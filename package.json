@@ -1,0 +1,16 @@
+{
+  "name": "inquire",
+  "version": "0.0.0",
+  "description": "A collection of common interactive command line user interfaces.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/SBoudrias/Inquire.js.git"
+  },
+  "keywords": [ "command", "prompt", "stdin", "cli" ],
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "license": "MIT"
+}
