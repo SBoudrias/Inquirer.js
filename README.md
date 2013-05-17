@@ -13,7 +13,7 @@ We strive at providing easily embeddable and beatiful command line interface for
 
 _Inquire_ should ease the process of asking end user questions, parsing, validating answers, and providing error feedback.
 
-_Inquire_ provide the interfaces, and the inquiring session flow. If you're searching for full blown command line utility, then checkout [Commander.js](https://github.com/visionmedia/commander.js) (inspired by) or [Charm](https://github.com/substack/node-charm) (used internally).
+_Inquire_ provide the user interface, and the inquiring session flow. If you're searching for full blown command line utility, then checkout [Commander.js](https://github.com/visionmedia/commander.js) (inspired by) or [Charm](https://github.com/substack/node-charm) (used internally).
 
 Installation
 ---------------------

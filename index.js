@@ -207,7 +207,7 @@ cli.prompt = function(questions, allDone) {
       function after(answer) {
         answers[question.name] = answer;
         done(null, answer);
-      };
+      }
 
       console.log(); // write line return
 
