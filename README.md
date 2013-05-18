@@ -79,7 +79,7 @@ A key/value hash containing the client answers in each prompt.
 Prompts
 ---------------------
 
-### List (`{ type: "list" }`)
+### List - `{ type: "list" }`
 
 Take `type`, `name`, `message`, `choices` properties.
 
@@ -91,7 +91,7 @@ What about the toping?
 (Use arrow key)
 ```
 
-### Raw List (`{ type: "rawlist" }`)
+### Raw List - `{ type: "rawlist" }`
 
 Take `type`, `name`, `message`, `choices` properties.
 
@@ -103,7 +103,7 @@ You also get a free 2L liquor! Which one?
   Default (1)
 ```
 
-### Confirm (`{ type: "confirm" }`)
+### Confirm - `{ type: "confirm" }`
 
 Take `type`, `name`, `message` properties.
 
@@ -111,7 +111,7 @@ Take `type`, `name`, `message` properties.
 Hi, welcome to Node Pizza plaza. Is it for a delivery? (Y/n)
 ```
 
-### Input (`{ type: "input" }`)
+### Input - `{ type: "input" }`
 
 Take `type`, `name`, `message`[, `default`] properties.
 
