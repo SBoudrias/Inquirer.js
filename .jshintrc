@@ -36,5 +36,9 @@
   "supernew"  : true,
   "undef"     : true,
   "validthis" : true,
-  "withstmt"  : true
+  "withstmt"  : true,
+  "globals": {
+    "describe": true,
+    "it": true
+  }
 }

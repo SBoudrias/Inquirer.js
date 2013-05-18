@@ -2,9 +2,9 @@
   "name": "inquirer",
   "version": "0.0.0",
   "description": "A collection of common interactive command line user interfaces.",
-  "main": "inquirer.js",
+  "main": "lib/inquirer.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,13 @@
     "lodash": "~1.2.1",
     "async": "~0.2.8",
     "charm": "~0.1.2"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.8",
+    "grunt-simple-mocha": "~0.4.0",
+    "mocha": "~1.9.0",
+    "chai": "~1.6.0",
+    "grunt-contrib-jshint": "~0.5.1"
   }
 }
