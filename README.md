@@ -64,7 +64,7 @@ A question object is a `hash` containing question related values:
 + **name**: (String) The name to use when storing the answer in the anwers hash.
 + **message**: (String) The question to print.
 + **default**: (String) Default value to use if nothing is entered
-+ **Choices**: (Array) Choices array.  
++ **choices**: (Array) Choices array.  
 Values can be simple `string`s, or `object`s containing a `name` (to display) and a `value` properties (to save in the answers hash).
 
 ### Answers
@@ -79,7 +79,45 @@ A key/value hash containing the client answers in each prompt.
 Prompts
 ---------------------
 
-_(Coming soon)_
+### List (`{ type: "list" }`)
+
+Take `type`, `name`, `message`, `choices` properties.
+
+``` prompt
+What about the toping?
+  [X] Peperonni and chesse
+  [ ] All dressed
+  [ ] Hawaïan
+(Use arrow key)
+```
+
+### Raw List (`{ type: "rawlist" }`)
+
+Take `type`, `name`, `message`, `choices` properties.
+
+``` prompt
+You also get a free 2L liquor! Which one?
+  1) Pepsi
+  2) 7up
+  3) Coke
+  Default (1)
+```
+
+### Confirm (`{ type: "confirm" }`)
+
+Take `type`, `name`, `message` properties.
+
+``` prompt
+Hi, welcome to Node Pizza plaza. Is it for a delivery? (Y/n)
+```
+
+### Input (`{ type: "input" }`)
+
+Take `type`, `name`, `message`[, `default`] properties.
+
+``` prompt
+Before leaving, any comments on your purchase experience? (default "Nope, all good!"):
+```
 
 
 News on the march (Release notes)
