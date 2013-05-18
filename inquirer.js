@@ -195,10 +195,14 @@ cli.prompt = function(questions, allDone) {
   process.stdin.on("keypress", function(s, key) {
     rlVent.emit("keypress", s, key);
   });
-  rl.on("line", function() {
-    var args = Array.prototype.slice.call(arguments, 0);
-    rlVent.emit.apply(rlVent, ["line"].concat(args));
-  });
+  rl
+    .on("line", function() {
+      var args = Array.prototype.slice.call(arguments, 0);
+      rlVent.emit.apply(rlVent, ["line"].concat(args));
+    })
+    .on("close", function() {
+      console.log(); // Line return
+    });
 
   async.mapSeries(questions,
     // Each question
