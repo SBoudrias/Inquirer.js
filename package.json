@@ -1,14 +1,14 @@
 {
-  "name": "inquire",
+  "name": "inquirer",
   "version": "0.0.0",
   "description": "A collection of common interactive command line user interfaces.",
-  "main": "index.js",
+  "main": "inquirer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/SBoudrias/Inquire.js.git"
+    "url": "git://github.com/SBoudrias/Inquirer.js.git"
   },
   "keywords": [
     "command",
