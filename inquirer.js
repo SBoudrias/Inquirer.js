@@ -166,7 +166,7 @@ _cli.confirm = function(question, cb) {
   // Once user confirm (enter key)
   rlVent.once("line", function(input) {
     var value = true;
-    if (input != null) {
+    if (input != null && input !== "") {
       value = /^y(es)?/i.test(input);
     }
     cleanLine();
