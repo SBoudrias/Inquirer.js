@@ -29,6 +29,8 @@
     "grunt-simple-mocha": "~0.4.0",
     "mocha": "~1.9.0",
     "chai": "~1.6.0",
-    "grunt-contrib-jshint": "~0.5.1"
+    "grunt-contrib-jshint": "~0.5.1",
+    "sinon": "~1.7.2",
+    "proxyquire": "~0.4.1"
   }
 }
