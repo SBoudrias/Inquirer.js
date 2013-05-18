@@ -47,6 +47,12 @@ var questions = [
     name: "liquor",
     message: "You also get a free 2L liquor! Which one?",
     choices: [ "Pepsi", "7up", "Coke" ]
+  },
+  {
+    type: "input",
+    name: "comments",
+    message: "Before leaving, any comments on your purchase experience?",
+    default: "Nope, all good!"
   }
 ];
 
