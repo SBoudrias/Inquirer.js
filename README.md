@@ -16,6 +16,9 @@ _Inquirer_ should ease the process of asking end user questions, parsing, valida
 
 _Inquirer_ provide the user interface, and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [Commander.js](https://github.com/visionmedia/commander.js) (inspired by) or [Charm](https://github.com/substack/node-charm) (used internally).
 
+Documentation
+=====================
+
 Installation
 ---------------------
 
@@ -30,21 +33,30 @@ inquirer.prompt([/* Pass your questions in here */], function( answers ) {
 });
 ```
 
-Documentation
+Examples (Run it and see it)
 ---------------------
 
-### Methods
+Checkout the `example/` folder for code and interface example.
 
-#### `.prompt( questions, callback )`
+``` prompt
+node example/pizza.js
+# etc
+```
+
+Methods
+---------------------
+
+### `inquirer.prompt( questions, callback )`
 
 Launch the prompt interface (inquiry session)
 
 + **questions** (Array) contains [Question Object](#question)
 + **callback** (Function) first parameter is the [Answers Object](#answers)
 
-### Objects
+Objects
+---------------------
 
-#### Question
+### Question
 A question object is a `hash` containing question related values:
 
 + **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `confirm`,
@@ -55,7 +67,7 @@ A question object is a `hash` containing question related values:
 + **Choices**: (Array) Choices array.  
 Values can be simple `string`s, or `object`s containing a `name` (to display) and a `value` properties (to save in the answers hash).
 
-#### Answers
+### Answers
 A key/value hash containing the client answers in each prompt.
 
 + **Key** The `name` property of the _question_ object
@@ -64,18 +76,19 @@ A key/value hash containing the client answers in each prompt.
   + `input` : User input (String)
   + `rawlist`, `list` : Selected choice value (or name if no value specified) (String)
 
-### Prompts
+Prompts
+---------------------
 
 _(Coming soon)_
 
 
 News on the march (Release notes)
----------------------
+=====================
 
 _(Coming soon)_
 
 License
----------------------
+=====================
 
 Copyright (c) 2012 Simon Boudrias  
 Licensed under the MIT license.
