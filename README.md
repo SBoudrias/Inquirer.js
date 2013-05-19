@@ -3,9 +3,6 @@ Inquirer.js  [![Build Status](https://travis-ci.org/SBoudrias/Inquirer.js.png?br
 
 A collection of common interactive command line user interfaces.
 
-**This is still early alpha, it's not yet published on NPM - that's coming soon!**
-
-
 Goal and philosophy
 ---------------------
 
@@ -125,7 +122,8 @@ Before leaving, any comments on your purchase experience? (default "Nope, all go
 News on the march (Release notes)
 =====================
 
-_(Coming soon)_
++ **0.1.0** : First official release. There's 4 prompt types: `input`, `confirm`, `list` and
+`rawlist`. There's functionnality to allow the validation of input, and the filtering of values.
 
 License
 =====================
