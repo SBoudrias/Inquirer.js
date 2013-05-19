@@ -1,6 +1,5 @@
 {
   "node"      : true,
-  "es5"       : true,
   "bitwise"   : true,
   "boss"      : true,
   "browser"   : true,
@@ -8,7 +7,6 @@
   "debug"     : true,
   "eqeqeq"    : true,
   "eqnull"    : true,
-  "es5"       : true,
   "esnext"    : true,
   "expr"      : true,
   "immed"     : true,
