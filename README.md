@@ -1,4 +1,4 @@
-Inquirer.js
+Inquirer.js  [![Build Status](https://travis-ci.org/SBoudrias/Inquirer.js.png?branch=master)](http://travis-ci.org/SBoudrias/Inquirer.js)
 =====================
 
 A collection of common interactive command line user interfaces.

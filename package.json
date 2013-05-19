@@ -4,7 +4,7 @@
   "description": "A collection of common interactive command line user interfaces.",
   "main": "lib/inquirer.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt --verbose"
   },
   "repository": {
     "type": "git",
