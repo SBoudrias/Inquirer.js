@@ -83,7 +83,7 @@ Prompts
 
 ### List - `{ type: "list" }`
 
-Take `type`, `name`, `message`, `choices` properties.
+Take `type`, `name`, `message`, `choices`[, `filter`] properties.
 
 ``` prompt
 What about the toping?
@@ -95,7 +95,7 @@ What about the toping?
 
 ### Raw List - `{ type: "rawlist" }`
 
-Take `type`, `name`, `message`, `choices` properties.
+Take `type`, `name`, `message`, `choices`[, `filter`] properties.
 
 ``` prompt
 You also get a free 2L liquor! Which one?
@@ -115,7 +115,7 @@ Hi, welcome to Node Pizza plaza. Is it for a delivery? (Y/n)
 
 ### Input - `{ type: "input" }`
 
-Take `type`, `name`, `message`[, `default`] properties.
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
 ``` prompt
 Before leaving, any comments on your purchase experience? (default "Nope, all good!"):
