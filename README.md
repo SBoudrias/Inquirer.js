@@ -66,6 +66,8 @@ A question object is a `hash` containing question related values:
 + **default**: (String) Default value to use if nothing is entered
 + **choices**: (Array) Choices array.  
 Values can be simple `string`s, or `object`s containing a `name` (to display) and a `value` properties (to save in the answers hash).
++ **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If no error message is returned, a default one is provided.
++ **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the `Answers` hash.
 
 ### Answers
 A key/value hash containing the client answers in each prompt.
