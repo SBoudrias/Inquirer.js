@@ -30,7 +30,18 @@ var questions = [
     type: "list",
     name: "size",
     message: "What size do you need?",
-    choices: [ "large", "medium", "small" ]
+    choices: [ "Large", "Medium", "Small" ],
+    filter: String.prototype.toLowerCase
+  },
+  {
+    type: "input",
+    name: "quanity",
+    message: "How many do you need?",
+    validate: function(value) {
+      var valid = !isNaN(parseFloat(value));
+      return valid || "Please enter a number";
+    },
+    filter: Number
   },
   {
     type: "list",
