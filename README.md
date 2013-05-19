@@ -33,10 +33,10 @@ inquirer.prompt([/* Pass your questions in here */], function( answers ) {
 Examples (Run it and see it)
 ---------------------
 
-Checkout the `example/` folder for code and interface example.
+Checkout the `examples/` folder for code and interface examples.
 
 ``` prompt
-node example/pizza.js
+node examples/pizza.js
 # etc
 ```
 
