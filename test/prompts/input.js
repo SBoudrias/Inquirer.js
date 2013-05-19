@@ -1,7 +1,7 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
 var EventEmitter = require("events").EventEmitter;
-var input = require("../../lib/prompts/input");
+var Input = require("../../lib/prompts/input");
 
 describe("`input` prompt", function() {
 
@@ -11,9 +11,10 @@ describe("`input` prompt", function() {
 
   it("should use raw value from the user", function(done) {
 
-    input.init(this.rl).run({
+    var input = new Input({
       message: "foo bar"
-    }, function(answer) {
+    }, this.rl);
+    input.run(function(answer) {
       expect(answer).to.equal("Inquirer");
       done();
     });

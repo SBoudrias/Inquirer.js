@@ -9,15 +9,15 @@ var EventEmitter = require("events").EventEmitter;
 
 var prompts = [ "input", "confirm", "rawlist", "list" ];
 
-_.each(prompts, function(promptName) {
+describe("Basic prompt interfaces", function() {
 
-  describe("`" + promptName + "` prompt", function() {
+  prompts.forEach(function(promptName) {
 
-    var prompt = require("../../lib/prompts/" + promptName);
-
-    it("`init` method should return the prompt", function() {
-      expect(prompt.init()).to.equal(prompt);
+    var Prompt = require("../../lib/prompts/" + promptName);
+    it(promptName + " prompt constructor should extend defaults property/methods", function() {
+      expect(new Prompt({}, {})).to.contain.keys("filter", "validate", "height");
     });
+
   });
 
 });
