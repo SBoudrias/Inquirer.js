@@ -10,7 +10,7 @@ var questions = [
   {
     type: "confirm",
     name: "toBeDelivered",
-    message: "Hi, welcome to Node Pizza plaza. \r\n" +
+    message: "Hi, welcome to Node Pizza plaza. \n" +
         "Is it for a delivery?"
   },
   {
