@@ -13,16 +13,12 @@ function makeCharmStub() {
   };
 }
 
-
 describe("cleanLine", function() {
 
   beforeEach(function() {
     this.charmStub = makeCharmStub();
-
-    this.utils = proxyquire("../lib/utils/utils", {
-      "charm": this.charmStub
-    });
-
+    process.charm  = this.charmStub();
+    this.utils = proxyquire("../lib/utils/utils", {});
   });
 
   it("should clean `n` number of line", function() {
@@ -39,7 +35,7 @@ describe("cleanLine", function() {
 
 describe("normalizeChoices", function() {
 
-  var utils = require("../lib/utils/utils");
+  var utils = proxyquire("../lib/utils/utils", {});
 
   it("should normalize array containing strings", function() {
     var initial = [ "foo", "bar" ];
