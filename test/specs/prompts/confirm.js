@@ -3,7 +3,7 @@ var sinon = require("sinon");
 var EventEmitter = require("events").EventEmitter;
 
 process.charm = require("charm")(process.stdout);
-var Confirm = require("../../lib/prompts/confirm");
+var Confirm = require("../../../lib/prompts/confirm");
 
 describe("`confirm` prompt", function() {
 
@@ -12,6 +12,10 @@ describe("`confirm` prompt", function() {
     this.confirm = new Confirm({
       message: "foo bar"
     }, this.rl);
+  });
+
+  afterEach(function() {
+    this.confirm.clean(1);
   });
 
   it("should default to true", function(done) {

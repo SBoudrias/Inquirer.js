@@ -3,7 +3,7 @@ var sinon = require("sinon");
 var EventEmitter = require("events").EventEmitter;
 
 process.charm = require("charm")(process.stdout);
-var List = require("../../lib/prompts/list");
+var List = require("../../../lib/prompts/list");
 
 
 describe("`list` prompt", function() {
@@ -16,10 +16,14 @@ describe("`list` prompt", function() {
     }, this.rl);
   });
 
-  it("should default to first choice", function(done) {
+  afterEach(function() {
+    this.list.clean();
+  });
 
+  it("should default to first choice", function(done) {
     this.list.run(function(answer) {
       expect(answer).to.equal("foo");
+
       done();
     });
 
@@ -89,6 +93,7 @@ describe("`list` prompt", function() {
 
     list.run(function(answer) {
       expect(answer).to.equal("pass");
+      list.clean(1);
       done();
     });
 

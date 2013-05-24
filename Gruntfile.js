@@ -15,7 +15,7 @@ module.exports = function( grunt ) {
         ui: "bdd",
         reporter: "spec"
       },
-      all: "test/**/*.js"
+      all: "test/specs/**/*.js"
     }
 
   });

@@ -3,7 +3,7 @@ var sinon = require("sinon");
 var EventEmitter = require("events").EventEmitter;
 
 process.charm = require("charm")(process.stdout);
-var Input = require("../../lib/prompts/input");
+var Input = require("../../../lib/prompts/input");
 
 describe("`input` prompt", function() {
 
@@ -18,6 +18,7 @@ describe("`input` prompt", function() {
     }, this.rl);
     input.run(function(answer) {
       expect(answer).to.equal("Inquirer");
+      input.clean(1);
       done();
     });
 
@@ -34,6 +35,7 @@ describe("`input` prompt", function() {
     }, this.rl);
     input.run(function(answer) {
       expect(answer).to.equal("pass");
+      input.clean(1);
       done();
     });
 
@@ -48,8 +50,9 @@ describe("`input` prompt", function() {
       validate: function(value) {
         called++;
         expect(value).to.equal("Inquirer");
-        // Make sure returning false won't
+        // Make sure returning false won't continue
         if (called === 2) {
+          input.clean(1);
           done();
         } else {
           self.rl.emit("line", "Inquirer");
@@ -58,7 +61,7 @@ describe("`input` prompt", function() {
       }
     }, this.rl);
     input.run(function(answer) {
-      // This should be called
+      // This should NOT be called
       expect(false).to.be.true;
     });
 
