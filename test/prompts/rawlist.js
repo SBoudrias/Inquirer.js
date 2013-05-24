@@ -1,6 +1,8 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
 var EventEmitter = require("events").EventEmitter;
+
+process.charm = require("charm")(process.stdout);
 var Rawlist = require("../../lib/prompts/rawlist");
 
 describe("`rawlist` prompt", function() {
