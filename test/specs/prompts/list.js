@@ -2,7 +2,7 @@ var expect = require("chai").expect;
 var sinon = require("sinon");
 var EventEmitter = require("events").EventEmitter;
 
-process.charm = require("charm")(process.stdout);
+process.charm = require("../../helpers/charm");
 var List = require("../../../lib/prompts/list");
 
 
@@ -88,6 +88,27 @@ describe("`list` prompt", function() {
       choices: [ "foo", "bar" ],
       filter: function() {
         return "pass";
+      }
+    }, this.rl);
+
+    list.run(function(answer) {
+      expect(answer).to.equal("pass");
+      list.clean(1);
+      done();
+    });
+
+    this.rl.emit("line");
+  });
+
+  it("should allow filter to be asynchronous", function(done) {
+    var list = new List({
+      message: "",
+      choices: [ "foo", "bar" ],
+      filter: function() {
+        var done = this.async();
+        setTimeout(function() {
+          done("pass");
+        }, 0);
       }
     }, this.rl);
 

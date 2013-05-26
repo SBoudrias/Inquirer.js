@@ -66,6 +66,23 @@ Values can be simple `string`s, or `object`s containing a `name` (to display) an
 + **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If no error message is returned, a default one is provided.
 + **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the `Answers` hash.
 
+`validate` and `filter` function can be asynchronous using `this.async()`. You just have to pass the value you'd normally return to the callback option.
+
+``` javascript
+{
+  validate: function(input) {
+    var done = this.async();
+    setTimeout(function() {
+      if (typeof input !== "number") {
+        done("You need to provide a number");
+        return;
+      }
+      done(true);
+    }, 3000);
+  }
+}
+```
+
 ### Answers
 A key/value hash containing the client answers in each prompt.
 
@@ -115,7 +132,7 @@ Hi, welcome to Node Pizza plaza. Is it for a delivery? (Y/n)
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
 ``` prompt
-Before leaving, any comments on your purchase experience? (default "Nope, all good!"):
+Any comments on your purchase experience? (default "Nope, all good!"):
 ```
 
 

@@ -2,7 +2,7 @@ var expect = require("chai").expect;
 var sinon = require("sinon");
 var EventEmitter = require("events").EventEmitter;
 
-process.charm = require("charm")(process.stdout);
+process.charm = require("../../helpers/charm");
 var Rawlist = require("../../../lib/prompts/rawlist");
 
 describe("`rawlist` prompt", function() {
@@ -63,6 +63,27 @@ describe("`rawlist` prompt", function() {
       choices: [ "foo", "bar" ],
       filter: function() {
         return "pass";
+      }
+    }, this.rl);
+
+    rawlist.run(function(answer) {
+      expect(answer).to.equal("pass");
+      rawlist.clean(1);
+      done();
+    });
+
+    this.rl.emit("line");
+  });
+
+  it("should allow filter function to be asynchronous", function(done) {
+    var rawlist = new Rawlist({
+      message: "",
+      choices: [ "foo", "bar" ],
+      filter: function() {
+        var done = this.async();
+        setTimeout(function() {
+          done("pass");
+        }, 0);
       }
     }, this.rl);
 

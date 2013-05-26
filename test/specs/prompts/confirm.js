@@ -2,7 +2,7 @@ var expect = require("chai").expect;
 var sinon = require("sinon");
 var EventEmitter = require("events").EventEmitter;
 
-process.charm = require("charm")(process.stdout);
+process.charm = require("../../helpers/charm");
 var Confirm = require("../../../lib/prompts/confirm");
 
 describe("`confirm` prompt", function() {
