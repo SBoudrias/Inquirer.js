@@ -18,7 +18,6 @@ describe("`input` prompt", function() {
     }, this.rl);
     input.run(function(answer) {
       expect(answer).to.equal("Inquirer");
-      input.clean(1);
       done();
     });
 
@@ -35,7 +34,6 @@ describe("`input` prompt", function() {
     }, this.rl);
     input.run(function(answer) {
       expect(answer).to.equal("pass");
-      input.clean(1);
       done();
     });
 
@@ -55,7 +53,6 @@ describe("`input` prompt", function() {
     }, this.rl);
     input.run(function(answer) {
       expect(answer).to.equal("pass");
-      input.clean(1);
       done();
     });
 
@@ -72,7 +69,6 @@ describe("`input` prompt", function() {
         expect(value).to.equal("Inquirer");
         // Make sure returning false won't continue
         if (called === 2) {
-          input.clean(1);
           done();
         } else {
           self.rl.emit("line", "Inquirer");
@@ -100,7 +96,6 @@ describe("`input` prompt", function() {
           expect(value).to.equal("Inquirer");
           // Make sure returning false won't continue
           if (called === 2) {
-            input.clean(1);
             continu();
           } else {
             self.rl.emit("line", "Inquirer");

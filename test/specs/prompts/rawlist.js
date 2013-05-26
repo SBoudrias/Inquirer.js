@@ -15,10 +15,6 @@ describe("`rawlist` prompt", function() {
     }, this.rl);
   });
 
-  afterEach(function() {
-    this.rawlist.clean(1);
-  });
-
   it("should default to first choice", function(done) {
 
     this.rawlist.run(function(answer) {
@@ -68,7 +64,6 @@ describe("`rawlist` prompt", function() {
 
     rawlist.run(function(answer) {
       expect(answer).to.equal("pass");
-      rawlist.clean(1);
       done();
     });
 
@@ -89,7 +84,6 @@ describe("`rawlist` prompt", function() {
 
     rawlist.run(function(answer) {
       expect(answer).to.equal("pass");
-      rawlist.clean(1);
       done();
     });
 

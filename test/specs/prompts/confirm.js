@@ -14,10 +14,6 @@ describe("`confirm` prompt", function() {
     }, this.rl);
   });
 
-  afterEach(function() {
-    this.confirm.clean(1);
-  });
-
   it("should default to true", function(done) {
 
     this.confirm.run(function(answer) {

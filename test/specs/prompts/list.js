@@ -16,10 +16,6 @@ describe("`list` prompt", function() {
     }, this.rl);
   });
 
-  afterEach(function() {
-    this.list.clean();
-  });
-
   it("should default to first choice", function(done) {
     this.list.run(function(answer) {
       expect(answer).to.equal("foo");
@@ -93,7 +89,6 @@ describe("`list` prompt", function() {
 
     list.run(function(answer) {
       expect(answer).to.equal("pass");
-      list.clean(1);
       done();
     });
 
@@ -114,7 +109,6 @@ describe("`list` prompt", function() {
 
     list.run(function(answer) {
       expect(answer).to.equal("pass");
-      list.clean(1);
       done();
     });
 
