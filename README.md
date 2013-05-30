@@ -139,6 +139,7 @@ Any comments on your purchase experience? (default "Nope, all good!"):
 News on the march (Release notes)
 =====================
 
++ **0.1.3** : Add async support for validation and filtering functions.
 + **0.1.0** : First official release. There's 4 prompt types: `input`, `confirm`, `list` and
 `rawlist`. There's functionnality to allow the validation of input, and the filtering of values.
 
