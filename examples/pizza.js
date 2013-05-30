@@ -31,7 +31,7 @@ var questions = [
     name: "size",
     message: "What size do you need?",
     choices: [ "Large", "Medium", "Small" ],
-    filter: String.prototype.toLowerCase
+    filter: function(val) { return val.toLowerCase(); }
   },
   {
     type: "input",
