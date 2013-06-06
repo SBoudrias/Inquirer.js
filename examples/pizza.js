@@ -6,17 +6,18 @@
 "use strict";
 var inquirer = require("../lib/inquirer");
 
+console.log("Hi, welcome to Node Pizza");
+
 var questions = [
   {
     type: "confirm",
     name: "toBeDelivered",
-    message: "Hi, welcome to Node Pizza plaza. \n" +
-        "Is it for a delivery?"
+    message: "Is it for a delivery"
   },
   {
     type: "input",
     name: "phone",
-    message: "What's your phone number?",
+    message: "What's your phone number",
     validate: function(value) {
       var pass = value.match(/^([01]{1})?[\-\.\s]?\(?(\d{3})\)?[\-\.\s]?(\d{3})[\-\.\s]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?){1}(?:\d+)?)?$/i);
       if (pass) {
@@ -29,14 +30,14 @@ var questions = [
   {
     type: "list",
     name: "size",
-    message: "What size do you need?",
+    message: "What size do you need",
     choices: [ "Large", "Medium", "Small" ],
     filter: function(val) { return val.toLowerCase(); }
   },
   {
     type: "input",
     name: "quanity",
-    message: "How many do you need?",
+    message: "How many do you need",
     validate: function(value) {
       var valid = !isNaN(parseFloat(value));
       return valid || "Please enter a number";
@@ -46,7 +47,7 @@ var questions = [
   {
     type: "list",
     name: "toppings",
-    message: "What about the toping?",
+    message: "What about the toping",
     choices: [
       {
         name: "Peperonni and chesse",
@@ -65,13 +66,13 @@ var questions = [
   {
     type: "rawlist",
     name: "liquor",
-    message: "You also get a free 2L liquor! Which one?",
+    message: "You also get a free 2L liquor!",
     choices: [ "Pepsi", "7up", "Coke" ]
   },
   {
     type: "input",
     name: "comments",
-    message: "Before leaving, any comments on your purchase experience?",
+    message: "Before leaving, any comments on your purchase experience",
     default: "Nope, all good!"
   }
 ];
