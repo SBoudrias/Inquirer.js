@@ -66,19 +66,18 @@ var questions = [
   {
     type: "rawlist",
     name: "liquor",
-    message: "You also get a free 2L liquor!",
+    message: "You also get a free 2L liquor",
     choices: [ "Pepsi", "7up", "Coke" ]
   },
   {
     type: "input",
     name: "comments",
-    message: "Before leaving, any comments on your purchase experience",
+    message: "Any comments on your purchase experience",
     default: "Nope, all good!"
   }
 ];
 
 inquirer.prompt(questions, function(answers) {
-  console.log();
-  console.log("Order receipt:");
+  console.log("\nOrder receipt:");
   console.log(JSON.stringify(answers, null, "  "));
 });
