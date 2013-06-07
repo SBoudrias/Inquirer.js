@@ -5,6 +5,8 @@ var EventEmitter = require("events").EventEmitter;
 process.charm = require("../../helpers/charm");
 var List = require("../../../lib/prompts/list");
 
+// Prevent prompt from writing to screen
+List.prototype.write = function() {};
 
 describe("`list` prompt", function() {
 

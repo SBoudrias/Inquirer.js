@@ -3,6 +3,7 @@ Inquirer.js  [![Build Status](https://travis-ci.org/SBoudrias/Inquirer.js.png?br
 
 A collection of common interactive command line user interfaces.
 
+
 Goal and philosophy
 ---------------------
 
@@ -13,8 +14,10 @@ _Inquirer_ should ease the process of asking end user questions, parsing, valida
 
 _Inquirer_ provide the user interface, and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [Commander.js](https://github.com/visionmedia/commander.js) (inspired by) or [Charm](https://github.com/substack/node-charm) (used internally).
 
+
 Documentation
 =====================
+
 
 Installation
 ---------------------
@@ -30,6 +33,7 @@ inquirer.prompt([/* Pass your questions in here */], function( answers ) {
 });
 ```
 
+
 Examples (Run it and see it)
 ---------------------
 
@@ -40,6 +44,7 @@ node examples/pizza.js
 # etc
 ```
 
+
 Methods
 ---------------------
 
@@ -49,6 +54,7 @@ Launch the prompt interface (inquiry session)
 
 + **questions** (Array) contains [Question Object](#question)
 + **callback** (Function) first parameter is the [Answers Object](#answers)
+
 
 Objects
 ---------------------
@@ -92,6 +98,7 @@ A key/value hash containing the client answers in each prompt.
   + `input` : User input (String)
   + `rawlist`, `list` : Selected choice value (or name if no value specified) (String)
 
+
 Prompts
 ---------------------
 
@@ -121,7 +128,7 @@ You also get a free 2L liquor! Which one?
 
 ### Confirm - `{ type: "confirm" }`
 
-Take `type`, `name`, `message` properties.
+Take `type`, `name`, `message`[, `default`] properties.
 
 ``` prompt
 Hi, welcome to Node Pizza plaza. Is it for a delivery? (Y/n)
@@ -142,6 +149,7 @@ News on the march (Release notes)
 + **0.1.3** : Add async support for validation and filtering functions.
 + **0.1.0** : First official release. There's 4 prompt types: `input`, `confirm`, `list` and
 `rawlist`. There's functionnality to allow the validation of input, and the filtering of values.
+
 
 License
 =====================

@@ -5,6 +5,9 @@ var EventEmitter = require("events").EventEmitter;
 process.charm = require("../../helpers/charm");
 var Confirm = require("../../../lib/prompts/confirm");
 
+// Prevent prompt from writing to screen
+Confirm.prototype.write = function() {};
+
 describe("`confirm` prompt", function() {
 
   beforeEach(function() {

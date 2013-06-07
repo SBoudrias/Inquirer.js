@@ -19,7 +19,7 @@ var questions = [
     type: "input",
     name: "phone",
     message: "What's your phone number",
-    validate: function(value) {
+    validate: function( value ) {
       var pass = value.match(/^([01]{1})?[\-\.\s]?\(?(\d{3})\)?[\-\.\s]?(\d{3})[\-\.\s]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?){1}(?:\d+)?)?$/i);
       if (pass) {
         return true;
@@ -33,13 +33,13 @@ var questions = [
     name: "size",
     message: "What size do you need",
     choices: [ "Large", "Medium", "Small" ],
-    filter: function(val) { return val.toLowerCase(); }
+    filter: function( val ) { return val.toLowerCase(); }
   },
   {
     type: "input",
     name: "quanity",
     message: "How many do you need",
-    validate: function(value) {
+    validate: function( value ) {
       var valid = !isNaN(parseFloat(value));
       return valid || "Please enter a number";
     },
@@ -78,7 +78,7 @@ var questions = [
   }
 ];
 
-inquirer.prompt(questions, function(answers) {
+inquirer.prompt( questions, function( answers ) {
   console.log("\nOrder receipt:");
-  console.log(JSON.stringify(answers, null, "  "));
+  console.log( JSON.stringify(answers, null, "  ") );
 });
