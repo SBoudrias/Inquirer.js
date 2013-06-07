@@ -64,4 +64,66 @@ describe("`confirm` prompt", function() {
     this.rl.emit("line", "bla bla foo");
   });
 
+    describe("should accept a default value", function() {
+
+    it("should allow a default value", function(done) {
+
+      var falseConfirm = new Confirm({
+        message: "foo bar",
+        default: false
+      }, this.rl);
+
+      falseConfirm.run(function(answer) {
+        expect(answer).to.be.false;
+        done();
+      });
+
+      this.rl.emit("line", "");
+    });
+
+    it("should default \"true\" to boolean true", function(done) {
+
+      var falseConfirm = new Confirm({
+        message: "foo bar",
+        default: "true"
+      }, this.rl);
+
+      falseConfirm.run(function(answer) {
+        expect(answer).to.be.true;
+        done();
+      });
+
+      this.rl.emit("line", "");
+    });
+
+    it("should default \"false\" to boolean false", function(done) {
+      var falseConfirm = new Confirm({
+        message: "foo bar",
+        default: "false"
+      }, this.rl);
+
+      falseConfirm.run(function(answer) {
+        expect(answer).to.be.false;
+        done();
+      });
+
+      this.rl.emit("line", "");
+    });
+
+    it("should default any other string than \"true\" to boolean true", function(done) {
+      var falseConfirm = new Confirm({
+        message: "foo bar",
+        default: "asdfdsa"
+      }, this.rl);
+
+      falseConfirm.run(function(answer) {
+        expect(answer).to.be.true;
+        done();
+      });
+
+      this.rl.emit("line", "");
+    });
+
+  });
+
 });
