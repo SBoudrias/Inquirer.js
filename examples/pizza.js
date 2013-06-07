@@ -12,7 +12,8 @@ var questions = [
   {
     type: "confirm",
     name: "toBeDelivered",
-    message: "Is it for a delivery"
+    message: "Is it for a delivery",
+    default: false
   },
   {
     type: "input",
