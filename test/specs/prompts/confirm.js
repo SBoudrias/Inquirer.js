@@ -24,6 +24,21 @@ describe("`confirm` prompt", function() {
     this.rl.emit("line", "");
   });
 
+  it("should allow a default value", function(done) {
+
+    var falseConfirm = new Confirm({
+      message: "foo bar",
+      default: false
+    }, this.rl);
+
+    falseConfirm.run(function(answer) {
+      expect(answer).to.be.false;
+      done();
+    });
+
+    this.rl.emit("line", "");
+  });
+
   it("should parse 'Y' value to boolean", function(done) {
 
     this.confirm.run(function(answer) {
