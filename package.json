@@ -21,7 +21,6 @@
   "dependencies": {
     "lodash": "~1.2.1",
     "async": "~0.2.8",
-    "charm": "~0.1.2",
     "cli-color": "~0.2.2"
   },
   "devDependencies": {

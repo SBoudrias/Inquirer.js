@@ -12,7 +12,7 @@ some hope in becoming the CLI Xanadu.
 
 _Inquirer_ should ease the process of asking end user questions, parsing, validating answers, and providing error feedback.
 
-_Inquirer_ provide the user interface, and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [Commander.js](https://github.com/visionmedia/commander.js) (inspired by) or [Charm](https://github.com/substack/node-charm) (used internally).
+_Inquirer_ provide the user interface, and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [Commander.js](https://github.com/visionmedia/commander.js) (inspired by) or [Cli-color](https://github.com/medikoo/cli-color) (used internally).
 
 
 Documentation

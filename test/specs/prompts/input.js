@@ -2,7 +2,6 @@ var expect = require("chai").expect;
 var sinon = require("sinon");
 var EventEmitter = require("events").EventEmitter;
 
-process.charm = require("../../helpers/charm");
 var Input = require("../../../lib/prompts/input");
 
 // Prevent prompt from writing to screen

@@ -9,12 +9,12 @@ var inquirer = require("../lib/inquirer");
 console.log("Hi, welcome to Node Pizza");
 
 var questions = [
-  {
-    type: "confirm",
-    name: "toBeDelivered",
-    message: "Is it for a delivery",
-    default: false
-  },
+  // {
+  //   type: "confirm",
+  //   name: "toBeDelivered",
+  //   message: "Is it for a delivery",
+  //   default: false
+  // },
   {
     type: "input",
     name: "phone",
@@ -28,54 +28,54 @@ var questions = [
       }
     }
   },
-  {
-    type: "list",
-    name: "size",
-    message: "What size do you need",
-    choices: [ "Large", "Medium", "Small" ],
-    filter: function( val ) { return val.toLowerCase(); }
-  },
-  {
-    type: "input",
-    name: "quanity",
-    message: "How many do you need",
-    validate: function( value ) {
-      var valid = !isNaN(parseFloat(value));
-      return valid || "Please enter a number";
-    },
-    filter: Number
-  },
-  {
-    type: "list",
-    name: "toppings",
-    message: "What about the toping",
-    choices: [
-      {
-        name: "Peperonni and chesse",
-        value: "PeperonniChesse"
-      },
-      {
-        name: "All dressed",
-        value: "alldressed"
-      },
-      {
-        name: "Hawaïan",
-        value: "hawain"
-      }
-    ]
-  },
+  // {
+  //   type: "list",
+  //   name: "size",
+  //   message: "What size do you need",
+  //   choices: [ "Large", "Medium", "Small" ],
+  //   filter: function( val ) { return val.toLowerCase(); }
+  // },
+  // {
+  //   type: "input",
+  //   name: "quantity",
+  //   message: "How many do you need",
+  //   validate: function( value ) {
+  //     var valid = !isNaN(parseFloat(value));
+  //     return valid || "Please enter a number";
+  //   },
+  //   filter: Number
+  // },
+  // {
+  //   type: "list",
+  //   name: "toppings",
+  //   message: "What about the toping",
+  //   choices: [
+  //     {
+  //       name: "Peperonni and chesse",
+  //       value: "PeperonniChesse"
+  //     },
+  //     {
+  //       name: "All dressed",
+  //       value: "alldressed"
+  //     },
+  //     {
+  //       name: "Hawaïan",
+  //       value: "hawain"
+  //     }
+  //   ]
+  // },
   {
     type: "rawlist",
     name: "liquor",
     message: "You also get a free 2L liquor",
     choices: [ "Pepsi", "7up", "Coke" ]
   },
-  {
-    type: "input",
-    name: "comments",
-    message: "Any comments on your purchase experience",
-    default: "Nope, all good!"
-  }
+  // {
+  //   type: "input",
+  //   name: "comments",
+  //   message: "Any comments on your purchase experience",
+  //   default: "Nope, all good!"
+  // }
 ];
 
 inquirer.prompt( questions, function( answers ) {
