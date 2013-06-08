@@ -1,16 +1,16 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var EventEmitter = require("events").EventEmitter;
+var ReadlineStub = require("../../helpers/readline");
 
 var Confirm = require("../../../lib/prompts/confirm");
 
 // Prevent prompt from writing to screen
-Confirm.prototype.write = function() {};
+Confirm.prototype.write = function() { return this; };
 
 describe("`confirm` prompt", function() {
 
   beforeEach(function() {
-    this.rl = new EventEmitter();
+    this.rl = new ReadlineStub();
     this.confirm = new Confirm({
       message: "foo bar"
     }, this.rl);

@@ -1,10 +1,8 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var proxyquire = require("proxyquire");
+var utils = require("../../lib/utils/utils");
 
 describe("normalizeChoices", function() {
-
-  var utils = proxyquire("../../lib/utils/utils", {});
 
   it("should normalize array containing strings", function() {
     var initial = [ "foo", "bar" ];

@@ -1,16 +1,16 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var EventEmitter = require("events").EventEmitter;
+var ReadlineStub = require("../../helpers/readline");
 
 var List = require("../../../lib/prompts/list");
 
 // Prevent prompt from writing to screen
-List.prototype.write = function() {};
+List.prototype.write = function() { return this; };
 
 describe("`list` prompt", function() {
 
   beforeEach(function() {
-    this.rl = new EventEmitter();
+    this.rl = new ReadlineStub();
     this.list = new List({
       message: "",
       choices: [ "foo", "bar" ]

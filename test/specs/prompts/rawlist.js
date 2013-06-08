@@ -1,16 +1,16 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var EventEmitter = require("events").EventEmitter;
+var ReadlineStub = require("../../helpers/readline");
 
 var Rawlist = require("../../../lib/prompts/rawlist");
 
 // Prevent prompt from writing to screen
-Rawlist.prototype.write = function() {};
+Rawlist.prototype.write = function() { return this; };
 
 describe("`rawlist` prompt", function() {
 
   beforeEach(function() {
-    this.rl = new EventEmitter();
+    this.rl = new ReadlineStub();
     this.rawlist = new Rawlist({
       message: "",
       choices: [ "foo", "bar" ]
