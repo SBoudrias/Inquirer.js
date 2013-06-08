@@ -151,6 +151,16 @@ News on the march (Release notes)
 `rawlist`. There's functionnality to allow the validation of input, and the filtering of values.
 
 
+Contributing
+=====================
+
+**Style Guide**: Please base yourself on [Idiomatic.js](https://github.com/rwldrn/idiomatic.js) style guide with two space indent  
+**Unit test**: Unit test are wrote in Mocha. Please add a unit test for every new feature
+or bug fix. `npm test` to run the test suite.  
+**Documentation**: Add documentation for every API change. Feel free to send corrections
+or better docs!  
+
+
 License
 =====================
 
