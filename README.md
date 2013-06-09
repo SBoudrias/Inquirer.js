@@ -52,7 +52,7 @@ Methods
 
 Launch the prompt interface (inquiry session)
 
-+ **questions** (Array) contains [Question Object](#question)
++ **questions** (Array) containing [Question Object](#question)
 + **callback** (Function) first parameter is the [Answers Object](#answers)
 
 
@@ -69,8 +69,8 @@ A question object is a `hash` containing question related values:
 + **default**: (String) Default value to use if nothing is entered
 + **choices**: (Array) Choices array.  
 Values can be simple `string`s, or `object`s containing a `name` (to display) and a `value` properties (to save in the answers hash).
-+ **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If no error message is returned, a default one is provided.
-+ **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the `Answers` hash.
++ **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
++ **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
 
 `validate` and `filter` function can be asynchronous using `this.async()`. You just have to pass the value you'd normally return to the callback option.
 
@@ -95,7 +95,7 @@ A key/value hash containing the client answers in each prompt.
 + **Key** The `name` property of the _question_ object
 + **Value** (Depends on the prompt)
   + `confirm`: (Boolean)
-  + `input` : User input (String)
+  + `input` : User input (filtered if `filter` is defined) (String)
   + `rawlist`, `list` : Selected choice value (or name if no value specified) (String)
 
 
