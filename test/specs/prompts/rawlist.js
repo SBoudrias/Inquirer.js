@@ -55,41 +55,4 @@ describe("`rawlist` prompt", function() {
     }, 10);
   });
 
-  it("should filter input", function(done) {
-    var rawlist = new Rawlist({
-      message: "",
-      choices: [ "foo", "bar" ],
-      filter: function() {
-        return "pass";
-      }
-    }, this.rl);
-
-    rawlist.run(function(answer) {
-      expect(answer).to.equal("pass");
-      done();
-    });
-
-    this.rl.emit("line");
-  });
-
-  it("should allow filter function to be asynchronous", function(done) {
-    var rawlist = new Rawlist({
-      message: "",
-      choices: [ "foo", "bar" ],
-      filter: function() {
-        var done = this.async();
-        setTimeout(function() {
-          done("pass");
-        }, 0);
-      }
-    }, this.rl);
-
-    rawlist.run(function(answer) {
-      expect(answer).to.equal("pass");
-      done();
-    });
-
-    this.rl.emit("line");
-  });
-
 });

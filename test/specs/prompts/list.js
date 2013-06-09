@@ -79,41 +79,4 @@ describe("`list` prompt", function() {
     this.rl.emit("line");
   });
 
-  it("should filter input", function(done) {
-    var list = new List({
-      message: "",
-      choices: [ "foo", "bar" ],
-      filter: function() {
-        return "pass";
-      }
-    }, this.rl);
-
-    list.run(function(answer) {
-      expect(answer).to.equal("pass");
-      done();
-    });
-
-    this.rl.emit("line");
-  });
-
-  it("should allow filter to be asynchronous", function(done) {
-    var list = new List({
-      message: "",
-      choices: [ "foo", "bar" ],
-      filter: function() {
-        var done = this.async();
-        setTimeout(function() {
-          done("pass");
-        }, 0);
-      }
-    }, this.rl);
-
-    list.run(function(answer) {
-      expect(answer).to.equal("pass");
-      done();
-    });
-
-    this.rl.emit("line");
-  });
-
 });
