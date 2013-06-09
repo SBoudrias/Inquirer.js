@@ -145,6 +145,7 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 News on the march (Release notes)
 =====================
 
++ **0.1.5** : Enhance visual style; prompts are now more succint. Lots of bug fixes.
 + **0.1.3** : Add async support for validation and filtering functions.
 + **0.1.0** : First official release. There's 4 prompt types: `input`, `confirm`, `list` and
 `rawlist`. There's functionnality to allow the validation of input, and the filtering of values.
