@@ -4,17 +4,22 @@ var ReadlineStub = require("../../helpers/readline");
 
 var Rawlist = require("../../../lib/prompts/rawlist");
 
-// Prevent prompt from writing to screen
-Rawlist.prototype.write = function() { return this; };
 
 describe("`rawlist` prompt", function() {
 
   beforeEach(function() {
+    this._write = Rawlist.prototype.write;
+    Rawlist.prototype.write = function() { return this; };
+
     this.rl = new ReadlineStub();
     this.rawlist = new Rawlist({
       message: "",
       choices: [ "foo", "bar" ]
     }, this.rl);
+  });
+
+  afterEach(function() {
+    Rawlist.prototype.write = this._write;
   });
 
   it("should default to first choice", function(done) {

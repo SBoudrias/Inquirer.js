@@ -4,17 +4,22 @@ var ReadlineStub = require("../../helpers/readline");
 
 var List = require("../../../lib/prompts/list");
 
-// Prevent prompt from writing to screen
-List.prototype.write = function() { return this; };
 
 describe("`list` prompt", function() {
 
   beforeEach(function() {
+    this._write = List.prototype.write;
+    List.prototype.write = function() { return this; };
+
     this.rl = new ReadlineStub();
     this.list = new List({
       message: "",
       choices: [ "foo", "bar" ]
     }, this.rl);
+  });
+
+  afterEach(function() {
+    List.prototype.write = this._write;
   });
 
   it("should default to first choice", function(done) {

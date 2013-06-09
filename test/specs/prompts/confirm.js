@@ -5,15 +5,22 @@ var ReadlineStub = require("../../helpers/readline");
 var Confirm = require("../../../lib/prompts/confirm");
 
 // Prevent prompt from writing to screen
-Confirm.prototype.write = function() { return this; };
+// Confirm.prototype.write = function() { return this; };
 
 describe("`confirm` prompt", function() {
 
   beforeEach(function() {
+    this._write = Confirm.prototype.write;
+    Confirm.prototype.write = function() { return this; };
+
     this.rl = new ReadlineStub();
     this.confirm = new Confirm({
       message: "foo bar"
     }, this.rl);
+  });
+
+  afterEach(function() {
+    Confirm.prototype.write = this._write;
   });
 
   it("should default to true", function(done) {
@@ -56,7 +63,7 @@ describe("`confirm` prompt", function() {
     this.rl.emit("line", "");
   });
 
-  it("should parse 'Y' value to boolean", function(done) {
+  it("should parse 'Y' value to boolean true", function(done) {
 
     this.confirm.run(function(answer) {
       expect(answer).to.be.true;
@@ -66,7 +73,7 @@ describe("`confirm` prompt", function() {
     this.rl.emit("line", "Y");
   });
 
-  it("should parse 'Yes' value to boolean", function(done) {
+  it("should parse 'Yes' value to boolean true", function(done) {
 
     this.confirm.run(function(answer) {
       expect(answer).to.be.true;
@@ -76,7 +83,7 @@ describe("`confirm` prompt", function() {
     this.rl.emit("line", "Yes");
   });
 
-  it("should parse 'No' value to boolean", function(done) {
+  it("should parse 'No' value to boolean false", function(done) {
 
     this.confirm.run(function(answer) {
       expect(answer).to.be.false;
@@ -86,7 +93,7 @@ describe("`confirm` prompt", function() {
     this.rl.emit("line", "No");
   });
 
-  it("should parse every string value to boolean", function(done) {
+  it("should parse every other string value to boolean false", function(done) {
 
     this.confirm.run(function(answer) {
       expect(answer).to.be.false;

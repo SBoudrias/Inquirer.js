@@ -44,11 +44,6 @@ var tests = {
   "filter": function( name ) {
     describe("filter API", function() {
 
-      beforeEach(function() {
-        this.Prompt = inquirer.prompts[name];
-        this.rl = new ReadlineStub();
-      });
-
       it("should filter the user input", function( done ) {
         var prompt = new this.Prompt({
           message: "foo bar",
@@ -91,11 +86,6 @@ var tests = {
 
   "validate": function( name ) {
     describe("validate API", function() {
-
-      beforeEach(function() {
-        this.Prompt = inquirer.prompts[name];
-        this.rl = new ReadlineStub();
-      });
 
       it("should validate the user input", function(done) {
         var self = this;
@@ -158,11 +148,6 @@ var tests = {
   "default": function( name ) {
     describe("default API", function( argument ) {
 
-      beforeEach(function() {
-        this.Prompt = inquirer.prompts[name];
-        this.rl = new ReadlineStub();
-      });
-
       it("should allow a default value", function( done ) {
         var prompt = new this.Prompt({
           "message": "foo",
@@ -183,8 +168,22 @@ var tests = {
 
 // Run tests
 describe("Public APIs", function() {
+
   _.each( prompts, function( detail ) {
     describe("on " + detail.name + " prompt", function() {
+
+      beforeEach(function() {
+        this.Prompt = inquirer.prompts[detail.name];
+        this.rl = new ReadlineStub();
+
+        this._write = this.Prompt.prototype.write;
+        this.Prompt.prototype.write = function() { return this; };
+      });
+
+      afterEach(function() {
+        this.Prompt.prototype.write = this._write;
+      });
+
       _.each( detail.apis, function( apiName ) {
         tests[apiName]( detail.name );
       }, this);
