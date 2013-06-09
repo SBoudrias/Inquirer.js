@@ -10,8 +10,14 @@ var Confirm = require("../../../lib/prompts/confirm");
 describe("`confirm` prompt", function() {
 
   beforeEach(function() {
+    var self = this;
+    this.output = "";
+
     this._write = Confirm.prototype.write;
-    Confirm.prototype.write = function() { return this; };
+    Confirm.prototype.write = function( str ) {
+      self.output += str;
+      return this;
+    };
 
     this.rl = new ReadlineStub();
     this.confirm = new Confirm({
@@ -24,8 +30,10 @@ describe("`confirm` prompt", function() {
   });
 
   it("should default to true", function(done) {
+    var self = this;
 
     this.confirm.run(function(answer) {
+      expect(self.output).to.contain("Y/n");
       expect(answer).to.be.true;
       done();
     });
@@ -34,6 +42,7 @@ describe("`confirm` prompt", function() {
   });
 
   it("should allow a default `false` value", function(done) {
+    var self = this;
 
     var falseConfirm = new Confirm({
       message: "foo bar",
@@ -41,6 +50,7 @@ describe("`confirm` prompt", function() {
     }, this.rl);
 
     falseConfirm.run(function(answer) {
+      expect(self.output).to.contain("y/N");
       expect(answer).to.be.false;
       done();
     });
@@ -49,6 +59,7 @@ describe("`confirm` prompt", function() {
   });
 
   it("should allow a default `true` value", function(done) {
+    var self = this;
 
     var falseConfirm = new Confirm({
       message: "foo bar",
@@ -56,6 +67,7 @@ describe("`confirm` prompt", function() {
     }, this.rl);
 
     falseConfirm.run(function(answer) {
+      expect(self.output).to.contain("Y/n");
       expect(answer).to.be.true;
       done();
     });

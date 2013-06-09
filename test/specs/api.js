@@ -15,25 +15,28 @@ var prompts = [
     apis: [
       "filter",
       "validate",
-      "default"
+      "default",
+      "message"
     ]
   },
   {
     name: "confirm",
     apis: [
-
+      "message"
     ]
   },
   {
     name: "rawlist",
     apis: [
-      "filter"
+      "filter",
+      "message"
     ]
   },
   {
     name: "list",
     apis: [
-      "filter"
+      "filter",
+      "message"
     ]
   }
 ];
@@ -41,8 +44,12 @@ var prompts = [
 // Define tests
 var tests = {
 
-  "filter": function( name ) {
+  "filter": function() {
     describe("filter API", function() {
+
+      beforeEach(function() {
+        this.output = "";
+      });
 
       it("should filter the user input", function( done ) {
         var prompt = new this.Prompt({
@@ -84,15 +91,19 @@ var tests = {
     });
   },
 
-  "validate": function( name ) {
+  "validate": function() {
     describe("validate API", function() {
 
-      it("should validate the user input", function(done) {
+      beforeEach(function() {
+        this.output = "";
+      });
+
+      it("should validate the user input", function( done ) {
         var self = this;
         var called = 0;
         var prompt = new this.Prompt({
           message: "foo bar",
-          validate: function(value) {
+          validate: function( value ) {
             called++;
             expect(value).to.equal("Inquirer");
             // Make sure returning false won't continue
@@ -145,21 +156,49 @@ var tests = {
     });
   },
 
-  "default": function( name ) {
-    describe("default API", function( argument ) {
+  "default": function() {
+    describe("default API", function() {
+
+      beforeEach(function() {
+        this.output = "";
+      });
 
       it("should allow a default value", function( done ) {
+        var self = this;
         var prompt = new this.Prompt({
           "message": "foo",
           "default": "pass"
         }, this.rl);
 
         prompt.run(function( answer ) {
+          expect(self.output).to.contain("(pass)");
           expect(answer).to.equal("pass");
           done();
         });
 
         this.rl.emit("line", "");
+      });
+
+    });
+  },
+
+  "message": function() {
+    describe("message API", function() {
+
+      beforeEach(function() {
+        this.output = "";
+      });
+
+      it("should print message on screen", function() {
+        var message = "Foo bar bar foo bar";
+        var prompt = new this.Prompt({
+          "message": message,
+          "choices": [ "foo", "bar" ]
+        }, this.rl);
+
+        prompt.run();
+
+        expect(this.output).to.contain(message);
       });
 
     });
@@ -173,11 +212,17 @@ describe("Public APIs", function() {
     describe("on " + detail.name + " prompt", function() {
 
       beforeEach(function() {
+        var self = this;
         this.Prompt = inquirer.prompts[detail.name];
         this.rl = new ReadlineStub();
 
+        this.output = "";
+
         this._write = this.Prompt.prototype.write;
-        this.Prompt.prototype.write = function() { return this; };
+        this.Prompt.prototype.write = function( str ) {
+          self.output += str;
+          return this;
+        };
       });
 
       afterEach(function() {
