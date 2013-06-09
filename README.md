@@ -107,11 +107,10 @@ Prompts
 Take `type`, `name`, `message`, `choices`[, `filter`] properties.
 
 ``` prompt
-What about the toping?
+[?] What about the toping: (Use arrow key)
   [X] Peperonni and chesse
   [ ] All dressed
   [ ] Hawaïan
-(Use arrow key)
 ```
 
 ### Raw List - `{ type: "rawlist" }`
@@ -119,11 +118,11 @@ What about the toping?
 Take `type`, `name`, `message`, `choices`[, `filter`] properties.
 
 ``` prompt
-You also get a free 2L liquor! Which one?
+[?] You also get a free 2L liquor: 
   1) Pepsi
   2) 7up
   3) Coke
-  Default (1)
+  Answer: 
 ```
 
 ### Confirm - `{ type: "confirm" }`
@@ -131,7 +130,7 @@ You also get a free 2L liquor! Which one?
 Take `type`, `name`, `message`[, `default`] properties.
 
 ``` prompt
-Hi, welcome to Node Pizza plaza. Is it for a delivery? (Y/n)
+[?] Is it for a delivery: (Y/n)
 ```
 
 ### Input - `{ type: "input" }`
@@ -139,7 +138,7 @@ Hi, welcome to Node Pizza plaza. Is it for a delivery? (Y/n)
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
 ``` prompt
-Any comments on your purchase experience? (default "Nope, all good!"):
+[?] Any comments on your purchase experience: (Nope, all good!)
 ```
 
 
