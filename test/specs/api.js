@@ -29,14 +29,16 @@ var prompts = [
     name: "rawlist",
     apis: [
       "filter",
-      "message"
+      "message",
+      "choices"
     ]
   },
   {
     name: "list",
     apis: [
       "filter",
-      "message"
+      "message",
+      "choices"
     ]
   }
 ];
@@ -101,6 +103,7 @@ var tests = {
       it("should validate the user input", function( done ) {
         var self = this;
         var called = 0;
+        var errorMessage = "uh oh, error!";
         var prompt = new this.Prompt({
           message: "foo bar",
           validate: function( value ) {
@@ -112,7 +115,7 @@ var tests = {
             } else {
               self.rl.emit("line", "Inquirer");
             }
-            return false;
+            return errorMessage;
           }
         }, this.rl);
 
@@ -199,6 +202,30 @@ var tests = {
         prompt.run();
 
         expect(this.output).to.contain(message);
+      });
+
+    });
+  },
+
+  "choices": function() {
+    describe("choices API", function() {
+
+      beforeEach(function() {
+        this.output = "";
+      });
+
+      it("should print choices to screen", function() {
+        var choices = [ "Echo", "foo" ];
+        var prompt = new this.Prompt({
+          "message": "",
+          "choices": choices
+        }, this.rl);
+
+        prompt.run();
+
+        _.each( choices, function( choice ) {
+          expect(this.output).to.contain(choice);
+        }, this );
       });
 
     });
