@@ -75,6 +75,15 @@ var questions = [
     name: "comments",
     message: "Any comments on your purchase experience",
     default: "Nope, all good!"
+  },
+  {
+    type: "list",
+    name: "prize",
+    message: "For leaving a comments, you get a freebie",
+    choices: [ "cake", "fries" ],
+    when: function( answers ) {
+      return answers.comments !== "Nope, all good!";
+    }
   }
 ];
 
