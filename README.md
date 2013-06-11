@@ -71,18 +71,25 @@ A question object is a `hash` containing question related values:
 Values can be simple `string`s, or `object`s containing a `name` (to display) and a `value` properties (to save in the answers hash).
 + **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 + **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
++ **when**: (Function) Receive the current user answers hash and should return `true` or `false` depending on wheter or not this question should be asked.
 
-`validate` and `filter` function can be asynchronous using `this.async()`. You just have to pass the value you'd normally return to the callback option.
+`validate`, `filter` and `when` functions can be asynchronously using `this.async()`. You just have to pass the value you'd normally return to the callback option.
 
 ``` javascript
 {
   validate: function(input) {
+
+    // Declare function as asynchronous, and save the done callback
     var done = this.async();
+
+    // Do async stuff
     setTimeout(function() {
       if (typeof input !== "number") {
+        // Pass the return value in the done callback
         done("You need to provide a number");
         return;
       }
+      // Pass the return value in the done callback
       done(true);
     }, 3000);
   }
