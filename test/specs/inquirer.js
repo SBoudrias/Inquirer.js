@@ -21,7 +21,7 @@ describe("Inquirer public API", function() {
 
     // pass answers as parameter
 
-    // continu is `when` returns true
+    // continu if `when` returns true
 
     // don't run prompt if `when` returns false
 
