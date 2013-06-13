@@ -10,6 +10,10 @@ console.log("Hi, welcome to Node Pizza");
 
 var questions = [
   {
+    type: "input",
+    name: "working"
+  },
+  {
     type: "confirm",
     name: "toBeDelivered",
     message: "Is it for a delivery",

@@ -13,7 +13,8 @@ describe("`rawlist` prompt", function() {
 
     this.rl = new ReadlineStub();
     this.rawlist = new Rawlist({
-      message: "",
+      message: "message",
+      name: "name",
       choices: [ "foo", "bar" ]
     }, this.rl);
   });
@@ -58,6 +59,14 @@ describe("`rawlist` prompt", function() {
           done();
       }, 10);
     }, 10);
+  });
+
+
+  it("should require a choices array", function() {
+    var mkPrompt = function() {
+      new Rawlist({ name : "foo", message: "bar" });
+    };
+    expect(mkPrompt).to.throw(/choices/);
   });
 
 });

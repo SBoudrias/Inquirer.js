@@ -13,7 +13,8 @@ describe("`list` prompt", function() {
 
     this.rl = new ReadlineStub();
     this.list = new List({
-      message: "",
+      message: "message",
+      name: "name",
       choices: [ "foo", "bar" ]
     }, this.rl);
   });
@@ -82,6 +83,13 @@ describe("`list` prompt", function() {
     this.rl.emit("keypress", "", { name : "down" });
     this.rl.emit("keypress", "", { name : "down" });
     this.rl.emit("line");
+  });
+
+  it("should require a choices array", function() {
+    var mkPrompt = function() {
+      new List({ name : "foo", message: "bar" });
+    };
+    expect(mkPrompt).to.throw(/choices/);
   });
 
 });

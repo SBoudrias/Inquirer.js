@@ -21,7 +21,8 @@ describe("`input` prompt", function() {
   it("should use raw value from the user", function(done) {
 
     var input = new Input({
-      message: "foo bar"
+      message: "foo bar",
+      name: "name"
     }, this.rl);
 
     input.run(function(answer) {

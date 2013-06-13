@@ -16,13 +16,15 @@ var prompts = [
       "filter",
       "validate",
       "default",
-      "message"
+      "message",
+      "requiredValues"
     ]
   },
   {
     name: "confirm",
     apis: [
-      "message"
+      "message",
+      "requiredValues"
     ]
   },
   {
@@ -30,7 +32,8 @@ var prompts = [
     apis: [
       "filter",
       "message",
-      "choices"
+      "choices",
+      "requiredValues"
     ]
   },
   {
@@ -38,7 +41,8 @@ var prompts = [
     apis: [
       "filter",
       "message",
-      "choices"
+      "choices",
+      "requiredValues"
     ]
   }
 ];
@@ -56,6 +60,7 @@ var tests = {
       it("should filter the user input", function( done ) {
         var prompt = new this.Prompt({
           message: "foo bar",
+          name: "foo",
           choices: [ "foo", "bar" ],
           filter: function() {
             return "pass";
@@ -73,6 +78,7 @@ var tests = {
       it("should allow filter function to be asynchronous", function( done ) {
         var prompt = new this.Prompt({
           message: "foo bar",
+          name: "foo",
           choices: [ "foo", "bar" ],
           filter: function() {
             var done = this.async();
@@ -105,6 +111,7 @@ var tests = {
         var called = 0;
         var prompt = new this.Prompt({
           message: "foo bar",
+          name: "foo",
           validate: function( value ) {
             called++;
             expect(value).to.equal("Inquirer");
@@ -132,6 +139,7 @@ var tests = {
         var errorMessage = "uh oh, error!";
         var prompt = new this.Prompt({
           message: "foo bar",
+          name: "foo",
           validate: function( value ) {
             called++;
             expect(value).to.equal("Inquirer");
@@ -157,6 +165,7 @@ var tests = {
         var called = 0;
         var prompt = new this.Prompt({
           message: "foo bar",
+          name: "foo",
           validate: function( value ) {
             expect(value).to.equal("Inquirer");
             called++;
@@ -177,6 +186,7 @@ var tests = {
         var called = 0;
         var prompt = new this.Prompt({
           message: "foo bar",
+          name: "foo",
           validate: function( value ) {
             var done = this.async();
             setTimeout(function() {
@@ -214,7 +224,8 @@ var tests = {
       it("should allow a default value", function( done ) {
         var self = this;
         var prompt = new this.Prompt({
-          "message": "foo",
+          message: "foo",
+          name: "foo",
           "default": "pass"
         }, this.rl);
 
@@ -240,8 +251,9 @@ var tests = {
       it("should print message on screen", function() {
         var message = "Foo bar bar foo bar";
         var prompt = new this.Prompt({
-          "message": message,
-          "choices": [ "foo", "bar" ]
+          message: message,
+          name: "foo",
+          choices: [ "foo", "bar" ]
         }, this.rl);
 
         prompt.run();
@@ -262,8 +274,9 @@ var tests = {
       it("should print choices to screen", function() {
         var choices = [ "Echo", "foo" ];
         var prompt = new this.Prompt({
-          "message": "",
-          "choices": choices
+          message: "m",
+          name: "foo",
+          choices: choices
         }, this.rl);
 
         prompt.run();
@@ -271,6 +284,26 @@ var tests = {
         _.each( choices, function( choice ) {
           expect(this.output).to.contain(choice);
         }, this );
+      });
+
+    });
+  },
+
+  "requiredValues": function() {
+    describe("Missing value", function() {
+
+      it("`message` should throw", function() {
+        var mkPrompt = function() {
+          new this.Prompt({ name : "foo" });
+        }.bind(this);
+        expect(mkPrompt).to.throw(/message/);
+      });
+
+      it("`name` should throw", function() {
+        var mkPrompt = function() {
+          new this.Prompt({ message : "foo" });
+        }.bind(this);
+        expect(mkPrompt).to.throw(/name/);
       });
 
     });

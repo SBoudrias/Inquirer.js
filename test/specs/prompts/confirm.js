@@ -21,7 +21,8 @@ describe("`confirm` prompt", function() {
 
     this.rl = new ReadlineStub();
     this.confirm = new Confirm({
-      message: "foo bar"
+      message: "foo bar",
+      name: "name"
     }, this.rl);
   });
 
@@ -46,6 +47,7 @@ describe("`confirm` prompt", function() {
 
     var falseConfirm = new Confirm({
       message: "foo bar",
+      name: "name",
       default: false
     }, this.rl);
 
@@ -63,6 +65,7 @@ describe("`confirm` prompt", function() {
 
     var falseConfirm = new Confirm({
       message: "foo bar",
+      name: "name",
       default: true
     }, this.rl);
 
