@@ -15,7 +15,7 @@ describe("`list` prompt", function() {
     this.list = new List({
       message: "message",
       name: "name",
-      choices: [ "foo", "bar" ]
+      choices: [ "foo", "bar", "bum" ]
     }, this.rl);
   });
 
@@ -56,7 +56,7 @@ describe("`list` prompt", function() {
     this.rl.emit("line");
   });
 
-  it("should limit moving inside it's choice array boundaries", function(done) {
+  it("should loop the choices when going out of boundaries", function(done) {
 
     var i = 0;
     function complete() {
@@ -67,7 +67,7 @@ describe("`list` prompt", function() {
     }
 
     this.list.run(function(answer) {
-      expect(answer).to.equal("foo");
+      expect(answer).to.equal("bar");
       complete();
     });
 
@@ -75,11 +75,13 @@ describe("`list` prompt", function() {
     this.rl.emit("keypress", "", { name : "up" });
     this.rl.emit("line");
 
+    this.list.selected = 0; //reset
     this.list.run(function(answer) {
-      expect(answer).to.equal("bar");
+      expect(answer).to.equal("foo");
       complete();
     });
 
+    this.rl.emit("keypress", "", { name : "down" });
     this.rl.emit("keypress", "", { name : "down" });
     this.rl.emit("keypress", "", { name : "down" });
     this.rl.emit("line");
