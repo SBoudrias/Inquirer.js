@@ -8,9 +8,43 @@ var _ = require("lodash");
 var ReadlineStub = require("../helpers/readline");
 var inquirer = require("../../lib/inquirer");
 
-inquirer.rl = new ReadlineStub();
 
 describe("inquirer.prompt", function() {
+
+  beforeEach(function() {
+    inquirer.rl = new ReadlineStub();
+  });
+
+  it("should resume and close readline", function( done ) {
+    var rl = inquirer.rl;
+
+    inquirer.prompt({
+      type: "confirm",
+      name: "q1",
+      message: "message"
+    }, function( answers ) {
+      expect(inquirer.rl).to.not.exist;
+      expect(rl.resume.called).to.be.true;
+      expect(rl.close.called).to.be.true;
+
+      rl = inquirer.rl = new ReadlineStub();
+      inquirer.prompt({
+        type: "confirm",
+        name: "q1",
+        message: "message"
+      }, function( answers ) {
+        expect(inquirer.rl).to.not.exist;
+        expect(rl.resume.called).to.be.true;
+        expect(rl.close.called).to.be.true;
+        done();
+      });
+
+      inquirer.rl.emit("line");
+    });
+
+    rl.emit("line");
+
+  });
 
   it("should take a prompts array and return answers", function( done ) {
     var prompts = [{

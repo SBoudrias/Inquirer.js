@@ -1,17 +1,18 @@
 var EventEmitter = require("events").EventEmitter;
+var sinon = require("sinon");
 var util = require("util");
 var _ = require("lodash");
 
-var noop = function() { return stub; };
 var stub = {
-  write      : noop,
-  moveCursor : noop,
-  setPrompt  : noop,
-  close      : noop,
+  write      : sinon.stub().returns(stub),
+  moveCursor : sinon.stub().returns(stub),
+  setPrompt  : sinon.stub().returns(stub),
+  close      : sinon.stub().returns(stub),
+  resume     : sinon.stub().returns(stub),
   output     : {
-    mute   : noop,
-    unmute : noop,
-    write  : noop
+    mute   : sinon.stub().returns(stub),
+    unmute : sinon.stub().returns(stub),
+    write  : sinon.stub().returns(stub)
   }
 };
 
