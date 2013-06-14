@@ -62,7 +62,8 @@ var questions = [
         name: "Hawaïan",
         value: "hawain"
       }
-    ]
+    ],
+    default: 1
   },
   {
     type: "rawlist",

@@ -94,4 +94,57 @@ describe("`list` prompt", function() {
     expect(mkPrompt).to.throw(/choices/);
   });
 
+  it("should allow a default index", function( done ) {
+    var rl = new ReadlineStub();
+    var list = new List({
+      message: "message",
+      name: "name",
+      choices: [ "foo", "bar", "bum" ],
+      default: 1
+    }, rl);
+
+    list.run(function( answer ) {
+      expect(answer).to.equal("bar");
+      done();
+    });
+
+    rl.emit("line");
+  });
+
+  it("should work from a default index", function( done ) {
+    var rl = new ReadlineStub();
+    var list = new List({
+      message: "message",
+      name: "name",
+      choices: [ "foo", "bar", "bum" ],
+      default: 1
+    }, rl);
+
+    list.run(function( answer ) {
+      expect(answer).to.equal("bum");
+      done();
+    });
+
+    rl.emit("keypress", "", { name : "down" });
+    rl.emit("line");
+  });
+
+  it("shouldn't allow an invalid index as default", function( done ) {
+    var rl = new ReadlineStub();
+    var list = new List({
+      message: "message",
+      name: "name",
+      choices: [ "foo", "bar", "bum" ],
+      default: 4
+    }, rl);
+
+    list.run(function( answer ) {
+      expect(answer).to.equal("foo");
+      done();
+    });
+
+    rl.emit("line");
+
+  });
+
 });
