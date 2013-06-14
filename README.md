@@ -111,7 +111,8 @@ Prompts
 
 ### List - `{ type: "list" }`
 
-Take `type`, `name`, `message`, `choices`[, `filter`] properties.
+Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
+default must the choice `index` in the array)
 
 ``` prompt
 [?] What about the toping: (Use arrow key)
@@ -122,7 +123,8 @@ Take `type`, `name`, `message`, `choices`[, `filter`] properties.
 
 ### Raw List - `{ type: "rawlist" }`
 
-Take `type`, `name`, `message`, `choices`[, `filter`] properties.
+Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
+default must the choice `index` in the array)
 
 ``` prompt
 [?] You also get a free 2L liquor: 
