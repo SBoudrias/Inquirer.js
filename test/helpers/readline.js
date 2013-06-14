@@ -7,6 +7,7 @@ var stub = {
   write      : noop,
   moveCursor : noop,
   setPrompt  : noop,
+  close      : noop,
   output     : {
     mute   : noop,
     unmute : noop,

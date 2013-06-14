@@ -311,7 +311,7 @@ var tests = {
 };
 
 // Run tests
-describe("Public APIs", function() {
+describe("Prompt public APIs", function() {
 
   _.each( prompts, function( detail ) {
     describe("on " + detail.name + " prompt", function() {
