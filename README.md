@@ -154,6 +154,8 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 News on the march (Release notes)
 =====================
 
++ **0.1.7** : Add a hierarchical prompt API with `when`, allow lists from having a default
++ **0.1.6** : Fix bug on unix and minor enhancement
 + **0.1.5** : Enhance visual style; prompts are now more succint. Lots of bug fixes.
 + **0.1.3** : Add async support for validation and filtering functions.
 + **0.1.0** : First official release. There's 4 prompt types: `input`, `confirm`, `list` and
