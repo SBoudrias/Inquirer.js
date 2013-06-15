@@ -8,6 +8,7 @@ var stub = {
   moveCursor : sinon.stub().returns(stub),
   setPrompt  : sinon.stub().returns(stub),
   close      : sinon.stub().returns(stub),
+  pause      : sinon.stub().returns(stub),
   resume     : sinon.stub().returns(stub),
   output     : {
     mute   : sinon.stub().returns(stub),
