@@ -23,7 +23,6 @@ describe("inquirer.prompt", function() {
       name: "q1",
       message: "message"
     }, function( answers ) {
-      expect(inquirer.rl).to.not.exist;
       expect(rl.resume.called).to.be.true;
       expect(rl.close.called).to.be.true;
 
@@ -33,7 +32,6 @@ describe("inquirer.prompt", function() {
         name: "q1",
         message: "message"
       }, function( answers ) {
-        expect(inquirer.rl).to.not.exist;
         expect(rl.resume.called).to.be.true;
         expect(rl.close.called).to.be.true;
         done();
