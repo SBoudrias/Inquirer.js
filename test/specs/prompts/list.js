@@ -1,6 +1,8 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
+var _ = require("lodash");
 var ReadlineStub = require("../../helpers/readline");
+var fixtures = require("../../helpers/fixtures");
 
 var List = require("../../../lib/prompts/list");
 
@@ -11,31 +13,27 @@ describe("`list` prompt", function() {
     this._write = List.prototype.write;
     List.prototype.write = function() { return this; };
 
+    this.fixture = _.clone( fixtures.list );
     this.rl = new ReadlineStub();
-    this.list = new List({
-      message: "message",
-      name: "name",
-      choices: [ "foo", "bar", "bum" ]
-    }, this.rl);
+    this.list = new List( this.fixture, this.rl );
   });
 
   afterEach(function() {
     List.prototype.write = this._write;
   });
 
-  it("should default to first choice", function(done) {
-    this.list.run(function(answer) {
+  it("should default to first choice", function( done ) {
+    this.list.run(function( answer ) {
       expect(answer).to.equal("foo");
-
       done();
     });
 
     this.rl.emit("line");
   });
 
-  it("should move selected cursor on keypress", function(done) {
+  it("should move selected cursor on keypress", function( done ) {
 
-    this.list.run(function(answer) {
+    this.list.run(function( answer ) {
       expect(answer).to.equal("bar");
       done();
     });
@@ -44,9 +42,9 @@ describe("`list` prompt", function() {
     this.rl.emit("line");
   });
 
-  it("should move selected cursor up and down on keypress", function(done) {
+  it("should move selected cursor up and down on keypress", function( done ) {
 
-    this.list.run(function(answer) {
+    this.list.run(function( answer ) {
       expect(answer).to.equal("foo");
       done();
     });
@@ -56,7 +54,7 @@ describe("`list` prompt", function() {
     this.rl.emit("line");
   });
 
-  it("should loop the choices when going out of boundaries", function(done) {
+  it("should loop the choices when going out of boundaries", function( done ) {
 
     var i = 0;
     function complete() {
@@ -66,7 +64,7 @@ describe("`list` prompt", function() {
       }
     }
 
-    this.list.run(function(answer) {
+    this.list.run(function( answer ) {
       expect(answer).to.equal("bar");
       complete();
     });
@@ -76,7 +74,7 @@ describe("`list` prompt", function() {
     this.rl.emit("line");
 
     this.list.selected = 0; //reset
-    this.list.run(function(answer) {
+    this.list.run(function( answer ) {
       expect(answer).to.equal("foo");
       complete();
     });
@@ -95,55 +93,42 @@ describe("`list` prompt", function() {
   });
 
   it("should allow a default index", function( done ) {
-    var rl = new ReadlineStub();
-    var list = new List({
-      message: "message",
-      name: "name",
-      choices: [ "foo", "bar", "bum" ],
-      default: 1
-    }, rl);
+
+    this.fixture.default = 1;
+    var list = new List( this.fixture, this.rl );
 
     list.run(function( answer ) {
       expect(answer).to.equal("bar");
       done();
     });
 
-    rl.emit("line");
+    this.rl.emit("line");
   });
 
   it("should work from a default index", function( done ) {
-    var rl = new ReadlineStub();
-    var list = new List({
-      message: "message",
-      name: "name",
-      choices: [ "foo", "bar", "bum" ],
-      default: 1
-    }, rl);
+
+    this.fixture.default = 1;
+    var list = new List( this.fixture, this.rl );
 
     list.run(function( answer ) {
       expect(answer).to.equal("bum");
       done();
     });
 
-    rl.emit("keypress", "", { name : "down" });
-    rl.emit("line");
+    this.rl.emit("keypress", "", { name : "down" });
+    this.rl.emit("line");
   });
 
   it("shouldn't allow an invalid index as default", function( done ) {
-    var rl = new ReadlineStub();
-    var list = new List({
-      message: "message",
-      name: "name",
-      choices: [ "foo", "bar", "bum" ],
-      default: 4
-    }, rl);
+    this.fixture.default = 4;
+    var list = new List( this.fixture, this.rl );
 
     list.run(function( answer ) {
       expect(answer).to.equal("foo");
       done();
     });
 
-    rl.emit("line");
+    this.rl.emit("line");
 
   });
 

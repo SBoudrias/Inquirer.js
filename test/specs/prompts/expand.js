@@ -1,6 +1,8 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
+var _ = require("lodash");
 var ReadlineStub = require("../../helpers/readline");
+var fixtures = require("../../helpers/fixtures");
 
 var Expand = require("../../../lib/prompts/expand");
 
@@ -17,96 +19,64 @@ describe("`expand` prompt", function() {
       return this;
     };
 
+    this.fixture = _.clone( fixtures.expand );
     this.rl = new ReadlineStub();
-    this.expand = new Expand({
-      message: "m",
-      name: "m",
-      choices: [
-        { key: "a", name: "acab" },
-        { key: "b", name: "bar" },
-        { key: "c", name: "chile" }
-      ]
-    }, this.rl);
+    this.expand = new Expand( this.fixture, this.rl );
   });
 
   afterEach(function() {
     Expand.prototype.write = this._write;
   });
 
-  describe("arguments validations", function() {
+  it("should throw if `key` is missing", function() {
+    var mkPrompt = function() {
+      this.fixture.choices = [ "a", "a" ];
+      return new Expand( this.fixture, this.rl );
+    }.bind(this);
 
-    it("should throw if `key` is missing", function() {
-      var errored = function() {
-        return new Expand({
-          message: "m",
-          name: "m",
-          choices: [ "a", "a" ]
-        });
-      };
-
-      expect(errored).to.throw(/Format error/);
-    });
-
-    it("should throw if `key` is duplicate", function() {
-      var errored = function() {
-        return new Expand({
-          message: "m",
-          name: "m",
-          choices: [
-            { key: "a", name: "foo" },
-            { key: "a", name: "foo" }
-          ]
-        });
-      };
-
-      expect(errored).to.throw(/Duplicate\ key\ error/);
-    });
-
-    it("should throw if `key` is `h`", function() {
-      var errored = function() {
-        return new Expand({
-          message: "m",
-          name: "m",
-          choices: [
-            { key: "h", name: "foo" }
-          ]
-        });
-      };
-
-      expect(errored).to.throw(/Reserved\ key\ error/);
-    });
-
+    expect(mkPrompt).to.throw(/Format error/);
   });
 
-  describe("default", function() {
+  it("should throw if `key` is duplicate", function() {
+    var mkPrompt = function() {
+      this.fixture.choices = [
+        { key: "a", name: "foo" },
+        { key: "a", name: "foo" }
+      ];
+      return new Expand( this.fixture, this.rl );
+    }.bind(this);
 
-    it("should be the first choice by default", function( done ) {
-      this.expand.run(function( answer ) {
-        expect(answer).to.equal("acab");
-        done();
-      });
-      this.rl.emit("line");
+    expect(mkPrompt).to.throw(/Duplicate\ key\ error/);
+  });
+
+  it("should throw if `key` is `h`", function() {
+    var mkPrompt = function() {
+      this.fixture.choices = [
+        { key: "h", name: "foo" }
+      ];
+      return new Expand( this.fixture, this.rl );
+    }.bind(this);
+
+    expect(mkPrompt).to.throw(/Reserved\ key\ error/);
+  });
+
+  it("should take the first choice by default", function( done ) {
+    this.expand.run(function( answer ) {
+      expect(answer).to.equal("acab");
+      done();
     });
+    this.rl.emit("line");
+  });
 
-    it("should be the `default` argument value", function( done ) {
-      this.expand = new Expand({
-        message: "m",
-        name: "m",
-        choices: [
-          { key: "a", name: "acab" },
-          { key: "b", name: "bar" },
-          { key: "c", name: "chile" }
-        ],
-        default: 1
-      }, this.rl);
+  it("should use the `default` argument value", function( done ) {
+    this.fixture.default = 1;
+    this.expand = new Expand( this.fixture, this.rl );
 
-      this.expand.run(function( answer ) {
-        expect(answer).to.equal("bar");
-        done();
-      });
-      this.rl.emit("line");
+    this.expand.run(function( answer ) {
+      expect(answer).to.equal("bar");
+      done();
     });
-
+    this.rl.emit("line");
   });
 
   it("should return the user input", function( done ) {
