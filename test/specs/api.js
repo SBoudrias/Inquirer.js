@@ -44,6 +44,12 @@ var prompts = [
       "choices",
       "requiredValues"
     ]
+  },
+  {
+    name: "expand",
+    apis: [
+      "requiredValues"
+    ]
   }
 ];
 

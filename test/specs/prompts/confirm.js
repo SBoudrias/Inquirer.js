@@ -4,8 +4,6 @@ var ReadlineStub = require("../../helpers/readline");
 
 var Confirm = require("../../../lib/prompts/confirm");
 
-// Prevent prompt from writing to screen
-// Confirm.prototype.write = function() { return this; };
 
 describe("`confirm` prompt", function() {
 
