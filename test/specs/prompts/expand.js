@@ -109,4 +109,42 @@ describe("`expand` prompt", function() {
 
   });
 
+  it("should return the user input", function( done ) {
+    this.expand.run(function( answer ) {
+      expect(answer).to.equal("bar");
+      done();
+    });
+    this.rl.emit("line", "b");
+  });
+
+  it("should have help option", function( done ) {
+    var run = 0;
+    this.expand.run(function( answer ) {
+      expect(this.output).to.match(/a\)\ acab/);
+      expect(this.output).to.match(/b\)\ bar/);
+      expect(answer).to.equal("chile");
+      done();
+    }.bind(this));
+    this.rl.emit("line", "h");
+    this.rl.emit("line", "c");
+  });
+
+  it("should not allow invalid command", function( done ) {
+    var self = this;
+    var callCount = 0;
+
+    this.expand.run(function( answer ) {
+      callCount++;
+    });
+
+    this.rl.emit( "line", "blah" );
+    setTimeout(function() {
+      self.rl.emit( "line", "a" );
+      setTimeout(function() {
+          expect(callCount).to.equal(1);
+          done();
+      }, 10 );
+    }, 10 );
+  });
+
 });
