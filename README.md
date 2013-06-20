@@ -106,8 +106,10 @@ A key/value hash containing the client answers in each prompt.
   + `rawlist`, `list` : Selected choice value (or name if no value specified) (String)
 
 
-Prompts
+Prompts type
 ---------------------
+
+_allowed options written inside square brackets (`[]`) are optionnals. Others are required._
 
 ### List - `{ type: "list" }`
 
@@ -139,9 +141,7 @@ default must the choice `index` in the array)
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must the choice `index` in the array)
 
-Note the `choice` object will take an extra parameter called `key` for the `expand` prompt.
-This parameter must be a single (lowercased) character. Note that the `h` option is added
-by the prompt and shouldn't be defined by the user.
+Note that the `choice` object will take an extra parameter called `key` for the `expand` prompt. This parameter must be a single (lowercased) character. The `h` option is added by the prompt and shouldn't be defined by the user.
 
 See `examples/expand.js` for a running example.
 
@@ -155,16 +155,16 @@ See `examples/expand.js` for a running example.
 
 # Expanded `h` command
 [?] Overwrite `file.js`: [Ysdh] h
-  1) Overwrite
-  2) Skip (do not overwrite)
-  3) Show Diff
-  4) Help, list options
+  y) Overwrite
+  s) Skip (do not overwrite)
+  d) Show Diff
+  h) Help, list options
   Answer: 
 ```
 
 ### Confirm - `{ type: "confirm" }`
 
-Take `type`, `name`, `message`[, `default`] properties.
+Take `type`, `name`, `message`[, `default`] properties. `default` is expected to be a boolean if used.
 
 ``` prompt
 [?] Is it for a delivery: (Y/n)
