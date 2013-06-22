@@ -14,8 +14,19 @@ var questions = [
     name: "toBeDelivered",
     message: "Is it for a delivery",
     default: false
-  },
-  {
+  },{
+    type: "password",
+    name: "secret",
+    message: "Tell me a secret",
+    validate: function( value ) {
+    var pass = value.length >=  6;
+    if (pass) {
+      return true;
+    } else {
+      return "Secret must have at least 6 characters";
+    }
+    }
+  },{
     type: "input",
     name: "phone",
     message: "What's your phone number",
