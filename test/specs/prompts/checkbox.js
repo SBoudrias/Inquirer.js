@@ -53,4 +53,32 @@ describe("`checkbox` prompt", function() {
     this.rl.emit("line");
   });
 
+  it("should check defaults choices", function( done ) {
+    this.fixture.choices = [
+      { name: "1", checked: true  },
+      { name: "2", checked: false },
+      { name: "3", checked: false }
+    ];
+    this.checkbox = new Checkbox( this.fixture, this.rl );
+    this.checkbox.run(function( answer ) {
+      expect(answer.length).to.equal(1);
+      expect(answer[0]).to.equal("1");
+      done();
+    });
+    this.rl.emit("line");
+  });
+
+  it("should toggle choice when hitting space", function( done ) {
+    this.checkbox.run(function( answer ) {
+      expect(answer.length).to.equal(1);
+      expect(answer[0]).to.equal("choice 1");
+      done();
+    });
+    this.rl.emit("keypress", " ", { name: "space" });
+    this.rl.emit("keypress", null, { name: "down" });
+    this.rl.emit("keypress", " ", { name: "space" });
+    this.rl.emit("keypress", " ", { name: "space" });
+    this.rl.emit("line");
+  });
+
 });
