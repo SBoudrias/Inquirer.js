@@ -30,6 +30,16 @@ module.exports = {
       { key: "b", name: "bar"   },
       { key: "c", name: "chile" }
     ]
+  },
+
+  checkbox: {
+    message: "message",
+    name: "name",
+    choices: [
+      "choice 1",
+      "choice 2",
+      "choice 3"
+    ]
   }
 
 };
