@@ -16,8 +16,8 @@ describe("`base` prompt (e.g. prompt helpers)", function() {
   });
 
   it("`suffix` method should only add ':' if last char is a letter", function() {
-    expect(this.base.suffix("m:")).to.equal("m:");
-    expect(this.base.suffix("m?")).to.equal("m?");
+    expect(this.base.suffix("m:")).to.equal("m: ");
+    expect(this.base.suffix("m?")).to.equal("m? ");
     expect(this.base.suffix("m")).to.equal("m: ");
     expect(this.base.suffix("m ")).to.equal("m ");
     expect(this.base.suffix()).to.equal(": ");
