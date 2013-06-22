@@ -162,6 +162,21 @@ See `examples/expand.js` for a running example.
   Answer: 
 ```
 
+### Checkbox - `{ type: "checkbox" }`
+
+Take `type`, `name`, `message`, `choices`[, `filter`, `validate`] properties.
+
+Choices marked as `{ checked: true }` will be checked by default.
+
+``` prompt
+[?] Choose your toppings: (press <space> to select)
+    [ ] Pepperoni
+  > [ ] Cheese
+    [X] Tomato
+    [ ] Pineapple
+    [ ] Bacon
+```
+
 ### Confirm - `{ type: "confirm" }`
 
 Take `type`, `name`, `message`[, `default`] properties. `default` is expected to be a boolean if used.
