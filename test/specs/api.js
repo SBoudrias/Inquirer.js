@@ -53,6 +53,15 @@ var prompts = [
       "filter",
       "message"
     ]
+  },
+  {
+    name: "checkbox",
+    apis: [
+      "requiredValues",
+      "message",
+      "choices",
+      "filter"
+    ]
   }
 ];
 
