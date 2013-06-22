@@ -51,6 +51,6 @@ describe("`checkbox` prompt", function() {
     this.rl.emit("keypress", null, { name: "down" });
     this.rl.emit("keypress", " ", { name: "space" });
     this.rl.emit("line");
-  })
+  });
 
 });
