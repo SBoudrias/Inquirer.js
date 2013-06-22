@@ -26,7 +26,13 @@ inquirer.prompt([
       {
         name: "Bacon"
       }
-    ]
+    ],
+    validate: function( answer ) {
+      if ( answer.length < 1 ) {
+        return "You must choose at least one topping.";
+      }
+      return true;
+    }
   }
 ], function( answers ) {
   console.log( JSON.stringify(answers, null, "  ") );

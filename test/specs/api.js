@@ -60,7 +60,8 @@ var prompts = [
       "requiredValues",
       "message",
       "choices",
-      "filter"
+      "filter",
+      "validate"
     ]
   }
 ];
@@ -122,12 +123,11 @@ var tests = {
 
         this.fixture.validate = function( value ) {
           called++;
-          expect(value).to.equal("Inquirer");
           // Make sure returning false won't continue
           if (called === 2) {
             done();
           } else {
-            self.rl.emit("line", "Inquirer");
+            self.rl.emit("line");
           }
           return false;
         };
@@ -138,7 +138,7 @@ var tests = {
           expect(false).to.be.true;
         });
 
-        this.rl.emit("line", "Inquirer");
+        this.rl.emit("line");
       });
 
       it("should reject input if a string is returned", function( done ) {
@@ -148,12 +148,11 @@ var tests = {
 
         this.fixture.validate = function( value ) {
           called++;
-          expect(value).to.equal("Inquirer");
           // Make sure returning false won't continue
           if (called === 2) {
             done();
           } else {
-            self.rl.emit("line", "Inquirer");
+            self.rl.emit("line");
           }
           return errorMessage;
         };
@@ -164,14 +163,13 @@ var tests = {
           expect(false).to.be.true;
         });
 
-        this.rl.emit("line", "Inquirer");
+        this.rl.emit("line");
       });
 
       it("should accept input if boolean true is returned", function( done ) {
         var called = 0;
 
         this.fixture.validate = function( value ) {
-          expect(value).to.equal("Inquirer");
           called++;
           return true;
         };
@@ -182,7 +180,7 @@ var tests = {
           done();
         });
 
-        this.rl.emit( "line", "Inquirer" );
+        this.rl.emit("line");
       });
 
       it("should allow validate function to be asynchronous", function( next ) {
@@ -193,12 +191,11 @@ var tests = {
           var done = this.async();
           setTimeout(function() {
             called++;
-            expect(value).to.equal("Inquirer");
             // Make sure returning false won't continue
             if (called === 2) {
               next();
             } else {
-              self.rl.emit("line", "Inquirer");
+              self.rl.emit("line");
             }
             done(false);
           }, 0);
@@ -211,7 +208,7 @@ var tests = {
           expect(false).to.be.true;
         });
 
-        this.rl.emit( "line", "Inquirer" );
+        this.rl.emit( "line" );
       });
 
     });
