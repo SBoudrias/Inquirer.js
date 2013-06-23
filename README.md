@@ -193,6 +193,14 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 [?] Any comments on your purchase experience: (Nope, all good!)
 ```
 
+### Password - `{ type: "password" }`
+
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
+
+``` prompt
+[?] Please enter your github account password: **** 
+```
+
 
 News on the march (Release notes)
 =====================
