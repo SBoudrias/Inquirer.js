@@ -63,6 +63,16 @@ var prompts = [
       "filter",
       "validate"
     ]
+  },
+  {
+    name: "password",
+    apis: [
+      "requiredValues",
+      "message",
+      "filter",
+      "validate",
+      "default"
+    ]
   }
 ];
 

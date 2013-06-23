@@ -10,6 +10,11 @@ module.exports = {
     name: "name"
   },
 
+  password: {
+    message: "message",
+    name: "name"
+  },
+
   list: {
     message: "message",
     name: "name",
