@@ -67,8 +67,8 @@ A question object is a `hash` containing question related values:
 + **name**: (String) The name to use when storing the answer in the anwers hash.
 + **message**: (String) The question to print.
 + **default**: (String) Default value to use if nothing is entered
-+ **choices**: (Array) Choices array.  
-Values can be simple `string`s, or `object`s containing a `name` (to display) and a `value` properties (to save in the answers hash).
++ **choices**: (Array|Function) Choices array or a function returning a choices array. If defined as a function, the first parameter will be the current inquirer session answers.  
+Array values can be simple `strings`, or `objects` containing a `name` (to display) and a `value` properties (to save in the answers hash).
 + **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 + **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
 + **when**: (Function) Receive the current user answers hash and should return `true` or `false` depending on wheter or not this question should be asked.
