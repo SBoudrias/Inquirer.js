@@ -202,6 +202,23 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 ```
 
 
+Support (OS - terminals)
+=====================
+
+You should expect mostly good support for the CLI below. This does not mean we won't
+look at issues found on other command line - feel free to report any!
+
+- **Mac OS**:
+  - Terminal.app
+  - iTerm
+- **Windows**:
+  - cmd.exe
+  - Powershell
+  - Cygwin
+- **Ubuntu**:
+  - Terminal
+
+
 News on the march (Release notes)
 =====================
 
@@ -222,9 +239,14 @@ or bug fix. `npm test` to run the test suite.
 **Documentation**: Add documentation for every API change. Feel free to send corrections
 or better docs!  
 
+We're looking to offer good support for multiples prompt and environments. If you want to
+help, we'd like to keep a list of testers for each terminal/OS so we can contact you and
+get feedback before release; let us know if you want to be added to the list! (just tweet
+to @vaxilart)
+
 
 License
 =====================
 
-Copyright (c) 2012 Simon Boudrias  
+Copyright (c) 2012 Simon Boudrias (twitter: @vaxilart)  
 Licensed under the MIT license.
