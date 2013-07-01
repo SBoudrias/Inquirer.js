@@ -116,25 +116,14 @@ _allowed options written inside square brackets (`[]`) are optionnals. Others ar
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must the choice `index` in the array)
 
-``` prompt
-[?] What about the toping: (Use arrow key)
-  [X] Peperonni and chesse
-  [ ] All dressed
-  [ ] Hawaïan
-```
+![List prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/list-prompt.png)
 
 ### Raw List - `{ type: "rawlist" }`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must the choice `index` in the array)
 
-``` prompt
-[?] You also get a free 2L liquor: 
-  1) Pepsi
-  2) 7up
-  3) Coke
-  Answer: 
-```
+![Raw list prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/rawlist-prompt.png)
 
 ### Expand - `{ type: "expand" }`
 
@@ -145,22 +134,9 @@ Note that the `choice` object will take an extra parameter called `key` for the 
 
 See `examples/expand.js` for a running example.
 
-``` prompt
-# Default
-[?] Overwrite `file.js`: [Ysdh]
+![Expand prompt closed](https://dl.dropboxusercontent.com/u/59696254/inquirer/expand-prompt-1.png)
+![Expand prompt expanded](https://dl.dropboxusercontent.com/u/59696254/inquirer/expand-prompt-2.png)
 
-# Auto feedback
-[?] Overwrite `file.js`: [Ysdh] y
->> Overwrite this one
-
-# Expanded `h` command
-[?] Overwrite `file.js`: [Ysdh] h
-  y) Overwrite
-  s) Skip (do not overwrite)
-  d) Show Diff
-  h) Help, list options
-  Answer: 
-```
 
 ### Checkbox - `{ type: "checkbox" }`
 
@@ -168,38 +144,26 @@ Take `type`, `name`, `message`, `choices`[, `filter`, `validate`] properties.
 
 Choices marked as `{ checked: true }` will be checked by default.
 
-``` prompt
-[?] Choose your toppings: (press <space> to select)
-    [ ] Pepperoni
-  > [ ] Cheese
-    [X] Tomato
-    [ ] Pineapple
-    [ ] Bacon
-```
+![Checkbox prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/checkbox-prompt.png)
 
 ### Confirm - `{ type: "confirm" }`
 
 Take `type`, `name`, `message`[, `default`] properties. `default` is expected to be a boolean if used.
 
-``` prompt
-[?] Is it for a delivery: (Y/n)
-```
+![Confirm prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/confirm-prompt.png)
 
 ### Input - `{ type: "input" }`
 
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
-``` prompt
-[?] Any comments on your purchase experience: (Nope, all good!)
-```
+![Input prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/input-prompt.png)
 
 ### Password - `{ type: "password" }`
 
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
-``` prompt
-[?] Please enter your github account password: **** 
-```
+![Password prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/password-prompt.png)
+
 
 
 Support (OS - terminals)
