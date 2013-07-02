@@ -15,6 +15,20 @@ describe("normalizeChoices", function() {
       value: "bar"
     }]);
   });
+
+  it("should keep extra keys", function() {
+    var initial = [{ name: "foo", extra: "1" }, { name: "bar", key: "z" }];
+    var normalized = utils.normalizeChoices(initial);
+    expect(normalized).to.eql([{
+      name: "foo",
+      value: "foo",
+      extra: "1"
+    }, {
+      name: "bar",
+      value: "bar",
+      key: "z"
+    }]);
+  });
 });
 
 describe("runAsync", function() {

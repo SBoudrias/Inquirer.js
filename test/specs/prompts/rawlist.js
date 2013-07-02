@@ -1,6 +1,8 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
+var _ = require("lodash");
 var ReadlineStub = require("../../helpers/readline");
+var fixtures = require("../../helpers/fixtures");
 
 var Rawlist = require("../../../lib/prompts/rawlist");
 
@@ -12,11 +14,8 @@ describe("`rawlist` prompt", function() {
     Rawlist.prototype.write = function() { return this; };
 
     this.rl = new ReadlineStub();
-    this.rawlist = new Rawlist({
-      message: "message",
-      name: "name",
-      choices: [ "foo", "bar" ]
-    }, this.rl);
+    this.fixture = _.clone( fixtures.rawlist );
+    this.rawlist = new Rawlist( this.fixture, this.rl );
   });
 
   afterEach(function() {
@@ -69,37 +68,27 @@ describe("`rawlist` prompt", function() {
   });
 
   it("should allow a default index", function( done ) {
-    var rl = new ReadlineStub();
-    var list = new Rawlist({
-      message: "message",
-      name: "name",
-      choices: [ "foo", "bar", "bum" ],
-      default: 1
-    }, rl);
+    this.fixture.default = 1;
+    var list = new Rawlist(this.fixture, this.rl);
 
     list.run(function( answer ) {
       expect(answer).to.equal("bar");
       done();
     });
 
-    rl.emit("line");
+    this.rl.emit("line");
   });
 
   it("shouldn't allow an invalid index as default", function( done ) {
-    var rl = new ReadlineStub();
-    var list = new Rawlist({
-      message: "message",
-      name: "name",
-      choices: [ "foo", "bar", "bum" ],
-      default: 4
-    }, rl);
+    this.fixture.default = 4;
+    var list = new Rawlist(this.fixture, this.rl);
 
     list.run(function( answer ) {
       expect(answer).to.equal("foo");
       done();
     });
 
-    rl.emit("line");
+    this.rl.emit("line");
 
   });
 

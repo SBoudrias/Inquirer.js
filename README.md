@@ -67,8 +67,8 @@ A question object is a `hash` containing question related values:
 + **name**: (String) The name to use when storing the answer in the anwers hash.
 + **message**: (String) The question to print.
 + **default**: (String) Default value to use if nothing is entered
-+ **choices**: (Array) Choices array.  
-Values can be simple `string`s, or `object`s containing a `name` (to display) and a `value` properties (to save in the answers hash).
++ **choices**: (Array|Function) Choices array or a function returning a choices array. If defined as a function, the first parameter will be the current inquirer session answers.  
+Array values can be simple `strings`, or `objects` containing a `name` (to display) and a `value` properties (to save in the answers hash).
 + **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 + **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
 + **when**: (Function) Receive the current user answers hash and should return `true` or `false` depending on wheter or not this question should be asked.
@@ -106,49 +106,81 @@ A key/value hash containing the client answers in each prompt.
   + `rawlist`, `list` : Selected choice value (or name if no value specified) (String)
 
 
-Prompts
+Prompts type
 ---------------------
+
+_allowed options written inside square brackets (`[]`) are optionnals. Others are required._
 
 ### List - `{ type: "list" }`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must the choice `index` in the array)
 
-``` prompt
-[?] What about the toping: (Use arrow key)
-  [X] Peperonni and chesse
-  [ ] All dressed
-  [ ] Hawaïan
-```
+![List prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/list-prompt.png)
 
 ### Raw List - `{ type: "rawlist" }`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must the choice `index` in the array)
 
-``` prompt
-[?] You also get a free 2L liquor: 
-  1) Pepsi
-  2) 7up
-  3) Coke
-  Answer: 
-```
+![Raw list prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/rawlist-prompt.png)
+
+### Expand - `{ type: "expand" }`
+
+Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
+default must the choice `index` in the array)
+
+Note that the `choice` object will take an extra parameter called `key` for the `expand` prompt. This parameter must be a single (lowercased) character. The `h` option is added by the prompt and shouldn't be defined by the user.
+
+See `examples/expand.js` for a running example.
+
+![Expand prompt closed](https://dl.dropboxusercontent.com/u/59696254/inquirer/expand-prompt-1.png)
+![Expand prompt expanded](https://dl.dropboxusercontent.com/u/59696254/inquirer/expand-prompt-2.png)
+
+
+### Checkbox - `{ type: "checkbox" }`
+
+Take `type`, `name`, `message`, `choices`[, `filter`, `validate`] properties.
+
+Choices marked as `{ checked: true }` will be checked by default.
+
+![Checkbox prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/checkbox-prompt.png)
 
 ### Confirm - `{ type: "confirm" }`
 
-Take `type`, `name`, `message`[, `default`] properties.
+Take `type`, `name`, `message`[, `default`] properties. `default` is expected to be a boolean if used.
 
-``` prompt
-[?] Is it for a delivery: (Y/n)
-```
+![Confirm prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/confirm-prompt.png)
 
 ### Input - `{ type: "input" }`
 
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
-``` prompt
-[?] Any comments on your purchase experience: (Nope, all good!)
-```
+![Input prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/input-prompt.png)
+
+### Password - `{ type: "password" }`
+
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
+
+![Password prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/password-prompt.png)
+
+
+
+Support (OS - terminals)
+=====================
+
+You should expect mostly good support for the CLI below. This does not mean we won't
+look at issues found on other command line - feel free to report any!
+
+- **Mac OS**:
+  - Terminal.app
+  - iTerm
+- **Windows**:
+  - cmd.exe
+  - Powershell
+  - Cygwin
+- **Ubuntu**:
+  - Terminal
 
 
 News on the march (Release notes)
@@ -171,9 +203,14 @@ or bug fix. `npm test` to run the test suite.
 **Documentation**: Add documentation for every API change. Feel free to send corrections
 or better docs!  
 
+We're looking to offer good support for multiples prompt and environments. If you want to
+help, we'd like to keep a list of testers for each terminal/OS so we can contact you and
+get feedback before release; let us know if you want to be added to the list! (just tweet
+to @vaxilart)
+
 
 License
 =====================
 
-Copyright (c) 2012 Simon Boudrias  
+Copyright (c) 2012 Simon Boudrias (twitter: @vaxilart)  
 Licensed under the MIT license.
