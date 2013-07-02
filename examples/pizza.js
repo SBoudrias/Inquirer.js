@@ -46,24 +46,26 @@ var questions = [
     filter: Number
   },
   {
-    type: "list",
+    type: "expand",
     name: "toppings",
     message: "What about the toping",
     choices: [
       {
+        key: "p",
         name: "Peperonni and chesse",
         value: "PeperonniChesse"
       },
       {
+        key: "a",
         name: "All dressed",
         value: "alldressed"
       },
       {
+        key: "w",
         name: "Hawaïan",
-        value: "hawain"
+        value: "hawaian"
       }
-    ],
-    default: 1
+    ]
   },
   {
     type: "rawlist",

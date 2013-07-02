@@ -4,28 +4,28 @@ var _ = require("lodash");
 var ReadlineStub = require("../../helpers/readline");
 var fixtures = require("../../helpers/fixtures");
 
-var Input = require("../../../lib/prompts/input");
+var Password = require("../../../lib/prompts/password");
 
 
-describe("`input` prompt", function() {
+describe("`password` prompt", function() {
 
   beforeEach(function() {
-    this._write = Input.prototype.write;
-    Input.prototype.write = function() { return this; };
+    this._write = Password.prototype.write;
+    Password.prototype.write = function() { return this; };
 
-    this.fixture = _.clone( fixtures.input );
+    this.fixture = _.clone( fixtures.password );
     this.rl = new ReadlineStub();
   });
 
   afterEach(function() {
-    Input.prototype.write = this._write;
+    Password.prototype.write = this._write;
   });
 
   it("should use raw value from the user", function( done ) {
 
-    var input = new Input( this.fixture, this.rl );
+    var password = new Password( this.fixture, this.rl );
 
-    input.run(function( answer ) {
+    password.run(function( answer ) {
       expect(answer).to.equal("Inquirer");
       done();
     });
