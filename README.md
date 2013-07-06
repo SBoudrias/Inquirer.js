@@ -10,7 +10,7 @@ Goal and philosophy
 We strive at providing easily embeddable and beatiful command line interface for Node.js ;
 some hope in becoming the CLI Xanadu.
 
-_Inquirer_ should ease the process of asking end user questions, parsing, validating answers, and providing error feedback.
+_Inquirer_ should ease the process of asking end user **questions**, **parsing**, **validating** answers, managing **hierarchical prompts** and providing **error feedback**.
 
 _Inquirer_ provide the user interface, and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [Commander.js](https://github.com/visionmedia/commander.js) (inspired by) or [Cli-color](https://github.com/medikoo/cli-color) (used internally).
 
@@ -186,12 +186,7 @@ look at issues found on other command line - feel free to report any!
 News on the march (Release notes)
 =====================
 
-+ **0.1.7** : Add a hierarchical prompt API with `when`, allow lists from having a default
-+ **0.1.6** : Fix bug on unix and minor enhancement
-+ **0.1.5** : Enhance visual style; prompts are now more succint. Lots of bug fixes.
-+ **0.1.3** : Add async support for validation and filtering functions.
-+ **0.1.0** : First official release. There's 4 prompt types: `input`, `confirm`, `list` and
-`rawlist`. There's functionnality to allow the validation of input, and the filtering of values.
+Please refer to the [Github releases section for the changelog](https://github.com/SBoudrias/Inquirer.js/releases)
 
 
 Contributing
@@ -202,6 +197,7 @@ Contributing
 or bug fix. `npm test` to run the test suite.  
 **Documentation**: Add documentation for every API change. Feel free to send corrections
 or better docs!  
+**Pull Requests**: Send _fixes_ PR on the `master` branch. Any new features should be send on the `wip`branch.
 
 We're looking to offer good support for multiples prompt and environments. If you want to
 help, we'd like to keep a list of testers for each terminal/OS so we can contact you and
