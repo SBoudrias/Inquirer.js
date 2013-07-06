@@ -24,7 +24,8 @@ describe("inquirer.prompt", function() {
       message: "message"
     }, function( answers ) {
       expect(rl.resume.called).to.be.true;
-      expect(rl.pause.called).to.be.true;
+      expect(rl.close.called).to.be.true;
+      expect(inquirer.rl).to.be.null;
 
       rl = inquirer.rl = new ReadlineStub();
       inquirer.prompt({
@@ -33,7 +34,8 @@ describe("inquirer.prompt", function() {
         message: "message"
       }, function( answers ) {
         expect(rl.resume.called).to.be.true;
-        expect(rl.pause.called).to.be.true;
+        expect(rl.close.called).to.be.true;
+        expect(inquirer.rl).to.be.null;
         done();
       });
 
