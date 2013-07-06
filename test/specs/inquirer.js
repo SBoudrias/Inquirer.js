@@ -6,43 +6,49 @@ var expect = require("chai").expect;
 var sinon = require("sinon");
 var _ = require("lodash");
 var ReadlineStub = require("../helpers/readline");
-var inquirer = require("../../lib/inquirer");
+var proxyquire = require("proxyquire");
+var inquirer = proxyquire("../../lib/inquirer", {
+  "./utils/readline": {
+    createInterface: function() {
+      return new ReadlineStub();
+    }
+  }
+});
 
 
 describe("inquirer.prompt", function() {
 
-  beforeEach(function() {
-    inquirer.rl = new ReadlineStub();
-  });
-
-  it("should resume and close readline", function( done ) {
-    var rl = inquirer.rl;
+  it("should close and create a new readline instances each time it's called", function( done ) {
+    var rl1;
 
     inquirer.prompt({
       type: "confirm",
       name: "q1",
       message: "message"
     }, function( answers ) {
-      expect(rl.resume.called).to.be.true;
-      expect(rl.close.called).to.be.true;
-      expect(inquirer.rl).to.be.null;
+      var rl2;
 
-      rl = inquirer.rl = new ReadlineStub();
+      expect(rl1.close.called).to.be.true;
+      expect(inquirer.rl).to.not.exist;
+
       inquirer.prompt({
         type: "confirm",
         name: "q1",
         message: "message"
       }, function( answers ) {
-        expect(rl.resume.called).to.be.true;
-        expect(rl.close.called).to.be.true;
-        expect(inquirer.rl).to.be.null;
+        expect(rl2.close.called).to.be.true;
+        expect(inquirer.rl).to.not.exist;
+
+        expect( rl1 ).to.not.equal( rl2 );
         done();
       });
 
+      rl2 = inquirer.rl;
       inquirer.rl.emit("line");
     });
 
-    rl.emit("line");
+    rl1 = inquirer.rl;
+    inquirer.rl.emit("line");
 
   });
 
