@@ -201,9 +201,8 @@ or better docs!
 
 We're looking to offer good support for multiples prompt and environments. If you want to
 help, we'd like to keep a list of testers for each terminal/OS so we can contact you and
-get feedback before release; let us know if you want to be added to the list! (just tweet
-to @vaxilart)
-
+get feedback before release. Let us know if you want to be added to the list (just tweet
+to @vaxilart) or just add your name to [the wiki](https://github.com/SBoudrias/Inquirer.js/wiki/Testers)
 
 License
 =====================
