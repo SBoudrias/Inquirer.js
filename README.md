@@ -66,7 +66,7 @@ A question object is a `hash` containing question related values:
 `list`, `rawlist`
 + **name**: (String) The name to use when storing the answer in the anwers hash.
 + **message**: (String) The question to print.
-+ **default**: (String) Default value to use if nothing is entered
++ **default**: (String|Function) Default value to use if nothing is entered, or a function that returns the default value. If defined as a function, the first parameter will be the current inquirer session answers. 
 + **choices**: (Array|Function) Choices array or a function returning a choices array. If defined as a function, the first parameter will be the current inquirer session answers.  
 Array values can be simple `strings`, or `objects` containing a `name` (to display) and a `value` properties (to save in the answers hash).
 + **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
