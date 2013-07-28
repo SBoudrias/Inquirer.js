@@ -90,6 +90,36 @@ describe("inquirer.prompt", function() {
     inquirer.rl.emit("line");
   });
 
+  it("should parse `default` if passed as a function", function( done ) {
+    var stubDefault = "foo";
+    inquirer.prompts.stub = function( params ) {
+      this.opt = {
+        when: function() { return true; }
+      };
+      expect(params.default).to.equal(stubDefault);
+      done();
+    };
+    inquirer.prompts.stub.prototype.run = function() {};
+
+    var prompts = [{
+      type: "input",
+      name: "name1",
+      message: "message",
+      default: "bar"
+    }, {
+      type: "stub",
+      name: "name",
+      message: "message",
+      default: function( answers ) {
+        expect(answers.name1).to.equal("bar");
+        return stubDefault;
+      }
+    }];
+
+    inquirer.prompt(prompts, function() {});
+    inquirer.rl.emit("line");
+  });
+
   it("should parse `choices` if passed as a function", function( done ) {
     var stubChoices = [ "foo", "bar" ];
     inquirer.prompts.stub = function( params ) {
