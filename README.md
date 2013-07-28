@@ -109,12 +109,12 @@ A key/value hash containing the client answers in each prompt.
 Prompts type
 ---------------------
 
-_allowed options written inside square brackets (`[]`) are optionnals. Others are required._
+_allowed options written inside square brackets (`[]`) are optional. Others are required._
 
 ### List - `{ type: "list" }`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
-default must the choice `index` in the array)
+default must be the choice `index` in the array)
 
 ![List prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/list-prompt.png)
 
@@ -128,7 +128,7 @@ default must the choice `index` in the array)
 ### Expand - `{ type: "expand" }`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
-default must the choice `index` in the array)
+default must be the choice `index` in the array)
 
 Note that the `choice` object will take an extra parameter called `key` for the `expand` prompt. This parameter must be a single (lowercased) character. The `h` option is added by the prompt and shouldn't be defined by the user.
 
@@ -199,7 +199,7 @@ or bug fix. `npm test` to run the test suite.
 or better docs!  
 **Pull Requests**: Send _fixes_ PR on the `master` branch. Any new features should be send on the `wip`branch.
 
-We're looking to offer good support for multiples prompt and environments. If you want to
+We're looking to offer good support for multiple prompts and environments. If you want to
 help, we'd like to keep a list of testers for each terminal/OS so we can contact you and
 get feedback before release; let us know if you want to be added to the list! (just tweet
 to @vaxilart)
