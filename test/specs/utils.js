@@ -1,34 +1,25 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
+
 var utils = require("../../lib/utils/utils");
+var inquirer = require("../../lib/inquirer");
+var Choice = require("../../lib/objects/choice");
 
 describe("normalizeChoices", function() {
 
-  it("should normalize array containing strings", function() {
-    var initial = [ "foo", "bar" ];
-    var normalized = utils.normalizeChoices(initial);
-    expect(normalized).to.eql([{
-      name: "foo",
-      value: "foo"
-    }, {
-      name: "bar",
-      value: "bar"
-    }]);
+  it("should create Choice object from array member", function() {
+    var result = utils.normalizeChoices([ "bar", { name: "foo" } ]);
+    expect( result[0] ).to.be.instanceOf( Choice );
+    expect( result[1] ).to.be.instanceOf( Choice );
   });
 
-  it("should keep extra keys", function() {
-    var initial = [{ name: "foo", extra: "1" }, { name: "bar", key: "z" }];
-    var normalized = utils.normalizeChoices(initial);
-    expect(normalized).to.eql([{
-      name: "foo",
-      value: "foo",
-      extra: "1"
-    }, {
-      name: "bar",
-      value: "bar",
-      key: "z"
-    }]);
+  it("should not process Separator object", function() {
+    var sep = new inquirer.Separator();
+    var result = utils.normalizeChoices([ "Bar", sep ]);
+    expect( result[0].name ).to.equal("Bar");
+    expect( result[1] ).to.equal( sep );
   });
+
 });
 
 describe("runAsync", function() {
