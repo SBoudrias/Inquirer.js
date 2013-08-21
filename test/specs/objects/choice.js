@@ -3,6 +3,7 @@ var sinon = require("sinon");
 var ReadlineStub = require("../../helpers/readline");
 
 var Choice = require("../../../lib/objects/choice");
+var Separator = require("../../../lib/objects/separator");
 
 describe("Choice object", function() {
   it("should normalize accept String as value", function() {
@@ -27,6 +28,11 @@ describe("Choice object", function() {
     expect( choice.extra ).to.equal("1");
     expect( choice.name ).to.equal("foo");
     expect( choice.value ).to.equal("foo");
+  });
+
+  it("shouldn't process Separator object", function() {
+    var sep = new Choice( new Separator() );
+    expect( sep ).to.be.instanceOf( Separator );
   });
 
 });
