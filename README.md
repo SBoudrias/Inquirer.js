@@ -68,7 +68,7 @@ A question object is a `hash` containing question related values:
 + **message**: (String) The question to print.
 + **default**: (String|Function) Default value to use if nothing is entered, or a function that returns the default value. If defined as a function, the first parameter will be the current inquirer session answers. 
 + **choices**: (Array|Function) Choices array or a function returning a choices array. If defined as a function, the first parameter will be the current inquirer session answers.  
-Array values can be simple `strings`, or `objects` containing a `name` (to display) and a `value` properties (to save in the answers hash).
+Array values can be simple `strings`, or `objects` containing a `name` (to display) and a `value` properties (to save in the answers hash). Values can also be [a `Separator`](#separator).
 + **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 + **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
 + **when**: (Function) Receive the current user answers hash and should return `true` or `false` depending on wheter or not this question should be asked.
@@ -105,6 +105,23 @@ A key/value hash containing the client answers in each prompt.
   + `input` : User input (filtered if `filter` is defined) (String)
   + `rawlist`, `list` : Selected choice value (or name if no value specified) (String)
 
+### Separator
+A separator can be added to any `choices` array:
+
+```
+// In the question object
+choices: [ "Choice A", new inquirer.Separator(), "choice B" ]
+
+// Which'll be displayed this way
+[?] What do you want to do?
+ > Order a pizza
+   Make a reservation
+   --------
+   Ask opening hours
+   Talk to the receptionnist
+```
+
+The constructor takes a facultative `String` value that'll be use as the separator. If omitted, the separator will be `--------`.
 
 Prompts type
 ---------------------
