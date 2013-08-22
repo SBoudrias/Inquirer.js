@@ -72,6 +72,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
 + **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 + **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
 + **when**: (Function) Receive the current user answers hash and should return `true` or `false` depending on wheter or not this question should be asked.
++ **paginated**: (Boolean) Should the choices outputted be paginated (should select `true` on long list)
 
 `validate`, `filter` and `when` functions can be asynchronously using `this.async()`. You just have to pass the value you'd normally return to the callback option.
 
@@ -130,7 +131,7 @@ _allowed options written inside square brackets (`[]`) are optional. Others are 
 
 ### List - `{ type: "list" }`
 
-Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
+Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `paginated`] properties. (Note that
 default must be the choice `index` in the array)
 
 ![List prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/list-prompt.png)
@@ -157,7 +158,7 @@ See `examples/expand.js` for a running example.
 
 ### Checkbox - `{ type: "checkbox" }`
 
-Take `type`, `name`, `message`, `choices`[, `filter`, `validate`] properties.
+Take `type`, `name`, `message`, `choices`[, `filter`, `validate`, `paginated`] properties.
 
 Choices marked as `{ checked: true }` will be checked by default.
 
