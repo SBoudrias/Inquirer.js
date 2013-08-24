@@ -54,6 +54,30 @@ describe("`list` prompt", function() {
     this.rl.emit("line");
   });
 
+  it("should move selected cursor to the beginning on keypress", function( done ) {
+
+    this.list.run(function( answer ) {
+      expect(answer).to.equal("foo");
+      done();
+    });
+
+    this.rl.emit("keypress", "", { name : "down" });
+    this.rl.emit("keypress", "", { name : "down" });
+    this.rl.emit("keypress", "", { name : "home" });
+    this.rl.emit("line");
+  });
+
+  it("should move selected cursor to the end on keypress", function( done ) {
+
+    this.list.run(function( answer ) {
+      expect(answer).to.equal("bum");
+      done();
+    });
+
+    this.rl.emit("keypress", "", { name : "end" });
+    this.rl.emit("line");
+  });
+
   it("should loop the choices when going out of boundaries", function( done ) {
 
     var i = 0;
