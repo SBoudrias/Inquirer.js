@@ -26,6 +26,7 @@ inquirer.prompt([
         name: "Show diff",
         value: "diff"
       },
+      new inquirer.Separator(),
       {
         key: "x",
         name: "Abort",

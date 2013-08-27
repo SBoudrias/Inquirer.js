@@ -1,5 +1,5 @@
 /**
- * List prompt example
+ * Raw List prompt example
  */
 
 "use strict";
@@ -7,7 +7,7 @@ var inquirer = require("../lib/inquirer");
 
 inquirer.prompt([
   {
-    type: "list",
+    type: "rawlist",
     name: "theme",
     message: "What do you want to do?",
     choices: [
@@ -19,7 +19,7 @@ inquirer.prompt([
     ]
   },
   {
-    type: "list",
+    type: "rawlist",
     name: "size",
     message: "What size do you need",
     choices: [ "Jumbo", "Large", "Standard", "Medium", "Small", "Micro" ],

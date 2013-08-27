@@ -132,4 +132,15 @@ describe("`list` prompt", function() {
 
   });
 
+  it("should allow 1-9 shortcut key", function( done ) {
+
+    this.list.run(function( answer ) {
+      expect(answer).to.equal("bar");
+      done();
+    });
+
+    this.rl.emit("keypress", "2");
+    this.rl.emit("line");
+  });
+
 });

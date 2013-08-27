@@ -11,6 +11,7 @@ inquirer.prompt([
     message: "Select toppings",
     name: "toppings",
     choices: [
+      new inquirer.Separator("The usual:"),
       {
         name: "Peperonni"
       },
@@ -18,13 +19,17 @@ inquirer.prompt([
         name: "Cheese"
       },
       {
+        name: "Mushroom"
+      },
+      new inquirer.Separator("The extras:"),
+      {
         name: "Pineapple"
       },
       {
-        name: "Mushroom"
+        name: "Bacon"
       },
       {
-        name: "Bacon"
+        name: "Extra cheese"
       }
     ],
     validate: function( answer ) {

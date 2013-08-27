@@ -81,4 +81,16 @@ describe("`checkbox` prompt", function() {
     this.rl.emit("line");
   });
 
+  it("should allow 1-9 shortcut key", function( done ) {
+
+    this.checkbox.run(function( answer ) {
+      expect(answer.length).to.equal(1);
+      expect(answer[0]).to.equal("choice 2");
+      done();
+    });
+
+    this.rl.emit("keypress", "2");
+    this.rl.emit("line");
+  });
+
 });
