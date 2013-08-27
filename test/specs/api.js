@@ -279,7 +279,7 @@ var tests = {
 
         prompt.run();
 
-        _.each( choices, function( choice ) {
+        _.each( choices.filter(inquirer.Separator.exclude), function( choice ) {
           expect( this.output ).to.contain( choice.name );
         }, this );
       });
