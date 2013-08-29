@@ -6,13 +6,15 @@
 var inquirer = require("../lib/inquirer");
 
 inquirer.prompt({
-  type: "input",
-  name: "candy",
-  message: "What's your favorite candy?"
+  type: "list",
+  name: "chocolate",
+  message: "What's your favorite chocolate?",
+  choices: [ "Mars", "Oh Henry", "Hershey" ]
 }, function( answers ) {
   inquirer.prompt({
-    type: "input",
+    type: "list",
     name: "liquor",
-    message: "And your favorite liquor?"
+    message: "And your favorite liquor?",
+    choices: [ "Pepsi", "Coke", "7up", "Mountain Dew", "Red bull" ]
   });
 });
