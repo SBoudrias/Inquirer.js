@@ -29,6 +29,7 @@ describe("inquirer.prompt", function() {
       var rl2;
 
       expect(rl1.close.called).to.be.true;
+      expect(rl1.output.end.called).to.be.true;
       expect(inquirer.rl).to.not.exist;
 
       inquirer.prompt({
@@ -37,6 +38,7 @@ describe("inquirer.prompt", function() {
         message: "message"
       }, function( answers ) {
         expect(rl2.close.called).to.be.true;
+        expect(rl2.output.end.called).to.be.true;
         expect(inquirer.rl).to.not.exist;
 
         expect( rl1 ).to.not.equal( rl2 );
