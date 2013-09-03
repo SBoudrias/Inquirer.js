@@ -11,6 +11,7 @@ var stub = {
   pause      : sinon.stub().returns(stub),
   resume     : sinon.stub().returns(stub),
   output     : {
+    end    : sinon.stub().returns(stub),
     mute   : sinon.stub().returns(stub),
     unmute : sinon.stub().returns(stub),
     write  : sinon.stub().returns(stub)
