@@ -42,7 +42,7 @@ describe("`list` prompt", function() {
     this.rl.emit("line");
   });
 
-  it("should move selected cursor up and down on keypress", function( done ) {
+  it("should allow for arrow navigation", function( done ) {
 
     this.list.run(function( answer ) {
       expect(answer).to.equal("foo");
@@ -51,6 +51,19 @@ describe("`list` prompt", function() {
 
     this.rl.emit("keypress", "", { name : "down" });
     this.rl.emit("keypress", "", { name : "up" });
+    this.rl.emit("line");
+  });
+
+  it("should allow for vi-style navigation", function( done ) {
+
+    this.list.run(function( answer ) {
+      expect(answer).to.equal("bar");
+      done();
+    });
+
+    this.rl.emit("keypress", "j", { name : "j" });
+    this.rl.emit("keypress", "j", { name : "j" });
+    this.rl.emit("keypress", "k", { name : "k" });
     this.rl.emit("line");
   });
 
