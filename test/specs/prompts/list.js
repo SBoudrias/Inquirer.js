@@ -45,10 +45,11 @@ describe("`list` prompt", function() {
   it("should move selected cursor up and down on keypress", function( done ) {
 
     this.list.run(function( answer ) {
-      expect(answer).to.equal("foo");
+      expect(answer).to.equal("bar");
       done();
     });
 
+    this.rl.emit("keypress", "", { name : "down" });
     this.rl.emit("keypress", "", { name : "down" });
     this.rl.emit("keypress", "", { name : "up" });
     this.rl.emit("line");
