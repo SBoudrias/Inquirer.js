@@ -81,15 +81,32 @@ describe("`checkbox` prompt", function() {
     this.rl.emit("line");
   });
 
+  it("should allow for arrow navigation", function( done ) {
+    this.checkbox.run(function( answer ) {
+      expect(answer.length).to.equal(1);
+      expect(answer[0]).to.equal("choice 2");
+      done();
+    });
+
+    this.rl.emit("keypress", null, { name: "down" });
+    this.rl.emit("keypress", null, { name: "down" });
+    this.rl.emit("keypress", null, { name: "up" });
+
+    this.rl.emit("keypress", " ", { name: "space" });
+    this.rl.emit("line");
+  });
+
   it("should allow for vi-style navigation", function( done ) {
     this.checkbox.run(function( answer ) {
       expect(answer.length).to.equal(1);
       expect(answer[0]).to.equal("choice 2");
       done();
     });
+
     this.rl.emit("keypress", "j", { name: "j" });
     this.rl.emit("keypress", "j", { name: "j" });
     this.rl.emit("keypress", "k", { name: "k" });
+
     this.rl.emit("keypress", " ", { name: "space" });
     this.rl.emit("line");
   });

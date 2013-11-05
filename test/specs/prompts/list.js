@@ -45,10 +45,11 @@ describe("`list` prompt", function() {
   it("should allow for arrow navigation", function( done ) {
 
     this.list.run(function( answer ) {
-      expect(answer).to.equal("foo");
+      expect(answer).to.equal("bar");
       done();
     });
 
+    this.rl.emit("keypress", "", { name : "down" });
     this.rl.emit("keypress", "", { name : "down" });
     this.rl.emit("keypress", "", { name : "up" });
     this.rl.emit("line");
