@@ -22,7 +22,8 @@
     "lodash": "~1.2.1",
     "async": "~0.2.8",
     "cli-color": "~0.2.2",
-    "mute-stream": "0.0.3"
+    "mute-stream": "0.0.3",
+    "through": "~2.3.4"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
