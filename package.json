@@ -28,12 +28,12 @@
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.8",
-    "grunt-simple-mocha": "~0.4.0",
     "mocha": "~1.9.0",
     "chai": "~1.6.0",
     "grunt-contrib-jshint": "~0.5.1",
     "sinon": "~1.7.2",
-    "proxyquire": "~0.4.1",
-    "grunt-release": "~0.3.3"
+    "grunt-release": "~0.3.3",
+    "mockery": "~1.4.0",
+    "grunt-mocha-test": "~0.8.1"
   }
 }

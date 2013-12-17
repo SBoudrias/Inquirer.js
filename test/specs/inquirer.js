@@ -5,18 +5,7 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
 var _ = require("lodash");
-var ReadlineStub = require("../helpers/readline");
-var proxyquire = require("proxyquire");
-var BaseUI = proxyquire("../../lib/ui/baseUI", {
-  "../utils/readline": {
-    createInterface: function() {
-      return new ReadlineStub();
-    }
-  }
-});
-var PromptUI = proxyquire("../../lib/ui/prompt", { "./baseUI": BaseUI });
-var inquirer = proxyquire("../../lib/inquirer", { "./ui/prompt": PromptUI });
-
+var inquirer = require("../../lib/inquirer");
 
 describe("inquirer.prompt", function() {
 
