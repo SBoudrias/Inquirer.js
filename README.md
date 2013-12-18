@@ -123,6 +123,8 @@ choices: [ "Choice A", new inquirer.Separator(), "choice B" ]
 
 The constructor takes a facultative `String` value that'll be use as the separator. If omitted, the separator will be `--------`.
 
+Separator instances have a property `type` equal to `separator`. This should allow tools façading Inquirer interface from detecting separator types in lists.
+
 Prompts type
 ---------------------
 

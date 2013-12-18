@@ -31,4 +31,9 @@ describe("Separator constructor", function() {
     expect( Separator.exclude(new Separator()) ).to.be.false;
   });
 
+  it("give the type 'separator' to its object", function() {
+    var sep = new Separator();
+    expect( sep.type ).to.equal("separator");
+  });
+
 });
