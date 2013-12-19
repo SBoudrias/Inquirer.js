@@ -106,7 +106,7 @@ describe("`list` prompt", function() {
     expect(mkPrompt).to.throw(/choices/);
   });
 
-  it("should allow a default index", function( done ) {
+  it("should allow a numeric default", function( done ) {
 
     this.fixture.default = 1;
     var list = new List( this.fixture, this.rl );
@@ -119,9 +119,34 @@ describe("`list` prompt", function() {
     this.rl.emit("line");
   });
 
-  it("should work from a default index", function( done ) {
+  it("should work from a numeric default being the index", function( done ) {
 
     this.fixture.default = 1;
+    var list = new List( this.fixture, this.rl );
+
+    list.run(function( answer ) {
+      expect(answer).to.equal("bum");
+      done();
+    });
+
+    this.rl.emit("keypress", "", { name : "down" });
+    this.rl.emit("line");
+  });
+
+  it("should allow a string default being the value", function( done ) {
+    this.fixture.default = "bar";
+    var list = new List( this.fixture, this.rl );
+
+    list.run(function( answer ) {
+      expect(answer).to.equal("bar");
+      done();
+    });
+
+    this.rl.emit("line");
+  });
+
+  it("should work from a string default", function( done ) {
+    this.fixture.default = "bar";
     var list = new List( this.fixture, this.rl );
 
     list.run(function( answer ) {
