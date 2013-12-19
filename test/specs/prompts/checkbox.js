@@ -68,6 +68,23 @@ describe("`checkbox` prompt", function() {
     this.rl.emit("line");
   });
 
+  it("should check defaults choices if given as array of values", function( done ) {
+    this.fixture.choices = [
+      { name: "1"  },
+      { name: "2" },
+      { name: "3" }
+    ];
+    this.fixture.default = [ "1", "3" ];
+    this.checkbox = new Checkbox( this.fixture, this.rl );
+    this.checkbox.run(function( answer ) {
+      expect(answer.length).to.equal(2);
+      expect(answer[0]).to.equal("1");
+      expect(answer[1]).to.equal("3");
+      done();
+    });
+    this.rl.emit("line");
+  });
+
   it("should toggle choice when hitting space", function( done ) {
     this.checkbox.run(function( answer ) {
       expect(answer.length).to.equal(1);
