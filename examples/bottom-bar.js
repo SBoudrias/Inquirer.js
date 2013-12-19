@@ -1,4 +1,5 @@
 var BottomBar = require("../lib/ui/bottom-bar");
+var cmdify = require("cmdify");
 
 var loader = [
   "/ Installing",
@@ -15,7 +16,7 @@ setInterval(function() {
 
 var spawn = require("child_process").spawn;
 
-var cmd = spawn("cmd", [ "/c", "npm", "-g", "install", "inquirer" ], { stdio: "pipe" });
+var cmd = spawn(cmdify("npm"), [ "-g", "install", "inquirer" ], { stdio: "pipe" });
 cmd.stdout.pipe( ui.log );
 cmd.on( "close", function() {
   ui.updateBottomBar("Installation done!\n");

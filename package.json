@@ -34,6 +34,7 @@
     "sinon": "~1.7.2",
     "grunt-release": "~0.6.0",
     "mockery": "~1.4.0",
-    "grunt-mocha-test": "~0.8.1"
+    "grunt-mocha-test": "~0.8.1",
+    "cmdify": "0.0.4"
   }
 }
