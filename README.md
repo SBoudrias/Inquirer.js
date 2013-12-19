@@ -66,7 +66,7 @@ A question object is a `hash` containing question related values:
 `list`, `rawlist`
 + **name**: (String) The name to use when storing the answer in the anwers hash.
 + **message**: (String) The question to print.
-+ **default**: (String|Function) Default value to use if nothing is entered, or a function that returns the default value. If defined as a function, the first parameter will be the current inquirer session answers. 
++ **default**: (String|Number|Array|Function) Default value(s) to use if nothing is entered, or a function that returns the default value(s). If defined as a function, the first parameter will be the current inquirer session answers.
 + **choices**: (Array|Function) Choices array or a function returning a choices array. If defined as a function, the first parameter will be the current inquirer session answers.  
 Array values can be simple `strings`, or `objects` containing a `name` (to display) and a `value` properties (to save in the answers hash). Values can also be [a `Separator`](#separator).
 + **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
@@ -133,7 +133,7 @@ _allowed options written inside square brackets (`[]`) are optional. Others are 
 ### List - `{ type: "list" }`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
-default must be the choice `index` in the array)
+default must be the choice `index` in the array or a choice `value`)
 
 ![List prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/list-prompt.png)
 
@@ -159,7 +159,7 @@ See `examples/expand.js` for a running example.
 
 ### Checkbox - `{ type: "checkbox" }`
 
-Take `type`, `name`, `message`, `choices`[, `filter`, `validate`] properties.
+Take `type`, `name`, `message`, `choices`[, `filter`, `validate`, `default`] properties. `default` is expected to be an Array of the checked choices value.
 
 Choices marked as `{ checked: true }` will be checked by default.
 
