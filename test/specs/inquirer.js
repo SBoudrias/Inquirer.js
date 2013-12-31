@@ -5,23 +5,14 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
 var _ = require("lodash");
-var ReadlineStub = require("../helpers/readline");
-var proxyquire = require("proxyquire");
-var inquirer = proxyquire("../../lib/inquirer", {
-  "./utils/readline": {
-    createInterface: function() {
-      return new ReadlineStub();
-    }
-  }
-});
-
+var inquirer = require("../../lib/inquirer");
 
 describe("inquirer.prompt", function() {
 
   it("should close and create a new readline instances each time it's called", function( done ) {
     var rl1;
 
-    inquirer.prompt({
+    var prompt = inquirer.prompt({
       type: "confirm",
       name: "q1",
       message: "message"
@@ -30,27 +21,27 @@ describe("inquirer.prompt", function() {
 
       expect(rl1.close.called).to.be.true;
       expect(rl1.output.end.called).to.be.true;
-      expect(inquirer.rl).to.not.exist;
+      expect(prompt.rl).to.not.exist;
 
-      inquirer.prompt({
+      var prompt2 = inquirer.prompt({
         type: "confirm",
         name: "q1",
         message: "message"
       }, function( answers ) {
         expect(rl2.close.called).to.be.true;
         expect(rl2.output.end.called).to.be.true;
-        expect(inquirer.rl).to.not.exist;
+        expect(prompt.rl).to.not.exist;
 
         expect( rl1 ).to.not.equal( rl2 );
         done();
       });
 
-      rl2 = inquirer.rl;
-      inquirer.rl.emit("line");
+      rl2 = prompt2.rl;
+      prompt2.rl.emit("line");
     });
 
-    rl1 = inquirer.rl;
-    inquirer.rl.emit("line");
+    rl1 = prompt.rl;
+    prompt.rl.emit("line");
 
   });
 
@@ -66,14 +57,14 @@ describe("inquirer.prompt", function() {
       default: false
     }];
 
-    inquirer.prompt( prompts, function( answers ) {
+    var ui = inquirer.prompt( prompts, function( answers ) {
       expect(answers.q1).to.be.true;
       expect(answers.q2).to.be.false;
       done();
     });
 
-    inquirer.rl.emit("line");
-    inquirer.rl.emit("line");
+    ui.rl.emit("line");
+    ui.rl.emit("line");
   });
 
   it("should take a single prompt and return answer", function( done ) {
@@ -84,12 +75,12 @@ describe("inquirer.prompt", function() {
       default: "bar"
     };
 
-    inquirer.prompt( prompt, function( answers ) {
+    var ui = inquirer.prompt( prompt, function( answers ) {
       expect(answers.q1).to.equal("bar");
       done();
     });
 
-    inquirer.rl.emit("line");
+    ui.rl.emit("line");
   });
 
   it("should parse `default` if passed as a function", function( done ) {
@@ -118,8 +109,8 @@ describe("inquirer.prompt", function() {
       }
     }];
 
-    inquirer.prompt(prompts, function() {});
-    inquirer.rl.emit("line");
+    var ui = inquirer.prompt(prompts, function() {});
+    ui.rl.emit("line");
   });
 
   it("should parse `choices` if passed as a function", function( done ) {
@@ -148,8 +139,8 @@ describe("inquirer.prompt", function() {
       }
     }];
 
-    inquirer.prompt(prompts, function() {});
-    inquirer.rl.emit("line");
+    var ui = inquirer.prompt(prompts, function() {});
+    ui.rl.emit("line");
   });
 
   // Hierarchical prompts (`when`)
@@ -170,9 +161,9 @@ describe("inquirer.prompt", function() {
         }
       }];
 
-      inquirer.prompt( prompts, function( answers ) {});
+      var ui = inquirer.prompt( prompts, function( answers ) {});
 
-      inquirer.rl.emit("line");
+      ui.rl.emit("line");
     });
 
     it("should run prompt if `when` returns true", function( done ) {
@@ -192,14 +183,14 @@ describe("inquirer.prompt", function() {
         }
       }];
 
-      inquirer.prompt( prompts, function( answers ) {
+      var ui = inquirer.prompt( prompts, function( answers ) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.equal("bar-var");
         done();
       });
 
-      inquirer.rl.emit("line");
-      inquirer.rl.emit("line");
+      ui.rl.emit("line");
+      ui.rl.emit("line");
     });
 
     it("should not run prompt if `when` returns false", function( done ) {
@@ -223,7 +214,7 @@ describe("inquirer.prompt", function() {
         default: "foo"
       }];
 
-      inquirer.prompt( prompts, function( answers ) {
+      var ui = inquirer.prompt( prompts, function( answers ) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.not.exist;
         expect(answers.q3).to.equal("foo");
@@ -231,8 +222,8 @@ describe("inquirer.prompt", function() {
         done();
       });
 
-      inquirer.rl.emit("line");
-      inquirer.rl.emit("line");
+      ui.rl.emit("line");
+      ui.rl.emit("line");
 
     });
 
@@ -252,18 +243,18 @@ describe("inquirer.prompt", function() {
           var goOn = this.async();
           setTimeout(function() { goOn(true); }, 0 );
           setTimeout(function() {
-            inquirer.rl.emit("line");
+            ui.rl.emit("line");
           }, 10 );
         }
       }];
 
-      inquirer.prompt( prompts, function( answers ) {
+      var ui = inquirer.prompt( prompts, function( answers ) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.equal("foo-bar");
         done();
       });
 
-      inquirer.rl.emit("line");
+      ui.rl.emit("line");
     });
 
   });

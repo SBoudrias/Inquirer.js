@@ -35,4 +35,10 @@ describe("Choice object", function() {
     expect( sep ).to.be.instanceOf( Separator );
   });
 
+  it("shouldn't process object with property type=separator", function() {
+    var obj = { type: "separator" };
+    var sep = new Choice( obj );
+    expect( sep ).to.equal( obj );
+  });
+
 });

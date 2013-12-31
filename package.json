@@ -19,20 +19,22 @@
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "license": "MIT",
   "dependencies": {
-    "lodash": "~1.2.1",
+    "lodash": "~2.4.1",
     "async": "~0.2.8",
     "cli-color": "~0.2.2",
-    "mute-stream": "0.0.3"
+    "mute-stream": "0.0.4",
+    "through": "~2.3.4"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.8",
-    "grunt-simple-mocha": "~0.4.0",
-    "mocha": "~1.9.0",
-    "chai": "~1.6.0",
-    "grunt-contrib-jshint": "~0.5.1",
+    "mocha": "~1.15.1",
+    "chai": "~1.8.1",
+    "grunt-contrib-jshint": "~0.7.2",
     "sinon": "~1.7.2",
-    "proxyquire": "~0.4.1",
-    "grunt-release": "~0.3.3"
+    "grunt-release": "~0.6.0",
+    "mockery": "~1.4.0",
+    "grunt-mocha-test": "~0.8.1",
+    "cmdify": "0.0.4"
   }
 }

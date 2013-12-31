@@ -23,7 +23,7 @@ inquirer.prompt([
       },
       new inquirer.Separator("The extras:"),
       {
-        name: "Pineapple"
+        name: "Pineapple",c
       },
       {
         name: "Bacon"
