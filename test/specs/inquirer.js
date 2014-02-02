@@ -37,10 +37,15 @@ describe("inquirer.prompt", function() {
       });
 
       rl2 = prompt2.rl;
+      sinon.spy( rl2, "close" );
+      sinon.spy( rl2.output, "end" );
       prompt2.rl.emit("line");
     });
 
+
     rl1 = prompt.rl;
+    sinon.spy( rl1, "close" );
+    sinon.spy( rl1.output, "end" );
     prompt.rl.emit("line");
 
   });

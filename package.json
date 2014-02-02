@@ -23,18 +23,19 @@
     "async": "~0.2.8",
     "cli-color": "~0.2.2",
     "mute-stream": "0.0.4",
-    "through": "~2.3.4"
+    "through": "~2.3.4",
+    "readline2": "~0.1.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.8",
-    "mocha": "~1.15.1",
-    "chai": "~1.8.1",
-    "grunt-contrib-jshint": "~0.7.2",
+    "mocha": "~1.17.1",
+    "chai": "~1.9.0",
+    "grunt-contrib-jshint": "~0.8.0",
     "sinon": "~1.7.2",
     "grunt-release": "~0.6.0",
     "mockery": "~1.4.0",
-    "grunt-mocha-test": "~0.8.1",
+    "grunt-mocha-test": "~0.9.0",
     "cmdify": "0.0.4"
   }
 }
