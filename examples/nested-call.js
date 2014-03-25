@@ -13,8 +13,8 @@ inquirer.prompt({
 }, function( answers ) {
   inquirer.prompt({
     type: "list",
-    name: "liquor",
-    message: "And your favorite liquor?",
-    choices: [ "Pepsi", "Coke", "7up", "Mountain Dew", "Red bull" ]
+    name: "beverage",
+    message: "And your favorite beverage?",
+    choices: [ "Pepsi", "Coke", "7up", "Mountain Dew", "Red Bull" ]
   });
 });

@@ -138,7 +138,7 @@ default must be the choice `index` in the array or a choice `value`)
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must the choice `index` in the array)
 
-![Raw list prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/rawlist-prompt.png)
+![Raw list prompt](https://i.cloudup.com/LcRGpXI0CX-3000x3000.png)
 
 ---
 
