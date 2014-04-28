@@ -10,8 +10,14 @@ var Input = require("../../../lib/prompts/input");
 describe("`input` prompt", function() {
 
   beforeEach(function() {
+    var self = this;
+    this.output = "";
+
     this._write = Input.prototype.write;
-    Input.prototype.write = function() { return this; };
+    Input.prototype.write = function( str ) {
+      self.output += str;
+      return this;
+    };
 
     this.fixture = _.clone( fixtures.input );
     this.rl = new ReadlineStub();
@@ -31,6 +37,20 @@ describe("`input` prompt", function() {
     });
 
     this.rl.emit( "line", "Inquirer" );
+  });
+
+  it("should output filtered value", function( done ) {
+    this.fixture.filter = function() {
+      return "pass";
+    };
+
+    var prompt = new Input( this.fixture, this.rl );
+    prompt.run(function( answer ) {
+      expect(this.output).to.contain("pass");
+      done();
+    }.bind(this));
+
+    this.rl.emit("line", "");
   });
 
 });
