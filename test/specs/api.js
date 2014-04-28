@@ -244,6 +244,19 @@ var tests = {
         this.rl.emit("line", "");
       });
 
+      it("should allow a falsy default value", function( done ) {
+        this.fixture.default = 0;
+
+        var prompt = new this.Prompt( this.fixture, this.rl );
+        prompt.run(function( answer ) {
+          expect(this.output).to.contain("(0)");
+          expect(answer).to.equal(0);
+          done();
+        }.bind(this));
+
+        this.rl.emit("line", "");
+      });
+
     });
   },
 
