@@ -162,7 +162,7 @@ Take `type`, `name`, `message`, `choices`[, `filter`, `validate`, `default`] pro
 
 Choices marked as `{ checked: true }` will be checked by default.
 
-Choices who're property `disabled` is truthy will be unselectable. If `disabled` is a string, then the string will be outputed next to the disabled choice, otherwise it'll default to `"Disabled"`.
+Choices who're property `disabled` is truthy will be unselectable. If `disabled` is a string, then the string will be outputed next to the disabled choice, otherwise it'll default to `"Disabled"`. The `disabled` property can also be a synchronous function receiving the current answers as argument and returning a boolean or a string.
 
 ![Checkbox prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/checkbox-prompt.png)
 

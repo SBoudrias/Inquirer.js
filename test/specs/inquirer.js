@@ -118,6 +118,28 @@ describe("inquirer.prompt", function() {
     ui.rl.emit("line");
   });
 
+  it("should pass previous answers to the prompt constructor", function( done ) {
+    inquirer.prompts.stub = function( params, rl, answers ) {
+      expect(answers.name1).to.equal("bar");
+      done();
+    };
+    inquirer.prompts.stub.prototype.run = function() {};
+
+    var prompts = [{
+      type: "input",
+      name: "name1",
+      message: "message",
+      default: "bar"
+    }, {
+      type: "stub",
+      name: "name",
+      message: "message"
+    }];
+
+    var ui = inquirer.prompt(prompts, function() {});
+    ui.rl.emit("line");
+  });
+
   it("should parse `choices` if passed as a function", function( done ) {
     var stubChoices = [ "foo", "bar" ];
     inquirer.prompts.stub = function( params ) {

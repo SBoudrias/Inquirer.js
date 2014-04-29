@@ -186,6 +186,24 @@ describe("`checkbox` prompt", function() {
       }.bind(this));
       this.rl.emit("line");
     });
+
+    it("disabled can be a function", function( done ) {
+      this.fixture.choices = [
+        {
+          name: "dis1",
+          disabled: function( answers ) {
+            expect(answers.foo).to.equal("foo");
+            return true;
+          }
+        }
+      ];
+      this.checkbox = new Checkbox( this.fixture, this.rl, { foo: "foo" });
+      this.checkbox.run(function() {
+        expect(this.output).to.contain("- dis1 (Disabled)");
+        done();
+      }.bind(this));
+      this.rl.emit("line");
+    });
   });
 
 });
