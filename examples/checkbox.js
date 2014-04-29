@@ -30,6 +30,10 @@ inquirer.prompt([
         name: "Bacon"
       },
       {
+        name: "Olives",
+        disabled: "out of stock"
+      },
+      {
         name: "Extra cheese"
       }
     ],
