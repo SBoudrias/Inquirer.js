@@ -122,6 +122,7 @@ describe("inquirer.prompt", function() {
     inquirer.prompts.stub = function( params, rl, answers ) {
       expect(answers.name1).to.equal("bar");
       done();
+      return new inquirer.prompts.input( params, rl, answers );
     };
     inquirer.prompts.stub.prototype.run = function() {};
 

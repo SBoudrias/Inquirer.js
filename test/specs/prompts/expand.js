@@ -125,13 +125,14 @@ describe("`expand` prompt", function() {
     expect(this.output).to.contain("(aBch)");
   });
 
-  it("should 'autocomplete' the user input", function() {
+  it("should 'autocomplete' the user input", function( done ) {
     this.expand = new Expand( this.fixture, this.rl );
     this.expand.run(function() {});
     this.rl.line = "a";
     this.rl.emit("keypress");
     setTimeout(function() {
       expect(this.output).to.contain("acab");
+      done();
     }.bind(this), 10);
   });
 
