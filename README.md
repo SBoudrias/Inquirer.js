@@ -186,7 +186,7 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
 #### Password - `{ type: "password" }`
 
-Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `hide`] properties.
 
 ![Password prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/password-prompt.png)
 
