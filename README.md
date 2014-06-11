@@ -238,6 +238,8 @@ look at issues found on other command line - feel free to report any!
 
 Please refer to the [Github releases section for the changelog](https://github.com/SBoudrias/Inquirer.js/releases)
 
+## Update with this clone
+Added "disabled" option for "list" types choices.
 
 ## Contributing
 
