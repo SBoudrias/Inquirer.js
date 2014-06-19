@@ -39,18 +39,48 @@ describe("`input` prompt", function() {
     this.rl.emit( "line", "Inquirer" );
   });
 
-  it("should output filtered value", function( done ) {
+  it("should not output filtered value", function( done ) {
     this.fixture.filter = function() {
       return "pass";
     };
 
     var prompt = new Input( this.fixture, this.rl );
     prompt.run(function( answer ) {
-      expect(this.output).to.contain("pass");
+      expect(this.output).not.to.contain("pass");
       done();
     }.bind(this));
 
     this.rl.emit("line", "");
   });
 
+  it("should filter the answer", function(done){
+    this.fixture.filter = function() {
+      return "pass";
+    };
+
+    var prompt = new Input( this.fixture, this.rl );
+    prompt.run(function( answer ) {
+      expect(answer).to.equal("pass");
+      done();
+    }.bind(this));
+
+    this.rl.emit("line", "");
+  });
+
+  it("should not execute filter function more than once", function(done){
+    var counter = 0;
+
+    this.fixture.filter = function() {
+      ++ counter;
+      return "pass";
+    };
+
+    var prompt = new Input( this.fixture, this.rl );
+    prompt.run(function( answer ) {
+      expect(counter).to.equal(1);
+      done();
+    }.bind(this));
+
+    this.rl.emit("line", "");
+  });
 });
