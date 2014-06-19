@@ -118,6 +118,38 @@ describe("inquirer.prompt", function() {
     ui.rl.emit("line");
   });
 
+  it("should run asynchronous `default`", function( done ) {
+    var goesInDefault = false;
+    var input2Default = "foo";
+    var prompts = [{
+      type: "input",
+      name: "name1",
+      message: "message",
+      default: "bar"
+    }, {
+      type: "input2",
+      name: "q2",
+      message: "message",
+      default: function ( answers ) {
+        goesInDefault = true;
+        expect(answers.name1).to.equal("bar");
+        var goOn = this.async();
+        setTimeout(function() { goOn(input2Default); }, 0 );
+        setTimeout(function() {
+          ui.rl.emit("line");
+        }, 10 );
+      }
+    }];
+
+    var ui = inquirer.prompt( prompts, function( answers ) {
+      expect(goesInDefault).to.be.true;
+      expect(answers.q2).to.equal(input2Default);
+      done();
+    });
+
+    ui.rl.emit("line");
+  });
+
   it("should pass previous answers to the prompt constructor", function( done ) {
     inquirer.prompts.stub = function( params, rl, answers ) {
       expect(answers.name1).to.equal("bar");
