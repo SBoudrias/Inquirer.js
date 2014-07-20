@@ -19,7 +19,6 @@
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "license": "MIT",
   "dependencies": {
-    "async": "~0.8.0",
     "chalk": "^0.5.0",
     "cli-color": "~0.3.2",
     "lodash": "~2.4.1",
