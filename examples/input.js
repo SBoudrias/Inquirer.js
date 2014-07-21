@@ -15,7 +15,7 @@ var questions = [
     type: "input",
     name: "last_name",
     message: "What's your last name",
-    default: "Doe"
+    default: function () { return "Doe"; }
   },
   {
     type: "input",
