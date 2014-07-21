@@ -203,6 +203,30 @@ describe("inquirer.prompt", function() {
     ui.rl.emit("line");
   });
 
+  it("should expose the Reactive interface", function(done) {
+    var prompts = [{
+      type: "input",
+      name: "name1",
+      message: "message",
+      default: "bar"
+    }, {
+      type: "input",
+      name: "name",
+      message: "message",
+      default: "doe"
+    }];
+
+    var ui = inquirer.prompt(prompts, function() {});
+    var spy = sinon.spy();
+    ui.process.subscribe( spy, function() {}, function() {
+      sinon.assert.calledWith( spy, { name: "name1", answer: "bar" });
+      sinon.assert.calledWith( spy, { name: "name", answer: "doe" });
+      done();
+    });
+    ui.rl.emit("line");
+    ui.rl.emit("line");
+  });
+
   // Hierarchical prompts (`when`)
   describe("hierarchical mode", function() {
 
