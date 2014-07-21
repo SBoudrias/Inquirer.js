@@ -5,6 +5,7 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
 var _ = require("lodash");
+var rx = require("rx");
 var inquirer = require("../../lib/inquirer");
 
 describe("inquirer.prompt", function() {
@@ -224,6 +225,34 @@ describe("inquirer.prompt", function() {
       done();
     });
     ui.rl.emit("line");
+    ui.rl.emit("line");
+  });
+
+  it("takes an Observable as question", function( done ) {
+    var prompts = rx.Observable.create(function( obs ) {
+      obs.onNext({
+        type: "confirm",
+        name: "q1",
+        message: "message"
+      });
+      setTimeout(function() {
+        obs.onNext({
+          type: "confirm",
+          name: "q2",
+          message: "message",
+          default: false
+        });
+        obs.onCompleted();
+        ui.rl.emit("line");
+      }, 30 );
+    });
+
+    var ui = inquirer.prompt( prompts, function( answers ) {
+      expect(answers.q1).to.be.true;
+      expect(answers.q2).to.be.false;
+      done();
+    });
+
     ui.rl.emit("line");
   });
 
