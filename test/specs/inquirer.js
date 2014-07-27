@@ -5,6 +5,7 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
 var _ = require("lodash");
+var rx = require("rx");
 var inquirer = require("../../lib/inquirer");
 
 describe("inquirer.prompt", function() {
@@ -200,6 +201,58 @@ describe("inquirer.prompt", function() {
     }];
 
     var ui = inquirer.prompt(prompts, function() {});
+    ui.rl.emit("line");
+  });
+
+  it("should expose the Reactive interface", function(done) {
+    var prompts = [{
+      type: "input",
+      name: "name1",
+      message: "message",
+      default: "bar"
+    }, {
+      type: "input",
+      name: "name",
+      message: "message",
+      default: "doe"
+    }];
+
+    var ui = inquirer.prompt(prompts, function() {});
+    var spy = sinon.spy();
+    ui.process.subscribe( spy, function() {}, function() {
+      sinon.assert.calledWith( spy, { name: "name1", answer: "bar" });
+      sinon.assert.calledWith( spy, { name: "name", answer: "doe" });
+      done();
+    });
+    ui.rl.emit("line");
+    ui.rl.emit("line");
+  });
+
+  it("takes an Observable as question", function( done ) {
+    var prompts = rx.Observable.create(function( obs ) {
+      obs.onNext({
+        type: "confirm",
+        name: "q1",
+        message: "message"
+      });
+      setTimeout(function() {
+        obs.onNext({
+          type: "confirm",
+          name: "q2",
+          message: "message",
+          default: false
+        });
+        obs.onCompleted();
+        ui.rl.emit("line");
+      }, 30 );
+    });
+
+    var ui = inquirer.prompt( prompts, function( answers ) {
+      expect(answers.q1).to.be.true;
+      expect(answers.q2).to.be.false;
+      done();
+    });
+
     ui.rl.emit("line");
   });
 

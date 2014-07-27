@@ -47,7 +47,7 @@ node examples/checkbox.js
 
 Launch the prompt interface (inquiry session)
 
-- **questions** (Array) containing [Question Object](#question)
+- **questions** (Array) containing [Question Object](#question) (using the [reactive interface](#reactive-interface), you can also pass a `Rx.Observable` instance)
 - **callback** (Function) first parameter is the [Answers Object](#answers)
 
 
@@ -217,6 +217,34 @@ ui.updateBottomBar("new bottom bar content");
 
 This is UI layout used to run prompt. This layout is returned by `inquirer.prompt` and you should probably always use `inquirer.prompt` to interface with this UI.
 
+
+## Reactive interface
+
+Internally, Inquirer uses the [JS reactive extension](https://github.com/Reactive-Extensions/RxJS) to handle events and async flows.
+
+This mean you can take advantage of this feature to provide more advanced flows. For example, you can dynamically add questions to be asked:
+
+```js
+var prompts = Rx.Observable.create(function( obs ) {
+  obs.onNext({ /* question... */ });
+  setTimeout(function () {
+    obs.onNext({ /* question... */ });
+    obs.onCompleted();
+  });
+});
+
+inquirer.prompt(prompts);
+```
+
+And using the `process` property, you have access to more fine grained callbacks:
+
+```js
+inquirer.prompts(prompts).process.subscribe(
+  onEachAnswer,
+  onError,
+  onComplete
+);
+```
 
 ## Support (OS Terminals)
 
