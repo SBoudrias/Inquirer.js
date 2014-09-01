@@ -2,6 +2,7 @@
  * Inquirer public API test
  */
 
+var assert = require("assert");
 var expect = require("chai").expect;
 var sinon = require("sinon");
 var _ = require("lodash");
@@ -370,6 +371,40 @@ describe("inquirer.prompt", function() {
       ui.rl.emit("line");
     });
 
+  });
+
+  describe("#registerPrompt()", function() {
+    it("register new prompt types", function( done ) {
+      var questions = [{ type: "foo", message: "something" }];
+      inquirer.registerPrompt("foo", function( question, rl, answers ) {
+        expect(question).to.eql(questions[0]);
+        expect(answers).to.eql({});
+        this.run = _.noop;
+        done();
+      });
+
+      inquirer.prompt(questions, _.noop);
+    });
+
+    it("overwrite default prompt types", function( done ) {
+      var questions = [{ type: "confirm", message: "something" }];
+      inquirer.registerPrompt("confirm", function( question, rl, answers ) {
+        this.run = _.noop;
+        done();
+      });
+
+      inquirer.prompt(questions, _.noop);
+      inquirer.restoreDefaultPrompts();
+    });
+  });
+
+  describe("#restoreDefaultPrompts()", function() {
+    it("restore default prompts", function() {
+      var ConfirmPrompt = inquirer.prompts["confirm"];
+      inquirer.registerPrompt("confirm", _.noop);
+      inquirer.restoreDefaultPrompts();
+      expect(ConfirmPrompt).to.equal(inquirer.prompts["confirm"]);
+    });
   });
 
 });
