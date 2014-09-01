@@ -203,7 +203,7 @@ var tests = {
             called++;
             // Make sure returning false won't continue
             if (called === 2) {
-              next();
+              done(true);
             } else {
               self.rl.emit("line");
             }
@@ -214,8 +214,7 @@ var tests = {
         var prompt = new this.Prompt( this.fixture, this.rl );
 
         prompt.run(function( answer ) {
-          // This should NOT be called
-          expect(false).to.be.true;
+          next();
         });
 
         this.rl.emit( "line" );
