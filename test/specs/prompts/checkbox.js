@@ -68,6 +68,23 @@ describe("`checkbox` prompt", function() {
     this.rl.emit("line");
   });
 
+  it("provide an array of checked choice to validate", function( done ) {
+    this.fixture.choices = [
+      { name: "1", checked: true  },
+      { name: "2", checked: false },
+      { name: "3", checked: false }
+    ];
+    this.fixture.validate = function( answer ) {
+      expect(answer).to.eql([ "1" ]);
+      return true;
+    };
+    this.checkbox = new Checkbox( this.fixture, this.rl );
+    this.checkbox.run(function() {
+      done();
+    });
+    this.rl.emit("line");
+  });
+
   it("should check defaults choices if given as array of values", function( done ) {
     this.fixture.choices = [
       { name: "1" },
