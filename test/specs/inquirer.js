@@ -90,6 +90,67 @@ describe("inquirer.prompt", function() {
     ui.rl.emit("line");
   });
 
+  it("should parse `message` if passed as a function", function( done ) {
+    var stubMessage = "foo";
+    inquirer.prompts.stub = function( params ) {
+      this.opt = {
+        when: function() { return true; }
+      };
+      expect(params.message).to.equal(stubMessage);
+      done();
+    };
+    inquirer.prompts.stub.prototype.run = function() {};
+
+    var prompts = [{
+      type: "input",
+      name: "name1",
+      message: "message",
+      default: "bar"
+    }, {
+      type: "stub",
+      name: "name",
+      message: function( answers ) {
+        expect(answers.name1).to.equal("bar");
+        return stubMessage;
+      }
+    }];
+
+    var ui = inquirer.prompt(prompts, function() {});
+    ui.rl.emit("line");
+  });
+
+  it("should run asynchronous `message`", function( done ) {
+    var stubMessage = "foo";
+    inquirer.prompts.stub = function( params ) {
+      this.opt = {
+        when: function() { return true; }
+      };
+      expect(params.message).to.equal(stubMessage);
+      done();
+    };
+    inquirer.prompts.stub.prototype.run = function() {};
+
+    var prompts = [{
+      type: "input",
+      name: "name1",
+      message: "message",
+      default: "bar"
+    }, {
+      type: "stub",
+      name: "name",
+      message: function( answers ) {
+        expect(answers.name1).to.equal("bar");
+        var goOn = this.async();
+        setTimeout(function() {
+          goOn(stubMessage);
+        }, 0 );
+      }
+    }];
+
+    var ui = inquirer.prompt(prompts, function() {});
+    ui.rl.emit("line");
+  });
+
   it("should parse `default` if passed as a function", function( done ) {
     var stubDefault = "foo";
     inquirer.prompts.stub = function( params ) {
