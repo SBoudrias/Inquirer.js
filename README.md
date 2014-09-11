@@ -239,7 +239,7 @@ inquirer.prompt(prompts);
 And using the `process` property, you have access to more fine grained callbacks:
 
 ```js
-inquirer.prompts(prompts).process.subscribe(
+inquirer.prompt(prompts).process.subscribe(
   onEachAnswer,
   onError,
   onComplete
