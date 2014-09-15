@@ -331,7 +331,7 @@ describe("Prompt public APIs", function() {
       beforeEach(function() {
         var self = this;
         this.fixture = _.clone(fixtures[ detail.name ]);
-        this.Prompt = inquirer.prompts[ detail.name ];
+        this.Prompt = inquirer.prompt.prompts[ detail.name ];
         this.rl = new ReadlineStub();
 
         this.output = "";
