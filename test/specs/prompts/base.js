@@ -1,5 +1,6 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
+var chalk = require("chalk");
 var ReadlineStub = require("../../helpers/readline");
 
 var Base = require("../../../lib/prompts/base");
@@ -19,6 +20,8 @@ describe("`base` prompt (e.g. prompt helpers)", function() {
     expect(this.base.suffix("m:")).to.equal("m: ");
     expect(this.base.suffix("m?")).to.equal("m? ");
     expect(this.base.suffix("my question?")).to.equal("my question? ");
+    expect(this.base.suffix(chalk.bold("m"))).to.equal("\u001b[1mm:\u001b[22m ");
+    expect(chalk.stripColor(this.base.suffix(chalk.bold("m?")))).to.equal("m? ");
     expect(this.base.suffix("m")).to.equal("m: ");
     expect(this.base.suffix("M")).to.equal("M: ");
     expect(this.base.suffix("m ")).to.equal("m ");
