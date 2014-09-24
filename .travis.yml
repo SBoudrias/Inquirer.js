@@ -3,4 +3,5 @@ node_js:
   - "0.8"
   - "0.10"
 before_install:
-  - npm install -g npm
+  - npm install -g npm@1.4.28
+  - npm install -g npm@2.0.2
