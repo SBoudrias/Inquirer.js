@@ -147,7 +147,7 @@ default must the choice `index` in the array)
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must be the choice `index` in the array)
 
-Note that the `choice` object will take an extra parameter called `key` for the `expand` prompt. This parameter must be a single (lowercased) character. The `h` option is added by the prompt and shouldn't be defined by the user.
+Note that the `choices` object will take an extra parameter called `key` for the `expand` prompt. This parameter must be a single (lowercased) character. The `h` option is added by the prompt and shouldn't be defined by the user.
 
 See `examples/expand.js` for a running example.
 
