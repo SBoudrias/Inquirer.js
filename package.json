@@ -27,7 +27,8 @@
     "mute-stream": "0.0.4",
     "readline2": "~0.1.0",
     "rx": "^2.2.27",
-    "through": "~2.3.4"
+    "through": "~2.3.4",
+    "ttys": "0.0.3"
   },
   "devDependencies": {
     "chai": "~1.9.0",
