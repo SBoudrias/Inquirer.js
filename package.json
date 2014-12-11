@@ -31,15 +31,15 @@
     "ttys": "0.0.3"
   },
   "devDependencies": {
-    "chai": "~1.9.0",
+    "chai": "^1.10.0",
     "cmdify": "0.0.4",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.8",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-mocha-test": "~0.10.2",
-    "grunt-release": "~0.7.0",
+    "grunt-release": "^0.9.0",
     "mocha": "~1.18.2",
     "mockery": "~1.4.0",
-    "sinon": "~1.9.1"
+    "sinon": "^1.12.1"
   }
 }
