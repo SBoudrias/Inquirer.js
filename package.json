@@ -26,7 +26,7 @@
     "lodash": "~2.4.1",
     "mute-stream": "0.0.4",
     "readline2": "~0.1.0",
-    "rx": "^2.2.27",
+    "rx": "2.2.27",
     "through": "~2.3.4"
   },
   "devDependencies": {
