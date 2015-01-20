@@ -12,7 +12,7 @@ We strive at providing easily embeddable and beautiful command line interface fo
 
 _**Inquirer**_ should ease the process of asking end user **questions**, **parsing**, **validating** answers, managing **hierarchical prompts** and providing **error feedback**.
 
-_**Inquirer**_ provide the user interface, and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [Commander.js](https://github.com/visionmedia/commander.js) (inspired by) or [cli-color](https://github.com/medikoo/cli-color) (used internally).
+_**Inquirer**_ provide the user interface, and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [Commander.js](https://github.com/visionmedia/commander.js) (inspired by).
 
 
 ## Documentation
