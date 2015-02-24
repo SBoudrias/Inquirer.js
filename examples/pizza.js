@@ -69,8 +69,8 @@ var questions = [
   },
   {
     type: "rawlist",
-    name: "liquor",
-    message: "You also get a free 2L liquor",
+    name: "beverage",
+    message: "You also get a free 2L beverage",
     choices: [ "Pepsi", "7up", "Coke" ]
   },
   {

@@ -203,7 +203,7 @@ var tests = {
             called++;
             // Make sure returning false won't continue
             if (called === 2) {
-              next();
+              done(true);
             } else {
               self.rl.emit("line");
             }
@@ -214,8 +214,7 @@ var tests = {
         var prompt = new this.Prompt( this.fixture, this.rl );
 
         prompt.run(function( answer ) {
-          // This should NOT be called
-          expect(false).to.be.true;
+          next();
         });
 
         this.rl.emit( "line" );
@@ -238,6 +237,19 @@ var tests = {
         prompt.run(function( answer ) {
           expect(this.output).to.contain("(pass)");
           expect(answer).to.equal("pass");
+          done();
+        }.bind(this));
+
+        this.rl.emit("line", "");
+      });
+
+      it("should allow a falsy default value", function( done ) {
+        this.fixture.default = 0;
+
+        var prompt = new this.Prompt( this.fixture, this.rl );
+        prompt.run(function( answer ) {
+          expect(this.output).to.contain("(0)");
+          expect(answer).to.equal(0);
           done();
         }.bind(this));
 
@@ -319,7 +331,7 @@ describe("Prompt public APIs", function() {
       beforeEach(function() {
         var self = this;
         this.fixture = _.clone(fixtures[ detail.name ]);
-        this.Prompt = inquirer.prompts[ detail.name ];
+        this.Prompt = inquirer.prompt.prompts[ detail.name ];
         this.rl = new ReadlineStub();
 
         this.output = "";

@@ -16,17 +16,22 @@ inquirer.prompt([
         name: "Peperonni"
       },
       {
-        name: "Cheese"
+        name: "Cheese",
+        checked: true
       },
       {
         name: "Mushroom"
       },
       new inquirer.Separator("The extras:"),
       {
-        name: "Pineapple",c
+        name: "Pineapple",
       },
       {
         name: "Bacon"
+      },
+      {
+        name: "Olives",
+        disabled: "out of stock"
       },
       {
         name: "Extra cheese"
