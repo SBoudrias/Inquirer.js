@@ -28,8 +28,7 @@
     "lodash": "~3.3.1",
     "readline2": "~0.1.1",
     "rx": "2.4.1",
-    "through": "~2.3.6",
-    "ttys": "0.0.3"
+    "through": "~2.3.6"
   },
   "devDependencies": {
     "chai": "^1.10.0",
