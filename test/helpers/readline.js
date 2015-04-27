@@ -11,6 +11,7 @@ var stub = {
   pause         : sinon.stub().returns(stub),
   resume        : sinon.stub().returns(stub),
   _getCursorPos : sinon.stub().returns(stub),
+  _prompt       : sinon.stub().returns(stub),
   output        : {
     end    : sinon.stub().returns(stub),
     mute   : sinon.stub().returns(stub),

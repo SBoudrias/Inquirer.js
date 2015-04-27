@@ -4,6 +4,7 @@ var _ = require("lodash");
 var ReadlineStub = require("../../helpers/readline");
 var fixtures = require("../../helpers/fixtures");
 
+var utils = require("../../../lib/utils/utils");
 var Input = require("../../../lib/prompts/input");
 
 
@@ -51,6 +52,73 @@ describe("`input` prompt", function() {
     }.bind(this));
 
     this.rl.emit("line", "");
+  });
+
+  describe("given a terminal width", function() {
+
+    beforeEach(function() {
+      this.cliWidthStub = sinon.stub( utils, "cliWidth" );
+      this.cliWidthStub.returns(20);
+    });
+
+    afterEach(function() {
+      this.cliWidthStub.restore();
+    });
+
+    it("should clean short lines appropriately", function( done ) {
+      var prompt = new Input( this.fixture, this.rl );
+      var cleanSpy = sinon.spy( prompt, "clean" );
+      prompt.run(function() {
+        expect( cleanSpy.callCount ).to.equal(1);
+        expect( cleanSpy.calledWith(1) ).to.be.true;
+        done();
+      }.bind(this));
+
+      this.rl.line = "hello";
+      this.rl.emit( "line", this.rl.line );
+    });
+
+    it("should clean wrapped long lines", function( done ) {
+      var prompt = new Input( this.fixture, this.rl );
+      var cleanSpy = sinon.spy( prompt, "clean" );
+      prompt.run(function() {
+        expect( cleanSpy.callCount ).to.equal(1);
+        expect( cleanSpy.calledWith(3) ).to.be.true;
+        done();
+      }.bind(this));
+
+      this.rl.line = "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdf";
+      this.rl.emit( "line", this.rl.line );
+    });
+
+  });
+
+  describe("given no terminal width", function() {
+
+    beforeEach(function() {
+      this.cliWidthStub = sinon.stub( utils, "cliWidth" );
+
+      // Return the default value
+      this.cliWidthStub.returns(0);
+    });
+
+    afterEach(function() {
+      this.cliWidthStub.restore();
+    });
+
+    it("should clean one line even if the input line is long", function( done ) {
+      var prompt = new Input( this.fixture, this.rl );
+      var cleanSpy = sinon.spy( prompt, "clean" );
+      prompt.run(function() {
+        expect( cleanSpy.callCount ).to.equal(1);
+        expect( cleanSpy.calledWith(1) ).to.be.true;
+        done();
+      }.bind(this));
+
+      this.rl.line = "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdf";
+      this.rl.emit( "line", this.rl.line );
+    });
+
   });
 
 });
