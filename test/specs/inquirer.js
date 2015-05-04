@@ -365,6 +365,28 @@ describe("inquirer.prompt", function() {
       ui.rl.emit("line");
     });
 
+    it("should run prompt if `when` is true", function( done ) {
+      var prompts = [{
+        type: "confirm",
+        name: "q1",
+        message: "message"
+      }, {
+        type: "input",
+        name: "q2",
+        message: "message",
+        default: "bar-var",
+        when: true
+      }];
+
+      var ui = this.prompt( prompts, function( answers ) {
+        expect(answers.q2).to.equal("bar-var");
+        done();
+      });
+
+      ui.rl.emit("line");
+      ui.rl.emit("line");
+    });
+
     it("should not run prompt if `when` returns false", function( done ) {
       var goesInWhen = false;
       var prompts = [{
@@ -388,6 +410,34 @@ describe("inquirer.prompt", function() {
 
       var ui = this.prompt( prompts, function( answers ) {
         expect(goesInWhen).to.be.true;
+        expect(answers.q2).to.not.exist;
+        expect(answers.q3).to.equal("foo");
+        expect(answers.q1).to.be.true;
+        done();
+      });
+
+      ui.rl.emit("line");
+      ui.rl.emit("line");
+    });
+
+    it("should not run prompt if `when` is false", function( done ) {
+      var prompts = [{
+        type: "confirm",
+        name: "q1",
+        message: "message"
+      }, {
+        type: "confirm",
+        name: "q2",
+        message: "message",
+        when: false
+      }, {
+        type: "input",
+        name: "q3",
+        message: "message",
+        default: "foo"
+      }];
+
+      var ui = this.prompt( prompts, function( answers ) {
         expect(answers.q2).to.not.exist;
         expect(answers.q3).to.equal("foo");
         expect(answers.q1).to.be.true;
