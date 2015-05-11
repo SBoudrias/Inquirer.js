@@ -8,6 +8,8 @@ A collection of common interactive command line user interfaces.
 
 ## Goal and philosophy
 
+<img align="right" alt="Inquirer Logo" src="/assets/inquirer_readme.png" title="Inquirer.js"/>
+
 We strive at providing easily embeddable and beautiful command line interface for Node.js; some hope in becoming the CLI Xanadu.
 
 _**Inquirer**_ should ease the process of asking end user **questions**, **parsing**, **validating** answers, managing **hierarchical prompts** and providing **error feedback**.
