@@ -71,11 +71,11 @@ describe("`checkbox` prompt", function() {
   it("provide an array of checked choice to validate", function( done ) {
     this.fixture.choices = [
       { name: "1", checked: true  },
-      { name: "2", checked: false },
+      { name: "2", checked: 1 },
       { name: "3", checked: false }
     ];
     this.fixture.validate = function( answer ) {
-      expect(answer).to.eql([ "1" ]);
+      expect(answer).to.eql([ "1", "2" ]);
       return true;
     };
     this.checkbox = new Checkbox( this.fixture, this.rl );
