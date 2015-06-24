@@ -10,25 +10,11 @@ var Input = require("../../../lib/prompts/input");
 describe("`input` prompt", function() {
 
   beforeEach(function() {
-    var self = this;
-    this.output = "";
-
-    this._write = Input.prototype.write;
-    Input.prototype.write = function( str ) {
-      self.output += str;
-      return this;
-    };
-
-    this.fixture = _.clone( fixtures.input );
+    this.fixture = _.clone(fixtures.input);
     this.rl = new ReadlineStub();
   });
 
-  afterEach(function() {
-    Input.prototype.write = this._write;
-  });
-
   it("should use raw value from the user", function( done ) {
-
     var input = new Input( this.fixture, this.rl );
 
     input.run(function( answer ) {
@@ -46,7 +32,7 @@ describe("`input` prompt", function() {
 
     var prompt = new Input( this.fixture, this.rl );
     prompt.run(function( answer ) {
-      expect(this.output).to.contain("pass");
+      expect(this.rl.output.__raw__).to.contain("pass");
       done();
     }.bind(this));
 

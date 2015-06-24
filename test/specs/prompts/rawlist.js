@@ -10,20 +10,12 @@ var Rawlist = require("../../../lib/prompts/rawlist");
 describe("`rawlist` prompt", function() {
 
   beforeEach(function() {
-    this._write = Rawlist.prototype.write;
-    Rawlist.prototype.write = function() { return this; };
-
     this.rl = new ReadlineStub();
     this.fixture = _.clone( fixtures.rawlist );
     this.rawlist = new Rawlist( this.fixture, this.rl );
   });
 
-  afterEach(function() {
-    Rawlist.prototype.write = this._write;
-  });
-
   it("should default to first choice", function(done) {
-
     this.rawlist.run(function(answer) {
       expect(answer).to.equal("foo");
       done();

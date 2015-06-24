@@ -10,22 +10,9 @@ var Checkbox = require("../../../lib/prompts/checkbox");
 describe("`checkbox` prompt", function() {
 
   beforeEach(function() {
-    var self = this;
-    this.output = "";
     this.fixture = _.clone( fixtures.checkbox );
-
-    this._write = Checkbox.prototype.write;
-    Checkbox.prototype.write = function( str ) {
-      self.output += str;
-      return this;
-    };
-
     this.rl = new ReadlineStub();
     this.checkbox = new Checkbox( this.fixture, this.rl );
-  });
-
-  afterEach(function() {
-    Checkbox.prototype.write = this._write;
   });
 
   it("should return a single selected choice in an array", function( done ) {
@@ -171,8 +158,8 @@ describe("`checkbox` prompt", function() {
 
     it("output disabled choices and custom messages", function( done ) {
       this.checkbox.run(function() {
-        expect(this.output).to.contain("- dis1 (Disabled)");
-        expect(this.output).to.contain("- dis2 (uh oh)");
+        expect(this.rl.output.__raw__).to.contain("- dis1 (Disabled)");
+        expect(this.rl.output.__raw__).to.contain("- dis2 (uh oh)");
         done();
       }.bind(this));
       this.rl.emit("line");
@@ -216,7 +203,7 @@ describe("`checkbox` prompt", function() {
       ];
       this.checkbox = new Checkbox( this.fixture, this.rl, { foo: "foo" });
       this.checkbox.run(function() {
-        expect(this.output).to.contain("- dis1 (Disabled)");
+        expect(this.rl.output.__raw__).to.contain("- dis1 (Disabled)");
         done();
       }.bind(this));
       this.rl.emit("line");

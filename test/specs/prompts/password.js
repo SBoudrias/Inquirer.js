@@ -8,21 +8,12 @@ var Password = require("../../../lib/prompts/password");
 
 
 describe("`password` prompt", function() {
-
   beforeEach(function() {
-    this._write = Password.prototype.write;
-    Password.prototype.write = function() { return this; };
-
     this.fixture = _.clone( fixtures.password );
     this.rl = new ReadlineStub();
   });
 
-  afterEach(function() {
-    Password.prototype.write = this._write;
-  });
-
   it("should use raw value from the user", function( done ) {
-
     var password = new Password( this.fixture, this.rl );
 
     password.run(function( answer ) {
@@ -32,5 +23,4 @@ describe("`password` prompt", function() {
 
     this.rl.emit( "line", "Inquirer" );
   });
-
 });

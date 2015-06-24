@@ -10,22 +10,9 @@ var Expand = require("../../../lib/prompts/expand");
 describe("`expand` prompt", function() {
 
   beforeEach(function() {
-    var self = this;
-    this.output = "";
-
-    this._write = Expand.prototype.write;
-    Expand.prototype.write = function( str ) {
-      self.output += str;
-      return this;
-    };
-
     this.fixture = _.clone( fixtures.expand );
     this.rl = new ReadlineStub();
     this.expand = new Expand( this.fixture, this.rl );
-  });
-
-  afterEach(function() {
-    Expand.prototype.write = this._write;
   });
 
   it("should throw if `key` is missing", function() {
@@ -90,8 +77,8 @@ describe("`expand` prompt", function() {
   it("should have help option", function( done ) {
     var run = 0;
     this.expand.run(function( answer ) {
-      expect(this.output).to.match(/a\)\ acab/);
-      expect(this.output).to.match(/b\)\ bar/);
+      expect(this.rl.output.__raw__).to.match(/a\)\ acab/);
+      expect(this.rl.output.__raw__).to.match(/b\)\ bar/);
       expect(answer).to.equal("chile");
       done();
     }.bind(this));
@@ -122,7 +109,7 @@ describe("`expand` prompt", function() {
     this.expand = new Expand( this.fixture, this.rl );
 
     this.expand.run(function() {});
-    expect(this.output).to.contain("(aBch)");
+    expect(this.rl.output.__raw__).to.contain("(aBch)");
   });
 
   it("should 'autocomplete' the user input", function( done ) {
@@ -131,7 +118,7 @@ describe("`expand` prompt", function() {
     this.rl.line = "a";
     this.rl.emit("keypress");
     setTimeout(function() {
-      expect(this.output).to.contain("acab");
+      expect(this.rl.output.__raw__).to.contain("acab");
       done();
     }.bind(this), 10);
   });

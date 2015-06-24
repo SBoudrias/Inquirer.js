@@ -10,16 +10,9 @@ var List = require("../../../lib/prompts/list");
 describe("`list` prompt", function() {
 
   beforeEach(function() {
-    this._write = List.prototype.write;
-    List.prototype.write = function() { return this; };
-
     this.fixture = _.clone( fixtures.list );
     this.rl = new ReadlineStub();
     this.list = new List( this.fixture, this.rl );
-  });
-
-  afterEach(function() {
-    List.prototype.write = this._write;
   });
 
   it("should default to first choice", function( done ) {

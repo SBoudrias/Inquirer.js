@@ -81,11 +81,6 @@ var tests = {
 
   "filter": function() {
     describe("filter API", function() {
-
-      beforeEach(function() {
-        this.output = "";
-      });
-
       it("should filter the user input", function( done ) {
         this.fixture.filter = function() {
           return "pass";
@@ -116,19 +111,12 @@ var tests = {
 
         this.rl.emit("line", "");
       });
-
     });
   },
 
   "validate": function() {
     describe("validate API", function() {
-
-      beforeEach(function() {
-        this.output = "";
-      });
-
       it("should reject input if boolean false is returned", function( done ) {
-        var self = this;
         var called = 0;
 
         this.fixture.validate = function( value ) {
@@ -137,10 +125,10 @@ var tests = {
           if (called === 2) {
             done();
           } else {
-            self.rl.emit("line");
+            this.rl.emit("line");
           }
           return false;
-        };
+        }.bind(this);
 
         var prompt = new this.Prompt( this.fixture, this.rl );
         prompt.run(function( answer ) {
@@ -246,23 +234,17 @@ var tests = {
         ui.rl.emit("line");
         ui.rl.emit("line");
       });
-
     });
   },
 
   "default": function() {
     describe("default API", function() {
-
-      beforeEach(function() {
-        this.output = "";
-      });
-
       it("should allow a default value", function( done ) {
         this.fixture.default = "pass";
 
         var prompt = new this.Prompt( this.fixture, this.rl );
         prompt.run(function( answer ) {
-          expect(this.output).to.contain("(pass)");
+          expect(this.rl.output.__raw__).to.contain("(pass)");
           expect(answer).to.equal("pass");
           done();
         }.bind(this));
@@ -275,43 +257,31 @@ var tests = {
 
         var prompt = new this.Prompt( this.fixture, this.rl );
         prompt.run(function( answer ) {
-          expect(this.output).to.contain("(0)");
+          expect(this.rl.output.__raw__).to.contain("(0)");
           expect(answer).to.equal(0);
           done();
         }.bind(this));
 
         this.rl.emit("line", "");
       });
-
     });
   },
 
   "message": function() {
     describe("message API", function() {
-
-      beforeEach(function() {
-        this.output = "";
-      });
-
       it("should print message on screen", function() {
         this.fixture.message = "Foo bar bar foo bar";
 
         var prompt = new this.Prompt( this.fixture, this.rl );
         prompt.run();
 
-        expect( this.output ).to.contain( this.fixture.message );
+        expect( this.rl.output.__raw__ ).to.contain( this.fixture.message );
       });
-
     });
   },
 
   "choices": function() {
     describe("choices API", function() {
-
-      beforeEach(function() {
-        this.output = "";
-      });
-
       it("should print choices to screen", function() {
         var prompt = new this.Prompt( this.fixture, this.rl );
         var choices = prompt.opt.choices;
@@ -319,16 +289,14 @@ var tests = {
         prompt.run();
 
         _.each( choices.filter(inquirer.Separator.exclude), function( choice ) {
-          expect( this.output ).to.contain( choice.name );
+          expect( this.rl.output.__raw__ ).to.contain( choice.name );
         }, this );
       });
-
     });
   },
 
   "requiredValues": function() {
     describe("Missing value", function() {
-
       it("`message` should throw", function() {
         var mkPrompt = function() {
           delete this.fixture.message;
@@ -344,7 +312,6 @@ var tests = {
         }.bind(this);
         expect(mkPrompt).to.throw(/name/);
       });
-
     });
   }
 };
@@ -356,22 +323,9 @@ describe("Prompt public APIs", function() {
     describe("on " + detail.name + " prompt", function() {
 
       beforeEach(function() {
-        var self = this;
         this.fixture = _.clone(fixtures[ detail.name ]);
         this.Prompt = inquirer.prompt.prompts[ detail.name ];
         this.rl = new ReadlineStub();
-
-        this.output = "";
-
-        this._write = this.Prompt.prototype.write;
-        this.Prompt.prototype.write = function( str ) {
-          self.output += str;
-          return this;
-        };
-      });
-
-      afterEach(function() {
-        this.Prompt.prototype.write = this._write;
       });
 
       _.each( detail.apis, function( apiName ) {

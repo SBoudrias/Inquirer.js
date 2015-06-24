@@ -10,16 +10,7 @@ var Confirm = require("../../../lib/prompts/confirm");
 describe("`confirm` prompt", function() {
 
   beforeEach(function() {
-    var self = this;
-    this.output = "";
     this.fixture = _.clone( fixtures.confirm );
-
-    this._write = Confirm.prototype.write;
-    Confirm.prototype.write = function( str ) {
-      self.output += str;
-      return this;
-    };
-
     this.rl = new ReadlineStub();
     this.confirm = new Confirm( this.fixture, this.rl );
   });
@@ -29,49 +20,42 @@ describe("`confirm` prompt", function() {
   });
 
   it("should default to true", function( done ) {
-    var self = this;
-
     this.confirm.run(function( answer ) {
-      expect(self.output).to.contain("Y/n");
+      expect(this.rl.output.__raw__).to.contain("Y/n");
       expect(answer).to.be.true;
       done();
-    });
+    }.bind(this));
 
     this.rl.emit( "line", "" );
   });
 
   it("should allow a default `false` value", function( done ) {
-    var self = this;
-
     this.fixture.default = false;
     var falseConfirm = new Confirm( this.fixture, this.rl );
 
     falseConfirm.run(function( answer ) {
-      expect(self.output).to.contain("y/N");
+      expect(this.rl.output.__raw__).to.contain("y/N");
       expect(answer).to.be.false;
       done();
-    });
+    }.bind(this));
 
     this.rl.emit( "line", "" );
   });
 
   it("should allow a default `true` value", function( done ) {
-    var self = this;
-
     this.fixture.default = true;
     var falseConfirm = new Confirm( this.fixture, this.rl );
 
     falseConfirm.run(function( answer ) {
-      expect(self.output).to.contain("Y/n");
+      expect(this.rl.output.__raw__).to.contain("Y/n");
       expect(answer).to.be.true;
       done();
-    });
+    }.bind(this));
 
     this.rl.emit( "line", "" );
   });
 
   it("should parse 'Y' value to boolean true", function( done ) {
-
     this.confirm.run(function( answer ) {
       expect(answer).to.be.true;
       done();
@@ -81,7 +65,6 @@ describe("`confirm` prompt", function() {
   });
 
   it("should parse 'Yes' value to boolean true", function( done ) {
-
     this.confirm.run(function( answer ) {
       expect(answer).to.be.true;
       done();
@@ -91,7 +74,6 @@ describe("`confirm` prompt", function() {
   });
 
   it("should parse 'No' value to boolean false", function( done ) {
-
     this.confirm.run(function( answer ) {
       expect(answer).to.be.false;
       done();
@@ -101,7 +83,6 @@ describe("`confirm` prompt", function() {
   });
 
   it("should parse every other string value to boolean false", function( done ) {
-
     this.confirm.run(function( answer ) {
       expect(answer).to.be.false;
       done();

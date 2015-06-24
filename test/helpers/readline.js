@@ -12,19 +12,21 @@ var stub = {
   resume        : sinon.stub().returns(stub),
   _getCursorPos : sinon.stub().returns(stub),
   output        : {
-    end    : sinon.stub().returns(stub),
-    mute   : sinon.stub().returns(stub),
-    unmute : sinon.stub().returns(stub),
-    write  : sinon.stub().returns(stub)
+    end    : sinon.stub(),
+    mute   : sinon.stub(),
+    unmute : sinon.stub(),
+    __raw__: '',
+    write  : function (str) {
+      this.__raw__ += str;
+    }
   }
 };
 
-var ReadlineStub = function() {
-  EventEmitter.apply( this, arguments );
+var ReadlineStub = function () {
+  EventEmitter.apply(this, arguments);
 };
 
-util.inherits( ReadlineStub, EventEmitter );
-_.assign( ReadlineStub.prototype, stub );
-
+util.inherits(ReadlineStub, EventEmitter);
+_.assign(ReadlineStub.prototype, stub);
 
 module.exports = ReadlineStub;
