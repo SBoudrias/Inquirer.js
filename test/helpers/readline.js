@@ -10,7 +10,7 @@ var stub = {
   close         : sinon.stub().returns(stub),
   pause         : sinon.stub().returns(stub),
   resume        : sinon.stub().returns(stub),
-  _getCursorPos : sinon.stub().returns(stub),
+  _getCursorPos : sinon.stub().returns({cols: 0, rows: 0}),
   output        : {
     end    : sinon.stub(),
     mute   : sinon.stub(),
