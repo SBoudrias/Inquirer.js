@@ -220,6 +220,33 @@ var tests = {
         this.rl.emit( "line" );
       });
 
+      it("should pass previous answers to the prompt validation function", function( done ) {
+        var prompt = inquirer.createPromptModule();
+        var questions = [{
+          type: "confirm",
+          name: "q1",
+          message: "message"
+        }, {
+          type: "confirm",
+          name: "q2",
+          message: "message",
+          validate: function(input, answers) {
+            expect(answers.q1).to.be.true;
+            return true;
+          },
+          default: false
+        }];
+
+        var ui = prompt( questions, function( answers ) {
+          expect(answers.q1).to.be.true;
+          expect(answers.q2).to.be.false;
+          done();
+        });
+
+        ui.rl.emit("line");
+        ui.rl.emit("line");
+      });
+
     });
   },
 
