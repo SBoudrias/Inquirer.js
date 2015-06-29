@@ -9,6 +9,7 @@ var choices = Array.apply(0, new Array(26)).map(function(x,y) {
   return String.fromCharCode(y + 65);
 });
 choices.push("Multiline option \n  super cool feature");
+choices.push("Super long option that should force the terminal to wrap the characters and Inquirer should not break because it's awesome.");
 
 inquirer.prompt([
   {
