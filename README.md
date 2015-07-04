@@ -59,7 +59,7 @@ Launch the prompt interface (inquiry session)
 A question object is a `hash` containing question related values:
 
 - **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `confirm`,
-`list`, `rawlist`, `password`
+`list`, `rawlist`, `password`, `password-hidden`
 - **name**: (String) The name to use when storing the answer in the anwers hash.
 - **message**: (String|Function) The question to print. If defined as a function, the first parameter will be the current inquirer session answers.
 - **default**: (String|Number|Array|Function) Default value(s) to use if nothing is entered, or a function that returns the default value(s). If defined as a function, the first parameter will be the current inquirer session answers.
@@ -191,6 +191,15 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
 ![Password prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/password-prompt.png)
+
+---
+
+#### Password Hidden - `{ type: "password-hidden" }`
+
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
+
+![Password prompt](http://i.imgur.com/GiLlj1z.png)
+
 
 ## User Interfaces and layouts
 

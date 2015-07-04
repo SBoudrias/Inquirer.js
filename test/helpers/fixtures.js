@@ -17,6 +17,11 @@ module.exports = {
     name: "name"
   },
 
+  passwordHidden: {
+    message: "message",
+    name: "name"
+  },
+
   list: {
     message: "message",
     name: "name",
