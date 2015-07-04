@@ -23,6 +23,7 @@ var stub = {
 };
 
 var ReadlineStub = function () {
+  this.line = '';
   EventEmitter.apply(this, arguments);
 };
 
