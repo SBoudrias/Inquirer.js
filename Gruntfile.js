@@ -17,13 +17,24 @@ module.exports = function( grunt ) {
         require: "test/before.js"
       },
       all: "test/specs/**/*.js"
+    },
+    watch : {
+      scripts: {
+        files: "<%= jshint.files %>",
+        tasks: ["jshint", "mochaTest"],
+        options: {
+          spawn: true,
+        },
+      },
     }
 
   });
 
   grunt.loadNpmTasks("grunt-contrib-jshint");
+  grunt.loadNpmTasks("grunt-contrib-watch");
   grunt.loadNpmTasks("grunt-mocha-test");
 
   grunt.registerTask("default", [ "jshint", "mochaTest" ]);
+  grunt.registerTask("develop", [ "jshint", "mochaTest", "watch" ]);
 
 };
