@@ -76,8 +76,6 @@ function searchStates(answers) {
 
         resolve(states.filter(function(state) {
           return new RegExp(input, 'i').exec(state) !== null;
-        }).map(function(state) {
-          return state;
         }));
       }, 400);
     });
@@ -88,11 +86,7 @@ inquirer.prompt([{
   type: "autocomplete",
   name: "from",
   message: "Select a state to travel from",
-  choices: searchStates,
-  validate: function(state) {
-    return 'error not valid';
-    return state.length > 10;
-  }
+  choices: searchStates
 }, {
   type: "autocomplete",
   name: "to",
