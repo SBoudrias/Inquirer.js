@@ -92,21 +92,57 @@ describe.only("`autocomplete` prompt", function() {
 
   });
 
-  it("should search when typing", function () {
-    sinon.spy(this.fixture, 'choices');
-
-this.autocomplete.currentPromise
-    rl.emit("keypress", "a", { name : "a" });
-    console.log('after');
-    sinon.assert.calledOnce(this.fixture.choices);
-
-  });
-
   it("should require a choices array", function() {
     var mkPrompt = function() {
       new Autocomplete({ name : "foo", message: "bar" });
     };
     expect(mkPrompt).to.throw(/choices/);
   });
+
+  describe("search", function () {
+    var search;
+    beforeEach(function () {
+      search = sinon.spy(this.autocomplete.opt, 'choices');
+    });
+
+    it("should search once initially with no params", function () {
+      this.autocomplete.run();
+      sinon.assert.calledOnce(this.autocomplete.opt.choices);
+      sinon.assert.calledWithExactly(this.autocomplete.opt.choices);
+    });
+
+    it("should search when user types", function () {
+      this.autocomplete.run();
+
+      rl.line = "a";
+      rl.emit("keypress", "a", {name : "a"});
+
+      rl.line = "ab";
+      rl.emit("keypress", "b", {name : "b"});
+
+      sinon.assert.calledThrice(search);
+      sinon.assert.calledWithExactly(search, 'a');
+      sinon.assert.calledWithExactly(search, 'ab');
+    });
+
+    it("should not search if last search was the same", function () {
+      this.autocomplete.run();
+
+      rl.line = "a";
+      rl.emit("keypress", "a", {name : "a"});
+
+      rl.emit("keypress", "", {name : "down"});
+      rl.emit("keypress", "", {name : "escape"});
+      rl.emit("keypress", "", {name : "up"});
+      rl.line = "ab";
+      rl.emit("keypress", "b", {name : "b"});
+      rl.emit("keypress", "", {name : "tab"});
+
+      sinon.assert.calledThrice(search);
+      sinon.assert.calledWithExactly(search, 'a');
+      sinon.assert.calledWithExactly(search, 'ab');
+    });
+  });
+
 
 });
