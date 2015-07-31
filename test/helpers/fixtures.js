@@ -1,4 +1,5 @@
 var inquirer = require("../../lib/inquirer");
+var Promise = require("promise");
 
 module.exports = {
 
@@ -27,6 +28,16 @@ module.exports = {
     message: "message",
     name: "name",
     choices: [ "foo", "bar", new inquirer.Separator(), "bum" ]
+  },
+
+  autocomplete: {
+    message: "message",
+    name: "name",
+    choices: function(input) {
+      return new Promise(function(resolve, reject) {
+        resolve([ "foo", "bar", new inquirer.Separator(), "bum" ]);
+      });
+    }
   },
 
   expand: {

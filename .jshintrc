@@ -42,6 +42,7 @@
     "before": true,
     "after": true,
     "xit": true,
-    "xdescribe": true
+    "xdescribe": true,
+    "Promise": true
   }
 }
