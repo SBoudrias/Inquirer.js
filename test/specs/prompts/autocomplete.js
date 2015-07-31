@@ -7,7 +7,7 @@ var fixtures = require("../../helpers/fixtures");
 var Autocomplete = require("../../../lib/prompts/autocomplete");
 
 
-describe.only("`autocomplete` prompt", function() {
+describe("`autocomplete` prompt", function() {
   var rl;
 
   beforeEach(function() {
