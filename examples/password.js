@@ -9,7 +9,8 @@ inquirer.prompt([
   {
     type: "password",
     message: "Enter your git password",
-    name: "password"
+    name: "password",
+    default: "secret"
   }
 ], function( answers ) {
   console.log( JSON.stringify(answers, null, "  ") );
