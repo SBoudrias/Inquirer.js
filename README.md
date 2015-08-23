@@ -10,16 +10,16 @@ A collection of common interactive command line user interfaces.
 
 <img align="right" alt="Inquirer Logo" src="/assets/inquirer_readme.png" title="Inquirer.js"/>
 
-**```Inquirer.js```** strives to be an easily embeddable and beautiful command line interface for [Node.js](https://nodejs.org/).
+**`Inquirer.js`** strives to be an easily embeddable and beautiful command line interface for [Node.js](https://nodejs.org/) (and perhaps the CLI Xanadu).
 
-**```Inquirer.js```** should ease the process of 
+**`Inquirer.js`** should ease the process of 
 - providing *error feedback*
 - *asking questions*
 - *parsing* input
 - *validating* answers
 - managing *hierarchical prompts*
 
-> **Note:** **```Inquirer.js```** provides the user interface, and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [Commander.js](https://github.com/visionmedia/commander.js).
+> **Note:** **`Inquirer.js`** provides the user interface, and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [Commander.js](https://github.com/visionmedia/commander.js).
 
 
 ## Documentation
