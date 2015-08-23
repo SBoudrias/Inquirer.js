@@ -10,7 +10,7 @@ A collection of common interactive command line user interfaces.
 
 <img align="right" alt="Inquirer Logo" src="/assets/inquirer_readme.png" title="Inquirer.js"/>
 
-**`Inquirer.js`** strives to be an easily embeddable and beautiful command line interface for [Node.js](https://nodejs.org/) (and perhaps the CLI Xanadu).
+**`Inquirer.js`** strives to be an easily embeddable and beautiful command line interface for [Node.js](https://nodejs.org/) (and perhaps the "CLI [Xanadu](https://en.wikipedia.org/wiki/Xanadu_(Citizen_Kane))").
 
 **`Inquirer.js`** should ease the process of 
 - providing *error feedback*
