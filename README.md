@@ -6,15 +6,20 @@ Inquirer.js
 A collection of common interactive command line user interfaces.
 
 
-## Goal and philosophy
+## Goal and Philosophy
 
 <img align="right" alt="Inquirer Logo" src="/assets/inquirer_readme.png" title="Inquirer.js"/>
 
-We strive at providing easily embeddable and beautiful command line interface for Node.js; some hope in becoming the CLI Xanadu.
+**`Inquirer.js`** strives to be an easily embeddable and beautiful command line interface for [Node.js](https://nodejs.org/) (and perhaps the "CLI [Xanadu](https://en.wikipedia.org/wiki/Xanadu_(Citizen_Kane))").
 
-_**Inquirer**_ should ease the process of asking end user **questions**, **parsing**, **validating** answers, managing **hierarchical prompts** and providing **error feedback**.
+**`Inquirer.js`** should ease the process of 
+- providing *error feedback*
+- *asking questions*
+- *parsing* input
+- *validating* answers
+- managing *hierarchical prompts*
 
-_**Inquirer**_ provide the user interface, and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [Commander.js](https://github.com/visionmedia/commander.js) (inspired by).
+> **Note:** **`Inquirer.js`** provides the user interface, and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [Commander.js](https://github.com/visionmedia/commander.js).
 
 
 ## Documentation
