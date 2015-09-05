@@ -19,6 +19,10 @@ var stub = {
     write  : function (str) {
       this.__raw__ += str;
     }
+  },
+  input: {
+    addListener   : sinon.stub(),
+    removeListener: sinon.stub()
   }
 };
 
