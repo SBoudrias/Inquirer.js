@@ -4,5 +4,6 @@ node_js:
   - "0.10"
   - "0.12"
   - "iojs"
+  - "stable"
 before_install:
   - npm install -g npm@2.7.3
