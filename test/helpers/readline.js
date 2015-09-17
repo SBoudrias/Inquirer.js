@@ -19,15 +19,12 @@ var stub = {
     write  : function (str) {
       this.__raw__ += str;
     }
-  },
-  input: {
-    addListener   : sinon.stub(),
-    removeListener: sinon.stub()
   }
 };
 
 var ReadlineStub = function () {
   this.line = '';
+  this.input = new EventEmitter();
   EventEmitter.apply(this, arguments);
 };
 

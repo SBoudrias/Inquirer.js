@@ -31,7 +31,7 @@ describe("`list` prompt", function() {
       done();
     });
 
-    this.rl.emit("keypress", "", { name : "down" });
+    this.rl.input.emit("keypress", "", { name : "down" });
     this.rl.emit("line");
   });
 
@@ -42,9 +42,9 @@ describe("`list` prompt", function() {
       done();
     });
 
-    this.rl.emit("keypress", "", { name : "down" });
-    this.rl.emit("keypress", "", { name : "down" });
-    this.rl.emit("keypress", "", { name : "up" });
+    this.rl.input.emit("keypress", "", { name : "down" });
+    this.rl.input.emit("keypress", "", { name : "down" });
+    this.rl.input.emit("keypress", "", { name : "up" });
     this.rl.emit("line");
   });
 
@@ -55,9 +55,9 @@ describe("`list` prompt", function() {
       done();
     });
 
-    this.rl.emit("keypress", "j", { name : "j" });
-    this.rl.emit("keypress", "j", { name : "j" });
-    this.rl.emit("keypress", "k", { name : "k" });
+    this.rl.input.emit("keypress", "j", { name : "j" });
+    this.rl.input.emit("keypress", "j", { name : "j" });
+    this.rl.input.emit("keypress", "k", { name : "k" });
     this.rl.emit("line");
   });
 
@@ -76,8 +76,8 @@ describe("`list` prompt", function() {
       complete();
     });
 
-    this.rl.emit("keypress", "", { name : "up" });
-    this.rl.emit("keypress", "", { name : "up" });
+    this.rl.input.emit("keypress", "", { name : "up" });
+    this.rl.input.emit("keypress", "", { name : "up" });
     this.rl.emit("line");
 
     this.list.selected = 0; //reset
@@ -86,9 +86,9 @@ describe("`list` prompt", function() {
       complete();
     });
 
-    this.rl.emit("keypress", "", { name : "down" });
-    this.rl.emit("keypress", "", { name : "down" });
-    this.rl.emit("keypress", "", { name : "down" });
+    this.rl.input.emit("keypress", "", { name : "down" });
+    this.rl.input.emit("keypress", "", { name : "down" });
+    this.rl.input.emit("keypress", "", { name : "down" });
     this.rl.emit("line");
   });
 
@@ -122,7 +122,7 @@ describe("`list` prompt", function() {
       done();
     });
 
-    this.rl.emit("keypress", "", { name : "down" });
+    this.rl.input.emit("keypress", "", { name : "down" });
     this.rl.emit("line");
   });
 
@@ -147,7 +147,7 @@ describe("`list` prompt", function() {
       done();
     });
 
-    this.rl.emit("keypress", "", { name : "down" });
+    this.rl.input.emit("keypress", "", { name : "down" });
     this.rl.emit("line");
   });
 
@@ -171,7 +171,7 @@ describe("`list` prompt", function() {
       done();
     });
 
-    this.rl.emit("keypress", "2");
+    this.rl.input.emit("keypress", "2");
     this.rl.emit("line");
   });
 

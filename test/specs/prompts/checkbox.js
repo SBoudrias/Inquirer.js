@@ -22,7 +22,7 @@ describe("`checkbox` prompt", function() {
       expect(answer[0]).to.equal("choice 1");
       done();
     });
-    this.rl.emit("keypress", " ", { name: "space" });
+    this.rl.input.emit("keypress", " ", { name: "space" });
     this.rl.emit("line");
   });
 
@@ -34,9 +34,9 @@ describe("`checkbox` prompt", function() {
       expect(answer[1]).to.equal("choice 2");
       done();
     });
-    this.rl.emit("keypress", " ", { name: "space" });
-    this.rl.emit("keypress", null, { name: "down" });
-    this.rl.emit("keypress", " ", { name: "space" });
+    this.rl.input.emit("keypress", " ", { name: "space" });
+    this.rl.input.emit("keypress", null, { name: "down" });
+    this.rl.input.emit("keypress", " ", { name: "space" });
     this.rl.emit("line");
   });
 
@@ -95,10 +95,10 @@ describe("`checkbox` prompt", function() {
       expect(answer[0]).to.equal("choice 1");
       done();
     });
-    this.rl.emit("keypress", " ", { name: "space" });
-    this.rl.emit("keypress", null, { name: "down" });
-    this.rl.emit("keypress", " ", { name: "space" });
-    this.rl.emit("keypress", " ", { name: "space" });
+    this.rl.input.emit("keypress", " ", { name: "space" });
+    this.rl.input.emit("keypress", null, { name: "down" });
+    this.rl.input.emit("keypress", " ", { name: "space" });
+    this.rl.input.emit("keypress", " ", { name: "space" });
     this.rl.emit("line");
   });
 
@@ -109,11 +109,11 @@ describe("`checkbox` prompt", function() {
       done();
     });
 
-    this.rl.emit("keypress", null, { name: "down" });
-    this.rl.emit("keypress", null, { name: "down" });
-    this.rl.emit("keypress", null, { name: "up" });
+    this.rl.input.emit("keypress", null, { name: "down" });
+    this.rl.input.emit("keypress", null, { name: "down" });
+    this.rl.input.emit("keypress", null, { name: "up" });
 
-    this.rl.emit("keypress", " ", { name: "space" });
+    this.rl.input.emit("keypress", " ", { name: "space" });
     this.rl.emit("line");
   });
 
@@ -124,11 +124,11 @@ describe("`checkbox` prompt", function() {
       done();
     });
 
-    this.rl.emit("keypress", "j", { name: "j" });
-    this.rl.emit("keypress", "j", { name: "j" });
-    this.rl.emit("keypress", "k", { name: "k" });
+    this.rl.input.emit("keypress", "j", { name: "j" });
+    this.rl.input.emit("keypress", "j", { name: "j" });
+    this.rl.input.emit("keypress", "k", { name: "k" });
 
-    this.rl.emit("keypress", " ", { name: "space" });
+    this.rl.input.emit("keypress", " ", { name: "space" });
     this.rl.emit("line");
   });
 
@@ -139,7 +139,7 @@ describe("`checkbox` prompt", function() {
       done();
     });
 
-    this.rl.emit("keypress", "2");
+    this.rl.input.emit("keypress", "2");
     this.rl.emit("line");
   });
 
@@ -170,11 +170,11 @@ describe("`checkbox` prompt", function() {
         expect(answer[0]).to.equal("choice 1");
         done();
       }.bind(this));
-      this.rl.emit("keypress", null, { name: "down" });
-      this.rl.emit("keypress", null, { name: "down" });
-      this.rl.emit("keypress", null, { name: "down" });
+      this.rl.input.emit("keypress", null, { name: "down" });
+      this.rl.input.emit("keypress", null, { name: "down" });
+      this.rl.input.emit("keypress", null, { name: "down" });
 
-      this.rl.emit("keypress", " ", { name: "space" });
+      this.rl.input.emit("keypress", " ", { name: "space" });
       this.rl.emit("line");
     });
 
