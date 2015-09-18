@@ -65,7 +65,7 @@ A question object is a `hash` containing question related values:
 
 - **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `confirm`,
 `list`, `rawlist`, `password`
-- **name**: (String) The name to use when storing the answer in the anwers hash.
+- **name**: (String) The name to use when storing the answer in the answers hash.
 - **message**: (String|Function) The question to print. If defined as a function, the first parameter will be the current inquirer session answers.
 - **default**: (String|Number|Array|Function) Default value(s) to use if nothing is entered, or a function that returns the default value(s). If defined as a function, the first parameter will be the current inquirer session answers.
 - **choices**: (Array|Function) Choices array or a function returning a choices array. If defined as a function, the first parameter will be the current inquirer session answers.  
@@ -119,7 +119,7 @@ choices: [ "Choice A", new inquirer.Separator(), "choice B" ]
    Make a reservation
    --------
    Ask opening hours
-   Talk to the receptionnist
+   Talk to the receptionist
 ```
 
 The constructor takes a facultative `String` value that'll be use as the separator. If omitted, the separator will be `--------`.
@@ -169,7 +169,7 @@ Take `type`, `name`, `message`, `choices`[, `filter`, `validate`, `default`] pro
 
 Choices marked as `{ checked: true }` will be checked by default.
 
-Choices whose property `disabled` is truthy will be unselectable. If `disabled` is a string, then the string will be outputed next to the disabled choice, otherwise it'll default to `"Disabled"`. The `disabled` property can also be a synchronous function receiving the current answers as argument and returning a boolean or a string.
+Choices whose property `disabled` is truthy will be unselectable. If `disabled` is a string, then the string will be outputted next to the disabled choice, otherwise it'll default to `"Disabled"`. The `disabled` property can also be a synchronous function receiving the current answers as argument and returning a boolean or a string.
 
 ![Checkbox prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/checkbox-prompt.png)
 
