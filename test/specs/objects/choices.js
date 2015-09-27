@@ -39,7 +39,13 @@ describe("Choices collection", function() {
 
   it("should allow filtering value with where", function() {
     var choices = new Choices([{ name: "n", key: "foo"}, { name: "a", key: "lab" }]);
-    expect(choices.where({ key: "lab" })).to.eql([{ name: "a", value: "a", key: "lab", disabled: undefined }]);
+    expect(choices.where({ key: "lab" })).to.eql([{
+      name: "a",
+      value: "a",
+      short: "a",
+      key: "lab",
+      disabled: undefined
+    }]);
   });
 
   it("should façade forEach", function() {

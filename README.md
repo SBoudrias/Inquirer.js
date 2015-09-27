@@ -12,7 +12,7 @@ A collection of common interactive command line user interfaces.
 
 **`Inquirer.js`** strives to be an easily embeddable and beautiful command line interface for [Node.js](https://nodejs.org/) (and perhaps the "CLI [Xanadu](https://en.wikipedia.org/wiki/Xanadu_(Citizen_Kane))").
 
-**`Inquirer.js`** should ease the process of 
+**`Inquirer.js`** should ease the process of
 - providing *error feedback*
 - *asking questions*
 - *parsing* input
@@ -69,7 +69,7 @@ A question object is a `hash` containing question related values:
 - **message**: (String|Function) The question to print. If defined as a function, the first parameter will be the current inquirer session answers.
 - **default**: (String|Number|Array|Function) Default value(s) to use if nothing is entered, or a function that returns the default value(s). If defined as a function, the first parameter will be the current inquirer session answers.
 - **choices**: (Array|Function) Choices array or a function returning a choices array. If defined as a function, the first parameter will be the current inquirer session answers.  
-Array values can be simple `strings`, or `objects` containing a `name` (to display) and a `value` properties (to save in the answers hash). Values can also be [a `Separator`](#separator).
+Array values can be simple `strings`, or `objects` containing a `name` (to display in list), a `value` (to save in the answers hash) and a `short` (to display after selection) properties. The choices array can also contain [a `Separator`](#separator).
 - **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 - **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
 - **when**: (Function, Boolean) Receive the current user answers hash and should return `true` or `false` depending on whether or not this question should be asked. The value can also be a simple boolean.

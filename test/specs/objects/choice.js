@@ -18,8 +18,10 @@ describe("Choice object", function() {
 
     expect( onlyName.name ).to.equal("foo");
     expect( onlyName.value ).to.equal("foo");
+    expect( onlyName.short ).to.equal("foo");
     expect( onlyVal.name ).to.equal("bar");
     expect( onlyVal.value ).to.equal("bar");
+    expect( onlyVal.short ).to.equal("bar");
   });
 
   it("should keep extra keys", function() {
@@ -40,5 +42,4 @@ describe("Choice object", function() {
     var sep = new Choice( obj );
     expect( sep ).to.equal( obj );
   });
-
 });
