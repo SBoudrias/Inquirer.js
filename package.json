@@ -1,6 +1,6 @@
 {
   "name": "inquirer",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "description": "A collection of common interactive command line user interfaces.",
   "main": "lib/inquirer.js",
   "scripts": {
