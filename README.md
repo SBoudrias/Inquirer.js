@@ -265,8 +265,9 @@ look at issues found on other command line - feel free to report any!
   - cmd.exe
   - Powershell
   - Cygwin
-- **Ubuntu**:
-  - Terminal
+- **Linux (Ubuntu, openSUSE, Arch Linux, etc)**:
+  - gnome-terminal (Terminal GNOME)
+  - konsole
 
 
 ## News on the march (Release notes)
