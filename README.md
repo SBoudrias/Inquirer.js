@@ -68,7 +68,7 @@ A question object is a `hash` containing question related values:
 - **name**: (String) The name to use when storing the answer in the answers hash.
 - **message**: (String|Function) The question to print. If defined as a function, the first parameter will be the current inquirer session answers.
 - **default**: (String|Number|Array|Function) Default value(s) to use if nothing is entered, or a function that returns the default value(s). If defined as a function, the first parameter will be the current inquirer session answers.
-- **choices**: (Array|Function) Choices array or a function returning a choices array. If defined as a function, the first parameter will be the current inquirer session answers.  
+- **choices**: (Array|Function) Choices array or a function returning a choices array. If defined as a function, the first parameter will be the current inquirer session answers.
 Array values can be simple `strings`, or `objects` containing a `name` (to display in list), a `value` (to save in the answers hash) and a `short` (to display after selection) properties. The choices array can also contain [a `Separator`](#separator).
 - **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 - **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
@@ -277,17 +277,17 @@ Please refer to the [Github releases section for the changelog](https://github.c
 
 ## Contributing
 
-**Style Guide**  
-Please brief yourself on [Idiomatic.js](https://github.com/rwldrn/idiomatic.js) style guide with two space indent  
+**Style Guide**
+Please brief yourself on [Idiomatic.js](https://github.com/rwldrn/idiomatic.js) style guide with two space indent
 
-**Unit test**  
-Unit test are written in [Mocha](http://visionmedia.github.io/mocha/). Please add a unit test for every new feature or bug fix. `npm test` to run the test suite.  
+**Unit test**
+Unit test are written in [Mocha](http://visionmedia.github.io/mocha/). Please add a unit test for every new feature or bug fix. `npm test` to run the test suite.
 
-**Documentation**  
+**Documentation**
 Add documentation for every API change. Feel free to send corrections
-or better docs!  
+or better docs!
 
-**Pull Requests**  
+**Pull Requests**
 Send _fixes_ PR on the `master` branch. Any new features should be send on the `wip`branch.
 
 We're looking to offer good support for multiple prompts and environments. If you want to
@@ -297,5 +297,5 @@ to @vaxilart) or just add your name to [the wiki](https://github.com/SBoudrias/I
 
 ## License
 
-Copyright (c) 2012 Simon Boudrias (twitter: @vaxilart)  
+Copyright (c) 2015 Simon Boudrias (twitter: @vaxilart)
 Licensed under the MIT license.
