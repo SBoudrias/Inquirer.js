@@ -281,7 +281,7 @@ Please refer to the [Github releases section for the changelog](https://github.c
 Please brief yourself on [Idiomatic.js](https://github.com/rwldrn/idiomatic.js) style guide with two space indent
 
 **Unit test**
-Unit test are written in [Mocha](http://visionmedia.github.io/mocha/). Please add a unit test for every new feature or bug fix. `npm test` to run the test suite.
+Unit test are written in [Mocha](https://mochajs.org/). Please add a unit test for every new feature or bug fix. `npm test` to run the test suite.
 
 **Documentation**
 Add documentation for every API change. Feel free to send corrections
