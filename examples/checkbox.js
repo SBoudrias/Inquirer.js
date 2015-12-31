@@ -11,23 +11,40 @@ inquirer.prompt([
     message: "Select toppings",
     name: "toppings",
     choices: [
-      new inquirer.Separator("The usual:"),
+      new inquirer.Separator(" = The Meats = "),
       {
         name: "Peperonni"
       },
       {
-        name: "Cheese",
-        checked: true
+        name: "Ham"
       },
       {
-        name: "Mushroom"
-      },
-      new inquirer.Separator("The extras:"),
-      {
-        name: "Pineapple",
+        name: "Ground Meat"
       },
       {
         name: "Bacon"
+      },
+      new inquirer.Separator(" = The Cheeses = "),
+      {
+        name: "Mozzarella",
+        checked: true
+      },
+      {
+        name: "Cheddar"
+      },
+      {
+        name: "Parmesan"
+      },
+      new inquirer.Separator(" = The usual ="),
+      {
+        name: "Mushroom"
+      },
+      {
+        name: "Tomato"
+      },
+      new inquirer.Separator(" = The extras = "),
+      {
+        name: "Pineapple",
       },
       {
         name: "Olives",
