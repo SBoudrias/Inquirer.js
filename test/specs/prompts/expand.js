@@ -74,6 +74,14 @@ describe("`expand` prompt", function() {
     this.rl.emit("line", "b");
   });
 
+  it("should strip the user input", function( done ) {
+    this.expand.run(function( answer ) {
+      expect(answer).to.equal("bar");
+      done();
+    });
+    this.rl.emit("line", " b ");
+  });
+
   it("should have help option", function( done ) {
     var run = 0;
     this.expand.run(function( answer ) {
