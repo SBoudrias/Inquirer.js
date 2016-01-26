@@ -514,4 +514,27 @@ describe("inquirer.prompt", function() {
     });
   });
 
+  // see: https://github.com/SBoudrias/Inquirer.js/pull/326
+  it('does not throw exception if cli-width reports width of 0', function (done) {
+    var original = process.stdout.getWindowSize;
+    process.stdout.getWindowSize = function () {
+      return [0];
+    };
+    var prompt = inquirer.createPromptModule();
+
+    var prompts = [{
+      type: "confirm",
+      name: "q1",
+      message: "message"
+    }];
+
+    var ui = prompt( prompts, function( answers ) {
+      process.stdout.getWindowSize = original;
+      expect(answers.q1).to.equal(true);
+      done();
+    });
+
+    ui.rl.emit("line");
+  });
+
 });
