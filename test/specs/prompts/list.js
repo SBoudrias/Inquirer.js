@@ -61,6 +61,19 @@ describe("`list` prompt", function() {
     this.rl.emit("line");
   });
 
+  it("should allow for emacs-style navigation", function( done ) {
+
+    this.list.run(function( answer ) {
+      expect(answer).to.equal("bar");
+      done();
+    });
+
+    this.rl.input.emit("keypress", "n", { name : "n", ctrl : true });
+    this.rl.input.emit("keypress", "n", { name : "n", ctrl : true });
+    this.rl.input.emit("keypress", "p", { name : "p", ctrl : true });
+    this.rl.emit("line");
+  });
+
   it("should loop the choices when going out of boundaries", function( done ) {
 
     var i = 0;
