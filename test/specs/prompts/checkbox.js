@@ -132,6 +132,21 @@ describe("`checkbox` prompt", function() {
     this.rl.emit("line");
   });
 
+  it("should allow for emacs-style navigation", function( done ) {
+    this.checkbox.run(function( answer ) {
+      expect(answer.length).to.equal(1);
+      expect(answer[0]).to.equal("choice 2");
+      done();
+    });
+
+    this.rl.input.emit("keypress", "n", { name : "n", ctrl : true });
+    this.rl.input.emit("keypress", "n", { name : "n", ctrl : true });
+    this.rl.input.emit("keypress", "p", { name : "p", ctrl : true });
+
+    this.rl.input.emit("keypress", " ", { name: "space" });
+    this.rl.emit("line");
+  });
+
   it("should allow 1-9 shortcut key", function( done ) {
     this.checkbox.run(function( answer ) {
       expect(answer.length).to.equal(1);
