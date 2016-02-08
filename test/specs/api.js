@@ -290,7 +290,7 @@ var tests = {
 
         _.each( choices.filter(inquirer.Separator.exclude), function( choice ) {
           expect( this.rl.output.__raw__ ).to.contain( choice.name );
-        }, this );
+        }.bind(this) );
       });
     });
   },
@@ -330,7 +330,7 @@ describe("Prompt public APIs", function() {
 
       _.each( detail.apis, function( apiName ) {
         tests[apiName]( detail.name );
-      }, this);
+      });
     });
   });
 });
