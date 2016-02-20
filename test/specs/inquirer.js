@@ -5,9 +5,10 @@
 var assert = require("assert");
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var _ = require("lodash");
 var rx = require("rx-lite");
 var inquirer = require("../../lib/inquirer");
+
+var noop = function () {};
 
 describe("inquirer.prompt", function() {
 
@@ -94,7 +95,7 @@ describe("inquirer.prompt", function() {
       this.opt = {
         when: function() { return true; }
       };
-      this.run = _.noop;
+      this.run = noop;
       expect(params.message).to.equal(stubMessage);
       done();
     });
@@ -123,7 +124,7 @@ describe("inquirer.prompt", function() {
       this.opt = {
         when: function() { return true; }
       };
-      this.run = _.noop;
+      this.run = noop;
       expect(params.message).to.equal(stubMessage);
       done();
     });
@@ -155,7 +156,7 @@ describe("inquirer.prompt", function() {
       this.opt = {
         when: function() { return true; }
       };
-      this.run = _.noop;
+      this.run = noop;
       expect(params.default).to.equal(stubDefault);
       done();
     });
@@ -213,7 +214,7 @@ describe("inquirer.prompt", function() {
 
   it("should pass previous answers to the prompt constructor", function( done ) {
     this.prompt.registerPrompt("stub", function( params, rl, answers ) {
-      this.run = _.noop;
+      this.run = noop;
       expect(answers.name1).to.equal("bar");
       done();
     });
@@ -236,7 +237,7 @@ describe("inquirer.prompt", function() {
   it("should parse `choices` if passed as a function", function( done ) {
     var stubChoices = [ "foo", "bar" ];
     this.prompt.registerPrompt("stub", function( params ) {
-      this.run = _.noop;
+      this.run = noop;
       this.opt = {
         when: function() { return true; }
       };
@@ -486,21 +487,21 @@ describe("inquirer.prompt", function() {
       inquirer.registerPrompt("foo", function( question, rl, answers ) {
         expect(question).to.eql(questions[0]);
         expect(answers).to.eql({});
-        this.run = _.noop;
+        this.run = noop;
         done();
       });
 
-      inquirer.prompt(questions, _.noop);
+      inquirer.prompt(questions, noop);
     });
 
     it("overwrite default prompt types", function( done ) {
       var questions = [{ type: "confirm", message: "something" }];
       inquirer.registerPrompt("confirm", function( question, rl, answers ) {
-        this.run = _.noop;
+        this.run = noop;
         done();
       });
 
-      inquirer.prompt(questions, _.noop);
+      inquirer.prompt(questions, noop);
       inquirer.restoreDefaultPrompts();
     });
   });
@@ -508,7 +509,7 @@ describe("inquirer.prompt", function() {
   describe("#restoreDefaultPrompts()", function() {
     it("restore default prompts", function() {
       var ConfirmPrompt = inquirer.prompt.prompts["confirm"];
-      inquirer.registerPrompt("confirm", _.noop);
+      inquirer.registerPrompt("confirm", noop);
       inquirer.restoreDefaultPrompts();
       expect(ConfirmPrompt).to.equal(inquirer.prompt.prompts["confirm"]);
     });

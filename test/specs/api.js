@@ -4,7 +4,8 @@
 
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var _ = require("lodash");
+var forEach = require('lodash.foreach');
+var clone = require('lodash.clone');
 var fixtures = require("../helpers/fixtures");
 var ReadlineStub = require("../helpers/readline");
 var inquirer = require("../../lib/inquirer");
@@ -288,7 +289,7 @@ var tests = {
 
         prompt.run();
 
-        _.each( choices.filter(inquirer.Separator.exclude), function( choice ) {
+        forEach( choices.filter(inquirer.Separator.exclude), function( choice ) {
           expect( this.rl.output.__raw__ ).to.contain( choice.name );
         }.bind(this) );
       });
@@ -319,16 +320,16 @@ var tests = {
 // Run tests
 describe("Prompt public APIs", function() {
 
-  _.each( prompts, function( detail ) {
+  forEach( prompts, function( detail ) {
     describe("on " + detail.name + " prompt", function() {
 
       beforeEach(function() {
-        this.fixture = _.clone(fixtures[ detail.name ]);
+        this.fixture = clone(fixtures[ detail.name ]);
         this.Prompt = inquirer.prompt.prompts[ detail.name ];
         this.rl = new ReadlineStub();
       });
 
-      _.each( detail.apis, function( apiName ) {
+      forEach( detail.apis, function( apiName ) {
         tests[apiName]( detail.name );
       });
     });

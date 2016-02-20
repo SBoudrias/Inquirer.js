@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var _ = require("lodash");
+var clone = require("lodash.clone");
 var ReadlineStub = require("../../helpers/readline");
 var fixtures = require("../../helpers/fixtures");
 
@@ -9,7 +9,7 @@ var Password = require("../../../lib/prompts/password");
 
 describe("`password` prompt", function() {
   beforeEach(function() {
-    this.fixture = _.clone( fixtures.password );
+    this.fixture = clone( fixtures.password );
     this.rl = new ReadlineStub();
   });
 
