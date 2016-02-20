@@ -1,7 +1,7 @@
 var EventEmitter = require("events").EventEmitter;
 var sinon = require("sinon");
 var util = require("util");
-var _ = require("lodash");
+var assign = require("lodash.assign");
 
 var stub = {
   write         : sinon.stub().returns(stub),
@@ -29,6 +29,6 @@ var ReadlineStub = function () {
 };
 
 util.inherits(ReadlineStub, EventEmitter);
-_.assign(ReadlineStub.prototype, stub);
+assign(ReadlineStub.prototype, stub);
 
 module.exports = ReadlineStub;

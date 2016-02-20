@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var _ = require("lodash");
+var clone = require("lodash.clone");
 var ReadlineStub = require("../../helpers/readline");
 var fixtures = require("../../helpers/fixtures");
 
@@ -11,7 +11,7 @@ describe("`rawlist` prompt", function() {
 
   beforeEach(function() {
     this.rl = new ReadlineStub();
-    this.fixture = _.clone( fixtures.rawlist );
+    this.fixture = clone( fixtures.rawlist );
     this.rawlist = new Rawlist( this.fixture, this.rl );
   });
 

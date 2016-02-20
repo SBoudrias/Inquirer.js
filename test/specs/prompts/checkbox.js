@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var _ = require("lodash");
+var clone = require("lodash.clone");
 var ReadlineStub = require("../../helpers/readline");
 var fixtures = require("../../helpers/fixtures");
 
@@ -10,7 +10,7 @@ var Checkbox = require("../../../lib/prompts/checkbox");
 describe("`checkbox` prompt", function() {
 
   beforeEach(function() {
-    this.fixture = _.clone( fixtures.checkbox );
+    this.fixture = clone( fixtures.checkbox );
     this.rl = new ReadlineStub();
     this.checkbox = new Checkbox( this.fixture, this.rl );
   });

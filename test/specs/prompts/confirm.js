@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var _ = require("lodash");
+var clone = require("lodash.clone");
 var ReadlineStub = require("../../helpers/readline");
 var fixtures = require("../../helpers/fixtures");
 
@@ -10,7 +10,7 @@ var Confirm = require("../../../lib/prompts/confirm");
 describe("`confirm` prompt", function() {
 
   beforeEach(function() {
-    this.fixture = _.clone( fixtures.confirm );
+    this.fixture = clone( fixtures.confirm );
     this.rl = new ReadlineStub();
     this.confirm = new Confirm( this.fixture, this.rl );
   });
