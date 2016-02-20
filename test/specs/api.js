@@ -4,7 +4,7 @@
 
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var _ = require("lodash");
+var _ = require("mindash");
 var fixtures = require("../helpers/fixtures");
 var ReadlineStub = require("../helpers/readline");
 var inquirer = require("../../lib/inquirer");

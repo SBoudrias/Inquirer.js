@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
 var sinon = require("sinon");
-var _ = require("lodash");
+var _ = require("mindash");
 var ReadlineStub = require("../../helpers/readline");
 var fixtures = require("../../helpers/fixtures");
 
