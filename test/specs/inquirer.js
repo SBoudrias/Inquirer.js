@@ -26,7 +26,6 @@ describe("inquirer.prompt", function() {
     }, function( answers ) {
       expect(rl1.close.called).to.be.true;
       expect(rl1.output.end.called).to.be.true;
-      expect(prompt.rl).to.not.exist;
 
       var rl2;
       var prompt2 = ctx.prompt({
@@ -36,7 +35,6 @@ describe("inquirer.prompt", function() {
       }, function( answers ) {
         expect(rl2.close.called).to.be.true;
         expect(rl2.output.end.called).to.be.true;
-        expect(prompt.rl).to.not.exist;
 
         expect( rl1 ).to.not.equal( rl2 );
         done();
@@ -260,6 +258,23 @@ describe("inquirer.prompt", function() {
     }];
 
     var ui = this.prompt(prompts, function() {});
+    ui.rl.emit("line");
+  });
+
+  it("should returns a promise", function( done ) {
+    var prompt = {
+      type: "input",
+      name: "q1",
+      message: "message",
+      default: "bar"
+    };
+
+    var ui = this.prompt(prompt);
+    ui.then(function( answers ) {
+      expect(answers.q1).to.equal("bar");
+      done();
+    });
+
     ui.rl.emit("line");
   });
 
