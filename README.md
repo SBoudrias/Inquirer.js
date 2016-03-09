@@ -262,6 +262,7 @@ look at issues found on other command line - feel free to report any!
   - Terminal.app
   - iTerm
 - **Windows**:
+  - [ConEmu](https://conemu.github.io/)
   - cmd.exe
   - Powershell
   - Cygwin
