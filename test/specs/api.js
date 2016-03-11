@@ -229,7 +229,7 @@ var tests = {
           expect(answers.q1).to.be.true;
           expect(answers.q2).to.be.false;
           done();
-        });
+        }).ui;
 
         ui.rl.emit("line");
         ui.rl.emit("line");
