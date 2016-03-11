@@ -19,7 +19,7 @@ describe("inquirer.prompt", function() {
     var ctx = this;
     var rl1;
 
-    var prompt = this.prompt({
+    var promise = this.prompt({
       type: "confirm",
       name: "q1",
       message: "message"
@@ -28,7 +28,7 @@ describe("inquirer.prompt", function() {
       expect(rl1.output.end.called).to.be.true;
 
       var rl2;
-      var prompt2 = ctx.prompt({
+      var promise2 = ctx.prompt({
         type: "confirm",
         name: "q1",
         message: "message"
@@ -40,12 +40,12 @@ describe("inquirer.prompt", function() {
         done();
       });
 
-      rl2 = prompt2.rl;
-      prompt2.rl.emit("line");
+      rl2 = promise2.ui.rl;
+      rl2.emit("line");
     });
 
-    rl1 = prompt.rl;
-    prompt.rl.emit("line");
+    rl1 = promise.ui.rl;
+    rl1.emit("line");
   });
 
   it("should take a prompts array and return answers", function( done ) {
@@ -66,8 +66,8 @@ describe("inquirer.prompt", function() {
       done();
     });
 
-    promise.rl.emit("line");
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should take a single prompt and return answer", function( done ) {
@@ -83,7 +83,7 @@ describe("inquirer.prompt", function() {
       done();
     });
 
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should parse `message` if passed as a function", function( done ) {
@@ -112,7 +112,7 @@ describe("inquirer.prompt", function() {
     }];
 
     var promise = this.prompt(prompts, function() {});
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should run asynchronous `message`", function( done ) {
@@ -144,7 +144,7 @@ describe("inquirer.prompt", function() {
     }];
 
     var promise = this.prompt(prompts, function() {});
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should parse `default` if passed as a function", function( done ) {
@@ -174,7 +174,7 @@ describe("inquirer.prompt", function() {
     }];
 
     var promise = this.prompt(prompts, function() {});
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should run asynchronous `default`", function( done ) {
@@ -195,7 +195,7 @@ describe("inquirer.prompt", function() {
         var goOn = this.async();
         setTimeout(function() { goOn(input2Default); }, 0 );
         setTimeout(function() {
-          promise.rl.emit("line");
+          promise.ui.rl.emit("line");
         }, 10 );
       }
     }];
@@ -206,7 +206,7 @@ describe("inquirer.prompt", function() {
       done();
     });
 
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should pass previous answers to the prompt constructor", function( done ) {
@@ -228,7 +228,7 @@ describe("inquirer.prompt", function() {
     }];
 
     var promise = this.prompt(prompts, function() {});
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should parse `choices` if passed as a function", function( done ) {
@@ -258,7 +258,7 @@ describe("inquirer.prompt", function() {
     }];
 
     var promise = this.prompt(prompts, function() {});
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should returns a promise", function( done ) {
@@ -275,7 +275,7 @@ describe("inquirer.prompt", function() {
       done();
     });
 
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should expose the Reactive interface", function(done) {
@@ -293,13 +293,13 @@ describe("inquirer.prompt", function() {
 
     var promise = this.prompt(prompts, function() {});
     var spy = sinon.spy();
-    promise.process.subscribe( spy, function() {}, function() {
+    promise.ui.process.subscribe( spy, function() {}, function() {
       sinon.assert.calledWith( spy, { name: "name1", answer: "bar" });
       sinon.assert.calledWith( spy, { name: "name", answer: "doe" });
       done();
     });
-    promise.rl.emit("line");
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should expose the UI", function(done) {
@@ -323,7 +323,7 @@ describe("inquirer.prompt", function() {
           default: false
         });
         obs.onCompleted();
-        promise.rl.emit("line");
+        promise.ui.rl.emit("line");
       }, 30 );
     });
 
@@ -333,7 +333,7 @@ describe("inquirer.prompt", function() {
       done();
     });
 
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   describe("hierarchical mode (`when`)", function() {
@@ -356,7 +356,7 @@ describe("inquirer.prompt", function() {
         done();
       });
 
-      promise.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
     it("should run prompt if `when` returns true", function( done ) {
@@ -382,8 +382,8 @@ describe("inquirer.prompt", function() {
         done();
       });
 
-      promise.rl.emit("line");
-      promise.rl.emit("line");
+      promise.ui.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
     it("should run prompt if `when` is true", function( done ) {
@@ -404,8 +404,8 @@ describe("inquirer.prompt", function() {
         done();
       });
 
-      promise.rl.emit("line");
-      promise.rl.emit("line");
+      promise.ui.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
     it("should not run prompt if `when` returns false", function( done ) {
@@ -437,8 +437,8 @@ describe("inquirer.prompt", function() {
         done();
       });
 
-      promise.rl.emit("line");
-      promise.rl.emit("line");
+      promise.ui.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
     it("should not run prompt if `when` is false", function( done ) {
@@ -465,8 +465,8 @@ describe("inquirer.prompt", function() {
         done();
       });
 
-      promise.rl.emit("line");
-      promise.rl.emit("line");
+      promise.ui.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
     it("should run asynchronous `when`", function( done ) {
@@ -485,7 +485,7 @@ describe("inquirer.prompt", function() {
           var goOn = this.async();
           setTimeout(function() { goOn(true); }, 0 );
           setTimeout(function() {
-            promise.rl.emit("line");
+            promise.ui.rl.emit("line");
           }, 10 );
         }
       }];
@@ -496,7 +496,7 @@ describe("inquirer.prompt", function() {
         done();
       });
 
-      promise.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
   });
@@ -555,7 +555,7 @@ describe("inquirer.prompt", function() {
       done();
     });
 
-    promise.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
 });
