@@ -19,7 +19,7 @@ describe("inquirer.prompt", function() {
     var ctx = this;
     var rl1;
 
-    var prompt = this.prompt({
+    var promise = this.prompt({
       type: "confirm",
       name: "q1",
       message: "message"
@@ -28,7 +28,7 @@ describe("inquirer.prompt", function() {
       expect(rl1.output.end.called).to.be.true;
 
       var rl2;
-      var prompt2 = ctx.prompt({
+      var promise2 = ctx.prompt({
         type: "confirm",
         name: "q1",
         message: "message"
@@ -40,12 +40,12 @@ describe("inquirer.prompt", function() {
         done();
       });
 
-      rl2 = prompt2.rl;
-      prompt2.rl.emit("line");
+      rl2 = promise2.ui.rl;
+      rl2.emit("line");
     });
 
-    rl1 = prompt.rl;
-    prompt.rl.emit("line");
+    rl1 = promise.ui.rl;
+    rl1.emit("line");
   });
 
   it("should take a prompts array and return answers", function( done ) {
@@ -60,14 +60,14 @@ describe("inquirer.prompt", function() {
       default: false
     }];
 
-    var ui = this.prompt( prompts, function( err, answers ) {
+    var promise = this.prompt( prompts, function( err, answers ) {
       expect(answers.q1).to.be.true;
       expect(answers.q2).to.be.false;
       done();
     });
 
-    ui.rl.emit("line");
-    ui.rl.emit("line");
+    promise.ui.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should take a single prompt and return answer", function( done ) {
@@ -78,12 +78,12 @@ describe("inquirer.prompt", function() {
       default: "bar"
     };
 
-    var ui = this.prompt( prompt, function( err, answers ) {
+    var promise = this.prompt( prompt, function( err, answers ) {
       expect(answers.q1).to.equal("bar");
       done();
     });
 
-    ui.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should parse `message` if passed as a function", function( done ) {
@@ -111,8 +111,8 @@ describe("inquirer.prompt", function() {
       }
     }];
 
-    var ui = this.prompt(prompts, function() {});
-    ui.rl.emit("line");
+    var promise = this.prompt(prompts, function() {});
+    promise.ui.rl.emit("line");
   });
 
   it("should run asynchronous `message`", function( done ) {
@@ -143,8 +143,8 @@ describe("inquirer.prompt", function() {
       }
     }];
 
-    var ui = this.prompt(prompts, function() {});
-    ui.rl.emit("line");
+    var promise = this.prompt(prompts, function() {});
+    promise.ui.rl.emit("line");
   });
 
   it("should parse `default` if passed as a function", function( done ) {
@@ -173,8 +173,8 @@ describe("inquirer.prompt", function() {
       }
     }];
 
-    var ui = this.prompt(prompts, function() {});
-    ui.rl.emit("line");
+    var promise = this.prompt(prompts, function() {});
+    promise.ui.rl.emit("line");
   });
 
   it("should run asynchronous `default`", function( done ) {
@@ -195,18 +195,18 @@ describe("inquirer.prompt", function() {
         var goOn = this.async();
         setTimeout(function() { goOn(input2Default); }, 0 );
         setTimeout(function() {
-          ui.rl.emit("line");
+          promise.ui.rl.emit("line");
         }, 10 );
       }
     }];
 
-    var ui = this.prompt( prompts, function( err, answers ) {
+    var promise = this.prompt( prompts, function( err, answers ) {
       expect(goesInDefault).to.be.true;
       expect(answers.q2).to.equal(input2Default);
       done();
     });
 
-    ui.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should pass previous answers to the prompt constructor", function( done ) {
@@ -227,8 +227,8 @@ describe("inquirer.prompt", function() {
       message: "message"
     }];
 
-    var ui = this.prompt(prompts, function() {});
-    ui.rl.emit("line");
+    var promise = this.prompt(prompts, function() {});
+    promise.ui.rl.emit("line");
   });
 
   it("should parse `choices` if passed as a function", function( done ) {
@@ -257,8 +257,8 @@ describe("inquirer.prompt", function() {
       }
     }];
 
-    var ui = this.prompt(prompts, function() {});
-    ui.rl.emit("line");
+    var promise = this.prompt(prompts, function() {});
+    promise.ui.rl.emit("line");
   });
 
   it("should returns a promise", function( done ) {
@@ -269,13 +269,13 @@ describe("inquirer.prompt", function() {
       default: "bar"
     };
 
-    var ui = this.prompt(prompt);
-    ui.then(function( answers ) {
+    var promise = this.prompt(prompt);
+    promise.then(function( answers ) {
       expect(answers.q1).to.equal("bar");
       done();
     });
 
-    ui.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   it("should expose the Reactive interface", function(done) {
@@ -291,15 +291,21 @@ describe("inquirer.prompt", function() {
       default: "doe"
     }];
 
-    var ui = this.prompt(prompts, function() {});
+    var promise = this.prompt(prompts, function() {});
     var spy = sinon.spy();
-    ui.process.subscribe( spy, function() {}, function() {
+    promise.ui.process.subscribe( spy, function() {}, function() {
       sinon.assert.calledWith( spy, { name: "name1", answer: "bar" });
       sinon.assert.calledWith( spy, { name: "name", answer: "doe" });
       done();
     });
-    ui.rl.emit("line");
-    ui.rl.emit("line");
+    promise.ui.rl.emit("line");
+    promise.ui.rl.emit("line");
+  });
+
+  it("should expose the UI", function(done) {
+    var promise = this.prompt([], function() {});
+    expect(promise.ui.answers).to.be.an('object');
+    done();
   });
 
   it("takes an Observable as question", function( done ) {
@@ -317,17 +323,17 @@ describe("inquirer.prompt", function() {
           default: false
         });
         obs.onCompleted();
-        ui.rl.emit("line");
+        promise.ui.rl.emit("line");
       }, 30 );
     });
 
-    var ui = this.prompt( prompts, function( err, answers ) {
+    var promise = this.prompt( prompts, function( err, answers ) {
       expect(answers.q1).to.be.true;
       expect(answers.q2).to.be.false;
       done();
     });
 
-    ui.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
   describe("hierarchical mode (`when`)", function() {
@@ -346,11 +352,11 @@ describe("inquirer.prompt", function() {
         }
       }];
 
-      var ui = this.prompt( prompts, function( err, answers ) {
+      var promise = this.prompt( prompts, function( err, answers ) {
         done();
       });
 
-      ui.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
     it("should run prompt if `when` returns true", function( done ) {
@@ -370,14 +376,14 @@ describe("inquirer.prompt", function() {
         }
       }];
 
-      var ui = this.prompt( prompts, function( err, answers ) {
+      var promise = this.prompt( prompts, function( err, answers ) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.equal("bar-var");
         done();
       });
 
-      ui.rl.emit("line");
-      ui.rl.emit("line");
+      promise.ui.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
     it("should run prompt if `when` is true", function( done ) {
@@ -393,13 +399,13 @@ describe("inquirer.prompt", function() {
         when: true
       }];
 
-      var ui = this.prompt( prompts, function( err, answers ) {
+      var promise = this.prompt( prompts, function( err, answers ) {
         expect(answers.q2).to.equal("bar-var");
         done();
       });
 
-      ui.rl.emit("line");
-      ui.rl.emit("line");
+      promise.ui.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
     it("should not run prompt if `when` returns false", function( done ) {
@@ -423,7 +429,7 @@ describe("inquirer.prompt", function() {
         default: "foo"
       }];
 
-      var ui = this.prompt( prompts, function( err, answers ) {
+      var promise = this.prompt( prompts, function( err, answers ) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.not.exist;
         expect(answers.q3).to.equal("foo");
@@ -431,8 +437,8 @@ describe("inquirer.prompt", function() {
         done();
       });
 
-      ui.rl.emit("line");
-      ui.rl.emit("line");
+      promise.ui.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
     it("should not run prompt if `when` is false", function( done ) {
@@ -452,15 +458,15 @@ describe("inquirer.prompt", function() {
         default: "foo"
       }];
 
-      var ui = this.prompt( prompts, function( err, answers ) {
+      var promise = this.prompt( prompts, function( err, answers ) {
         expect(answers.q2).to.not.exist;
         expect(answers.q3).to.equal("foo");
         expect(answers.q1).to.be.true;
         done();
       });
 
-      ui.rl.emit("line");
-      ui.rl.emit("line");
+      promise.ui.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
     it("should run asynchronous `when`", function( done ) {
@@ -479,18 +485,18 @@ describe("inquirer.prompt", function() {
           var goOn = this.async();
           setTimeout(function() { goOn(true); }, 0 );
           setTimeout(function() {
-            ui.rl.emit("line");
+            promise.ui.rl.emit("line");
           }, 10 );
         }
       }];
 
-      var ui = this.prompt( prompts, function( err, answers ) {
+      var promise = this.prompt( prompts, function( err, answers ) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.equal("foo-bar");
         done();
       });
 
-      ui.rl.emit("line");
+      promise.ui.rl.emit("line");
     });
 
   });
@@ -543,13 +549,13 @@ describe("inquirer.prompt", function() {
       message: "message"
     }];
 
-    var ui = prompt( prompts, function( err, answers ) {
+    var promise = prompt( prompts, function( err, answers ) {
       process.stdout.getWindowSize = original;
       expect(answers.q1).to.equal(true);
       done();
     });
 
-    ui.rl.emit("line");
+    promise.ui.rl.emit("line");
   });
 
 });
