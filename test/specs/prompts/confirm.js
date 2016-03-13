@@ -17,7 +17,7 @@ describe('`confirm` prompt', function () {
   });
 
   it('should default to true', function (done) {
-    this.confirm.run(function (answer) {
+    this.confirm.run(function (err, answer) {
       expect(this.rl.output.__raw__).to.contain('Y/n');
       expect(answer).to.be.true;
       done();
@@ -30,7 +30,7 @@ describe('`confirm` prompt', function () {
     this.fixture.default = false;
     var falseConfirm = new Confirm(this.fixture, this.rl);
 
-    falseConfirm.run(function (answer) {
+    falseConfirm.run(function (err, answer) {
       expect(this.rl.output.__raw__).to.contain('y/N');
       expect(answer).to.be.false;
       done();
@@ -43,7 +43,7 @@ describe('`confirm` prompt', function () {
     this.fixture.default = true;
     var falseConfirm = new Confirm(this.fixture, this.rl);
 
-    falseConfirm.run(function (answer) {
+    falseConfirm.run(function (err, answer) {
       expect(this.rl.output.__raw__).to.contain('Y/n');
       expect(answer).to.be.true;
       done();
@@ -53,7 +53,7 @@ describe('`confirm` prompt', function () {
   });
 
   it('should parse \'Y\' value to boolean true', function (done) {
-    this.confirm.run(function (answer) {
+    this.confirm.run(function (err, answer) {
       expect(answer).to.be.true;
       done();
     });
@@ -62,7 +62,7 @@ describe('`confirm` prompt', function () {
   });
 
   it('should parse \'Yes\' value to boolean true', function (done) {
-    this.confirm.run(function (answer) {
+    this.confirm.run(function (err, answer) {
       expect(answer).to.be.true;
       done();
     });
@@ -71,7 +71,7 @@ describe('`confirm` prompt', function () {
   });
 
   it('should parse \'No\' value to boolean false', function (done) {
-    this.confirm.run(function (answer) {
+    this.confirm.run(function (err, answer) {
       expect(answer).to.be.false;
       done();
     });
@@ -80,7 +80,7 @@ describe('`confirm` prompt', function () {
   });
 
   it('should parse every other string value to boolean false', function (done) {
-    this.confirm.run(function (answer) {
+    this.confirm.run(function (err, answer) {
       expect(answer).to.be.false;
       done();
     });

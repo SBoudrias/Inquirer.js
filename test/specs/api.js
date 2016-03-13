@@ -85,7 +85,7 @@ var tests = {
         };
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run(function (answer) {
+        prompt.run(function (err, answer) {
           expect(answer).to.equal('pass');
           done();
         });
@@ -97,12 +97,12 @@ var tests = {
         this.fixture.filter = function () {
           var done = this.async();
           setTimeout(function () {
-            done('pass');
+            done(null, 'pass');
           }, 0);
         };
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run(function (answer) {
+        prompt.run(function (err, answer) {
           expect(answer).to.equal('pass');
           done();
         });
@@ -189,7 +189,7 @@ var tests = {
             called++;
             // Make sure returning false won't continue
             if (called === 2) {
-              done(true);
+              done(null, true);
             } else {
               self.rl.emit('line');
             }
@@ -208,20 +208,15 @@ var tests = {
 
       it('should pass previous answers to the prompt validation function', function (done) {
         var prompt = inquirer.createPromptModule();
+        this.fixture.validate = function (input, answers) {
+          expect(answers.q1).to.be.true;
+          return true;
+        };
         var questions = [{
           type: 'confirm',
           name: 'q1',
           message: 'message'
-        }, {
-          type: 'confirm',
-          name: 'q2',
-          message: 'message',
-          validate: function (input, answers) {
-            expect(answers.q1).to.be.true;
-            return true;
-          },
-          default: false
-        }];
+        }, this.fixture];
 
         var ui = prompt(questions, function (err, answers) {
           expect(answers.q1).to.be.true;
@@ -241,7 +236,7 @@ var tests = {
         this.fixture.default = 'pass';
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run(function (answer) {
+        prompt.run(function (err, answer) {
           expect(this.rl.output.__raw__).to.contain('(pass)');
           expect(answer).to.equal('pass');
           done();
@@ -254,7 +249,7 @@ var tests = {
         this.fixture.default = 0;
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run(function (answer) {
+        prompt.run(function (err, answer) {
           expect(this.rl.output.__raw__).to.contain('(0)');
           expect(answer).to.equal(0);
           done();
