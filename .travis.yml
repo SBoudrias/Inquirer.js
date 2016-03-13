@@ -1,12 +1,11 @@
 sudo: false
 language: node_js
 node_js:
-  - '0.8'
-  - '0.10'
-  - '0.12'
-  - iojs
-  - stable
-  - v5
+  - v0.8
+  - v0.10
+  - v0.12
   - v4
+  - v5
+  - stable
 before_install:
   - 'npm install -g npm@2.7.3'
