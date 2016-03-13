@@ -40,20 +40,20 @@
   "devDependencies": {
     "chai": "^3.0.0",
     "cmdify": "^0.0.4",
-    "mocha": "^2.2.1",
-    "mockery": "^1.4.0",
-    "sinon": "^1.12.1",
     "eslint": "^2.1.0",
-    "eslint-config-xo-space": "^0.10.0",
+    "eslint-config-xo-space": "^0.11.0",
     "gulp": "^3.9.0",
+    "gulp-coveralls": "^0.1.0",
     "gulp-eslint": "^2.0.0",
     "gulp-exclude-gitignore": "^1.0.0",
-    "gulp-line-ending-corrector": "^1.0.1",
     "gulp-istanbul": "^0.10.3",
+    "gulp-line-ending-corrector": "^1.0.1",
     "gulp-mocha": "^2.0.0",
-    "gulp-plumber": "^1.0.0",
     "gulp-nsp": "^2.1.0",
-    "gulp-coveralls": "^0.1.0"
+    "gulp-plumber": "^1.0.0",
+    "mocha": "^2.2.1",
+    "mockery": "^1.4.0",
+    "sinon": "^1.12.1"
   },
   "eslintConfig": {
     "extends": "xo-space",
@@ -61,11 +61,17 @@
       "mocha": true
     },
     "rules": {
-      "quotes": ["error", "single"],
+      "quotes": [
+        "error",
+        "single"
+      ],
       "no-unused-expressions": "off",
       "handle-callback-err": "off",
       "no-eq-null": "off",
-      "eqeqeq": ["error", "allow-null"]
+      "eqeqeq": [
+        "error",
+        "allow-null"
+      ]
     }
   }
 }
