@@ -1,7 +1,7 @@
 Inquirer.js
 ===========
 
-[![npm](https://badge.fury.io/js/inquirer.svg)](http://badge.fury.io/js/inquirer) [![tests](https://travis-ci.org/SBoudrias/Inquirer.js.svg?branch=master)](http://travis-ci.org/SBoudrias/Inquirer.js) [![dependencies](https://david-dm.org/SBoudrias/Inquirer.js.svg?theme=shields.io)](https://david-dm.org/SBoudrias/Inquirer.js)
+[![npm](https://badge.fury.io/js/inquirer.svg)](http://badge.fury.io/js/inquirer) [![tests](https://travis-ci.org/SBoudrias/Inquirer.js.svg?branch=master)](http://travis-ci.org/SBoudrias/Inquirer.js) [![Coverage Status](https://coveralls.io/repos/yeoman/generator/badge.svg)](https://coveralls.io/r/SBoudrias/Inquirer.js) [![dependencies](https://david-dm.org/SBoudrias/Inquirer.js.svg?theme=shields.io)](https://david-dm.org/SBoudrias/Inquirer.js)
 
 A collection of common interactive command line user interfaces.
 
@@ -10,7 +10,7 @@ A collection of common interactive command line user interfaces.
 
 <img align="right" alt="Inquirer Logo" src="/assets/inquirer_readme.png" title="Inquirer.js"/>
 
-**`Inquirer.js`** strives to be an easily embeddable and beautiful command line interface for [Node.js](https://nodejs.org/) (and perhaps the "CLI [Xanadu](https://en.wikipedia.org/wiki/Xanadu_(Citizen_Kane))").
+**`Inquirer.js`** strives to be an easily embeddable and beautiful command line interface for [Node.js](https://nodejs.org/) (and perhaps the "CLI [Xanadu](https://en.wikipedia.org/wiki/Xanadu_(Citizen_Kane)").
 
 **`Inquirer.js`** should ease the process of
 - providing *error feedback*
@@ -31,8 +31,8 @@ npm install inquirer
 ```
 
 ```javascript
-var inquirer = require("inquirer");
-inquirer.prompt([/* Pass your questions in here */], function( answers ) {
+var inquirer = require('inquirer');
+inquirer.prompt([/* Pass your questions in here */]).then(function (answers) {
 	// Use user feedback for... whatever!!
 });
 ```
@@ -50,12 +50,13 @@ node examples/checkbox.js
 
 ### Methods
 
-`inquirer.prompt( questions, callback )`
+`inquirer.prompt(questions, callback) -> promise`
 
 Launch the prompt interface (inquiry session)
 
 - **questions** (Array) containing [Question Object](#question) (using the [reactive interface](#reactive-interface), you can also pass a `Rx.Observable` instance)
-- **callback** (Function) first parameter is the [Answers Object](#answers)
+- **callback** (Function(Error, Object)) taking an Error parameter and an [Answers Object](#answers) as arguments
+- returns a **Promise**
 
 
 ### Objects
@@ -74,20 +75,23 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
 - **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
 - **when**: (Function, Boolean) Receive the current user answers hash and should return `true` or `false` depending on whether or not this question should be asked. The value can also be a simple boolean.
 
-`default`, `choices`(if defined as functions), `validate`, `filter` and `when` functions can be called asynchronously using `this.async()`. You just have to pass the value you'd normally return to the callback option.
+`default`, `choices`(if defined as functions), `validate`, `filter` and `when` functions can be called asynchronous. Either return a promise or use `this.async()` to get a callback you'll call with the final value.
 
 ``` javascript
 {
-  validate: function(input) {
+  filter: function () {
+    return new Promise(/* etc... */);
+  },
 
+  validate: function (input) {
     // Declare function as asynchronous, and save the done callback
     var done = this.async();
 
     // Do async stuff
-    setTimeout(function() {
-      if (typeof input !== "number") {
+    setTimeout(function () {
+      if (typeof input !== 'number') {
         // Pass the return value in the done callback
-        done("You need to provide a number");
+        done('You need to provide a number');
         return;
       }
       // Pass the return value in the done callback
@@ -131,7 +135,7 @@ Prompts type
 
 > **Note:**: _allowed options written inside square brackets (`[]`) are optional. Others are required._
 
-#### List - `{ type: "list" }`
+#### List - `{type: 'list'}`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must be the choice `index` in the array or a choice `value`)
@@ -140,7 +144,7 @@ default must be the choice `index` in the array or a choice `value`)
 
 ---
 
-#### Raw List - `{ type: "rawlist" }`
+#### Raw List - `{type: 'rawlist'}`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must the choice `index` in the array)
@@ -149,7 +153,7 @@ default must the choice `index` in the array)
 
 ---
 
-#### Expand - `{ type: "expand" }`
+#### Expand - `{type: 'expand'}`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must be the choice `index` in the array)
@@ -163,7 +167,7 @@ See `examples/expand.js` for a running example.
 
 ---
 
-#### Checkbox - `{ type: "checkbox" }`
+#### Checkbox - `{type: 'checkbox'}`
 
 Take `type`, `name`, `message`, `choices`[, `filter`, `validate`, `default`] properties. `default` is expected to be an Array of the checked choices value.
 
@@ -175,7 +179,7 @@ Choices whose property `disabled` is truthy will be unselectable. If `disabled` 
 
 ---
 
-#### Confirm - `{ type: "confirm" }`
+#### Confirm - `{type: 'confirm'}`
 
 Take `type`, `name`, `message`[, `default`] properties. `default` is expected to be a boolean if used.
 
@@ -183,7 +187,7 @@ Take `type`, `name`, `message`[, `default`] properties. `default` is expected to
 
 ---
 
-#### Input - `{ type: "input" }`
+#### Input - `{type: 'input'}`
 
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
@@ -191,7 +195,7 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
 ---
 
-#### Password - `{ type: "password" }`
+#### Password - `{type: 'password'}`
 
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
@@ -209,15 +213,15 @@ This UI present a fixed text at the bottom of a free text zone. This is useful t
 var ui = new inquirer.ui.BottomBar();
 
 // pipe a Stream to the log zone
-outputStream.pipe( ui.log );
+outputStream.pipe(ui.log);
 
 // Or simply write output
-ui.log.write("something just happened.");
-ui.log.write("Almost over, standby!");
+ui.log.write('something just happened.');
+ui.log.write('Almost over, standby!');
 
 // During processing, update the bottom bar content to display a loader
 // or output a progress bar, etc
-ui.updateBottomBar("new bottom bar content");
+ui.updateBottomBar('new bottom bar content');
 ```
 
 #### Prompt - `inquirer.ui.Prompt`
@@ -232,7 +236,7 @@ Internally, Inquirer uses the [JS reactive extension](https://github.com/Reactiv
 This mean you can take advantage of this feature to provide more advanced flows. For example, you can dynamically add questions to be asked:
 
 ```js
-var prompts = Rx.Observable.create(function( obs ) {
+var prompts = Rx.Observable.create(function (obs) {
   obs.onNext({ /* question... */ });
   setTimeout(function () {
     obs.onNext({ /* question... */ });
@@ -278,25 +282,18 @@ Please refer to the [Github releases section for the changelog](https://github.c
 
 ## Contributing
 
-**Style Guide**
-Please brief yourself on [Idiomatic.js](https://github.com/rwldrn/idiomatic.js) style guide with two space indent
-
 **Unit test**
 Unit test are written in [Mocha](https://mochajs.org/). Please add a unit test for every new feature or bug fix. `npm test` to run the test suite.
 
 **Documentation**
-Add documentation for every API change. Feel free to send corrections
-or better docs!
-
-**Pull Requests**
-Send _fixes_ PR on the `master` branch. Any new features should be send on the `wip`branch.
+Add documentation for every API change. Feel free to send typo fixes and better docs!
 
 We're looking to offer good support for multiple prompts and environments. If you want to
 help, we'd like to keep a list of testers for each terminal/OS so we can contact you and
 get feedback before release. Let us know if you want to be added to the list (just tweet
-to @vaxilart) or just add your name to [the wiki](https://github.com/SBoudrias/Inquirer.js/wiki/Testers)
+to [@vaxilart](https://twitter.com/Vaxilart)) or just add your name to [the wiki](https://github.com/SBoudrias/Inquirer.js/wiki/Testers)
 
 ## License
 
-Copyright (c) 2015 Simon Boudrias (twitter: @vaxilart)
+Copyright (c) 2016 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))
 Licensed under the MIT license.
