@@ -11,6 +11,6 @@ inquirer.prompt([
     message: "Enter your git password",
     name: "password"
   }
-], function( answers ) {
-  console.log( JSON.stringify(answers, null, "  ") );
+], function (answers) {
+  console.log(JSON.stringify(answers, null, "  "));
 });

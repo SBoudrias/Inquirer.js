@@ -19,27 +19,29 @@ var questions = [
     type: "input",
     name: "phone",
     message: "What's your phone number",
-    validate: function( value ) {
+    validate: function (value) {
       var pass = value.match(/^([01]{1})?[\-\.\s]?\(?(\d{3})\)?[\-\.\s]?(\d{3})[\-\.\s]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?){1}(?:\d+)?)?$/i);
       if (pass) {
         return true;
-      } else {
-        return "Please enter a valid phone number";
       }
+
+      return "Please enter a valid phone number";
     }
   },
   {
     type: "list",
     name: "size",
     message: "What size do you need",
-    choices: [ "Large", "Medium", "Small" ],
-    filter: function( val ) { return val.toLowerCase(); }
+    choices: ["Large", "Medium", "Small"],
+    filter: function (val) {
+      return val.toLowerCase();
+    }
   },
   {
     type: "input",
     name: "quantity",
     message: "How many do you need",
-    validate: function( value ) {
+    validate: function (value) {
       var valid = !isNaN(parseFloat(value));
       return valid || "Please enter a number";
     },
@@ -71,7 +73,7 @@ var questions = [
     type: "rawlist",
     name: "beverage",
     message: "You also get a free 2L beverage",
-    choices: [ "Pepsi", "7up", "Coke" ]
+    choices: ["Pepsi", "7up", "Coke"]
   },
   {
     type: "input",
@@ -83,14 +85,14 @@ var questions = [
     type: "list",
     name: "prize",
     message: "For leaving a comments, you get a freebie",
-    choices: [ "cake", "fries" ],
-    when: function( answers ) {
+    choices: ["cake", "fries"],
+    when: function (answers) {
       return answers.comments !== "Nope, all good!";
     }
   }
 ];
 
-inquirer.prompt( questions, function( answers ) {
+inquirer.prompt(questions, function (answers) {
   console.log("\nOrder receipt:");
-  console.log( JSON.stringify(answers, null, "  ") );
+  console.log(JSON.stringify(answers, null, "  "));
 });
