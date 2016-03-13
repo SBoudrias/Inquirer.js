@@ -13,7 +13,7 @@ describe('`checkbox` prompt', function () {
   });
 
   it('should return a single selected choice in an array', function (done) {
-    this.checkbox.run(function (answer) {
+    this.checkbox.run(function (err, answer) {
       expect(answer).to.be.an('array');
       expect(answer.length).to.equal(1);
       expect(answer[0]).to.equal('choice 1');
@@ -24,7 +24,7 @@ describe('`checkbox` prompt', function () {
   });
 
   it('should return multiples selected choices in an array', function (done) {
-    this.checkbox.run(function (answer) {
+    this.checkbox.run(function (err, answer) {
       expect(answer).to.be.an('array');
       expect(answer.length).to.equal(2);
       expect(answer[0]).to.equal('choice 1');
@@ -44,7 +44,7 @@ describe('`checkbox` prompt', function () {
       {name: '3', checked: false}
     ];
     this.checkbox = new Checkbox(this.fixture, this.rl);
-    this.checkbox.run(function (answer) {
+    this.checkbox.run(function (err, answer) {
       expect(answer.length).to.equal(1);
       expect(answer[0]).to.equal('1');
       done();
@@ -77,7 +77,7 @@ describe('`checkbox` prompt', function () {
     ];
     this.fixture.default = ['1', '3'];
     this.checkbox = new Checkbox(this.fixture, this.rl);
-    this.checkbox.run(function (answer) {
+    this.checkbox.run(function (err, answer) {
       expect(answer.length).to.equal(2);
       expect(answer[0]).to.equal('1');
       expect(answer[1]).to.equal('3');
@@ -87,7 +87,7 @@ describe('`checkbox` prompt', function () {
   });
 
   it('should toggle choice when hitting space', function (done) {
-    this.checkbox.run(function (answer) {
+    this.checkbox.run(function (err, answer) {
       expect(answer.length).to.equal(1);
       expect(answer[0]).to.equal('choice 1');
       done();
@@ -100,7 +100,7 @@ describe('`checkbox` prompt', function () {
   });
 
   it('should allow for arrow navigation', function (done) {
-    this.checkbox.run(function (answer) {
+    this.checkbox.run(function (err, answer) {
       expect(answer.length).to.equal(1);
       expect(answer[0]).to.equal('choice 2');
       done();
@@ -115,7 +115,7 @@ describe('`checkbox` prompt', function () {
   });
 
   it('should allow for vi-style navigation', function (done) {
-    this.checkbox.run(function (answer) {
+    this.checkbox.run(function (err, answer) {
       expect(answer.length).to.equal(1);
       expect(answer[0]).to.equal('choice 2');
       done();
@@ -130,7 +130,7 @@ describe('`checkbox` prompt', function () {
   });
 
   it('should allow for emacs-style navigation', function (done) {
-    this.checkbox.run(function (answer) {
+    this.checkbox.run(function (err, answer) {
       expect(answer.length).to.equal(1);
       expect(answer[0]).to.equal('choice 2');
       done();
@@ -145,7 +145,7 @@ describe('`checkbox` prompt', function () {
   });
 
   it('should allow 1-9 shortcut key', function (done) {
-    this.checkbox.run(function (answer) {
+    this.checkbox.run(function (err, answer) {
       expect(answer.length).to.equal(1);
       expect(answer[0]).to.equal('choice 2');
       done();
@@ -178,7 +178,7 @@ describe('`checkbox` prompt', function () {
     });
 
     it('skip disabled choices', function (done) {
-      this.checkbox.run(function (answer) {
+      this.checkbox.run(function (err, answer) {
         expect(answer[0]).to.equal('choice 1');
         done();
       });
@@ -196,7 +196,7 @@ describe('`checkbox` prompt', function () {
         {name: '2'}
       ];
       this.checkbox = new Checkbox(this.fixture, this.rl);
-      this.checkbox.run(function (answer) {
+      this.checkbox.run(function (err, answer) {
         expect(answer.length).to.equal(0);
         done();
       });

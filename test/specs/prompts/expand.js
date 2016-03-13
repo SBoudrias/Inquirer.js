@@ -45,7 +45,7 @@ describe('`expand` prompt', function () {
   });
 
   it('should take the first choice by default', function (done) {
-    this.expand.run(function (answer) {
+    this.expand.run(function (err, answer) {
       expect(answer).to.equal('acab');
       done();
     });
@@ -56,7 +56,7 @@ describe('`expand` prompt', function () {
     this.fixture.default = 1;
     this.expand = new Expand(this.fixture, this.rl);
 
-    this.expand.run(function (answer) {
+    this.expand.run(function (err, answer) {
       expect(answer).to.equal('bar');
       done();
     });
@@ -64,7 +64,7 @@ describe('`expand` prompt', function () {
   });
 
   it('should return the user input', function (done) {
-    this.expand.run(function (answer) {
+    this.expand.run(function (err, answer) {
       expect(answer).to.equal('bar');
       done();
     });
@@ -72,7 +72,7 @@ describe('`expand` prompt', function () {
   });
 
   it('should strip the user input', function (done) {
-    this.expand.run(function (answer) {
+    this.expand.run(function (err, answer) {
       expect(answer).to.equal('bar');
       done();
     });
@@ -80,7 +80,7 @@ describe('`expand` prompt', function () {
   });
 
   it('should have help option', function (done) {
-    this.expand.run(function (answer) {
+    this.expand.run(function (err, answer) {
       expect(this.rl.output.__raw__).to.match(/a\)\ acab/);
       expect(this.rl.output.__raw__).to.match(/b\)\ bar/);
       expect(answer).to.equal('chile');

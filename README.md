@@ -95,7 +95,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
         return;
       }
       // Pass the return value in the done callback
-      done(true);
+      done(null, true);
     }, 3000);
   }
 }

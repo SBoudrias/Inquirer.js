@@ -140,7 +140,7 @@ describe('inquirer.prompt', function () {
         expect(answers.name1).to.equal('bar');
         var goOn = this.async();
         setTimeout(function () {
-          goOn(stubMessage);
+          goOn(null, stubMessage);
         }, 0);
       }
     }];
@@ -199,7 +199,7 @@ describe('inquirer.prompt', function () {
         expect(answers.name1).to.equal('bar');
         var goOn = this.async();
         setTimeout(function () {
-          goOn(input2Default);
+          goOn(null, input2Default);
         }, 0);
         setTimeout(function () {
           promise.ui.rl.emit('line');
@@ -494,7 +494,7 @@ describe('inquirer.prompt', function () {
           goesInWhen = true;
           var goOn = this.async();
           setTimeout(function () {
-            goOn(true);
+            goOn(null, true);
           }, 0);
           setTimeout(function () {
             promise.ui.rl.emit('line');

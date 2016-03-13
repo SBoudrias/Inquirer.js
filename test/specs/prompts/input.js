@@ -14,7 +14,7 @@ describe('`input` prompt', function () {
   it('should use raw value from the user', function (done) {
     var input = new Input(this.fixture, this.rl);
 
-    input.run(function (answer) {
+    input.run(function (err, answer) {
       expect(answer).to.equal('Inquirer');
       done();
     });
