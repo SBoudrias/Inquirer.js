@@ -2,11 +2,12 @@
   "name": "inquirer",
   "version": "0.12.0",
   "description": "A collection of common interactive command line user interfaces.",
+  "homepage": "",
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "files": [
+    "lib"
+  ],
   "main": "lib/inquirer.js",
-  "scripts": {
-    "test": "grunt --verbose"
-  },
-  "repository": "SBoudrias/Inquirer.js",
   "keywords": [
     "command",
     "prompt",
@@ -15,11 +16,12 @@
     "tty",
     "menu"
   ],
-  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "scripts": {
+    "test": "gulp",
+    "prepublish": "gulp prepublish"
+  },
+  "repository": "SBoudrias/Inquirer.js",
   "license": "MIT",
-  "files": [
-    "lib"
-  ],
   "dependencies": {
     "ansi-escapes": "^1.1.0",
     "ansi-regex": "^2.0.0",
@@ -45,6 +47,23 @@
     "grunt-mocha-test": "^0.12.7",
     "mocha": "^2.2.1",
     "mockery": "^1.4.0",
-    "sinon": "^1.12.1"
+    "sinon": "^1.12.1",
+    "eslint": "^2.1.0",
+    "eslint-config-xo-space": "^0.10.0",
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^2.0.0",
+    "gulp-exclude-gitignore": "^1.0.0",
+    "gulp-line-ending-corrector": "^1.0.1",
+    "gulp-istanbul": "^0.10.3",
+    "gulp-mocha": "^2.0.0",
+    "gulp-plumber": "^1.0.0",
+    "gulp-nsp": "^2.1.0",
+    "gulp-coveralls": "^0.1.0"
+  },
+  "eslintConfig": {
+    "extends": "xo-space",
+    "env": {
+      "mocha": true
+    }
   }
 }
