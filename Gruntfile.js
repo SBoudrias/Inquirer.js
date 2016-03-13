@@ -1,5 +1,5 @@
-/*jshint strict:false */
-module.exports = function( grunt ) {
+/* jshint strict:false */
+module.exports = function (grunt) {
 
   grunt.initConfig({
 
@@ -7,7 +7,7 @@ module.exports = function( grunt ) {
       options: {
         jshintrc : ".jshintrc"
       },
-      files: [ "lib/**/*.js", "test/**/*.js" ]
+      files: ["lib/**/*.js", "test/**/*.js"]
     },
 
     mochaTest: {
@@ -24,6 +24,6 @@ module.exports = function( grunt ) {
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-mocha-test");
 
-  grunt.registerTask("default", [ "jshint", "mochaTest" ]);
+  grunt.registerTask("default", ["jshint", "mochaTest"]);
 
 };

@@ -1,7 +1,6 @@
 var inquirer = require("../../lib/inquirer");
 
 module.exports = {
-
   input: {
     message: "message",
     name: "name"
@@ -20,23 +19,23 @@ module.exports = {
   list: {
     message: "message",
     name: "name",
-    choices: [ "foo", new inquirer.Separator(), "bar", "bum" ]
+    choices: ["foo", new inquirer.Separator(), "bar", "bum"]
   },
 
   rawlist: {
     message: "message",
     name: "name",
-    choices: [ "foo", "bar", new inquirer.Separator(), "bum" ]
+    choices: ["foo", "bar", new inquirer.Separator(), "bum"]
   },
 
   expand: {
     message: "message",
     name: "name",
     choices: [
-      { key: "a", name: "acab"  },
+      {key: "a", name: "acab"},
       new inquirer.Separator(),
-      { key: "b", name: "bar"   },
-      { key: "c", name: "chile" }
+      {key: "b", name: "bar"},
+      {key: "c", name: "chile"}
     ]
   },
 
@@ -50,5 +49,4 @@ module.exports = {
       "choice 3"
     ]
   }
-
 };

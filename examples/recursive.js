@@ -22,12 +22,12 @@ var questions = [
 ];
 
 function ask() {
-  inquirer.prompt( questions, function( answers ) {
-    output.push( answers.tvShow );
-    if ( answers.askAgain ) {
+  inquirer.prompt(questions, function (answers) {
+    output.push(answers.tvShow);
+    if (answers.askAgain) {
       ask();
     } else {
-      console.log( "Your favorite TV Shows:", output.join(", ") );
+      console.log("Your favorite TV Shows:", output.join(", "));
     }
   });
 }

@@ -34,6 +34,6 @@ inquirer.prompt([
       }
     ]
   }
-], function( answers ) {
-  console.log( JSON.stringify(answers, null, "  ") );
+], function (answers) {
+  console.log(JSON.stringify(answers, null, "  "));
 });

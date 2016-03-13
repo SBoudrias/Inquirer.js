@@ -3,24 +3,26 @@ var sinon = require("sinon");
 var util = require("util");
 var _ = require("lodash");
 
-var stub = {
-  write         : sinon.stub().returns(stub),
-  moveCursor    : sinon.stub().returns(stub),
-  setPrompt     : sinon.stub().returns(stub),
-  close         : sinon.stub().returns(stub),
-  pause         : sinon.stub().returns(stub),
-  resume        : sinon.stub().returns(stub),
-  _getCursorPos : sinon.stub().returns({cols: 0, rows: 0}),
-  output        : {
-    end    : sinon.stub(),
-    mute   : sinon.stub(),
-    unmute : sinon.stub(),
+var stub = {};
+
+_.extend(stub, {
+  write: sinon.stub().returns(stub),
+  moveCursor: sinon.stub().returns(stub),
+  setPrompt: sinon.stub().returns(stub),
+  close: sinon.stub().returns(stub),
+  pause: sinon.stub().returns(stub),
+  resume: sinon.stub().returns(stub),
+  _getCursorPos: sinon.stub().returns({cols: 0, rows: 0}),
+  output: {
+    end: sinon.stub(),
+    mute: sinon.stub(),
+    unmute: sinon.stub(),
     __raw__: '',
-    write  : function (str) {
+    write: function (str) {
       this.__raw__ += str;
     }
   }
-};
+});
 
 var ReadlineStub = function () {
   this.line = '';

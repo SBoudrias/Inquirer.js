@@ -44,7 +44,7 @@ inquirer.prompt([
       },
       new inquirer.Separator(" = The extras = "),
       {
-        name: "Pineapple",
+        name: "Pineapple"
       },
       {
         name: "Olives",
@@ -54,13 +54,13 @@ inquirer.prompt([
         name: "Extra cheese"
       }
     ],
-    validate: function( answer ) {
-      if ( answer.length < 1 ) {
+    validate: function (answer) {
+      if (answer.length < 1) {
         return "You must choose at least one topping.";
       }
       return true;
     }
   }
-], function( answers ) {
-  console.log( JSON.stringify(answers, null, "  ") );
+], function (answers) {
+  console.log(JSON.stringify(answers, null, "  "));
 });

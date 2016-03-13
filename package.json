@@ -64,6 +64,12 @@
     "extends": "xo-space",
     "env": {
       "mocha": true
+    },
+    "rules": {
+      "no-unused-expressions": "off",
+      "handle-callback-err": "off",
+      "no-eq-null": "off",
+      "eqeqeq": ["error", "allow-null"]
     }
   }
 }
