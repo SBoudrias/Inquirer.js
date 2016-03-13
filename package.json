@@ -41,10 +41,6 @@
   "devDependencies": {
     "chai": "^3.0.0",
     "cmdify": "^0.0.4",
-    "grunt": "^0.4.1",
-    "grunt-cli": "^0.1.8",
-    "grunt-contrib-jshint": "^0.11.1",
-    "grunt-mocha-test": "^0.12.7",
     "mocha": "^2.2.1",
     "mockery": "^1.4.0",
     "sinon": "^1.12.1",
