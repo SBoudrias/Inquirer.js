@@ -2,65 +2,65 @@
  * Checkbox list examples
  */
 
-"use strict";
-var inquirer = require("../lib/inquirer");
+'use strict';
+var inquirer = require('../lib/inquirer');
 
 inquirer.prompt([
   {
-    type: "checkbox",
-    message: "Select toppings",
-    name: "toppings",
+    type: 'checkbox',
+    message: 'Select toppings',
+    name: 'toppings',
     choices: [
-      new inquirer.Separator(" = The Meats = "),
+      new inquirer.Separator(' = The Meats = '),
       {
-        name: "Peperonni"
+        name: 'Peperonni'
       },
       {
-        name: "Ham"
+        name: 'Ham'
       },
       {
-        name: "Ground Meat"
+        name: 'Ground Meat'
       },
       {
-        name: "Bacon"
+        name: 'Bacon'
       },
-      new inquirer.Separator(" = The Cheeses = "),
+      new inquirer.Separator(' = The Cheeses = '),
       {
-        name: "Mozzarella",
+        name: 'Mozzarella',
         checked: true
       },
       {
-        name: "Cheddar"
+        name: 'Cheddar'
       },
       {
-        name: "Parmesan"
+        name: 'Parmesan'
       },
-      new inquirer.Separator(" = The usual ="),
+      new inquirer.Separator(' = The usual ='),
       {
-        name: "Mushroom"
-      },
-      {
-        name: "Tomato"
-      },
-      new inquirer.Separator(" = The extras = "),
-      {
-        name: "Pineapple"
+        name: 'Mushroom'
       },
       {
-        name: "Olives",
-        disabled: "out of stock"
+        name: 'Tomato'
+      },
+      new inquirer.Separator(' = The extras = '),
+      {
+        name: 'Pineapple'
       },
       {
-        name: "Extra cheese"
+        name: 'Olives',
+        disabled: 'out of stock'
+      },
+      {
+        name: 'Extra cheese'
       }
     ],
     validate: function (answer) {
       if (answer.length < 1) {
-        return "You must choose at least one topping.";
+        return 'You must choose at least one topping.';
       }
       return true;
     }
   }
 ], function (answers) {
-  console.log(JSON.stringify(answers, null, "  "));
+  console.log(JSON.stringify(answers, null, '  '));
 });

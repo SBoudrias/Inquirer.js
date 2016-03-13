@@ -1,7 +1,7 @@
-var EventEmitter = require("events").EventEmitter;
-var sinon = require("sinon");
-var util = require("util");
-var _ = require("lodash");
+var EventEmitter = require('events').EventEmitter;
+var sinon = require('sinon');
+var util = require('util');
+var _ = require('lodash');
 
 var stub = {};
 
