@@ -62,6 +62,7 @@
       "mocha": true
     },
     "rules": {
+      "quotes": ["error", "single"],
       "no-unused-expressions": "off",
       "handle-callback-err": "off",
       "no-eq-null": "off",
