@@ -41,6 +41,6 @@ function likesFood(aFood) {
   };
 }
 
-inquirer.prompt(questions, function (answers) {
+inquirer.prompt(questions, function (err, answers) {
   console.log(JSON.stringify(answers, null, '  '));
 });
