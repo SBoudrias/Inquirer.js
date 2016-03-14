@@ -27,6 +27,6 @@ inquirer.prompt([
       return val.toLowerCase();
     }
   }
-], function (answers) {
+], function (err, answers) {
   console.log(JSON.stringify(answers, null, '  '));
 });

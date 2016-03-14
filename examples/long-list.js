@@ -30,6 +30,6 @@ inquirer.prompt([
     paginated: true,
     choices: choices
   }
-], function (answers) {
+], function (err, answers) {
   console.log(JSON.stringify(answers, null, '  '));
 });

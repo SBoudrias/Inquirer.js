@@ -92,7 +92,7 @@ var questions = [
   }
 ];
 
-inquirer.prompt(questions, function (answers) {
+inquirer.prompt(questions, function (err, answers) {
   console.log('\nOrder receipt:');
   console.log(JSON.stringify(answers, null, '  '));
 });

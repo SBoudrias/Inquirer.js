@@ -22,7 +22,7 @@ var questions = [
 ];
 
 function ask() {
-  inquirer.prompt(questions, function (answers) {
+  inquirer.prompt(questions, function (err, answers) {
     output.push(answers.tvShow);
     if (answers.askAgain) {
       ask();

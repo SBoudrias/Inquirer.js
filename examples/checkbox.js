@@ -61,6 +61,6 @@ inquirer.prompt([
       return true;
     }
   }
-], function (answers) {
+], function (err, answers) {
   console.log(JSON.stringify(answers, null, '  '));
 });
