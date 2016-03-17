@@ -31,7 +31,7 @@
     "lodash": "^4.3.0",
     "pinkie-promise": "^2.0.0",
     "readline2": "^1.0.1",
-    "run-async": "^2.1.0",
+    "run-async": "^2.2.0",
     "rx-lite": "^4.0.8",
     "string-width": "^1.0.1",
     "strip-ansi": "^3.0.0",
