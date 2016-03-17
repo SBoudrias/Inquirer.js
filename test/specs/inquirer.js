@@ -6,7 +6,9 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 var _ = require('lodash');
 var rx = require('rx-lite');
+var Promise = require('pinkie-promise');
 var inquirer = require('../../lib/inquirer');
+var autosubmit = require('../helpers/events').autosubmit;
 
 describe('inquirer.prompt', function () {
   beforeEach(function () {
@@ -46,7 +48,7 @@ describe('inquirer.prompt', function () {
     rl1.emit('line');
   });
 
-  it('should take a prompts array and return answers', function (done) {
+  it('should take a prompts array and return answers', function () {
     var prompts = [{
       type: 'confirm',
       name: 'q1',
@@ -58,14 +60,13 @@ describe('inquirer.prompt', function () {
       default: false
     }];
 
-    var promise = this.prompt(prompts, function (err, answers) {
+    var promise = this.prompt(prompts);
+    autosubmit(promise.ui);
+
+    return promise.then(function (answers) {
       expect(answers.q1).to.be.true;
       expect(answers.q2).to.be.false;
-      done();
     });
-
-    promise.ui.rl.emit('line');
-    promise.ui.rl.emit('line');
   });
 
   it('should take a single prompt and return answer', function (done) {
@@ -92,7 +93,7 @@ describe('inquirer.prompt', function () {
           return true;
         }
       };
-      this.run = _.noop;
+      this.run = sinon.stub().returns(Promise.resolve());
       expect(params.message).to.equal(stubMessage);
       done();
     });
@@ -123,7 +124,7 @@ describe('inquirer.prompt', function () {
           return true;
         }
       };
-      this.run = _.noop;
+      this.run = sinon.stub().returns(Promise.resolve());
       expect(params.message).to.equal(stubMessage);
       done();
     });
@@ -157,7 +158,7 @@ describe('inquirer.prompt', function () {
           return true;
         }
       };
-      this.run = _.noop;
+      this.run = sinon.stub().returns(Promise.resolve());
       expect(params.default).to.equal(stubDefault);
       done();
     });
@@ -218,7 +219,7 @@ describe('inquirer.prompt', function () {
 
   it('should pass previous answers to the prompt constructor', function (done) {
     this.prompt.registerPrompt('stub', function (params, rl, answers) {
-      this.run = _.noop;
+      this.run = sinon.stub().returns(Promise.resolve());
       expect(answers.name1).to.equal('bar');
       done();
     });
@@ -241,7 +242,7 @@ describe('inquirer.prompt', function () {
   it('should parse `choices` if passed as a function', function (done) {
     var stubChoices = ['foo', 'bar'];
     this.prompt.registerPrompt('stub', function (params) {
-      this.run = _.noop;
+      this.run = sinon.stub().returns(Promise.resolve());
       this.opt = {
         when: function () {
           return true;
@@ -300,15 +301,15 @@ describe('inquirer.prompt', function () {
       default: 'doe'
     }];
 
-    var promise = this.prompt(prompts, function () {});
+    var promise = this.prompt(prompts);
     var spy = sinon.spy();
     promise.ui.process.subscribe(spy, function () {}, function () {
       sinon.assert.calledWith(spy, {name: 'name1', answer: 'bar'});
       sinon.assert.calledWith(spy, {name: 'name', answer: 'doe'});
       done();
     });
-    promise.ui.rl.emit('line');
-    promise.ui.rl.emit('line');
+
+    autosubmit(promise.ui);
   });
 
   it('should expose the UI', function (done) {
@@ -365,7 +366,7 @@ describe('inquirer.prompt', function () {
         done();
       });
 
-      promise.ui.rl.emit('line');
+      autosubmit(promise.ui);
     });
 
     it('should run prompt if `when` returns true', function (done) {
@@ -391,8 +392,7 @@ describe('inquirer.prompt', function () {
         done();
       });
 
-      promise.ui.rl.emit('line');
-      promise.ui.rl.emit('line');
+      autosubmit(promise.ui);
     });
 
     it('should run prompt if `when` is true', function (done) {
@@ -413,8 +413,7 @@ describe('inquirer.prompt', function () {
         done();
       });
 
-      promise.ui.rl.emit('line');
-      promise.ui.rl.emit('line');
+      autosubmit(promise.ui);
     });
 
     it('should not run prompt if `when` returns false', function (done) {
@@ -446,8 +445,7 @@ describe('inquirer.prompt', function () {
         done();
       });
 
-      promise.ui.rl.emit('line');
-      promise.ui.rl.emit('line');
+      autosubmit(promise.ui);
     });
 
     it('should not run prompt if `when` is false', function (done) {
@@ -474,8 +472,7 @@ describe('inquirer.prompt', function () {
         done();
       });
 
-      promise.ui.rl.emit('line');
-      promise.ui.rl.emit('line');
+      autosubmit(promise.ui);
     });
 
     it('should run asynchronous `when`', function (done) {
@@ -518,7 +515,7 @@ describe('inquirer.prompt', function () {
       inquirer.registerPrompt('foo', function (question, rl, answers) {
         expect(question).to.eql(questions[0]);
         expect(answers).to.eql({});
-        this.run = _.noop;
+        this.run = sinon.stub().returns(Promise.resolve());
         done();
       });
 
@@ -528,7 +525,7 @@ describe('inquirer.prompt', function () {
     it('overwrite default prompt types', function (done) {
       var questions = [{type: 'confirm', message: 'something'}];
       inquirer.registerPrompt('confirm', function () {
-        this.run = _.noop;
+        this.run = sinon.stub().returns(Promise.resolve());
         done();
       });
 

@@ -7,6 +7,7 @@ var _ = require('lodash');
 var fixtures = require('../helpers/fixtures');
 var ReadlineStub = require('../helpers/readline');
 var inquirer = require('../../lib/inquirer');
+var autosubmit = require('../helpers/events').autosubmit;
 
 // Define prompts and their public API
 var prompts = [
@@ -206,26 +207,30 @@ var tests = {
         this.rl.emit('line');
       });
 
-      it('should pass previous answers to the prompt validation function', function (done) {
+      it('should pass previous answers to the prompt validation function', function () {
         var prompt = inquirer.createPromptModule();
-        this.fixture.validate = function (input, answers) {
-          expect(answers.q1).to.be.true;
-          return true;
-        };
         var questions = [{
           type: 'confirm',
           name: 'q1',
           message: 'message'
-        }, this.fixture];
+        }, {
+          type: 'confirm',
+          name: 'q2',
+          message: 'message',
+          validate: function (input, answers) {
+            expect(answers.q1).to.be.true;
+            return true;
+          },
+          default: false
+        }];
 
-        var ui = prompt(questions, function (err, answers) {
+        var promise = prompt(questions);
+        autosubmit(promise.ui);
+
+        return promise.then(function (answers) {
           expect(answers.q1).to.be.true;
           expect(answers.q2).to.be.false;
-          done();
-        }).ui;
-
-        ui.rl.emit('line');
-        ui.rl.emit('line');
+        });
       });
     });
   },
