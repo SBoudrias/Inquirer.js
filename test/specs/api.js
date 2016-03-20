@@ -115,27 +115,25 @@ var tests = {
 
   validate: function () {
     describe('validate API', function () {
-      it('should reject input if boolean false is returned', function (done) {
+      it('should reject input if boolean false is returned', function () {
         var called = 0;
 
         this.fixture.validate = function () {
           called++;
           // Make sure returning false won't continue
           if (called === 2) {
-            done();
-          } else {
-            this.rl.emit('line');
+            return true;
           }
+
+          this.rl.emit('line');
           return false;
         }.bind(this);
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run(function () {
-          // This should NOT be called
-          expect(false).to.be.true;
-        });
+        var promise = prompt.run();
 
         this.rl.emit('line');
+        return promise;
       });
 
       it('should reject input if a string is returned', function (done) {
@@ -148,22 +146,20 @@ var tests = {
           // Make sure returning false won't continue
           if (called === 2) {
             done();
-          } else {
-            self.rl.emit('line');
+            return;
           }
+
+          self.rl.emit('line');
           return errorMessage;
         };
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run(function () {
-          // This should NOT be called
-          expect(false).to.be.true;
-        });
+        prompt.run();
 
         this.rl.emit('line');
       });
 
-      it('should accept input if boolean true is returned', function (done) {
+      it('should accept input if boolean true is returned', function () {
         var called = 0;
 
         this.fixture.validate = function () {
@@ -172,15 +168,15 @@ var tests = {
         };
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run(function () {
+        var promise = prompt.run().then(function () {
           expect(called).to.equal(1);
-          done();
         });
 
         this.rl.emit('line');
+        return promise;
       });
 
-      it('should allow validate function to be asynchronous', function (next) {
+      it('should allow validate function to be asynchronous', function () {
         var self = this;
         var called = 0;
 
@@ -199,12 +195,10 @@ var tests = {
         };
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-
-        prompt.run(function () {
-          next();
-        });
+        var promise = prompt.run();
 
         this.rl.emit('line');
+        return promise;
       });
 
       it('should pass previous answers to the prompt validation function', function () {
