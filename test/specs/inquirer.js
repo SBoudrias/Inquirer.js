@@ -5,7 +5,7 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var _ = require('lodash');
-var rx = require('rx-lite');
+var rx = require('rx');
 var Promise = require('pinkie-promise');
 var inquirer = require('../../lib/inquirer');
 var autosubmit = require('../helpers/events').autosubmit;
@@ -348,7 +348,7 @@ describe('inquirer.prompt', function () {
   });
 
   describe('hierarchical mode (`when`)', function () {
-    it('should pass current answers to `when`', function (done) {
+    it('should pass current answers to `when`', function () {
       var prompts = [{
         type: 'confirm',
         name: 'q1',
@@ -362,14 +362,13 @@ describe('inquirer.prompt', function () {
         }
       }];
 
-      var promise = this.prompt(prompts, function () {
-        done();
-      });
+      var promise = this.prompt(prompts);
 
       autosubmit(promise.ui);
+      return promise;
     });
 
-    it('should run prompt if `when` returns true', function (done) {
+    it('should run prompt if `when` returns true', function () {
       var goesInWhen = false;
       var prompts = [{
         type: 'confirm',
@@ -386,16 +385,16 @@ describe('inquirer.prompt', function () {
         }
       }];
 
-      var promise = this.prompt(prompts, function (err, answers) {
+      var promise = this.prompt(prompts);
+      autosubmit(promise.ui);
+
+      return promise.then(function (answers) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.equal('bar-var');
-        done();
       });
-
-      autosubmit(promise.ui);
     });
 
-    it('should run prompt if `when` is true', function (done) {
+    it('should run prompt if `when` is true', function () {
       var prompts = [{
         type: 'confirm',
         name: 'q1',
@@ -408,15 +407,15 @@ describe('inquirer.prompt', function () {
         when: true
       }];
 
-      var promise = this.prompt(prompts, function (err, answers) {
-        expect(answers.q2).to.equal('bar-var');
-        done();
-      });
-
+      var promise = this.prompt(prompts);
       autosubmit(promise.ui);
+
+      return promise.then(function (answers) {
+        expect(answers.q2).to.equal('bar-var');
+      });
     });
 
-    it('should not run prompt if `when` returns false', function (done) {
+    it('should not run prompt if `when` returns false', function () {
       var goesInWhen = false;
       var prompts = [{
         type: 'confirm',
@@ -437,18 +436,18 @@ describe('inquirer.prompt', function () {
         default: 'foo'
       }];
 
-      var promise = this.prompt(prompts, function (err, answers) {
+      var promise = this.prompt(prompts);
+      autosubmit(promise.ui);
+
+      return promise.then(function (answers) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.not.exist;
         expect(answers.q3).to.equal('foo');
         expect(answers.q1).to.be.true;
-        done();
       });
-
-      autosubmit(promise.ui);
     });
 
-    it('should not run prompt if `when` is false', function (done) {
+    it('should not run prompt if `when` is false', function () {
       var prompts = [{
         type: 'confirm',
         name: 'q1',
@@ -465,17 +464,17 @@ describe('inquirer.prompt', function () {
         default: 'foo'
       }];
 
-      var promise = this.prompt(prompts, function (err, answers) {
+      var promise = this.prompt(prompts);
+      autosubmit(promise.ui);
+
+      return promise.then(function (answers) {
         expect(answers.q2).to.not.exist;
         expect(answers.q3).to.equal('foo');
         expect(answers.q1).to.be.true;
-        done();
       });
-
-      autosubmit(promise.ui);
     });
 
-    it('should run asynchronous `when`', function (done) {
+    it('should run asynchronous `when`', function () {
       var promise;
       var goesInWhen = false;
       var prompts = [{
@@ -499,13 +498,13 @@ describe('inquirer.prompt', function () {
         }
       }];
 
-      promise = this.prompt(prompts, function (err, answers) {
+      promise = this.prompt(prompts);
+      autosubmit(promise.ui);
+
+      return promise.then(function (answers) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.equal('foo-bar');
-        done();
       });
-
-      promise.ui.rl.emit('line');
     });
   });
 
