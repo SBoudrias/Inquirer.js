@@ -247,10 +247,10 @@ var prompts = Rx.Observable.create(function (obs) {
 inquirer.prompt(prompts);
 ```
 
-And using the `process` property, you have access to more fine grained callbacks:
+And using the `ui.process` property, you have access to more fine grained callbacks:
 
 ```js
-inquirer.prompt(prompts).process.subscribe(
+inquirer.prompt(prompts).ui.process.subscribe(
   onEachAnswer,
   onError,
   onComplete
