@@ -69,7 +69,7 @@ describe('inquirer.prompt', function () {
     });
   });
 
-  it('should take a single prompt and return answer', function (done) {
+  it('should take a single prompt and return answer', function () {
     var prompt = {
       type: 'input',
       name: 'q1',
@@ -77,12 +77,12 @@ describe('inquirer.prompt', function () {
       default: 'bar'
     };
 
-    var promise = this.prompt(prompt, function (err, answers) {
-      expect(answers.q1).to.equal('bar');
-      done();
-    });
+    var promise = this.prompt(prompt);
 
     promise.ui.rl.emit('line');
+    return promise.then(function (answers) {
+      expect(answers.q1).to.equal('bar');
+    });
   });
 
   it('should parse `message` if passed as a function', function (done) {
@@ -182,7 +182,7 @@ describe('inquirer.prompt', function () {
     promise.ui.rl.emit('line');
   });
 
-  it('should run asynchronous `default`', function (done) {
+  it('should run asynchronous `default`', function () {
     var goesInDefault = false;
     var input2Default = 'foo';
     var promise;
@@ -208,13 +208,13 @@ describe('inquirer.prompt', function () {
       }
     }];
 
-    promise = this.prompt(prompts, function (err, answers) {
+    promise = this.prompt(prompts);
+    promise.ui.rl.emit('line');
+
+    return promise.then(function (answers) {
       expect(goesInDefault).to.be.true;
       expect(answers.q2).to.equal(input2Default);
-      done();
     });
-
-    promise.ui.rl.emit('line');
   });
 
   it('should pass previous answers to the prompt constructor', function (done) {
@@ -235,7 +235,7 @@ describe('inquirer.prompt', function () {
       message: 'message'
     }];
 
-    var promise = this.prompt(prompts, function () {});
+    var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
   });
 
@@ -318,7 +318,7 @@ describe('inquirer.prompt', function () {
     done();
   });
 
-  it('takes an Observable as question', function (done) {
+  it('takes an Observable as question', function () {
     var promise;
     var prompts = rx.Observable.create(function (obs) {
       obs.onNext({
@@ -338,13 +338,13 @@ describe('inquirer.prompt', function () {
       }, 30);
     });
 
-    promise = this.prompt(prompts, function (err, answers) {
+    promise = this.prompt(prompts);
+    promise.ui.rl.emit('line');
+
+    return promise.then(function (answers) {
       expect(answers.q1).to.be.true;
       expect(answers.q2).to.be.false;
-      done();
     });
-
-    promise.ui.rl.emit('line');
   });
 
   describe('hierarchical mode (`when`)', function () {
@@ -543,7 +543,7 @@ describe('inquirer.prompt', function () {
   });
 
   // see: https://github.com/SBoudrias/Inquirer.js/pull/326
-  it('does not throw exception if cli-width reports width of 0', function (done) {
+  it('does not throw exception if cli-width reports width of 0', function () {
     var original = process.stdout.getWindowSize;
     process.stdout.getWindowSize = function () {
       return [0];
@@ -556,12 +556,12 @@ describe('inquirer.prompt', function () {
       message: 'message'
     }];
 
-    var promise = prompt(prompts, function (err, answers) {
+    var promise = prompt(prompts);
+    promise.ui.rl.emit('line');
+
+    return promise.then(function (answers) {
       process.stdout.getWindowSize = original;
       expect(answers.q1).to.equal(true);
-      done();
     });
-
-    promise.ui.rl.emit('line');
   });
 });

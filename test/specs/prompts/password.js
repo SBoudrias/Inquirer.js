@@ -14,7 +14,7 @@ describe('`password` prompt', function () {
   it('should use raw value from the user', function (done) {
     var password = new Password(this.fixture, this.rl);
 
-    password.run(function (err, answer) {
+    password.run().then(function (answer) {
       expect(answer).to.equal('Inquirer');
       done();
     });

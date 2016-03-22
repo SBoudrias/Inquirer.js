@@ -86,7 +86,7 @@ var tests = {
         };
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run(function (err, answer) {
+        prompt.run().then(function (answer) {
           expect(answer).to.equal('pass');
           done();
         });
@@ -103,7 +103,7 @@ var tests = {
         };
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run(function (err, answer) {
+        prompt.run().then(function (answer) {
           expect(answer).to.equal('pass');
           done();
         });
@@ -235,7 +235,7 @@ var tests = {
         this.fixture.default = 'pass';
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run(function (err, answer) {
+        prompt.run().then(function (answer) {
           expect(this.rl.output.__raw__).to.contain('(pass)');
           expect(answer).to.equal('pass');
           done();
@@ -248,7 +248,7 @@ var tests = {
         this.fixture.default = 0;
 
         var prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run(function (err, answer) {
+        prompt.run().then(function (answer) {
           expect(this.rl.output.__raw__).to.contain('(0)');
           expect(answer).to.equal(0);
           done();
