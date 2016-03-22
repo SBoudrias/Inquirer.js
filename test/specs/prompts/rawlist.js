@@ -13,7 +13,7 @@ describe('`rawlist` prompt', function () {
   });
 
   it('should default to first choice', function (done) {
-    this.rawlist.run(function (err, answer) {
+    this.rawlist.run().then(function (answer) {
       expect(answer).to.equal('foo');
       done();
     });
@@ -22,7 +22,7 @@ describe('`rawlist` prompt', function () {
   });
 
   it('should select given index', function (done) {
-    this.rawlist.run(function (err, answer) {
+    this.rawlist.run().then(function (answer) {
       expect(answer).to.equal('bar');
       done();
     });
@@ -59,7 +59,7 @@ describe('`rawlist` prompt', function () {
     this.fixture.default = 1;
     var list = new Rawlist(this.fixture, this.rl);
 
-    list.run(function (err, answer) {
+    list.run().then(function (answer) {
       expect(answer).to.equal('bar');
       done();
     });
@@ -71,7 +71,7 @@ describe('`rawlist` prompt', function () {
     this.fixture.default = 4;
     var list = new Rawlist(this.fixture, this.rl);
 
-    list.run(function (err, answer) {
+    list.run().then(function (answer) {
       expect(answer).to.equal('foo');
       done();
     });

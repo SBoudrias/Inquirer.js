@@ -13,7 +13,7 @@ describe('`list` prompt', function () {
   });
 
   it('should default to first choice', function (done) {
-    this.list.run(function (err, answer) {
+    this.list.run().then(function (answer) {
       expect(answer).to.equal('foo');
       done();
     });
@@ -22,7 +22,7 @@ describe('`list` prompt', function () {
   });
 
   it('should move selected cursor on keypress', function (done) {
-    this.list.run(function (err, answer) {
+    this.list.run().then(function (answer) {
       expect(answer).to.equal('bar');
       done();
     });
@@ -32,7 +32,7 @@ describe('`list` prompt', function () {
   });
 
   it('should allow for arrow navigation', function (done) {
-    this.list.run(function (err, answer) {
+    this.list.run().then(function (answer) {
       expect(answer).to.equal('bar');
       done();
     });
@@ -44,7 +44,7 @@ describe('`list` prompt', function () {
   });
 
   it('should allow for vi-style navigation', function (done) {
-    this.list.run(function (err, answer) {
+    this.list.run().then(function (answer) {
       expect(answer).to.equal('bar');
       done();
     });
@@ -56,7 +56,7 @@ describe('`list` prompt', function () {
   });
 
   it('should allow for emacs-style navigation', function (done) {
-    this.list.run(function (err, answer) {
+    this.list.run().then(function (answer) {
       expect(answer).to.equal('bar');
       done();
     });
@@ -76,7 +76,7 @@ describe('`list` prompt', function () {
       }
     }
 
-    this.list.run(function (err, answer) {
+    this.list.run().then(function (answer) {
       expect(answer).to.equal('bar');
       complete();
     });
@@ -86,7 +86,7 @@ describe('`list` prompt', function () {
     this.rl.emit('line');
 
     this.list.selected = 0; // reset
-    this.list.run(function (err, answer) {
+    this.list.run().then(function (answer) {
       expect(answer).to.equal('foo');
       complete();
     });
@@ -108,7 +108,7 @@ describe('`list` prompt', function () {
     this.fixture.default = 1;
     var list = new List(this.fixture, this.rl);
 
-    list.run(function (err, answer) {
+    list.run().then(function (answer) {
       expect(answer).to.equal('bar');
       done();
     });
@@ -120,7 +120,7 @@ describe('`list` prompt', function () {
     this.fixture.default = 1;
     var list = new List(this.fixture, this.rl);
 
-    list.run(function (err, answer) {
+    list.run().then(function (answer) {
       expect(answer).to.equal('bum');
       done();
     });
@@ -133,7 +133,7 @@ describe('`list` prompt', function () {
     this.fixture.default = 'bar';
     var list = new List(this.fixture, this.rl);
 
-    list.run(function (err, answer) {
+    list.run().then(function (answer) {
       expect(answer).to.equal('bar');
       done();
     });
@@ -145,7 +145,7 @@ describe('`list` prompt', function () {
     this.fixture.default = 'bar';
     var list = new List(this.fixture, this.rl);
 
-    list.run(function (err, answer) {
+    list.run().then(function (answer) {
       expect(answer).to.equal('bum');
       done();
     });
@@ -158,7 +158,7 @@ describe('`list` prompt', function () {
     this.fixture.default = 4;
     var list = new List(this.fixture, this.rl);
 
-    list.run(function (err, answer) {
+    list.run().then(function (answer) {
       expect(answer).to.equal('foo');
       done();
     });
@@ -167,7 +167,7 @@ describe('`list` prompt', function () {
   });
 
   it('should allow 1-9 shortcut key', function (done) {
-    this.list.run(function (err, answer) {
+    this.list.run().then(function (answer) {
       expect(answer).to.equal('bar');
       done();
     });
