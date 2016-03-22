@@ -15,7 +15,7 @@ describe('inquirer.prompt', function () {
     this.prompt = inquirer.createPromptModule();
   });
 
-  it('should close and create a new readline instances each time it\'s called', function (done) {
+  it('should close and create a new readline instances each time it\'s called', function () {
     var ctx = this;
     var rl1;
 
@@ -23,7 +23,12 @@ describe('inquirer.prompt', function () {
       type: 'confirm',
       name: 'q1',
       message: 'message'
-    }, function () {
+    });
+
+    rl1 = promise.ui.rl;
+    rl1.emit('line');
+
+    return promise.then(function () {
       expect(rl1.close.called).to.be.true;
       expect(rl1.output.end.called).to.be.true;
 
@@ -32,20 +37,18 @@ describe('inquirer.prompt', function () {
         type: 'confirm',
         name: 'q1',
         message: 'message'
-      }, function () {
-        expect(rl2.close.called).to.be.true;
-        expect(rl2.output.end.called).to.be.true;
-
-        expect(rl1).to.not.equal(rl2);
-        done();
       });
 
       rl2 = promise2.ui.rl;
       rl2.emit('line');
-    });
 
-    rl1 = promise.ui.rl;
-    rl1.emit('line');
+      return promise2.then(function () {
+        expect(rl2.close.called).to.be.true;
+        expect(rl2.output.end.called).to.be.true;
+
+        expect(rl1).to.not.equal(rl2);
+      });
+    });
   });
 
   it('should take a prompts array and return answers', function () {
