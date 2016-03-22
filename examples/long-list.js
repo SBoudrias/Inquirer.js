@@ -3,7 +3,7 @@
  */
 
 'use strict';
-var inquirer = require('../lib/inquirer');
+var inquirer = require('..');
 
 var choices = Array.apply(0, new Array(26)).map(function (x, y) {
   return String.fromCharCode(y + 65);
@@ -30,6 +30,6 @@ inquirer.prompt([
     paginated: true,
     choices: choices
   }
-], function (err, answers) {
+]).then(function (answers) {
   console.log(JSON.stringify(answers, null, '  '));
 });

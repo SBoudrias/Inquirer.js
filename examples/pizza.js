@@ -4,7 +4,7 @@
  */
 
 'use strict';
-var inquirer = require('../lib/inquirer');
+var inquirer = require('..');
 
 console.log('Hi, welcome to Node Pizza');
 
@@ -92,7 +92,7 @@ var questions = [
   }
 ];
 
-inquirer.prompt(questions, function (err, answers) {
+inquirer.prompt(questions).then(function (answers) {
   console.log('\nOrder receipt:');
   console.log(JSON.stringify(answers, null, '  '));
 });

@@ -3,14 +3,14 @@
  */
 
 'use strict';
-var inquirer = require('../lib/inquirer');
+var inquirer = require('..');
 
 inquirer.prompt({
   type: 'list',
   name: 'chocolate',
   message: 'What\'s your favorite chocolate?',
   choices: ['Mars', 'Oh Henry', 'Hershey']
-}, function () {
+}).then(function () {
   inquirer.prompt({
     type: 'list',
     name: 'beverage',

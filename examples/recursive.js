@@ -4,7 +4,7 @@
  */
 
 'use strict';
-var inquirer = require('../lib/inquirer');
+var inquirer = require('..');
 var output = [];
 
 var questions = [
@@ -22,7 +22,7 @@ var questions = [
 ];
 
 function ask() {
-  inquirer.prompt(questions, function (err, answers) {
+  inquirer.prompt(questions).then(function (answers) {
     output.push(answers.tvShow);
     if (answers.askAgain) {
       ask();

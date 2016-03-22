@@ -3,7 +3,7 @@
  */
 
 'use strict';
-var inquirer = require('../lib/inquirer');
+var inquirer = require('..');
 
 inquirer.prompt([
   {
@@ -11,6 +11,6 @@ inquirer.prompt([
     message: 'Enter your git password',
     name: 'password'
   }
-], function (err, answers) {
+]).then(function (answers) {
   console.log(JSON.stringify(answers, null, '  '));
 });

@@ -3,7 +3,7 @@
  */
 
 'use strict';
-var inquirer = require('../lib/inquirer');
+var inquirer = require('..');
 
 var questions = [
   {
@@ -41,6 +41,6 @@ function likesFood(aFood) {
   };
 }
 
-inquirer.prompt(questions, function (err, answers) {
+inquirer.prompt(questions).then(function (answers) {
   console.log(JSON.stringify(answers, null, '  '));
 });
