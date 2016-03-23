@@ -225,7 +225,7 @@ var tests = {
           default: false
         }];
 
-        var ui = prompt( questions, function( answers ) {
+        var ui = prompt( questions, function( err, answers ) {
           expect(answers.q1).to.be.true;
           expect(answers.q2).to.be.false;
           done();

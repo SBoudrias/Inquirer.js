@@ -23,20 +23,18 @@ describe("inquirer.prompt", function() {
       type: "confirm",
       name: "q1",
       message: "message"
-    }, function( answers ) {
+    }, function( err, answers ) {
       expect(rl1.close.called).to.be.true;
       expect(rl1.output.end.called).to.be.true;
-      expect(prompt.rl).to.not.exist;
 
       var rl2;
       var prompt2 = ctx.prompt({
         type: "confirm",
         name: "q1",
         message: "message"
-      }, function( answers ) {
+      }, function( err, answers ) {
         expect(rl2.close.called).to.be.true;
         expect(rl2.output.end.called).to.be.true;
-        expect(prompt.rl).to.not.exist;
 
         expect( rl1 ).to.not.equal( rl2 );
         done();
@@ -62,7 +60,7 @@ describe("inquirer.prompt", function() {
       default: false
     }];
 
-    var ui = this.prompt( prompts, function( answers ) {
+    var ui = this.prompt( prompts, function( err, answers ) {
       expect(answers.q1).to.be.true;
       expect(answers.q2).to.be.false;
       done();
@@ -80,7 +78,7 @@ describe("inquirer.prompt", function() {
       default: "bar"
     };
 
-    var ui = this.prompt( prompt, function( answers ) {
+    var ui = this.prompt( prompt, function( err, answers ) {
       expect(answers.q1).to.equal("bar");
       done();
     });
@@ -202,7 +200,7 @@ describe("inquirer.prompt", function() {
       }
     }];
 
-    var ui = this.prompt( prompts, function( answers ) {
+    var ui = this.prompt( prompts, function( err, answers ) {
       expect(goesInDefault).to.be.true;
       expect(answers.q2).to.equal(input2Default);
       done();
@@ -263,6 +261,23 @@ describe("inquirer.prompt", function() {
     ui.rl.emit("line");
   });
 
+  it("should returns a promise", function( done ) {
+    var prompt = {
+      type: "input",
+      name: "q1",
+      message: "message",
+      default: "bar"
+    };
+
+    var ui = this.prompt(prompt);
+    ui.then(function( answers ) {
+      expect(answers.q1).to.equal("bar");
+      done();
+    });
+
+    ui.rl.emit("line");
+  });
+
   it("should expose the Reactive interface", function(done) {
     var prompts = [{
       type: "input",
@@ -306,7 +321,7 @@ describe("inquirer.prompt", function() {
       }, 30 );
     });
 
-    var ui = this.prompt( prompts, function( answers ) {
+    var ui = this.prompt( prompts, function( err, answers ) {
       expect(answers.q1).to.be.true;
       expect(answers.q2).to.be.false;
       done();
@@ -331,7 +346,7 @@ describe("inquirer.prompt", function() {
         }
       }];
 
-      var ui = this.prompt( prompts, function( answers ) {
+      var ui = this.prompt( prompts, function( err, answers ) {
         done();
       });
 
@@ -355,7 +370,7 @@ describe("inquirer.prompt", function() {
         }
       }];
 
-      var ui = this.prompt( prompts, function( answers ) {
+      var ui = this.prompt( prompts, function( err, answers ) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.equal("bar-var");
         done();
@@ -378,7 +393,7 @@ describe("inquirer.prompt", function() {
         when: true
       }];
 
-      var ui = this.prompt( prompts, function( answers ) {
+      var ui = this.prompt( prompts, function( err, answers ) {
         expect(answers.q2).to.equal("bar-var");
         done();
       });
@@ -408,7 +423,7 @@ describe("inquirer.prompt", function() {
         default: "foo"
       }];
 
-      var ui = this.prompt( prompts, function( answers ) {
+      var ui = this.prompt( prompts, function( err, answers ) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.not.exist;
         expect(answers.q3).to.equal("foo");
@@ -437,7 +452,7 @@ describe("inquirer.prompt", function() {
         default: "foo"
       }];
 
-      var ui = this.prompt( prompts, function( answers ) {
+      var ui = this.prompt( prompts, function( err, answers ) {
         expect(answers.q2).to.not.exist;
         expect(answers.q3).to.equal("foo");
         expect(answers.q1).to.be.true;
@@ -469,7 +484,7 @@ describe("inquirer.prompt", function() {
         }
       }];
 
-      var ui = this.prompt( prompts, function( answers ) {
+      var ui = this.prompt( prompts, function( err, answers ) {
         expect(goesInWhen).to.be.true;
         expect(answers.q2).to.equal("foo-bar");
         done();
@@ -528,7 +543,7 @@ describe("inquirer.prompt", function() {
       message: "message"
     }];
 
-    var ui = prompt( prompts, function( answers ) {
+    var ui = prompt( prompts, function( err, answers ) {
       process.stdout.getWindowSize = original;
       expect(answers.q1).to.equal(true);
       done();
