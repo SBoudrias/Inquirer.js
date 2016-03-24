@@ -52,8 +52,8 @@ var questions = [
     choices: [
       {
         key: "p",
-        name: "Peperonni and chesse",
-        value: "PeperonniChesse"
+        name: "Pepperonni and Chesse",
+        value: "PepperonniChesse"
       },
       {
         key: "a",
@@ -62,8 +62,8 @@ var questions = [
       },
       {
         key: "w",
-        name: "Hawaïan",
-        value: "hawaian"
+        name: "Hawaiian",
+        value: "hawaiian"
       }
     ]
   },
