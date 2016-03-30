@@ -30,22 +30,16 @@ describe('`rawlist` prompt', function () {
     this.rl.emit('line', '2');
   });
 
-  it('should not allow invalid index', function (done) {
+  it('should not allow invalid index', function () {
     var self = this;
-    var callCount = 0;
-
-    this.rawlist.run(function () {
-      callCount++;
-    });
+    var promise = this.rawlist.run();
 
     this.rl.emit('line', 'blah');
     setTimeout(function () {
       self.rl.emit('line', '1');
-      setTimeout(function () {
-        expect(callCount).to.equal(1);
-        done();
-      }, 10);
     }, 10);
+
+    return promise;
   });
 
   it('should require a choices array', function () {
