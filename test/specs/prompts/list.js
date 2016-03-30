@@ -67,34 +67,28 @@ describe('`list` prompt', function () {
     this.rl.emit('line');
   });
 
-  it('should loop the choices when going out of boundaries', function (done) {
-    var i = 0;
-    function complete() {
-      i++;
-      if (i === 2) {
-        done();
-      }
-    }
-
-    this.list.run().then(function (answer) {
+  it('should loop the choices when going out of boundaries', function () {
+    var promise1 = this.list.run().then(function (answer) {
       expect(answer).to.equal('bar');
-      complete();
     });
 
     this.rl.input.emit('keypress', '', {name: 'up'});
     this.rl.input.emit('keypress', '', {name: 'up'});
     this.rl.emit('line');
 
-    this.list.selected = 0; // reset
-    this.list.run().then(function (answer) {
-      expect(answer).to.equal('foo');
-      complete();
-    });
+    return promise1
+      .then(function () {
+        this.list.selected = 0; // reset
+        var promise2 = this.list.run().then(function (answer) {
+          expect(answer).to.equal('foo');
+        });
 
-    this.rl.input.emit('keypress', '', {name: 'down'});
-    this.rl.input.emit('keypress', '', {name: 'down'});
-    this.rl.input.emit('keypress', '', {name: 'down'});
-    this.rl.emit('line');
+        this.rl.input.emit('keypress', '', {name: 'down'});
+        this.rl.input.emit('keypress', '', {name: 'down'});
+        this.rl.input.emit('keypress', '', {name: 'down'});
+        this.rl.emit('line');
+        return promise2;
+      }.bind(this));
   });
 
   it('should require a choices array', function () {
