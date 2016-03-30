@@ -90,35 +90,28 @@ describe('`expand` prompt', function () {
     this.rl.emit('line', 'c');
   });
 
-  it('should not allow invalid command', function (done) {
+  it('should not allow invalid command', function () {
     var self = this;
-    var callCount = 0;
-
-    this.expand.run(function () {
-      callCount++;
-    });
+    var promise = this.expand.run();
 
     this.rl.emit('line', 'blah');
     setTimeout(function () {
       self.rl.emit('line', 'a');
-      setTimeout(function () {
-        expect(callCount).to.equal(1);
-        done();
-      }, 10);
     }, 10);
+    return promise;
   });
 
   it('should display and capitalize the default choice `key`', function () {
     this.fixture.default = 1;
     this.expand = new Expand(this.fixture, this.rl);
 
-    this.expand.run(function () {});
+    this.expand.run();
     expect(this.rl.output.__raw__).to.contain('(aBch)');
   });
 
   it('should \'autocomplete\' the user input', function (done) {
     this.expand = new Expand(this.fixture, this.rl);
-    this.expand.run(function () {});
+    this.expand.run();
     this.rl.line = 'a';
     this.rl.emit('keypress');
     setTimeout(function () {

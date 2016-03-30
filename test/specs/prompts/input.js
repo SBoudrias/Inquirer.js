@@ -22,17 +22,17 @@ describe('`input` prompt', function () {
     this.rl.emit('line', 'Inquirer');
   });
 
-  it('should output filtered value', function (done) {
+  it('should output filtered value', function () {
     this.fixture.filter = function () {
       return 'pass';
     };
 
     var prompt = new Input(this.fixture, this.rl);
-    prompt.run(function () {
-      expect(this.rl.output.__raw__).to.contain('pass');
-      done();
-    }.bind(this));
-
+    var promise = prompt.run();
     this.rl.emit('line', '');
+
+    return promise.then(function () {
+      expect(this.rl.output.__raw__).to.contain('pass');
+    }.bind(this));
   });
 });
