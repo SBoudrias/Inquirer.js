@@ -52,7 +52,7 @@ describe('`checkbox` prompt', function () {
     this.rl.emit('line');
   });
 
-  it('provide an array of checked choice to validate', function (done) {
+  it('provide an array of checked choice to validate', function () {
     this.fixture.choices = [
       {name: '1', checked: true},
       {name: '2', checked: 1},
@@ -63,10 +63,9 @@ describe('`checkbox` prompt', function () {
       return true;
     };
     this.checkbox = new Checkbox(this.fixture, this.rl);
-    this.checkbox.run(function () {
-      done();
-    });
+    var promise = this.checkbox.run();
     this.rl.emit('line');
+    return promise;
   });
 
   it('should check defaults choices if given as array of values', function (done) {
@@ -168,13 +167,13 @@ describe('`checkbox` prompt', function () {
       this.checkbox = new Checkbox(this.fixture, this.rl);
     });
 
-    it('output disabled choices and custom messages', function (done) {
-      this.checkbox.run(function () {
+    it('output disabled choices and custom messages', function () {
+      var promise = this.checkbox.run();
+      this.rl.emit('line');
+      return promise.then(function () {
         expect(this.rl.output.__raw__).to.contain('- dis1 (Disabled)');
         expect(this.rl.output.__raw__).to.contain('- dis2 (uh oh)');
-        done();
       }.bind(this));
-      this.rl.emit('line');
     });
 
     it('skip disabled choices', function (done) {
@@ -203,7 +202,7 @@ describe('`checkbox` prompt', function () {
       this.rl.emit('line');
     });
 
-    it('disabled can be a function', function (done) {
+    it('disabled can be a function', function () {
       this.fixture.choices = [
         {
           name: 'dis1',
@@ -214,11 +213,12 @@ describe('`checkbox` prompt', function () {
         }
       ];
       this.checkbox = new Checkbox(this.fixture, this.rl, {foo: 'foo'});
-      this.checkbox.run(function () {
-        expect(this.rl.output.__raw__).to.contain('- dis1 (Disabled)');
-        done();
-      }.bind(this));
+      var promise = this.checkbox.run();
       this.rl.emit('line');
+
+      promise.then(function () {
+        expect(this.rl.output.__raw__).to.contain('- dis1 (Disabled)');
+      }.bind(this));
     });
   });
 });
