@@ -23,7 +23,6 @@
   "license": "MIT",
   "dependencies": {
     "ansi-escapes": "^1.1.0",
-    "ansi-regex": "^2.0.0",
     "chalk": "^1.0.0",
     "cli-cursor": "^1.0.1",
     "cli-width": "^2.0.0",
