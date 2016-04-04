@@ -50,14 +50,29 @@ node examples/checkbox.js
 
 ### Methods
 
-`inquirer.prompt(questions, callback) -> promise`
+#### `inquirer.prompt(questions) -> promise`
 
 Launch the prompt interface (inquiry session)
 
 - **questions** (Array) containing [Question Object](#question) (using the [reactive interface](#reactive-interface), you can also pass a `Rx.Observable` instance)
-- **callback** (Function(Error, Object)) taking an Error parameter and an [Answers Object](#answers) as arguments
 - returns a **Promise**
 
+#### `inquirer.registerPrompt(name, prompt)`
+
+Register prompt plugins under `name`.
+
+- **name** (string) name of the this new prompt. (used for question `type`)
+- **prompt** (object) the prompt object itself (the plugin)
+
+#### `inquirer.createPromptModule() -> prompt function`
+
+Create a self contained inquirer module. If don't want to affect other libraries that also rely on inquirer when you overwrite or add new prompt types.
+
+```js
+var prompt = inquirer.createPromptModule();
+
+prompt(questions).then(/* ... */);
+```
 
 ### Objects
 
@@ -79,10 +94,12 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
 
 ``` javascript
 {
+  /* Preferred way: with promise */
   filter: function () {
     return new Promise(/* etc... */);
   },
 
+  /* Legacy way: with this.async */
   validate: function (input) {
     // Declare function as asynchronous, and save the done callback
     var done = this.async();
@@ -171,7 +188,7 @@ See `examples/expand.js` for a running example.
 
 Take `type`, `name`, `message`, `choices`[, `filter`, `validate`, `default`] properties. `default` is expected to be an Array of the checked choices value.
 
-Choices marked as `{ checked: true }` will be checked by default.
+Choices marked as `{checked: true}` will be checked by default.
 
 Choices whose property `disabled` is truthy will be unselectable. If `disabled` is a string, then the string will be outputted next to the disabled choice, otherwise it'll default to `"Disabled"`. The `disabled` property can also be a synchronous function receiving the current answers as argument and returning a boolean or a string.
 
@@ -224,11 +241,6 @@ ui.log.write('Almost over, standby!');
 ui.updateBottomBar('new bottom bar content');
 ```
 
-#### Prompt - `inquirer.ui.Prompt`
-
-This is UI layout used to run prompt. This layout is returned by `inquirer.prompt` and you should probably always use `inquirer.prompt` to interface with this UI.
-
-
 ## Reactive interface
 
 Internally, Inquirer uses the [JS reactive extension](https://github.com/Reactive-Extensions/RxJS) to handle events and async flows.
@@ -236,21 +248,21 @@ Internally, Inquirer uses the [JS reactive extension](https://github.com/Reactiv
 This mean you can take advantage of this feature to provide more advanced flows. For example, you can dynamically add questions to be asked:
 
 ```js
-var prompts = Rx.Observable.create(function (obs) {
-  obs.onNext({ /* question... */ });
-  setTimeout(function () {
-    obs.onNext({ /* question... */ });
-    obs.onCompleted();
-  });
-});
-
+var prompts = new Rx.Subject();
 inquirer.prompt(prompts);
+
+// At some point in the future, push new questions
+prompts.onNext({ /* question... */ });
+prompts.onNext({ /* question... */ });
+
+// When you're done
+prompts.onCompleted();
 ```
 
-And using the `ui.process` property, you have access to more fine grained callbacks:
+And using the return value `process` property, you can access more fine grained callbacks:
 
 ```js
-inquirer.prompt(prompts).ui.process.subscribe(
+inquirer.prompt(prompts).process.subscribe(
   onEachAnswer,
   onError,
   onComplete
