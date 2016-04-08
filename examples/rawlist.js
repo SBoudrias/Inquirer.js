@@ -15,7 +15,7 @@ inquirer.prompt([
       'Make a reservation',
       new inquirer.Separator(),
       'Ask opening hours',
-      'Talk to the receptionnist'
+      'Talk to the receptionist'
     ]
   },
   {

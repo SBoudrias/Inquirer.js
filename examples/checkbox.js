@@ -13,7 +13,7 @@ inquirer.prompt([
     choices: [
       new inquirer.Separator(' = The Meats = '),
       {
-        name: 'Peperonni'
+        name: 'Pepperoni'
       },
       {
         name: 'Ham'
