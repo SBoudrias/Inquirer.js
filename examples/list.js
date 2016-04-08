@@ -14,18 +14,18 @@ inquirer.prompt([
       'Order a pizza',
       'Make a reservation',
       new inquirer.Separator(),
-      'Ask opening hours',
+      'Ask for opening hours',
       {
         name: 'Contact support',
         disabled: 'Unavailable at this time'
       },
-      'Talk to the receptionnist'
+      'Talk to the receptionist'
     ]
   },
   {
     type: 'list',
     name: 'size',
-    message: 'What size do you need',
+    message: 'What size do you need?',
     choices: ['Jumbo', 'Large', 'Standard', 'Medium', 'Small', 'Micro'],
     filter: function (val) {
       return val.toLowerCase();

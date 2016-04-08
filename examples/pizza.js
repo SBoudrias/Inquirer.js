@@ -12,13 +12,13 @@ var questions = [
   {
     type: 'confirm',
     name: 'toBeDelivered',
-    message: 'Is it for a delivery',
+    message: 'Is this for delivery?',
     default: false
   },
   {
     type: 'input',
     name: 'phone',
-    message: 'What\'s your phone number',
+    message: 'What\'s your phone number?',
     validate: function (value) {
       var pass = value.match(/^([01]{1})?[\-\.\s]?\(?(\d{3})\)?[\-\.\s]?(\d{3})[\-\.\s]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?){1}(?:\d+)?)?$/i);
       if (pass) {
@@ -31,7 +31,7 @@ var questions = [
   {
     type: 'list',
     name: 'size',
-    message: 'What size do you need',
+    message: 'What size do you need?',
     choices: ['Large', 'Medium', 'Small'],
     filter: function (val) {
       return val.toLowerCase();
@@ -40,7 +40,7 @@ var questions = [
   {
     type: 'input',
     name: 'quantity',
-    message: 'How many do you need',
+    message: 'How many do you need?',
     validate: function (value) {
       var valid = !isNaN(parseFloat(value));
       return valid || 'Please enter a number';
@@ -50,12 +50,12 @@ var questions = [
   {
     type: 'expand',
     name: 'toppings',
-    message: 'What about the toping',
+    message: 'What about the toppings?',
     choices: [
       {
         key: 'p',
-        name: 'Peperonni and chesse',
-        value: 'PeperonniChesse'
+        name: 'Pepperoni and cheese',
+        value: 'PepperoniCheese'
       },
       {
         key: 'a',
@@ -64,8 +64,8 @@ var questions = [
       },
       {
         key: 'w',
-        name: 'Hawaïan',
-        value: 'hawaian'
+        name: 'Hawaiian',
+        value: 'hawaiian'
       }
     ]
   },
@@ -78,13 +78,13 @@ var questions = [
   {
     type: 'input',
     name: 'comments',
-    message: 'Any comments on your purchase experience',
+    message: 'Any comments on your purchase experience?',
     default: 'Nope, all good!'
   },
   {
     type: 'list',
     name: 'prize',
-    message: 'For leaving a comments, you get a freebie',
+    message: 'For leaving a comment, you get a freebie',
     choices: ['cake', 'fries'],
     when: function (answers) {
       return answers.comments !== 'Nope, all good!';
