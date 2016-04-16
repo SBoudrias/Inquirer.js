@@ -40,7 +40,7 @@
     "chai": "^3.0.0",
     "cmdify": "^0.0.4",
     "eslint": "^2.1.0",
-    "eslint-config-xo-space": "^0.11.0",
+    "eslint-config-xo-space": "^0.12.0",
     "gulp": "^3.9.0",
     "gulp-coveralls": "^0.1.0",
     "gulp-eslint": "^2.0.0",
