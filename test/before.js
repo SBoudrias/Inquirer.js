@@ -3,7 +3,7 @@ var ReadlineStub = require('./helpers/readline');
 
 mockery.enable();
 mockery.warnOnUnregistered(false);
-mockery.registerMock('readline2', {
+mockery.registerMock('readline', {
   createInterface: function () {
     return new ReadlineStub();
   }
