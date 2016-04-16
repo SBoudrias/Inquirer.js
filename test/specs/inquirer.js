@@ -101,6 +101,11 @@ describe('inquirer.prompt', function () {
       done();
     });
 
+    var msgFunc = function (answers) {
+      expect(answers.name1).to.equal('bar');
+      return stubMessage;
+    };
+
     var prompts = [{
       type: 'input',
       name: 'name1',
@@ -109,14 +114,16 @@ describe('inquirer.prompt', function () {
     }, {
       type: 'stub',
       name: 'name',
-      message: function (answers) {
-        expect(answers.name1).to.equal('bar');
-        return stubMessage;
-      }
+      message: msgFunc
     }];
 
-    var promise = this.prompt(prompts, function () {});
+    var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
+    promise.ui.rl.emit('line');
+    return promise.then(function () {
+      // Ensure we're not overwriting original prompt values.
+      expect(prompts[1].message).to.equal(msgFunc);
+    });
   });
 
   it('should run asynchronous `message`', function (done) {
