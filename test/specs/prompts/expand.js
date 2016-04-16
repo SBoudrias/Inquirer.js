@@ -30,7 +30,7 @@ describe('`expand` prompt', function () {
       return new Expand(this.fixture, this.rl);
     }.bind(this);
 
-    expect(mkPrompt).to.throw(/Duplicate\ key\ error/);
+    expect(mkPrompt).to.throw(/Duplicate key error/);
   });
 
   it('should throw if `key` is `h`', function () {
@@ -41,7 +41,7 @@ describe('`expand` prompt', function () {
       return new Expand(this.fixture, this.rl);
     }.bind(this);
 
-    expect(mkPrompt).to.throw(/Reserved\ key\ error/);
+    expect(mkPrompt).to.throw(/Reserved key error/);
   });
 
   it('should take the first choice by default', function (done) {
@@ -81,8 +81,8 @@ describe('`expand` prompt', function () {
 
   it('should have help option', function (done) {
     this.expand.run().then(function (answer) {
-      expect(this.rl.output.__raw__).to.match(/a\)\ acab/);
-      expect(this.rl.output.__raw__).to.match(/b\)\ bar/);
+      expect(this.rl.output.__raw__).to.match(/a\) acab/);
+      expect(this.rl.output.__raw__).to.match(/b\) bar/);
       expect(answer).to.equal('chile');
       done();
     }.bind(this));
