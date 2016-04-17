@@ -50,7 +50,6 @@ var prompts = [
     name: 'expand',
     apis: [
       'requiredValues',
-      'filter',
       'message'
     ]
   },

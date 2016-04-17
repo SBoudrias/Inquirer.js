@@ -172,7 +172,7 @@ default must the choice `index` in the array)
 
 #### Expand - `{type: 'expand'}`
 
-Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
+Take `type`, `name`, `message`, `choices`[, `default`] properties. (Note that
 default must be the choice `index` in the array)
 
 Note that the `choices` object will take an extra parameter called `key` for the `expand` prompt. This parameter must be a single (lowercased) character. The `h` option is added by the prompt and shouldn't be defined by the user.

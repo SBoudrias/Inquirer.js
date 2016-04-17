@@ -52,6 +52,21 @@ describe('`expand` prompt', function () {
     this.rl.emit('line');
   });
 
+  it('pass the value as answer, and display short on the prompt', function () {
+    this.fixture.choices = [
+      {key: 'a', name: 'A Name', value: 'a value', short: 'ShortA'},
+      {key: 'b', name: 'B Name', value: 'b value', short: 'ShortB'}
+    ];
+    var prompt = new Expand(this.fixture, this.rl);
+    var promise = prompt.run();
+    this.rl.emit('line', 'b');
+
+    return promise.then(function (answer) {
+      expect(answer).to.equal('b value');
+      expect(this.rl.output.__raw__).to.match(/ShortB/);
+    }.bind(this));
+  });
+
   it('should use the `default` argument value', function (done) {
     this.fixture.default = 1;
     this.expand = new Expand(this.fixture, this.rl);
