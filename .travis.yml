@@ -5,4 +5,4 @@ node_js:
   - v0.12
   - v4
   - v5
-  - stable
+  - v6
