@@ -35,7 +35,8 @@ module.exports = {
       {key: 'a', name: 'acab'},
       new inquirer.Separator(),
       {key: 'b', name: 'bar'},
-      {key: 'c', name: 'chile'}
+      {key: 'c', name: 'chile'},
+      {key: 'd', name: 'd', value: false}
     ]
   },
 

@@ -52,6 +52,15 @@ describe('`expand` prompt', function () {
     this.rl.emit('line');
   });
 
+  it('should allow false as a value', function () {
+    var promise = this.expand.run();
+
+    this.rl.emit('line', 'd');
+    return promise.then(function (answer) {
+      expect(answer).to.equal(false);
+    });
+  });
+
   it('pass the value as answer, and display short on the prompt', function () {
     this.fixture.choices = [
       {key: 'a', name: 'A Name', value: 'a value', short: 'ShortA'},
@@ -121,7 +130,7 @@ describe('`expand` prompt', function () {
     this.expand = new Expand(this.fixture, this.rl);
 
     this.expand.run();
-    expect(this.rl.output.__raw__).to.contain('(aBch)');
+    expect(this.rl.output.__raw__).to.contain('(aBcdh)');
   });
 
   it('should \'autocomplete\' the user input', function (done) {
