@@ -121,7 +121,7 @@ describe('`expand` prompt', function () {
     this.expand = new Expand(this.fixture, this.rl);
 
     this.expand.run();
-    expect(this.rl.output.__raw__).to.contain('(aBch)');
+    expect(this.rl.output.__raw__).to.contain('(aBcdeh)');
   });
 
   it('should \'autocomplete\' the user input', function (done) {
