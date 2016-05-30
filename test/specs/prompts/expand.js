@@ -21,17 +21,6 @@ describe('`expand` prompt', function () {
     expect(mkPrompt).to.throw(/Format error/);
   });
 
-  it('should throw if `value` has a wrong type', function () {
-    var mkPrompt = function () {
-      this.fixture.choices = [
-          {key: 'a', name: 'foo', value: null}
-      ];
-      return new Expand(this.fixture, this.rl);
-    }.bind(this);
-
-    expect(mkPrompt).to.throw(/Type error/);
-  });
-
   it('should throw if `key` is duplicate', function () {
     var mkPrompt = function () {
       this.fixture.choices = [
