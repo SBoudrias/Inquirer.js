@@ -2,105 +2,104 @@
  * `confirm` type prompt
  */
 
-var _ = require('lodash');
-var util = require('util');
-var chalk = require('chalk');
-var Base = require('./base');
-var observe = require('../utils/events');
+import {BasePrompt} from './base';
+import {observe} from '../utils/events';
 
-/**
- * Module exports
- */
 
-module.exports = Prompt;
+import _ = require('lodash');
+import chalk = require('chalk');
 
 /**
  * Constructor
  */
 
-function Prompt() {
-  Base.apply(this, arguments);
+export class ConfirmPrompt extends BasePrompt {
+  private done;
+  constructor(prompts, rl?, answers?) {
+    super(prompts, rl, answers);
 
-  var rawDefault = true;
+    var rawDefault = true;
 
-  _.extend(this.opt, {
-    filter: function (input) {
-      var value = rawDefault;
-      if (input != null && input !== '') {
-        value = /^y(es)?/i.test(input);
+    //noinspection TypeScriptValidateJSTypes
+    _.extend(this.opt, {
+      filter: function (input) {
+        var value = rawDefault;
+        if (input != null && input !== '') {
+          value = /^y(es)?/i.test(input);
+        }
+        return value;
       }
-      return value;
+    });
+
+    if (_.isBoolean(this.opt.default)) {
+      rawDefault = this.opt.default;
     }
-  });
 
-  if (_.isBoolean(this.opt.default)) {
-    rawDefault = this.opt.default;
+    this.opt.default = rawDefault ? 'Y/n' : 'y/N';
+
+    return this;
   }
 
-  this.opt.default = rawDefault ? 'Y/n' : 'y/N';
+  /**
+   * Start the Inquiry session
+   * @param  {Function} cb   Callback when prompt is done
+   * @return {this}
+   */
 
-  return this;
+  _run(cb) {
+    this.done = cb;
+
+    // Once user confirm (enter key)
+    var events = observe(this.rl);
+    events.keypress.takeUntil(events.line).forEach(this.onKeypress.bind(this));
+
+    events.line.take(1).forEach(this.onEnd.bind(this));
+
+    // Init
+    this.render();
+
+    return this;
+  };
+
+  /**
+   * Render the prompt to screen
+   * @return {BottomBar} self
+   */
+
+  render(answer?) {
+    var message = this.getQuestion();
+
+    if (typeof answer === 'boolean') {
+      //noinspection TypeScriptValidateTypes
+      message += chalk.cyan(answer ? 'Yes' : 'No');
+    } else {
+      message += this.rl.line;
+    }
+
+    this.screen.render(message);
+
+    return this;
+  };
+
+  /**
+   * When user press `enter` key
+   */
+
+  onEnd(input) {
+    this.status = 'answered';
+
+    var output = this.opt.filter(input);
+    this.render(output);
+
+    this.screen.done();
+    this.done(output);
+  };
+
+  /**
+   * When user press a key
+   */
+
+  onKeypress() {
+    this.render();
+  };
 }
-util.inherits(Prompt, Base);
-
-/**
- * Start the Inquiry session
- * @param  {Function} cb   Callback when prompt is done
- * @return {this}
- */
-
-Prompt.prototype._run = function (cb) {
-  this.done = cb;
-
-  // Once user confirm (enter key)
-  var events = observe(this.rl);
-  events.keypress.takeUntil(events.line).forEach(this.onKeypress.bind(this));
-
-  events.line.take(1).forEach(this.onEnd.bind(this));
-
-  // Init
-  this.render();
-
-  return this;
-};
-
-/**
- * Render the prompt to screen
- * @return {Prompt} self
- */
-
-Prompt.prototype.render = function (answer) {
-  var message = this.getQuestion();
-
-  if (typeof answer === 'boolean') {
-    message += chalk.cyan(answer ? 'Yes' : 'No');
-  } else {
-    message += this.rl.line;
-  }
-
-  this.screen.render(message);
-
-  return this;
-};
-
-/**
- * When user press `enter` key
- */
-
-Prompt.prototype.onEnd = function (input) {
-  this.status = 'answered';
-
-  var output = this.opt.filter(input);
-  this.render(output);
-
-  this.screen.done();
-  this.done(output);
-};
-
-/**
- * When user press a key
- */
-
-Prompt.prototype.onKeypress = function () {
-  this.render();
-};

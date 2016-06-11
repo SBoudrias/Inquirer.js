@@ -2,8 +2,7 @@
  * List prompt example
  */
 
-'use strict';
-var inquirer = require('..');
+import inquirer = require('..');
 
 inquirer.prompt([
   {

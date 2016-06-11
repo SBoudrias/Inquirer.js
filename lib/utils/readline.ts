@@ -1,13 +1,11 @@
-'use strict';
-var ansiEscapes = require('ansi-escapes');
-
+import ansiEscapes = require('ansi-escapes');
 /**
  * Move cursor left by `x`
  * @param  {Readline} rl - Readline instance
  * @param  {Number}   x  - How far to go left (default to 1)
  */
 
-exports.left = function (rl, x) {
+export var left = (rl, x) => {
   rl.output.write(ansiEscapes.cursorBackward(x));
 };
 
@@ -17,7 +15,7 @@ exports.left = function (rl, x) {
  * @param  {Number}   x  - How far to go left (default to 1)
  */
 
-exports.right = function (rl, x) {
+export var right = (rl, x) => {
   rl.output.write(ansiEscapes.cursorForward(x));
 };
 
@@ -27,7 +25,7 @@ exports.right = function (rl, x) {
  * @param  {Number}   x  - How far to go up (default to 1)
  */
 
-exports.up = function (rl, x) {
+export var up = (rl, x) => {
   rl.output.write(ansiEscapes.cursorUp(x));
 };
 
@@ -37,7 +35,7 @@ exports.up = function (rl, x) {
  * @param  {Number}   x  - How far to go down (default to 1)
  */
 
-exports.down = function (rl, x) {
+export var down = (rl, x) => {
   rl.output.write(ansiEscapes.cursorDown(x));
 };
 
@@ -46,6 +44,6 @@ exports.down = function (rl, x) {
  * @param  {Readline} rl  - Readline instance
  * @param  {Number}   len - number of line to delete
  */
-exports.clearLine = function (rl, len) {
+export var clearLine = (rl, len) => {
   rl.output.write(ansiEscapes.eraseLines(len));
 };

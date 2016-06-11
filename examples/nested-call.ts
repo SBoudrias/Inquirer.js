@@ -2,8 +2,7 @@
  * Nested Inquirer call
  */
 
-'use strict';
-var inquirer = require('..');
+import inquirer = require('..');
 
 inquirer.prompt({
   type: 'list',

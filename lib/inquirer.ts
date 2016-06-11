@@ -1,65 +1,72 @@
-/**
- * Inquirer.js
- * A collection of common interactive command line user interfaces.
- */
-
-var inquirer = module.exports;
+export {Separator} from './objects/separator';
+import {BottomBar} from './ui/bottom-bar';
+import {PromptUI} from './ui/prompt';
+import {ListPrompt} from './prompts/list';
+import {InputPrompt} from './prompts/input';
+import {ConfirmPrompt} from './prompts/confirm';
+import {RawListPrompt} from './prompts/rawlist';
+import {ExpandPrompt} from './prompts/expand';
+import {CheckboxPrompt} from './prompts/checkbox';
+import {PasswordPrompt} from './prompts/password';
 
 /**
  * Client interfaces
  */
+export var prompts = {};
 
-inquirer.prompts = {};
-
-inquirer.Separator = require('./objects/separator');
-
-inquirer.ui = {
-  BottomBar: require('./ui/bottom-bar'),
-  Prompt: require('./ui/prompt')
+export var ui = {
+  BottomBar: BottomBar,
+  Prompt: PromptUI
 };
 
 /**
  * Create a new self-contained prompt module.
  */
-inquirer.createPromptModule = function (opt) {
-  var promptModule = function (questions) {
-    var ui = new inquirer.ui.Prompt(promptModule.prompts, opt);
+export var createPromptModule = function () {
+  var promptModule = function (questions, opt?) {
+    //noinspection TypeScriptUnresolvedVariable
+    var ui = new PromptUI(promptModule.prompts, opt);
     var promise = ui.run(questions);
 
-    // Monkey patch the UI on the promise object so
+    // Monkey patch the BaseUI on the promise object so
     // that it remains publicly accessible.
     promise.ui = ui;
 
     return promise;
   };
+  //noinspection TypeScriptUnresolvedVariable
   promptModule.prompts = {};
 
+  //noinspection TypeScriptUnresolvedVariable
   /**
    * Register a prompt type
-   * @param {String} name     Prompt type name
-   * @param {Function} prompt Prompt constructor
+   * @param {String} name     BottomBar type name
+   * @param {Function} prompt BottomBar constructor
    * @return {inquirer}
    */
 
   promptModule.registerPrompt = function (name, prompt) {
+    //noinspection TypeScriptUnresolvedVariable
     promptModule.prompts[name] = prompt;
     return this;
   };
 
+  //noinspection TypeScriptUnresolvedVariable
   /**
    * Register the defaults provider prompts
    */
 
   promptModule.restoreDefaultPrompts = function () {
-    this.registerPrompt('list', require('./prompts/list'));
-    this.registerPrompt('input', require('./prompts/input'));
-    this.registerPrompt('confirm', require('./prompts/confirm'));
-    this.registerPrompt('rawlist', require('./prompts/rawlist'));
-    this.registerPrompt('expand', require('./prompts/expand'));
-    this.registerPrompt('checkbox', require('./prompts/checkbox'));
-    this.registerPrompt('password', require('./prompts/password'));
+    this.registerPrompt('list', ListPrompt);
+    this.registerPrompt('input', InputPrompt);
+    this.registerPrompt('confirm', ConfirmPrompt);
+    this.registerPrompt('rawlist', RawListPrompt);
+    this.registerPrompt('expand', ExpandPrompt);
+    this.registerPrompt('checkbox', CheckboxPrompt);
+    this.registerPrompt('password', PasswordPrompt);
   };
 
+  //noinspection TypeScriptUnresolvedFunction
   promptModule.restoreDefaultPrompts();
 
   return promptModule;
@@ -69,15 +76,17 @@ inquirer.createPromptModule = function (opt) {
  * Public CLI helper interface
  * @param  {Array|Object|rx.Observable} questions - Questions settings array
  * @param  {Function} cb - Callback being passed the user answers
- * @return {inquirer.ui.Prompt}
+ * @return {ui.Prompt}
  */
 
-inquirer.prompt = inquirer.createPromptModule();
+export var prompt = createPromptModule();
 
 // Expose helper functions on the top level for easiest usage by common users
-inquirer.registerPrompt = function (name, prompt) {
-  inquirer.prompt.registerPrompt(name, prompt);
+export var registerPrompt = (name, _prompt) => {
+  //noinspection TypeScriptUnresolvedFunction
+  prompt.registerPrompt(name, _prompt);
 };
-inquirer.restoreDefaultPrompts = function () {
-  inquirer.prompt.restoreDefaultPrompts();
+export var restoreDefaultPrompts = () => {
+  //noinspection TypeScriptUnresolvedFunction
+  prompt.restoreDefaultPrompts();
 };

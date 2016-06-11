@@ -1,243 +1,245 @@
 /**
  * `rawlist` type prompt
  */
-
-var _ = require('lodash');
-var util = require('util');
-var chalk = require('chalk');
-var Base = require('./base');
-var Separator = require('../objects/separator');
-var observe = require('../utils/events');
-var Paginator = require('../utils/paginator');
-
-/**
- * Module exports
- */
-
-module.exports = Prompt;
+import {BasePrompt} from './base';
+import {observe} from '../utils/events';
+import {Separator} from '../objects/separator';
+import {Paginator} from '../utils/paginator';
+import _ = require('lodash');
+import chalk = require('chalk');
 
 /**
  * Constructor
  */
 
-function Prompt() {
-  Base.apply(this, arguments);
+export class ExpandPrompt extends BasePrompt {
+  private paginator;
+  private done;
+  private keypressObs;
+  private answer;
+  private selectedKey;
+  private rawDefault;
+  constructor(question, rl?, answers?) {
+    super(question, rl, answers);
 
-  if (!this.opt.choices) {
-    this.throwParamError('choices');
-  }
-
-  this.validateChoices(this.opt.choices);
-
-  // Add the default `help` (/expand) option
-  this.opt.choices.push({
-    key: 'h',
-    name: 'Help, list all options',
-    value: 'help'
-  });
-
-  this.opt.validate = function (choice) {
-    if (choice == null) {
-      return 'Please enter a valid command';
+    if (!this.opt.choices) {
+      this.throwParamError('choices');
     }
 
-    return choice !== 'help';
-  };
+    this.validateChoices(this.opt.choices);
 
-  // Setup the default string (capitalize the default key)
-  this.opt.default = this.generateChoicesString(this.opt.choices, this.opt.default);
+    // Add the default `help` (/expand) option
+    this.opt.choices.push({
+      key: 'h',
+      name: 'Help, list all options',
+      value: 'help'
+    });
 
-  this.paginator = new Paginator();
-}
-util.inherits(Prompt, Base);
+    this.opt.validate = (choice) => {
+      if (choice == null) {
+        return 'Please enter a valid command';
+      }
 
-/**
- * Start the Inquiry session
- * @param  {Function} cb      Callback when prompt is done
- * @return {this}
- */
+      return choice !== 'help';
+    };
 
-Prompt.prototype._run = function (cb) {
-  this.done = cb;
+    // Setup the default string (capitalize the default key)
+    this.opt.default = this.generateChoicesString(this.opt.choices, this.opt.default);
 
-  // Save user answer and update prompt to show selected option.
-  var events = observe(this.rl);
-  var validation = this.handleSubmitEvents(
-    events.line.map(this.getCurrentValue.bind(this))
-  );
-  validation.success.forEach(this.onSubmit.bind(this));
-  validation.error.forEach(this.onError.bind(this));
-  this.keypressObs = events.keypress.takeUntil(validation.success)
-    .forEach(this.onKeypress.bind(this));
-
-  // Init the prompt
-  this.render();
-
-  return this;
-};
-
-/**
- * Render the prompt to screen
- * @return {Prompt} self
- */
-
-Prompt.prototype.render = function (error, hint) {
-  var message = this.getQuestion();
-  var bottomContent = '';
-
-  if (this.status === 'answered') {
-    message += chalk.cyan(this.answer);
-  } else if (this.status === 'expanded') {
-    var choicesStr = renderChoices(this.opt.choices, this.selectedKey);
-    message += this.paginator.paginate(choicesStr, this.selectedKey, this.opt.pageSize);
-    message += '\n  Answer: ';
+    this.paginator = new Paginator();
   }
 
-  message += this.rl.line;
+  /**
+   * Start the Inquiry session
+   * @param  {Function} cb      Callback when prompt is done
+   * @return {this}
+   */
 
-  if (error) {
-    bottomContent = chalk.red('>> ') + error;
+  _run(cb) {
+    this.done = cb;
+
+    // Save user answer and update prompt to show selected option.
+    var events = observe(this.rl);
+    var validation = this.handleSubmitEvents(
+      events.line.map(this.getCurrentValue.bind(this))
+    );
+    validation.success.forEach(this.onSubmit.bind(this));
+    validation.error.forEach(this.onError.bind(this));
+    this.keypressObs = events.keypress.takeUntil(validation.success)
+      .forEach(this.onKeypress.bind(this));
+
+    // Init the prompt
+    this.render();
+
+    return this;
   }
 
-  if (hint) {
-    bottomContent = chalk.cyan('>> ') + hint;
+  /**
+   * Render the prompt to screen
+   * @return {BottomBar} self
+   */
+
+  render(error?, hint?) {
+    var message = this.getQuestion();
+    var bottomContent = '';
+
+    if (this.status === 'answered') {
+      //noinspection TypeScriptValidateTypes
+      message += chalk.cyan(this.answer);
+    } else if (this.status === 'expanded') {
+      var choicesStr = renderChoices(this.opt.choices, this.selectedKey);
+      message += this.paginator.paginate(choicesStr, this.selectedKey, this.opt.pageSize);
+      message += '\n  Answer: ';
+    }
+
+    message += this.rl.line;
+
+    if (error) {
+      //noinspection TypeScriptValidateTypes
+      bottomContent = chalk.red('>> ') + error;
+    }
+
+    if (hint) {
+      //noinspection TypeScriptValidateTypes
+      bottomContent = chalk.cyan('>> ') + hint;
+    }
+
+    this.screen.render(message, bottomContent);
   }
 
-  this.screen.render(message, bottomContent);
-};
+  getCurrentValue(input) {
+    if (!input) {
+      input = this.rawDefault;
+    }
+    var selected = this.opt.choices.where({key: input.toLowerCase().trim()})[0];
+    if (!selected) {
+      return null;
+    }
 
-Prompt.prototype.getCurrentValue = function (input) {
-  if (!input) {
-    input = this.rawDefault;
+    return selected.value;
   }
-  var selected = this.opt.choices.where({key: input.toLowerCase().trim()})[0];
-  if (!selected) {
-    return null;
+
+  /**
+   * Generate the prompt choices string
+   * @return {String}  Choices string
+   */
+  getChoices() {
+    var output = '';
+
+    this.opt.choices.forEach(function (choice) {
+      output += '\n  ';
+
+      if (choice.type === 'separator') {
+        output += ' ' + choice;
+        return;
+      }
+
+      var choiceStr = choice.key + ') ' + choice.name;
+      if (this.selectedKey === choice.key) {
+        //noinspection TypeScriptValidateTypes
+        choiceStr = chalk.cyan(choiceStr);
+      }
+      output += choiceStr;
+    }.bind(this));
+
+    return output;
   }
 
-  return selected.value;
-};
-
-/**
- * Generate the prompt choices string
- * @return {String}  Choices string
- */
-
-Prompt.prototype.getChoices = function () {
-  var output = '';
-
-  this.opt.choices.forEach(function (choice) {
-    output += '\n  ';
-
-    if (choice.type === 'separator') {
-      output += ' ' + choice;
+  onError(state) {
+    if (state.value === 'help') {
+      this.selectedKey = '';
+      this.status = 'expanded';
+      this.render();
       return;
     }
+    this.render(state.isValid);
+  }
 
-    var choiceStr = choice.key + ') ' + choice.name;
-    if (this.selectedKey === choice.key) {
-      choiceStr = chalk.cyan(choiceStr);
-    }
-    output += choiceStr;
-  }.bind(this));
+  /**
+   * When user press `enter` key
+   */
 
-  return output;
-};
+  onSubmit(state) {
+    this.status = 'answered';
+    var choice = this.opt.choices.where({value: state.value})[0];
+    this.answer = choice.short || choice.name;
 
-Prompt.prototype.onError = function (state) {
-  if (state.value === 'help') {
-    this.selectedKey = '';
-    this.status = 'expanded';
+    // Re-render prompt
     this.render();
-    return;
-  }
-  this.render(state.isValid);
-};
+    this.screen.done();
+    this.done(state.value);
+  };
 
-/**
- * When user press `enter` key
- */
+  /**
+   * When user press a key
+   */
 
-Prompt.prototype.onSubmit = function (state) {
-  this.status = 'answered';
-  var choice = this.opt.choices.where({value: state.value})[0];
-  this.answer = choice.short || choice.name;
-
-  // Re-render prompt
-  this.render();
-  this.screen.done();
-  this.done(state.value);
-};
-
-/**
- * When user press a key
- */
-
-Prompt.prototype.onKeypress = function () {
-  this.selectedKey = this.rl.line.toLowerCase();
-  var selected = this.opt.choices.where({key: this.selectedKey})[0];
-  if (this.status === 'expanded') {
-    this.render();
-  } else {
-    this.render(null, selected ? selected.name : null);
-  }
-};
-
-/**
- * Validate the choices
- * @param {Array} choices
- */
-
-Prompt.prototype.validateChoices = function (choices) {
-  var formatError;
-  var errors = [];
-  var keymap = {};
-  choices.filter(Separator.exclude).forEach(function (choice) {
-    if (!choice.key || choice.key.length !== 1) {
-      formatError = true;
+  onKeypress() {
+    this.selectedKey = this.rl.line.toLowerCase();
+    var selected = this.opt.choices.where({key: this.selectedKey})[0];
+    if (this.status === 'expanded') {
+      this.render();
+    } else {
+      this.render(null, selected ? selected.name : null);
     }
-    if (keymap[choice.key]) {
-      errors.push(choice.key);
-    }
-    keymap[choice.key] = true;
-    choice.key = String(choice.key).toLowerCase();
-  });
+  }
 
-  if (formatError) {
-    throw new Error('Format error: `key` param must be a single letter and is required.');
-  }
-  if (keymap.h) {
-    throw new Error('Reserved key error: `key` param cannot be `h` - this value is reserved.');
-  }
-  if (errors.length) {
-    throw new Error('Duplicate key error: `key` param must be unique. Duplicates: ' +
+  /**
+   * Validate the choices
+   * @param {Array} choices
+   */
+
+  validateChoices(choices) {
+    var formatError;
+    var errors = [];
+    var keymap = {};
+    choices.filter(Separator.exclude).forEach(function (choice) {
+      if (!choice.key || choice.key.length !== 1) {
+        formatError = true;
+      }
+      if (keymap[choice.key]) {
+        errors.push(choice.key);
+      }
+      keymap[choice.key] = true;
+      choice.key = String(choice.key).toLowerCase();
+    });
+
+    if (formatError) {
+      throw new Error('Format error: `key` param must be a single letter and is required.');
+    }
+    //noinspection TypeScriptUnresolvedVariable
+    if (keymap.h) {
+      throw new Error('Reserved key error: `key` param cannot be `h` - this value is reserved.');
+    }
+    if (errors.length) {
+      throw new Error('Duplicate key error: `key` param must be unique. Duplicates: ' +
         _.uniq(errors).join(', '));
+    }
   }
-};
 
-/**
- * Generate a string out of the choices keys
- * @param  {Array}  choices
- * @param  {Number} defaultIndex - the choice index to capitalize
- * @return {String} The rendered choices key string
- */
-Prompt.prototype.generateChoicesString = function (choices, defaultIndex) {
-  var defIndex = 0;
-  if (_.isNumber(defaultIndex) && this.opt.choices.getChoice(defaultIndex)) {
-    defIndex = defaultIndex;
+  /**
+   * Generate a string out of the choices keys
+   * @param  {Array}  choices
+   * @param  {Number} defaultIndex - the choice index to capitalize
+   * @return {String} The rendered choices key string
+   */
+  generateChoicesString(choices, defaultIndex) {
+    var defIndex = 0;
+    if (_.isNumber(defaultIndex) && this.opt.choices.getChoice(defaultIndex)) {
+      defIndex = defaultIndex;
+    }
+    var defStr = this.opt.choices.pluck('key');
+    this.rawDefault = defStr[defIndex];
+    defStr[defIndex] = String(defStr[defIndex]).toUpperCase();
+    return defStr.join('');
   }
-  var defStr = this.opt.choices.pluck('key');
-  this.rawDefault = defStr[defIndex];
-  defStr[defIndex] = String(defStr[defIndex]).toUpperCase();
-  return defStr.join('');
-};
+}
 
 /**
  * Function for rendering checkbox choices
  * @param  {String} pointer Selected key
  * @return {String}         Rendered content
  */
-
 function renderChoices(choices, pointer) {
   var output = '';
 
@@ -251,6 +253,7 @@ function renderChoices(choices, pointer) {
 
     var choiceStr = choice.key + ') ' + choice.name;
     if (pointer === choice.key) {
+      //noinspection TypeScriptValidateTypes
       choiceStr = chalk.cyan(choiceStr);
     }
     output += choiceStr;

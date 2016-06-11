@@ -1,11 +1,10 @@
-'use strict';
-var rx = require('rx');
+import rx = require('rx');
 
 function normalizeKeypressEvents(value, key) {
   return {value: value, key: key || {}};
 }
 
-module.exports = function (rl) {
+export var observe = (rl) => {
   var keypress = rx.Observable.fromEvent(rl.input, 'keypress', normalizeKeypressEvents)
     .filter(function (e) {
       // Ignore `enter` key. On the readline, we only care about the `line` event.

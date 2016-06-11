@@ -1,7 +1,6 @@
-'use strict';
-var _ = require('lodash');
-var rx = require('rx');
-var runAsync = require('run-async');
+import _ = require('lodash');
+import rx = require('rx');
+import runAsync = require('run-async');
 
 /**
  * Resolve a question property value if it is passed as a function.
@@ -12,7 +11,7 @@ var runAsync = require('run-async');
  * @return {rx.Obsersable}   - Observable emitting once value is known
  */
 
-exports.fetchAsyncQuestionProperty = function (question, prop, answers) {
+export var fetchAsyncQuestionProperty = (question, prop, answers) => {
   if (!_.isFunction(question[prop])) {
     return rx.Observable.return(question);
   }

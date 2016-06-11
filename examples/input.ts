@@ -2,8 +2,7 @@
  * Input prompt example
  */
 
-'use strict';
-var inquirer = require('..');
+import inquirer = require('..');
 
 var questions = [
   {

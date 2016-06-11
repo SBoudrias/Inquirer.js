@@ -1,5 +1,7 @@
-var BottomBar = require('../lib/ui/bottom-bar');
-var cmdify = require('cmdify');
+import {BottomBar} from '../lib/ui/bottom-bar';
+import cmdify = require('cmdify');
+
+var spawn = require('child_process').spawn;
 
 var loader = [
   '/ Installing',
@@ -13,8 +15,6 @@ var ui = new BottomBar({bottomBar: loader[i % 4]});
 setInterval(function () {
   ui.updateBottomBar(loader[i++ % 4]);
 }, 300);
-
-var spawn = require('child_process').spawn;
 
 var cmd = spawn(cmdify('npm'), ['-g', 'install', 'inquirer'], {stdio: 'pipe'});
 cmd.stdout.pipe(ui.log);

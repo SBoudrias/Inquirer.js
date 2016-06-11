@@ -3,8 +3,7 @@
  * Allows user to choose when to exit prompt
  */
 
-'use strict';
-var inquirer = require('..');
+import inquirer = require('..');
 var output = [];
 
 var questions = [

@@ -2,8 +2,8 @@
  * Checkbox list examples
  */
 
-'use strict';
-var inquirer = require('..');
+import {Separator} from '../lib/objects/separator';
+import inquirer = require('..');
 
 inquirer.prompt([
   {
@@ -11,7 +11,7 @@ inquirer.prompt([
     message: 'Select toppings',
     name: 'toppings',
     choices: [
-      new inquirer.Separator(' = The Meats = '),
+      new Separator(' = The Meats = '),
       {
         name: 'Pepperoni'
       },
@@ -24,7 +24,7 @@ inquirer.prompt([
       {
         name: 'Bacon'
       },
-      new inquirer.Separator(' = The Cheeses = '),
+      new Separator(' = The Cheeses = '),
       {
         name: 'Mozzarella',
         checked: true
@@ -35,14 +35,14 @@ inquirer.prompt([
       {
         name: 'Parmesan'
       },
-      new inquirer.Separator(' = The usual ='),
+      new Separator(' = The usual ='),
       {
         name: 'Mushroom'
       },
       {
         name: 'Tomato'
       },
-      new inquirer.Separator(' = The extras = '),
+      new Separator(' = The extras = '),
       {
         name: 'Pineapple'
       },

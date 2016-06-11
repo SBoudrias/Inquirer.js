@@ -1,148 +1,146 @@
+
+import {BasePrompt} from './base';
+import {observe} from '../utils/events';
+import {Paginator} from '../utils/paginator';
+
+import _ = require('lodash');
+import chalk = require('chalk');
+import figures = require('figures');
+import cliCursor = require('cli-cursor');
+
 /**
  * `list` type prompt
  */
+export class ListPrompt extends BasePrompt {
+  private firstRender;
+  private selected;
+  private paginator;
+  private done;
+  constructor(question, rl?, answers?) {
+    super(question, rl, answers);
 
-var _ = require('lodash');
-var util = require('util');
-var chalk = require('chalk');
-var figures = require('figures');
-var cliCursor = require('cli-cursor');
-var Base = require('./base');
-var observe = require('../utils/events');
-var Paginator = require('../utils/paginator');
+    if (!this.opt.choices) {
+      this.throwParamError('choices');
+    }
 
-/**
- * Module exports
- */
+    this.firstRender = true;
+    this.selected = 0;
 
-module.exports = Prompt;
+    var def = this.opt.default;
 
-/**
- * Constructor
- */
+    // Default being a Number
+    if (_.isNumber(def) && def >= 0 && def < this.opt.choices.realLength) {
+      this.selected = def;
+    }
 
-function Prompt() {
-  Base.apply(this, arguments);
+    // Default being a String
+    if (_.isString(def)) {
+      this.selected = this.opt.choices.pluck('value').indexOf(def);
+    }
 
-  if (!this.opt.choices) {
-    this.throwParamError('choices');
+    // Make sure no default is set (so it won't be printed)
+    this.opt.default = null;
+
+    this.paginator = new Paginator();
   }
 
-  this.firstRender = true;
-  this.selected = 0;
+  /**
+   * Start the Inquiry session
+   * @param  {Function} cb      Callback when prompt is done
+   * @return {this}
+   */
 
-  var def = this.opt.default;
+  _run(cb) {
+    this.done = cb;
 
-  // Default being a Number
-  if (_.isNumber(def) && def >= 0 && def < this.opt.choices.realLength) {
-    this.selected = def;
-  }
+    var events = observe(this.rl);
+    events.normalizedUpKey.takeUntil(events.line).forEach(this.onUpKey.bind(this));
+    events.normalizedDownKey.takeUntil(events.line).forEach(this.onDownKey.bind(this));
+    events.numberKey.takeUntil(events.line).forEach(this.onNumberKey.bind(this));
+    var validation = this.handleSubmitEvents(
+      events.line.map(this.getCurrentValue.bind(this))
+    );
+    validation.success.forEach(this.onSubmit.bind(this));
 
-  // Default being a String
-  if (_.isString(def)) {
-    this.selected = this.opt.choices.pluck('value').indexOf(def);
-  }
+    // Init the prompt
+    //noinspection TypeScriptUnresolvedFunction
+    cliCursor.hide();
+    this.render();
 
-  // Make sure no default is set (so it won't be printed)
-  this.opt.default = null;
+    return this;
+  };
 
-  this.paginator = new Paginator();
+  /**
+   * Render the prompt to screen
+   * @return {BottomBar} self
+   */
+
+  render() {
+    // Render question
+    var message = this.getQuestion();
+
+    if (this.firstRender) {
+      //noinspection TypeScriptValidateTypes
+      message += chalk.dim('(Use arrow keys)');
+    }
+
+    // Render choices or answer depending on the state
+    if (this.status === 'answered') {
+      //noinspection TypeScriptValidateTypes
+      message += chalk.cyan(this.opt.choices.getChoice(this.selected).short);
+    } else {
+      var choicesStr = listRender(this.opt.choices, this.selected);
+      var indexPosition = this.opt.choices.indexOf(this.opt.choices.getChoice(this.selected));
+      message += '\n' + this.paginator.paginate(choicesStr, indexPosition, this.opt.pageSize);
+    }
+
+    this.firstRender = false;
+
+    this.screen.render(message);
+  };
+
+  /**
+   * When user press `enter` key
+   */
+
+  onSubmit(state) {
+    this.status = 'answered';
+
+    // Rerender prompt
+    this.render();
+
+    this.screen.done();
+    //noinspection TypeScriptUnresolvedFunction
+    cliCursor.show();
+    this.done(state.value);
+  };
+
+  getCurrentValue() {
+    return this.opt.choices.getChoice(this.selected).value;
+  };
+
+  /**
+   * When user press a key
+   */
+  onUpKey() {
+    var len = this.opt.choices.realLength;
+    this.selected = (this.selected > 0) ? this.selected - 1 : len - 1;
+    this.render();
+  };
+
+  onDownKey() {
+    var len = this.opt.choices.realLength;
+    this.selected = (this.selected < len - 1) ? this.selected + 1 : 0;
+    this.render();
+  };
+
+  onNumberKey(input) {
+    if (input <= this.opt.choices.realLength) {
+      this.selected = input - 1;
+    }
+    this.render();
+  };
 }
-util.inherits(Prompt, Base);
-
-/**
- * Start the Inquiry session
- * @param  {Function} cb      Callback when prompt is done
- * @return {this}
- */
-
-Prompt.prototype._run = function (cb) {
-  this.done = cb;
-
-  var events = observe(this.rl);
-  events.normalizedUpKey.takeUntil(events.line).forEach(this.onUpKey.bind(this));
-  events.normalizedDownKey.takeUntil(events.line).forEach(this.onDownKey.bind(this));
-  events.numberKey.takeUntil(events.line).forEach(this.onNumberKey.bind(this));
-  var validation = this.handleSubmitEvents(
-    events.line.map(this.getCurrentValue.bind(this))
-  );
-  validation.success.forEach(this.onSubmit.bind(this));
-
-  // Init the prompt
-  cliCursor.hide();
-  this.render();
-
-  return this;
-};
-
-/**
- * Render the prompt to screen
- * @return {Prompt} self
- */
-
-Prompt.prototype.render = function () {
-  // Render question
-  var message = this.getQuestion();
-
-  if (this.firstRender) {
-    message += chalk.dim('(Use arrow keys)');
-  }
-
-  // Render choices or answer depending on the state
-  if (this.status === 'answered') {
-    message += chalk.cyan(this.opt.choices.getChoice(this.selected).short);
-  } else {
-    var choicesStr = listRender(this.opt.choices, this.selected);
-    var indexPosition = this.opt.choices.indexOf(this.opt.choices.getChoice(this.selected));
-    message += '\n' + this.paginator.paginate(choicesStr, indexPosition, this.opt.pageSize);
-  }
-
-  this.firstRender = false;
-
-  this.screen.render(message);
-};
-
-/**
- * When user press `enter` key
- */
-
-Prompt.prototype.onSubmit = function (state) {
-  this.status = 'answered';
-
-  // Rerender prompt
-  this.render();
-
-  this.screen.done();
-  cliCursor.show();
-  this.done(state.value);
-};
-
-Prompt.prototype.getCurrentValue = function () {
-  return this.opt.choices.getChoice(this.selected).value;
-};
-
-/**
- * When user press a key
- */
-Prompt.prototype.onUpKey = function () {
-  var len = this.opt.choices.realLength;
-  this.selected = (this.selected > 0) ? this.selected - 1 : len - 1;
-  this.render();
-};
-
-Prompt.prototype.onDownKey = function () {
-  var len = this.opt.choices.realLength;
-  this.selected = (this.selected < len - 1) ? this.selected + 1 : 0;
-  this.render();
-};
-
-Prompt.prototype.onNumberKey = function (input) {
-  if (input <= this.opt.choices.realLength) {
-    this.selected = input - 1;
-  }
-  this.render();
-};
-
 /**
  * Function for rendering list choices
  * @param  {Number} pointer Position of the pointer
@@ -170,6 +168,7 @@ function listRender(choices, pointer) {
     var isSelected = (i - separatorOffset === pointer);
     var line = (isSelected ? figures.pointer + ' ' : '  ') + choice.name;
     if (isSelected) {
+      //noinspection TypeScriptValidateTypes
       line = chalk.cyan(line);
     }
     output += line + ' \n';
