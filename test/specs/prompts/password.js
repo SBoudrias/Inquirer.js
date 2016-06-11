@@ -3,7 +3,7 @@ var _ = require('lodash');
 var ReadlineStub = require('../../helpers/readline');
 var fixtures = require('../../helpers/fixtures');
 
-var Password = require('../../../lib/prompts/password');
+var Password = require('../../../lib/prompts/password').PasswordPrompt;
 
 describe('`password` prompt', function () {
   beforeEach(function () {

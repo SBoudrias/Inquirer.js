@@ -8,20 +8,25 @@ var istanbul = require('gulp-istanbul');
 var nsp = require('gulp-nsp');
 var plumber = require('gulp-plumber');
 var coveralls = require('gulp-coveralls');
+var tsc = require('gulp-tsc');
+var shell = require('gulp-shell');
+var runseq = require('run-sequence');
+var tslint = require('gulp-tslint');
 
 gulp.task('static', function () {
-  return gulp.src('**/*.js')
+  return gulp.src('**/*.ts')
     .pipe(excludeGitignore())
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
+    .pipe(tslint())
+    .pipe(tslint.report('prose', {
+      emitError: true
+    }));;
 });
 
 gulp.task('nsp', function (cb) {
   nsp({package: path.resolve('package.json')}, cb);
 });
 
-gulp.task('pre-test', function () {
+gulp.task('pre-test', ['build'], function () {
   return gulp.src('lib/**/*.js')
     .pipe(excludeGitignore())
     .pipe(istanbul({
@@ -46,7 +51,7 @@ gulp.task('test', ['pre-test'], function (cb) {
 });
 
 gulp.task('watch', function () {
-  gulp.watch(['lib/**/*.js', 'test/**'], ['test']);
+  gulp.watch(paths.tscripts.src, runseq(['build', 'test']));
 });
 
 gulp.task('coveralls', ['test'], function () {
@@ -60,3 +65,33 @@ gulp.task('coveralls', ['test'], function () {
 
 gulp.task('prepublish', ['nsp']);
 gulp.task('default', ['static', 'test', 'coveralls']);
+
+var paths = {
+  tscripts: {
+    src: ['**/*.ts', '!node_modules/**/*.ts', '!typings/**/*.ts'],
+    dest: ''
+  }
+};
+
+// ** Compilation ** //
+gulp.task('build', function () {
+  return gulp
+    .src(paths.tscripts.src)
+    .pipe(tsc({
+      // module: "commonjs",
+      // target: 'ES6',
+      sourceMap: true,
+      sourceRoot: process.cwd(),
+      emitError: false
+    }))
+    .pipe(gulp.dest(paths.tscripts.dest));
+});
+
+// ** Linting ** //
+gulp.task('lint', function () {
+  return gulp.src(paths.tscripts.src)
+    .pipe(tslint())
+    .pipe(tslint.report('prose', {
+      emitError: false
+    }));
+});

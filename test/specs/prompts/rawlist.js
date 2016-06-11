@@ -3,7 +3,7 @@ var _ = require('lodash');
 var ReadlineStub = require('../../helpers/readline');
 var fixtures = require('../../helpers/fixtures');
 
-var Rawlist = require('../../../lib/prompts/rawlist');
+var Rawlist = require('../../../lib/prompts/rawlist').RawListPrompt;
 
 describe('`rawlist` prompt', function () {
   beforeEach(function () {

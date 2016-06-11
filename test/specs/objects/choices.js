@@ -1,8 +1,8 @@
 var expect = require('chai').expect;
 
 var inquirer = require('../../../lib/inquirer');
-var Choices = require('../../../lib/objects/choices');
-var Choice = require('../../../lib/objects/choice');
+var Choices = require('../../../lib/objects/choices').Choices;
+var Choice = require('../../../lib/objects/choice').Choice;
 
 describe('Choices collection', function () {
   it('should create Choice object from array member', function () {

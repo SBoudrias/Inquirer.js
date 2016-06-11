@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var chalk = require('chalk');
 
-var Separator = require('../../../lib/objects/separator');
+var Separator = require('../../../lib/objects/separator').Separator;
 var Inquirer = require('../../../lib/inquirer');
 
 describe('Separator constructor', function () {
