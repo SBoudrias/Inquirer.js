@@ -8,7 +8,11 @@ var _ = require('lodash');
 var rx = require('rx');
 var Promise = require('pinkie-promise');
 var inquirer = require('../../lib/inquirer');
+var it = require("mocha/lib/mocha.js").it;
+var beforeEach = require("mocha/lib/mocha.js").beforeEach;
+var describe = require("mocha/lib/mocha.js").describe;
 var autosubmit = require('../helpers/events').autosubmit;
+var ReadlineStub = require('../helpers/readline');
 
 describe('inquirer.prompt', function () {
   beforeEach(function () {
@@ -17,29 +21,27 @@ describe('inquirer.prompt', function () {
 
   it('should close and create a new readline instances each time it\'s called', function () {
     var ctx = this;
-    var rl1;
+    var rl1 = new ReadlineStub();
 
     var promise = this.prompt({
       type: 'confirm',
       name: 'q1',
       message: 'message'
-    });
+    }, rl1);
 
-    rl1 = promise.ui.rl;
     rl1.emit('line');
 
     return promise.then(function () {
       expect(rl1.close.called).to.be.true;
       expect(rl1.output.end.called).to.be.true;
 
-      var rl2;
+      var rl2 = new ReadlineStub();;
       var promise2 = ctx.prompt({
         type: 'confirm',
         name: 'q1',
         message: 'message'
-      });
+      }, rl2);
 
-      rl2 = promise2.ui.rl;
       rl2.emit('line');
 
       return promise2.then(function () {
@@ -156,7 +158,7 @@ describe('inquirer.prompt', function () {
       }
     }];
 
-    var promise = this.prompt(prompts, function () {});
+    var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
   });
 
@@ -188,7 +190,7 @@ describe('inquirer.prompt', function () {
       }
     }];
 
-    var promise = this.prompt(prompts, function () {});
+    var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
   });
 
@@ -277,7 +279,7 @@ describe('inquirer.prompt', function () {
       }
     }];
 
-    var promise = this.prompt(prompts, function () {});
+    var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
   });
 
@@ -322,8 +324,8 @@ describe('inquirer.prompt', function () {
     autosubmit(promise.ui);
   });
 
-  it('should expose the UI', function (done) {
-    var promise = this.prompt([], function () {});
+  it('should expose the BaseUI', function (done) {
+    var promise = this.prompt([]);
     expect(promise.ui.answers).to.be.an('object');
     done();
   });
@@ -528,7 +530,7 @@ describe('inquirer.prompt', function () {
         done();
       });
 
-      inquirer.prompt(questions, _.noop);
+      inquirer.prompt(questions);
     });
 
     it('overwrite default prompt types', function (done) {
@@ -538,7 +540,7 @@ describe('inquirer.prompt', function () {
         done();
       });
 
-      inquirer.prompt(questions, _.noop);
+      inquirer.prompt(questions);
       inquirer.restoreDefaultPrompts();
     });
   });
@@ -546,7 +548,7 @@ describe('inquirer.prompt', function () {
   describe('#restoreDefaultPrompts()', function () {
     it('restore default prompts', function () {
       var ConfirmPrompt = inquirer.prompt.prompts.confirm;
-      inquirer.registerPrompt('confirm', _.noop);
+      inquirer.registerPrompt('confirm');
       inquirer.restoreDefaultPrompts();
       expect(ConfirmPrompt).to.equal(inquirer.prompt.prompts.confirm);
     });

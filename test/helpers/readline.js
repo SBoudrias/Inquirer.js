@@ -20,7 +20,9 @@ _.extend(stub, {
     __raw__: '',
     write: function (str) {
       this.__raw__ += str;
-    }
+    },
+    on: sinon.stub(),
+    emit: sinon.stub()
   }
 });
 

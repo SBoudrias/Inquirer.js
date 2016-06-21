@@ -1,16 +1,15 @@
 /**
  * Password prompt example
  */
-
-'use strict';
+"use strict";
 var inquirer = require('..');
-
 inquirer.prompt([
-  {
-    type: 'password',
-    message: 'Enter your git password',
-    name: 'password'
-  }
+    {
+        type: 'password',
+        message: 'Enter your git password',
+        name: 'password'
+    }
 ]).then(function (answers) {
-  console.log(JSON.stringify(answers, null, '  '));
+    console.log(JSON.stringify(answers, null, '  '));
 });
+//# sourceMappingURL=password.js.map

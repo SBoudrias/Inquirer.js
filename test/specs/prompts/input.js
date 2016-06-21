@@ -3,7 +3,7 @@ var _ = require('lodash');
 var ReadlineStub = require('../../helpers/readline');
 var fixtures = require('../../helpers/fixtures');
 
-var Input = require('../../../lib/prompts/input');
+var Input = require('../../../lib/prompts/input').InputPrompt;
 
 describe('`input` prompt', function () {
   beforeEach(function () {

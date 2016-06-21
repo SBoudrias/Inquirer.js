@@ -1,7 +1,6 @@
 /**
  * Test Prompt public APIs
  */
-
 var expect = require('chai').expect;
 var _ = require('lodash');
 var fixtures = require('../helpers/fixtures');

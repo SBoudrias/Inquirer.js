@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 
-var Choice = require('../../../lib/objects/choice');
-var Separator = require('../../../lib/objects/separator');
+var Choice = require('../../../lib/objects/choice').Choice;
+var Separator = require('../../../lib/objects/separator').Separator;
 
 describe('Choice object', function () {
   it('should normalize accept String as value', function () {
