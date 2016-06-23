@@ -31,6 +31,15 @@ var questions = [
 
       return 'Please enter a valid phone number';
     }
+  },
+  {
+    type: 'input',
+    name: 'bio',
+    message: 'Please write a short bio',
+    multiline: true,
+    default: function () {
+      return 'I am a very HAPPY HAPPY person.\n\nAlso, sometimes I go a long walks.';
+    }
   }
 ];
 

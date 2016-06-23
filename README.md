@@ -206,7 +206,9 @@ Take `type`, `name`, `message`[, `default`] properties. `default` is expected to
 
 #### Input - `{type: 'input'}`
 
-Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `muiltline`] properties.
+
+If you set `multiline` to true, the users default $VISUAL or $EDITOR will be launched with a temporary file. Once the user exits their editor (for any reason), the temporary file's contents are read and used as the answer.
 
 ![Input prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/input-prompt.png)
 

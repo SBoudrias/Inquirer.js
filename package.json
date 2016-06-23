@@ -34,6 +34,7 @@
     "rx": "^4.1.0",
     "string-width": "^1.0.1",
     "strip-ansi": "^3.0.0",
+    "temp": "^0.8.3",
     "through": "^2.3.6"
   },
   "devDependencies": {
