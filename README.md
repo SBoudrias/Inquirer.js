@@ -80,7 +80,7 @@ prompt(questions).then(/* ... */);
 A question object is a `hash` containing question related values:
 
 - **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `confirm`,
-`list`, `rawlist`, `expand`, `checkbox`, `password`
+`list`, `rawlist`, `expand`, `checkbox`, `password`, `editor`
 - **name**: (String) The name to use when storing the answer in the answers hash.
 - **message**: (String|Function) The question to print. If defined as a function, the first parameter will be the current inquirer session answers.
 - **default**: (String|Number|Array|Function) Default value(s) to use if nothing is entered, or a function that returns the default value(s). If defined as a function, the first parameter will be the current inquirer session answers.
@@ -206,9 +206,7 @@ Take `type`, `name`, `message`[, `default`] properties. `default` is expected to
 
 #### Input - `{type: 'input'}`
 
-Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `muiltline`] properties.
-
-If you set `multiline` to true, the users default $VISUAL or $EDITOR will be launched with a temporary file. Once the user exits their editor (for any reason), the temporary file's contents are read and used as the answer.
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
 ![Input prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/input-prompt.png)
 
@@ -219,6 +217,14 @@ If you set `multiline` to true, the users default $VISUAL or $EDITOR will be lau
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
 ![Password prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/password-prompt.png)
+
+---
+
+#### Editor - `{type: 'editor'}`
+
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties
+
+Launches an instance of the users preferred editor on a temporary file. Once the user exits their editor, the contents of the temporary file are read in as the result. The editor to use is determined by reading the $VISUAL or $EDITOR environment variables. If neither of those are present, notepad (on Windows) or vim (Linux or Mac) is used.
 
 ## User Interfaces and layouts
 

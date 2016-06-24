@@ -49,5 +49,11 @@ module.exports = {
       'choice 2',
       'choice 3'
     ]
+  },
+
+  editor: {
+    message: 'message',
+    name: 'name',
+    default: 'Inquirer'
   }
 };
