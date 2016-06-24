@@ -7,14 +7,14 @@ var Editor = require('../../../lib/prompts/editor');
 
 describe('`editor` prompt', function () {
   beforeEach(function () {
-    this.previous_visual = process.env.VISUAL;
-    process.env.VISUAL = "truncate --size 0";
+    this.previousVisual = process.env.VISUAL;
+    process.env.VISUAL = 'truncate --size 0';
     this.fixture = _.clone(fixtures.editor);
     this.rl = new ReadlineStub();
   });
 
   afterEach(function () {
-    process.env.VISUAL = this.previous_visual;
+    process.env.VISUAL = this.previousVisual;
   });
 
   it('should use raw value from the users editor', function (done) {
