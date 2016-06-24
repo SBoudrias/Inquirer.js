@@ -32,6 +32,7 @@
     "pinkie-promise": "^2.0.0",
     "run-async": "^2.2.0",
     "rx": "^4.1.0",
+    "spawn-sync": "^1.0.15",
     "string-width": "^1.0.1",
     "strip-ansi": "^3.0.0",
     "temp": "^0.8.3",
