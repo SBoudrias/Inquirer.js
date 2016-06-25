@@ -8,7 +8,8 @@ var Editor = require('../../../lib/prompts/editor');
 describe('`editor` prompt', function () {
   beforeEach(function () {
     this.previousVisual = process.env.VISUAL;
-    process.env.VISUAL = 'truncate --size 0';
+    // Writes the word "testing" to the file
+    process.env.VISUAL = 'node test/helpers/write.js testing';
     this.fixture = _.clone(fixtures.editor);
     this.rl = new ReadlineStub();
   });
@@ -17,29 +18,14 @@ describe('`editor` prompt', function () {
     process.env.VISUAL = this.previousVisual;
   });
 
-  it('should use raw value from the users editor', function (done) {
-    var input = new Editor(this.fixture, this.rl);
-
-    input.run().then(function (answer) {
-      expect(answer).to.equal('');
-      done();
-    });
-
-    this.rl.emit('line', '');
-  });
-
-  it('should output filtered value', function () {
-    this.fixture.filter = function () {
-      return 'pass';
-    };
-
+  it('should retrieve temporary files contents', function () {
     var prompt = new Editor(this.fixture, this.rl);
 
     var promise = prompt.run();
     this.rl.emit('line', '');
 
-    return promise.then(function () {
-      expect(this.rl.output.__raw__).to.contain('pass');
-    }.bind(this));
+    return promise.then(function (answer) {
+      expect(answer).to.equal('testing');
+    });
   });
 });
