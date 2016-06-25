@@ -9,7 +9,7 @@ describe('`editor` prompt', function () {
   beforeEach(function () {
     this.previousVisual = process.env.VISUAL;
     // Writes the word "testing" to the file
-    process.env.VISUAL = 'node test/helpers/write.js testing';
+    process.env.VISUAL = 'node ./test/bin/write.js testing';
     this.fixture = _.clone(fixtures.editor);
     this.rl = new ReadlineStub();
   });
@@ -25,7 +25,7 @@ describe('`editor` prompt', function () {
     this.rl.emit('line', '');
 
     return promise.then(function (answer) {
-      expect(answer).to.equal('testing');
+      return expect(answer).to.equal('testing');
     });
   });
 });
