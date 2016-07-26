@@ -5,6 +5,24 @@ Inquirer.js
 
 A collection of common interactive command line user interfaces.
 
+## Table of Contents
+
+  1. [Documentation](#documentation)
+    1. [Installation](#installation)
+    2. [Examples](#examples)
+    3. [Methods](#methods)
+    4. [Objects](#objects)
+      1. [Questions](#questions)
+      2. [Answers](#answers)
+      3. [Separator](#separator)
+    4. [Prompt Types](#prompt)
+  2. [User Interfaces and Layouts](#layouts)
+    1. [Reactive Interface](#reactive)
+  3. [Support](#support)
+  4. [News](#news)
+  5. [Contributing](#contributing)
+  6. [License](#license)
+
 
 ## Goal and Philosophy
 
@@ -22,9 +40,11 @@ A collection of common interactive command line user interfaces.
 > **Note:** **`Inquirer.js`** provides the user interface and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [commander](https://github.com/visionmedia/commander.js), [vorpal](https://github.com/dthree/vorpal) or [args](https://github.com/leo/args).
 
 
-## Documentation
+## [Documentation](#documentation)
+<a name="documentation"></a>
 
 ### Installation
+<a name="installation"></a>
 
 ``` shell
 npm install inquirer
@@ -37,7 +57,7 @@ inquirer.prompt([/* Pass your questions in here */]).then(function (answers) {
 });
 ```
 
-
+<a name="examples"></a>
 ### Examples (Run it and see it)
 Check out the `examples/` folder for code and interface examples.
 
@@ -49,7 +69,7 @@ node examples/checkbox.js
 
 
 ### Methods
-
+<a name="methods"></a>
 #### `inquirer.prompt(questions) -> promise`
 
 Launch the prompt interface (inquiry session)
@@ -75,8 +95,10 @@ prompt(questions).then(/* ... */);
 ```
 
 ### Objects
+<a name="objects"></a>
 
 #### Question
+<a name="questions"></a>
 A question object is a `hash` containing question related values:
 
 - **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `confirm`,
@@ -119,6 +141,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
 ```
 
 ### Answers
+<a name="answers"></a>
 A key/value hash containing the client answers in each prompt.
 
 - **Key** The `name` property of the _question_ object
@@ -128,6 +151,7 @@ A key/value hash containing the client answers in each prompt.
   - `rawlist`, `list` : Selected choice value (or name if no value specified) (String)
 
 ### Separator
+<a name="separator"></a>
 A separator can be added to any `choices` array:
 
 ```
@@ -147,7 +171,8 @@ The constructor takes a facultative `String` value that'll be use as the separat
 
 Separator instances have a property `type` equal to `separator`. This should allow tools façading Inquirer interface from detecting separator types in lists.
 
-Prompts type
+<a name="prompt"></a>
+### Prompt types
 ---------------------
 
 > **Note:**: _allowed options written inside square brackets (`[]`) are optional. Others are required._
@@ -226,7 +251,9 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties
 
 Launches an instance of the users preferred editor on a temporary file. Once the user exits their editor, the contents of the temporary file are read in as the result. The editor to use is determined by reading the $VISUAL or $EDITOR environment variables. If neither of those are present, notepad (on Windows) or vim (Linux or Mac) is used.
 
+<a name="layouts"></a>
 ## User Interfaces and layouts
+
 
 Along with the prompts, Inquirer offers some basic text UI.
 
@@ -249,7 +276,9 @@ ui.log.write('Almost over, standby!');
 ui.updateBottomBar('new bottom bar content');
 ```
 
+<a name="reactive"></a>
 ## Reactive interface
+
 
 Internally, Inquirer uses the [JS reactive extension](https://github.com/Reactive-Extensions/RxJS) to handle events and async flows.
 
@@ -278,6 +307,7 @@ inquirer.prompt(prompts).ui.process.subscribe(
 ```
 
 ## Support (OS Terminals)
+<a name="support"></a>
 
 You should expect mostly good support for the CLI below. This does not mean we won't
 look at issues found on other command line - feel free to report any!
@@ -296,11 +326,14 @@ look at issues found on other command line - feel free to report any!
 
 
 ## News on the march (Release notes)
+<a name="news"></a>
+
 
 Please refer to the [Github releases section for the changelog](https://github.com/SBoudrias/Inquirer.js/releases)
 
 
 ## Contributing
+<a name="contributing"></a>
 
 **Unit test**
 Unit test are written in [Mocha](https://mochajs.org/). Please add a unit test for every new feature or bug fix. `npm test` to run the test suite.
@@ -314,6 +347,7 @@ get feedback before release. Let us know if you want to be added to the list (ju
 to [@vaxilart](https://twitter.com/Vaxilart)) or just add your name to [the wiki](https://github.com/SBoudrias/Inquirer.js/wiki/Testers)
 
 ## License
+<a name="license"></a>
 
 Copyright (c) 2016 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))
 Licensed under the MIT license.
