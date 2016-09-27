@@ -154,6 +154,37 @@ describe('`checkbox` prompt', function () {
     this.rl.emit('line');
   });
 
+  it('should select all answers if <a> is pressed', function (done) {
+    this.checkbox.run().then(function (answer) {
+      expect(answer.length).to.equal(4);
+      done();
+    });
+
+    this.rl.input.emit('keypress', 'a', {name: 'a'});
+    this.rl.emit('line');
+  });
+
+  it('should select no answers if <a> is pressed a second time', function (done) {
+    this.checkbox.run().then(function (answer) {
+      expect(answer.length).to.equal(0);
+      done();
+    });
+
+    this.rl.input.emit('keypress', 'a', {name: 'a'});
+    this.rl.input.emit('keypress', 'a', {name: 'a'});
+    this.rl.emit('line');
+  });
+
+  it('should select the inverse of the current selection when <i> is pressed', function (done) {
+    this.checkbox.run().then(function (answer) {
+      expect(answer.length).to.equal(3);
+      done();
+    });
+
+    this.rl.input.emit('keypress', 'i', {name: 'i'});
+    this.rl.emit('line');
+  });
+
   describe('with disabled choices', function () {
     beforeEach(function () {
       this.fixture.choices.push({
