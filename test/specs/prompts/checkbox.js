@@ -177,7 +177,6 @@ describe('`checkbox` prompt', function () {
 
   it('should select the inverse of the current selection when <i> is pressed', function (done) {
     this.checkbox.run().then(function (answer) {
-      console.log(answer);
       expect(answer.length).to.equal(3);
       done();
     });
