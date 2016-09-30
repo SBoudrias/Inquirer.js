@@ -109,6 +109,29 @@ var tests = {
 
         this.rl.emit('line', '');
       });
+
+      it('should handle errors produced in async filters', function () {
+        var called = 0;
+        var rl = this.rl;
+
+        this.fixture.filter = function () {
+          called++;
+          var cb = this.async();
+
+          if (called === 2) {
+            return cb(null, 'pass');
+          }
+
+          rl.emit('line');
+          return cb(new Error('fail'));
+        };
+
+        var prompt = new this.Prompt(this.fixture, this.rl);
+        var promise = prompt.run();
+
+        this.rl.emit('line');
+        return promise;
+      });
     });
   },
 
