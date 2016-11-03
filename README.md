@@ -306,6 +306,22 @@ inquirer.prompt(prompts).process.subscribe(
 );
 ```
 
+Reactive Extensions use `Observables` in order to get streams of data. In usage with
+Inquirer, you will need to attach, for instance an [Observable](http://reactivex.io/rxjs/manual/overview.html#creating-observables) or
+[Subject](http://reactivex.io/rxjs/manual/overview.html#subject).
+
+<<<<<<< Updated upstream
+In order to recieve the answers, you can attach a promise at the end, batching all your answers into one object. If you want an example of how to integrate with Rx, please check
+out the `examples/RxObservable.js` folder for an full example.
+=======
+In order to recieve the answers, you can attach a promise at the end, batching all your answers into one object. If you want an example of how to integrate Rx, please check
+out the `examples/rx-observable.js` file for an full example.
+>>>>>>> Stashed changes
+
+Having dynamic interfaces are a pain, unless you want to spend a lot of your time in callback hell. Accomplishing dynamic interfaces with RxJS, you simply create a subscription using `inquirer.promt(observable)`, where you have the freedom to do everything you would, using regular JavaScript.
+
+Perhaps the hardest thing, is to understand how RxJS works, in order to fully benefit from it. We advice you to spend some time learning this, as you can integrate Reactive Extensions like a symphony with Inquirer.
+
 ## Support (OS Terminals)
 <a name="support"></a>
 
