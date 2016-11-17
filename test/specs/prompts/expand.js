@@ -133,6 +133,14 @@ describe('`expand` prompt', function () {
     expect(this.rl.output.__raw__).to.contain('(aBcdh)');
   });
 
+  it('should display and capitalize the default choice H `key` when it is `help`', function () {
+    this.fixture.default = 'help';
+    this.expand = new Expand(this.fixture, this.rl);
+    this.expand.run();
+
+    expect(this.rl.output.__raw__).to.contain('(abcdH)');
+  });
+
   it('should \'autocomplete\' the user input', function (done) {
     this.expand = new Expand(this.fixture, this.rl);
     this.expand.run();
