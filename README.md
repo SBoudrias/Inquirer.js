@@ -299,7 +299,7 @@ prompts.onCompleted();
 And using the return value `process` property, you can access more fine grained callbacks:
 
 ```js
-inquirer.prompt(prompts).process.subscribe(
+inquirer.prompt(prompts).ui.process.subscribe(
   onEachAnswer,
   onError,
   onComplete
