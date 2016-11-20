@@ -88,7 +88,7 @@ describe('inquirer.prompt', function () {
     });
   });
 
-  it('should parse `message` if passed as a function', function (done) {
+  it('should parse `message` if passed as a function', function () {
     var stubMessage = 'foo';
     this.prompt.registerPrompt('stub', function (params) {
       this.opt = {
@@ -98,7 +98,6 @@ describe('inquirer.prompt', function () {
       };
       this.run = sinon.stub().returns(Promise.resolve());
       expect(params.message).to.equal(stubMessage);
-      done();
     });
 
     var msgFunc = function (answers) {
