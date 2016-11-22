@@ -72,6 +72,33 @@ describe('inquirer.prompt', function () {
     });
   });
 
+  it('should take a prompts array with nested names', function () {
+    var prompts = [{
+      type: 'confirm',
+      name: 'foo.bar.q1',
+      message: 'message'
+    }, {
+      type: 'confirm',
+      name: 'foo.q2',
+      message: 'message',
+      default: false
+    }];
+
+    var promise = this.prompt(prompts);
+    autosubmit(promise.ui);
+
+    return promise.then(function (answers) {
+      expect(answers).to.deep.equal({
+        foo: {
+          bar: {
+            q1: true
+          },
+          q2: false
+        }
+      });
+    });
+  });
+
   it('should take a single prompt and return answer', function () {
     var prompt = {
       type: 'input',
@@ -88,7 +115,7 @@ describe('inquirer.prompt', function () {
     });
   });
 
-  it('should parse `message` if passed as a function', function (done) {
+  it('should parse `message` if passed as a function', function () {
     var stubMessage = 'foo';
     this.prompt.registerPrompt('stub', function (params) {
       this.opt = {
@@ -98,7 +125,6 @@ describe('inquirer.prompt', function () {
       };
       this.run = sinon.stub().returns(Promise.resolve());
       expect(params.message).to.equal(stubMessage);
-      done();
     });
 
     var msgFunc = function (answers) {
