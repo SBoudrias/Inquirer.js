@@ -44,14 +44,6 @@ describe('`expand` prompt', function () {
     expect(mkPrompt).to.throw(/Reserved key error/);
   });
 
-  it('should take the first choice by default', function (done) {
-    this.expand.run().then(function (answer) {
-      expect(answer).to.equal('acab');
-      done();
-    });
-    this.rl.emit('line');
-  });
-
   it('should allow false as a value', function () {
     var promise = this.expand.run();
 
@@ -131,6 +123,14 @@ describe('`expand` prompt', function () {
 
     this.expand.run();
     expect(this.rl.output.__raw__).to.contain('(aBcdh)');
+  });
+
+  it('should display and capitalize the default choice H (Help) `key` if none provided', function () {
+    delete this.fixture.default;
+    this.expand = new Expand(this.fixture, this.rl);
+    this.expand.run();
+
+    expect(this.rl.output.__raw__).to.contain('(abcdH)');
   });
 
   it('should \'autocomplete\' the user input', function (done) {
