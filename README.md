@@ -111,6 +111,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
 - **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 - **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
 - **when**: (Function, Boolean) Receive the current user answers hash and should return `true` or `false` depending on whether or not this question should be asked. The value can also be a simple boolean.
+- **pageSize**: (Number) Change the number of lines that will be rendered when using `list`, `rawList`, `expand` or `checkbox`. 
 
 `default`, `choices`(if defined as functions), `validate`, `filter` and `when` functions can be called asynchronous. Either return a promise or use `this.async()` to get a callback you'll call with the final value.
 
