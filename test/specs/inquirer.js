@@ -6,7 +6,6 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 var _ = require('lodash');
 var rx = require('rx');
-var Promise = require('pinkie-promise');
 var inquirer = require('../../lib/inquirer');
 var autosubmit = require('../helpers/events').autosubmit;
 
