@@ -247,8 +247,6 @@ var tests = {
       });
 
       it('should allow validate function to return a Promise', function () {
-        var self = this;
-
         this.fixture.validate = function () {
           return Promise.resolve(true);
         };
