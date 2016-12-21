@@ -71,7 +71,34 @@ describe('inquirer.prompt', function () {
     });
   });
 
-  it('should take a prompts array with nested names', function () {
+  it('should take a prompts array with array names', function () {
+    var prompts = [{
+      type: 'confirm',
+      name: ['foo', 'bar', 'q1'],
+      message: 'message'
+    }, {
+      type: 'confirm',
+      name: ['foo', 'q2'],
+      message: 'message',
+      default: false
+    }];
+
+    var promise = this.prompt(prompts);
+    autosubmit(promise.ui);
+
+    return promise.then(function (answers) {
+      expect(answers).to.deep.equal({
+        foo: {
+          bar: {
+            q1: true
+          },
+          q2: false
+        }
+      });
+    });
+  });
+
+  it('should not nest answers if prompts names are string containing periods', function () {
     var prompts = [{
       type: 'confirm',
       name: 'foo.bar.q1',
@@ -88,12 +115,8 @@ describe('inquirer.prompt', function () {
 
     return promise.then(function (answers) {
       expect(answers).to.deep.equal({
-        foo: {
-          bar: {
-            q1: true
-          },
-          q2: false
-        }
+        'foo.bar.q1': true,
+        'foo.q2': false
       });
     });
   });
