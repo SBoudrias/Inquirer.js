@@ -24,7 +24,7 @@
   "dependencies": {
     "ansi-escapes": "^1.1.0",
     "chalk": "^1.0.0",
-    "cli-cursor": "^1.0.1",
+    "cli-cursor": "^2.1.0",
     "cli-width": "^2.0.0",
     "external-editor": "^2.0.1",
     "figures": "^2.0.0",
