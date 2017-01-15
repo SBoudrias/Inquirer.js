@@ -22,4 +22,11 @@ describe('`base` prompt (e.g. prompt helpers)', function () {
     expect(question.name).to.equal(base.opt.name);
     expect(question.message).to.equal(base.opt.message);
   });
+
+  // You could erase `base._run` and this test and nothing would change.
+  it('should have a dummy run', function (done) {
+    this.base.run().then(function () {
+      done();
+    });
+  });
 });

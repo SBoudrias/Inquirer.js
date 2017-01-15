@@ -28,7 +28,7 @@ describe('Choices collection', function () {
     expect(choices.get(1)).to.not.exist;
     expect(function () {
       choices.realLength = 0;
-    }).to.throw;
+    }).to.throw();
   });
 
   it('should allow plucking choice content', function () {

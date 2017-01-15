@@ -6,6 +6,14 @@ var fixtures = require('../../helpers/fixtures');
 var Checkbox = require('../../../lib/prompts/checkbox');
 
 describe('`checkbox` prompt', function () {
+  it('should throw if `choices` is not provided', function () {
+    var fixture = _.omit(fixtures.checkbox, 'choices');
+    var rl = new ReadlineStub();
+    expect(function () {
+      return new Checkbox(fixture, rl);
+    }).to.throw();
+  });
+
   beforeEach(function () {
     this.fixture = _.clone(fixtures.checkbox);
     this.rl = new ReadlineStub();
