@@ -181,6 +181,29 @@ var tests = {
         this.rl.emit('line');
       });
 
+      it('should reject input if a Promise is returned which rejects', function (done) {
+        var self = this;
+        var called = 0;
+        var errorMessage = 'uh oh, error!';
+
+        this.fixture.validate = function () {
+          called++;
+          // Make sure returning false won't continue
+          if (called === 2) {
+            done();
+            return;
+          }
+
+          self.rl.emit('line');
+          return Promise.reject(errorMessage);
+        };
+
+        var prompt = new this.Prompt(this.fixture, this.rl);
+        prompt.run();
+
+        this.rl.emit('line');
+      });
+
       it('should accept input if boolean true is returned', function () {
         var called = 0;
 
@@ -214,6 +237,18 @@ var tests = {
             }
             done(false);
           }, 0);
+        };
+
+        var prompt = new this.Prompt(this.fixture, this.rl);
+        var promise = prompt.run();
+
+        this.rl.emit('line');
+        return promise;
+      });
+
+      it('should allow validate function to return a Promise', function () {
+        this.fixture.validate = function () {
+          return Promise.resolve(true);
         };
 
         var prompt = new this.Prompt(this.fixture, this.rl);
