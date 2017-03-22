@@ -111,7 +111,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
 - **validate**: (Function) Receive the user input and should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 - **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
 - **when**: (Function, Boolean) Receive the current user answers hash and should return `true` or `false` depending on whether or not this question should be asked. The value can also be a simple boolean.
-- **pageSize**: (Number) Change the number of lines that will be rendered when using `list`, `rawList`, `expand` or `checkbox`. 
+- **pageSize**: (Number) Change the number of lines that will be rendered when using `list`, `rawList`, `expand` or `checkbox`.
 
 `default`, `choices`(if defined as functions), `validate`, `filter` and `when` functions can be called asynchronous. Either return a promise or use `this.async()` to get a callback you'll call with the final value.
 
@@ -183,7 +183,7 @@ Separator instances have a property `type` equal to `separator`. This should all
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must be the choice `index` in the array or a choice `value`)
 
-![List prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/list-prompt.png)
+![List prompt](assets/screenshots/list-prompt.png)
 
 ---
 
@@ -192,7 +192,7 @@ default must be the choice `index` in the array or a choice `value`)
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must the choice `index` in the array)
 
-![Raw list prompt](https://i.cloudup.com/LcRGpXI0CX-3000x3000.png)
+![Raw list prompt](assets/screenshots/rawlist-prompt.png)
 
 ---
 
@@ -205,8 +205,8 @@ Note that the `choices` object will take an extra parameter called `key` for the
 
 See `examples/expand.js` for a running example.
 
-![Expand prompt closed](https://dl.dropboxusercontent.com/u/59696254/inquirer/expand-prompt-1.png)
-![Expand prompt expanded](https://dl.dropboxusercontent.com/u/59696254/inquirer/expand-prompt-2.png)
+![Expand prompt closed](assets/screenshots/expand-prompt-1.png)
+![Expand prompt expanded](assets/screenshots/expand-prompt-2.png)
 
 ---
 
@@ -218,7 +218,7 @@ Choices marked as `{checked: true}` will be checked by default.
 
 Choices whose property `disabled` is truthy will be unselectable. If `disabled` is a string, then the string will be outputted next to the disabled choice, otherwise it'll default to `"Disabled"`. The `disabled` property can also be a synchronous function receiving the current answers as argument and returning a boolean or a string.
 
-![Checkbox prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/checkbox-prompt.png)
+![Checkbox prompt](assets/screenshots/checkbox-prompt.png)
 
 ---
 
@@ -226,7 +226,7 @@ Choices whose property `disabled` is truthy will be unselectable. If `disabled` 
 
 Take `type`, `name`, `message`[, `default`] properties. `default` is expected to be a boolean if used.
 
-![Confirm prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/confirm-prompt.png)
+![Confirm prompt](assets/screenshots/confirm-prompt.png)
 
 ---
 
@@ -234,7 +234,7 @@ Take `type`, `name`, `message`[, `default`] properties. `default` is expected to
 
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
-![Input prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/input-prompt.png)
+![Input prompt](assets/screenshots/input-prompt.png)
 
 ---
 
@@ -242,7 +242,7 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
-![Password prompt](https://dl.dropboxusercontent.com/u/59696254/inquirer/password-prompt.png)
+![Password prompt](assets/screenshots/password-prompt.png)
 
 ---
 
