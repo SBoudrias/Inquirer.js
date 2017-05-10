@@ -30,7 +30,7 @@ describe('`checkbox` prompt', function () {
       expect(answer[0]).to.equal('choice 1');
       expect(answer[1]).to.equal('choice 2');
       done();
-    });
+    }).catch(err => console.log(err));
     this.rl.input.emit('keypress', ' ', {name: 'space'});
     this.rl.input.emit('keypress', null, {name: 'down'});
     this.rl.input.emit('keypress', ' ', {name: 'space'});
@@ -253,6 +253,76 @@ describe('`checkbox` prompt', function () {
       promise.then(function () {
         expect(this.rl.output.__raw__).to.contain('- dis1 (Disabled)');
       }.bind(this));
+    });
+  });
+
+  describe('with maxSelections option', function () {
+    beforeEach(function () {
+      this.fixture.maxSelections = 2;
+      this.checkbox = new Checkbox(this.fixture, this.rl);
+    });
+
+    it('disables selecting all', function () {
+      this.checkbox.run().then(function (answer) {
+        expect(answer.length).to.equal(0);
+      });
+
+      this.rl.input.emit('keypress', 'a', {name: 'a'});
+      this.rl.emit('line');
+    });
+
+    it('disables selecting inverse', function () {
+      this.checkbox.run().then(function (answer) {
+        expect(answer.length).to.equal(0);
+      });
+
+      this.rl.input.emit('keypress', 'i', {name: 'i'});
+      this.rl.emit('line');
+    });
+
+    it('navigates only between selected items', function () {
+      this.checkbox.run().then(function (answer) {
+        expect(answer.length).to.equal(1);
+        expect(answer[0]).to.equal('choice 2');
+      });
+
+      this.rl.input.emit('keypress', ' ', {name: 'space'});
+      this.rl.input.emit('keypress', null, {name: 'down'});
+      this.rl.input.emit('keypress', ' ', {name: 'space'});
+      this.rl.input.emit('keypress', null, {name: 'down'});
+      this.rl.input.emit('keypress', null, {name: 'down'});
+      this.rl.input.emit('keypress', null, {name: 'up'});
+      this.rl.input.emit('keypress', ' ', {name: 'space'});
+      this.rl.emit('line');
+    });
+
+    it('navigates only between selected items, consecutive', function () {
+      this.checkbox.run().then(function (answer) {
+        expect(answer.length).to.equal(1);
+        expect(answer[0]).to.equal('choice 2');
+      });
+
+      this.rl.input.emit('keypress', null, {name: 'down'});
+      this.rl.input.emit('keypress', ' ', {name: 'space'});
+      this.rl.input.emit('keypress', null, {name: 'down'});
+      this.rl.input.emit('keypress', ' ', {name: 'space'});
+      this.rl.input.emit('keypress', null, {name: 'up'});
+      this.rl.input.emit('keypress', null, {name: 'up'});
+      this.rl.input.emit('keypress', ' ', {name: 'space'});
+      this.rl.emit('line');
+    });
+
+    it('navigates only between selected items, using 1-9 shortcut key', function () {
+      this.checkbox.run().then(function (answer) {
+        expect(answer.length).to.equal(1);
+        expect(answer[0]).to.equal('choice 2');
+      });
+
+      this.rl.input.emit('keypress', '1');
+      this.rl.input.emit('keypress', '2');
+      this.rl.input.emit('keypress', '3');
+      this.rl.input.emit('keypress', '1');
+      this.rl.emit('line');
     });
   });
 });
