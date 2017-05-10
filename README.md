@@ -53,7 +53,7 @@ npm install inquirer
 ```javascript
 var inquirer = require('inquirer');
 inquirer.prompt([/* Pass your questions in here */]).then(function (answers) {
-	// Use user feedback for... whatever!!
+  // Use user feedback for... whatever!!
 });
 ```
 
@@ -212,7 +212,7 @@ See `examples/expand.js` for a running example.
 
 #### Checkbox - `{type: 'checkbox'}`
 
-Take `type`, `name`, `message`, `choices`[, `filter`, `validate`, `default`] properties. `default` is expected to be an Array of the checked choices value.
+Take `type`, `name`, `message`, `choices`[, `filter`, `validate`, `default`, `maxSelections`] properties. `default` is expected to be an Array of the checked choices value. `maxSelections` allows you to limit the number of selections allowed.
 
 Choices marked as `{checked: true}` will be checked by default.
 
