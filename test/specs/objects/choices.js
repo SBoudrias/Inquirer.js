@@ -47,6 +47,54 @@ describe('Choices collection', function () {
     }]);
   });
 
+  it('should allow finding an index among valid choices', function () {
+    var choices = new Choices([
+      {name: 'a', disabled: true},
+      {name: 'b', checked: true},
+      {name: 'c', checked: false},
+      {name: 'd', checked: false},
+      {name: 'e', checked: false}
+    ]);
+    var foundIndex = choices.findIndex({checked: true});
+    expect(foundIndex).to.equal(0);
+  });
+
+  it('should allow finding an index among valid choices, starting from specific index', function () {
+    var choices = new Choices([
+      {name: 'a', disabled: true},
+      {name: 'b', checked: true},
+      {name: 'c', checked: false},
+      {name: 'd', checked: true},
+      {name: 'e', checked: false}
+    ]);
+    var foundIndex = choices.findIndex({checked: true}, 1);
+    expect(foundIndex).to.equal(2);
+  });
+
+  it('should allow finding a last index among valid choices', function () {
+    var choices = new Choices([
+      {name: 'a', disabled: true},
+      {name: 'b', checked: true},
+      {name: 'c', checked: false},
+      {name: 'd', checked: true},
+      {name: 'e', checked: false}
+    ]);
+    var foundIndex = choices.findLastIndex({checked: true});
+    expect(foundIndex).to.equal(2);
+  });
+
+  it('should allow finding a last index among valid choices, starting from specific index', function () {
+    var choices = new Choices([
+      {name: 'a', disabled: true},
+      {name: 'b', checked: true},
+      {name: 'c', checked: false},
+      {name: 'd', checked: false},
+      {name: 'e', checked: true}
+    ]);
+    var foundIndex = choices.findLastIndex({checked: true}, 2);
+    expect(foundIndex).to.equal(0);
+  });
+
   it('should façade forEach', function () {
     var raw = ['a', 'b', 'c'];
     var choices = new Choices(raw);
@@ -62,6 +110,14 @@ describe('Choices collection', function () {
     });
     expect(filtered.length).to.equal(1);
     expect(filtered[0].name).to.equal('a');
+  });
+
+  it('should façade find', function () {
+    var choices = new Choices(['a', 'b', 'c']);
+    var found = choices.find(function (val) {
+      return val.name === 'a';
+    });
+    expect(found.name).to.equal('a');
   });
 
   it('should façade push and update the realChoices internally', function () {
