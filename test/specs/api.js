@@ -132,6 +132,32 @@ var tests = {
         this.rl.emit('line');
         return promise;
       });
+
+      it('should pass previous answers to the prompt filter function', function () {
+        var prompt = inquirer.createPromptModule();
+        var questions = [{
+          type: 'confirm',
+          name: 'q1',
+          message: 'message'
+        }, {
+          type: 'confirm',
+          name: 'q2',
+          message: 'message',
+          filter: function (input, answers) {
+            expect(answers.q1).to.be.true;
+            return input;
+          },
+          default: false
+        }];
+
+        var promise = prompt(questions);
+        autosubmit(promise.ui);
+
+        return promise.then(function (answers) {
+          expect(answers.q1).to.be.true;
+          expect(answers.q2).to.be.false;
+        });
+      });
     });
   },
 
