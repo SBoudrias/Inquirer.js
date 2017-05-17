@@ -1,5 +1,5 @@
 var inquirer = require('..');
-var Rx = require('rx');
+var Rx = require('rx-lite-aggregates');
 
 var observe = Rx.Observable.create(function (obs) {
   obs.onNext({

@@ -5,7 +5,7 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var _ = require('lodash');
-var rx = require('rx');
+var rx = require('rx-lite-aggregates');
 var inquirer = require('../../lib/inquirer');
 var autosubmit = require('../helpers/events').autosubmit;
 
