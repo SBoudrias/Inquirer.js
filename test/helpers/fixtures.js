@@ -22,6 +22,12 @@ module.exports = {
     choices: ['foo', new inquirer.Separator(), 'bar', 'bum']
   },
 
+  directory: {
+    message: "message",
+    name: "name",
+    basePath: './'
+  },
+
   rawlist: {
     message: 'message',
     name: 'name',
