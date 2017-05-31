@@ -38,7 +38,7 @@
     "through": "^2.3.6"
   },
   "devDependencies": {
-    "chai": "^3.0.0",
+    "chai": "^4.0.1",
     "cmdify": "^0.0.4",
     "eslint": "^3.10.2",
     "eslint-config-xo-space": "^0.15.0",
