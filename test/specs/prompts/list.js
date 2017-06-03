@@ -31,6 +31,16 @@ describe('`list` prompt', function () {
     this.rl.emit('line');
   });
 
+  it('should abort when user presses escape', function (done) {
+    this.list.run().then(function (answer) {
+      expect(answer).to.equal(null);
+      done();
+    });
+
+    this.rl.input.emit('keypress', '', {name: 'escape'});
+    this.rl.emit('line');
+  });
+
   it('should allow for arrow navigation', function (done) {
     this.list.run().then(function (answer) {
       expect(answer).to.equal('bar');
