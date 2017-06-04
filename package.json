@@ -1,6 +1,6 @@
 {
   "name": "inquirer",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "files": [
@@ -23,7 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "ansi-escapes": "^2.0.0",
-    "chalk": "^1.0.0",
+    "chalk": "^1.1.3",
     "cli-cursor": "^2.1.0",
     "cli-width": "^2.0.0",
     "external-editor": "^2.0.4",
