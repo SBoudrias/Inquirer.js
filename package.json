@@ -40,7 +40,7 @@
   "devDependencies": {
     "chai": "^4.0.1",
     "cmdify": "^0.0.4",
-    "eslint": "^3.10.2",
+    "eslint": "^3.19.0",
     "eslint-config-xo-space": "^0.16.0",
     "gulp": "^3.9.0",
     "gulp-coveralls": "^0.1.0",
@@ -51,9 +51,9 @@
     "gulp-mocha": "^3.0.0",
     "gulp-nsp": "^2.1.0",
     "gulp-plumber": "^1.0.0",
-    "mocha": "^3.1.2",
+    "mocha": "^3.4.2",
     "mockery": "^2.0.0",
-    "sinon": "^2.0.0"
+    "sinon": "^2.3.2"
   },
   "eslintConfig": {
     "extends": "xo-space",
@@ -65,6 +65,8 @@
         "error",
         "single"
       ],
+      "no-multi-assign": "off",
+      "capitalized-comments": "off",
       "no-unused-expressions": "off",
       "handle-callback-err": "off",
       "no-eq-null": "off",
