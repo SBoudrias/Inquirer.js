@@ -29,7 +29,7 @@ module.exports = {
       min: '1/1/2000'
     },
     time: {
-      min: '5:00 PM',
+      min: '9:00 AM',
       max: '10:00 PM',
       minutes: {
         interval: 15
