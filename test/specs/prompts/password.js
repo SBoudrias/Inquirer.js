@@ -49,4 +49,29 @@ describe('`password` prompt', function () {
     this.rl.emit('line', 'Inquirer');
     return promise;
   });
+
+  it('should display an error on validation error', function (done) {
+    var rl = this.rl;
+
+    this.fixture.mask = '*';
+    this.fixture.validate = function (input) {
+      if (input !== 'Passw0rd') {
+        return 'invalid password';
+      }
+
+      return true;
+    };
+
+    var password = new Password(this.fixture, this.rl);
+    password.run();
+
+    rl.emit('line', 'Inquirer');
+    setTimeout(function () {
+      console.log('\n\nBABA\n\n\n\n', rl.output.__raw__, '\n\n\n\nBABA\n\n');
+      var expectOutput = expect(stripAnsi(rl.output.__raw__));
+      expectOutput.to.contain('invalid password');
+
+      done();
+    }, 250);
+  });
 });
