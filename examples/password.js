@@ -10,9 +10,9 @@ inquirer.prompt([
     type: 'password',
     message: 'Enter "Passw0rd"',
     name: 'password3',
-    validate: (input) => {
+    validate: function (input) {
       if (input !== 'Passw0rd') {
-        return 'invalid password'
+        return 'invalid password';
       }
 
       return true;
