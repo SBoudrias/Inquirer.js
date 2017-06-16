@@ -53,6 +53,56 @@ describe('`password` prompt', function () {
   it('should display an error on validation error', function (done) {
     var rl = this.rl;
 
+    this.fixture.validate = function (input) {
+      if (input !== 'Passw0rd') {
+        return 'invalid password';
+      }
+
+      return true;
+    };
+
+    var password = new Password(this.fixture, this.rl);
+    password.run();
+
+    rl.emit('line', 'Inquirer');
+
+    setTimeout(function () {
+      var expectOutput = expect(stripAnsi(rl.output.__raw__));
+      expectOutput.to.contain('invalid password');
+      done();
+    }, 25);
+  });
+
+  it('should remove an error on keypress without mask', function (done) {
+    var rl = this.rl;
+
+    this.fixture.validate = function (input) {
+      if (input !== 'Passw0rd') {
+        return 'invalid password';
+      }
+
+      return true;
+    };
+
+    var password = new Password(this.fixture, this.rl);
+    password.run();
+
+    rl.emit('line', 'Inquirer');
+
+    setTimeout(function () {
+      rl.input.emit('keypress', 'a', {name: 'a'});
+      rl.input.emit('keypress', 'b', {name: 'b'});
+
+      setTimeout(function () {
+        expect(password.error).to.be.null;
+        done();
+      }, 25);
+    }, 25);
+  });
+
+  it('should remove an error on keypress with mask', function (done) {
+    var rl = this.rl;
+
     this.fixture.mask = '*';
     this.fixture.validate = function (input) {
       if (input !== 'Passw0rd') {
@@ -66,12 +116,15 @@ describe('`password` prompt', function () {
     password.run();
 
     rl.emit('line', 'Inquirer');
-    setTimeout(function () {
-      console.log('\n\nBABA\n\n\n\n', rl.output.__raw__, '\n\n\n\nBABA\n\n');
-      var expectOutput = expect(stripAnsi(rl.output.__raw__));
-      expectOutput.to.contain('invalid password');
 
-      done();
-    }, 250);
+    setTimeout(function () {
+      rl.input.emit('keypress', 'a', {name: 'a'});
+      rl.input.emit('keypress', 'b', {name: 'b'});
+
+      setTimeout(function () {
+        expect(password.error).to.be.null;
+        done();
+      }, 25);
+    }, 25);
   });
 });
