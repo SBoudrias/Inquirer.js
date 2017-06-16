@@ -6,6 +6,14 @@ var fixtures = require('../../helpers/fixtures');
 
 var Password = require('../../../lib/prompts/password');
 
+function validationFixture(input) {
+  if (input !== 'Passw0rd') {
+    return 'invalid password';
+  }
+
+  return true;
+}
+
 function testMasking(rl, mask) {
   return function (answer) {
     expect(answer).to.equal('Inquirer');
@@ -16,6 +24,30 @@ function testMasking(rl, mask) {
       expectOutput.to.not.contain('********');
     }
   };
+}
+
+function testError(rl, errorMessage) {
+  return new Promise(function (resolve) {
+    rl.emit('line', 'Inquirer');
+
+    setTimeout(function () {
+      var expectOutput = expect(stripAnsi(rl.output.__raw__));
+      expectOutput.to.contain(errorMessage);
+      resolve();
+    }, 25);
+  });
+}
+
+function testNoError(rl, password) {
+  return new Promise(function (resolve) {
+    rl.input.emit('keypress', 'a', {name: 'a'});
+    rl.input.emit('keypress', 'b', {name: 'b'});
+
+    setTimeout(function () {
+      expect(password.error).to.equal(null);
+      resolve();
+    }, 25);
+  });
 }
 
 describe('`password` prompt', function () {
@@ -50,81 +82,38 @@ describe('`password` prompt', function () {
     return promise;
   });
 
-  it('should display an error on validation error', function (done) {
+  it('should display an error on validation error', function () {
+    this.fixture.validate = validationFixture;
+
+    new Password(this.fixture, this.rl).run();
+
+    return testError(this.rl, 'invalid password');
+  });
+
+  it('should remove an error on keypress without mask', function () {
+    this.fixture.validate = validationFixture;
+
     var rl = this.rl;
-
-    this.fixture.validate = function (input) {
-      if (input !== 'Passw0rd') {
-        return 'invalid password';
-      }
-
-      return true;
-    };
-
     var password = new Password(this.fixture, this.rl);
     password.run();
 
-    rl.emit('line', 'Inquirer');
-
-    setTimeout(function () {
-      var expectOutput = expect(stripAnsi(rl.output.__raw__));
-      expectOutput.to.contain('invalid password');
-      done();
-    }, 25);
+    return testError(rl, 'invalid password')
+      .then(function () {
+        return testNoError(rl, password);
+      });
   });
 
-  it('should remove an error on keypress without mask', function (done) {
-    var rl = this.rl;
-
-    this.fixture.validate = function (input) {
-      if (input !== 'Passw0rd') {
-        return 'invalid password';
-      }
-
-      return true;
-    };
-
-    var password = new Password(this.fixture, this.rl);
-    password.run();
-
-    rl.emit('line', 'Inquirer');
-
-    setTimeout(function () {
-      rl.input.emit('keypress', 'a', {name: 'a'});
-      rl.input.emit('keypress', 'b', {name: 'b'});
-
-      setTimeout(function () {
-        expect(password.error).to.be.null;
-        done();
-      }, 25);
-    }, 25);
-  });
-
-  it('should remove an error on keypress with mask', function (done) {
-    var rl = this.rl;
-
+  it('should remove an error on keypress with mask', function () {
     this.fixture.mask = '*';
-    this.fixture.validate = function (input) {
-      if (input !== 'Passw0rd') {
-        return 'invalid password';
-      }
+    this.fixture.validate = validationFixture;
 
-      return true;
-    };
-
+    var rl = this.rl;
     var password = new Password(this.fixture, this.rl);
     password.run();
 
-    rl.emit('line', 'Inquirer');
-
-    setTimeout(function () {
-      rl.input.emit('keypress', 'a', {name: 'a'});
-      rl.input.emit('keypress', 'b', {name: 'b'});
-
-      setTimeout(function () {
-        expect(password.error).to.be.null;
-        done();
-      }, 25);
-    }, 25);
+    return testError(rl, 'invalid password')
+      .then(function () {
+        return testNoError(rl, password);
+      });
   });
 });
