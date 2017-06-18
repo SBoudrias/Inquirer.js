@@ -252,6 +252,17 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties
 
 Launches an instance of the users preferred editor on a temporary file. Once the user exits their editor, the contents of the temporary file are read in as the result. The editor to use is determined by reading the $VISUAL or $EDITOR environment variables. If neither of those are present, notepad (on Windows) or vim (Linux or Mac) is used.
 
+#### Datetime - `{type: 'datetime'}`
+
+Take `type`, `name`, `message`[, `format`, `date`, `time`] properties.
+
+![Datetime prompt](assets/screenshots/datetime-prompt.png)
+
+Allows for input of a date object.
+
+See `examples/datetime.js` for an example.
+
+
 <a name="layouts"></a>
 ## User Interfaces and layouts
 

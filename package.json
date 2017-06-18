@@ -26,6 +26,8 @@
     "chalk": "^1.0.0",
     "cli-cursor": "^2.1.0",
     "cli-width": "^2.0.0",
+    "dateformat": "^2.0.0",
+    "datejs": "^1.0.0-rc3",
     "external-editor": "^2.0.4",
     "figures": "^2.0.0",
     "lodash": "^4.3.0",
