@@ -359,9 +359,11 @@ Licensed under the MIT license.
 
 #### Prompts ####
 
-[__autocomplete__](https://github.com/mokkabonna/inquirer-autocomplete-prompt)
+[__autocomplete__](https://github.com/mokkabonna/inquirer-autocomplete-prompt)<br>
+Presents a list of options as the user types, compatible with other packages such as fuzzy (for search)<br>
 ![autocomplete prompt](https://github.com/mokkabonna/inquirer-autocomplete-prompt/raw/master/inquirer.gif)
 
-[__datetime__](https://github.com/DerekTBrown/inquirer-datepicker-prompt)
+[__datetime__](https://github.com/DerekTBrown/inquirer-datepicker-prompt)<br>
+Customizable date/time selector using both number pad and arrow keys, with support for date and time range limiting.
 ![Datetime Prompt](https://github.com/DerekTBrown/inquirer-datepicker-prompt/raw/master/example/datetime-prompt.png)
 
