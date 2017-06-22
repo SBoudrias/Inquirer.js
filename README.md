@@ -364,6 +364,6 @@ Presents a list of options as the user types, compatible with other packages suc
 ![autocomplete prompt](https://github.com/mokkabonna/inquirer-autocomplete-prompt/raw/master/inquirer.gif)
 
 [__datetime__](https://github.com/DerekTBrown/inquirer-datepicker-prompt)<br>
-Customizable date/time selector using both number pad and arrow keys, with support for date and time range limiting.
+Customizable date/time selector using both number pad and arrow keys, with support for date and time range limiting.<br>
 ![Datetime Prompt](https://github.com/DerekTBrown/inquirer-datepicker-prompt/raw/master/example/datetime-prompt.png)
 
