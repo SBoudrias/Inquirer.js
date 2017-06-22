@@ -357,7 +357,7 @@ Licensed under the MIT license.
 ## Plugins
 <a name="plugins"></a>
 
-#### Prompts ####
+### Prompts ###
 
 [__autocomplete__](https://github.com/mokkabonna/inquirer-autocomplete-prompt)<br>
 Presents a list of options as the user types, compatible with other packages such as fuzzy (for search)<br>
