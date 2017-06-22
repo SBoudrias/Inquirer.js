@@ -22,6 +22,7 @@ A collection of common interactive command line user interfaces.
   4. [News](#news)
   5. [Contributing](#contributing)
   6. [License](#license)
+  7. [Plugins](#plugins)
 
 
 ## Goal and Philosophy
@@ -352,3 +353,15 @@ to [@vaxilart](https://twitter.com/Vaxilart)) or just add your name to [the wiki
 
 Copyright (c) 2016 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))
 Licensed under the MIT license.
+
+## Plugins
+<a name="plugins"></a>
+
+#### Prompts ####
+
+[__autocomplete__](https://github.com/mokkabonna/inquirer-autocomplete-prompt)
+![autocomplete prompt](https://github.com/mokkabonna/inquirer-autocomplete-prompt/raw/master/inquirer.gif)
+
+[__datetime__](https://github.com/DerekTBrown/inquirer-datepicker-prompt)
+![Datetime Prompt](https://github.com/DerekTBrown/inquirer-datepicker-prompt/raw/master/example/datetime-prompt.png)
+
