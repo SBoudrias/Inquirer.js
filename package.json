@@ -23,7 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "ansi-escapes": "^2.0.0",
-    "chalk": "^1.0.0",
+    "chalk": "^2.0.0",
     "cli-cursor": "^2.1.0",
     "cli-width": "^2.0.0",
     "external-editor": "^2.0.4",
