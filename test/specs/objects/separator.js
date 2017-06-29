@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var chalk = require('chalk');
+var stripAnsi = require('strip-ansi');
 
 var Separator = require('../../../lib/objects/separator');
 var Inquirer = require('../../../lib/inquirer');
@@ -7,17 +7,17 @@ var Inquirer = require('../../../lib/inquirer');
 describe('Separator constructor', function () {
   it('should set a default', function () {
     var sep = new Separator();
-    expect(chalk.stripColor(sep.toString())).to.equal('──────────────');
+    expect(stripAnsi(sep.toString())).to.equal('──────────────');
   });
 
   it('should set user input as separator', function () {
     var sep = new Separator('foo bar');
-    expect(chalk.stripColor(sep.toString())).to.equal('foo bar');
+    expect(stripAnsi(sep.toString())).to.equal('foo bar');
   });
 
   it('instances should be stringified when appended to a string', function () {
     var sep = new Separator('foo bar');
-    expect(chalk.stripColor(String(sep))).to.equal('foo bar');
+    expect(stripAnsi(String(sep))).to.equal('foo bar');
   });
 
   it('should be exposed on Inquirer object', function () {
