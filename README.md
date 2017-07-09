@@ -87,7 +87,7 @@ Register prompt plugins under `name`.
 
 #### `inquirer.createPromptModule() -> prompt function`
 
-Create a self contained inquirer module. If don't want to affect other libraries that also rely on inquirer when you overwrite or add new prompt types.
+Create a self contained inquirer module. If you don't want to affect other libraries that also rely on inquirer when you overwrite or add new prompt types.
 
 ```js
 var prompt = inquirer.createPromptModule();
