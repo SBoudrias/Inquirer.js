@@ -369,3 +369,6 @@ Customizable date/time selector using both number pad and arrow keys<br>
 <br>
 ![Datetime Prompt](https://github.com/DerekTBrown/inquirer-datepicker-prompt/raw/master/example/datetime-prompt.png)
 
+[__inquirer-select-line__](https://github.com/adam-golab/inquirer-select-line)<br>
+Prompt for selecting index in array where add new element
+![inquirer-select-line gif](https://media.giphy.com/media/xUA7b1MxpngddUvdHW/giphy.gif)
