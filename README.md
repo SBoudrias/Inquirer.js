@@ -372,3 +372,6 @@ Customizable date/time selector using both number pad and arrow keys<br>
 [__inquirer-select-line__](https://github.com/adam-golab/inquirer-select-line)<br>
 Prompt for selecting index in array where add new element
 ![inquirer-select-line gif](https://media.giphy.com/media/xUA7b1MxpngddUvdHW/giphy.gif)
+
+[__command__](https://github.com/sullof/inquirer-command-prompt)<br>
+Simple prompt with command history and dynamic autocomplete
