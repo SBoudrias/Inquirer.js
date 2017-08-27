@@ -374,6 +374,9 @@ Prompt for selecting index in array where add new element<br>
 <br>
 ![inquirer-select-line gif](https://media.giphy.com/media/xUA7b1MxpngddUvdHW/giphy.gif)
 
+[__command__](https://github.com/sullof/inquirer-command-prompt)<br>
+Simple prompt with command history and dynamic autocomplete
+
 [__inquirer-chalk-pipe__](https://github.com/LitoMore/inquirer-chalk-pipe)<br>
 Prompt for input chalk-pipe style strings<br>
 <br>
