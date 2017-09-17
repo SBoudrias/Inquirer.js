@@ -372,5 +372,15 @@ Customizable date/time selector using both number pad and arrow keys<br>
 ![Datetime Prompt](https://github.com/DerekTBrown/inquirer-datepicker-prompt/raw/master/example/datetime-prompt.png)
 
 [__inquirer-select-line__](https://github.com/adam-golab/inquirer-select-line)<br>
-Prompt for selecting index in array where add new element
+Prompt for selecting index in array where add new element<br>
+<br>
 ![inquirer-select-line gif](https://media.giphy.com/media/xUA7b1MxpngddUvdHW/giphy.gif)
+
+[__command__](https://github.com/sullof/inquirer-command-prompt)<br>
+<br>
+Simple prompt with command history and dynamic autocomplete
+
+[__inquirer-chalk-pipe__](https://github.com/LitoMore/inquirer-chalk-pipe)<br>
+Prompt for input chalk-pipe style strings<br>
+<br>
+![inquirer-chalk-pipe](https://github.com/LitoMore/inquirer-chalk-pipe/raw/master/screenshot.gif)

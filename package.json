@@ -1,6 +1,6 @@
 {
   "name": "inquirer",
-  "version": "3.2.1",
+  "version": "3.2.3",
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "files": [
@@ -22,7 +22,7 @@
   "repository": "SBoudrias/Inquirer.js",
   "license": "MIT",
   "dependencies": {
-    "ansi-escapes": "^2.0.0",
+    "ansi-escapes": "^3.0.0",
     "chalk": "^2.0.0",
     "cli-cursor": "^2.1.0",
     "cli-width": "^2.0.0",
@@ -54,6 +54,6 @@
     "gulp-plumber": "^1.0.0",
     "mocha": "^3.4.2",
     "mockery": "^2.1.0",
-    "sinon": "^2.3.6"
+    "sinon": "^3.0.0"
   }
 }
