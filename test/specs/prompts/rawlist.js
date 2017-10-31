@@ -72,4 +72,28 @@ describe('`rawlist` prompt', function () {
 
     this.rl.emit('line');
   });
+
+  it('should allow string default being the value', function (done) {
+    this.fixture.default = 'bum';
+    var list = new Rawlist(this.fixture, this.rl);
+
+    list.run().then(function (answer) {
+      expect(answer).to.equal('bum');
+      done();
+    });
+
+    this.rl.emit('line');
+  });
+
+  it('shouldn\'t allow an invalid string default to change position', function (done) {
+    this.fixture.default = 'bumby';
+    var list = new Rawlist(this.fixture, this.rl);
+
+    list.run().then(function (answer) {
+      expect(answer).to.equal('foo');
+      done();
+    });
+
+    this.rl.emit('line');
+  });
 });
