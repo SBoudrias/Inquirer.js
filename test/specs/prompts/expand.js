@@ -68,6 +68,17 @@ describe('`expand` prompt', function () {
     }.bind(this));
   });
 
+  it('should use a string the `default` value', function (done) {
+    this.fixture.default = 'chile';
+    this.expand = new Expand(this.fixture, this.rl);
+
+    this.expand.run().then(function (answer) {
+      expect(answer).to.equal('chile');
+      done();
+    });
+    this.rl.emit('line');
+  });
+
   it('should use the `default` argument value', function (done) {
     this.fixture.default = 1;
     this.expand = new Expand(this.fixture, this.rl);
@@ -123,6 +134,22 @@ describe('`expand` prompt', function () {
 
     this.expand.run();
     expect(this.rl.output.__raw__).to.contain('(aBcdh)');
+  });
+
+  it('should display and capitalize the default choice by name value', function () {
+    this.fixture.default = 'chile';
+    this.expand = new Expand(this.fixture, this.rl);
+
+    this.expand.run();
+    expect(this.rl.output.__raw__).to.contain('(abCdh)');
+  });
+
+  it('should display and capitalize the default choice H (Help) `key` if no string default matched', function () {
+    this.fixture.default = 'chile!';
+    this.expand = new Expand(this.fixture, this.rl);
+
+    this.expand.run();
+    expect(this.rl.output.__raw__).to.contain('(abcdH)');
   });
 
   it('should display and capitalize the default choice H (Help) `key` if none provided', function () {
