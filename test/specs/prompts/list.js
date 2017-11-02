@@ -148,6 +148,18 @@ describe('`list` prompt', function () {
     this.rl.emit('line');
   });
 
+  it('shouldn\'t allow an invalid string default to change position', function (done) {
+    this.fixture.default = 'babar';
+    var list = new List(this.fixture, this.rl);
+
+    list.run().then(function (answer) {
+      expect(answer).to.equal('foo');
+      done();
+    });
+
+    this.rl.emit('line');
+  });
+
   it('shouldn\'t allow an invalid index as default', function (done) {
     this.fixture.default = 4;
     var list = new List(this.fixture, this.rl);
