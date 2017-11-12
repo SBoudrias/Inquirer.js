@@ -121,7 +121,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
 ``` javascript
 {
   /* Preferred way: with promise */
-  filter: function () {
+  filter() {
     return new Promise(/* etc... */);
   },
 
@@ -131,7 +131,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
     var done = this.async();
 
     // Do async stuff
-    setTimeout(function () {
+    setTimeout(() => {
       if (typeof input !== 'number') {
         // Pass the return value in the done callback
         done('You need to provide a number');

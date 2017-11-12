@@ -5,16 +5,16 @@ var fixtures = require('../../helpers/fixtures');
 
 var Input = require('../../../lib/prompts/input');
 
-describe('`input` prompt', function () {
-  beforeEach(function () {
+describe('`input` prompt', function() {
+  beforeEach(function() {
     this.fixture = _.clone(fixtures.input);
     this.rl = new ReadlineStub();
   });
 
-  it('should use raw value from the user', function (done) {
+  it('should use raw value from the user', function(done) {
     var input = new Input(this.fixture, this.rl);
 
-    input.run().then(function (answer) {
+    input.run().then(answer => {
       expect(answer).to.equal('Inquirer');
       done();
     });
@@ -22,8 +22,8 @@ describe('`input` prompt', function () {
     this.rl.emit('line', 'Inquirer');
   });
 
-  it('should output filtered value', function () {
-    this.fixture.filter = function () {
+  it('should output filtered value', function() {
+    this.fixture.filter = function() {
       return 'pass';
     };
 
@@ -31,8 +31,8 @@ describe('`input` prompt', function () {
     var promise = prompt.run();
     this.rl.emit('line', '');
 
-    return promise.then(function () {
+    return promise.then(() => {
       expect(this.rl.output.__raw__).to.contain('pass');
-    }.bind(this));
+    });
   });
 });

@@ -15,7 +15,7 @@ var questions = [
     type: 'input',
     name: 'favorite',
     message: 'Bacon lover, what is your favorite type of bacon?',
-    when: function (answers) {
+    when: function(answers) {
       return answers.bacon;
     }
   },
@@ -23,7 +23,7 @@ var questions = [
     type: 'confirm',
     name: 'pizza',
     message: 'Ok... Do you like pizza?',
-    when: function (answers) {
+    when: function(answers) {
       return !likesFood('bacon')(answers);
     }
   },
@@ -36,11 +36,11 @@ var questions = [
 ];
 
 function likesFood(aFood) {
-  return function (answers) {
+  return function(answers) {
     return answers[aFood];
   };
 }
 
-inquirer.prompt(questions).then(function (answers) {
+inquirer.prompt(questions).then(answers => {
   console.log(JSON.stringify(answers, null, '  '));
 });

@@ -32,23 +32,18 @@ module.exports = {
     message: 'message',
     name: 'name',
     choices: [
-      {key: 'a', name: 'acab'},
+      { key: 'a', name: 'acab' },
       new inquirer.Separator(),
-      {key: 'b', name: 'bar'},
-      {key: 'c', name: 'chile'},
-      {key: 'd', name: 'd', value: false}
+      { key: 'b', name: 'bar' },
+      { key: 'c', name: 'chile' },
+      { key: 'd', name: 'd', value: false }
     ]
   },
 
   checkbox: {
     message: 'message',
     name: 'name',
-    choices: [
-      'choice 1',
-      new inquirer.Separator(),
-      'choice 2',
-      'choice 3'
-    ]
+    choices: ['choice 1', new inquirer.Separator(), 'choice 2', 'choice 3']
   },
 
   editor: {
