@@ -7,6 +7,9 @@
   "files": ["lib"],
   "main": "lib/inquirer.js",
   "keywords": ["command", "prompt", "stdin", "cli", "tty", "menu"],
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "devDependencies": {
     "chai": "^4.0.1",
     "cmdify": "^0.0.4",
@@ -19,7 +22,7 @@
     "lint-staged": "^5.0.0",
     "mocha": "^4.0.0",
     "mockery": "^2.1.0",
-    "nsp": "^3.1.0",
+    "nsp": "^3.0.0",
     "nyc": "^11.3.0",
     "prettier": "^1.7.0",
     "sinon": "^4.0.0"
