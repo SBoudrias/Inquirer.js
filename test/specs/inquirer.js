@@ -5,7 +5,7 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var _ = require('lodash');
-var rx = require('rx-lite-aggregates');
+var Rx = require('rxjs/Rx');
 var inquirer = require('../../lib/inquirer');
 var autosubmit = require('../helpers/events').autosubmit;
 
@@ -386,20 +386,20 @@ describe('inquirer.prompt', function() {
 
   it('takes an Observable as question', function() {
     var promise;
-    var prompts = rx.Observable.create(function(obs) {
-      obs.onNext({
+    var prompts = Rx.Observable.create(function(obs) {
+      obs.next({
         type: 'confirm',
         name: 'q1',
         message: 'message'
       });
       setTimeout(() => {
-        obs.onNext({
+        obs.next({
           type: 'confirm',
           name: 'q2',
           message: 'message',
           default: false
         });
-        obs.onCompleted();
+        obs.complete();
         promise.ui.rl.emit('line');
       }, 30);
     });

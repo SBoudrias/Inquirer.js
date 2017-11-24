@@ -286,7 +286,7 @@ ui.updateBottomBar('new bottom bar content');
 ## Reactive interface
 
 
-Internally, Inquirer uses the [JS reactive extension](https://github.com/Reactive-Extensions/RxJS) to handle events and async flows.
+Internally, Inquirer uses the [JS reactive extension](https://github.com/ReactiveX/rxjs) to handle events and async flows.
 
 This mean you can take advantage of this feature to provide more advanced flows. For example, you can dynamically add questions to be asked:
 
@@ -295,11 +295,11 @@ var prompts = new Rx.Subject();
 inquirer.prompt(prompts);
 
 // At some point in the future, push new questions
-prompts.onNext({ /* question... */ });
-prompts.onNext({ /* question... */ });
+prompts.next({ /* question... */ });
+prompts.next({ /* question... */ });
 
 // When you're done
-prompts.onCompleted();
+prompts.complete();
 ```
 
 And using the return value `process` property, you can access more fine grained callbacks:
