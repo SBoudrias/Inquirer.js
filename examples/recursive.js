@@ -11,7 +11,7 @@ var questions = [
   {
     type: 'input',
     name: 'tvShow',
-    message: 'What\'s your favorite TV show?'
+    message: "What's your favorite TV show?"
   },
   {
     type: 'confirm',
@@ -22,7 +22,7 @@ var questions = [
 ];
 
 function ask() {
-  inquirer.prompt(questions).then(function (answers) {
+  inquirer.prompt(questions).then(answers => {
     output.push(answers.tvShow);
     if (answers.askAgain) {
       ask();

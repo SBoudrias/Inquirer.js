@@ -5,6 +5,8 @@ Inquirer.js
 
 A collection of common interactive command line user interfaces.
 
+**Version 4.x** only supports Node 6 and over. For Node 4 support please use [version 3.x](https://github.com/SBoudrias/Inquirer.js/tree/v3.3.0).
+
 ## Table of Contents
 
   1. [Documentation](#documentation)
@@ -53,7 +55,7 @@ npm install inquirer
 
 ```javascript
 var inquirer = require('inquirer');
-inquirer.prompt([/* Pass your questions in here */]).then(function (answers) {
+inquirer.prompt([/* Pass your questions in here */]).then(answers => {
 	// Use user feedback for... whatever!!
 });
 ```
@@ -121,7 +123,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
 ``` javascript
 {
   /* Preferred way: with promise */
-  filter: function () {
+  filter() {
     return new Promise(/* etc... */);
   },
 
@@ -131,7 +133,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
     var done = this.async();
 
     // Do async stuff
-    setTimeout(function () {
+    setTimeout(function() {
       if (typeof input !== 'number') {
         // Pass the return value in the done callback
         done('You need to provide a number');
