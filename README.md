@@ -188,7 +188,7 @@ Separator instances have a property `type` equal to `separator`. This should all
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must be the choice `index` in the array or a choice `value`)
 
-![List prompt](https://cdn.rawgit.com/marionebl/f256ed6907a24fafe0383eee266c5fe5/raw/3d68035c56fc3e0b8d057b7ac2d8c5249c5d740f/list.svg)
+![List prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/list.svg)
 
 ---
 
@@ -197,7 +197,7 @@ default must be the choice `index` in the array or a choice `value`)
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must the choice `index` in the array)
 
-![Raw list prompt](https://cdn.rawgit.com/marionebl/f256ed6907a24fafe0383eee266c5fe5/raw/b1ac99cb165628b6ce6fc9be24b55a2110ee874b/rawlist.svg)
+![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
 
 ---
 
@@ -210,8 +210,8 @@ Note that the `choices` object will take an extra parameter called `key` for the
 
 See `examples/expand.js` for a running example.
 
-![Expand prompt closed](https://cdn.rawgit.com/marionebl/f256ed6907a24fafe0383eee266c5fe5/raw/3d68035c56fc3e0b8d057b7ac2d8c5249c5d740f/expand-y.svg)
-![Expand prompt expanded](https://cdn.rawgit.com/marionebl/f256ed6907a24fafe0383eee266c5fe5/raw/3d68035c56fc3e0b8d057b7ac2d8c5249c5d740f/expand-d.svg)
+![Expand prompt closed](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-y.svg)
+![Expand prompt expanded](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-d.svg)
 
 ---
 
@@ -223,7 +223,7 @@ Choices marked as `{checked: true}` will be checked by default.
 
 Choices whose property `disabled` is truthy will be unselectable. If `disabled` is a string, then the string will be outputted next to the disabled choice, otherwise it'll default to `"Disabled"`. The `disabled` property can also be a synchronous function receiving the current answers as argument and returning a boolean or a string.
 
-![Checkbox prompt](https://cdn.rawgit.com/marionebl/f256ed6907a24fafe0383eee266c5fe5/raw/3d68035c56fc3e0b8d057b7ac2d8c5249c5d740f/checkbox.svg)
+![Checkbox prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/checkbox.svg)
 
 ---
 
@@ -231,7 +231,7 @@ Choices whose property `disabled` is truthy will be unselectable. If `disabled` 
 
 Take `type`, `name`, `message`[, `default`] properties. `default` is expected to be a boolean if used.
 
-![Confirm prompt](https://cdn.rawgit.com/marionebl/f256ed6907a24fafe0383eee266c5fe5/raw/3d68035c56fc3e0b8d057b7ac2d8c5249c5d740f/confirm.svg)
+![Confirm prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/confirm.svg)
 
 ---
 
@@ -239,7 +239,7 @@ Take `type`, `name`, `message`[, `default`] properties. `default` is expected to
 
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
-![Input prompt](https://cdn.rawgit.com/marionebl/f256ed6907a24fafe0383eee266c5fe5/raw/3d68035c56fc3e0b8d057b7ac2d8c5249c5d740f/input.svg)
+![Input prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/input.svg)
 
 ---
 
@@ -247,7 +247,7 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
-![Password prompt](https://cdn.rawgit.com/marionebl/f256ed6907a24fafe0383eee266c5fe5/raw/3d68035c56fc3e0b8d057b7ac2d8c5249c5d740f/password.svg)
+![Password prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/password.svg)
 
 ---
 
