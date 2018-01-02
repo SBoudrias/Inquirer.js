@@ -188,7 +188,7 @@ Separator instances have a property `type` equal to `separator`. This should all
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must be the choice `index` in the array or a choice `value`)
 
-![List prompt](assets/screenshots/list-prompt.png)
+![List prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/list.svg)
 
 ---
 
@@ -197,7 +197,7 @@ default must be the choice `index` in the array or a choice `value`)
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must the choice `index` in the array)
 
-![Raw list prompt](assets/screenshots/rawlist-prompt.png)
+![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
 
 ---
 
@@ -210,8 +210,8 @@ Note that the `choices` object will take an extra parameter called `key` for the
 
 See `examples/expand.js` for a running example.
 
-![Expand prompt closed](assets/screenshots/expand-prompt-1.png)
-![Expand prompt expanded](assets/screenshots/expand-prompt-2.png)
+![Expand prompt closed](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-y.svg)
+![Expand prompt expanded](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-d.svg)
 
 ---
 
@@ -223,7 +223,7 @@ Choices marked as `{checked: true}` will be checked by default.
 
 Choices whose property `disabled` is truthy will be unselectable. If `disabled` is a string, then the string will be outputted next to the disabled choice, otherwise it'll default to `"Disabled"`. The `disabled` property can also be a synchronous function receiving the current answers as argument and returning a boolean or a string.
 
-![Checkbox prompt](assets/screenshots/checkbox-prompt.png)
+![Checkbox prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/checkbox.svg)
 
 ---
 
@@ -231,7 +231,7 @@ Choices whose property `disabled` is truthy will be unselectable. If `disabled` 
 
 Take `type`, `name`, `message`[, `default`] properties. `default` is expected to be a boolean if used.
 
-![Confirm prompt](assets/screenshots/confirm-prompt.png)
+![Confirm prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/confirm.svg)
 
 ---
 
@@ -239,7 +239,7 @@ Take `type`, `name`, `message`[, `default`] properties. `default` is expected to
 
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
-![Input prompt](assets/screenshots/input-prompt.png)
+![Input prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/input.svg)
 
 ---
 
@@ -247,7 +247,7 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
 
-![Password prompt](assets/screenshots/password-prompt.png)
+![Password prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/password.svg)
 
 ---
 
