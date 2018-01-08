@@ -1,14 +1,14 @@
 var inquirer = require('..');
-var Rx = require('rx-lite-aggregates');
+var Rx = require('rxjs/Rx');
 
 var observe = Rx.Observable.create(function(obs) {
-  obs.onNext({
+  obs.next({
     type: 'input',
     name: 'first_name',
     message: "What's your first name"
   });
 
-  obs.onNext({
+  obs.next({
     type: 'input',
     name: 'last_name',
     message: "What's your last name",
@@ -17,7 +17,7 @@ var observe = Rx.Observable.create(function(obs) {
     }
   });
 
-  obs.onNext({
+  obs.next({
     type: 'input',
     name: 'phone',
     message: "What's your phone number",
@@ -32,7 +32,7 @@ var observe = Rx.Observable.create(function(obs) {
       return 'Please enter a valid phone number';
     }
   });
-  obs.onCompleted();
+  obs.complete();
 });
 
 inquirer.prompt(observe).then(answers => {
