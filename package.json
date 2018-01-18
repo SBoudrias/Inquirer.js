@@ -20,7 +20,7 @@
     "eslint-plugin-prettier": "^2.2.0",
     "husky": "^0.14.3",
     "lint-staged": "^6.0.0",
-    "mocha": "^4.0.0",
+    "mocha": "^5.0.0",
     "mockery": "^2.1.0",
     "nsp": "^3.0.0",
     "nyc": "^11.3.0",
