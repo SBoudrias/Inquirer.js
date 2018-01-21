@@ -28,7 +28,7 @@
     "sinon": "^4.0.0"
   },
   "scripts": {
-    "test": "nyc mocha test/** -r ./test/before",
+    "test": "nyc mocha test/**/* -r ./test/before",
     "prepublish": "nsp check",
     "pretest": "eslint .",
     "precommit": "lint-staged",
