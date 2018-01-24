@@ -35,4 +35,24 @@ describe('`input` prompt', function() {
       expect(this.rl.output.__raw__).to.contain('pass');
     });
   });
+
+  it('should apply the provided transform to the value', function(done) {
+    this.fixture.transformer = function(value) {
+      return value
+        .split('')
+        .reverse()
+        .join('');
+    };
+
+    var prompt = new Input(this.fixture, this.rl);
+    prompt.run();
+
+    this.rl.line = 'Inquirer';
+    this.rl.input.emit('keypress');
+
+    setTimeout(() => {
+      expect(this.rl.output.__raw__).to.contain('reriuqnI');
+      done();
+    }, 10);
+  });
 });
