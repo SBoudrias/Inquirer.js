@@ -119,7 +119,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
 - **prefix**: (String) Change the default _prefix_ message.
 - **suffix**: (String) Change the default _suffix_ message.
 
-`default`, `choices`(if defined as functions), `validate`, `filter`, `transformer`, and `when` functions can be called asynchronous. Either return a promise or use `this.async()` to get a callback you'll call with the final value.
+`default`, `choices`(if defined as functions), `validate`, `filter`, and `when` functions can be called asynchronously. Either return a promise or use `this.async()` to get a callback you'll call with the final value.
 
 ``` javascript
 {
