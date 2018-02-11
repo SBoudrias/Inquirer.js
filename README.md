@@ -196,7 +196,7 @@ default must be the choice `index` in the array or a choice `value`)
 #### Raw List - `{type: 'rawlist'}`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
-default must the choice `index` in the array)
+default must be the choice `index` in the array)
 
 ![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
 
