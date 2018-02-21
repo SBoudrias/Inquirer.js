@@ -387,3 +387,6 @@ Simple prompt with command history and dynamic autocomplete
 Prompt for input chalk-pipe style strings<br>
 <br>
 ![inquirer-chalk-pipe](https://github.com/LitoMore/inquirer-chalk-pipe/raw/master/screenshot.gif)
+
+[__inquirer-search-checkbox__](https://github.com/clinyong/inquirer-search-checkbox)<br>
+Searchable Inquirer checkbox<br>
