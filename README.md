@@ -369,6 +369,11 @@ Presents a list of options as the user types, compatible with other packages suc
 <br>
 ![autocomplete prompt](https://github.com/mokkabonna/inquirer-autocomplete-prompt/raw/master/inquirer.gif)
 
+[__checkbox-plus__](https://github.com/faressoft/inquirer-checkbox-plus-prompt)<br>
+Checkbox list with autocomplete and other additions<br>
+<br>
+![checkbox-plus](https://github.com/faressoft/inquirer-checkbox-plus-prompt/raw/master/demo.gif)
+
 [__datetime__](https://github.com/DerekTBrown/inquirer-datepicker-prompt)<br>
 Customizable date/time selector using both number pad and arrow keys<br>
 <br>
