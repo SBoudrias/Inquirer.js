@@ -113,7 +113,7 @@ A question object is a `hash` containing question related values:
 Array values can be simple `strings`, or `objects` containing a `name` (to display in list), a `value` (to save in the answers hash) and a `short` (to display after selection) properties. The choices array can also contain [a `Separator`](#separator).
 - **validate**: (Function) Receive the user input and answers hash. Should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 - **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
-- **transformer**: (Function) Receive the user input and return the transformed value to be displayed to the user. The transformation only impacts what is shown while editing. It does not impact the `answers` hash.
+- **transformer**: (Function) Receive the user input and answers hash, and return a transformed value to display to the user. The transformation only impacts what is shown while editing. It does not modify the answers hash.
 - **when**: (Function, Boolean) Receive the current user answers hash and should return `true` or `false` depending on whether or not this question should be asked. The value can also be a simple boolean.
 - **pageSize**: (Number) Change the number of lines that will be rendered when using `list`, `rawList`, `expand` or `checkbox`.
 - **prefix**: (String) Change the default _prefix_ message.
