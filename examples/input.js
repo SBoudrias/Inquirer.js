@@ -26,6 +26,9 @@ var questions = [
     message: "What's your favorite color",
     transformer: function(color) {
       return chalkPipe(color)(color);
+    },
+    answerTransformer: function(color) {
+      return chalkPipe(color)(color);
     }
   },
   {
