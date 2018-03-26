@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "chai": "^4.0.1",
+    "chalk-pipe": "^1.2.0",
     "cmdify": "^0.0.4",
     "coveralls": "^3.0.0",
     "eslint": "^4.1.0",
