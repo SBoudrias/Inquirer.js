@@ -4,6 +4,7 @@
 
 'use strict';
 var inquirer = require('..');
+var chalkPipe = require('chalk-pipe');
 
 var questions = [
   {
@@ -17,6 +18,14 @@ var questions = [
     message: "What's your last name",
     default: function() {
       return 'Doe';
+    }
+  },
+  {
+    type: 'input',
+    name: 'fav_color',
+    message: "What's your favorite color",
+    transformer: function(color) {
+      return chalkPipe(color)(color);
     }
   },
   {
