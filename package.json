@@ -26,7 +26,7 @@
     "nsp": "^3.0.0",
     "nyc": "^11.3.0",
     "prettier": "^1.7.0",
-    "sinon": "^4.0.0"
+    "sinon": "^5.0.0"
   },
   "scripts": {
     "test": "nyc mocha test/**/* -r ./test/before",
