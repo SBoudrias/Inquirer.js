@@ -17,7 +17,7 @@
     "coveralls": "^3.0.0",
     "eslint": "^4.1.0",
     "eslint-config-prettier": "^2.4.0",
-    "eslint-config-xo": "^0.20.0",
+    "eslint-config-xo": "^0.22.1",
     "eslint-plugin-prettier": "^2.2.0",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",
