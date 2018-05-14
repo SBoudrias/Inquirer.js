@@ -6,6 +6,11 @@ module.exports = {
     name: 'name'
   },
 
+  number: {
+    message: 'message',
+    name: 'name'
+  },
+
   confirm: {
     message: 'message',
     name: 'name'

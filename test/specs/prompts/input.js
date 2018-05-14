@@ -35,4 +35,45 @@ describe('`input` prompt', function() {
       expect(this.rl.output.__raw__).to.contain('pass');
     });
   });
+
+  it('should apply the provided transform to the value', function(done) {
+    this.fixture.transformer = function(value) {
+      return value
+        .split('')
+        .reverse()
+        .join('');
+    };
+
+    var prompt = new Input(this.fixture, this.rl);
+    prompt.run();
+
+    this.rl.line = 'Inquirer';
+    this.rl.input.emit('keypress');
+
+    setTimeout(() => {
+      expect(this.rl.output.__raw__).to.contain('reriuqnI');
+      done();
+    }, 10);
+  });
+
+  it('should use the answers object in the provided transformer', function(done) {
+    this.fixture.transformer = function(value, answers) {
+      return answers.capitalize ? value.toUpperCase() : value;
+    };
+
+    var answers = {
+      capitalize: true
+    };
+
+    var prompt = new Input(this.fixture, this.rl, answers);
+    prompt.run();
+
+    this.rl.line = 'inquirer';
+    this.rl.input.emit('keypress');
+
+    setTimeout(() => {
+      expect(this.rl.output.__raw__).to.contain('INQUIRER');
+      done();
+    }, 200);
+  });
 });

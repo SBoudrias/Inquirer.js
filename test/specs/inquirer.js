@@ -5,7 +5,7 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var _ = require('lodash');
-var Rx = require('rxjs/Rx');
+var { Observable } = require('rxjs');
 var inquirer = require('../../lib/inquirer');
 var autosubmit = require('../helpers/events').autosubmit;
 
@@ -386,7 +386,7 @@ describe('inquirer.prompt', function() {
 
   it('takes an Observable as question', function() {
     var promise;
-    var prompts = Rx.Observable.create(function(obs) {
+    var prompts = Observable.create(function(obs) {
       obs.next({
         type: 'confirm',
         name: 'q1',
@@ -590,6 +590,26 @@ describe('inquirer.prompt', function() {
       return promise.then(answers => {
         expect(goesInWhen).to.equal(true);
         expect(answers.q2).to.equal('foo-bar');
+      });
+    });
+
+    it('should get the value which set in `when` on returns false', function() {
+      var prompts = [
+        {
+          name: 'q',
+          message: 'message',
+          when: function(answers) {
+            answers.q = 'foo';
+            return false;
+          }
+        }
+      ];
+
+      var promise = this.prompt(prompts);
+      autosubmit(promise.ui);
+
+      return promise.then(answers => {
+        expect(answers.q).to.equal('foo');
       });
     });
   });
