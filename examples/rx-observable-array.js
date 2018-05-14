@@ -1,5 +1,5 @@
 var inquirer = require('..');
-var Rx = require('rxjs/Rx');
+var { from } = require('rxjs');
 
 var questions = [
   {
@@ -32,7 +32,7 @@ var questions = [
   }
 ];
 
-var observable = Rx.Observable.from(questions);
+var observable = from(questions);
 
 inquirer.prompt(observable).ui.process.subscribe(
   function(ans) {

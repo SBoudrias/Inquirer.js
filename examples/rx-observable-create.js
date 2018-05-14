@@ -1,7 +1,7 @@
 var inquirer = require('..');
-var Rx = require('rxjs/Rx');
+var { Observable } = require('rxjs');
 
-var observe = Rx.Observable.create(function(obs) {
+var observe = Observable.create(function(obs) {
   obs.next({
     type: 'input',
     name: 'first_name',

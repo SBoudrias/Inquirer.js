@@ -5,7 +5,7 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var _ = require('lodash');
-var Rx = require('rxjs/Rx');
+var { Observable } = require('rxjs');
 var inquirer = require('../../lib/inquirer');
 var autosubmit = require('../helpers/events').autosubmit;
 
@@ -386,7 +386,7 @@ describe('inquirer.prompt', function() {
 
   it('takes an Observable as question', function() {
     var promise;
-    var prompts = Rx.Observable.create(function(obs) {
+    var prompts = Observable.create(function(obs) {
       obs.next({
         type: 'confirm',
         name: 'q1',
