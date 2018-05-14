@@ -592,6 +592,26 @@ describe('inquirer.prompt', function() {
         expect(answers.q2).to.equal('foo-bar');
       });
     });
+
+    it('should get the value which set in `when` on returns false', function() {
+      var prompts = [
+        {
+          name: 'q',
+          message: 'message',
+          when: function(answers) {
+            answers.q = 'foo';
+            return false;
+          }
+        }
+      ];
+
+      var promise = this.prompt(prompts);
+      autosubmit(promise.ui);
+
+      return promise.then(answers => {
+        expect(answers.q).to.equal('foo');
+      });
+    });
   });
 
   describe('#registerPrompt()', function() {
