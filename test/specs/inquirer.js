@@ -526,6 +526,37 @@ describe('inquirer.prompt', function() {
       });
     });
 
+    it('should still return mutated answers if all `when`s return false', function() {
+      var prompts = [
+        {
+          type: 'confirm',
+          name: 'q1',
+          message: 'message',
+          when: function(answers) {
+            answers.q1 = 'foo';
+            return false;
+          }
+        },
+        {
+          type: 'confirm',
+          name: 'q2',
+          message: 'message',
+          when: function(answers) {
+            answers.q2 = 'bar';
+            return false;
+          }
+        }
+      ];
+
+      var promise = this.prompt(prompts);
+      autosubmit(promise.ui);
+
+      return promise.then(answers => {
+        expect(answers.q1).to.equal('foo');
+        expect(answers.q2).to.equal('bar');
+      });
+    });
+
     it('should not run prompt if `when` is false', function() {
       var prompts = [
         {
