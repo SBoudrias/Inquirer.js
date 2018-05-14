@@ -324,6 +324,15 @@ var tests = {
 
         expect(this.rl.output.__raw__).to.contain(this.fixture.message);
       });
+      it('should default to name for message', function() {
+        this.fixture.name = 'testfoobarbarfoobar';
+        delete this.fixture.message;
+
+        var prompt = new this.Prompt(this.fixture, this.rl);
+        prompt.run();
+
+        expect(this.rl.output.__raw__).to.contain(this.fixture.name + ':');
+      });
     });
   },
 
@@ -344,13 +353,6 @@ var tests = {
 
   requiredValues: function() {
     describe('Missing value', function() {
-      it('`message` should throw', function() {
-        expect(() => {
-          delete this.fixture.message;
-          return new this.Prompt(this.fixture, this.rl);
-        }).to.throw(/message/);
-      });
-
       it('`name` should throw', function() {
         expect(() => {
           delete this.fixture.name;
