@@ -238,7 +238,7 @@ Take `type`, `name`, `message`[, `default`] properties. `default` is expected to
 
 #### Input - `{type: 'input'}`
 
-Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `transformer`, `answerTransformer`] properties.
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `transformer`] properties.
 
 ![Input prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/input.svg)
 
