@@ -77,29 +77,11 @@ describe('`input` prompt', function() {
     }, 200);
   });
 
-  it('should apply the provided answer transform to the value', function(done) {
-    this.fixture.answerTransformer = function(value) {
-      return value
-        .split('')
-        .reverse()
-        .join('');
-    };
-
-    var prompt = new Input(this.fixture, this.rl);
-    prompt.run();
-
-    this.rl.line = 'Inquirer';
-    this.rl.input.emit('keypress');
-
-    setTimeout(() => {
-      expect(this.rl.output.__raw__).to.contain('reriuqnI');
-      done();
-    }, 10);
-  });
-
-  it('should use the answers object in the provided answer transformer', function(done) {
-    this.fixture.answerTransformer = function(value, answers) {
-      return answers.capitalize ? value.toUpperCase() : value;
+  it('should use the flags object in the provided transformer', function(done) {
+    this.fixture.transformer = function(value, answers, flags) {
+      var text = answers.capitalize ? value.toUpperCase() : value;
+      if (flags.isFinal) return text + '!';
+      return text;
     };
 
     var answers = {
@@ -111,7 +93,6 @@ describe('`input` prompt', function() {
 
     this.rl.line = 'inquirer';
     this.rl.input.emit('keypress');
-
     setTimeout(() => {
       expect(this.rl.output.__raw__).to.contain('INQUIRER');
       done();
