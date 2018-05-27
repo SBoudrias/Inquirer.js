@@ -395,3 +395,8 @@ Prompt for input chalk-pipe style strings<br>
 
 [__inquirer-search-checkbox__](https://github.com/clinyong/inquirer-search-checkbox)<br>
 Searchable Inquirer checkbox<br>
+
+[__inquirer-prompt-suggest__](https://github.com/olistic/inquirer-prompt-suggest)<br>
+Inquirer prompt for your less creative users.
+
+![inquirer-prompt-suggest](https://user-images.githubusercontent.com/5600126/40391192-d4f3d6d0-5ded-11e8-932f-4b75b642c09e.gif)
