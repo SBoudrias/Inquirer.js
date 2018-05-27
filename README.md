@@ -388,6 +388,11 @@ Prompt for selecting index in array where add new element<br>
 <br>
 Simple prompt with command history and dynamic autocomplete
 
+[__inquirer-fuzzy-path__](https://github.com/adelsz/inquirer-fuzzy-path)<br>
+Prompt for fuzzy file/directory selection.<br>
+<br>
+![inquirer-fuzzy-path](https://raw.githubusercontent.com/adelsz/inquirer-fuzzy-path/master/recording.gif)
+
 [__inquirer-chalk-pipe__](https://github.com/LitoMore/inquirer-chalk-pipe)<br>
 Prompt for input chalk-pipe style strings<br>
 <br>
