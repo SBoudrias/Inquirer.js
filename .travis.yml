@@ -4,10 +4,11 @@ node_js:
   - 6
   - 8
   - node
-cache:
-  yarn: true
+before_script:
+  - yarn lerna bootstrap
+script: yarn lerna exec yarn test
 after_success:
-  - npm run coverage
+  - yarn lerna exec --scope inquirer -- yarn coverage
 env:
   global:
     secure: dHdnulkfL3Es9kaH0JVFwPk5VUeD7fdiMYdNaId09ZTa9mL9BvYcHmeVK5g1ZIm1F0+QmLeJwjO+4dq1yjRz6IFnpbgQSlhIbYjs+8zBc1v+HTZZfB/kFRIqHO0x4nJG8vKVa+Sg5tp0pI7hiCgevsrlvf4Pb6D0Cyx+faSGNrY=
