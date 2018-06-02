@@ -1,12 +1,20 @@
 {
   "name": "inquirer",
   "version": "6.0.0",
-  "description":
-    "A collection of common interactive command line user interfaces.",
+  "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "main": "lib/inquirer.js",
-  "keywords": ["command", "prompt", "stdin", "cli", "tty", "menu"],
+  "keywords": [
+    "command",
+    "prompt",
+    "stdin",
+    "cli",
+    "tty",
+    "menu"
+  ],
   "engines": {
     "node": ">=6.0.0"
   },
@@ -15,24 +23,15 @@
     "chalk-pipe": "^1.2.0",
     "cmdify": "^0.0.4",
     "coveralls": "^3.0.0",
-    "eslint": "^4.1.0",
-    "eslint-config-prettier": "^2.4.0",
-    "eslint-config-xo": "^0.22.1",
-    "eslint-plugin-prettier": "^2.2.0",
-    "husky": "^0.14.3",
-    "lint-staged": "^7.0.0",
     "mocha": "^5.0.0",
     "mockery": "^2.1.0",
     "nsp": "^3.0.0",
     "nyc": "^12.0.1",
-    "prettier": "^1.7.0",
     "sinon": "^5.0.0"
   },
   "scripts": {
     "test": "nyc mocha test/**/* -r ./test/before",
     "prepublish": "nsp check",
-    "pretest": "eslint .",
-    "precommit": "lint-staged",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": "SBoudrias/Inquirer.js",
@@ -51,34 +50,5 @@
     "string-width": "^2.1.0",
     "strip-ansi": "^4.0.0",
     "through": "^2.3.6"
-  },
-  "lint-staged": {
-    "*.js": ["eslint --fix", "git add"],
-    "*.json": ["prettier --write", "git add"]
-  },
-  "eslintConfig": {
-    "extends": ["xo", "prettier"],
-    "env": {
-      "mocha": true,
-      "node": true
-    },
-    "rules": {
-      "no-eq-null": "off",
-      "eqeqeq": [
-        "error",
-        "always",
-        {
-          "null": "ignore"
-        }
-      ],
-      "prettier/prettier": [
-        "error",
-        {
-          "singleQuote": true,
-          "printWidth": 90
-        }
-      ]
-    },
-    "plugins": ["prettier"]
   }
 }

@@ -1,0 +1,25 @@
+{
+  "extends": ["xo", "prettier"],
+  "env": {
+    "mocha": true,
+    "node": true
+  },
+  "rules": {
+    "no-eq-null": "off",
+    "eqeqeq": [
+      "error",
+      "always",
+      {
+        "null": "ignore"
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "printWidth": 90
+      }
+    ]
+  },
+  "plugins": ["prettier"]
+}
