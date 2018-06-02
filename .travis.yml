@@ -4,9 +4,11 @@ node_js:
   - 6
   - 8
   - node
+cache:
+  yarn: true
 before_script:
   - yarn lerna bootstrap
-script: yarn lerna exec yarn test
+script: yarn test
 after_success:
   - yarn lerna exec --scope inquirer -- yarn coverage
 env:

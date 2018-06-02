@@ -103,7 +103,10 @@ class Prompt {
       share()
     );
 
-    var success = validation.pipe(filter(state => state.isValid === true), take(1));
+    var success = validation.pipe(
+      filter(state => state.isValid === true),
+      take(1)
+    );
     var error = validation.pipe(
       filter(state => state.isValid !== true),
       takeUntil(success)
