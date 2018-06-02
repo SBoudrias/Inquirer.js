@@ -76,4 +76,26 @@ describe('`input` prompt', function() {
       done();
     }, 200);
   });
+
+  it('should use the flags object in the provided transformer', function(done) {
+    this.fixture.transformer = function(value, answers, flags) {
+      var text = answers.capitalize ? value.toUpperCase() : value;
+      if (flags.isFinal) return text + '!';
+      return text;
+    };
+
+    var answers = {
+      capitalize: true
+    };
+
+    var prompt = new Input(this.fixture, this.rl, answers);
+    prompt.run();
+
+    this.rl.line = 'inquirer';
+    this.rl.input.emit('keypress');
+    setTimeout(() => {
+      expect(this.rl.output.__raw__).to.contain('INQUIRER');
+      done();
+    }, 200);
+  });
 });

@@ -24,8 +24,12 @@ var questions = [
     type: 'input',
     name: 'fav_color',
     message: "What's your favorite color",
-    transformer: function(color) {
-      return chalkPipe(color)(color);
+    transformer: function(color, answers, flags) {
+      const text = chalkPipe(color)(color);
+      if (flags.isFinal) {
+        return text + '!';
+      }
+      return text;
     }
   },
   {
