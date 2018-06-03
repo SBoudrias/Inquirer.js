@@ -1,0 +1,29 @@
+{
+  "name": "@inquirer/input",
+  "version": "0.0.0",
+  "description": "Inquirer input text prompt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SBoudrias/Inquirer.js.git"
+  },
+  "keywords": [
+    "cli",
+    "prompt",
+    "command-line",
+    "input"
+  ],
+  "author": "Simon Boudrias",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SBoudrias/Inquirer.js/issues"
+  },
+  "homepage": "https://github.com/SBoudrias/Inquirer.js#readme",
+  "dependencies": {
+    "@inquirer/core": "^0.0.0",
+    "chalk": "^2.4.1"
+  }
+}
