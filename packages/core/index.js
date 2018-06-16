@@ -8,7 +8,12 @@ const ScreenManager = require('./lib/screen-manager');
 
 class StateManager {
   constructor(config, initialState, render) {
-    this.config = config;
+    this.config = Object.assign(
+      {
+        onKeypress: _.noop
+      },
+      config
+    );
     this.initialState = Object.assign(
       {
         message: initialState.message || initialState.name || '',
@@ -43,6 +48,7 @@ class StateManager {
     this.onSubmit = this.onSubmit.bind(this);
     this.startLoading = this.startLoading.bind(this);
     this.onLoaderTick = this.onLoaderTick.bind(this);
+    this.setState = this.setState.bind(this);
   }
 
   async execute(cb) {
@@ -65,12 +71,14 @@ class StateManager {
   }
 
   onKeypress(value, key) {
+    const { onKeypress } = this.config;
     // Ignore enter keypress. The "line" event is handling those.
     if (key.name === 'enter' || key.name === 'return') {
       return;
     }
 
     this.setState({ value: this.rl.line, error: null });
+    onKeypress(value, key, this.getState(), this.setState);
   }
 
   startLoading() {
