@@ -2,7 +2,7 @@
   "private": true,
   "devDependencies": {
     "lerna": "^2.11.0",
-    "eslint": "^4.1.0",
+    "eslint": "^5.0.0",
     "eslint-config-prettier": "^2.4.0",
     "eslint-config-xo": "^0.22.1",
     "eslint-plugin-prettier": "^2.2.0",
