@@ -12,7 +12,6 @@
   ],
   "author": "Simon Boudrias",
   "license": "MIT",
-  "homepage": "https://github.com/SBoudrias/Inquirer.js",
   "dependencies": {
     "ansi-escapes": "^3.1.0",
     "chalk": "^2.4.1",
