@@ -21,7 +21,7 @@
   "scripts": {
     "precommit": "lint-staged",
     "pretest": "eslint .",
-    "test": "lerna exec yarn test --scope inquirer"
+    "test": "jest --coverage && lerna exec yarn test --scope inquirer"
   },
   "lint-staged": {
     "*.js": [
