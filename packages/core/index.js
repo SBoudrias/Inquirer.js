@@ -172,8 +172,15 @@ class StateManager {
   }
 }
 
-exports.createPrompt = (config, render) => initialState =>
-  new Promise(resolve => {
-    const prompt = new StateManager(config, initialState, render);
-    prompt.execute(resolve);
-  });
+exports.createPrompt = (config, render) => {
+  const run = initialState =>
+    new Promise(resolve => {
+      const prompt = new StateManager(config, initialState, render);
+      prompt.execute(resolve);
+    });
+
+  run.render = render;
+  run.config = config;
+
+  return run;
+};

@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input prompt renders in done state 1`] = `"? Question: [36manswer[39m"`;
+
+exports[`Input prompt renders in idle state 1`] = `"? Question: answer"`;
