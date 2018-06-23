@@ -22,7 +22,6 @@
     "chai": "^4.0.1",
     "chalk-pipe": "^1.2.0",
     "cmdify": "^0.0.4",
-    "coveralls": "^3.0.0",
     "mocha": "^5.0.0",
     "mockery": "^2.1.0",
     "nsp": "^3.0.0",
@@ -31,8 +30,8 @@
   },
   "scripts": {
     "test": "nyc mocha test/**/* -r ./test/before",
-    "prepublish": "nsp check",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "posttest": "nyc report --reporter=text-lcov > ../../coverage/nyc-report.lcov",
+    "prepublish": "nsp check"
   },
   "repository": "SBoudrias/Inquirer.js",
   "license": "MIT",
