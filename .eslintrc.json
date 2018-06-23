@@ -2,6 +2,7 @@
   "extends": ["xo", "prettier"],
   "env": {
     "mocha": true,
+    "jest": true,
     "node": true
   },
   "rules": {
@@ -13,13 +14,7 @@
         "null": "ignore"
       }
     ],
-    "prettier/prettier": [
-      "error",
-      {
-        "singleQuote": true,
-        "printWidth": 90
-      }
-    ]
+    "prettier/prettier": "error"
   },
   "plugins": ["prettier"]
 }

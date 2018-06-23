@@ -1,19 +1,27 @@
 {
   "private": true,
   "devDependencies": {
-    "lerna": "^2.11.0",
-    "eslint": "^4.1.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.0.1",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^5.0.0",
     "eslint-config-prettier": "^2.4.0",
     "eslint-config-xo": "^0.22.1",
     "eslint-plugin-prettier": "^2.2.0",
     "husky": "^0.14.3",
+    "jest": "^23.1.0",
+    "lerna": "^2.11.0",
     "lint-staged": "^7.0.0",
-    "prettier": "^1.7.0"
+    "prettier": "^1.7.0",
+    "regenerator-runtime": "^0.11.1"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "precommit": "lint-staged",
     "pretest": "eslint .",
-    "test": "lerna exec yarn test"
+    "test": "lerna exec yarn test --scope inquirer"
   },
   "lint-staged": {
     "*.js": [
