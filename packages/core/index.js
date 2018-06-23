@@ -16,7 +16,7 @@ class StateManager {
     );
     this.initialState = Object.assign(
       {
-        message: initialState.message || initialState.name || '',
+        message: initialState.message,
         validate: () => true,
         filter: val => val,
         transformer: val => val
@@ -52,22 +52,22 @@ class StateManager {
   }
 
   async execute(cb) {
-    const { message } = this.getState();
+    let { message } = this.getState();
     this.cb = cb;
 
     // Load asynchronous properties
     const showLoader = setTimeout(this.startLoading, 500);
     if (_.isFunction(message)) {
-      this.setState({ message: await runAsync(message)() });
+      message = await runAsync(message)();
     }
+    this.setState({ message, status: 'idle' });
+
+    // Disable the loader if it didn't launch
+    clearTimeout(showLoader);
 
     // Setup event listeners once we're done fetching the configs
     this.rl.input.on('keypress', this.onKeypress);
     this.rl.on('line', this.onSubmit);
-
-    // Reset prompt in idle state if it showed a loader
-    clearTimeout(showLoader);
-    this.setState({ status: 'idle' });
   }
 
   onKeypress(value, key) {
@@ -83,7 +83,7 @@ class StateManager {
 
   startLoading() {
     this.setState({ loadingIncrement: 0, status: 'loading' });
-    this.onLoaderTick();
+    setTimeout(this.onLoaderTick, spinner.interval);
   }
 
   onLoaderTick() {
@@ -102,17 +102,16 @@ class StateManager {
       const filteredValue = await runAsync(filter)(value);
       const isValid = await runAsync(validate)(filteredValue);
 
-      clearTimeout(showLoader);
-      this.rl.resume();
       if (isValid === true) {
         this.onDone(filteredValue);
       } else {
         this.onError(isValid);
       }
     } catch (err) {
-      this.rl.resume();
       this.onError(err.message);
     }
+    clearTimeout(showLoader);
+    this.rl.resume();
   }
 
   onError(error) {
@@ -165,7 +164,10 @@ class StateManager {
       {
         // Only pass message down if it's a string. Otherwise we're still in init state
         message: _.isFunction(message) ? 'Loading...' : message,
-        value: transformer(value, { isFinal: status === 'done' })
+        value: transformer(value, { isFinal: status === 'done' }),
+        validate: undefined,
+        filter: undefined,
+        transformer: undefined
       }
     );
     this.screen.render(this.render(renderState), error);
