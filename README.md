@@ -1,7 +1,6 @@
-Inquirer.js
-===========
+# Inquirer.js
 
-[![npm](https://badge.fury.io/js/inquirer.svg)](http://badge.fury.io/js/inquirer) [![tests](https://travis-ci.org/SBoudrias/Inquirer.js.svg?branch=master)](http://travis-ci.org/SBoudrias/Inquirer.js) [![Coverage Status](https://coveralls.io/repos/yeoman/generator/badge.svg)](https://coveralls.io/r/SBoudrias/Inquirer.js) [![dependencies](https://david-dm.org/SBoudrias/Inquirer.js.svg?theme=shields.io)](https://david-dm.org/SBoudrias/Inquirer.js)
+[![npm](https://badge.fury.io/js/inquirer.svg)](http://badge.fury.io/js/inquirer) [![tests](https://travis-ci.org/SBoudrias/Inquirer.js.svg?branch=master)](http://travis-ci.org/SBoudrias/Inquirer.js) [![Coverage Status](https://codecov.io/gh/SBoudrias/Inquirer.js/branch/master/graph/badge.svg)](https://codecov.io/gh/SBoudrias/Inquirer.js) [![dependencies](https://david-dm.org/SBoudrias/Inquirer.js.svg?theme=shields.io)](https://david-dm.org/SBoudrias/Inquirer.js)
 
 A collection of common interactive command line user interfaces.
 
@@ -9,23 +8,22 @@ A collection of common interactive command line user interfaces.
 
 ## Table of Contents
 
-  1. [Documentation](#documentation)
-    1. [Installation](#installation)
-    2. [Examples](#examples)
-    3. [Methods](#methods)
-    4. [Objects](#objects)
-      1. [Questions](#questions)
-      2. [Answers](#answers)
-      3. [Separator](#separator)
-    4. [Prompt Types](#prompt)
-  2. [User Interfaces and Layouts](#layouts)
-    1. [Reactive Interface](#reactive)
-  3. [Support](#support)
-  4. [News](#news)
-  5. [Contributing](#contributing)
-  6. [License](#license)
-  7. [Plugins](#plugins)
-
+1.  [Documentation](#documentation)
+    1.  [Installation](#installation)
+    2.  [Examples](#examples)
+    3.  [Methods](#methods)
+    4.  [Objects](#objects)
+    5.  [Questions](#questions)
+    6.  [Answers](#answers)
+    7.  [Separator](#separator)
+    8.  [Prompt Types](#prompt)
+2.  [User Interfaces and Layouts](#layouts)
+    1.  [Reactive Interface](#reactive)
+3.  [Support](#support)
+4.  [News](#news)
+5.  [Contributing](#contributing)
+6.  [License](#license)
+7.  [Plugins](#plugins)
 
 ## Goal and Philosophy
 
@@ -34,45 +32,54 @@ A collection of common interactive command line user interfaces.
 **`Inquirer.js`** strives to be an easily embeddable and beautiful command line interface for [Node.js](https://nodejs.org/) (and perhaps the "CLI [Xanadu](https://en.wikipedia.org/wiki/Citizen_Kane)").
 
 **`Inquirer.js`** should ease the process of
-- providing *error feedback*
-- *asking questions*
-- *parsing* input
-- *validating* answers
-- managing *hierarchical prompts*
+
+- providing _error feedback_
+- _asking questions_
+- _parsing_ input
+- _validating_ answers
+- managing _hierarchical prompts_
 
 > **Note:** **`Inquirer.js`** provides the user interface and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [commander](https://github.com/visionmedia/commander.js), [vorpal](https://github.com/dthree/vorpal) or [args](https://github.com/leo/args).
 
-
 ## [Documentation](#documentation)
+
 <a name="documentation"></a>
 
 ### Installation
+
 <a name="installation"></a>
 
-``` shell
+```shell
 npm install inquirer
 ```
 
 ```javascript
 var inquirer = require('inquirer');
-inquirer.prompt([/* Pass your questions in here */]).then(answers => {
-	// Use user feedback for... whatever!!
-});
+inquirer
+  .prompt([
+    /* Pass your questions in here */
+  ])
+  .then(answers => {
+    // Use user feedback for... whatever!!
+  });
 ```
 
 <a name="examples"></a>
+
 ### Examples (Run it and see it)
+
 Check out the `examples/` folder for code and interface examples.
 
-``` shell
+```shell
 node examples/pizza.js
 node examples/checkbox.js
 # etc...
 ```
 
-
 ### Methods
+
 <a name="methods"></a>
+
 #### `inquirer.prompt(questions) -> promise`
 
 Launch the prompt interface (inquiry session)
@@ -98,19 +105,21 @@ prompt(questions).then(/* ... */);
 ```
 
 ### Objects
+
 <a name="objects"></a>
 
 #### Question
+
 <a name="questions"></a>
 A question object is a `hash` containing question related values:
 
 - **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `confirm`,
-`list`, `rawlist`, `expand`, `checkbox`, `password`, `editor`
+  `list`, `rawlist`, `expand`, `checkbox`, `password`, `editor`
 - **name**: (String) The name to use when storing the answer in the answers hash. If the name contains periods, it will define a path in the answers hash.
 - **message**: (String|Function) The question to print. If defined as a function, the first parameter will be the current inquirer session answers. Defaults to the value of `name` (followed by a colon).
 - **default**: (String|Number|Boolean|Array|Function) Default value(s) to use if nothing is entered, or a function that returns the default value(s). If defined as a function, the first parameter will be the current inquirer session answers.
 - **choices**: (Array|Function) Choices array or a function returning a choices array. If defined as a function, the first parameter will be the current inquirer session answers.
-Array values can be simple `strings`, or `objects` containing a `name` (to display in list), a `value` (to save in the answers hash) and a `short` (to display after selection) properties. The choices array can also contain [a `Separator`](#separator).
+  Array values can be simple `strings`, or `objects` containing a `name` (to display in list), a `value` (to save in the answers hash) and a `short` (to display after selection) properties. The choices array can also contain [a `Separator`](#separator).
 - **validate**: (Function) Receive the user input and answers hash. Should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 - **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
 - **transformer**: (Function) Receive the user input, answers hash and option flags, and return a transformed value to display to the user. The transformation only impacts what is shown while editing. It does not modify the answers hash.
@@ -121,7 +130,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
 
 `default`, `choices`(if defined as functions), `validate`, `filter` and `when` functions can be called asynchronously. Either return a promise or use `this.async()` to get a callback you'll call with the final value.
 
-``` javascript
+```javascript
 {
   /* Preferred way: with promise */
   filter() {
@@ -148,6 +157,7 @@ Array values can be simple `strings`, or `objects` containing a `name` (to displ
 ```
 
 ### Answers
+
 <a name="answers"></a>
 A key/value hash containing the client answers in each prompt.
 
@@ -158,6 +168,7 @@ A key/value hash containing the client answers in each prompt.
   - `rawlist`, `list` : Selected choice value (or name if no value specified) (String)
 
 ### Separator
+
 <a name="separator"></a>
 A separator can be added to any `choices` array:
 
@@ -179,8 +190,10 @@ The constructor takes a facultative `String` value that'll be use as the separat
 Separator instances have a property `type` equal to `separator`. This should allow tools façading Inquirer interface from detecting separator types in lists.
 
 <a name="prompt"></a>
+
 ### Prompt types
----------------------
+
+---
 
 > **Note:**: _allowed options written inside square brackets (`[]`) are optional. Others are required._
 
@@ -259,8 +272,8 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties
 Launches an instance of the users preferred editor on a temporary file. Once the user exits their editor, the contents of the temporary file are read in as the result. The editor to use is determined by reading the $VISUAL or $EDITOR environment variables. If neither of those are present, notepad (on Windows) or vim (Linux or Mac) is used.
 
 <a name="layouts"></a>
-## User Interfaces and layouts
 
+## User Interfaces and layouts
 
 Along with the prompts, Inquirer offers some basic text UI.
 
@@ -284,8 +297,8 @@ ui.updateBottomBar('new bottom bar content');
 ```
 
 <a name="reactive"></a>
-## Reactive interface
 
+## Reactive interface
 
 Internally, Inquirer uses the [JS reactive extension](https://github.com/ReactiveX/rxjs) to handle events and async flows.
 
@@ -296,8 +309,12 @@ var prompts = new Rx.Subject();
 inquirer.prompt(prompts);
 
 // At some point in the future, push new questions
-prompts.next({ /* question... */ });
-prompts.next({ /* question... */ });
+prompts.next({
+  /* question... */
+});
+prompts.next({
+  /* question... */
+});
 
 // When you're done
 prompts.complete();
@@ -306,14 +323,11 @@ prompts.complete();
 And using the return value `process` property, you can access more fine grained callbacks:
 
 ```js
-inquirer.prompt(prompts).ui.process.subscribe(
-  onEachAnswer,
-  onError,
-  onComplete
-);
+inquirer.prompt(prompts).ui.process.subscribe(onEachAnswer, onError, onComplete);
 ```
 
 ## Support (OS Terminals)
+
 <a name="support"></a>
 
 You should expect mostly good support for the CLI below. This does not mean we won't
@@ -331,15 +345,14 @@ look at issues found on other command line - feel free to report any!
   - gnome-terminal (Terminal GNOME)
   - konsole
 
-
 ## News on the march (Release notes)
-<a name="news"></a>
 
+<a name="news"></a>
 
 Please refer to the [Github releases section for the changelog](https://github.com/SBoudrias/Inquirer.js/releases)
 
-
 ## Contributing
+
 <a name="contributing"></a>
 
 **Unit test**
@@ -354,54 +367,56 @@ get feedback before release. Let us know if you want to be added to the list (ju
 to [@vaxilart](https://twitter.com/Vaxilart)) or just add your name to [the wiki](https://github.com/SBoudrias/Inquirer.js/wiki/Testers)
 
 ## License
+
 <a name="license"></a>
 
 Copyright (c) 2016 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))
 Licensed under the MIT license.
 
 ## Plugins
+
 <a name="plugins"></a>
 
-### Prompts ###
+### Prompts
 
-[__autocomplete__](https://github.com/mokkabonna/inquirer-autocomplete-prompt)<br>
+[**autocomplete**](https://github.com/mokkabonna/inquirer-autocomplete-prompt)<br>
 Presents a list of options as the user types, compatible with other packages such as fuzzy (for search)<br>
 <br>
 ![autocomplete prompt](https://github.com/mokkabonna/inquirer-autocomplete-prompt/raw/master/inquirer.gif)
 
-[__checkbox-plus__](https://github.com/faressoft/inquirer-checkbox-plus-prompt)<br>
+[**checkbox-plus**](https://github.com/faressoft/inquirer-checkbox-plus-prompt)<br>
 Checkbox list with autocomplete and other additions<br>
 <br>
 ![checkbox-plus](https://github.com/faressoft/inquirer-checkbox-plus-prompt/raw/master/demo.gif)
 
-[__datetime__](https://github.com/DerekTBrown/inquirer-datepicker-prompt)<br>
+[**datetime**](https://github.com/DerekTBrown/inquirer-datepicker-prompt)<br>
 Customizable date/time selector using both number pad and arrow keys<br>
 <br>
 ![Datetime Prompt](https://github.com/DerekTBrown/inquirer-datepicker-prompt/raw/master/example/datetime-prompt.png)
 
-[__inquirer-select-line__](https://github.com/adam-golab/inquirer-select-line)<br>
+[**inquirer-select-line**](https://github.com/adam-golab/inquirer-select-line)<br>
 Prompt for selecting index in array where add new element<br>
 <br>
 ![inquirer-select-line gif](https://media.giphy.com/media/xUA7b1MxpngddUvdHW/giphy.gif)
 
-[__command__](https://github.com/sullof/inquirer-command-prompt)<br>
+[**command**](https://github.com/sullof/inquirer-command-prompt)<br>
 <br>
 Simple prompt with command history and dynamic autocomplete
 
-[__inquirer-fuzzy-path__](https://github.com/adelsz/inquirer-fuzzy-path)<br>
+[**inquirer-fuzzy-path**](https://github.com/adelsz/inquirer-fuzzy-path)<br>
 Prompt for fuzzy file/directory selection.<br>
 <br>
 ![inquirer-fuzzy-path](https://raw.githubusercontent.com/adelsz/inquirer-fuzzy-path/master/recording.gif)
 
-[__inquirer-chalk-pipe__](https://github.com/LitoMore/inquirer-chalk-pipe)<br>
+[**inquirer-chalk-pipe**](https://github.com/LitoMore/inquirer-chalk-pipe)<br>
 Prompt for input chalk-pipe style strings<br>
 <br>
 ![inquirer-chalk-pipe](https://github.com/LitoMore/inquirer-chalk-pipe/raw/master/screenshot.gif)
 
-[__inquirer-search-checkbox__](https://github.com/clinyong/inquirer-search-checkbox)<br>
+[**inquirer-search-checkbox**](https://github.com/clinyong/inquirer-search-checkbox)<br>
 Searchable Inquirer checkbox<br>
 
-[__inquirer-prompt-suggest__](https://github.com/olistic/inquirer-prompt-suggest)<br>
+[**inquirer-prompt-suggest**](https://github.com/olistic/inquirer-prompt-suggest)<br>
 Inquirer prompt for your less creative users.
 
 ![inquirer-prompt-suggest](https://user-images.githubusercontent.com/5600126/40391192-d4f3d6d0-5ded-11e8-932f-4b75b642c09e.gif)

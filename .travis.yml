@@ -10,7 +10,7 @@ before_script:
   - yarn lerna bootstrap
 script: yarn test
 after_success:
-  - yarn lerna exec --scope inquirer -- yarn coverage
+  - yarn codecov
 env:
   global:
     - FORCE_COLOR=1
