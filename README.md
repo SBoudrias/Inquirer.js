@@ -68,11 +68,11 @@ inquirer
 
 ### Examples (Run it and see it)
 
-Check out the `examples/` folder for code and interface examples.
+Check out the `packages/inquirer/examples/` folder for code and interface examples.
 
 ```shell
-node examples/pizza.js
-node examples/checkbox.js
+node packages/inquirer/examples/pizza.js
+node packages/inquirer/examples/checkbox.js
 # etc...
 ```
 
