@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="235px" height="235px" viewBox="0 0 235 235" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>SVG</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="SVG" transform="translate(-11.000000, -11.000000)">
+            <rect id="yellow-background" fill="#F0DB4F" x="11" y="11" width="235" height="235"></rect>
+            <polygon id="Combined-Shape" fill="#323330" points="149 174 149 169 154 169 154 164 183 164 183 169 187 169 187 174 192 174 192 188 187 188 187 193 183 193 183 198 178 198 178 203 173 203 173 218 164 218 164 199 169 199 169 194 174 194 174 189 179 189 179 184 184 184 184 178 179 178 179 173 158 173 158 178 153 178 153 188 144 188 144 174"></polygon>
+            <polygon id="Combined-Shape" fill="#323330" points="136 173 116 173 116 224 136 224 136 233 108 233 108 164 136 164"></polygon>
+            <polygon id="Combined-Shape" fill="#323330" transform="translate(215.000000, 198.500000) scale(-1, 1) translate(-215.000000, -198.500000) " points="229 173 209 173 209 224 229 224 229 233 201 233 201 164 229 164"></polygon>
+            <rect id="Rectangle" fill="#323330" x="164" y="224" width="9" height="9"></rect>
+        </g>
+    </g>
+</svg>
