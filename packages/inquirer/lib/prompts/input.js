@@ -90,6 +90,11 @@ class InputPrompt extends Base {
   }
 
   onError(state) {
+    if (this.opt.keepAnswerOnValidationError && (typeof state.value !== 'number' || !isNaN(state.value))) {
+      this.rl.line += state.value;
+      this.rl.cursor = state.value.length;
+    }
+
     this.render(state.isValid);
   }
 
