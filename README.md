@@ -127,6 +127,7 @@ A question object is a `hash` containing question related values:
 - **pageSize**: (Number) Change the number of lines that will be rendered when using `list`, `rawList`, `expand` or `checkbox`.
 - **prefix**: (String) Change the default _prefix_ message.
 - **suffix**: (String) Change the default _suffix_ message.
+- **keepAnswerOnValidationError**: (Boolean) If true and user answer fails validation, the answer is kept in the input.
 
 `default`, `choices`(if defined as functions), `validate`, `filter` and `when` functions can be called asynchronously. Either return a promise or use `this.async()` to get a callback you'll call with the final value.
 
