@@ -12,47 +12,22 @@ var observe = require('../utils/events');
 class ConfirmPrompt extends Base {
   constructor(questions, rl, answers) {
     super(questions, rl, answers);
-
-    var rawDefault = true;
-
-    _.extend(this.opt, {
-      filter: function(input) {
-        var value = rawDefault;
-        if (input != null && input !== '') {
-          value = /^y(es)?/i.test(input);
-        }
-        return value;
-      }
-    });
-
-    if (_.isBoolean(this.opt.default)) {
-      rawDefault = this.opt.default;
-    }
-
-    this.opt.default = rawDefault ? 'Y/n' : 'y/N';
-
+    this.rawDefault = this.opt.default !== false;
+    this.opt.default = this.rawDefault ? 'Y/n' : 'y/N';
     return this;
   }
 
   /**
    * Start the Inquiry session
-   * @param  {Function} cb   Callback when prompt is done
    * @return {this}
    */
 
-  _run(cb) {
-    this.done = cb;
-
+  _run() {
     // Once user confirm (enter key)
     var events = observe(this.rl);
+
     events.keypress.pipe(takeUntil(events.line)).forEach(this.onKeypress.bind(this));
-
     events.line.pipe(take(1)).forEach(this.onEnd.bind(this));
-
-    // Init
-    this.render();
-
-    return this;
   }
 
   /**
@@ -72,6 +47,14 @@ class ConfirmPrompt extends Base {
     this.screen.render(message);
 
     return this;
+  }
+
+  filterInput(input) {
+    return _.isBoolean(input) ? input : input ? /^y(es)?/i.test(input) : this.rawDefault;
+  }
+
+  filterBypass(input) {
+    return input === true || /^y(es)?/i.test(input);
   }
 
   /**

@@ -5,8 +5,9 @@
 
 var _ = require('lodash');
 var chalk = require('chalk');
-var { map, takeUntil } = require('rxjs/operators');
+var { takeUntil } = require('rxjs/operators');
 var Base = require('./base');
+var List = require('./list');
 var Separator = require('../objects/separator');
 var observe = require('../utils/events');
 var Paginator = require('../utils/paginator');
@@ -49,29 +50,17 @@ class RawListPrompt extends Base {
 
   /**
    * Start the Inquiry session
-   * @param  {Function} cb      Callback when prompt is done
    * @return {this}
    */
 
-  _run(cb) {
-    this.done = cb;
-
+  _run() {
     // Once user confirm (enter key)
     var events = observe(this.rl);
-    var submit = events.line.pipe(map(this.getCurrentValue.bind(this)));
-
-    var validation = this.handleSubmitEvents(submit);
-    validation.success.forEach(this.onEnd.bind(this));
-    validation.error.forEach(this.onError.bind(this));
+    var validation = this.submit(events.line);
 
     events.keypress
       .pipe(takeUntil(validation.success))
       .forEach(this.onKeypress.bind(this));
-
-    // Init the prompt
-    this.render();
-
-    return this;
   }
 
   /**
@@ -105,7 +94,7 @@ class RawListPrompt extends Base {
    * When user press `enter` key
    */
 
-  getCurrentValue(index) {
+  filterInput(index) {
     if (index == null || index === '') {
       index = this.rawDefault;
     } else {
@@ -116,12 +105,13 @@ class RawListPrompt extends Base {
     return choice ? choice.value : null;
   }
 
-  onEnd(state) {
-    this.status = 'answered';
-    this.answer = state.value;
+  filterBypass(input) {
+    return List.prototype.filterBypass.call(this, input);
+  }
 
-    // Re-render prompt
-    this.render();
+  onEnd(state) {
+    this.answer = state.value;
+    super.onEnd();
 
     this.screen.done();
     this.done(state.value);

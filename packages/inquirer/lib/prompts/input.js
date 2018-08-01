@@ -4,36 +4,24 @@
  */
 
 var chalk = require('chalk');
-var { map, takeUntil } = require('rxjs/operators');
+var { takeUntil } = require('rxjs/operators');
 var Base = require('./base');
 var observe = require('../utils/events');
 
 class InputPrompt extends Base {
   /**
    * Start the Inquiry session
-   * @param  {Function} cb      Callback when prompt is done
    * @return {this}
    */
 
-  _run(cb) {
-    this.done = cb;
-
+  _run() {
     // Once user confirm (enter key)
     var events = observe(this.rl);
-    var submit = events.line.pipe(map(this.filterInput.bind(this)));
-
-    var validation = this.handleSubmitEvents(submit);
-    validation.success.forEach(this.onEnd.bind(this));
-    validation.error.forEach(this.onError.bind(this));
+    var validation = this.submit(events.line);
 
     events.keypress
       .pipe(takeUntil(validation.success))
       .forEach(this.onKeypress.bind(this));
-
-    // Init
-    this.render();
-
-    return this;
   }
 
   /**
@@ -80,10 +68,7 @@ class InputPrompt extends Base {
 
   onEnd(state) {
     this.answer = state.value;
-    this.status = 'answered';
-
-    // Re-render prompt
-    this.render();
+    super.onEnd();
 
     this.screen.done();
     this.done(state.value);

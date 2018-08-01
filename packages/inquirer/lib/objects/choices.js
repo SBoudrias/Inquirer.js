@@ -105,6 +105,14 @@ module.exports = class Choices {
     return _.find(this.choices, func);
   }
 
+  findIndex(func) {
+    var length = this.length;
+    for (var i = 0; i < length; i++) {
+      if (func(this.choices[i])) return i;
+    }
+    return -1;
+  }
+
   push() {
     var objs = _.map(arguments, val => new Choice(val));
     this.choices.push.apply(this.choices, objs);

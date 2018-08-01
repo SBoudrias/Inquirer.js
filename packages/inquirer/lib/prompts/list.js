@@ -42,34 +42,29 @@ class ListPrompt extends Base {
 
   /**
    * Start the Inquiry session
-   * @param  {Function} cb      Callback when prompt is done
    * @return {this}
    */
 
-  _run(cb) {
-    this.done = cb;
-
-    var self = this;
-
+  _run() {
     var events = observe(this.rl);
+
     events.normalizedUpKey.pipe(takeUntil(events.line)).forEach(this.onUpKey.bind(this));
+
     events.normalizedDownKey
       .pipe(takeUntil(events.line))
       .forEach(this.onDownKey.bind(this));
+
     events.numberKey.pipe(takeUntil(events.line)).forEach(this.onNumberKey.bind(this));
+
     events.line
       .pipe(
         take(1),
-        map(this.getCurrentValue.bind(this)),
-        flatMap(value => runAsync(self.opt.filter)(value).catch(err => err))
+        map(this.getCurrentValue, this),
+        flatMap(value => runAsync(this.opt.filter)(value).catch(err => err))
       )
-      .forEach(this.onSubmit.bind(this));
+      .forEach(this.onEnd.bind(this));
 
-    // Init the prompt
     cliCursor.hide();
-    this.render();
-
-    return this;
   }
 
   /**
@@ -82,6 +77,7 @@ class ListPrompt extends Base {
     var message = this.getQuestion();
 
     if (this.firstRender) {
+      this.firstRender = false;
       message += chalk.dim('(Use arrow keys)');
     }
 
@@ -97,28 +93,37 @@ class ListPrompt extends Base {
         '\n' + this.paginator.paginate(choicesStr, indexPosition, this.opt.pageSize);
     }
 
-    this.firstRender = false;
-
     this.screen.render(message);
+  }
+
+  getCurrentValue() {
+    return this.opt.choices.getChoice(this.selected).value;
+  }
+
+  filterBypass(input) {
+    var choices = this.opt.choices;
+    var idx = Number(input);
+    if (Number.isNaN(idx)) {
+      idx = choices.findIndex(c => c.name === input || c.value === input);
+    } else if (idx > choices.length - 1) {
+      return;
+    }
+    if (idx !== -1) {
+      this.selected = idx;
+      return idx;
+    }
   }
 
   /**
    * When user press `enter` key
    */
 
-  onSubmit(value) {
-    this.status = 'answered';
-
-    // Rerender prompt
-    this.render();
+  onEnd(value) {
+    super.onEnd();
 
     this.screen.done();
     cliCursor.show();
     this.done(value);
-  }
-
-  getCurrentValue() {
-    return this.opt.choices.getChoice(this.selected).value;
   }
 
   /**

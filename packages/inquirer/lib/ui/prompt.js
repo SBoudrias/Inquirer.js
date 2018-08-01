@@ -3,6 +3,7 @@ var _ = require('lodash');
 var { defer, empty, from, of } = require('rxjs');
 var { concatMap, filter, publish, reduce } = require('rxjs/operators');
 var runAsync = require('run-async');
+var chalk = require('chalk');
 var utils = require('../utils/utils');
 var Base = require('./baseUI');
 
@@ -16,9 +17,13 @@ class PromptUI extends Base {
     this.prompts = prompts;
   }
 
-  run(questions) {
-    // Keep global reference to the answers
+  run(questions, answers) {
     this.answers = {};
+
+    // Pre-defined answers
+    if (answers) {
+      this.prefill(questions, answers);
+    }
 
     // Make sure questions is an array.
     if (_.isPlainObject(questions)) {
@@ -46,6 +51,17 @@ class PromptUI extends Base {
       )
       .toPromise(Promise)
       .then(this.onCompletion.bind(this));
+  }
+
+  prefill(questions, answers) {
+    var names = questions.map(question => question.name);
+    for (var name in answers) {
+      if (names.indexOf(name) === -1) {
+        console.log(chalk.red('>> ') + 'Invalid question: %O', name);
+      } else {
+        this.answers[name] = answers[name];
+      }
+    }
   }
 
   /**

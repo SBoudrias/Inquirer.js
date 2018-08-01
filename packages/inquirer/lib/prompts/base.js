@@ -5,9 +5,10 @@
  */
 
 var _ = require('lodash');
+var rx = require('rxjs');
 var chalk = require('chalk');
 var runAsync = require('run-async');
-var { filter, flatMap, share, take, takeUntil } = require('rxjs/operators');
+var { filter, flatMap, map, share, take, takeUntil } = require('rxjs/operators');
 var Choices = require('../objects/choices');
 var ScreenManager = require('../utils/screen-manager');
 
@@ -54,13 +55,37 @@ class Prompt {
 
   run() {
     return new Promise(resolve => {
-      this._run(value => resolve(value));
+      this.done = resolve;
+
+      var val = this.answers[this.opt.name];
+      if (this.filterBypass) {
+        val = this.filterBypass(val);
+      }
+
+      if (val == null) {
+        this._run();
+        this.render();
+      } else {
+        this.firstRender = false;
+        this.render();
+
+        this.firstRender = true;
+        this.submit(rx.of(val)).error.forEach(() => this._run());
+      }
     });
   }
 
-  // Default noop (this one should be overwritten in prompts)
-  _run(cb) {
-    cb();
+  onEnd() {
+    this.status = 'answered';
+    this.render();
+  }
+
+  onError() {
+    this.render();
+  }
+
+  _run() {
+    throw Error('Prompts must override the `_run` method');
   }
 
   /**
@@ -80,12 +105,26 @@ class Prompt {
     this.screen.releaseCursor();
   }
 
+  submit(value) {
+    var filter = this.filterInput || this.getCurrentValue;
+    if (filter) value = value.pipe(map(filter, this));
+
+    var validation = this._validate(value);
+    validation.success.forEach(this.onEnd.bind(this));
+    validation.error.forEach(this.onError.bind(this));
+    return validation;
+  }
+
+  filterBypass(input) {
+    return String(input);
+  }
+
   /**
    * Run the provided validation method each time a submit event occur.
    * @param  {Rx.Observable} submit - submit event flow
    * @return {Object}        Object containing two observables: `success` and `error`
    */
-  handleSubmitEvents(submit) {
+  _validate(submit) {
     var self = this;
     var validate = runAsync(this.opt.validate);
     var asyncFilter = runAsync(this.opt.filter);

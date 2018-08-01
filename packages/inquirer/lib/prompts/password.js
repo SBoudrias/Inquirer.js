@@ -4,7 +4,7 @@
  */
 
 var chalk = require('chalk');
-var { map, takeUntil } = require('rxjs/operators');
+var { takeUntil } = require('rxjs/operators');
 var Base = require('./base');
 var observe = require('../utils/events');
 
@@ -21,32 +21,19 @@ function mask(input, maskChar) {
 class PasswordPrompt extends Base {
   /**
    * Start the Inquiry session
-   * @param  {Function} cb      Callback when prompt is done
    * @return {this}
    */
 
-  _run(cb) {
-    this.done = cb;
-
-    var events = observe(this.rl);
-
+  _run() {
     // Once user confirm (enter key)
-    var submit = events.line.pipe(map(this.filterInput.bind(this)));
-
-    var validation = this.handleSubmitEvents(submit);
-    validation.success.forEach(this.onEnd.bind(this));
-    validation.error.forEach(this.onError.bind(this));
+    var events = observe(this.rl);
+    var validation = this.submit(events.line);
 
     if (this.opt.mask) {
       events.keypress
         .pipe(takeUntil(validation.success))
         .forEach(this.onKeypress.bind(this));
     }
-
-    // Init
-    this.render();
-
-    return this;
   }
 
   /**
@@ -87,11 +74,8 @@ class PasswordPrompt extends Base {
   }
 
   onEnd(state) {
-    this.status = 'answered';
     this.answer = state.value;
-
-    // Re-render prompt
-    this.render();
+    super.onEnd();
 
     this.screen.done();
     this.done(state.value);

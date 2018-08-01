@@ -21,11 +21,13 @@ inquirer.ui = {
 
 /**
  * Create a new self-contained prompt module.
+ * @param {Object} opt Readline options
+ * @return {Function}
  */
 inquirer.createPromptModule = function(opt) {
-  var promptModule = function(questions) {
+  var promptModule = function(questions, answers) {
     var ui = new inquirer.ui.Prompt(promptModule.prompts, opt);
-    var promise = ui.run(questions);
+    var promise = ui.run(questions, answers);
 
     // Monkey patch the UI on the promise object so
     // that it remains publicly accessible.

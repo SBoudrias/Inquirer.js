@@ -12,32 +12,21 @@ var { Subject } = require('rxjs');
 class EditorPrompt extends Base {
   /**
    * Start the Inquiry session
-   * @param  {Function} cb      Callback when prompt is done
    * @return {this}
    */
 
-  _run(cb) {
-    this.done = cb;
-
-    this.editorResult = new Subject();
-
+  _run() {
     // Open Editor on "line" (Enter Key)
     var events = observe(this.rl);
     this.lineSubscription = events.line.subscribe(this.startExternalEditor.bind(this));
 
-    // Trigger Validation when editor closes
-    var validation = this.handleSubmitEvents(this.editorResult);
-    validation.success.forEach(this.onEnd.bind(this));
-    validation.error.forEach(this.onError.bind(this));
+    // Trigger validation when editor closes
+    this.editorResult = new Subject();
+    this.submit(this.editorResult);
 
     // Prevents default from being printed on screen (can look weird with multiple lines)
     this.currentText = this.opt.default;
     this.opt.default = null;
-
-    // Init
-    this.render();
-
-    return this;
   }
 
   /**
@@ -85,9 +74,8 @@ class EditorPrompt extends Base {
     this.editorResult.unsubscribe();
     this.lineSubscription.unsubscribe();
     this.answer = state.value;
-    this.status = 'answered';
-    // Re-render prompt
-    this.render();
+    super.onEnd();
+
     this.screen.done();
     this.done(this.answer);
   }

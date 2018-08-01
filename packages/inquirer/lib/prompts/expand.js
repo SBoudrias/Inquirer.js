@@ -5,7 +5,7 @@
 
 var _ = require('lodash');
 var chalk = require('chalk');
-var { map, takeUntil } = require('rxjs/operators');
+var { takeUntil } = require('rxjs/operators');
 var Base = require('./base');
 var Separator = require('../objects/separator');
 var observe = require('../utils/events');
@@ -44,28 +44,17 @@ class ExpandPrompt extends Base {
 
   /**
    * Start the Inquiry session
-   * @param  {Function} cb      Callback when prompt is done
    * @return {this}
    */
 
-  _run(cb) {
-    this.done = cb;
-
+  _run() {
     // Save user answer and update prompt to show selected option.
     var events = observe(this.rl);
-    var validation = this.handleSubmitEvents(
-      events.line.pipe(map(this.getCurrentValue.bind(this)))
-    );
-    validation.success.forEach(this.onSubmit.bind(this));
-    validation.error.forEach(this.onError.bind(this));
+    var validation = this.submit(events.line);
+
     this.keypressObs = events.keypress
       .pipe(takeUntil(validation.success))
       .forEach(this.onKeypress.bind(this));
-
-    // Init the prompt
-    this.render();
-
-    return this;
   }
 
   /**
@@ -98,7 +87,7 @@ class ExpandPrompt extends Base {
     this.screen.render(message, bottomContent);
   }
 
-  getCurrentValue(input) {
+  filterInput(input) {
     if (!input) {
       input = this.rawDefault;
     }
@@ -150,13 +139,11 @@ class ExpandPrompt extends Base {
    * When user press `enter` key
    */
 
-  onSubmit(state) {
-    this.status = 'answered';
+  onEnd(state) {
     var choice = this.opt.choices.where({ value: state.value })[0];
     this.answer = choice.short || choice.name;
+    super.onEnd();
 
-    // Re-render prompt
-    this.render();
     this.screen.done();
     this.done(state.value);
   }
