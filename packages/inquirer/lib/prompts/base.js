@@ -87,16 +87,21 @@ class Prompt {
    */
   handleSubmitEvents(submit) {
     var self = this;
+    var required = this.opt.required;
     var validate = runAsync(this.opt.validate);
     var asyncFilter = runAsync(this.opt.filter);
     var validation = submit.pipe(
       flatMap(value =>
         asyncFilter(value, self.answers).then(
           filteredValue =>
-            validate(filteredValue, self.answers).then(
-              isValid => ({ isValid: isValid, value: filteredValue }),
-              err => ({ isValid: err })
-            ),
+            required && (filteredValue == null || filteredValue === '')
+              ? {
+                  isValid: required === true ? 'An answer is required' : required
+                }
+              : validate(filteredValue, self.answers).then(
+                  isValid => ({ isValid: isValid, value: filteredValue }),
+                  err => ({ isValid: err })
+                ),
           err => ({ isValid: err })
         )
       ),
