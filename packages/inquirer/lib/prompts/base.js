@@ -57,7 +57,7 @@ class Prompt {
     return new Promise(resolve => {
       this.done = resolve;
 
-      var val = this.answers[this.opt.name];
+      var val = _.get(this.answers, this.opt.name);
       if (val == null) {
         this._run();
         this.render();

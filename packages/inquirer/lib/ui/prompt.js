@@ -59,7 +59,7 @@ class PromptUI extends Base {
       if (names.indexOf(name) === -1) {
         console.log(chalk.red('>> ') + 'Invalid question: %O', name);
       } else {
-        this.answers[name] = answers[name];
+        _.set(this.answers, name, answers[name]);
       }
     }
   }
