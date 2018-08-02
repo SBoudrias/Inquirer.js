@@ -58,20 +58,26 @@ class Prompt {
       this.done = resolve;
 
       var val = this.answers[this.opt.name];
-      if (this.filterBypass) {
-        val = this.filterBypass(val);
-      }
-
-      if (val == null) {
-        this._run();
-        this.render();
+      if (_.isFunction(val)) {
+        val = rx.from(Promise.resolve(val(this.answers)));
       } else {
-        this.firstRender = false;
-        this.render();
-
-        this.firstRender = true;
-        this.submit(rx.of(val)).error.forEach(() => this._run());
+        val = rx.of(val);
       }
+      if (this.filterBypass) {
+        val = val.pipe(map(this.filterBypass, this));
+      }
+      val.subscribe(val => {
+        if (val == null) {
+          this._run();
+          this.render();
+        } else {
+          this.firstRender = false;
+          this.render();
+
+          this.firstRender = true;
+          this.submit(rx.of(val)).error.forEach(() => this._run());
+        }
+      });
     });
   }
 
@@ -116,7 +122,7 @@ class Prompt {
   }
 
   filterBypass(input) {
-    return String(input);
+    return input == null ? null : String(input);
   }
 
   /**
