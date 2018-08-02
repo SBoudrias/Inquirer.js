@@ -62,7 +62,7 @@ class ListPrompt extends Base {
         map(this.getCurrentValue, this),
         flatMap(value => runAsync(this.opt.filter)(value).catch(err => err))
       )
-      .forEach(this.onEnd.bind(this));
+      .forEach(input => this.onEnd({ isValid: true, value: input }));
 
     cliCursor.hide();
   }
@@ -117,12 +117,12 @@ class ListPrompt extends Base {
    * When user press `enter` key
    */
 
-  onEnd(value) {
+  onEnd(state) {
     super.onEnd();
 
     this.screen.done();
     cliCursor.show();
-    this.done(value);
+    this.done(state.value);
   }
 
   /**

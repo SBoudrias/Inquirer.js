@@ -5,7 +5,7 @@
 
 var _ = require('lodash');
 var chalk = require('chalk');
-var { take, takeUntil } = require('rxjs/operators');
+var { map, take, takeUntil } = require('rxjs/operators');
 var Base = require('./base');
 var observe = require('../utils/events');
 
@@ -27,7 +27,9 @@ class ConfirmPrompt extends Base {
     var events = observe(this.rl);
 
     events.keypress.pipe(takeUntil(events.line)).forEach(this.onKeypress.bind(this));
-    events.line.pipe(take(1)).forEach(this.onEnd.bind(this));
+    events.line
+      .pipe(take(1), map(this.filterInput, this))
+      .forEach(input => this.onEnd({ isValid: true, value: input }));
   }
 
   /**
@@ -61,10 +63,10 @@ class ConfirmPrompt extends Base {
    * When user press `enter` key
    */
 
-  onEnd(input) {
+  onEnd(state) {
     this.status = 'answered';
 
-    var output = this.opt.filter(input);
+    var output = this.opt.filter(state.value);
     this.render(output);
 
     this.screen.done();
