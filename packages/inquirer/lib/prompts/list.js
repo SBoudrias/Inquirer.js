@@ -76,15 +76,14 @@ class ListPrompt extends Base {
     // Render question
     var message = this.getQuestion();
 
-    if (this.firstRender) {
-      this.firstRender = false;
-      message += chalk.dim('(Use arrow keys)');
-    }
-
     // Render choices or answer depending on the state
     if (this.status === 'answered') {
       message += chalk.cyan(this.opt.choices.getChoice(this.selected).short);
     } else {
+      if (this.firstRender) {
+        this.firstRender = false;
+        message += chalk.dim('(Use arrow keys)');
+      }
       var choicesStr = listRender(this.opt.choices, this.selected);
       var indexPosition = this.opt.choices.indexOf(
         this.opt.choices.getChoice(this.selected)

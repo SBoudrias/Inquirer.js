@@ -71,10 +71,7 @@ class Prompt {
           this._run();
           this.render();
         } else {
-          this.firstRender = false;
-          this.render();
-
-          this.firstRender = true;
+          // Run the prompt if the answer is invalid.
           this.submit(rx.of(val)).error.forEach(() => this._run());
         }
       });

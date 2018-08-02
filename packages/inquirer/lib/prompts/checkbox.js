@@ -76,22 +76,21 @@ class CheckboxPrompt extends Base {
     var message = this.getQuestion();
     var bottomContent = '';
 
-    if (this.firstRender) {
-      this.firstRender = false;
-      message +=
-        '(Press ' +
-        chalk.cyan.bold('<space>') +
-        ' to select, ' +
-        chalk.cyan.bold('<a>') +
-        ' to toggle all, ' +
-        chalk.cyan.bold('<i>') +
-        ' to invert selection)';
-    }
-
     // Render choices or answer depending on the state
     if (this.status === 'answered') {
       message += chalk.cyan(this.selection.join(', '));
     } else {
+      if (this.firstRender) {
+        this.firstRender = false;
+        message +=
+          '(Press ' +
+          chalk.cyan.bold('<space>') +
+          ' to select, ' +
+          chalk.cyan.bold('<a>') +
+          ' to toggle all, ' +
+          chalk.cyan.bold('<i>') +
+          ' to invert selection)';
+      }
       var choicesStr = renderChoices(this.opt.choices, this.pointer);
       var indexPosition = this.opt.choices.indexOf(
         this.opt.choices.getChoice(this.pointer)
