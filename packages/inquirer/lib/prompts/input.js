@@ -97,7 +97,23 @@ class InputPrompt extends Base {
    * When user press a key
    */
 
-  onKeypress() {
+  onKeypress(event) {
+    const { key } = event;
+
+    // Empty the default when a user clears the input
+    // The `this.hasInput` flag is required to properly detect when the user
+    // has pressed the backspace key while the line is already empty, in which
+    // case we reset the default, which allows a user to supply an empty response.
+    if (key.name === 'backspace' && !this.rl.line) {
+      if (this.hasInput) {
+        this.hasInput = undefined;
+      } else {
+        this.opt.default = undefined;
+      }
+    } else if (this.rl.line && !this.hasInput) {
+      this.hasInput = true;
+    }
+
     this.render();
   }
 }
