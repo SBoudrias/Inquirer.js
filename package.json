@@ -6,7 +6,7 @@
     "babel-preset-env": "^1.7.0",
     "codecov": "^3.0.2",
     "eslint": "^5.0.0",
-    "eslint-config-prettier": "^2.4.0",
+    "eslint-config-prettier": "^3.0.0",
     "eslint-config-xo": "^0.23.0",
     "eslint-plugin-prettier": "^2.2.0",
     "husky": "^0.14.3",
