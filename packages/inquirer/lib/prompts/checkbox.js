@@ -226,7 +226,7 @@ function renderChoices(choices, pointer) {
       output += ' - ' + choice.name;
       output += ' (' + (_.isString(choice.disabled) ? choice.disabled : 'Disabled') + ')';
     } else {
-      var line = getCheckbox(choice.checked) + choice.name;
+      var line = getCheckbox(choice.checked) + ' ' + choice.name;
       if (i - separatorOffset === pointer) {
         output += chalk.cyan(figures.pointer + line);
       } else {
