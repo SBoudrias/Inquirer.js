@@ -1,6 +1,6 @@
 .git
 node_modules
+coverage
+.nyc_output
 packages/*/node_modules
-packages/*/coverage
-packages/*/.nyc_output
 packages/*/__snapshots__
