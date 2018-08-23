@@ -20,19 +20,22 @@
     "packages/*"
   ],
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "precommit": "lint-staged",
     "pretest": "eslint .",
-    "test": "jest --coverage && lerna exec yarn test --scope inquirer"
+    "test": "jest --coverage && lerna exec npm test --scope inquirer"
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.json": [
-      "prettier --write",
-      "git add"
-    ]
+    "linters": {
+      "*.js": [
+        "eslint --fix",
+        "git add"
+      ],
+      "*.json": [
+        "prettier --write",
+        "git add"
+      ]
+    }
   },
   "jest": {
     "coverageDirectory": "./coverage/",
