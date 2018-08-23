@@ -98,47 +98,4 @@ describe('`input` prompt', function() {
       done();
     }, 200);
   });
-
-  it('should use the default when the user submits empty input', function() {
-    this.fixture.default = 'DEFAULT';
-
-    var prompt = new Input(this.fixture, this.rl);
-    var promise = prompt.run();
-
-    this.rl.emit('line', '');
-
-    return promise.then(answer => {
-      expect(answer).to.equal('DEFAULT');
-    });
-  });
-
-  it('should use the default when the user enters some input then deletes it', function() {
-    this.fixture.default = 'DEFAULT';
-
-    var prompt = new Input(this.fixture, this.rl);
-    var promise = prompt.run();
-
-    this.rl.line = 'a';
-    this.rl.input.emit('keypress', ' ', { name: 'backspace' });
-    this.rl.emit('line', '');
-
-    return promise.then(answer => {
-      expect(answer).to.equal('DEFAULT');
-    });
-  });
-
-  it('should clear the default when the user hits backspace when input is empty', function() {
-    this.fixture.default = 'DEFAULT';
-
-    var prompt = new Input(this.fixture, this.rl);
-    var promise = prompt.run();
-
-    this.rl.line = '';
-    this.rl.input.emit('keypress', ' ', { name: 'backspace' });
-    this.rl.emit('line', '');
-
-    return promise.then(answer => {
-      expect(answer).to.equal('');
-    });
-  });
 });
