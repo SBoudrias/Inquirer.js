@@ -6,6 +6,7 @@
 var _ = require('lodash');
 var chalk = require('chalk');
 var { map, takeUntil } = require('rxjs/operators');
+var { isUpKey, isDownKey } = require('@inquirer/core/lib/key');
 var Base = require('./base');
 var Separator = require('../objects/separator');
 var observe = require('../utils/events');
@@ -135,13 +136,30 @@ class RawListPrompt extends Base {
    * When user press a key
    */
 
-  onKeypress() {
-    var index = this.rl.line.length ? Number(this.rl.line) - 1 : 0;
-
-    if (this.opt.choices.getChoice(index)) {
-      this.selected = index;
+  onKeypress(e) {
+    const length = this.opt.choices.realLength;
+    if (isUpKey(e.key)) {
+      if (this.selected) {
+        this.selected--;
+      } else {
+        this.selected = length - 1;
+      }
+      this.rl.line = (this.selected + 1).toString();
+    } else if (isDownKey(e.key)) {
+      if (this.selected === undefined || this.selected >= length - 1) {
+        this.selected = 0;
+      } else {
+        this.selected++;
+      }
+      this.rl.line = (this.selected + 1).toString();
     } else {
-      this.selected = undefined;
+      var index = this.rl.line.length ? Number(this.rl.line) - 1 : 0;
+
+      if (this.opt.choices.getChoice(index)) {
+        this.selected = index;
+      } else {
+        this.selected = undefined;
+      }
     }
 
     this.render();
