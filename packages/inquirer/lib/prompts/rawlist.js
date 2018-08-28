@@ -156,13 +156,7 @@ class RawListPrompt extends Base {
    */
 
   onUpKey() {
-    if (this.selected) {
-      this.selected--;
-    } else {
-      this.selected = this.opt.choices.realLength - 1;
-    }
-    this.rl.line = (this.selected + 1).toString();
-    this.render();
+    this.onArrowKey('up');
   }
 
   /**
@@ -170,14 +164,19 @@ class RawListPrompt extends Base {
    */
 
   onDownKey() {
-    const length = this.opt.choices.realLength;
-    if (this.selected === undefined || this.selected >= length - 1) {
-      this.selected = 0;
-    } else {
-      this.selected++;
-    }
-    this.rl.line = (this.selected + 1).toString();
-    this.render();
+    this.onArrowKey('down');
+  }
+
+  /**
+   * When user press up or down key
+   * @param {String} type Arrow type: up or down
+   */
+
+  onArrowKey(type) {
+    var index = this.rl.line.length ? Number(this.rl.line) - 1 : 0;
+    index += type === 'up' ? -1 : 1;
+    this.rl.line = String(index + 1);
+    this.onKeypress();
   }
 }
 
