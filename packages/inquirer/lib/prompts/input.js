@@ -61,6 +61,7 @@ class InputPrompt extends Base {
     }
 
     if (error) {
+      console.log(123);
       bottomContent = chalk.red('>> ') + error;
     }
 
