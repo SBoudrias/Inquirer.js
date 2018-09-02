@@ -91,7 +91,7 @@ class InputPrompt extends Base {
 
   onError(state) { 
     this.rl.line += state.value;
-    this.rl.cursor = state.value.length;
+    this.rl.cursor += state.value.length;
     this.render(state.isValid);
   }
 
