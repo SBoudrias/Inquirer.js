@@ -226,9 +226,12 @@ function renderChoices(choices, pointer) {
       output += ' - ' + choice.name;
       output += ' (' + (_.isString(choice.disabled) ? choice.disabled : 'Disabled') + ')';
     } else {
-      var isSelected = i - separatorOffset === pointer;
-      output += isSelected ? chalk.cyan(figures.pointer) : ' ';
-      output += getCheckbox(choice.checked) + ' ' + choice.name;
+      var line = getCheckbox(choice.checked) + ' ' + choice.name;
+      if (i - separatorOffset === pointer) {
+        output += chalk.cyan(figures.pointer + line);
+      } else {
+        output += ' ' + line;
+      }
     }
 
     output += '\n';
