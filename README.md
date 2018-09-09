@@ -68,7 +68,7 @@ inquirer
 
 ### Examples (Run it and see it)
 
-Check out the `packages/inquirer/examples/` folder for code and interface examples.
+Check out the [`packages/inquirer/examples/`](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/inquirer/examples) folder for code and interface examples.
 
 ```shell
 node packages/inquirer/examples/pizza.js
