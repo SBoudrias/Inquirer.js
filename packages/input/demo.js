@@ -17,7 +17,7 @@ const isHex = value =>
     },
     validate: value => isHex(value) || 'Pass a valid hex value'
   });
-  console.log('Answer: ', answer);
+  console.log('Answer:', answer);
 
   answer = await input({
     message: '(Slow validation) provide a number:',
@@ -33,7 +33,7 @@ const isHex = value =>
         );
       })
   });
-  console.log('Answer: ', answer);
+  console.log('Answer:', answer);
 
   answer = await input({
     message: () =>
@@ -41,5 +41,11 @@ const isHex = value =>
         setTimeout(() => resolve('(Slow message) Input any value:'), 3000);
       })
   });
-  console.log('Answer: ', answer);
+  console.log('Answer:', answer);
+
+  answer = await input({
+    message: "What's your favorite food?",
+    default: 'Croissant'
+  });
+  console.log('Answer:', answer);
 })();

@@ -258,7 +258,7 @@ describe('createPrompt()', () => {
     rl.input.emit('keypress', 'a value', { name: 'foo' });
     expect(onKeypress).toHaveBeenCalledTimes(1);
     expect(onKeypress).toHaveBeenLastCalledWith(
-      'a value',
+      'new value',
       { name: 'foo' },
       expect.objectContaining({
         message: 'Question',

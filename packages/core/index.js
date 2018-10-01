@@ -78,7 +78,7 @@ class StateManager {
     }
 
     this.setState({ value: this.rl.line, error: null });
-    onKeypress(value, key, this.getState(), this.setState);
+    onKeypress(this.rl.line, key, this.getState(), this.setState);
   }
 
   startLoading() {
@@ -95,7 +95,15 @@ class StateManager {
   }
 
   async onSubmit() {
-    const { validate, filter, value } = this.getState();
+    const state = this.getState();
+    const { validate, filter, default: defaultValue } = state;
+
+    // If no answer was provided, use default value.
+    let { value } = state;
+    if (!value) {
+      value = defaultValue;
+    }
+
     const showLoader = setTimeout(this.startLoading, 500);
     this.rl.pause();
     try {
