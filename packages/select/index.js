@@ -1,6 +1,8 @@
 const { createPrompt } = require('@inquirer/core');
 const { isUpKey, isDownKey } = require('@inquirer/core/lib/key');
 const chalk = require('chalk');
+const figures = require('figures');
+const { cursorHide } = require('ansi-escapes');
 
 module.exports = createPrompt(
   {
@@ -28,14 +30,18 @@ module.exports = createPrompt(
       return `${prefix} ${message} ${chalk.cyan(choice.name || choice.value)}`;
     }
 
-    const cursorChar = '> ';
-    const padding = '  ';
     const list = choices
-      .map(
-        ({ name, value }, index) =>
-          `${index === cursorPosition ? cursorChar : padding}${name || value}`
-      )
+      .map(({ name, value, disabled }, index) => {
+        const line = name || value;
+        if (disabled) {
+          return chalk.dim(`- ${line} (disabled)`);
+        }
+        if (index === cursorPosition) {
+          return chalk.cyan(`${figures.pointer} ${line}`);
+        }
+        return `  ${line}`;
+      })
       .join('\n');
-    return `${prefix} ${message}\n${list}\n`;
+    return `${prefix} ${message}\n${list}${cursorHide}`;
   }
 );

@@ -2,6 +2,7 @@ const _ = require('lodash');
 const cliWidth = require('cli-width');
 const stripAnsi = require('strip-ansi');
 const stringWidth = require('string-width');
+const { cursorShow } = require('ansi-escapes');
 const util = require('./readline');
 
 const height = content => content.split('\n').length;
@@ -95,6 +96,7 @@ module.exports = class ScreenManager {
     this.rl.setPrompt('');
     this.rl.output.unmute();
     this.rl.output.write('\n');
+    this.rl.output.write(cursorShow);
     this.rl.close();
   }
 

@@ -5,7 +5,11 @@ const select = require('.');
 
   answer = await select({
     message: 'Select a package manager',
-    choices: [{ name: 'npm', value: 'npm' }, { name: 'Yarn', value: 'yarn' }]
+    choices: [
+      { name: 'npm', value: 'npm' },
+      { name: 'yarn', value: 'yarn' },
+      { name: 'jspm', value: 'jspm', disabled: true }
+    ]
   });
   console.log('Answer:', answer);
 })();
