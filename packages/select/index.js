@@ -1,5 +1,5 @@
 const { createPrompt } = require('@inquirer/core');
-const { isUpKey, isDownKey } = require('@inquirer/core/lib/key');
+const { isUpKey } = require('@inquirer/core/lib/key');
 const Paginator = require('@inquirer/core/lib/Paginator');
 const chalk = require('chalk');
 const figures = require('figures');
@@ -9,18 +9,18 @@ module.exports = createPrompt(
   readline => ({
     onKeypress: (value, key, { cursorPosition = 0, choices }, setState) => {
       let newCursorPosition = cursorPosition;
-      if (isUpKey(key)) {
-        newCursorPosition = (cursorPosition - 1 + choices.length) % choices.length;
-      } else if (isDownKey(key)) {
-        newCursorPosition = (cursorPosition + 1) % choices.length;
+      const offset = isUpKey(key) ? -1 : 1;
+      let selectedOption;
+
+      while (!selectedOption || selectedOption.disabled) {
+        newCursorPosition = Math.abs(newCursorPosition + offset) % choices.length;
+        selectedOption = choices[newCursorPosition];
       }
 
-      if (newCursorPosition !== cursorPosition) {
-        setState({
-          cursorPosition: newCursorPosition,
-          value: choices[newCursorPosition].value
-        });
-      }
+      setState({
+        cursorPosition: newCursorPosition,
+        value: selectedOption.value
+      });
     },
     paginator: new Paginator(readline)
   }),
