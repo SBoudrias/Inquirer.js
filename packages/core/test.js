@@ -43,7 +43,8 @@ describe('createPrompt()', () => {
         loadingIncrement: 0,
         message: 'Loading...',
         status: 'loading'
-      })
+      }),
+      {}
     );
 
     jest.advanceTimersByTime(80);
@@ -53,7 +54,8 @@ describe('createPrompt()', () => {
         loadingIncrement: 1,
         message: 'Loading...',
         status: 'loading'
-      })
+      }),
+      {}
     );
 
     resolveCb('Async message:');
@@ -61,10 +63,8 @@ describe('createPrompt()', () => {
     await Promise.resolve(); // Wait one extra tick
     expect(render).toHaveBeenCalledTimes(3);
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        message: 'Async message:',
-        status: 'idle'
-      })
+      expect.objectContaining({ message: 'Async message:', status: 'idle' }),
+      {}
     );
   });
 
@@ -75,10 +75,8 @@ describe('createPrompt()', () => {
     const promptPromise = prompt({ message: 'Question:' });
     expect(render).toHaveBeenCalledTimes(1);
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        message: 'Question:',
-        status: 'idle'
-      })
+      expect.objectContaining({ message: 'Question:', status: 'idle' }),
+      {}
     );
 
     // Check it ignores return <enter> keypress
@@ -91,10 +89,8 @@ describe('createPrompt()', () => {
     await Promise.resolve();
     expect(render).toHaveBeenCalledTimes(2);
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        value: 'new value',
-        status: 'idle'
-      })
+      expect.objectContaining({ value: 'new value', status: 'idle' }),
+      {}
     );
 
     // Submit
@@ -108,29 +104,24 @@ describe('createPrompt()', () => {
         message: 'Question:',
         value: 'new value',
         status: 'done'
-      })
+      }),
+      {}
     );
 
     await expect(promptPromise).resolves.toEqual('new value');
   });
 
-  it('submit: async filterng and validation', async () => {
+  it('submit: async filtering and validation', async () => {
     const rl = readline.createInterface();
     const render = jest.fn(() => '');
     const prompt = createPrompt({}, render);
     const filter = jest.fn(() => Promise.resolve('filtered value'));
     const validate = jest.fn(() => Promise.resolve(true));
-    const promptPromise = prompt({
-      message: 'Question:',
-      filter,
-      validate
-    });
+    const promptPromise = prompt({ message: 'Question:', filter, validate });
     expect(render).toHaveBeenCalledTimes(1);
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        message: 'Question:',
-        status: 'idle'
-      })
+      expect.objectContaining({ message: 'Question:', status: 'idle' }),
+      {}
     );
 
     rl.line = 'new value';
@@ -143,10 +134,8 @@ describe('createPrompt()', () => {
     jest.advanceTimersByTime(500);
     expect(render).toHaveBeenCalledTimes(3);
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        message: 'Question:',
-        status: 'loading'
-      })
+      expect.objectContaining({ message: 'Question:', status: 'loading' }),
+      {}
     );
 
     await Promise.resolve();
@@ -173,13 +162,14 @@ describe('createPrompt()', () => {
       expect.objectContaining({
         message: 'Question:',
         error: 'You must provide a valid value'
-      })
+      }),
+      {}
     );
 
     // New input will clear the error message
     rl.input.emit('keypress', null, { name: 'a' });
     expect(render).toHaveBeenCalledTimes(3);
-    expect(render).toHaveBeenLastCalledWith(expect.objectContaining({ error: null }));
+    expect(render).toHaveBeenLastCalledWith(expect.objectContaining({ error: null }), {});
   });
 
   it('submit: handle validation error (rejected promise)', async () => {
@@ -196,10 +186,8 @@ describe('createPrompt()', () => {
     await Promise.resolve();
     expect(render).toHaveBeenCalledTimes(2);
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        message: 'Question:',
-        error: 'Only numbers allowed'
-      })
+      expect.objectContaining({ message: 'Question:', error: 'Only numbers allowed' }),
+      {}
     );
 
     validate.mockImplementation(() => Promise.resolve(true));
@@ -209,9 +197,8 @@ describe('createPrompt()', () => {
     await Promise.resolve();
     expect(render).toHaveBeenCalledTimes(3);
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        status: 'done'
-      })
+      expect.objectContaining({ status: 'done' }),
+      {}
     );
     await promptPromise;
   });
@@ -231,7 +218,8 @@ describe('createPrompt()', () => {
     expect(render).toHaveBeenCalledTimes(1);
     expect(transformer).toHaveBeenLastCalledWith('', { isFinal: false });
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({ value: 'transformed value' })
+      expect.objectContaining({ value: 'transformed value' }),
+      {}
     );
 
     rl.emit('line');
@@ -241,12 +229,13 @@ describe('createPrompt()', () => {
     expect(transformer).toHaveBeenLastCalledWith('', { isFinal: true });
     expect(render).toHaveBeenCalledTimes(2);
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({ value: 'last value' })
+      expect.objectContaining({ value: 'last value' }),
+      {}
     );
     await expect(promptPromise).resolves.toEqual('dummy value');
   });
 
-  it('onKeypress: allow to implement custom behavior on keypresses', () => {
+  it('onKeypress: allow to implement custom behavior on keypress', () => {
     const rl = readline.createInterface();
     const render = jest.fn(() => '');
     const onKeypress = jest.fn((value, key, state, setState) => {
@@ -260,19 +249,14 @@ describe('createPrompt()', () => {
     expect(onKeypress).toHaveBeenLastCalledWith(
       'new value',
       { name: 'foo' },
-      expect.objectContaining({
-        message: 'Question',
-        status: 'idle'
-      }),
+      expect.objectContaining({ message: 'Question', status: 'idle' }),
       expect.any(Function)
     );
 
     expect(render).toHaveBeenCalledTimes(3);
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        status: 'idle',
-        value: 'foo'
-      })
+      expect.objectContaining({ status: 'idle', value: 'foo' }),
+      expect.objectContaining({ onKeypress: expect.any(Function) })
     );
   });
 });

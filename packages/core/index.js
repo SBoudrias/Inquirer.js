@@ -42,12 +42,7 @@ class StateManager {
     if (_.isFunction(configFactory)) {
       config = configFactory(this.rl);
     }
-    this.config = Object.assign(
-      {
-        onKeypress: _.noop
-      },
-      config
-    );
+    this.config = config;
 
     this.onKeypress = this.onKeypress.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -76,7 +71,7 @@ class StateManager {
   }
 
   onKeypress(value, key) {
-    const { onKeypress } = this.config;
+    const { onKeypress = _.noop } = this.config;
     // Ignore enter keypress. The "line" event is handling those.
     if (key.name === 'enter' || key.name === 'return') {
       return;
