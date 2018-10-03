@@ -4,6 +4,7 @@ const stripAnsi = require('strip-ansi');
 const stringWidth = require('string-width');
 const { cursorShow } = require('ansi-escapes');
 const util = require('./readline');
+const { breakLines } = require('./utils');
 
 const height = content => content.split('\n').length;
 const lastLine = content => _.last(content.split('\n'));
@@ -39,11 +40,11 @@ module.exports = class ScreenManager {
 
     // SetPrompt will change cursor position, now we can get correct value
     const cursorPos = this.rl._getCursorPos();
-    const width = this.normalizedCliWidth();
+    const width = cliWidth({ defaultWidth: 80, output: this.rl.output });
 
-    content = this.forceLineReturn(content, width);
+    content = breakLines(content, width);
     if (bottomContent) {
-      bottomContent = this.forceLineReturn(bottomContent, width);
+      bottomContent = breakLines(bottomContent, width);
     }
     // Manually insert an extra line if we're at the end of the line.
     // This prevent the cursor from appearing at the beginning of the
@@ -104,30 +105,5 @@ module.exports = class ScreenManager {
     if (this.extraLinesUnderPrompt > 0) {
       util.down(this.rl, this.extraLinesUnderPrompt);
     }
-  }
-
-  normalizedCliWidth() {
-    return cliWidth({
-      defaultWidth: 80,
-      output: this.rl.output
-    });
-  }
-
-  breakLines(lines, width) {
-    // Break lines who're longer than the cli width so we can normalize the natural line
-    // returns behavior across terminals.
-    width = width || this.normalizedCliWidth();
-    const regex = new RegExp('(?:(?:\\033[[0-9;]*m)*.?){1,' + width + '}', 'g');
-    return lines.map(line => {
-      const chunk = line.match(regex);
-      // Last match is always empty
-      chunk.pop();
-      return chunk || '';
-    });
-  }
-
-  forceLineReturn(content, width) {
-    width = width || this.normalizedCliWidth();
-    return _.flatten(this.breakLines(content.split('\n'), width)).join('\n');
   }
 };

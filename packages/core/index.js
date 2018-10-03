@@ -7,13 +7,7 @@ const spinner = require('cli-spinners').dots;
 const ScreenManager = require('./lib/screen-manager');
 
 class StateManager {
-  constructor(config, initialState, render) {
-    this.config = Object.assign(
-      {
-        onKeypress: _.noop
-      },
-      config
-    );
+  constructor(configFactory, initialState, render) {
     this.initialState = Object.assign(
       {
         message: initialState.message,
@@ -43,6 +37,17 @@ class StateManager {
       output
     });
     this.screen = new ScreenManager(this.rl);
+
+    let config = configFactory;
+    if (_.isFunction(configFactory)) {
+      config = configFactory(this.rl);
+    }
+    this.config = Object.assign(
+      {
+        onKeypress: _.noop
+      },
+      config
+    );
 
     this.onKeypress = this.onKeypress.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -178,7 +183,7 @@ class StateManager {
         transformer: undefined
       }
     );
-    this.screen.render(this.render(renderState), error);
+    this.screen.render(this.render(renderState, this.config), error);
   }
 }
 
