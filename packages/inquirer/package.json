@@ -4,7 +4,8 @@
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "files": [
-    "lib"
+    "lib",
+    "README.md"
   ],
   "main": "lib/inquirer.js",
   "keywords": [
@@ -31,7 +32,9 @@
   "scripts": {
     "test": "nyc mocha test/**/* -r ./test/before",
     "posttest": "nyc report --reporter=text-lcov > ../../coverage/nyc-report.lcov",
-    "prepublish": "nsp check"
+    "prepublish": "nsp check",
+    "prepublishOnly": "cp ../../README.md .",
+    "postpublish": "rm -f README.md"
   },
   "repository": "SBoudrias/Inquirer.js",
   "license": "MIT",
