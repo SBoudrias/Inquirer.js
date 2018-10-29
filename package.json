@@ -12,7 +12,7 @@
     "husky": "^1.1.0",
     "jest": "^23.6.0",
     "lerna": "^3.4.0",
-    "lint-staged": "^7.3.0",
+    "lint-staged": "^8.0.0",
     "prettier": "^1.14.3",
     "regenerator-runtime": "^0.12.0"
   },
