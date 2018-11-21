@@ -1,3 +1,5 @@
+<img width="75px" height="75px" align="right" alt="Inquirer Logo" src="https://raw.githubusercontent.com/SBoudrias/Inquirer.js/master/assets/inquirer_readme.svg?sanitize=true" title="Inquirer.js"/>
+
 # Inquirer.js
 
 [![npm](https://badge.fury.io/js/inquirer.svg)](http://badge.fury.io/js/inquirer) [![tests](https://travis-ci.org/SBoudrias/Inquirer.js.svg?branch=master)](http://travis-ci.org/SBoudrias/Inquirer.js) [![Coverage Status](https://codecov.io/gh/SBoudrias/Inquirer.js/branch/master/graph/badge.svg)](https://codecov.io/gh/SBoudrias/Inquirer.js) [![dependencies](https://david-dm.org/SBoudrias/Inquirer.js.svg?theme=shields.io)](https://david-dm.org/SBoudrias/Inquirer.js)
@@ -26,8 +28,6 @@ A collection of common interactive command line user interfaces.
 7.  [Plugins](#plugins)
 
 ## Goal and Philosophy
-
-<img align="right" alt="Inquirer Logo" src="/assets/inquirer_readme.svg" title="Inquirer.js"/>
 
 **`Inquirer.js`** strives to be an easily embeddable and beautiful command line interface for [Node.js](https://nodejs.org/) (and perhaps the "CLI [Xanadu](https://en.wikipedia.org/wiki/Citizen_Kane)").
 
