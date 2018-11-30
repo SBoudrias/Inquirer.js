@@ -265,7 +265,7 @@ Take `type`, `name`, `message`, `mask`,[, `default`, `filter`, `validate`] prope
 
 ---
 
-Note that `mask` is required to not show the actual user input.
+Note that `mask` is required to hide the actual user input.
 
 #### Editor - `{type: 'editor'}`
 
