@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/select",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1-alpha.1",
   "description": "Inquirer select/list prompt",
   "main": "index.js",
   "repository": "SBoudrias/Inquirer.js",
@@ -13,7 +13,7 @@
   "author": "Simon Boudrias",
   "license": "MIT",
   "dependencies": {
-    "@inquirer/core": "^0.0.1-alpha.0",
+    "@inquirer/core": "^0.0.1-alpha.1",
     "chalk": "^2.4.1"
   }
 }
