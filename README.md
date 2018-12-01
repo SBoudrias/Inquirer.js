@@ -259,11 +259,13 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `transformer`]
 
 #### Password - `{type: 'password'}`
 
-Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
+Take `type`, `name`, `message`, `mask`,[, `default`, `filter`, `validate`] properties.
 
 ![Password prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/password.svg)
 
 ---
+
+Note that `mask` is required to hide the actual user input.
 
 #### Editor - `{type: 'editor'}`
 
