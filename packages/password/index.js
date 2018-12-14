@@ -1,0 +1,31 @@
+const input = require('@inquirer/input');
+const chalk = require('chalk');
+
+module.exports = (config, ...args) => {
+  if (config.transformer) {
+    throw new Error(
+      'Inquirer password prompt do not support custom transformer function. Use the input prompt instead.'
+    );
+  }
+
+  return input(
+    Object.assign({}, config, {
+      // Make sure we do not display the default password
+      defaultValue: undefined,
+      transformer: (input, { isFinal }) => {
+        if (config.mask) {
+          return Array(input.length)
+            .fill(config.mask)
+            .join('');
+        }
+
+        if (!isFinal) {
+          return chalk.dim('[input is masked]');
+        }
+
+        return '';
+      }
+    }),
+    ...args
+  );
+};

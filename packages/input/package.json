@@ -10,7 +10,7 @@
     "command-line",
     "input"
   ],
-  "author": "Simon Boudrias",
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
   "license": "MIT",
   "dependencies": {
     "@inquirer/core": "^0.0.1-alpha.1",
