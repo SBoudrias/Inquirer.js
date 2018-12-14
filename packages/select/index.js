@@ -13,7 +13,8 @@ module.exports = createPrompt(
       let selectedOption;
 
       while (!selectedOption || selectedOption.disabled) {
-        newCursorPosition = Math.abs(newCursorPosition + offset) % choices.length;
+        newCursorPosition =
+          (newCursorPosition + offset + choices.length) % choices.length;
         selectedOption = choices[newCursorPosition];
       }
 

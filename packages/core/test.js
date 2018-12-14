@@ -207,8 +207,8 @@ describe('createPrompt()', () => {
     const rl = readline.createInterface();
     const render = jest.fn(() => '');
     const prompt = createPrompt({}, render);
-    const transformer = jest.fn((value, { isFinal }) =>
-      isFinal ? 'last value' : 'transformed value'
+    const transformer = jest.fn(
+      (value, { isFinal }) => (isFinal ? 'last value' : 'transformed value')
     );
     const promptPromise = prompt({
       message: 'Question',
