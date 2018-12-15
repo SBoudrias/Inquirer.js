@@ -6,17 +6,15 @@ const runAsync = require('run-async');
 const spinner = require('cli-spinners').dots;
 const ScreenManager = require('./lib/screen-manager');
 
+const defaultState = {
+  validate: () => true,
+  filter: val => val,
+  transformer: val => val
+};
+
 class StateManager {
   constructor(configFactory, initialState, render) {
-    this.initialState = Object.assign(
-      {
-        message: initialState.message,
-        validate: () => true,
-        filter: val => val,
-        transformer: val => val
-      },
-      initialState
-    );
+    this.initialState = initialState;
     this.render = render;
     this.currentState = {
       loadingIncrement: 0,
@@ -98,8 +96,10 @@ class StateManager {
     const state = this.getState();
     const { validate, filter, default: defaultValue } = state;
 
+    const { mapStateToValue = () => state.value } = this.config;
+    let value = mapStateToValue(state);
+
     // If no answer was provided, use default value.
-    let { value } = state;
     if (!value) {
       value = defaultValue;
     }
@@ -143,7 +143,7 @@ class StateManager {
   }
 
   getState() {
-    return Object.assign({}, this.initialState, this.currentState);
+    return Object.assign({}, defaultState, this.initialState, this.currentState);
   }
 
   getPrefix() {

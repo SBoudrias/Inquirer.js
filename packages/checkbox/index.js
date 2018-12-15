@@ -23,17 +23,18 @@ module.exports = createPrompt(
       }
 
       if (isSpaceKey(key)) {
-        const newChoices = choices.map((choice, i) => {
-          if (i === cursorPosition) {
-            return Object.assign({}, choice, { checked: !choice.checked });
-          }
-          return choice;
-        });
         setState({
-          choices: newChoices,
-          value: newChoices.filter(choice => choice.checked).map(choice => choice.value)
+          choices: choices.map((choice, i) => {
+            if (i === cursorPosition) {
+              return Object.assign({}, choice, { checked: !choice.checked });
+            }
+            return choice;
+          })
         });
       }
+    },
+    mapStateToValue: ({ choices }) => {
+      return choices.filter(choice => choice.checked).map(choice => choice.value);
     },
     paginator: new Paginator(readline)
   }),

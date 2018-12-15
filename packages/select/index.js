@@ -19,11 +19,11 @@ module.exports = createPrompt(
           selectedOption = choices[newCursorPosition];
         }
 
-        setState({
-          cursorPosition: newCursorPosition,
-          value: selectedOption.value
-        });
+        setState({ cursorPosition: newCursorPosition });
       }
+    },
+    mapStateToValue: ({ cursorPosition = 0, choices }) => {
+      return choices[cursorPosition].value;
     },
     paginator: new Paginator(readline)
   }),
