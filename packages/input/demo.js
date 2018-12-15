@@ -11,11 +11,11 @@ const isHex = value =>
 
   answer = await input({
     message: 'Enter an hex color?',
-    transformer: (value, { isFinal }) => {
+    transformer: (value = '', { isFinal }) => {
       const color = chalk.hex(isHex(value) ? value : 'fff');
       return isFinal ? color.underline(value) : color(value);
     },
-    validate: value => isHex(value) || 'Pass a valid hex value'
+    validate: (value = '') => isHex(value) || 'Pass a valid hex value'
   });
   console.log('Answer:', answer);
 
@@ -24,11 +24,7 @@ const isHex = value =>
     validate: value =>
       new Promise(resolve => {
         setTimeout(
-          () =>
-            resolve(
-              (value.length && !Number.isNaN(Number(value))) ||
-                'You must provide a number'
-            ),
+          () => resolve(!Number.isNaN(Number(value)) || 'You must provide a number'),
           3000
         );
       })

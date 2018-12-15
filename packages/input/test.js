@@ -38,7 +38,7 @@ describe('Input prompt', () => {
       status: 'done'
     });
     expect(whenDone).toMatchSnapshot();
-    expect(whenDone).not.toContain('foo');
+    expect(whenDone).toContain('foo');
 
     const withAnswer = Input.render({
       prefix: '?',

@@ -14,7 +14,7 @@ const defaultState = {
 
 const defaultMapStateToValue = state => {
   if (!state.value) {
-    return state.default || '';
+    return state.default;
   }
   return state.value;
 };
