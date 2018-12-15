@@ -1,5 +1,5 @@
 const { createPrompt } = require('@inquirer/core');
-const { isUpKey, isDownKey } = require('@inquirer/core/lib/key');
+const { isUpKey, isDownKey, isNumberKey } = require('@inquirer/core/lib/key');
 const Paginator = require('@inquirer/core/lib/Paginator');
 const chalk = require('chalk');
 const figures = require('figures');
@@ -17,6 +17,16 @@ module.exports = createPrompt(
           newCursorPosition =
             (newCursorPosition + offset + choices.length) % choices.length;
           selectedOption = choices[newCursorPosition];
+        }
+
+        setState({ cursorPosition: newCursorPosition });
+      } else if (isNumberKey(key)) {
+        // Adjust index to start at 1
+        const newCursorPosition = Number(key.name) - 1;
+
+        // Abort if the choice doesn't exists or if disabled
+        if (!choices[newCursorPosition] || choices[newCursorPosition].disabled) {
+          return;
         }
 
         setState({ cursorPosition: newCursorPosition });
