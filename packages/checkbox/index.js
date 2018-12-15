@@ -42,8 +42,10 @@ module.exports = createPrompt(
     const { prefix, message, choices, cursorPosition = 0, pageSize = 7 } = state;
 
     if (state.status === 'done') {
-      const choice = choices[cursorPosition];
-      return `${prefix} ${message} ${chalk.cyan(choice.name || choice.value)}`;
+      const selection = choices
+        .filter(choice => choice.checked)
+        .map(({ name, value }) => name || value);
+      return `${prefix} ${message} ${chalk.cyan(selection.join(', '))}`;
     }
 
     const allChoices = choices
