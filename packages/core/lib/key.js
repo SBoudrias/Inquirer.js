@@ -3,3 +3,5 @@ exports.isUpKey = key =>
 
 exports.isDownKey = key =>
   key.name === 'down' || key.name === 'j' || (key.name === 'n' && key.ctrl);
+
+exports.isSpaceKey = key => key.name === 'space';
