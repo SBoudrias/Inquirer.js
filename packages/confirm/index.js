@@ -11,7 +11,8 @@ module.exports = createPrompt(
     }
   },
   (state, { mapStateToValue }) => {
-    const { prefix, message, value = '', status } = state;
+    const { prefix, value = '', status } = state;
+    const message = chalk.bold(state.message);
     let formattedValue = value;
     if (status === 'done') {
       const value = mapStateToValue(state);

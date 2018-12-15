@@ -1,5 +1,5 @@
 const { createPrompt } = require('@inquirer/core');
-const { isUpKey, isDownKey, isSpaceKey } = require('@inquirer/core/lib/key');
+const { isUpKey, isDownKey, isSpaceKey, isNumberKey } = require('@inquirer/core/lib/key');
 const Paginator = require('@inquirer/core/lib/Paginator');
 const chalk = require('chalk');
 const figures = require('figures');
@@ -20,12 +20,42 @@ module.exports = createPrompt(
         }
 
         setState({ cursorPosition: newCursorPosition });
-      }
-
-      if (isSpaceKey(key)) {
+      } else if (isSpaceKey(key)) {
         setState({
+          showHelpTip: false,
           choices: choices.map((choice, i) => {
             if (i === cursorPosition) {
+              return Object.assign({}, choice, { checked: !choice.checked });
+            }
+            return choice;
+          })
+        });
+      } else if (key.name === 'a') {
+        const selectAll = Boolean(choices.find(choice => !choice.checked));
+        setState({
+          choices: choices.map(choice =>
+            Object.assign({}, choice, { checked: selectAll })
+          )
+        });
+      } else if (key.name === 'i') {
+        setState({
+          choices: choices.map(choice =>
+            Object.assign({}, choice, { checked: !choice.checked })
+          )
+        });
+      } else if (isNumberKey(key)) {
+        // Adjust index to start at 1
+        const position = Number(key.name) - 1;
+
+        // Abort if the choice doesn't exists or if disabled
+        if (!choices[position] || choices[position].disabled) {
+          return;
+        }
+
+        setState({
+          cursorPosition: position,
+          choices: choices.map((choice, i) => {
+            if (i === position) {
               return Object.assign({}, choice, { checked: !choice.checked });
             }
             return choice;
@@ -39,13 +69,24 @@ module.exports = createPrompt(
     paginator: new Paginator(readline)
   }),
   (state, { paginator }) => {
-    const { prefix, message, choices, cursorPosition = 0, pageSize = 7 } = state;
+    const { prefix, choices, showHelpTip, cursorPosition = 0, pageSize = 7 } = state;
+    const message = chalk.bold(state.message);
 
     if (state.status === 'done') {
       const selection = choices
         .filter(choice => choice.checked)
         .map(({ name, value }) => name || value);
       return `${prefix} ${message} ${chalk.cyan(selection.join(', '))}`;
+    }
+
+    let helpTip = '';
+    if (showHelpTip !== false) {
+      const keys = [
+        `${chalk.cyan.bold('<space>')} to select`,
+        `${chalk.cyan.bold('<a>')} to toggle all`,
+        `${chalk.cyan.bold('<i>')} to invert selection`
+      ];
+      helpTip = ` (Press ${keys.join(', ')})`;
     }
 
     const allChoices = choices
@@ -62,6 +103,6 @@ module.exports = createPrompt(
       })
       .join('\n');
     const windowedChoices = paginator.paginate(allChoices, cursorPosition, pageSize);
-    return `${prefix} ${message}\n${windowedChoices}${cursorHide}`;
+    return `${prefix} ${message}${helpTip}\n${windowedChoices}${cursorHide}`;
   }
 );

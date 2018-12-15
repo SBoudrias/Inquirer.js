@@ -28,7 +28,8 @@ module.exports = createPrompt(
     paginator: new Paginator(readline)
   }),
   (state, { paginator }) => {
-    const { prefix, message, choices, cursorPosition = 0, pageSize = 7 } = state;
+    const { prefix, choices, cursorPosition = 0, pageSize = 7 } = state;
+    const message = chalk.bold(state.message);
 
     if (state.status === 'done') {
       const choice = choices[cursorPosition];

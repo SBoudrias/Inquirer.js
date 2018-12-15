@@ -15,7 +15,8 @@ module.exports = createPrompt(
     }
   },
   state => {
-    const { prefix, message, value = '', status } = state;
+    const { prefix, value = '', status } = state;
+    const message = chalk.bold(state.message);
     let formattedValue = value;
     if (status === 'done') {
       formattedValue = chalk.cyan(value || state.default || '');
