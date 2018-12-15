@@ -1,0 +1,21 @@
+{
+  "name": "@inquirer/expand",
+  "version": "0.0.1-alpha.1",
+  "description": "Inquirer checkbox prompt",
+  "main": "index.js",
+  "repository": "SBoudrias/Inquirer.js",
+  "keywords": [
+    "cli",
+    "prompt",
+    "command-line",
+    "input",
+    "inquirer"
+  ],
+  "author": "Simon Boudrias",
+  "license": "MIT",
+  "dependencies": {
+    "@inquirer/core": "^0.0.1-alpha.1",
+    "chalk": "^2.4.1",
+    "figures": "^2.0.0"
+  }
+}

@@ -19,6 +19,8 @@ const defaultMapStateToValue = state => {
   return state.value;
 };
 
+const defaultOnLine = (state, { submit }) => submit();
+
 class StateManager {
   constructor(configFactory, initialState, render) {
     this.initialState = initialState;
@@ -54,6 +56,7 @@ class StateManager {
     this.startLoading = this.startLoading.bind(this);
     this.onLoaderTick = this.onLoaderTick.bind(this);
     this.setState = this.setState.bind(this);
+    this.handleLineEvent = this.handleLineEvent.bind(this);
   }
 
   async execute(cb) {
@@ -72,7 +75,7 @@ class StateManager {
 
     // Setup event listeners once we're done fetching the configs
     this.rl.input.on('keypress', this.onKeypress);
-    this.rl.on('line', this.onSubmit);
+    this.rl.on('line', this.handleLineEvent);
   }
 
   onKeypress(value, key) {
@@ -99,9 +102,18 @@ class StateManager {
     }
   }
 
+  handleLineEvent() {
+    const { onLine = defaultOnLine } = this.config;
+    onLine(this.getState(), {
+      submit: this.onSubmit,
+      setState: this.setState
+    });
+  }
+
   async onSubmit() {
     const state = this.getState();
     const { validate, filter } = state;
+    const { validate: configValidate = () => true } = this.config;
 
     const { mapStateToValue = defaultMapStateToValue } = this.config;
     let value = mapStateToValue(state);
@@ -110,7 +122,8 @@ class StateManager {
     this.rl.pause();
     try {
       const filteredValue = await runAsync(filter)(value);
-      const isValid = await runAsync(validate)(filteredValue);
+      const isValid =
+        configValidate(value, state) || (await runAsync(validate)(filteredValue));
 
       if (isValid === true) {
         this.onDone(filteredValue);
@@ -120,7 +133,7 @@ class StateManager {
 
       this.onError(isValid);
     } catch (err) {
-      this.onError(err.message);
+      this.onError(err.message + '\n' + err.stack);
     }
     clearTimeout(showLoader);
     this.rl.resume();
@@ -136,7 +149,7 @@ class StateManager {
   onDone(value) {
     this.setState({ status: 'done' });
     this.rl.input.removeListener('keypress', this.onKeypress);
-    this.rl.removeListener('line', this.onSubmit);
+    this.rl.removeListener('line', this.handleLineEvent);
     this.screen.done();
     this.cb(value);
   }
