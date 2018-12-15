@@ -14,7 +14,7 @@ const defaultState = {
 
 const defaultMapStateToValue = state => {
   if (!state.value) {
-    return state.default;
+    return state.default || '';
   }
   return state.value;
 };
@@ -114,9 +114,11 @@ class StateManager {
 
       if (isValid === true) {
         this.onDone(filteredValue);
-      } else {
-        this.onError(isValid);
+        clearTimeout(showLoader);
+        return;
       }
+
+      this.onError(isValid);
     } catch (err) {
       this.onError(err.message);
     }
@@ -133,7 +135,7 @@ class StateManager {
 
   onDone(value) {
     this.setState({ status: 'done' });
-    this.rl.removeListener('keypress', this.onKeypress);
+    this.rl.input.removeListener('keypress', this.onKeypress);
     this.rl.removeListener('line', this.onSubmit);
     this.screen.done();
     this.cb(value);
