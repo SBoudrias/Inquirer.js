@@ -12,6 +12,13 @@ const defaultState = {
   transformer: val => val
 };
 
+const defaultMapStateToValue = state => {
+  if (!state.value) {
+    return state.default;
+  }
+  return state.value;
+};
+
 class StateManager {
   constructor(configFactory, initialState, render) {
     this.initialState = initialState;
@@ -94,15 +101,10 @@ class StateManager {
 
   async onSubmit() {
     const state = this.getState();
-    const { validate, filter, default: defaultValue } = state;
+    const { validate, filter } = state;
 
-    const { mapStateToValue = () => state.value } = this.config;
+    const { mapStateToValue = defaultMapStateToValue } = this.config;
     let value = mapStateToValue(state);
-
-    // If no answer was provided, use default value.
-    if (!value) {
-      value = defaultValue;
-    }
 
     const showLoader = setTimeout(this.startLoading, 500);
     this.rl.pause();

@@ -1,0 +1,24 @@
+{
+  "name": "@inquirer/confirm",
+  "version": "0.0.0",
+  "description": "Inquirer confirm prompt",
+  "keywords": [
+    "cli",
+    "command",
+    "line",
+    "form",
+    "input",
+    "prompt",
+    "terminal"
+  ],
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "homepage": "https://github.com/SBoudrias/Inquirer.js#readme",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": "SBoudrias/Inquirer.js",
+  "dependencies": {
+    "@inquirer/input": "^0.0.1-alpha.1",
+    "@inquirer/core": "^0.0.1-alpha.1",
+    "chalk": "^2.4.1"
+  }
+}
