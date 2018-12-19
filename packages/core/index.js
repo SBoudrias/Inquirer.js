@@ -122,8 +122,10 @@ class StateManager {
     this.rl.pause();
     try {
       const filteredValue = await runAsync(filter)(value);
-      const isValid =
-        configValidate(value, state) || (await runAsync(validate)(filteredValue));
+      let isValid = configValidate(value, state);
+      if (isValid === true) {
+        isValid = await runAsync(validate)(filteredValue);
+      }
 
       if (isValid === true) {
         this.onDone(filteredValue);

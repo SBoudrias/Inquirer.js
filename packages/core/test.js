@@ -186,7 +186,10 @@ describe('createPrompt()', () => {
     await Promise.resolve();
     expect(render).toHaveBeenCalledTimes(2);
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({ message: 'Question:', error: 'Only numbers allowed' }),
+      expect.objectContaining({
+        message: 'Question:',
+        error: expect.stringMatching('Only numbers allowed')
+      }),
       {}
     );
 
