@@ -6,7 +6,8 @@ node_js:
   - node
 before_script:
   - npm run bootstrap
-script: npm test
+script:
+  - npm test
 after_success:
   - npm run codecov
 env:

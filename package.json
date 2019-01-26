@@ -20,7 +20,7 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --no-ci",
     "pretest": "eslint .",
     "test": "jest --coverage && lerna exec npm test --scope inquirer"
   },
