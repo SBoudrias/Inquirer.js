@@ -174,7 +174,8 @@ class RawListPrompt extends Base {
 
   onArrowKey(type) {
     var index = this.rl.line.length ? Number(this.rl.line) - 1 : 0;
-    index += type === 'up' ? -1 : 1;
+    if (type === 'up') index = index === 0 ? this.opt.choices.length - 1 : index - 1;
+    else index = index === this.opt.choices.length - 1 ? 0 : index + 1;
     this.rl.line = String(index + 1);
     this.onKeypress();
   }
