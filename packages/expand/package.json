@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/expand",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.2-alpha.0",
   "description": "Inquirer checkbox prompt",
   "main": "index.js",
   "repository": "SBoudrias/Inquirer.js",
@@ -14,7 +14,7 @@
   "author": "Simon Boudrias",
   "license": "MIT",
   "dependencies": {
-    "@inquirer/core": "^0.0.1-alpha.1",
+    "@inquirer/core": "^0.0.2-alpha.0",
     "chalk": "^2.4.1",
     "figures": "^2.0.0"
   }

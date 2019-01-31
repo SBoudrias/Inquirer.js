@@ -36,6 +36,7 @@ module.exports = class ScreenManager {
     if (this.rl.line.length) {
       prompt = prompt.slice(0, -this.rl.line.length);
     }
+
     this.rl.setPrompt(prompt);
 
     // SetPrompt will change cursor position, now we can get correct value
@@ -46,12 +47,14 @@ module.exports = class ScreenManager {
     if (bottomContent) {
       bottomContent = breakLines(bottomContent, width);
     }
+
     // Manually insert an extra line if we're at the end of the line.
     // This prevent the cursor from appearing at the beginning of the
     // current line.
     if (rawPromptLine.length % width === 0) {
       content += '\n';
     }
+
     const fullContent = content + (bottomContent ? '\n' + bottomContent : '');
     this.rl.output.write(fullContent);
 
@@ -89,6 +92,7 @@ module.exports = class ScreenManager {
     if (extraLines > 0) {
       util.down(this.rl, extraLines);
     }
+
     util.clearLine(this.rl, this.height);
   }
 

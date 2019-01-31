@@ -9,6 +9,7 @@ const requireLetterAndNumber = value => {
   if (/\w/.test(value) && /\d/.test(value)) {
     return true;
   }
+
   return 'Password need to have at least a letter and a number';
 };
 

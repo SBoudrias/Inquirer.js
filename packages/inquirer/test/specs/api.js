@@ -230,6 +230,7 @@ var tests = {
             } else {
               self.rl.emit('line');
             }
+
             done(false);
           }, 0);
         };

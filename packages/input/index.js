@@ -11,6 +11,7 @@ module.exports = createPrompt(
       if (canRemoveDefault && key.name === 'backspace') {
         newState.default = undefined;
       }
+
       setState(newState);
     }
   },

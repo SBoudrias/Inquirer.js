@@ -206,6 +206,7 @@ function renderChoices(choices, pointer) {
     if (index === pointer) {
       display = chalk.cyan(display);
     }
+
     output += display;
   });
 
