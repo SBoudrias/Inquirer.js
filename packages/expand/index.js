@@ -27,6 +27,7 @@ module.exports = createPrompt(
       if (!selection) {
         return undefined;
       }
+
       return selection.value || selection.name;
     },
     validate(selection, { value = '', choices }) {
@@ -38,6 +39,7 @@ module.exports = createPrompt(
       if (value === '') {
         return 'Please input a value';
       }
+
       return (
         Boolean(choices.find(({ key }) => key === value.toLowerCase())) ||
         `"${chalk.red(value)}" isn't an available option`
@@ -62,6 +64,7 @@ module.exports = createPrompt(
         if (choice.key === value.toLowerCase()) {
           return chalk.cyan(line);
         }
+
         return line;
       });
 
@@ -74,6 +77,7 @@ module.exports = createPrompt(
         if (choice.key === rawDefault) {
           return choice.key.toUpperCase();
         }
+
         return choice.key;
       })
       .join('');

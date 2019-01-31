@@ -16,6 +16,7 @@ const defaultMapStateToValue = state => {
   if (!state.value) {
     return state.default;
   }
+
   return state.value;
 };
 
@@ -49,6 +50,7 @@ class StateManager {
     if (_.isFunction(configFactory)) {
       config = configFactory(this.rl);
     }
+
     this.config = config;
 
     this.onKeypress = this.onKeypress.bind(this);
@@ -68,6 +70,7 @@ class StateManager {
     if (_.isFunction(message)) {
       message = await runAsync(message)();
     }
+
     this.setState({ message, status: 'idle' });
 
     // Disable the loader if it didn't launch
@@ -137,6 +140,7 @@ class StateManager {
     } catch (err) {
       this.onError(err.message + '\n' + err.stack);
     }
+
     clearTimeout(showLoader);
     this.rl.resume();
   }
@@ -172,6 +176,7 @@ class StateManager {
       const frame = loadingIncrement % spinner.frames.length;
       prefix = chalk.yellow(spinner.frames[frame]);
     }
+
     return prefix;
   }
 

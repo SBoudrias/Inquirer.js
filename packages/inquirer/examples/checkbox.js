@@ -59,6 +59,7 @@ inquirer
         if (answer.length < 1) {
           return 'You must choose at least one topping.';
         }
+
         return true;
       }
     }

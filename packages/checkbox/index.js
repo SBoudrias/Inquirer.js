@@ -27,6 +27,7 @@ module.exports = createPrompt(
             if (i === cursorPosition) {
               return Object.assign({}, choice, { checked: !choice.checked });
             }
+
             return choice;
           })
         });
@@ -58,6 +59,7 @@ module.exports = createPrompt(
             if (i === position) {
               return Object.assign({}, choice, { checked: !choice.checked });
             }
+
             return choice;
           })
         });
@@ -95,10 +97,12 @@ module.exports = createPrompt(
         if (disabled) {
           return chalk.dim(` - ${line} (disabled)`);
         }
+
         const checkbox = checked ? chalk.green(figures.circleFilled) : figures.circle;
         if (index === cursorPosition) {
           return chalk.cyan(`${figures.pointer}${checkbox} ${line}`);
         }
+
         return ` ${checkbox} ${line}`;
       })
       .join('\n');

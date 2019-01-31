@@ -52,9 +52,11 @@ module.exports = createPrompt(
         if (disabled) {
           return chalk.dim(`- ${line} (disabled)`);
         }
+
         if (index === cursorPosition) {
           return chalk.cyan(`${figures.pointer} ${line}`);
         }
+
         return `  ${line}`;
       })
       .join('\n');

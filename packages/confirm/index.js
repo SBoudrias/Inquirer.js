@@ -7,6 +7,7 @@ module.exports = createPrompt(
       if (value) {
         return /^y(es)?/i.test(value);
       }
+
       return rawDefault !== false;
     }
   },
