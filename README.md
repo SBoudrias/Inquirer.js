@@ -427,3 +427,6 @@ Inquirer prompt for your less creative users.
 An S3 object selector for Inquirer.
 
 ![inquirer-s3](https://github.com/HQarroum/inquirer-s3/raw/master/docs/inquirer-screenshot.png)
+
+[**inquirer-autosubmit-prompt**](https://github.com/yaodingyd/inquirer-autosubmit-prompt)<br>
+Auto submit based on your current input, saving one extra enter
