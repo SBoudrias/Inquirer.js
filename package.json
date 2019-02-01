@@ -1,8 +1,9 @@
 {
   "private": true,
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
     "babel-jest": "^24.0.0",
-    "babel-preset-env": "^1.7.0",
     "codecov": "^3.1.0",
     "eslint": "^5.12.1",
     "eslint-config-prettier": "^4.0.0",
