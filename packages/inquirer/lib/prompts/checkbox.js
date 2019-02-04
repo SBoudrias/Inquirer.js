@@ -101,7 +101,7 @@ class CheckboxPrompt extends Base {
     if (this.status === 'answered') {
       message += chalk.cyan(this.selection.join(', '));
     } else {
-      var choicesStr = renderChoices(this.opt.choices, this.pointer);
+      var choicesStr = renderChoices(this.opt.choices, this.pointer, this.opt);
       var indexPosition = this.opt.choices.indexOf(
         this.opt.choices.getChoice(this.pointer)
       );
@@ -136,8 +136,12 @@ class CheckboxPrompt extends Base {
   }
 
   getCurrentValue() {
+    var includeDisabled = this.opt.includeDisabled;
     var choices = this.opt.choices.filter(function(choice) {
-      return Boolean(choice.checked) && !choice.disabled;
+      return (
+        Boolean(choice.checked) &&
+        (includeDisabled || (!includeDisabled && !choice.disabled))
+      );
     });
 
     this.selection = _.map(choices, 'short');
@@ -208,10 +212,11 @@ class CheckboxPrompt extends Base {
 /**
  * Function for rendering checkbox choices
  * @param  {Number} pointer Position of the pointer
+ * @param  {Object} options Question options
  * @return {String}         Rendered content
  */
 
-function renderChoices(choices, pointer) {
+function renderChoices(choices, pointer, options) {
   var output = '';
   var separatorOffset = 0;
 
@@ -224,7 +229,12 @@ function renderChoices(choices, pointer) {
 
     if (choice.disabled) {
       separatorOffset++;
-      output += ' - ' + choice.name;
+      if (options.includeDisabled) {
+        output += getCheckbox(choice.checked, true) + ' ' + choice.name;
+      } else {
+        output += ' - ' + choice.name;
+      }
+
       output += ' (' + (_.isString(choice.disabled) ? choice.disabled : 'Disabled') + ')';
     } else {
       var line = getCheckbox(choice.checked) + ' ' + choice.name;
@@ -244,11 +254,20 @@ function renderChoices(choices, pointer) {
 /**
  * Get the checkbox
  * @param  {Boolean} checked - add a X or not to the checkbox
+ * @param  {Boolean} disabled - (optional) whether the checkbox is disabled
  * @return {String} Composited checkbox string
  */
 
-function getCheckbox(checked) {
-  return checked ? chalk.green(figures.radioOn) : figures.radioOff;
+function getCheckbox(checked, disabled) {
+  if (typeof disabled === 'undefined') {
+    disabled = false;
+  }
+
+  return checked
+    ? disabled
+      ? chalk.gray(figures.radioOn)
+      : chalk.green(figures.radioOn)
+    : figures.radioOff;
 }
 
 module.exports = CheckboxPrompt;

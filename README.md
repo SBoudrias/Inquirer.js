@@ -127,6 +127,7 @@ A question object is a `hash` containing question related values:
 - **pageSize**: (Number) Change the number of lines that will be rendered when using `list`, `rawList`, `expand` or `checkbox`.
 - **prefix**: (String) Change the default _prefix_ message.
 - **suffix**: (String) Change the default _suffix_ message.
+- **includeDisabled**: (Boolean) In returned answers, include choices that are `{disabled: true}` as well as `{checked: true}`. Defaults: `false`
 
 `default`, `choices`(if defined as functions), `validate`, `filter` and `when` functions can be called asynchronously. Either return a promise or use `this.async()` to get a callback you'll call with the final value.
 
@@ -235,7 +236,7 @@ Take `type`, `name`, `message`, `choices`[, `filter`, `validate`, `default`] pro
 
 Choices marked as `{checked: true}` will be checked by default.
 
-Choices whose property `disabled` is truthy will be unselectable. If `disabled` is a string, then the string will be outputted next to the disabled choice, otherwise it'll default to `"Disabled"`. The `disabled` property can also be a synchronous function receiving the current answers as argument and returning a boolean or a string.
+Choices whose property `disabled` is truthy will be unselectable. By default, disabled choices will not be returned as answers. To include disabled choices that are marked as `{checked: true}` in the answers for a question, set the `includeDisabled` option on the question to `true`. If `disabled` is a string, then the string will be outputted next to the disabled choice, otherwise it'll default to `"Disabled"`. The `disabled` property can also be a synchronous function receiving the current answers as argument and returning a boolean or a string.
 
 ![Checkbox prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/checkbox.svg)
 

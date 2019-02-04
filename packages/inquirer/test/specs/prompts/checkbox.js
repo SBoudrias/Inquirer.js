@@ -233,6 +233,20 @@ describe('`checkbox` prompt', function() {
       this.rl.emit('line');
     });
 
+    it('include choices that are disabled when includeDisabled is true', function(done) {
+      this.fixture.choices = [
+        { name: '1', checked: true, disabled: true },
+        { name: '2', checked: false, disabled: true }
+      ];
+      this.fixture.includeDisabled = true;
+      this.checkbox = new Checkbox(this.fixture, this.rl);
+      this.checkbox.run().then(answer => {
+        expect(answer.length).to.equal(1);
+        done();
+      });
+      this.rl.emit('line');
+    });
+
     it('disabled can be a function', function() {
       this.fixture.choices = [
         {
