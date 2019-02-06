@@ -307,26 +307,30 @@ Internally, Inquirer uses the [JS reactive extension](https://github.com/Reactiv
 This mean you can take advantage of this feature to provide more advanced flows. For example, you can dynamically add questions to be asked:
 
 ```js
-var prompts = new Rx.Subject();
-inquirer.prompt(prompts);
+var inquirer = require('inquirer');
+var Rx = require('rxjs');
 
-// At some point in the future, push new questions
-prompts.next({
-  /* question... */
-});
-prompts.next({
-  /* question... */
-});
+var prompts = new Rx.Subject(), i = 0;
 
-// When you're done
-prompts.complete();
+var question = () => {
+  ++i; return {
+    type: 'input',
+    name: `question-${i}`,
+    message: 'Continue? (y,n)',
+    default: i,
+    validate: answer => String(answer).toLowerCase() === 'y' || String(answer).toLowerCase() === 'n'
+  };
+}
+
+inquirer.prompt(prompts).ui.process.subscribe(
+  (result) => { result.answer.toLowerCase() === 'n' ? prompts.complete() : prompts.next(question()); },
+  (error) => { console.error(error); },
+  () => { console.log('complete'); },
+);
+
+prompts.next(question());
 ```
-
-And using the return value `process` property, you can access more fine grained callbacks:
-
-```js
-inquirer.prompt(prompts).ui.process.subscribe(onEachAnswer, onError, onComplete);
-```
+### Note: The example above works in RxJS 5 (tested in ~5.5.12)
 
 ## Support (OS Terminals)
 
