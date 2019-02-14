@@ -410,6 +410,11 @@ Prompt for fuzzy file/directory selection.<br>
 <br>
 ![inquirer-fuzzy-path](https://raw.githubusercontent.com/adelsz/inquirer-fuzzy-path/master/recording.gif)
 
+[**inquirer-emoji**](https://github.com/tannerntanner/inquirer-emoji)<br>
+Prompt for inputting emojis.<br>
+<br>
+![inquirer-emoji](https://github.com/tannerntannern/inquirer-emoji/raw/master/demo.gif)
+
 [**inquirer-chalk-pipe**](https://github.com/LitoMore/inquirer-chalk-pipe)<br>
 Prompt for input chalk-pipe style strings<br>
 <br>
