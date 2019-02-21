@@ -113,7 +113,7 @@ prompt(questions).then(/* ... */);
 <a name="questions"></a>
 A question object is a `hash` containing question related values:
 
-- **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `confirm`,
+- **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `number`, `confirm`,
   `list`, `rawlist`, `expand`, `checkbox`, `password`, `editor`
 - **name**: (String) The name to use when storing the answer in the answers hash. If the name contains periods, it will define a path in the answers hash.
 - **message**: (String|Function) The question to print. If defined as a function, the first parameter will be the current inquirer session answers. Defaults to the value of `name` (followed by a colon).
@@ -165,6 +165,7 @@ A key/value hash containing the client answers in each prompt.
 - **Value** (Depends on the prompt)
   - `confirm`: (Boolean)
   - `input` : User input (filtered if `filter` is defined) (String)
+  - `number`: User input (filtered if `filter` is defined) (Number)
   - `rawlist`, `list` : Selected choice value (or name if no value specified) (String)
 
 ### Separator
@@ -254,6 +255,12 @@ Take `type`, `name`, `message`, [`default`] properties. `default` is expected to
 Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `transformer`] properties.
 
 ![Input prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/input.svg)
+
+---
+
+#### Input - `{type: 'number'}`
+
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `transformer`] properties.
 
 ---
 
