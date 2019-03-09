@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/password",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.2-alpha.0",
   "description": "Inquirer password prompt",
   "keywords": [
     "cli",
@@ -18,7 +18,7 @@
   "main": "index.js",
   "repository": "SBoudrias/Inquirer.js",
   "dependencies": {
-    "@inquirer/input": "^0.0.2-alpha.0",
+    "@inquirer/input": "^0.0.3-alpha.0",
     "chalk": "^2.4.1"
   }
 }
