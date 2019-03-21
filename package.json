@@ -1,44 +1,46 @@
 {
   "private": true,
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-jest": "^23.0.1",
-    "babel-preset-env": "^1.7.0",
-    "codecov": "^3.0.2",
-    "eslint": "^5.0.0",
-    "eslint-config-prettier": "^3.0.0",
-    "eslint-config-xo": "^0.23.0",
-    "eslint-plugin-prettier": "^2.2.0",
-    "husky": "^0.14.3",
-    "jest": "^23.1.0",
-    "lerna": "^3.0.0",
-    "lint-staged": "^7.0.0",
-    "prettier": "^1.7.0",
-    "regenerator-runtime": "^0.12.0"
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "babel-jest": "^24.0.0",
+    "codecov": "^3.1.0",
+    "eslint": "^5.12.1",
+    "eslint-config-prettier": "^4.0.0",
+    "eslint-config-xo": "^0.26.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "husky": "^1.3.1",
+    "jest": "^24.3.1",
+    "lerna": "^3.10.7",
+    "lint-staged": "^8.1.1",
+    "prettier": "^1.16.3"
   },
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "precommit": "lint-staged",
+    "bootstrap": "lerna bootstrap --no-ci",
     "pretest": "eslint .",
     "test": "jest --coverage && lerna exec npm test --scope inquirer"
   },
-  "lint-staged": {
-    "linters": {
-      "*.js": [
-        "eslint --fix",
-        "git add"
-      ],
-      "*.json": [
-        "prettier --write",
-        "git add"
-      ]
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "jest": {
     "coverageDirectory": "./coverage/",
     "collectCoverage": true
-  }
+  },
+  "dependencies": {}
 }

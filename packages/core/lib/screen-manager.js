@@ -2,7 +2,9 @@ const _ = require('lodash');
 const cliWidth = require('cli-width');
 const stripAnsi = require('strip-ansi');
 const stringWidth = require('string-width');
+const { cursorShow } = require('ansi-escapes');
 const util = require('./readline');
+const { breakLines } = require('./utils');
 
 const height = content => content.split('\n').length;
 const lastLine = content => _.last(content.split('\n'));
@@ -34,22 +36,25 @@ module.exports = class ScreenManager {
     if (this.rl.line.length) {
       prompt = prompt.slice(0, -this.rl.line.length);
     }
+
     this.rl.setPrompt(prompt);
 
     // SetPrompt will change cursor position, now we can get correct value
     const cursorPos = this.rl._getCursorPos();
-    const width = this.normalizedCliWidth();
+    const width = cliWidth({ defaultWidth: 80, output: this.rl.output });
 
-    content = this.forceLineReturn(content, width);
+    content = breakLines(content, width);
     if (bottomContent) {
-      bottomContent = this.forceLineReturn(bottomContent, width);
+      bottomContent = breakLines(bottomContent, width);
     }
+
     // Manually insert an extra line if we're at the end of the line.
     // This prevent the cursor from appearing at the beginning of the
     // current line.
     if (rawPromptLine.length % width === 0) {
       content += '\n';
     }
+
     const fullContent = content + (bottomContent ? '\n' + bottomContent : '');
     this.rl.output.write(fullContent);
 
@@ -87,6 +92,7 @@ module.exports = class ScreenManager {
     if (extraLines > 0) {
       util.down(this.rl, extraLines);
     }
+
     util.clearLine(this.rl, this.height);
   }
 
@@ -95,6 +101,7 @@ module.exports = class ScreenManager {
     this.rl.setPrompt('');
     this.rl.output.unmute();
     this.rl.output.write('\n');
+    this.rl.output.write(cursorShow);
     this.rl.close();
   }
 
@@ -102,30 +109,5 @@ module.exports = class ScreenManager {
     if (this.extraLinesUnderPrompt > 0) {
       util.down(this.rl, this.extraLinesUnderPrompt);
     }
-  }
-
-  normalizedCliWidth() {
-    return cliWidth({
-      defaultWidth: 80,
-      output: this.rl.output
-    });
-  }
-
-  breakLines(lines, width) {
-    // Break lines who're longer than the cli width so we can normalize the natural line
-    // returns behavior across terminals.
-    width = width || this.normalizedCliWidth();
-    const regex = new RegExp('(?:(?:\\033[[0-9;]*m)*.?){1,' + width + '}', 'g');
-    return lines.map(line => {
-      const chunk = line.match(regex);
-      // Last match is always empty
-      chunk.pop();
-      return chunk || '';
-    });
-  }
-
-  forceLineReturn(content, width) {
-    width = width || this.normalizedCliWidth();
-    return _.flatten(this.breakLines(content.split('\n'), width)).join('\n');
   }
 };

@@ -11,29 +11,25 @@ const isHex = value =>
 
   answer = await input({
     message: 'Enter an hex color?',
-    transformer: (value, { isFinal }) => {
+    transformer: (value = '', { isFinal }) => {
       const color = chalk.hex(isHex(value) ? value : 'fff');
       return isFinal ? color.underline(value) : color(value);
     },
-    validate: value => isHex(value) || 'Pass a valid hex value'
+    validate: (value = '') => isHex(value) || 'Pass a valid hex value'
   });
-  console.log('Answer: ', answer);
+  console.log('Answer:', answer);
 
   answer = await input({
     message: '(Slow validation) provide a number:',
     validate: value =>
       new Promise(resolve => {
         setTimeout(
-          () =>
-            resolve(
-              (value.length && !Number.isNaN(Number(value))) ||
-                'You must provide a number'
-            ),
+          () => resolve(!Number.isNaN(Number(value)) || 'You must provide a number'),
           3000
         );
       })
   });
-  console.log('Answer: ', answer);
+  console.log('Answer:', answer);
 
   answer = await input({
     message: () =>
@@ -41,5 +37,11 @@ const isHex = value =>
         setTimeout(() => resolve('(Slow message) Input any value:'), 3000);
       })
   });
-  console.log('Answer: ', answer);
+  console.log('Answer:', answer);
+
+  answer = await input({
+    message: "What's your favorite food?",
+    default: 'Croissant'
+  });
+  console.log('Answer:', answer);
 })();

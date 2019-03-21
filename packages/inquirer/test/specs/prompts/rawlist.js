@@ -46,6 +46,7 @@ describe('`rawlist` prompt', function() {
     var mkPrompt = function() {
       return new Rawlist({ name: 'foo', message: 'bar' });
     };
+
     expect(mkPrompt).to.throw(/choices/);
   });
 

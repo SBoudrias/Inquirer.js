@@ -6,23 +6,25 @@ const runAsync = require('run-async');
 const spinner = require('cli-spinners').dots;
 const ScreenManager = require('./lib/screen-manager');
 
+const defaultState = {
+  validate: () => true,
+  filter: val => val,
+  transformer: val => val
+};
+
+const defaultMapStateToValue = state => {
+  if (!state.value) {
+    return state.default;
+  }
+
+  return state.value;
+};
+
+const defaultOnLine = (state, { submit }) => submit();
+
 class StateManager {
-  constructor(config, initialState, render) {
-    this.config = Object.assign(
-      {
-        onKeypress: _.noop
-      },
-      config
-    );
-    this.initialState = Object.assign(
-      {
-        message: initialState.message,
-        validate: () => true,
-        filter: val => val,
-        transformer: val => val
-      },
-      initialState
-    );
+  constructor(configFactory, initialState, render) {
+    this.initialState = initialState;
     this.render = render;
     this.currentState = {
       loadingIncrement: 0,
@@ -44,11 +46,19 @@ class StateManager {
     });
     this.screen = new ScreenManager(this.rl);
 
+    let config = configFactory;
+    if (_.isFunction(configFactory)) {
+      config = configFactory(this.rl);
+    }
+
+    this.config = config;
+
     this.onKeypress = this.onKeypress.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.startLoading = this.startLoading.bind(this);
     this.onLoaderTick = this.onLoaderTick.bind(this);
     this.setState = this.setState.bind(this);
+    this.handleLineEvent = this.handleLineEvent.bind(this);
   }
 
   async execute(cb) {
@@ -60,6 +70,7 @@ class StateManager {
     if (_.isFunction(message)) {
       message = await runAsync(message)();
     }
+
     this.setState({ message, status: 'idle' });
 
     // Disable the loader if it didn't launch
@@ -67,18 +78,18 @@ class StateManager {
 
     // Setup event listeners once we're done fetching the configs
     this.rl.input.on('keypress', this.onKeypress);
-    this.rl.on('line', this.onSubmit);
+    this.rl.on('line', this.handleLineEvent);
   }
 
   onKeypress(value, key) {
-    const { onKeypress } = this.config;
+    const { onKeypress = _.noop } = this.config;
     // Ignore enter keypress. The "line" event is handling those.
     if (key.name === 'enter' || key.name === 'return') {
       return;
     }
 
     this.setState({ value: this.rl.line, error: null });
-    onKeypress(value, key, this.getState(), this.setState);
+    onKeypress(this.rl.line, key, this.getState(), this.setState);
   }
 
   startLoading() {
@@ -94,22 +105,42 @@ class StateManager {
     }
   }
 
+  handleLineEvent() {
+    const { onLine = defaultOnLine } = this.config;
+    onLine(this.getState(), {
+      submit: this.onSubmit,
+      setState: this.setState
+    });
+  }
+
   async onSubmit() {
-    const { validate, filter, value } = this.getState();
+    const state = this.getState();
+    const { validate, filter } = state;
+    const { validate: configValidate = () => true } = this.config;
+
+    const { mapStateToValue = defaultMapStateToValue } = this.config;
+    let value = mapStateToValue(state);
+
     const showLoader = setTimeout(this.startLoading, 500);
     this.rl.pause();
     try {
       const filteredValue = await runAsync(filter)(value);
-      const isValid = await runAsync(validate)(filteredValue);
+      let isValid = configValidate(value, state);
+      if (isValid === true) {
+        isValid = await runAsync(validate)(filteredValue);
+      }
 
       if (isValid === true) {
         this.onDone(filteredValue);
-      } else {
-        this.onError(isValid);
+        clearTimeout(showLoader);
+        return;
       }
+
+      this.onError(isValid);
     } catch (err) {
-      this.onError(err.message);
+      this.onError(err.message + '\n' + err.stack);
     }
+
     clearTimeout(showLoader);
     this.rl.resume();
   }
@@ -123,8 +154,8 @@ class StateManager {
 
   onDone(value) {
     this.setState({ status: 'done' });
-    this.rl.removeListener('keypress', this.onKeypress);
-    this.rl.removeListener('line', this.onSubmit);
+    this.rl.input.removeListener('keypress', this.onKeypress);
+    this.rl.removeListener('line', this.handleLineEvent);
     this.screen.done();
     this.cb(value);
   }
@@ -135,7 +166,7 @@ class StateManager {
   }
 
   getState() {
-    return Object.assign({}, this.initialState, this.currentState);
+    return Object.assign({}, defaultState, this.initialState, this.currentState);
   }
 
   getPrefix() {
@@ -145,6 +176,7 @@ class StateManager {
       const frame = loadingIncrement % spinner.frames.length;
       prefix = chalk.yellow(spinner.frames[frame]);
     }
+
     return prefix;
   }
 
@@ -170,7 +202,7 @@ class StateManager {
         transformer: undefined
       }
     );
-    this.screen.render(this.render(renderState), error);
+    this.screen.render(this.render(renderState, this.config), error);
   }
 }
 

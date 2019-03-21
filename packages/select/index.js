@@ -1,41 +1,66 @@
 const { createPrompt } = require('@inquirer/core');
-const { isUpKey, isDownKey } = require('@inquirer/core/lib/key');
+const { isUpKey, isDownKey, isNumberKey } = require('@inquirer/core/lib/key');
+const Paginator = require('@inquirer/core/lib/Paginator');
 const chalk = require('chalk');
+const figures = require('figures');
+const { cursorHide } = require('ansi-escapes');
 
 module.exports = createPrompt(
-  {
+  readline => ({
     onKeypress: (value, key, { cursorPosition = 0, choices }, setState) => {
-      let newCursorPosition = cursorPosition;
-      if (isUpKey(key)) {
-        newCursorPosition = (cursorPosition + 1) % choices.length;
-      } else if (isDownKey(key)) {
-        newCursorPosition = (cursorPosition - 1 + choices.length) % choices.length;
-      }
+      if (isUpKey(key) || isDownKey(key)) {
+        let newCursorPosition = cursorPosition;
+        const offset = isUpKey(key) ? -1 : 1;
+        let selectedOption;
 
-      if (newCursorPosition !== cursorPosition) {
-        setState({
-          cursorPosition: newCursorPosition,
-          value: choices[newCursorPosition].value
-        });
+        while (!selectedOption || selectedOption.disabled) {
+          newCursorPosition =
+            (newCursorPosition + offset + choices.length) % choices.length;
+          selectedOption = choices[newCursorPosition];
+        }
+
+        setState({ cursorPosition: newCursorPosition });
+      } else if (isNumberKey(key)) {
+        // Adjust index to start at 1
+        const newCursorPosition = Number(key.name) - 1;
+
+        // Abort if the choice doesn't exists or if disabled
+        if (!choices[newCursorPosition] || choices[newCursorPosition].disabled) {
+          return;
+        }
+
+        setState({ cursorPosition: newCursorPosition });
       }
-    }
-  },
-  state => {
-    const { prefix, message, choices, cursorPosition = 0 } = state;
+    },
+    mapStateToValue: ({ cursorPosition = 0, choices }) => {
+      return choices[cursorPosition].value;
+    },
+    paginator: new Paginator(readline)
+  }),
+  (state, { paginator }) => {
+    const { prefix, choices, cursorPosition = 0, pageSize = 7 } = state;
+    const message = chalk.bold(state.message);
 
     if (state.status === 'done') {
       const choice = choices[cursorPosition];
       return `${prefix} ${message} ${chalk.cyan(choice.name || choice.value)}`;
     }
 
-    const cursorChar = '> ';
-    const padding = '  ';
-    const list = choices
-      .map(
-        ({ name, value }, index) =>
-          `${index === cursorPosition ? cursorChar : padding}${name || value}`
-      )
+    const allChoices = choices
+      .map(({ name, value, disabled }, index) => {
+        const line = name || value;
+        if (disabled) {
+          return chalk.dim(`- ${line} (disabled)`);
+        }
+
+        if (index === cursorPosition) {
+          return chalk.cyan(`${figures.pointer} ${line}`);
+        }
+
+        return `  ${line}`;
+      })
       .join('\n');
-    return `${prefix} ${message}\n${list}\n`;
+    const windowedChoices = paginator.paginate(allChoices, cursorPosition, pageSize);
+    return `${prefix} ${message}\n${windowedChoices}${cursorHide}`;
   }
 );

@@ -1,3 +1,5 @@
+<img width="75px" height="75px" align="right" alt="Inquirer Logo" src="https://raw.githubusercontent.com/SBoudrias/Inquirer.js/master/assets/inquirer_readme.svg?sanitize=true" title="Inquirer.js"/>
+
 # Inquirer.js
 
 [![npm](https://badge.fury.io/js/inquirer.svg)](http://badge.fury.io/js/inquirer) [![tests](https://travis-ci.org/SBoudrias/Inquirer.js.svg?branch=master)](http://travis-ci.org/SBoudrias/Inquirer.js) [![Coverage Status](https://codecov.io/gh/SBoudrias/Inquirer.js/branch/master/graph/badge.svg)](https://codecov.io/gh/SBoudrias/Inquirer.js) [![dependencies](https://david-dm.org/SBoudrias/Inquirer.js.svg?theme=shields.io)](https://david-dm.org/SBoudrias/Inquirer.js)
@@ -26,8 +28,6 @@ A collection of common interactive command line user interfaces.
 7.  [Plugins](#plugins)
 
 ## Goal and Philosophy
-
-<img align="right" alt="Inquirer Logo" src="/assets/inquirer_readme.svg" title="Inquirer.js"/>
 
 **`Inquirer.js`** strives to be an easily embeddable and beautiful command line interface for [Node.js](https://nodejs.org/) (and perhaps the "CLI [Xanadu](https://en.wikipedia.org/wiki/Citizen_Kane)").
 
@@ -68,7 +68,7 @@ inquirer
 
 ### Examples (Run it and see it)
 
-Check out the `packages/inquirer/examples/` folder for code and interface examples.
+Check out the [`packages/inquirer/examples/`](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/inquirer/examples) folder for code and interface examples.
 
 ```shell
 node packages/inquirer/examples/pizza.js
@@ -113,7 +113,7 @@ prompt(questions).then(/* ... */);
 <a name="questions"></a>
 A question object is a `hash` containing question related values:
 
-- **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `confirm`,
+- **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `number`, `confirm`,
   `list`, `rawlist`, `expand`, `checkbox`, `password`, `editor`
 - **name**: (String) The name to use when storing the answer in the answers hash. If the name contains periods, it will define a path in the answers hash.
 - **message**: (String|Function) The question to print. If defined as a function, the first parameter will be the current inquirer session answers. Defaults to the value of `name` (followed by a colon).
@@ -165,6 +165,7 @@ A key/value hash containing the client answers in each prompt.
 - **Value** (Depends on the prompt)
   - `confirm`: (Boolean)
   - `input` : User input (filtered if `filter` is defined) (String)
+  - `number`: User input (filtered if `filter` is defined) (Number)
   - `rawlist`, `list` : Selected choice value (or name if no value specified) (String)
 
 ### Separator
@@ -257,13 +258,21 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `transformer`]
 
 ---
 
+#### Input - `{type: 'number'}`
+
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `transformer`] properties.
+
+---
+
 #### Password - `{type: 'password'}`
 
-Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties.
+Take `type`, `name`, `message`, `mask`,[, `default`, `filter`, `validate`] properties.
 
 ![Password prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/password.svg)
 
 ---
+
+Note that `mask` is required to hide the actual user input.
 
 #### Editor - `{type: 'editor'}`
 
@@ -408,6 +417,11 @@ Prompt for fuzzy file/directory selection.<br>
 <br>
 ![inquirer-fuzzy-path](https://raw.githubusercontent.com/adelsz/inquirer-fuzzy-path/master/recording.gif)
 
+[**inquirer-emoji**](https://github.com/tannerntanner/inquirer-emoji)<br>
+Prompt for inputting emojis.<br>
+<br>
+![inquirer-emoji](https://github.com/tannerntannern/inquirer-emoji/raw/master/demo.gif)
+
 [**inquirer-chalk-pipe**](https://github.com/LitoMore/inquirer-chalk-pipe)<br>
 Prompt for input chalk-pipe style strings<br>
 <br>
@@ -420,3 +434,11 @@ Searchable Inquirer checkbox<br>
 Inquirer prompt for your less creative users.
 
 ![inquirer-prompt-suggest](https://user-images.githubusercontent.com/5600126/40391192-d4f3d6d0-5ded-11e8-932f-4b75b642c09e.gif)
+
+[**inquirer-s3**](https://github.com/HQarroum/inquirer-s3)<br>
+An S3 object selector for Inquirer.
+
+![inquirer-s3](https://github.com/HQarroum/inquirer-s3/raw/master/docs/inquirer-screenshot.png)
+
+[**inquirer-autosubmit-prompt**](https://github.com/yaodingyd/inquirer-autosubmit-prompt)<br>
+Auto submit based on your current input, saving one extra enter

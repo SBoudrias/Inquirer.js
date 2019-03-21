@@ -62,6 +62,7 @@ describe('`checkbox` prompt', function() {
       expect(answer).to.eql(['1', '2']);
       return true;
     };
+
     this.checkbox = new Checkbox(this.fixture, this.rl);
     var promise = this.checkbox.run();
     this.rl.emit('line');

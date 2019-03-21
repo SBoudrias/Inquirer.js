@@ -654,6 +654,7 @@ describe('inquirer.prompt', function() {
     process.stdout.getWindowSize = function() {
       return [0];
     };
+
     var prompt = inquirer.createPromptModule();
 
     var prompts = [

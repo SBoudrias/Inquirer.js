@@ -29,6 +29,7 @@ var questions = [
       if (flags.isFinal) {
         return text + '!';
       }
+
       return text;
     }
   },
