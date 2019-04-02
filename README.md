@@ -417,7 +417,7 @@ Prompt for fuzzy file/directory selection.<br>
 <br>
 ![inquirer-fuzzy-path](https://raw.githubusercontent.com/adelsz/inquirer-fuzzy-path/master/recording.gif)
 
-[**inquirer-emoji**](https://github.com/tannerntanner/inquirer-emoji)<br>
+[**inquirer-emoji**](https://github.com/tannerntannern/inquirer-emoji)<br>
 Prompt for inputting emojis.<br>
 <br>
 ![inquirer-emoji](https://github.com/tannerntannern/inquirer-emoji/raw/master/demo.gif)
