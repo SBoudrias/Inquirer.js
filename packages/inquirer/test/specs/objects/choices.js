@@ -11,6 +11,11 @@ describe('Choices collection', function() {
     expect(choices.getChoice(1)).to.be.instanceOf(Choice);
   });
 
+  it('should support for number', function() {
+    var choices = new Choices([1, 2, 3, 4]);
+    expect(choices.getChoice(0).value).to.equal(1);
+  });
+
   it('should not process Separator object', function() {
     var sep = new inquirer.Separator();
     var choices = new Choices(['Bar', sep]);
