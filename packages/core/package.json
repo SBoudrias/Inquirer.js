@@ -22,5 +22,8 @@
     "run-async": "^2.3.0",
     "string-width": "^2.1.1",
     "strip-ansi": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
