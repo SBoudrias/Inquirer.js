@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/confirm",
-  "version": "0.0.2-alpha.0",
+  "version": "0.0.3-alpha.0",
   "description": "Inquirer confirm prompt",
   "keywords": [
     "cli",
@@ -17,8 +17,8 @@
   "main": "index.js",
   "repository": "SBoudrias/Inquirer.js",
   "dependencies": {
-    "@inquirer/core": "^0.0.3-alpha.0",
-    "@inquirer/input": "^0.0.3-alpha.0",
+    "@inquirer/core": "^0.0.4-alpha.0",
+    "@inquirer/input": "^0.0.4-alpha.0",
     "chalk": "^2.4.1"
   }
 }
