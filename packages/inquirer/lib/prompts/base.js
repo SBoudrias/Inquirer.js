@@ -78,7 +78,6 @@ class Prompt {
    */
   close() {
     this.screen.releaseCursor();
-    this.rl.input.removeAllListeners();
   }
 
   /**
