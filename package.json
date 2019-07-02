@@ -12,7 +12,7 @@
     "husky": "^2.4.1",
     "jest": "^24.8.0",
     "lerna": "^3.15.0",
-    "lint-staged": "^8.2.1",
+    "lint-staged": "^9.0.0",
     "prettier": "^1.18.2"
   },
   "workspaces": [
