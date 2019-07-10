@@ -119,7 +119,7 @@ A question object is a `hash` containing question related values:
 - **message**: (String|Function) The question to print. If defined as a function, the first parameter will be the current inquirer session answers. Defaults to the value of `name` (followed by a colon).
 - **default**: (String|Number|Boolean|Array|Function) Default value(s) to use if nothing is entered, or a function that returns the default value(s). If defined as a function, the first parameter will be the current inquirer session answers.
 - **choices**: (Array|Function) Choices array or a function returning a choices array. If defined as a function, the first parameter will be the current inquirer session answers.
-  Array values can be simple `strings`, or `objects` containing a `name` (to display in list), a `value` (to save in the answers hash) and a `short` (to display after selection) properties. The choices array can also contain [a `Separator`](#separator).
+  Array values can be simple `numbers`, `strings`, or `objects` containing a `name` (to display in list), a `value` (to save in the answers hash) and a `short` (to display after selection) properties. The choices array can also contain [a `Separator`](#separator).
 - **validate**: (Function) Receive the user input and answers hash. Should return `true` if the value is valid, and an error message (`String`) otherwise. If `false` is returned, a default error message is provided.
 - **filter**: (Function) Receive the user input and return the filtered value to be used inside the program. The value returned will be added to the _Answers_ hash.
 - **transformer**: (Function) Receive the user input, answers hash and option flags, and return a transformed value to display to the user. The transformation only impacts what is shown while editing. It does not modify the answers hash.
@@ -417,7 +417,7 @@ Prompt for fuzzy file/directory selection.<br>
 <br>
 ![inquirer-fuzzy-path](https://raw.githubusercontent.com/adelsz/inquirer-fuzzy-path/master/recording.gif)
 
-[**inquirer-emoji**](https://github.com/tannerntanner/inquirer-emoji)<br>
+[**inquirer-emoji**](https://github.com/tannerntannern/inquirer-emoji)<br>
 Prompt for inputting emojis.<br>
 <br>
 ![inquirer-emoji](https://github.com/tannerntannern/inquirer-emoji/raw/master/demo.gif)
@@ -442,3 +442,8 @@ An S3 object selector for Inquirer.
 
 [**inquirer-autosubmit-prompt**](https://github.com/yaodingyd/inquirer-autosubmit-prompt)<br>
 Auto submit based on your current input, saving one extra enter
+
+[**inquirer-file-tree-selection-prompt**](https://github.com/anc95/inquirer-file-tree-selection)<br>
+Inquirer prompt for to select a file or directory in file tree
+
+![inquirer-file-tree-selection-prompt](https://github.com/anc95/inquirer-file-tree-selection/blob/master/example/screenshot.gif)

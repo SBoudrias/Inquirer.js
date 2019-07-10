@@ -20,14 +20,12 @@ inquirer
       type: 'list',
       name: 'letter',
       message: "What's your favorite letter?",
-      paginated: true,
       choices: choices
     },
     {
       type: 'checkbox',
       name: 'name',
       message: 'Select the letter contained in your name:',
-      paginated: true,
       choices: choices
     }
   ])
