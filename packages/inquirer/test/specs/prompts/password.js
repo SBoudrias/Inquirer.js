@@ -49,4 +49,21 @@ describe('`password` prompt', function() {
     this.rl.emit('line', 'Inquirer');
     return promise;
   });
+
+  it('Preserves default', function() {
+    this.fixture.default = 'Inquirer';
+    var password = new Password(this.fixture, this.rl);
+    var promise = password.run().then(answer => expect(answer).to.equal('Inquirer'));
+    this.rl.emit('line', '');
+    return promise;
+  });
+
+  it('Clears default on keypress', function() {
+    this.fixture.default = 'Inquirer';
+    var password = new Password(this.fixture, this.rl);
+    var promise = password.run().then(answer => expect(answer).to.equal(''));
+    password.onKeypress({ name: 'backspace' });
+    this.rl.emit('line', '');
+    return promise;
+  });
 });
