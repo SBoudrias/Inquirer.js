@@ -358,7 +358,7 @@ look at issues found on other command line - feel free to report any!
 
 <a name="news"></a>
 
-Please refer to the [Github releases section for the changelog](https://github.com/SBoudrias/Inquirer.js/releases)
+Please refer to the [GitHub releases section for the changelog](https://github.com/SBoudrias/Inquirer.js/releases)
 
 ## Contributing
 
