@@ -5,7 +5,7 @@
     "@babel/preset-env": "^7.4.5",
     "babel-jest": "^24.8.0",
     "codecov": "^3.5.0",
-    "eslint": "^5.16.0",
+    "eslint": "^6.1.0",
     "eslint-config-prettier": "^5.0.0",
     "eslint-config-xo": "^0.26.0",
     "eslint-plugin-prettier": "^3.1.0",
