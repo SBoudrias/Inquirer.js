@@ -23,9 +23,9 @@
     "chai": "^4.2.0",
     "chalk-pipe": "^2.0.0",
     "cmdify": "^0.0.4",
-    "mocha": "^5.0.0",
+    "mocha": "^6.2.0",
     "mockery": "^2.1.0",
-    "nyc": "^13.1.0",
+    "nyc": "^14.1.1",
     "sinon": "^7.1.1"
   },
   "scripts": {
@@ -37,17 +37,17 @@
   "repository": "SBoudrias/Inquirer.js",
   "license": "MIT",
   "dependencies": {
-    "ansi-escapes": "^3.2.0",
+    "ansi-escapes": "^4.2.0",
     "chalk": "^2.4.2",
-    "cli-cursor": "^2.1.0",
+    "cli-cursor": "^3.1.0",
     "cli-width": "^2.0.0",
     "external-editor": "^3.0.3",
-    "figures": "^2.0.0",
+    "figures": "^3.0.0",
     "lodash": "^4.17.12",
-    "mute-stream": "0.0.7",
+    "mute-stream": "0.0.8",
     "run-async": "^2.2.0",
     "rxjs": "^6.4.0",
-    "string-width": "^2.1.0",
+    "string-width": "^4.1.0",
     "strip-ansi": "^5.1.0",
     "through": "^2.3.6"
   }

@@ -1,9 +1,9 @@
 sudo: false
 language: node_js
 node_js:
-  - 6
   - 8
   - 10
+  - 12
   - node
 before_script:
   - npm run bootstrap
