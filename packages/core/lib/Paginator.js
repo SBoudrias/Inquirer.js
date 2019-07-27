@@ -21,7 +21,9 @@ class Paginator {
     pageSize = pageSize || 7;
     const middleOfList = Math.floor(pageSize / 2);
 
-    const width = cliWidth({ defaultWidth: 80, output: this.rl.output });
+    // TODO: I've remove the dependency on readline here. But we should refactor the
+    // paginator to also rely on hook.
+    const width = cliWidth({ defaultWidth: 80, output: process.stdout });
     let lines = breakLines(output, width).split('\n');
 
     // Make sure there's enough lines to paginate

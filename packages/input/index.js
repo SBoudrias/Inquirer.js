@@ -1,5 +1,6 @@
 const { createPrompt, useState, useKeypress } = require('@inquirer/core/hooks');
 const { usePrefix } = require('@inquirer/core/lib/prefix');
+const { isEnterKey } = require('@inquirer/core/lib/key');
 const chalk = require('chalk');
 
 module.exports = createPrompt((config, done) => {
@@ -16,7 +17,7 @@ module.exports = createPrompt((config, done) => {
       return;
     }
 
-    if (key.name === 'enter' || key.name === 'return') {
+    if (isEnterKey(key)) {
       setStatus('loading');
       const isValid = await config.validate(value);
       if (isValid === true) {

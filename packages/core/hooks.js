@@ -70,6 +70,10 @@ exports.useEffect = (cb, depArray) => {
   index++;
 };
 
+exports.useRef = val => {
+  return exports.useState({ current: val })[0];
+};
+
 exports.createPrompt = view => {
   return options => {
     // Default `input` to stdin
