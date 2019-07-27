@@ -6,6 +6,7 @@
     "node": true
   },
   "rules": {
+    "padding-line-between-statements": "off",
     "no-eq-null": "off",
     "eqeqeq": [
       "error",
