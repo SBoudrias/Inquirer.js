@@ -1,0 +1,23 @@
+{
+  "name": "@inquirer/editor",
+  "version": "0.0.0",
+  "description": "Inquirer multiline editor prompt",
+  "main": "index.js",
+  "repository": "SBoudrias/Inquirer.js",
+  "keywords": [
+    "cli",
+    "prompt",
+    "command-line",
+    "input"
+  ],
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@inquirer/core": "^0.0.6-alpha.0",
+    "chalk": "^2.4.1",
+    "external-editor": "^3.0.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
