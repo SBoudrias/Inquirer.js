@@ -1,12 +1,13 @@
 const { createPrompt, useState, useKeypress } = require('@inquirer/core/hooks');
 const { usePrefix } = require('@inquirer/core/lib/prefix');
-const { isEnterKey } = require('@inquirer/core/lib/key');
+const { isEnterKey, isBackspaceKey } = require('@inquirer/core/lib/key');
 const chalk = require('chalk');
 
 module.exports = createPrompt((config, done) => {
   const [status, setStatus] = useState('pending');
+  const [defaultValue, setDefaultValue] = useState(config.default);
   const [errorMsg, setError] = useState();
-  const [value, setValue] = useState(config.default || '');
+  const [value, setValue] = useState('');
 
   const isLoading = status === 'loading';
   const prefix = usePrefix(isLoading);
@@ -18,11 +19,13 @@ module.exports = createPrompt((config, done) => {
     }
 
     if (isEnterKey(key)) {
+      const answer = value || defaultValue || '';
       setStatus('loading');
-      const isValid = await config.validate(value);
+      const isValid = await config.validate(answer);
       if (isValid === true) {
+        setValue(answer);
         setStatus('done');
-        done(value);
+        done(answer);
       } else {
         // TODO: Can we keep the value after validation failure?
         // `rl.line = value` works but it looses the cursor position.
@@ -30,6 +33,8 @@ module.exports = createPrompt((config, done) => {
         setError(isValid || 'You must provide a valid value');
         setStatus('pending');
       }
+    } else if (isBackspaceKey(key) && !value) {
+      setDefaultValue(undefined);
     } else {
       setValue(rl.line);
       setError(undefined);
@@ -44,9 +49,9 @@ module.exports = createPrompt((config, done) => {
     formattedValue = chalk.cyan(value);
   }
 
-  let defaultValue = '';
-  if (config.default && status !== 'done' && !value) {
-    defaultValue = chalk.dim(` (${config.default})`);
+  let defaultStr = '';
+  if (defaultValue && status !== 'done' && !value) {
+    defaultStr = chalk.dim(` (${defaultValue})`);
   }
 
   let error = '';
@@ -54,5 +59,5 @@ module.exports = createPrompt((config, done) => {
     error = chalk.red(`> ${errorMsg}`);
   }
 
-  return [`${prefix} ${message}${defaultValue} ${formattedValue}`, error];
+  return [`${prefix} ${message}${defaultStr} ${formattedValue}`, error];
 });

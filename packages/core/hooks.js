@@ -18,7 +18,7 @@ const cleanupHook = index => {
 
 exports.useState = defaultValue => {
   const _idx = index;
-  const value = hooks[_idx] || defaultValue;
+  const value = _idx in hooks ? hooks[_idx] : defaultValue;
 
   index++;
 

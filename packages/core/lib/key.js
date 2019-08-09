@@ -6,6 +6,8 @@ exports.isDownKey = key =>
 
 exports.isSpaceKey = key => key.name === 'space';
 
+exports.isBackspaceKey = key => key.name === 'backspace';
+
 exports.isNumberKey = key => '123456789'.includes(key.name);
 
 exports.isEnterKey = key => key.name === 'enter' || key.name === 'return';
