@@ -45,8 +45,9 @@ module.exports = createPrompt((config, done) => {
   let formattedValue = value;
   if (typeof config.transformer === 'function') {
     formattedValue = config.transformer(value, { isFinal: status === 'done' });
-  } else if (status === 'done') {
-    formattedValue = chalk.cyan(value);
+  }
+  if (status === 'done') {
+    formattedValue = chalk.cyan(formattedValue);
   }
 
   let defaultStr = '';
