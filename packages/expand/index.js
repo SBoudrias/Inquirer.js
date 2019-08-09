@@ -1,97 +1,99 @@
-const { createPrompt } = require('@inquirer/core');
+const { createPrompt, useState, useKeypress } = require('@inquirer/core/hooks');
+const { usePrefix } = require('@inquirer/core/lib/prefix');
+const { isEnterKey } = require('@inquirer/core/lib/key');
 const chalk = require('chalk');
 
-module.exports = createPrompt(
-  {
-    onLine(state, { submit, setState }) {
-      // Handle expanding the prompt only if:
-      // 1. Prompt isn't expanded
-      // 2. If user do not provide a default (in such case we select the help as default)
-      if (
-        !state.expanded &&
-        (state.value.toLowerCase() === 'h' || (state.value === '' && !state.default))
-      ) {
-        setState({ expanded: true });
+const helpChoice = {
+  key: 'h',
+  name: 'Help, list all options',
+  value: undefined
+};
+
+module.exports = createPrompt((config, done) => {
+  const {
+    choices,
+    default: defaultKey = 'h',
+    expanded: defaultExpandState = false
+  } = config;
+  const [status, setStatus] = useState('pending');
+  const [value, setValue] = useState('');
+  const [expanded, setExpanded] = useState(defaultExpandState);
+  const [errorMsg, setError] = useState();
+  const prefix = usePrefix();
+
+  useKeypress((key, rl) => {
+    if (isEnterKey(key)) {
+      const answer = (value || defaultKey).toLowerCase();
+      if (answer === 'h' && !expanded) {
+        setExpanded(true);
       } else {
-        submit();
+        const selectedChoice = choices.find(({ key }) => key === answer);
+        if (selectedChoice) {
+          const finalValue = selectedChoice.value || selectedChoice.name;
+          setValue(finalValue);
+          setStatus('done');
+          done(finalValue);
+        } else if (value === '') {
+          setError('Please input a value');
+        } else {
+          setError(`"${chalk.red(value)}" isn't an available option`);
+        }
       }
-    },
-    mapStateToValue({ value = '', choices, default: defaultOption }) {
-      let selection;
-      if (value) {
-        selection = choices.find(choice => choice.key === value.toLowerCase());
-      } else if (defaultOption) {
-        selection = choices.find(choice => choice.key === defaultOption.toLowerCase());
-      }
-
-      if (!selection) {
-        return undefined;
-      }
-
-      return selection.value || selection.name;
-    },
-    validate(selection, { value = '', choices }) {
-      // If we matched an option, no need to run validation.
-      if (selection) {
-        return true;
-      }
-
-      if (value === '') {
-        return 'Please input a value';
-      }
-
-      return (
-        Boolean(choices.find(({ key }) => key === value.toLowerCase())) ||
-        `"${chalk.red(value)}" isn't an available option`
-      );
+    } else {
+      setValue(rl.line);
+      setError(undefined);
     }
-  },
-  (state, { mapStateToValue }) => {
-    const { prefix, choices, value = '', expanded = false, default: rawDefault } = state;
-    const message = chalk.bold(state.message);
+  });
 
-    if (state.status === 'done') {
-      const selection = mapStateToValue(state);
-      return `${prefix} ${message} ${chalk.cyan(selection)}`;
-    }
+  const message = chalk.bold(config.message);
 
-    let choicesDisplay;
+  if (status === 'done') {
+    return `${prefix} ${message} ${chalk.cyan(value)}`;
+  }
 
-    // Expanded display style
-    if (expanded) {
-      choicesDisplay = choices.map(choice => {
-        const line = `\n  ${choice.key}) ${choice.name || choice.value}`;
+  const allChoices = expanded ? choices : [...choices, helpChoice];
+
+  // Collapsed display style
+  let longChoices = '';
+  let shortChoices = allChoices
+    .map(choice => {
+      if (choice.key === defaultKey) {
+        return choice.key.toUpperCase();
+      }
+
+      return choice.key;
+    })
+    .join('');
+  shortChoices = chalk.dim(` (${shortChoices})`);
+
+  // Expanded display style
+  if (expanded) {
+    shortChoices = '';
+    longChoices = allChoices
+      .map(choice => {
+        const line = `  ${choice.key}) ${choice.name || choice.value}`;
         if (choice.key === value.toLowerCase()) {
           return chalk.cyan(line);
         }
 
         return line;
-      });
-
-      return `${prefix} ${message} ${value} ${choicesDisplay}`;
-    }
-
-    // Collapsed display style
-    choicesDisplay = choices
-      .map(choice => {
-        if (choice.key === rawDefault) {
-          return choice.key.toUpperCase();
-        }
-
-        return choice.key;
       })
-      .join('');
-    choicesDisplay += rawDefault ? 'h' : 'H';
-    choicesDisplay = chalk.dim(`(${choicesDisplay})`);
-
-    let helpTip = '';
-    const currentOption = choices.find(({ key }) => key === value.toLowerCase());
-    if (currentOption) {
-      helpTip = `\n${chalk.cyan('>>')} ${currentOption.name || currentOption.value}`;
-    } else if (value.toLowerCase() === 'h') {
-      helpTip = `\n${chalk.cyan('>>')} Help, list all options`;
-    }
-
-    return `${prefix} ${message} ${choicesDisplay} ${value}${helpTip}`;
+      .join('\n');
   }
-);
+
+  let helpTip = '';
+  const currentOption = allChoices.find(({ key }) => key === value.toLowerCase());
+  if (currentOption) {
+    helpTip = `${chalk.cyan('>>')} ${currentOption.name || currentOption.value}`;
+  }
+
+  let error = '';
+  if (errorMsg) {
+    error = chalk.red(`> ${errorMsg}`);
+  }
+
+  return [
+    `${prefix} ${message}${shortChoices} ${value}`,
+    [longChoices, helpTip, error].filter(Boolean).join('\n')
+  ];
+});
