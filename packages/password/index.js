@@ -11,7 +11,7 @@ module.exports = (config, ...args) => {
   return input(
     Object.assign({}, config, {
       // Make sure we do not display the default password
-      defaultValue: undefined,
+      default: undefined,
       transformer: (input, { isFinal }) => {
         if (config.mask) {
           return Array(input.length)
