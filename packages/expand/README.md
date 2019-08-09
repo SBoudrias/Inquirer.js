@@ -2,6 +2,9 @@
 
 Compact single select prompt. Every option is assigned a shortcut key, and selecting `h` will expand all the choices and their descriptions.
 
+![Expand prompt closed](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-y.svg)
+![Expand prompt expanded](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-d.svg)
+
 # Installation
 
 ```sh

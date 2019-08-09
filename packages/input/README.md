@@ -2,6 +2,8 @@
 
 Interactive free text input component for command line interfaces. Supports validation, filtering, transformation, etc.
 
+![Input prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/input.svg)
+
 # Installation
 
 ```sh

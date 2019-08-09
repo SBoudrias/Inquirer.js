@@ -2,6 +2,8 @@
 
 Interactive password input component for command line interfaces. Supports input validation and masked or transparent modes.
 
+![Password prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/password.svg)
+
 # Installation
 
 ```sh
