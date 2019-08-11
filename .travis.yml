@@ -6,11 +6,11 @@ node_js:
   - 12
   - node
 before_script:
-  - npm run bootstrap
+  - yarn bootstrap
 script:
-  - npm test
+  - yarn test
 after_success:
-  - npm run codecov
+  - yarn codecov
 env:
   global:
     - FORCE_COLOR=1
