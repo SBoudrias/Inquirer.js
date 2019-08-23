@@ -1,6 +1,6 @@
 {
   "name": "inquirer",
-  "version": "6.5.1",
+  "version": "7.0.0",
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "files": [
