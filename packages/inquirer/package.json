@@ -23,10 +23,10 @@
     "chai": "^4.2.0",
     "chalk-pipe": "^2.0.0",
     "cmdify": "^0.0.4",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.1",
     "mockery": "^2.1.0",
     "nyc": "^14.1.1",
-    "sinon": "^7.4.1"
+    "sinon": "^7.5.0"
   },
   "scripts": {
     "test": "nyc mocha test/**/* -r ./test/before",
@@ -46,7 +46,7 @@
     "lodash": "^4.17.15",
     "mute-stream": "0.0.8",
     "run-async": "^2.2.0",
-    "rxjs": "^6.4.0",
+    "rxjs": "^6.5.3",
     "string-width": "^4.1.0",
     "strip-ansi": "^5.1.0",
     "through": "^2.3.6"
