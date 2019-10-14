@@ -3,6 +3,7 @@
 # Inquirer.js
 
 [![npm](https://badge.fury.io/js/inquirer.svg)](http://badge.fury.io/js/inquirer) [![tests](https://travis-ci.org/SBoudrias/Inquirer.js.svg?branch=master)](http://travis-ci.org/SBoudrias/Inquirer.js) [![Coverage Status](https://codecov.io/gh/SBoudrias/Inquirer.js/branch/master/graph/badge.svg)](https://codecov.io/gh/SBoudrias/Inquirer.js) [![dependencies](https://david-dm.org/SBoudrias/Inquirer.js.svg?theme=shields.io)](https://david-dm.org/SBoudrias/Inquirer.js)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js?ref=badge_shield)
 
 A collection of common interactive command line user interfaces.
 
@@ -381,6 +382,9 @@ to [@vaxilart](https://twitter.com/Vaxilart)) or just add your name to [the wiki
 
 Copyright (c) 2016 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))
 Licensed under the MIT license.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js?ref=badge_large)
 
 ## Plugins
 
