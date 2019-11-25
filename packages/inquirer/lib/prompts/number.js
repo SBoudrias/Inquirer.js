@@ -22,7 +22,7 @@ class NumberPrompt extends Input {
     }
 
     // If the input was invalid return the default value.
-    return this.opt.default == null ? NaN : this.opt.default;
+    return this.opt.default == null ? 'NaN' : this.opt.default;
   }
 }
 
