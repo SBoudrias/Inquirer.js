@@ -72,11 +72,19 @@ describe('Choices collection', function() {
   });
 
   it('should façade push and update the realChoices internally', function() {
-    var choices = new Choices(['a']);
+    var choices = new Choices(['a', { name: 'b', disabled: true }]);
     choices.push('b', new inquirer.Separator());
-    expect(choices.length).to.equal(3);
+    expect(choices.length).to.equal(4);
     expect(choices.realLength).to.equal(2);
-    expect(choices.getChoice(1)).to.be.instanceOf(Choice);
-    expect(choices.get(2)).to.be.instanceOf(inquirer.Separator);
+    expect(choices.getChoice(0))
+      .to.be.instanceOf(Choice)
+      .and.have.property('name', 'a');
+    expect(choices.getChoice(1))
+      .to.be.instanceOf(Choice)
+      .and.have.property('name', 'b');
+    expect(choices.get(1))
+      .to.be.instanceOf(Choice)
+      .and.have.property('disabled', true);
+    expect(choices.get(3)).to.be.instanceOf(inquirer.Separator);
   });
 });
