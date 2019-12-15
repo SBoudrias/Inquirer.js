@@ -97,4 +97,16 @@ describe('`rawlist` prompt', function() {
 
     this.rl.emit('line');
   });
+
+  it('should allow for arrow navigation', function(done) {
+    this.rawlist.run().then(answer => {
+      expect(answer).to.equal('bar');
+      done();
+    });
+
+    this.rl.input.emit('keypress', '', { name: 'down' });
+    this.rl.input.emit('keypress', '', { name: 'down' });
+    this.rl.input.emit('keypress', '', { name: 'up' });
+    this.rl.emit('line', this.rl.line);
+  });
 });
