@@ -2,7 +2,7 @@
 var _ = require('lodash');
 var MuteStream = require('mute-stream');
 var readline = require('readline');
-var {PassThrough} = require('stream')
+var { PassThrough } = require('stream');
 
 /**
  * Base interface class other can inherits from
