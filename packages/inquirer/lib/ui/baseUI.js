@@ -2,7 +2,6 @@
 var _ = require('lodash');
 var MuteStream = require('mute-stream');
 var readline = require('readline');
-var { PassThrough } = require('stream');
 
 /**
  * Base interface class other can inherits from
@@ -70,14 +69,6 @@ function setupReadlineOptions(opt) {
   var ms = new MuteStream();
   ms.pipe(opt.output || process.stdout);
   var output = ms;
-
-  if (/^win/i.test(process.platform)) {
-    // @see https://github.com/nodejs/node/issues/21771
-    // rl.close() closes main stream.
-    var oldInput = input;
-    input = new PassThrough();
-    oldInput.pipe(input);
-  }
 
   return _.extend(
     {
