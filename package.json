@@ -9,7 +9,7 @@
     "eslint-config-prettier": "^6.4.0",
     "eslint-config-xo": "^0.27.1",
     "eslint-plugin-prettier": "^3.1.1",
-    "husky": "^3.0.9",
+    "husky": "^4.0.2",
     "jest": "^24.9.0",
     "lerna": "^3.17.0",
     "lint-staged": "^9.4.2",
