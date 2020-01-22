@@ -32,7 +32,12 @@ class PromptUI extends Base {
 
     // Make sure questions is an array.
     if (_.isPlainObject(questions)) {
-      questions = [questions];
+      // It's either an object of questions or a single question
+      questions = Object.values(questions).every(
+        (v) => _.isPlainObject(v) && !_.has(v, 'name')
+      )
+        ? Object.entries(questions).map(([name, question]) => ({ name, ...question }))
+        : [questions];
     }
 
     // Create an observable, unless we received one as parameter.
