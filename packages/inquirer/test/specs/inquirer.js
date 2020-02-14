@@ -693,12 +693,12 @@ describe('inquirer.prompt', function() {
     return promise
       .then(() => {
         // Failure
-        expect(true).to.equal(false);
         process.stdin.isTTY = original;
+        expect(true).to.equal(false);
       })
       .catch(error => {
-        expect(error.isTtyError).to.equal(true);
         process.stdin.isTTY = original;
+        expect(error.isTtyError).to.equal(true);
       });
   });
 });
