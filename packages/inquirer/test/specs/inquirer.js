@@ -694,11 +694,10 @@ describe('inquirer.prompt', function() {
       .then(() => {
         // Failure
         expect(true).to.equal(false);
+        process.stdin.isTTY = original;
       })
       .catch(error => {
         expect(error.isTtyError).to.equal(true);
-      })
-      .finally(() => {
         process.stdin.isTTY = original;
       });
   });
