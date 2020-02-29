@@ -21,12 +21,12 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "chalk-pipe": "^2.0.0",
+    "chalk-pipe": "^3.0.0",
     "cmdify": "^0.0.4",
-    "mocha": "^6.2.1",
+    "mocha": "^7.1.0",
     "mockery": "^2.1.0",
-    "nyc": "^14.1.1",
-    "sinon": "^7.5.0"
+    "nyc": "^15.0.0",
+    "sinon": "^9.0.0"
   },
   "scripts": {
     "test": "nyc mocha test/**/* -r ./test/before",
@@ -38,17 +38,17 @@
   "license": "MIT",
   "dependencies": {
     "ansi-escapes": "^4.2.1",
-    "chalk": "^2.4.2",
+    "chalk": "^3.0.0",
     "cli-cursor": "^3.1.0",
     "cli-width": "^2.0.0",
     "external-editor": "^3.0.3",
     "figures": "^3.0.0",
     "lodash": "^4.17.15",
     "mute-stream": "0.0.8",
-    "run-async": "^2.2.0",
+    "run-async": "^2.4.0",
     "rxjs": "^6.5.3",
     "string-width": "^4.1.0",
-    "strip-ansi": "^5.1.0",
+    "strip-ansi": "^6.0.0",
     "through": "^2.3.6"
   }
 }

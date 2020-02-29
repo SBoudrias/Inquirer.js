@@ -14,14 +14,14 @@
   "license": "MIT",
   "dependencies": {
     "ansi-escapes": "^4.2.1",
-    "chalk": "^2.4.2",
+    "chalk": "^3.0.0",
     "cli-spinners": "^2.2.0",
     "cli-width": "^2.2.0",
     "lodash": "^4.17.12",
     "mute-stream": "^0.0.8",
     "run-async": "^2.3.0",
     "string-width": "^4.1.0",
-    "strip-ansi": "^5.2.0"
+    "strip-ansi": "^6.0.0"
   },
   "publishConfig": {
     "access": "public"

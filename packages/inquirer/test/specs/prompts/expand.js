@@ -21,7 +21,10 @@ describe('`expand` prompt', function() {
 
   it('should throw if `key` is duplicate', function() {
     expect(() => {
-      this.fixture.choices = [{ key: 'a', name: 'foo' }, { key: 'a', name: 'foo' }];
+      this.fixture.choices = [
+        { key: 'a', name: 'foo' },
+        { key: 'a', name: 'foo' }
+      ];
       return new Expand(this.fixture, this.rl);
     }).to.throw(/Duplicate key error/);
   });

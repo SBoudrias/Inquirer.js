@@ -37,12 +37,18 @@ describe('Choices collection', function() {
   });
 
   it('should allow plucking choice content', function() {
-    var choices = new Choices([{ name: 'n', key: 'foo' }, { name: 'a', key: 'lab' }]);
+    var choices = new Choices([
+      { name: 'n', key: 'foo' },
+      { name: 'a', key: 'lab' }
+    ]);
     expect(choices.pluck('key')).to.eql(['foo', 'lab']);
   });
 
   it('should allow filtering value with where', function() {
-    var choices = new Choices([{ name: 'n', key: 'foo' }, { name: 'a', key: 'lab' }]);
+    var choices = new Choices([
+      { name: 'n', key: 'foo' },
+      { name: 'a', key: 'lab' }
+    ]);
     expect(choices.where({ key: 'lab' })).to.eql([
       {
         name: 'a',
