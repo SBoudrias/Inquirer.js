@@ -24,6 +24,16 @@ inquirer.ui = {
  */
 inquirer.createPromptModule = function(opt) {
   var promptModule = function(questions) {
+    // Check if prompt is being called in TTY environment
+    // If it isn't return a failed promise
+    if (!process.stdin.isTTY) {
+      const nonTtyError = new Error(
+        'Prompts can not be meaningfully rendered in non-TTY environments'
+      );
+      nonTtyError.isTtyError = true;
+      return Promise.reject(nonTtyError);
+    }
+
     var ui = new inquirer.ui.Prompt(promptModule.prompts, opt);
     var promise = ui.run(questions);
 

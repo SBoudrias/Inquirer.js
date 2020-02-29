@@ -62,6 +62,13 @@ inquirer
   ])
   .then(answers => {
     // Use user feedback for... whatever!!
+  })
+  .catch(error => {
+    if(error.isTtyError) {
+      // Prompt couldn't be rendered in the current environment
+    } else {
+      // Something else when wrong
+    }
   });
 ```
 
@@ -282,6 +289,10 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties
 Launches an instance of the users preferred editor on a temporary file. Once the user exits their editor, the contents of the temporary file are read in as the result. The editor to use is determined by reading the $VISUAL or $EDITOR environment variables. If neither of those are present, notepad (on Windows) or vim (Linux or Mac) is used.
 
 <a name="layouts"></a>
+
+### Use in Non-Interactive Environments
+`prompt()` requires that it is run in an interactive environment. (I.e. [One where `process.stdin.isTTY` is `true`](https://nodejs.org/docs/latest-v12.x/api/process.html#process_a_note_on_process_i_o)). If `prompt()` is invoked outside of such an environment, then `prompt()` will return a rejected promise with an error. For convenience, the error will have a `isTtyError` property to programmatically indicate the cause.
+
 
 ## User Interfaces and layouts
 

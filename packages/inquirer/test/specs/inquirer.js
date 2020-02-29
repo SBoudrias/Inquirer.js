@@ -673,4 +673,32 @@ describe('inquirer.prompt', function() {
       expect(answers.q1).to.equal(true);
     });
   });
+
+  it('Throw an exception when run in non-tty', function() {
+    var original = process.stdin.isTTY;
+    delete process.stdin.isTTY;
+
+    var prompt = inquirer.createPromptModule();
+
+    var prompts = [
+      {
+        type: 'confirm',
+        name: 'q1',
+        message: 'message'
+      }
+    ];
+
+    var promise = prompt(prompts);
+
+    return promise
+      .then(() => {
+        // Failure
+        process.stdin.isTTY = original;
+        expect(true).to.equal(false);
+      })
+      .catch(error => {
+        process.stdin.isTTY = original;
+        expect(error.isTtyError).to.equal(true);
+      });
+  });
 });
