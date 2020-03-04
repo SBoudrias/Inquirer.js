@@ -674,31 +674,58 @@ describe('inquirer.prompt', function() {
     });
   });
 
-  it('Throw an exception when run in non-tty', function() {
-    var original = process.stdin.isTTY;
-    delete process.stdin.isTTY;
+  describe('Non-TTY checks', function() {
+    let original;
 
-    var prompt = inquirer.createPromptModule();
+    before(function() {
+      original = process.stdin.isTTY;
+      delete process.stdin.isTTY;
+    });
 
-    var prompts = [
-      {
-        type: 'confirm',
-        name: 'q1',
-        message: 'message'
-      }
-    ];
+    after(function() {
+      process.stdin.isTTY = original;
+    });
 
-    var promise = prompt(prompts);
+    it('Throw an exception when run in non-tty', function() {
+      var prompt = inquirer.createPromptModule();
 
-    return promise
-      .then(() => {
-        // Failure
-        process.stdin.isTTY = original;
-        expect(true).to.equal(false);
-      })
-      .catch(error => {
-        process.stdin.isTTY = original;
-        expect(error.isTtyError).to.equal(true);
+      var prompts = [
+        {
+          type: 'confirm',
+          name: 'q1',
+          message: 'message'
+        }
+      ];
+
+      var promise = prompt(prompts);
+
+      return promise
+        .then(() => {
+          // Failure
+          expect(true).to.equal(false);
+        })
+        .catch(error => {
+          expect(error.isTtyError).to.equal(true);
+        });
+    });
+
+    it('No exception when when flags non-tty', function() {
+      var prompt = inquirer.createPromptModule();
+
+      var prompts = [
+        {
+          name: 'name',
+          message: 'give a name to your app',
+          default: 'foo',
+          when: () => false
+        }
+      ];
+
+      var promise = prompt(prompts);
+
+      return promise.then(answers => {
+        expect(answers).to.deep.equal({});
       });
+    });
   });
 });
