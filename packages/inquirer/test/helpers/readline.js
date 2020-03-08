@@ -24,9 +24,10 @@ _.extend(stub, {
   }
 });
 
-var ReadlineStub = function() {
+var ReadlineStub = function(opts) {
+  opts = opts || {};
   this.line = '';
-  this.input = new EventEmitter();
+  this.input = opts.input || new EventEmitter();
   EventEmitter.apply(this, arguments);
 };
 
