@@ -413,6 +413,25 @@ describe('inquirer.prompt', function() {
     });
   });
 
+  it('should take a prompts array and answers and return answers', function() {
+    var prompts = [
+      {
+        type: 'confirm',
+        name: 'q1',
+        message: 'message'
+      }
+    ];
+
+    var answers = { prefiled: true };
+    var promise = this.prompt(prompts, answers);
+    autosubmit(promise.ui);
+
+    return promise.then(answers => {
+      expect(answers.prefiled).to.equal(true);
+      expect(answers.q1).to.equal(true);
+    });
+  });
+
   describe('hierarchical mode (`when`)', function() {
     it('should pass current answers to `when`', function() {
       var prompts = [
