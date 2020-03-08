@@ -193,7 +193,7 @@ describe('inquirer.prompt', function() {
       }
     ];
 
-    var promise = this.prompt(prompts, function() {});
+    var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
   });
 
@@ -228,7 +228,7 @@ describe('inquirer.prompt', function() {
       }
     ];
 
-    var promise = this.prompt(prompts, function() {});
+    var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
   });
 
@@ -326,7 +326,7 @@ describe('inquirer.prompt', function() {
       }
     ];
 
-    var promise = this.prompt(prompts, function() {});
+    var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
   });
 
@@ -379,7 +379,7 @@ describe('inquirer.prompt', function() {
   });
 
   it('should expose the UI', function(done) {
-    var promise = this.prompt([], function() {});
+    var promise = this.prompt([]);
     expect(promise.ui.answers).to.be.an('object');
     done();
   });
@@ -624,7 +624,7 @@ describe('inquirer.prompt', function() {
         done();
       });
 
-      inquirer.prompt(questions, _.noop);
+      inquirer.prompt(questions);
     });
 
     it('overwrite default prompt types', function(done) {
@@ -634,7 +634,7 @@ describe('inquirer.prompt', function() {
         done();
       });
 
-      inquirer.prompt(questions, _.noop);
+      inquirer.prompt(questions);
       inquirer.restoreDefaultPrompts();
     });
   });
