@@ -2,11 +2,13 @@
  * Inquirer public API test
  */
 
+var fs = require('fs');
+var stream = require('stream');
+var tty = require('tty');
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var _ = require('lodash');
 var { Observable } = require('rxjs');
-var stream = require('stream');
 
 var inquirer = require('../../lib/inquirer');
 var autosubmit = require('../helpers/events').autosubmit;
@@ -816,6 +818,36 @@ describe('inquirer.prompt', function() {
         .catch(error => {
           expect(error.isTtyError).to.equal(true);
         });
+    });
+
+    it('No exception when using tty other than process.stdin', function() {
+      // Manually opens a new tty
+      var input = new tty.ReadStream(fs.openSync('/dev/tty', 'r+'));
+
+      // Uses manually opened tty as input instead of process.stdin
+      var prompt = inquirer.createPromptModule({
+        input: input,
+        skipTTYChecks: false
+      });
+
+      var prompts = [
+        {
+          type: 'input',
+          name: 'q1',
+          default: 'foo',
+          message: 'message'
+        }
+      ];
+
+      var promise = prompt(prompts);
+      promise.ui.rl.emit('line');
+
+      // Release the input tty socket
+      input.unref();
+
+      return promise.then(answers => {
+        expect(answers).to.deep.equal({ q1: 'foo' });
+      });
     });
   });
 });
