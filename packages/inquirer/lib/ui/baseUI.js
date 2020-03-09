@@ -65,13 +65,16 @@ class UI {
 
 function setupReadlineOptions(opt) {
   opt = opt || {};
+  // Inquirer 8.x:
+  // opt.skipTTYChecks = opt.skipTTYChecks === undefined ? opt.input !== undefined : opt.skipTTYChecks;
+  opt.skipTTYChecks = opt.skipTTYChecks === undefined ? true : opt.skipTTYChecks;
 
   // Default `input` to stdin
   var input = opt.input || process.stdin;
 
   // Check if prompt is being called in TTY environment
   // If it isn't return a failed promise
-  if (!input.isTTY) {
+  if (!opt.skipTTYChecks && !input.isTTY) {
     const nonTtyError = new Error(
       'Prompts can not be meaningfully rendered in non-TTY environments'
     );
