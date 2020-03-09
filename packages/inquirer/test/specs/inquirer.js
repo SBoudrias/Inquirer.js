@@ -708,24 +708,5 @@ describe('inquirer.prompt', function() {
           expect(error.isTtyError).to.equal(true);
         });
     });
-
-    it('No exception when when flags non-tty', function() {
-      var prompt = inquirer.createPromptModule();
-
-      var prompts = [
-        {
-          name: 'name',
-          message: 'give a name to your app',
-          default: 'foo',
-          when: () => false
-        }
-      ];
-
-      var promise = prompt(prompts);
-
-      return promise.then(answers => {
-        expect(answers).to.deep.equal({});
-      });
-    });
   });
 });

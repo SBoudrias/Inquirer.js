@@ -69,6 +69,16 @@ function setupReadlineOptions(opt) {
   // Default `input` to stdin
   var input = opt.input || process.stdin;
 
+  // Check if prompt is being called in TTY environment
+  // If it isn't return a failed promise
+  if (!input.isTTY) {
+    const nonTtyError = new Error(
+      'Prompts can not be meaningfully rendered in non-TTY environments'
+    );
+    nonTtyError.isTtyError = true;
+    throw nonTtyError;
+  }
+
   // Add mute capabilities to the output
   var ms = new MuteStream();
   ms.pipe(opt.output || process.stdout);

@@ -24,7 +24,12 @@ inquirer.ui = {
  */
 inquirer.createPromptModule = function(opt) {
   var promptModule = function(questions) {
-    var ui = new inquirer.ui.Prompt(promptModule.prompts, opt);
+    var ui;
+    try {
+      ui = new inquirer.ui.Prompt(promptModule.prompts, opt);
+    } catch (error) {
+      return Promise.reject(error);
+    }
     var promise = ui.run(questions);
 
     // Monkey patch the UI on the promise object so
