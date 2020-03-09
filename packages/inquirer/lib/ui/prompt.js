@@ -114,6 +114,10 @@ class PromptUI extends Base {
   }
 
   filterIfRunnable(question) {
+    if (question.askAnswered !== true && this.answers[question.name] !== undefined) {
+      return empty();
+    }
+
     if (question.when === false) {
       return empty();
     }

@@ -631,6 +631,52 @@ describe('inquirer.prompt', function() {
         expect(answers.q).to.equal('foo');
       });
     });
+
+    it('should not run prompt if answer exists for question', function() {
+      var throwFunc = function(step) {
+        throw new Error(`askAnswered Error ${step}`);
+      };
+      var prompts = [
+        {
+          type: 'input',
+          name: 'prefiled',
+          when: throwFunc.bind(undefined, 'when'),
+          validate: throwFunc.bind(undefined, 'validate'),
+          transformer: throwFunc.bind(undefined, 'transformer'),
+          filter: throwFunc.bind(undefined, 'filter'),
+          message: 'message',
+          default: 'newValue'
+        }
+      ];
+
+      var answers = { prefiled: 'prefiled' };
+      var promise = this.prompt(prompts, answers);
+      autosubmit(promise.ui);
+
+      return promise.then(answers => {
+        expect(answers.prefiled).to.equal('prefiled');
+      });
+    });
+
+    it('should run prompt if answer exists for question and askAnswered is set', function() {
+      var prompts = [
+        {
+          askAnswered: true,
+          type: 'input',
+          name: 'prefiled',
+          message: 'message',
+          default: 'newValue'
+        }
+      ];
+
+      var answers = { prefiled: 'prefiled' };
+      var promise = this.prompt(prompts, answers);
+      autosubmit(promise.ui);
+
+      return promise.then(answers => {
+        expect(answers.prefiled).to.equal('newValue');
+      });
+    });
   });
 
   describe('#registerPrompt()', function() {
