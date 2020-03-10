@@ -2,10 +2,14 @@
  * Inquirer public API test
  */
 
+var fs = require('fs');
+var stream = require('stream');
+var tty = require('tty');
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var _ = require('lodash');
 var { Observable } = require('rxjs');
+
 var inquirer = require('../../lib/inquirer');
 var autosubmit = require('../helpers/events').autosubmit;
 
@@ -687,7 +691,7 @@ describe('inquirer.prompt', function() {
     });
 
     it('Throw an exception when run in non-tty', function() {
-      var prompt = inquirer.createPromptModule();
+      var prompt = inquirer.createPromptModule({ skipTTYChecks: false });
 
       var prompts = [
         {
@@ -709,22 +713,140 @@ describe('inquirer.prompt', function() {
         });
     });
 
-    it('No exception when when flags non-tty', function() {
+    it("Don't throw an exception when run in non-tty by default", function(done) {
       var prompt = inquirer.createPromptModule();
+      var prompts = [
+        {
+          type: 'confirm',
+          name: 'q1',
+          message: 'message'
+        },
+        {
+          type: 'confirm',
+          name: 'q2',
+          message: 'message'
+        }
+      ];
+
+      var promise = prompt(prompts);
+      autosubmit(promise.ui);
+      promise
+        .then(() => {
+          done();
+        })
+        .catch(error => {
+          console.log(error);
+          expect(error.isTtyError).to.equal(false);
+        });
+    });
+
+    it("Don't throw an exception when run in non-tty and skipTTYChecks is true", function(done) {
+      var prompt = inquirer.createPromptModule({ skipTTYChecks: true });
+      var prompts = [
+        {
+          type: 'confirm',
+          name: 'q1',
+          message: 'message'
+        },
+        {
+          type: 'confirm',
+          name: 'q2',
+          message: 'message'
+        }
+      ];
+
+      var promise = prompt(prompts);
+      autosubmit(promise.ui);
+      promise
+        .then(() => {
+          done();
+        })
+        .catch(error => {
+          console.log(error);
+          expect(error.isTtyError).to.equal(false);
+        });
+    });
+
+    it("Don't throw an exception when run in non-tty and custom input is provided", function(done) {
+      var prompt = inquirer.createPromptModule({ input: new stream.Readable() });
+      var prompts = [
+        {
+          type: 'confirm',
+          name: 'q1',
+          message: 'message'
+        },
+        {
+          type: 'confirm',
+          name: 'q2',
+          message: 'message'
+        }
+      ];
+
+      var promise = prompt(prompts);
+      autosubmit(promise.ui);
+      promise
+        .then(() => {
+          done();
+        })
+        .catch(error => {
+          console.log(error);
+          expect(error.isTtyError).to.equal(false);
+        });
+    });
+
+    it('Throw an exception when run in non-tty and custom input is provided with skipTTYChecks: false', function() {
+      var prompt = inquirer.createPromptModule({
+        input: new stream.Readable(),
+        skipTTYChecks: false
+      });
 
       var prompts = [
         {
-          name: 'name',
-          message: 'give a name to your app',
-          default: 'foo',
-          when: () => false
+          type: 'confirm',
+          name: 'q1',
+          message: 'message'
         }
       ];
 
       var promise = prompt(prompts);
 
+      return promise
+        .then(() => {
+          // Failure
+          expect(true).to.equal(false);
+        })
+        .catch(error => {
+          expect(error.isTtyError).to.equal(true);
+        });
+    });
+
+    it('No exception when using tty other than process.stdin', function() {
+      // Manually opens a new tty
+      var input = new tty.ReadStream(fs.openSync('/dev/tty', 'r+'));
+
+      // Uses manually opened tty as input instead of process.stdin
+      var prompt = inquirer.createPromptModule({
+        input: input,
+        skipTTYChecks: false
+      });
+
+      var prompts = [
+        {
+          type: 'input',
+          name: 'q1',
+          default: 'foo',
+          message: 'message'
+        }
+      ];
+
+      var promise = prompt(prompts);
+      promise.ui.rl.emit('line');
+
+      // Release the input tty socket
+      input.unref();
+
       return promise.then(answers => {
-        expect(answers).to.deep.equal({});
+        expect(answers).to.deep.equal({ q1: 'foo' });
       });
     });
   });
