@@ -55,11 +55,7 @@ class UI {
     // Close the readline
     this.rl.output.end();
     this.rl.pause();
-
-    // @see https://github.com/nodejs/node/issues/21771
-    if (!/^win/i.test(process.platform)) {
-      this.rl.close();
-    }
+    this.rl.close();
   }
 }
 

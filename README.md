@@ -23,6 +23,7 @@ A collection of common interactive command line user interfaces.
 2.  [User Interfaces and Layouts](#layouts)
     1.  [Reactive Interface](#reactive)
 3.  [Support](#support)
+4.  [Known issues](#issues)
 4.  [News](#news)
 5.  [Contributing](#contributing)
 6.  [License](#license)
@@ -357,7 +358,7 @@ look at issues found on other command line - feel free to report any!
 - **Mac OS**:
   - Terminal.app
   - iTerm
-- **Windows**:
+- **Windows ([Known issues](#issues))**:
   - [ConEmu](https://conemu.github.io/)
   - cmd.exe
   - Powershell
@@ -365,6 +366,14 @@ look at issues found on other command line - feel free to report any!
 - **Linux (Ubuntu, openSUSE, Arch Linux, etc)**:
   - gnome-terminal (Terminal GNOME)
   - konsole
+
+## Know issues
+
+<a name="issues"></a>
+
+Running Inquirer together with network streams in Windows platform inside some terminals can result in process hang.
+Workaround: run inside another terminal.
+Please refer to the https://github.com/nodejs/node/issues/21771
 
 ## News on the march (Release notes)
 
