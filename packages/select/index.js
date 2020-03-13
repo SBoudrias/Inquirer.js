@@ -65,5 +65,8 @@ module.exports = createPrompt((config, done) => {
     .join('\n');
   const windowedChoices = paginator.paginate(allChoices, cursorPosition, pageSize);
 
-  return `${prefix} ${message}\n${windowedChoices}${cursorHide}`;
+  const choice = choices[cursorPosition];
+  const choiceLong = choice && choice.long ? `\n${choice.long}` : ``;
+
+  return `${prefix} ${message}\n${windowedChoices}${choiceLong}${cursorHide}`;
 });
