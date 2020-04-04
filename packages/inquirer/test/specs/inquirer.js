@@ -54,6 +54,27 @@ describe('inquirer.prompt', function () {
     });
   });
 
+  it('should close readline instance on rejected promise', function (done) {
+    this.prompt.registerPrompt('stub', function () {
+      this.run = () => {
+        return Promise.reject(new Error('test error'));
+      };
+    });
+
+    var promise = this.prompt({
+      type: 'stub',
+      name: 'q1',
+    });
+
+    var rl1 = promise.ui.rl;
+
+    promise.catch(() => {
+      expect(rl1.close.called).to.equal(true);
+      expect(rl1.output.end.called).to.equal(true);
+      done();
+    });
+  });
+
   it('should take a prompts array and return answers', function () {
     var prompts = [
       {
