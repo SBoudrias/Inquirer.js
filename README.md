@@ -451,7 +451,7 @@ Prompt for input chalk-pipe style strings<br>
 [**inquirer-search-checkbox**](https://github.com/clinyong/inquirer-search-checkbox)<br>
 Searchable Inquirer checkbox<br>
 
-[**inquirer-search-checkbox**](https://github.com/robin-rpr/inquirer-search-list)<br>
+[**inquirer-search-list**](https://github.com/robin-rpr/inquirer-search-list)<br>
 Searchable Inquirer list<br>
 <br>
 ![inquirer-search-list](https://github.com/robin-rpr/inquirer-search-list/blob/master/preview.gif)
