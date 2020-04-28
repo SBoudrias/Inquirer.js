@@ -431,8 +431,7 @@ Prompt for selecting index in array where add new element<br>
 ![inquirer-select-line gif](https://media.giphy.com/media/xUA7b1MxpngddUvdHW/giphy.gif)
 
 [**command**](https://github.com/sullof/inquirer-command-prompt)<br>
-<br>
-Simple prompt with command history and dynamic autocomplete
+Simple prompt with command history and dynamic autocomplete<br>
 
 [**inquirer-fuzzy-path**](https://github.com/adelsz/inquirer-fuzzy-path)<br>
 Prompt for fuzzy file/directory selection.<br>
@@ -452,25 +451,30 @@ Prompt for input chalk-pipe style strings<br>
 [**inquirer-search-checkbox**](https://github.com/clinyong/inquirer-search-checkbox)<br>
 Searchable Inquirer checkbox<br>
 
-[**inquirer-prompt-suggest**](https://github.com/olistic/inquirer-prompt-suggest)<br>
-Inquirer prompt for your less creative users.
+[**inquirer-search-list**](https://github.com/robin-rpr/inquirer-search-list)<br>
+Searchable Inquirer list<br>
+<br>
+![inquirer-search-list](https://github.com/robin-rpr/inquirer-search-list/blob/master/preview.gif)
 
+[**inquirer-prompt-suggest**](https://github.com/olistic/inquirer-prompt-suggest)<br>
+Inquirer prompt for your less creative users.<br>
+<br>
 ![inquirer-prompt-suggest](https://user-images.githubusercontent.com/5600126/40391192-d4f3d6d0-5ded-11e8-932f-4b75b642c09e.gif)
 
 [**inquirer-s3**](https://github.com/HQarroum/inquirer-s3)<br>
-An S3 object selector for Inquirer.
-
+An S3 object selector for Inquirer.<br>
+<br>
 ![inquirer-s3](https://github.com/HQarroum/inquirer-s3/raw/master/docs/inquirer-screenshot.png)
 
 [**inquirer-autosubmit-prompt**](https://github.com/yaodingyd/inquirer-autosubmit-prompt)<br>
-Auto submit based on your current input, saving one extra enter
+Auto submit based on your current input, saving one extra enter<br>
 
 [**inquirer-file-tree-selection-prompt**](https://github.com/anc95/inquirer-file-tree-selection)<br>
-Inquirer prompt for to select a file or directory in file tree
-
+Inquirer prompt for to select a file or directory in file tree<br>
+<br>
 ![inquirer-file-tree-selection-prompt](https://github.com/anc95/inquirer-file-tree-selection/blob/master/example/screenshot.gif)
 
 [**inquirer-table-prompt**](https://github.com/eduardoboucas/inquirer-table-prompt)<br>
-A table-like prompt for Inquirer.
-
+A table-like prompt for Inquirer.<br>
+<br>
 ![inquirer-table-prompt](https://raw.githubusercontent.com/eduardoboucas/inquirer-table-prompt/master/screen-capture.gif)
