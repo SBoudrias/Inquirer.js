@@ -22,7 +22,7 @@ module.exports = createPrompt((config, done) => {
   let formattedValue = value;
   let defaultValue = '';
   if (status === 'done') {
-    formattedValue = chalk.cyan(value ? 'yes' : 'no');
+    formattedValue = chalk.cyan(value);
   } else {
     defaultValue = chalk.dim(config.default === false ? ' (y/N)' : ' (Y/n)');
   }
