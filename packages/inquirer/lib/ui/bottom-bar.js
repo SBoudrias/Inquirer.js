@@ -6,7 +6,9 @@
 var through = require('through');
 var Base = require('./baseUI');
 var rlUtils = require('../utils/readline');
-var _ = require('lodash');
+var _ = {
+  last: require('lodash/last')
+};
 
 class BottomBar extends Base {
   constructor(opt) {

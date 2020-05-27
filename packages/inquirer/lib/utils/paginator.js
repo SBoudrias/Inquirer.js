@@ -1,6 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
+var _ = {
+  sum: require('lodash/sum'),
+  flatten: require('lodash/flatten')
+};
 var chalk = require('chalk');
 
 /**

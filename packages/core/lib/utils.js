@@ -1,4 +1,6 @@
-const _ = require('lodash');
+const _ = {
+  flatten: require('lodash/flatten')
+};
 
 /**
  * Force line returns at specific width. This function is ANSI code friendly and it'll

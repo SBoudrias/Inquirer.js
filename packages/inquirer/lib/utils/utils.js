@@ -1,5 +1,7 @@
 'use strict';
-var _ = require('lodash');
+var _ = {
+  isFunction: require('lodash/isFunction')
+};
 var { from, of } = require('rxjs');
 var runAsync = require('run-async');
 

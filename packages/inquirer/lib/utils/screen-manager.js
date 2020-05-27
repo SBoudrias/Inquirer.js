@@ -1,5 +1,8 @@
 'use strict';
-var _ = require('lodash');
+var _ = {
+  last: require('lodash/last'),
+  flatten: require('lodash/flatten')
+};
 var util = require('./readline');
 var cliWidth = require('cli-width');
 var stripAnsi = require('strip-ansi');

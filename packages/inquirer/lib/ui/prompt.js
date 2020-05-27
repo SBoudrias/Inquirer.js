@@ -1,5 +1,11 @@
 'use strict';
-var _ = require('lodash');
+var _ = {
+  isPlainObject: require('lodash/isPlainObject'),
+  clone: require('lodash/clone'),
+  isArray: require('lodash/isArray'),
+  set: require('lodash/set'),
+  isFunction: require('lodash/isFunction')
+};
 var { defer, empty, from, of } = require('rxjs');
 var { concatMap, filter, publish, reduce } = require('rxjs/operators');
 var runAsync = require('run-async');

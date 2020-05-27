@@ -1,6 +1,11 @@
 'use strict';
 var assert = require('assert');
-var _ = require('lodash');
+var _ = {
+  isNumber: require('lodash/isNumber'),
+  filter: require('lodash/filter'),
+  map: require('lodash/map'),
+  find: require('lodash/find')
+};
 var Separator = require('./separator');
 var Choice = require('./choice');
 

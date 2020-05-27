@@ -3,7 +3,11 @@
  * `rawlist` type prompt
  */
 
-var _ = require('lodash');
+var _ = {
+  extend: require('lodash/extend'),
+  isNumber: require('lodash/isNumber'),
+  findIndex: require('lodash/findIndex')
+};
 var chalk = require('chalk');
 var { map, takeUntil } = require('rxjs/operators');
 var Base = require('./base');
