@@ -1,5 +1,6 @@
 const _ = {
-  isFunction: require('lodash/isFunction')
+  isFunction: require('lodash/isFunction'),
+  noop: require('lodash/noop')
 };
 const readline = require('readline');
 const chalk = require('chalk');
