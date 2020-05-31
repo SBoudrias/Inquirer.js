@@ -1,4 +1,6 @@
-const _ = require('lodash');
+const _ = {
+  last: require('lodash/last')
+};
 const cliWidth = require('cli-width');
 const stripAnsi = require('strip-ansi');
 const stringWidth = require('string-width');

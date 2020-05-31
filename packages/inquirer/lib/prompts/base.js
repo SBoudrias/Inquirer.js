@@ -3,8 +3,11 @@
  * Base prompt implementation
  * Should be extended by prompt types.
  */
-
-var _ = require('lodash');
+var _ = {
+  assign: require('lodash/assign'),
+  defaults: require('lodash/defaults'),
+  clone: require('lodash/clone')
+};
 var chalk = require('chalk');
 var runAsync = require('run-async');
 var { filter, flatMap, share, take, takeUntil } = require('rxjs/operators');

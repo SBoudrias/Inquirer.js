@@ -1,5 +1,10 @@
 'use strict';
-var _ = require('lodash');
+var _ = {
+  isString: require('lodash/isString'),
+  isNumber: require('lodash/isNumber'),
+  extend: require('lodash/extend'),
+  isFunction: require('lodash/isFunction')
+};
 
 /**
  * Choice object

@@ -1,6 +1,8 @@
 'use strict';
 
-const _ = require('lodash');
+const _ = {
+  flatten: require('lodash/flatten')
+};
 const chalk = require('chalk');
 const cliWidth = require('cli-width');
 const { breakLines } = require('./utils');

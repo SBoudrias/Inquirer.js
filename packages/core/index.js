@@ -1,4 +1,7 @@
-const _ = require('lodash');
+const _ = {
+  isFunction: require('lodash/isFunction'),
+  noop: require('lodash/noop')
+};
 const readline = require('readline');
 const chalk = require('chalk');
 const MuteStream = require('mute-stream');

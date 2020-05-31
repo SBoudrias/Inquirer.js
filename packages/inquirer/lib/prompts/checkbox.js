@@ -3,7 +3,11 @@
  * `list` type prompt
  */
 
-var _ = require('lodash');
+var _ = {
+  isArray: require('lodash/isArray'),
+  map: require('lodash/map'),
+  isString: require('lodash/isString')
+};
 var chalk = require('chalk');
 var cliCursor = require('cli-cursor');
 var figures = require('figures');

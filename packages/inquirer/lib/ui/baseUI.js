@@ -1,5 +1,8 @@
 'use strict';
-var _ = require('lodash');
+var _ = {
+  extend: require('lodash/extend'),
+  omit: require('lodash/omit')
+};
 var MuteStream = require('mute-stream');
 var readline = require('readline');
 
