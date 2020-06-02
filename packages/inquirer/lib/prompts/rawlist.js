@@ -14,6 +14,7 @@ var Base = require('./base');
 var Separator = require('../objects/separator');
 var observe = require('../utils/events');
 var Paginator = require('../utils/paginator');
+var incrementListIndex = require('../utils/incrementListIndex');
 
 class RawListPrompt extends Base {
   constructor(questions, rl, answers) {
@@ -177,11 +178,7 @@ class RawListPrompt extends Base {
    */
 
   onArrowKey(type) {
-    var len = this.opt.choices.realLength;
-
-    if (type === 'up') this.selected = this.selected > 0 ? this.selected - 1 : len - 1;
-    else this.selected = this.selected < len - 1 ? this.selected + 1 : 0;
-
+    this.selected = incrementListIndex(this.selected, type, this.opt);
     this.rl.line = String(this.selected + 1);
   }
 }

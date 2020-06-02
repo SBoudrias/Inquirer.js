@@ -210,8 +210,10 @@ Separator instances have a property `type` equal to `separator`. This should all
 
 #### List - `{type: 'list'}`
 
-Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
+Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties. (Note that
 default must be the choice `index` in the array or a choice `value`)
+
+`loop:false` will disable the default looping behavior.
 
 ![List prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/list.svg)
 
@@ -221,6 +223,8 @@ default must be the choice `index` in the array or a choice `value`)
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
 default must be the choice `index` in the array)
+
+`loop:false` will disable the default looping behavior.
 
 ![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
 

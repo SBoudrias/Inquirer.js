@@ -109,4 +109,47 @@ describe('`rawlist` prompt', function() {
     this.rl.input.emit('keypress', '', { name: 'up' });
     this.rl.emit('line', this.rl.line);
   });
+
+  describe('going out of boundaries', function() {
+    beforeEach(function() {
+      this.pressKey = function(dir, times) {
+        for (var i = 0; i < times; i++) {
+          this.rl.input.emit('keypress', '', { name: dir });
+        }
+        this.rl.emit('line', this.rl.line);
+      };
+    });
+    describe('when loop undefined / true', function() {
+      it('loops to bottom when too far up', async function() {
+        var promise = this.rawlist.run();
+        this.pressKey('up', 2);
+        var answer = await promise;
+        expect(answer).to.equal('bar');
+      });
+      it('loops to top when too far down', async function() {
+        var promise = this.rawlist.run();
+        this.pressKey('down', 3);
+        var answer = await promise;
+        expect(answer).to.equal('foo');
+      });
+    });
+
+    describe('when loop: false', function() {
+      beforeEach(function() {
+        this.rawlist = new Rawlist(_.assign(this.fixture, { loop: false }), this.rl);
+      });
+      it('stays at top when too far up', async function() {
+        var promise = this.rawlist.run();
+        this.pressKey('up', 2);
+        var answer = await promise;
+        expect(answer).to.equal('foo');
+      });
+      it('stays at bottom when too far down', async function() {
+        var promise = this.rawlist.run();
+        this.pressKey('down', 3);
+        var answer = await promise;
+        expect(answer).to.equal('bum');
+      });
+    });
+  });
 });
