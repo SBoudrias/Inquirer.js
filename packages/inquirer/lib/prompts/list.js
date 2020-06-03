@@ -6,7 +6,7 @@
 var _ = {
   isNumber: require('lodash/isNumber'),
   findIndex: require('lodash/findIndex'),
-  isString: require('lodash/isString')
+  isString: require('lodash/isString'),
 };
 var chalk = require('chalk');
 var figures = require('figures');
@@ -65,7 +65,7 @@ class ListPrompt extends Base {
       .pipe(
         take(1),
         map(this.getCurrentValue.bind(this)),
-        flatMap(value => runAsync(self.opt.filter)(value).catch(err => err))
+        flatMap((value) => runAsync(self.opt.filter)(value).catch((err) => err))
       )
       .forEach(this.onSubmit.bind(this));
 
@@ -97,8 +97,20 @@ class ListPrompt extends Base {
       var indexPosition = this.opt.choices.indexOf(
         this.opt.choices.getChoice(this.selected)
       );
+      var realIndexPosition =
+        this.opt.choices.reduce(function (acc, value, i) {
+          if (i > indexPosition) {
+            return acc;
+          }
+          if (value.type === 'separator') {
+            return acc + 1;
+          }
+          var l = value.name;
+          l = l.split('\n');
+          return acc + l.length;
+        }, 0) - 1;
       message +=
-        '\n' + this.paginator.paginate(choicesStr, indexPosition, this.opt.pageSize);
+        '\n' + this.paginator.paginate(choicesStr, realIndexPosition, this.opt.pageSize);
     }
 
     this.firstRender = false;

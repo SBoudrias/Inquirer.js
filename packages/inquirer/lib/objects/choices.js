@@ -4,7 +4,7 @@ var _ = {
   isNumber: require('lodash/isNumber'),
   filter: require('lodash/filter'),
   map: require('lodash/map'),
-  find: require('lodash/find')
+  find: require('lodash/find'),
 };
 var Separator = require('./separator');
 var Choice = require('./choice');
@@ -18,7 +18,7 @@ var Choice = require('./choice');
 
 module.exports = class Choices {
   constructor(choices, answers) {
-    this.choices = choices.map(val => {
+    this.choices = choices.map((val) => {
       if (val.type === 'separator') {
         if (!(val instanceof Separator)) {
           val = new Separator(val.line);
@@ -32,7 +32,7 @@ module.exports = class Choices {
 
     this.realChoices = this.choices
       .filter(Separator.exclude)
-      .filter(item => !item.disabled);
+      .filter((item) => !item.disabled);
 
     Object.defineProperty(this, 'length', {
       get() {
@@ -40,7 +40,7 @@ module.exports = class Choices {
       },
       set(val) {
         this.choices.length = val;
-      }
+      },
     });
 
     Object.defineProperty(this, 'realLength', {
@@ -49,7 +49,7 @@ module.exports = class Choices {
       },
       set() {
         throw new Error('Cannot set `realLength` of a Choices collection');
-      }
+      },
     });
   }
 
@@ -108,16 +108,20 @@ module.exports = class Choices {
     return this.choices.filter.apply(this.choices, arguments);
   }
 
+  reduce() {
+    return this.choices.reduce.apply(this.choices, arguments);
+  }
+
   find(func) {
     return _.find(this.choices, func);
   }
 
   push() {
-    var objs = _.map(arguments, val => new Choice(val));
+    var objs = _.map(arguments, (val) => new Choice(val));
     this.choices.push.apply(this.choices, objs);
     this.realChoices = this.choices
       .filter(Separator.exclude)
-      .filter(item => !item.disabled);
+      .filter((item) => !item.disabled);
     return this.choices;
   }
 };
