@@ -137,6 +137,7 @@ A question object is a `hash` containing question related values:
 - **prefix**: (String) Change the default _prefix_ message.
 - **suffix**: (String) Change the default _suffix_ message.
 - **askAnswered**: (Boolean) Force to prompt the question if the answer already exists.
+- **loop**: (Boolean) Enable list looping. Defaults: `true`
 
 `default`, `choices`(if defined as functions), `validate`, `filter` and `when` functions can be called asynchronously. Either return a promise or use `this.async()` to get a callback you'll call with the final value.
 
@@ -213,18 +214,14 @@ Separator instances have a property `type` equal to `separator`. This should all
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties. (Note that
 default must be the choice `index` in the array or a choice `value`)
 
-`loop:false` will disable the default looping behavior.
-
 ![List prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/list.svg)
 
 ---
 
 #### Raw List - `{type: 'rawlist'}`
 
-Take `type`, `name`, `message`, `choices`[, `default`, `filter`] properties. (Note that
+Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties. (Note that
 default must be the choice `index` in the array)
-
-`loop:false` will disable the default looping behavior.
 
 ![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
 
