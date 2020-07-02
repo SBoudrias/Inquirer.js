@@ -16,6 +16,7 @@ var { flatMap, map, take, takeUntil } = require('rxjs/operators');
 var Base = require('./base');
 var observe = require('../utils/events');
 var Paginator = require('../utils/paginator');
+var incrementListIndex = require('../utils/incrementListIndex');
 
 class ListPrompt extends Base {
   constructor(questions, rl, answers) {
@@ -150,14 +151,12 @@ class ListPrompt extends Base {
    * When user press a key
    */
   onUpKey() {
-    var len = this.opt.choices.realLength;
-    this.selected = this.selected > 0 ? this.selected - 1 : len - 1;
+    this.selected = incrementListIndex(this.selected, 'up', this.opt);
     this.render();
   }
 
   onDownKey() {
-    var len = this.opt.choices.realLength;
-    this.selected = this.selected < len - 1 ? this.selected + 1 : 0;
+    this.selected = incrementListIndex(this.selected, 'down', this.opt);
     this.render();
   }
 

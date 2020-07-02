@@ -68,26 +68,46 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it('should loop the choices when going out of boundaries', function() {
-    var promise1 = this.list.run().then(answer => {
-      expect(answer).to.equal('bar');
+  describe('going out of boundaries', function() {
+    beforeEach(function() {
+      this.pressKey = function(dir, times) {
+        for (var i = 0; i < times; i++) {
+          this.rl.input.emit('keypress', '', { name: dir });
+        }
+        this.rl.emit('line');
+      };
     });
-
-    this.rl.input.emit('keypress', '', { name: 'up' });
-    this.rl.input.emit('keypress', '', { name: 'up' });
-    this.rl.emit('line');
-
-    return promise1.then(() => {
-      this.list.selected = 0; // Reset
-      var promise2 = this.list.run().then(answer => {
+    describe('when loop undefined / true', function() {
+      it('loops to bottom when too far up', async function() {
+        var promise = this.list.run();
+        this.pressKey('up', 2);
+        var answer = await promise;
+        expect(answer).to.equal('bar');
+      });
+      it('loops to top when too far down', async function() {
+        var promise = this.list.run();
+        this.pressKey('down', 3);
+        var answer = await promise;
         expect(answer).to.equal('foo');
       });
+    });
 
-      this.rl.input.emit('keypress', '', { name: 'down' });
-      this.rl.input.emit('keypress', '', { name: 'down' });
-      this.rl.input.emit('keypress', '', { name: 'down' });
-      this.rl.emit('line');
-      return promise2;
+    describe('when loop: false', function() {
+      beforeEach(function() {
+        this.list = new List(_.assign(this.fixture, { loop: false }), this.rl);
+      });
+      it('stays at top when too far up', async function() {
+        var promise = this.list.run();
+        this.pressKey('up', 2);
+        var answer = await promise;
+        expect(answer).to.equal('foo');
+      });
+      it('stays at bottom when too far down', async function() {
+        var promise = this.list.run();
+        this.pressKey('down', 3);
+        var answer = await promise;
+        expect(answer).to.equal('bum');
+      });
     });
   });
 
