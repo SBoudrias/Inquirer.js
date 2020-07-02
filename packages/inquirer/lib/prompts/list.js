@@ -97,8 +97,29 @@ class ListPrompt extends Base {
       var indexPosition = this.opt.choices.indexOf(
         this.opt.choices.getChoice(this.selected)
       );
+      var realIndexPosition =
+        this.opt.choices.reduce(function(acc, value, i) {
+          // Dont count lines past the choice we are looking at
+          if (i > indexPosition) {
+            return acc;
+          }
+          // Add line if it's a separator
+          if (value.type === 'separator') {
+            return acc + 1;
+          }
+
+          var l = value.name;
+          // Non-strings take up one line
+          if (typeof l !== 'string') {
+            return acc + 1;
+          }
+
+          // Calculate lines taken up by string
+          l = l.split('\n');
+          return acc + l.length;
+        }, 0) - 1;
       message +=
-        '\n' + this.paginator.paginate(choicesStr, indexPosition, this.opt.pageSize);
+        '\n' + this.paginator.paginate(choicesStr, realIndexPosition, this.opt.pageSize);
     }
 
     this.firstRender = false;

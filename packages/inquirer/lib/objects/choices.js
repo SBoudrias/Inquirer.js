@@ -108,6 +108,10 @@ module.exports = class Choices {
     return this.choices.filter.apply(this.choices, arguments);
   }
 
+  reduce() {
+    return this.choices.reduce.apply(this.choices, arguments);
+  }
+
   find(func) {
     return _.find(this.choices, func);
   }

@@ -2,6 +2,7 @@ var expect = require('chai').expect;
 var _ = require('lodash');
 var ReadlineStub = require('../../helpers/readline');
 var fixtures = require('../../helpers/fixtures');
+var sinon = require('sinon');
 
 var Checkbox = require('../../../lib/prompts/checkbox');
 
@@ -183,6 +184,30 @@ describe('`checkbox` prompt', function() {
     return promise.then(answer => {
       expect(answer.length).to.equal(3);
     });
+  });
+
+  it('pagination works with multiline choices', function(done) {
+    var multilineFixture = {
+      message: 'message',
+      name: 'name',
+      choices: ['a\n\n', 'b\n\n']
+    };
+    var list = new Checkbox(multilineFixture, this.rl);
+    const spy = sinon.spy(list.paginator, 'paginate');
+    list.run().then(answer => {
+      const realIndexPosition1 = spy.firstCall.args[1];
+      const realIndexPosition2 = spy.secondCall.args[1];
+
+      // 'a\n\n': 0th index, but pagination at 2nd index position due to 2 extra newlines
+      expect(realIndexPosition1).to.equal(2);
+      // 'b\n\n': 1st index, but pagination at 5th index position due to 4 extra newlines
+      expect(realIndexPosition2).to.equal(5);
+      expect(answer[0]).to.equal('b\n\n');
+      done();
+    });
+    this.rl.input.emit('keypress', '', { name: 'down' });
+    this.rl.input.emit('keypress', ' ', { name: 'space' });
+    this.rl.emit('line');
   });
 
   describe('with disabled choices', function() {

@@ -6,6 +6,12 @@
 var inquirer = require('..');
 
 var choices = Array.apply(0, new Array(26)).map((x, y) => String.fromCharCode(y + 65));
+choices.push('Multiline option 1\n  super cool feature \n  more lines');
+choices.push('Multiline option 2\n  super cool feature \n  more lines');
+choices.push('Multiline option 3\n  super cool feature \n  more lines');
+choices.push('Multiline option 4\n  super cool feature \n  more lines');
+choices.push('Multiline option 5\n  super cool feature \n  more lines');
+choices.push(new inquirer.Separator());
 choices.push('Multiline option \n  super cool feature');
 choices.push({
   name:
