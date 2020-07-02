@@ -46,7 +46,7 @@
     "lodash": "^4.17.15",
     "mute-stream": "0.0.8",
     "run-async": "^2.4.0",
-    "rxjs": "^6.5.3",
+    "rxjs": "^6.6.0",
     "string-width": "^4.1.0",
     "strip-ansi": "^6.0.0",
     "through": "^2.3.6"
