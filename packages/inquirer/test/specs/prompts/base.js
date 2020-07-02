@@ -3,22 +3,22 @@ var ReadlineStub = require('../../helpers/readline');
 
 var Base = require('../../../lib/prompts/base');
 
-describe('`base` prompt (e.g. prompt helpers)', function() {
-  beforeEach(function() {
+describe('`base` prompt (e.g. prompt helpers)', function () {
+  beforeEach(function () {
     this.rl = new ReadlineStub();
     this.base = new Base(
       {
         message: 'foo bar',
-        name: 'name'
+        name: 'name',
       },
       this.rl
     );
   });
 
-  it('should not point by reference to the entry `question` object', function() {
+  it('should not point by reference to the entry `question` object', function () {
     var question = {
       message: 'foo bar',
-      name: 'name'
+      name: 'name',
     };
     var base = new Base(question, this.rl);
     expect(question).to.not.equal(base.opt);

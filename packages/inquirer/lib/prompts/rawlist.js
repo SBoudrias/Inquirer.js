@@ -6,7 +6,7 @@
 var _ = {
   extend: require('lodash/extend'),
   isNumber: require('lodash/isNumber'),
-  findIndex: require('lodash/findIndex')
+  findIndex: require('lodash/findIndex'),
 };
 var chalk = require('chalk');
 var { map, takeUntil } = require('rxjs/operators');
@@ -30,9 +30,9 @@ class RawListPrompt extends Base {
     this.rawDefault = 0;
 
     _.extend(this.opt, {
-      validate: function(val) {
+      validate: function (val) {
         return val != null;
-      }
+      },
     });
 
     var def = this.opt.default;
@@ -193,7 +193,7 @@ function renderChoices(choices, pointer) {
   var output = '';
   var separatorOffset = 0;
 
-  choices.forEach(function(choice, i) {
+  choices.forEach(function (choice, i) {
     output += '\n  ';
 
     if (choice.type === 'separator') {

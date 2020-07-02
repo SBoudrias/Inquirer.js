@@ -1,5 +1,5 @@
 const _ = {
-  flatten: require('lodash/flatten')
+  flatten: require('lodash/flatten'),
 };
 
 /**
@@ -12,7 +12,7 @@ const _ = {
 exports.breakLines = (content, width) => {
   const regex = new RegExp('(?:(?:\\033[[0-9;]*m)*.?){1,' + width + '}', 'g');
   return _.flatten(
-    content.split('\n').map(line => {
+    content.split('\n').map((line) => {
       const chunk = line.match(regex);
       // Remove the last match as it's always empty
       chunk.pop();

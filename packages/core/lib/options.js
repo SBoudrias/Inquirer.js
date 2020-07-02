@@ -1,4 +1,4 @@
-exports.getPromptConfig = async options => {
+exports.getPromptConfig = async (options) => {
   let message = options.message;
   if (typeof options.message === 'function') {
     message = message();
@@ -7,6 +7,6 @@ exports.getPromptConfig = async options => {
   return {
     validate: () => true,
     ...options,
-    message: await message
+    message: await message,
   };
 };

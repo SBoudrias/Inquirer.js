@@ -2,7 +2,7 @@
 
 var _ = {
   sum: require('lodash/sum'),
-  flatten: require('lodash/flatten')
+  flatten: require('lodash/flatten'),
 };
 var chalk = require('chalk');
 
@@ -25,7 +25,7 @@ class Paginator {
 
     if (this.screen) {
       lines = this.screen.breakLines(lines);
-      active = _.sum(lines.map(lineParts => lineParts.length).splice(0, active));
+      active = _.sum(lines.map((lineParts) => lineParts.length).splice(0, active));
       lines = _.flatten(lines);
     }
 

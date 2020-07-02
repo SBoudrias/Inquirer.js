@@ -8,8 +8,8 @@ const checkbox = require('.');
     choices: [
       { name: 'npm', value: 'npm' },
       { name: 'yarn', value: 'yarn' },
-      { name: 'jspm', value: 'jspm', disabled: true }
-    ]
+      { name: 'jspm', value: 'jspm', disabled: true },
+    ],
   });
   console.log('Answer:', answer);
 
@@ -41,8 +41,8 @@ const checkbox = require('.');
       { value: 'W' },
       { value: 'X' },
       { value: 'Y' },
-      { value: 'Z' }
-    ]
+      { value: 'Z' },
+    ],
   });
   console.log('Answer:', answer);
 })();

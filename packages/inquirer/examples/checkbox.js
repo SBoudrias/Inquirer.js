@@ -14,56 +14,56 @@ inquirer
       choices: [
         new inquirer.Separator(' = The Meats = '),
         {
-          name: 'Pepperoni'
+          name: 'Pepperoni',
         },
         {
-          name: 'Ham'
+          name: 'Ham',
         },
         {
-          name: 'Ground Meat'
+          name: 'Ground Meat',
         },
         {
-          name: 'Bacon'
+          name: 'Bacon',
         },
         new inquirer.Separator(' = The Cheeses = '),
         {
           name: 'Mozzarella',
-          checked: true
+          checked: true,
         },
         {
-          name: 'Cheddar'
+          name: 'Cheddar',
         },
         {
-          name: 'Parmesan'
+          name: 'Parmesan',
         },
         new inquirer.Separator(' = The usual ='),
         {
-          name: 'Mushroom'
+          name: 'Mushroom',
         },
         {
-          name: 'Tomato'
+          name: 'Tomato',
         },
         new inquirer.Separator(' = The extras = '),
         {
-          name: 'Pineapple'
+          name: 'Pineapple',
         },
         {
           name: 'Olives',
-          disabled: 'out of stock'
+          disabled: 'out of stock',
         },
         {
-          name: 'Extra cheese'
-        }
+          name: 'Extra cheese',
+        },
       ],
-      validate: function(answer) {
+      validate: function (answer) {
         if (answer.length < 1) {
           return 'You must choose at least one topping.';
         }
 
         return true;
-      }
-    }
+      },
+    },
   ])
-  .then(answers => {
+  .then((answers) => {
     console.log(JSON.stringify(answers, null, '  '));
   });

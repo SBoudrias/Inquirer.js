@@ -6,15 +6,15 @@ var sinon = require('sinon');
 
 var List = require('../../../lib/prompts/list');
 
-describe('`list` prompt', function() {
-  beforeEach(function() {
+describe('`list` prompt', function () {
+  beforeEach(function () {
     this.fixture = _.clone(fixtures.list);
     this.rl = new ReadlineStub();
     this.list = new List(this.fixture, this.rl);
   });
 
-  it('should default to first choice', function(done) {
-    this.list.run().then(answer => {
+  it('should default to first choice', function (done) {
+    this.list.run().then((answer) => {
       expect(answer).to.equal('foo');
       done();
     });
@@ -22,8 +22,8 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it('should move selected cursor on keypress', function(done) {
-    this.list.run().then(answer => {
+  it('should move selected cursor on keypress', function (done) {
+    this.list.run().then((answer) => {
       expect(answer).to.equal('bar');
       done();
     });
@@ -32,8 +32,8 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it('should allow for arrow navigation', function(done) {
-    this.list.run().then(answer => {
+  it('should allow for arrow navigation', function (done) {
+    this.list.run().then((answer) => {
       expect(answer).to.equal('bar');
       done();
     });
@@ -44,8 +44,8 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it('should allow for vi-style navigation', function(done) {
-    this.list.run().then(answer => {
+  it('should allow for vi-style navigation', function (done) {
+    this.list.run().then((answer) => {
       expect(answer).to.equal('bar');
       done();
     });
@@ -56,8 +56,8 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it('should allow for emacs-style navigation', function(done) {
-    this.list.run().then(answer => {
+  it('should allow for emacs-style navigation', function (done) {
+    this.list.run().then((answer) => {
       expect(answer).to.equal('bar');
       done();
     });
@@ -68,23 +68,23 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  describe('going out of boundaries', function() {
-    beforeEach(function() {
-      this.pressKey = function(dir, times) {
+  describe('going out of boundaries', function () {
+    beforeEach(function () {
+      this.pressKey = function (dir, times) {
         for (var i = 0; i < times; i++) {
           this.rl.input.emit('keypress', '', { name: dir });
         }
         this.rl.emit('line');
       };
     });
-    describe('when loop undefined / true', function() {
-      it('loops to bottom when too far up', async function() {
+    describe('when loop undefined / true', function () {
+      it('loops to bottom when too far up', async function () {
         var promise = this.list.run();
         this.pressKey('up', 2);
         var answer = await promise;
         expect(answer).to.equal('bar');
       });
-      it('loops to top when too far down', async function() {
+      it('loops to top when too far down', async function () {
         var promise = this.list.run();
         this.pressKey('down', 3);
         var answer = await promise;
@@ -92,17 +92,17 @@ describe('`list` prompt', function() {
       });
     });
 
-    describe('when loop: false', function() {
-      beforeEach(function() {
+    describe('when loop: false', function () {
+      beforeEach(function () {
         this.list = new List(_.assign(this.fixture, { loop: false }), this.rl);
       });
-      it('stays at top when too far up', async function() {
+      it('stays at top when too far up', async function () {
         var promise = this.list.run();
         this.pressKey('up', 2);
         var answer = await promise;
         expect(answer).to.equal('foo');
       });
-      it('stays at bottom when too far down', async function() {
+      it('stays at bottom when too far down', async function () {
         var promise = this.list.run();
         this.pressKey('down', 3);
         var answer = await promise;
@@ -111,17 +111,17 @@ describe('`list` prompt', function() {
     });
   });
 
-  it('should require a choices array', function() {
+  it('should require a choices array', function () {
     expect(() => {
       return new List({ name: 'foo', message: 'bar' });
     }).to.throw(/choices/);
   });
 
-  it('should allow a numeric default', function(done) {
+  it('should allow a numeric default', function (done) {
     this.fixture.default = 1;
     var list = new List(this.fixture, this.rl);
 
-    list.run().then(answer => {
+    list.run().then((answer) => {
       expect(answer).to.equal('bar');
       done();
     });
@@ -129,11 +129,11 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it('should work from a numeric default being the index', function(done) {
+  it('should work from a numeric default being the index', function (done) {
     this.fixture.default = 1;
     var list = new List(this.fixture, this.rl);
 
-    list.run().then(answer => {
+    list.run().then((answer) => {
       expect(answer).to.equal('bum');
       done();
     });
@@ -142,11 +142,11 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it('should allow a string default being the value', function(done) {
+  it('should allow a string default being the value', function (done) {
     this.fixture.default = 'bar';
     var list = new List(this.fixture, this.rl);
 
-    list.run().then(answer => {
+    list.run().then((answer) => {
       expect(answer).to.equal('bar');
       done();
     });
@@ -154,11 +154,11 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it('should work from a string default', function(done) {
+  it('should work from a string default', function (done) {
     this.fixture.default = 'bar';
     var list = new List(this.fixture, this.rl);
 
-    list.run().then(answer => {
+    list.run().then((answer) => {
       expect(answer).to.equal('bum');
       done();
     });
@@ -167,11 +167,11 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it("shouldn't allow an invalid string default to change position", function(done) {
+  it("shouldn't allow an invalid string default to change position", function (done) {
     this.fixture.default = 'babar';
     var list = new List(this.fixture, this.rl);
 
-    list.run().then(answer => {
+    list.run().then((answer) => {
       expect(answer).to.equal('foo');
       done();
     });
@@ -179,11 +179,11 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it("shouldn't allow an invalid index as default", function(done) {
+  it("shouldn't allow an invalid index as default", function (done) {
     this.fixture.default = 4;
     var list = new List(this.fixture, this.rl);
 
-    list.run().then(answer => {
+    list.run().then((answer) => {
       expect(answer).to.equal('foo');
       done();
     });
@@ -191,8 +191,8 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it('should allow 1-9 shortcut key', function(done) {
-    this.list.run().then(answer => {
+  it('should allow 1-9 shortcut key', function (done) {
+    this.list.run().then((answer) => {
       expect(answer).to.equal('bar');
       done();
     });
@@ -201,15 +201,15 @@ describe('`list` prompt', function() {
     this.rl.emit('line');
   });
 
-  it('pagination works with multiline choices', function(done) {
+  it('pagination works with multiline choices', function (done) {
     var multilineFixture = {
       message: 'message',
       name: 'name',
-      choices: ['a\n\n', 'b\n\n']
+      choices: ['a\n\n', 'b\n\n'],
     };
     var list = new List(multilineFixture, this.rl);
     const spy = sinon.spy(list.paginator, 'paginate');
-    list.run().then(answer => {
+    list.run().then((answer) => {
       const realIndexPosition1 = spy.firstCall.args[1];
       const realIndexPosition2 = spy.secondCall.args[1];
 

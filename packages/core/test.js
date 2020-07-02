@@ -2,7 +2,7 @@ const readline = require('readline');
 const { createPrompt } = require('.');
 
 jest.mock('readline', () => {
-  const readline = require.requireActual('readline');
+  const readline = jest.requireActual('readline');
   const EventEmitter = require('events');
   const stream = require('stream');
   const MuteStream = require('mute-stream');
@@ -15,7 +15,7 @@ jest.mock('readline', () => {
 
   const fakeInstance2 = readline.createInterface({
     output: new MuteStream(),
-    input: new MuteStream()
+    input: new MuteStream(),
   });
   fakeInstance2.line = '';
 
@@ -28,7 +28,7 @@ describe('createPrompt()', () => {
     const render = jest.fn(() => '');
     const prompt = createPrompt({}, render);
     let resolveCb;
-    const promise = new Promise(resolve => {
+    const promise = new Promise((resolve) => {
       resolveCb = resolve;
     });
     prompt({ message: () => promise });
@@ -42,7 +42,7 @@ describe('createPrompt()', () => {
       expect.objectContaining({
         loadingIncrement: 0,
         message: 'Loading...',
-        status: 'loading'
+        status: 'loading',
       }),
       {}
     );
@@ -53,7 +53,7 @@ describe('createPrompt()', () => {
       expect.objectContaining({
         loadingIncrement: 1,
         message: 'Loading...',
-        status: 'loading'
+        status: 'loading',
       }),
       {}
     );
@@ -103,7 +103,7 @@ describe('createPrompt()', () => {
       expect.objectContaining({
         message: 'Question:',
         value: 'new value',
-        status: 'done'
+        status: 'done',
       }),
       {}
     );
@@ -161,7 +161,7 @@ describe('createPrompt()', () => {
     expect(render).toHaveBeenLastCalledWith(
       expect.objectContaining({
         message: 'Question:',
-        error: 'You must provide a valid value'
+        error: 'You must provide a valid value',
       }),
       {}
     );
@@ -188,7 +188,7 @@ describe('createPrompt()', () => {
     expect(render).toHaveBeenLastCalledWith(
       expect.objectContaining({
         message: 'Question:',
-        error: expect.stringMatching('Only numbers allowed')
+        error: expect.stringMatching('Only numbers allowed'),
       }),
       {}
     );
@@ -216,7 +216,7 @@ describe('createPrompt()', () => {
     const promptPromise = prompt({
       message: 'Question',
       transformer,
-      filter: () => 'dummy value'
+      filter: () => 'dummy value',
     });
     expect(render).toHaveBeenCalledTimes(1);
     expect(transformer).toHaveBeenLastCalledWith('', { isFinal: false });

@@ -1,7 +1,7 @@
 'use strict';
 var _ = {
   extend: require('lodash/extend'),
-  omit: require('lodash/omit')
+  omit: require('lodash/omit'),
 };
 var MuteStream = require('mute-stream');
 var readline = require('readline');
@@ -90,7 +90,7 @@ function setupReadlineOptions(opt) {
     {
       terminal: true,
       input: input,
-      output: output
+      output: output,
     },
     _.omit(opt, ['input', 'output'])
   );

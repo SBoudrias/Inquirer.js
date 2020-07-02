@@ -6,7 +6,7 @@ const figures = require('figures');
 const { cursorHide } = require('ansi-escapes');
 
 module.exports = createPrompt(
-  readline => ({
+  (readline) => ({
     onKeypress: (value, key, { cursorPosition = 0, choices }, setState) => {
       let newCursorPosition = cursorPosition;
       if (isUpKey(key) || isDownKey(key)) {
@@ -29,20 +29,20 @@ module.exports = createPrompt(
             }
 
             return choice;
-          })
+          }),
         });
       } else if (key.name === 'a') {
-        const selectAll = Boolean(choices.find(choice => !choice.checked));
+        const selectAll = Boolean(choices.find((choice) => !choice.checked));
         setState({
-          choices: choices.map(choice =>
+          choices: choices.map((choice) =>
             Object.assign({}, choice, { checked: selectAll })
-          )
+          ),
         });
       } else if (key.name === 'i') {
         setState({
-          choices: choices.map(choice =>
+          choices: choices.map((choice) =>
             Object.assign({}, choice, { checked: !choice.checked })
-          )
+          ),
         });
       } else if (isNumberKey(key)) {
         // Adjust index to start at 1
@@ -61,14 +61,14 @@ module.exports = createPrompt(
             }
 
             return choice;
-          })
+          }),
         });
       }
     },
     mapStateToValue: ({ choices }) => {
-      return choices.filter(choice => choice.checked).map(choice => choice.value);
+      return choices.filter((choice) => choice.checked).map((choice) => choice.value);
     },
-    paginator: new Paginator(readline)
+    paginator: new Paginator(readline),
   }),
   (state, { paginator }) => {
     const { prefix, choices, showHelpTip, cursorPosition = 0, pageSize = 7 } = state;
@@ -76,7 +76,7 @@ module.exports = createPrompt(
 
     if (state.status === 'done') {
       const selection = choices
-        .filter(choice => choice.checked)
+        .filter((choice) => choice.checked)
         .map(({ name, value }) => name || value);
       return `${prefix} ${message} ${chalk.cyan(selection.join(', '))}`;
     }
@@ -86,7 +86,7 @@ module.exports = createPrompt(
       const keys = [
         `${chalk.cyan.bold('<space>')} to select`,
         `${chalk.cyan.bold('<a>')} to toggle all`,
-        `${chalk.cyan.bold('<i>')} to invert selection`
+        `${chalk.cyan.bold('<i>')} to invert selection`,
       ];
       helpTip = ` (Press ${keys.join(', ')})`;
     }

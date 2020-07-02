@@ -13,7 +13,7 @@ module.exports = createPrompt((config, done) => {
   const paginator = useRef(new Paginator()).current;
   const prefix = usePrefix();
 
-  useKeypress(key => {
+  useKeypress((key) => {
     if (isEnterKey(key)) {
       setStatus('done');
       done(choices[cursorPosition].value);

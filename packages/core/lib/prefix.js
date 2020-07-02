@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const spinner = require('cli-spinners').dots;
 const { useState, useEffect } = require('../hooks');
 
-exports.usePrefix = isLoading => {
+exports.usePrefix = (isLoading) => {
   const [tick, setTick] = useState(0);
 
   useEffect(() => {

@@ -5,7 +5,7 @@
 
 var _ = {
   extend: require('lodash/extend'),
-  isBoolean: require('lodash/isBoolean')
+  isBoolean: require('lodash/isBoolean'),
 };
 var chalk = require('chalk');
 var { take, takeUntil } = require('rxjs/operators');
@@ -19,14 +19,14 @@ class ConfirmPrompt extends Base {
     var rawDefault = true;
 
     _.extend(this.opt, {
-      filter: function(input) {
+      filter: function (input) {
         var value = rawDefault;
         if (input != null && input !== '') {
           value = /^y(es)?/i.test(input);
         }
 
         return value;
-      }
+      },
     });
 
     if (_.isBoolean(this.opt.default)) {

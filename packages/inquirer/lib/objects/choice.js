@@ -3,7 +3,7 @@ var _ = {
   isString: require('lodash/isString'),
   isNumber: require('lodash/isNumber'),
   extend: require('lodash/extend'),
-  isFunction: require('lodash/isFunction')
+  isFunction: require('lodash/isFunction'),
 };
 
 /**
@@ -30,7 +30,7 @@ module.exports = class Choice {
       _.extend(this, val, {
         name: val.name || val.value,
         value: 'value' in val ? val.value : val.name,
-        short: val.short || val.name || val.value
+        short: val.short || val.name || val.value,
       });
     }
 

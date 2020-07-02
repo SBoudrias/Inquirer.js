@@ -9,14 +9,14 @@ let hooksCleanup = [];
 let index = 0;
 let handleChange = () => {};
 
-const cleanupHook = index => {
+const cleanupHook = (index) => {
   const cleanFn = hooksCleanup[index];
   if (typeof cleanFn === 'function') {
     cleanFn();
   }
 };
 
-exports.useState = defaultValue => {
+exports.useState = (defaultValue) => {
   const _idx = index;
   const value = _idx in hooks ? hooks[_idx] : defaultValue;
 
@@ -24,16 +24,16 @@ exports.useState = defaultValue => {
 
   return [
     value,
-    newValue => {
+    (newValue) => {
       hooks[_idx] = newValue;
 
       // Trigger re-render
       handleChange();
-    }
+    },
   ];
 };
 
-exports.useKeypress = userHandler => {
+exports.useKeypress = (userHandler) => {
   const _idx = index;
   const prevHandler = hooks[_idx];
   const handler = (input, event) => {
@@ -70,12 +70,12 @@ exports.useEffect = (cb, depArray) => {
   index++;
 };
 
-exports.useRef = val => {
+exports.useRef = (val) => {
   return exports.useState({ current: val })[0];
 };
 
-exports.createPrompt = view => {
-  return options => {
+exports.createPrompt = (view) => {
+  return (options) => {
     // Default `input` to stdin
     const input = process.stdin;
 
@@ -86,14 +86,14 @@ exports.createPrompt = view => {
     const rl = readline.createInterface({
       terminal: true,
       input,
-      output
+      output,
     });
     const screen = new ScreenManager(rl);
 
     return new Promise((resolve, reject) => {
       sessionRl = rl;
 
-      const done = value => {
+      const done = (value) => {
         let len = cleanupHook.length;
         while (len--) {
           cleanupHook(len);
@@ -110,7 +110,7 @@ exports.createPrompt = view => {
       };
 
       hooks = [];
-      const workLoop = config => {
+      const workLoop = (config) => {
         index = 0;
         handleChange = () => workLoop(config);
         screen.render(...[view(config, done)].flat().filter(Boolean));

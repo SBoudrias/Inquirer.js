@@ -11,18 +11,18 @@ var questions = [
   {
     type: 'input',
     name: 'tvShow',
-    message: "What's your favorite TV show?"
+    message: "What's your favorite TV show?",
   },
   {
     type: 'confirm',
     name: 'askAgain',
     message: 'Want to enter another TV show favorite (just hit enter for YES)?',
-    default: true
-  }
+    default: true,
+  },
 ];
 
 function ask() {
-  inquirer.prompt(questions).then(answers => {
+  inquirer.prompt(questions).then((answers) => {
     output.push(answers.tvShow);
     if (answers.askAgain) {
       ask();

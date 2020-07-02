@@ -4,7 +4,7 @@ var _ = {
   clone: require('lodash/clone'),
   isArray: require('lodash/isArray'),
   set: require('lodash/set'),
-  isFunction: require('lodash/isFunction')
+  isFunction: require('lodash/isFunction'),
 };
 var { defer, empty, from, of } = require('rxjs');
 var { concatMap, filter, publish, reduce } = require('rxjs/operators');
@@ -95,7 +95,9 @@ class PromptUI extends Base {
     this.activePrompt = new Prompt(question, this.rl, this.answers);
     return defer(() =>
       from(
-        this.activePrompt.run().then(answer => ({ name: question.name, answer: answer }))
+        this.activePrompt
+          .run()
+          .then((answer) => ({ name: question.name, answer: answer }))
       )
     );
   }
@@ -125,12 +127,12 @@ class PromptUI extends Base {
     var answers = this.answers;
     return defer(() =>
       from(
-        runAsync(question.when)(answers).then(shouldRun => {
+        runAsync(question.when)(answers).then((shouldRun) => {
           if (shouldRun) {
             return question;
           }
         })
-      ).pipe(filter(val => val != null))
+      ).pipe(filter((val) => val != null))
     );
   }
 }

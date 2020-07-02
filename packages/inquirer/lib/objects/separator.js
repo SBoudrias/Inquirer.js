@@ -30,7 +30,7 @@ class Separator {
  * @return {Boolean}    `false` if object is a separator
  */
 
-Separator.exclude = function(obj) {
+Separator.exclude = function (obj) {
   return obj.type !== 'separator';
 };
 

@@ -9,7 +9,7 @@ var directionsPrompt = {
   type: 'list',
   name: 'direction',
   message: 'Which direction would you like to go?',
-  choices: ['Forward', 'Right', 'Left', 'Back']
+  choices: ['Forward', 'Right', 'Left', 'Back'],
 };
 
 function main() {
@@ -18,7 +18,7 @@ function main() {
 }
 
 function exitHouse() {
-  inquirer.prompt(directionsPrompt).then(answers => {
+  inquirer.prompt(directionsPrompt).then((answers) => {
     if (answers.direction === 'Forward') {
       console.log('You find yourself in a forest');
       console.log(
@@ -33,7 +33,7 @@ function exitHouse() {
 }
 
 function encounter1() {
-  inquirer.prompt(directionsPrompt).then(answers => {
+  inquirer.prompt(directionsPrompt).then((answers) => {
     var direction = answers.direction;
     if (direction === 'Forward') {
       console.log('You attempt to fight the wolf');
@@ -53,7 +53,7 @@ function encounter1() {
 }
 
 function encounter2a() {
-  inquirer.prompt(directionsPrompt).then(answers => {
+  inquirer.prompt(directionsPrompt).then((answers) => {
     var direction = answers.direction;
     if (direction === 'Forward') {
       var output = 'You find a painted wooden sign that says:';
@@ -80,8 +80,8 @@ function encounter2b() {
         'Use the stick',
         'Grab a large rock',
         'Try and make a run for it',
-        'Attack the wolf unarmed'
-      ]
+        'Attack the wolf unarmed',
+      ],
     })
     .then(() => {
       console.log('The wolf mauls you. You die. The end.');

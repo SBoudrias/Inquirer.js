@@ -1,6 +1,6 @@
 const _ = {
   isFunction: require('lodash/isFunction'),
-  noop: require('lodash/noop')
+  noop: require('lodash/noop'),
 };
 const readline = require('readline');
 const chalk = require('chalk');
@@ -11,11 +11,11 @@ const ScreenManager = require('./lib/screen-manager');
 
 const defaultState = {
   validate: () => true,
-  filter: val => val,
-  transformer: val => val
+  filter: (val) => val,
+  transformer: (val) => val,
 };
 
-const defaultMapStateToValue = state => {
+const defaultMapStateToValue = (state) => {
   if (!state.value) {
     return state.default;
   }
@@ -32,7 +32,7 @@ class StateManager {
     this.currentState = {
       loadingIncrement: 0,
       value: '',
-      status: 'idle'
+      status: 'idle',
     };
 
     // Default `input` to stdin
@@ -45,7 +45,7 @@ class StateManager {
     this.rl = readline.createInterface({
       terminal: true,
       input,
-      output
+      output,
     });
     this.screen = new ScreenManager(this.rl);
 
@@ -112,7 +112,7 @@ class StateManager {
     const { onLine = defaultOnLine } = this.config;
     onLine(this.getState(), {
       submit: this.onSubmit,
-      setState: this.setState
+      setState: this.setState,
     });
   }
 
@@ -151,7 +151,7 @@ class StateManager {
   onError(error) {
     this.setState({
       status: 'idle',
-      error: error || 'You must provide a valid value'
+      error: error || 'You must provide a valid value',
     });
   }
 
@@ -193,7 +193,7 @@ class StateManager {
 
     const renderState = Object.assign(
       {
-        prefix: this.getPrefix()
+        prefix: this.getPrefix(),
       },
       state,
       {
@@ -202,7 +202,7 @@ class StateManager {
         value: transformer(value, { isFinal: status === 'done' }),
         validate: undefined,
         filter: undefined,
-        transformer: undefined
+        transformer: undefined,
       }
     );
     this.screen.render(this.render(renderState, this.config), error);
@@ -210,8 +210,8 @@ class StateManager {
 }
 
 exports.createPrompt = (config, render) => {
-  const run = initialState =>
-    new Promise(resolve => {
+  const run = (initialState) =>
+    new Promise((resolve) => {
       const prompt = new StateManager(config, initialState, render);
       prompt.execute(resolve);
     });

@@ -1,7 +1,7 @@
 'use strict';
 var _ = {
   last: require('lodash/last'),
-  flatten: require('lodash/flatten')
+  flatten: require('lodash/flatten'),
 };
 var util = require('./readline');
 var cliWidth = require('cli-width');
@@ -118,7 +118,7 @@ class ScreenManager {
   normalizedCliWidth() {
     var width = cliWidth({
       defaultWidth: 80,
-      output: this.rl.output
+      output: this.rl.output,
     });
     return width;
   }
@@ -128,7 +128,7 @@ class ScreenManager {
     // returns behavior across terminals.
     width = width || this.normalizedCliWidth();
     var regex = new RegExp('(?:(?:\\033[[0-9;]*m)*.?){1,' + width + '}', 'g');
-    return lines.map(line => {
+    return lines.map((line) => {
       var chunk = line.match(regex);
       // Last match is always empty
       chunk.pop();

@@ -7,7 +7,7 @@ var _ = {
   uniq: require('lodash/uniq'),
   isString: require('lodash/isString'),
   isNumber: require('lodash/isNumber'),
-  findIndex: require('lodash/findIndex')
+  findIndex: require('lodash/findIndex'),
 };
 var chalk = require('chalk');
 var { map, takeUntil } = require('rxjs/operators');
@@ -30,10 +30,10 @@ class ExpandPrompt extends Base {
     this.opt.choices.push({
       key: 'h',
       name: 'Help, list all options',
-      value: 'help'
+      value: 'help',
     });
 
-    this.opt.validate = choice => {
+    this.opt.validate = (choice) => {
       if (choice == null) {
         return 'Please enter a valid command';
       }
@@ -124,7 +124,7 @@ class ExpandPrompt extends Base {
   getChoices() {
     var output = '';
 
-    this.opt.choices.forEach(choice => {
+    this.opt.choices.forEach((choice) => {
       output += '\n  ';
 
       if (choice.type === 'separator') {
@@ -192,7 +192,7 @@ class ExpandPrompt extends Base {
     var formatError;
     var errors = [];
     var keymap = {};
-    choices.filter(Separator.exclude).forEach(choice => {
+    choices.filter(Separator.exclude).forEach((choice) => {
       if (!choice.key || choice.key.length !== 1) {
         formatError = true;
       }
@@ -259,7 +259,7 @@ class ExpandPrompt extends Base {
 function renderChoices(choices, pointer) {
   var output = '';
 
-  choices.forEach(choice => {
+  choices.forEach((choice) => {
     output += '\n  ';
 
     if (choice.type === 'separator') {

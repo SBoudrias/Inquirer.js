@@ -15,27 +15,27 @@ inquirer
         {
           key: 'y',
           name: 'Overwrite',
-          value: 'overwrite'
+          value: 'overwrite',
         },
         {
           key: 'a',
           name: 'Overwrite this one and all next',
-          value: 'overwrite_all'
+          value: 'overwrite_all',
         },
         {
           key: 'd',
           name: 'Show diff',
-          value: 'diff'
+          value: 'diff',
         },
         new inquirer.Separator(),
         {
           key: 'x',
           name: 'Abort',
-          value: 'abort'
-        }
-      ]
-    }
+          value: 'abort',
+        },
+      ],
+    },
   ])
-  .then(answers => {
+  .then((answers) => {
     console.log(JSON.stringify(answers, null, '  '));
   });

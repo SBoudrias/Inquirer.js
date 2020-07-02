@@ -6,7 +6,7 @@ function normalizeKeypressEvents(value, key) {
   return { value: value, key: key || {} };
 }
 
-module.exports = function(rl) {
+module.exports = function (rl) {
   var keypress = fromEvent(rl.input, 'keypress', normalizeKeypressEvents)
     .pipe(takeUntil(fromEvent(rl, 'close')))
     // Ignore `enter` key. On the readline, we only care about the `line` event.
@@ -33,8 +33,8 @@ module.exports = function(rl) {
     ),
 
     numberKey: keypress.pipe(
-      filter(e => e.value && '123456789'.indexOf(e.value) >= 0),
-      map(e => Number(e.value)),
+      filter((e) => e.value && '123456789'.indexOf(e.value) >= 0),
+      map((e) => Number(e.value)),
       share()
     ),
 
@@ -49,6 +49,6 @@ module.exports = function(rl) {
     iKey: keypress.pipe(
       filter(({ key }) => key && key.name === 'i'),
       share()
-    )
+    ),
   };
 };

@@ -6,7 +6,7 @@
 var _ = {
   isArray: require('lodash/isArray'),
   map: require('lodash/map'),
-  isString: require('lodash/isString')
+  isString: require('lodash/isString'),
 };
 var chalk = require('chalk');
 var cliCursor = require('cli-cursor');
@@ -25,7 +25,7 @@ class CheckboxPrompt extends Base {
     }
 
     if (_.isArray(this.opt.default)) {
-      this.opt.choices.forEach(function(choice) {
+      this.opt.choices.forEach(function (choice) {
         if (this.opt.default.indexOf(choice.value) >= 0) {
           choice.checked = true;
         }
@@ -110,7 +110,7 @@ class CheckboxPrompt extends Base {
         this.opt.choices.getChoice(this.pointer)
       );
       var realIndexPosition =
-        this.opt.choices.reduce(function(acc, value, i) {
+        this.opt.choices.reduce(function (acc, value, i) {
           // Dont count lines past the choice we are looking at
           if (i > indexPosition) {
             return acc;
@@ -161,7 +161,7 @@ class CheckboxPrompt extends Base {
   }
 
   getCurrentValue() {
-    var choices = this.opt.choices.filter(function(choice) {
+    var choices = this.opt.choices.filter(function (choice) {
       return Boolean(choice.checked) && !choice.disabled;
     });
 
@@ -198,12 +198,12 @@ class CheckboxPrompt extends Base {
 
   onAllKey() {
     var shouldBeChecked = Boolean(
-      this.opt.choices.find(function(choice) {
+      this.opt.choices.find(function (choice) {
         return choice.type !== 'separator' && !choice.checked;
       })
     );
 
-    this.opt.choices.forEach(function(choice) {
+    this.opt.choices.forEach(function (choice) {
       if (choice.type !== 'separator') {
         choice.checked = shouldBeChecked;
       }
@@ -213,7 +213,7 @@ class CheckboxPrompt extends Base {
   }
 
   onInverseKey() {
-    this.opt.choices.forEach(function(choice) {
+    this.opt.choices.forEach(function (choice) {
       if (choice.type !== 'separator') {
         choice.checked = !choice.checked;
       }
@@ -240,7 +240,7 @@ function renderChoices(choices, pointer) {
   var output = '';
   var separatorOffset = 0;
 
-  choices.forEach(function(choice, i) {
+  choices.forEach(function (choice, i) {
     if (choice.type === 'separator') {
       separatorOffset++;
       output += ' ' + choice + '\n';

@@ -6,7 +6,7 @@
 var _ = {
   assign: require('lodash/assign'),
   defaults: require('lodash/defaults'),
-  clone: require('lodash/clone')
+  clone: require('lodash/clone'),
 };
 var chalk = require('chalk');
 var runAsync = require('run-async');
@@ -19,16 +19,16 @@ class Prompt {
     // Setup instance defaults property
     _.assign(this, {
       answers: answers,
-      status: 'pending'
+      status: 'pending',
     });
 
     // Set defaults prompt options
     this.opt = _.defaults(_.clone(question), {
       validate: () => true,
-      filter: val => val,
+      filter: (val) => val,
       when: () => true,
       suffix: '',
-      prefix: chalk.green('?')
+      prefix: chalk.green('?'),
     });
 
     // Make sure name is present
@@ -56,8 +56,8 @@ class Prompt {
    */
 
   run() {
-    return new Promise(resolve => {
-      this._run(value => resolve(value));
+    return new Promise((resolve) => {
+      this._run((value) => resolve(value));
     });
   }
 
@@ -93,31 +93,31 @@ class Prompt {
     var validate = runAsync(this.opt.validate);
     var asyncFilter = runAsync(this.opt.filter);
     var validation = submit.pipe(
-      flatMap(value =>
+      flatMap((value) =>
         asyncFilter(value, self.answers).then(
-          filteredValue =>
+          (filteredValue) =>
             validate(filteredValue, self.answers).then(
-              isValid => ({ isValid: isValid, value: filteredValue }),
-              err => ({ isValid: err, value: filteredValue })
+              (isValid) => ({ isValid: isValid, value: filteredValue }),
+              (err) => ({ isValid: err, value: filteredValue })
             ),
-          err => ({ isValid: err })
+          (err) => ({ isValid: err })
         )
       ),
       share()
     );
 
     var success = validation.pipe(
-      filter(state => state.isValid === true),
+      filter((state) => state.isValid === true),
       take(1)
     );
     var error = validation.pipe(
-      filter(state => state.isValid !== true),
+      filter((state) => state.isValid !== true),
       takeUntil(success)
     );
 
     return {
       success: success,
-      error: error
+      error: error,
     };
   }
 

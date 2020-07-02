@@ -6,14 +6,14 @@ const chalk = require('chalk');
 const helpChoice = {
   key: 'h',
   name: 'Help, list all options',
-  value: undefined
+  value: undefined,
 };
 
 module.exports = createPrompt((config, done) => {
   const {
     choices,
     default: defaultKey = 'h',
-    expanded: defaultExpandState = false
+    expanded: defaultExpandState = false,
   } = config;
   const [status, setStatus] = useState('pending');
   const [value, setValue] = useState('');
@@ -56,7 +56,7 @@ module.exports = createPrompt((config, done) => {
   // Collapsed display style
   let longChoices = '';
   let shortChoices = allChoices
-    .map(choice => {
+    .map((choice) => {
       if (choice.key === defaultKey) {
         return choice.key.toUpperCase();
       }
@@ -70,7 +70,7 @@ module.exports = createPrompt((config, done) => {
   if (expanded) {
     shortChoices = '';
     longChoices = allChoices
-      .map(choice => {
+      .map((choice) => {
         const line = `  ${choice.key}) ${choice.name || choice.value}`;
         if (choice.key === value.toLowerCase()) {
           return chalk.cyan(line);
@@ -94,6 +94,6 @@ module.exports = createPrompt((config, done) => {
 
   return [
     `${prefix} ${message}${shortChoices} ${value}`,
-    [longChoices, helpTip, error].filter(Boolean).join('\n')
+    [longChoices, helpTip, error].filter(Boolean).join('\n'),
   ];
 });

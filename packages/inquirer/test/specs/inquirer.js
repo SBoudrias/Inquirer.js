@@ -13,19 +13,19 @@ var { Observable } = require('rxjs');
 var inquirer = require('../../lib/inquirer');
 var autosubmit = require('../helpers/events').autosubmit;
 
-describe('inquirer.prompt', function() {
-  beforeEach(function() {
+describe('inquirer.prompt', function () {
+  beforeEach(function () {
     this.prompt = inquirer.createPromptModule();
   });
 
-  it("should close and create a new readline instances each time it's called", function() {
+  it("should close and create a new readline instances each time it's called", function () {
     var ctx = this;
     var rl1;
 
     var promise = this.prompt({
       type: 'confirm',
       name: 'q1',
-      message: 'message'
+      message: 'message',
     });
 
     rl1 = promise.ui.rl;
@@ -39,7 +39,7 @@ describe('inquirer.prompt', function() {
       var promise2 = ctx.prompt({
         type: 'confirm',
         name: 'q1',
-        message: 'message'
+        message: 'message',
       });
 
       rl2 = promise2.ui.rl;
@@ -54,89 +54,89 @@ describe('inquirer.prompt', function() {
     });
   });
 
-  it('should take a prompts array and return answers', function() {
+  it('should take a prompts array and return answers', function () {
     var prompts = [
       {
         type: 'confirm',
         name: 'q1',
-        message: 'message'
+        message: 'message',
       },
       {
         type: 'confirm',
         name: 'q2',
         message: 'message',
-        default: false
-      }
+        default: false,
+      },
     ];
 
     var promise = this.prompt(prompts);
     autosubmit(promise.ui);
 
-    return promise.then(answers => {
+    return promise.then((answers) => {
       expect(answers.q1).to.equal(true);
       expect(answers.q2).to.equal(false);
     });
   });
 
-  it('should take a prompts array with nested names', function() {
+  it('should take a prompts array with nested names', function () {
     var prompts = [
       {
         type: 'confirm',
         name: 'foo.bar.q1',
-        message: 'message'
+        message: 'message',
       },
       {
         type: 'confirm',
         name: 'foo.q2',
         message: 'message',
-        default: false
-      }
+        default: false,
+      },
     ];
 
     var promise = this.prompt(prompts);
     autosubmit(promise.ui);
 
-    return promise.then(answers => {
+    return promise.then((answers) => {
       expect(answers).to.deep.equal({
         foo: {
           bar: {
-            q1: true
+            q1: true,
           },
-          q2: false
-        }
+          q2: false,
+        },
       });
     });
   });
 
-  it('should take a single prompt and return answer', function() {
+  it('should take a single prompt and return answer', function () {
     var prompt = {
       type: 'input',
       name: 'q1',
       message: 'message',
-      default: 'bar'
+      default: 'bar',
     };
 
     var promise = this.prompt(prompt);
 
     promise.ui.rl.emit('line');
-    return promise.then(answers => {
+    return promise.then((answers) => {
       expect(answers.q1).to.equal('bar');
     });
   });
 
-  it('should parse `message` if passed as a function', function() {
+  it('should parse `message` if passed as a function', function () {
     var stubMessage = 'foo';
-    this.prompt.registerPrompt('stub', function(params) {
+    this.prompt.registerPrompt('stub', function (params) {
       this.opt = {
-        when: function() {
+        when: function () {
           return true;
-        }
+        },
       };
       this.run = sinon.stub().returns(Promise.resolve());
       expect(params.message).to.equal(stubMessage);
     });
 
-    var msgFunc = function(answers) {
+    var msgFunc = function (answers) {
       expect(answers.name1).to.equal('bar');
       return stubMessage;
     };
@@ -146,13 +146,13 @@ describe('inquirer.prompt', function() {
         type: 'input',
         name: 'name1',
         message: 'message',
-        default: 'bar'
+        default: 'bar',
       },
       {
         type: 'stub',
         name: 'name',
-        message: msgFunc
-      }
+        message: msgFunc,
+      },
     ];
 
     var promise = this.prompt(prompts);
@@ -164,13 +164,13 @@ describe('inquirer.prompt', function() {
     });
   });
 
-  it('should run asynchronous `message`', function(done) {
+  it('should run asynchronous `message`', function (done) {
     var stubMessage = 'foo';
-    this.prompt.registerPrompt('stub', function(params) {
+    this.prompt.registerPrompt('stub', function (params) {
       this.opt = {
-        when: function() {
+        when: function () {
           return true;
-        }
+        },
       };
       this.run = sinon.stub().returns(Promise.resolve());
       expect(params.message).to.equal(stubMessage);
@@ -182,32 +182,32 @@ describe('inquirer.prompt', function() {
         type: 'input',
         name: 'name1',
         message: 'message',
-        default: 'bar'
+        default: 'bar',
       },
       {
         type: 'stub',
         name: 'name',
-        message: function(answers) {
+        message: function (answers) {
           expect(answers.name1).to.equal('bar');
           var goOn = this.async();
           setTimeout(() => {
             goOn(null, stubMessage);
           }, 0);
-        }
-      }
+        },
+      },
     ];
 
     var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
   });
 
-  it('should parse `default` if passed as a function', function(done) {
+  it('should parse `default` if passed as a function', function (done) {
     var stubDefault = 'foo';
-    this.prompt.registerPrompt('stub', function(params) {
+    this.prompt.registerPrompt('stub', function (params) {
       this.opt = {
-        when: function() {
+        when: function () {
           return true;
-        }
+        },
       };
       this.run = sinon.stub().returns(Promise.resolve());
       expect(params.default).to.equal(stubDefault);
@@ -219,24 +219,24 @@ describe('inquirer.prompt', function() {
         type: 'input',
         name: 'name1',
         message: 'message',
-        default: 'bar'
+        default: 'bar',
       },
       {
         type: 'stub',
         name: 'name',
         message: 'message',
-        default: function(answers) {
+        default: function (answers) {
           expect(answers.name1).to.equal('bar');
           return stubDefault;
-        }
-      }
+        },
+      },
     ];
 
     var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
   });
 
-  it('should run asynchronous `default`', function() {
+  it('should run asynchronous `default`', function () {
     var goesInDefault = false;
     var input2Default = 'foo';
     var promise;
@@ -245,13 +245,13 @@ describe('inquirer.prompt', function() {
         type: 'input',
         name: 'name1',
         message: 'message',
-        default: 'bar'
+        default: 'bar',
       },
       {
         type: 'input2',
         name: 'q2',
         message: 'message',
-        default: function(answers) {
+        default: function (answers) {
           goesInDefault = true;
           expect(answers.name1).to.equal('bar');
           var goOn = this.async();
@@ -261,21 +261,21 @@ describe('inquirer.prompt', function() {
           setTimeout(() => {
             promise.ui.rl.emit('line');
           }, 10);
-        }
-      }
+        },
+      },
     ];
 
     promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
 
-    return promise.then(answers => {
+    return promise.then((answers) => {
       expect(goesInDefault).to.equal(true);
       expect(answers.q2).to.equal(input2Default);
     });
   });
 
-  it('should pass previous answers to the prompt constructor', function(done) {
-    this.prompt.registerPrompt('stub', function(params, rl, answers) {
+  it('should pass previous answers to the prompt constructor', function (done) {
+    this.prompt.registerPrompt('stub', function (params, rl, answers) {
       this.run = sinon.stub().returns(Promise.resolve());
       expect(answers.name1).to.equal('bar');
       done();
@@ -286,27 +286,27 @@ describe('inquirer.prompt', function() {
         type: 'input',
         name: 'name1',
         message: 'message',
-        default: 'bar'
+        default: 'bar',
       },
       {
         type: 'stub',
         name: 'name',
-        message: 'message'
-      }
+        message: 'message',
+      },
     ];
 
     var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
   });
 
-  it('should parse `choices` if passed as a function', function(done) {
+  it('should parse `choices` if passed as a function', function (done) {
     var stubChoices = ['foo', 'bar'];
-    this.prompt.registerPrompt('stub', function(params) {
+    this.prompt.registerPrompt('stub', function (params) {
       this.run = sinon.stub().returns(Promise.resolve());
       this.opt = {
-        when: function() {
+        when: function () {
           return true;
-        }
+        },
       };
       expect(params.choices).to.equal(stubChoices);
       done();
@@ -317,33 +317,33 @@ describe('inquirer.prompt', function() {
         type: 'input',
         name: 'name1',
         message: 'message',
-        default: 'bar'
+        default: 'bar',
       },
       {
         type: 'stub',
         name: 'name',
         message: 'message',
-        choices: function(answers) {
+        choices: function (answers) {
           expect(answers.name1).to.equal('bar');
           return stubChoices;
-        }
-      }
+        },
+      },
     ];
 
     var promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
   });
 
-  it('should returns a promise', function(done) {
+  it('should returns a promise', function (done) {
     var prompt = {
       type: 'input',
       name: 'q1',
       message: 'message',
-      default: 'bar'
+      default: 'bar',
     };
 
     var promise = this.prompt(prompt);
-    promise.then(answers => {
+    promise.then((answers) => {
       expect(answers.q1).to.equal('bar');
       done();
     });
@@ -351,28 +351,28 @@ describe('inquirer.prompt', function() {
     promise.ui.rl.emit('line');
   });
 
-  it('should expose the Reactive interface', function(done) {
+  it('should expose the Reactive interface', function (done) {
     var prompts = [
       {
         type: 'input',
         name: 'name1',
         message: 'message',
-        default: 'bar'
+        default: 'bar',
       },
       {
         type: 'input',
         name: 'name',
         message: 'message',
-        default: 'doe'
-      }
+        default: 'doe',
+      },
     ];
 
     var promise = this.prompt(prompts);
     var spy = sinon.spy();
     promise.ui.process.subscribe(
       spy,
-      function() {},
-      function() {
+      function () {},
+      function () {
         sinon.assert.calledWith(spy, { name: 'name1', answer: 'bar' });
         sinon.assert.calledWith(spy, { name: 'name', answer: 'doe' });
         done();
@@ -382,26 +382,26 @@ describe('inquirer.prompt', function() {
     autosubmit(promise.ui);
   });
 
-  it('should expose the UI', function(done) {
+  it('should expose the UI', function (done) {
     var promise = this.prompt([]);
     expect(promise.ui.answers).to.be.an('object');
     done();
   });
 
-  it('takes an Observable as question', function() {
+  it('takes an Observable as question', function () {
     var promise;
-    var prompts = Observable.create(function(obs) {
+    var prompts = Observable.create(function (obs) {
       obs.next({
         type: 'confirm',
         name: 'q1',
-        message: 'message'
+        message: 'message',
       });
       setTimeout(() => {
         obs.next({
           type: 'confirm',
           name: 'q2',
           message: 'message',
-          default: false
+          default: false,
         });
         obs.complete();
         promise.ui.rl.emit('line');
@@ -411,47 +411,47 @@ describe('inquirer.prompt', function() {
     promise = this.prompt(prompts);
     promise.ui.rl.emit('line');
 
-    return promise.then(answers => {
+    return promise.then((answers) => {
       expect(answers.q1).to.equal(true);
       expect(answers.q2).to.equal(false);
     });
   });
 
-  it('should take a prompts array and answers and return answers', function() {
+  it('should take a prompts array and answers and return answers', function () {
     var prompts = [
       {
         type: 'confirm',
         name: 'q1',
-        message: 'message'
-      }
+        message: 'message',
+      },
     ];
 
     var answers = { prefiled: true };
     var promise = this.prompt(prompts, answers);
     autosubmit(promise.ui);
 
-    return promise.then(answers => {
+    return promise.then((answers) => {
       expect(answers.prefiled).to.equal(true);
       expect(answers.q1).to.equal(true);
     });
   });
 
-  describe('hierarchical mode (`when`)', function() {
-    it('should pass current answers to `when`', function() {
+  describe('hierarchical mode (`when`)', function () {
+    it('should pass current answers to `when`', function () {
       var prompts = [
         {
           type: 'confirm',
           name: 'q1',
-          message: 'message'
+          message: 'message',
         },
         {
           name: 'q2',
           message: 'message',
-          when: function(answers) {
+          when: function (answers) {
             expect(answers).to.be.an('object');
             expect(answers.q1).to.equal(true);
-          }
-        }
+          },
+        },
       ];
 
       var promise = this.prompt(prompts);
@@ -460,88 +460,88 @@ describe('inquirer.prompt', function() {
       return promise;
     });
 
-    it('should run prompt if `when` returns true', function() {
+    it('should run prompt if `when` returns true', function () {
       var goesInWhen = false;
       var prompts = [
         {
           type: 'confirm',
           name: 'q1',
-          message: 'message'
+          message: 'message',
         },
         {
           type: 'input',
           name: 'q2',
           message: 'message',
           default: 'bar-var',
-          when: function() {
+          when: function () {
             goesInWhen = true;
             return true;
-          }
-        }
+          },
+        },
       ];
 
       var promise = this.prompt(prompts);
       autosubmit(promise.ui);
 
-      return promise.then(answers => {
+      return promise.then((answers) => {
         expect(goesInWhen).to.equal(true);
         expect(answers.q2).to.equal('bar-var');
       });
     });
 
-    it('should run prompt if `when` is true', function() {
+    it('should run prompt if `when` is true', function () {
       var prompts = [
         {
           type: 'confirm',
           name: 'q1',
-          message: 'message'
+          message: 'message',
         },
         {
           type: 'input',
           name: 'q2',
           message: 'message',
           default: 'bar-var',
-          when: true
-        }
+          when: true,
+        },
       ];
 
       var promise = this.prompt(prompts);
       autosubmit(promise.ui);
 
-      return promise.then(answers => {
+      return promise.then((answers) => {
         expect(answers.q2).to.equal('bar-var');
       });
     });
 
-    it('should not run prompt if `when` returns false', function() {
+    it('should not run prompt if `when` returns false', function () {
       var goesInWhen = false;
       var prompts = [
         {
           type: 'confirm',
           name: 'q1',
-          message: 'message'
+          message: 'message',
         },
         {
           type: 'confirm',
           name: 'q2',
           message: 'message',
-          when: function() {
+          when: function () {
             goesInWhen = true;
             return false;
-          }
+          },
         },
         {
           type: 'input',
           name: 'q3',
           message: 'message',
-          default: 'foo'
-        }
+          default: 'foo',
+        },
       ];
 
       var promise = this.prompt(prompts);
       autosubmit(promise.ui);
 
-      return promise.then(answers => {
+      return promise.then((answers) => {
         expect(goesInWhen).to.equal(true);
         expect(answers.q2).to.equal(undefined);
         expect(answers.q3).to.equal('foo');
@@ -549,52 +549,52 @@ describe('inquirer.prompt', function() {
       });
     });
 
-    it('should not run prompt if `when` is false', function() {
+    it('should not run prompt if `when` is false', function () {
       var prompts = [
         {
           type: 'confirm',
           name: 'q1',
-          message: 'message'
+          message: 'message',
         },
         {
           type: 'confirm',
           name: 'q2',
           message: 'message',
-          when: false
+          when: false,
         },
         {
           type: 'input',
           name: 'q3',
           message: 'message',
-          default: 'foo'
-        }
+          default: 'foo',
+        },
       ];
 
       var promise = this.prompt(prompts);
       autosubmit(promise.ui);
 
-      return promise.then(answers => {
+      return promise.then((answers) => {
         expect(answers.q2).to.equal(undefined);
         expect(answers.q3).to.equal('foo');
         expect(answers.q1).to.equal(true);
       });
     });
 
-    it('should run asynchronous `when`', function() {
+    it('should run asynchronous `when`', function () {
       var promise;
       var goesInWhen = false;
       var prompts = [
         {
           type: 'confirm',
           name: 'q1',
-          message: 'message'
+          message: 'message',
         },
         {
           type: 'input',
           name: 'q2',
           message: 'message',
           default: 'foo-bar',
-          when: function() {
+          when: function () {
             goesInWhen = true;
             var goOn = this.async();
             setTimeout(() => {
@@ -603,41 +603,41 @@ describe('inquirer.prompt', function() {
             setTimeout(() => {
               promise.ui.rl.emit('line');
             }, 10);
-          }
-        }
+          },
+        },
       ];
 
       promise = this.prompt(prompts);
       autosubmit(promise.ui);
 
-      return promise.then(answers => {
+      return promise.then((answers) => {
         expect(goesInWhen).to.equal(true);
         expect(answers.q2).to.equal('foo-bar');
       });
     });
 
-    it('should get the value which set in `when` on returns false', function() {
+    it('should get the value which set in `when` on returns false', function () {
       var prompts = [
         {
           name: 'q',
           message: 'message',
-          when: function(answers) {
+          when: function (answers) {
             answers.q = 'foo';
             return false;
-          }
-        }
+          },
+        },
       ];
 
       var promise = this.prompt(prompts);
       autosubmit(promise.ui);
 
-      return promise.then(answers => {
+      return promise.then((answers) => {
         expect(answers.q).to.equal('foo');
       });
     });
 
-    it('should not run prompt if answer exists for question', function() {
-      var throwFunc = function(step) {
+    it('should not run prompt if answer exists for question', function () {
+      var throwFunc = function (step) {
         throw new Error(`askAnswered Error ${step}`);
       };
       var prompts = [
@@ -649,44 +649,44 @@ describe('inquirer.prompt', function() {
           transformer: throwFunc.bind(undefined, 'transformer'),
           filter: throwFunc.bind(undefined, 'filter'),
           message: 'message',
-          default: 'newValue'
-        }
+          default: 'newValue',
+        },
       ];
 
       var answers = { prefiled: 'prefiled' };
       var promise = this.prompt(prompts, answers);
       autosubmit(promise.ui);
 
-      return promise.then(answers => {
+      return promise.then((answers) => {
         expect(answers.prefiled).to.equal('prefiled');
       });
     });
 
-    it('should run prompt if answer exists for question and askAnswered is set', function() {
+    it('should run prompt if answer exists for question and askAnswered is set', function () {
       var prompts = [
         {
           askAnswered: true,
           type: 'input',
           name: 'prefiled',
           message: 'message',
-          default: 'newValue'
-        }
+          default: 'newValue',
+        },
       ];
 
       var answers = { prefiled: 'prefiled' };
       var promise = this.prompt(prompts, answers);
       autosubmit(promise.ui);
 
-      return promise.then(answers => {
+      return promise.then((answers) => {
         expect(answers.prefiled).to.equal('newValue');
       });
     });
   });
 
-  describe('#registerPrompt()', function() {
-    it('register new prompt types', function(done) {
+  describe('#registerPrompt()', function () {
+    it('register new prompt types', function (done) {
       var questions = [{ type: 'foo', message: 'something' }];
-      inquirer.registerPrompt('foo', function(question, rl, answers) {
+      inquirer.registerPrompt('foo', function (question, rl, answers) {
         expect(question).to.eql(questions[0]);
         expect(answers).to.eql({});
         this.run = sinon.stub().returns(Promise.resolve());
@@ -696,9 +696,9 @@ describe('inquirer.prompt', function() {
       inquirer.prompt(questions);
     });
 
-    it('overwrite default prompt types', function(done) {
+    it('overwrite default prompt types', function (done) {
       var questions = [{ type: 'confirm', message: 'something' }];
-      inquirer.registerPrompt('confirm', function() {
+      inquirer.registerPrompt('confirm', function () {
         this.run = sinon.stub().returns(Promise.resolve());
         done();
       });
@@ -708,8 +708,8 @@ describe('inquirer.prompt', function() {
     });
   });
 
-  describe('#restoreDefaultPrompts()', function() {
-    it('restore default prompts', function() {
+  describe('#restoreDefaultPrompts()', function () {
+    it('restore default prompts', function () {
       var ConfirmPrompt = inquirer.prompt.prompts.confirm;
       inquirer.registerPrompt('confirm', _.noop);
       inquirer.restoreDefaultPrompts();
@@ -718,9 +718,9 @@ describe('inquirer.prompt', function() {
   });
 
   // See: https://github.com/SBoudrias/Inquirer.js/pull/326
-  it('does not throw exception if cli-width reports width of 0', function() {
+  it('does not throw exception if cli-width reports width of 0', function () {
     var original = process.stdout.getWindowSize;
-    process.stdout.getWindowSize = function() {
+    process.stdout.getWindowSize = function () {
       return [0];
     };
 
@@ -730,40 +730,40 @@ describe('inquirer.prompt', function() {
       {
         type: 'confirm',
         name: 'q1',
-        message: 'message'
-      }
+        message: 'message',
+      },
     ];
 
     var promise = prompt(prompts);
     promise.ui.rl.emit('line');
 
-    return promise.then(answers => {
+    return promise.then((answers) => {
       process.stdout.getWindowSize = original;
       expect(answers.q1).to.equal(true);
     });
   });
 
-  describe('Non-TTY checks', function() {
+  describe('Non-TTY checks', function () {
     let original;
 
-    before(function() {
+    before(function () {
       original = process.stdin.isTTY;
       delete process.stdin.isTTY;
     });
 
-    after(function() {
+    after(function () {
       process.stdin.isTTY = original;
     });
 
-    it('Throw an exception when run in non-tty', function() {
+    it('Throw an exception when run in non-tty', function () {
       var prompt = inquirer.createPromptModule({ skipTTYChecks: false });
 
       var prompts = [
         {
           type: 'confirm',
           name: 'q1',
-          message: 'message'
-        }
+          message: 'message',
+        },
       ];
 
       var promise = prompt(prompts);
@@ -773,24 +773,24 @@ describe('inquirer.prompt', function() {
           // Failure
           expect(true).to.equal(false);
         })
-        .catch(error => {
+        .catch((error) => {
           expect(error.isTtyError).to.equal(true);
         });
     });
 
-    it("Don't throw an exception when run in non-tty by default", function(done) {
+    it("Don't throw an exception when run in non-tty by default", function (done) {
       var prompt = inquirer.createPromptModule();
       var prompts = [
         {
           type: 'confirm',
           name: 'q1',
-          message: 'message'
+          message: 'message',
         },
         {
           type: 'confirm',
           name: 'q2',
-          message: 'message'
-        }
+          message: 'message',
+        },
       ];
 
       var promise = prompt(prompts);
@@ -799,25 +799,25 @@ describe('inquirer.prompt', function() {
         .then(() => {
           done();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           expect(error.isTtyError).to.equal(false);
         });
     });
 
-    it("Don't throw an exception when run in non-tty and skipTTYChecks is true", function(done) {
+    it("Don't throw an exception when run in non-tty and skipTTYChecks is true", function (done) {
       var prompt = inquirer.createPromptModule({ skipTTYChecks: true });
       var prompts = [
         {
           type: 'confirm',
           name: 'q1',
-          message: 'message'
+          message: 'message',
         },
         {
           type: 'confirm',
           name: 'q2',
-          message: 'message'
-        }
+          message: 'message',
+        },
       ];
 
       var promise = prompt(prompts);
@@ -826,25 +826,25 @@ describe('inquirer.prompt', function() {
         .then(() => {
           done();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           expect(error.isTtyError).to.equal(false);
         });
     });
 
-    it("Don't throw an exception when run in non-tty and custom input is provided", function(done) {
+    it("Don't throw an exception when run in non-tty and custom input is provided", function (done) {
       var prompt = inquirer.createPromptModule({ input: new stream.Readable() });
       var prompts = [
         {
           type: 'confirm',
           name: 'q1',
-          message: 'message'
+          message: 'message',
         },
         {
           type: 'confirm',
           name: 'q2',
-          message: 'message'
-        }
+          message: 'message',
+        },
       ];
 
       var promise = prompt(prompts);
@@ -853,24 +853,24 @@ describe('inquirer.prompt', function() {
         .then(() => {
           done();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           expect(error.isTtyError).to.equal(false);
         });
     });
 
-    it('Throw an exception when run in non-tty and custom input is provided with skipTTYChecks: false', function() {
+    it('Throw an exception when run in non-tty and custom input is provided with skipTTYChecks: false', function () {
       var prompt = inquirer.createPromptModule({
         input: new stream.Readable(),
-        skipTTYChecks: false
+        skipTTYChecks: false,
       });
 
       var prompts = [
         {
           type: 'confirm',
           name: 'q1',
-          message: 'message'
-        }
+          message: 'message',
+        },
       ];
 
       var promise = prompt(prompts);
@@ -880,19 +880,19 @@ describe('inquirer.prompt', function() {
           // Failure
           expect(true).to.equal(false);
         })
-        .catch(error => {
+        .catch((error) => {
           expect(error.isTtyError).to.equal(true);
         });
     });
 
-    it('No exception when using tty other than process.stdin', function() {
+    it('No exception when using tty other than process.stdin', function () {
       // Manually opens a new tty
       var input = new tty.ReadStream(fs.openSync('/dev/tty', 'r+'));
 
       // Uses manually opened tty as input instead of process.stdin
       var prompt = inquirer.createPromptModule({
         input: input,
-        skipTTYChecks: false
+        skipTTYChecks: false,
       });
 
       var prompts = [
@@ -900,8 +900,8 @@ describe('inquirer.prompt', function() {
           type: 'input',
           name: 'q1',
           default: 'foo',
-          message: 'message'
-        }
+          message: 'message',
+        },
       ];
 
       var promise = prompt(prompts);
@@ -910,7 +910,7 @@ describe('inquirer.prompt', function() {
       // Release the input tty socket
       input.unref();
 
-      return promise.then(answers => {
+      return promise.then((answers) => {
         expect(answers).to.deep.equal({ q1: 'foo' });
       });
     });

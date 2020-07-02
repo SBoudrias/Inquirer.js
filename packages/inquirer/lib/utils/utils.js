@@ -1,6 +1,6 @@
 'use strict';
 var _ = {
-  isFunction: require('lodash/isFunction')
+  isFunction: require('lodash/isFunction'),
 };
 var { from, of } = require('rxjs');
 var runAsync = require('run-async');
@@ -14,13 +14,13 @@ var runAsync = require('run-async');
  * @return {Rx.Observable}   - Observable emitting once value is known
  */
 
-exports.fetchAsyncQuestionProperty = function(question, prop, answers) {
+exports.fetchAsyncQuestionProperty = function (question, prop, answers) {
   if (!_.isFunction(question[prop])) {
     return of(question);
   }
 
   return from(
-    runAsync(question[prop])(answers).then(value => {
+    runAsync(question[prop])(answers).then((value) => {
       question[prop] = value;
       return question;
     })

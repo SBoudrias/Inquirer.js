@@ -9,24 +9,24 @@ const expand = require('.');
       {
         key: 'y',
         name: 'Overwrite',
-        value: 'overwrite'
+        value: 'overwrite',
       },
       {
         key: 'a',
         name: 'Overwrite this one and all next',
-        value: 'overwrite_all'
+        value: 'overwrite_all',
       },
       {
         key: 'd',
         name: 'Show diff',
-        value: 'diff'
+        value: 'diff',
       },
       {
         key: 'x',
         name: 'Abort',
-        value: 'abort'
-      }
-    ]
+        value: 'abort',
+      },
+    ],
   });
   console.log('Answer:', answer);
 
@@ -37,24 +37,24 @@ const expand = require('.');
       {
         key: 'y',
         name: 'Overwrite',
-        value: 'overwrite'
+        value: 'overwrite',
       },
       {
         key: 'a',
         name: 'Overwrite this one and all next',
-        value: 'overwrite_all'
+        value: 'overwrite_all',
       },
       {
         key: 'd',
         name: 'Show diff',
-        value: 'diff'
+        value: 'diff',
       },
       {
         key: 'x',
         name: 'Abort',
-        value: 'abort'
-      }
-    ]
+        value: 'abort',
+      },
+    ],
   });
   console.log('Answer:', answer);
 
@@ -65,24 +65,24 @@ const expand = require('.');
       {
         key: 'y',
         name: 'Overwrite',
-        value: 'overwrite'
+        value: 'overwrite',
       },
       {
         key: 'a',
         name: 'Overwrite this one and all next',
-        value: 'overwrite_all'
+        value: 'overwrite_all',
       },
       {
         key: 'd',
         name: 'Show diff',
-        value: 'diff'
+        value: 'diff',
       },
       {
         key: 'x',
         name: 'Abort',
-        value: 'abort'
-      }
-    ]
+        value: 'abort',
+      },
+    ],
   });
   console.log('Answer:', answer);
 })();

@@ -3,17 +3,17 @@
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
-    "babel-jest": "^25.1.0",
+    "babel-jest": "^26.1.0",
     "codecov": "^3.6.5",
-    "eslint": "^6.8.0",
+    "eslint": "^7.3.1",
     "eslint-config-prettier": "^6.10.0",
-    "eslint-config-xo": "^0.30.0",
+    "eslint-config-xo": "^0.32.0",
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.3",
-    "jest": "^25.1.0",
+    "jest": "^26.1.0",
     "lerna": "^3.20.2",
     "lint-staged": "^10.0.8",
-    "prettier": "^1.19.1"
+    "prettier": "^2.0.5"
   },
   "workspaces": [
     "packages/*"

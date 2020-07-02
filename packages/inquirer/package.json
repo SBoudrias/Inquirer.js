@@ -21,9 +21,9 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "chalk-pipe": "^3.0.0",
+    "chalk-pipe": "^4.0.0",
     "cmdify": "^0.0.4",
-    "mocha": "^7.1.0",
+    "mocha": "^8.0.1",
     "mockery": "^2.1.0",
     "nyc": "^15.0.0",
     "sinon": "^9.0.0"
@@ -38,9 +38,9 @@
   "license": "MIT",
   "dependencies": {
     "ansi-escapes": "^4.2.1",
-    "chalk": "^3.0.0",
+    "chalk": "^4.1.0",
     "cli-cursor": "^3.1.0",
-    "cli-width": "^2.0.0",
+    "cli-width": "^3.0.0",
     "external-editor": "^3.0.3",
     "figures": "^3.0.0",
     "lodash": "^4.17.15",

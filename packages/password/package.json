@@ -19,7 +19,7 @@
   "repository": "SBoudrias/Inquirer.js",
   "dependencies": {
     "@inquirer/input": "^0.0.10-alpha.0",
-    "chalk": "^3.0.0"
+    "chalk": "^4.1.0"
   },
   "publishConfig": {
     "access": "public"

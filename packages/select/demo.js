@@ -9,11 +9,11 @@ const select = require('.');
       {
         name: 'npm',
         value: 'npm',
-        description: 'npm is the most popular package manager'
+        description: 'npm is the most popular package manager',
       },
       { name: 'yarn', value: 'yarn', description: 'yarn is an awesome package manager' },
-      { name: 'jspm', value: 'jspm', disabled: true }
-    ]
+      { name: 'jspm', value: 'jspm', disabled: true },
+    ],
   });
   console.log('Answer:', answer);
 
@@ -45,8 +45,8 @@ const select = require('.');
       { value: 'W' },
       { value: 'X' },
       { value: 'Y' },
-      { value: 'Z' }
-    ]
+      { value: 'Z' },
+    ],
   });
   console.log('Answer:', answer);
 })();

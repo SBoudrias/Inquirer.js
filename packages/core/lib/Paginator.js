@@ -1,7 +1,7 @@
 'use strict';
 
 const _ = {
-  flatten: require('lodash/flatten')
+  flatten: require('lodash/flatten'),
 };
 const chalk = require('chalk');
 const cliWidth = require('cli-width');

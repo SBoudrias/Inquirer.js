@@ -18,13 +18,13 @@ _.extend(stub, {
     mute: sinon.stub(),
     unmute: sinon.stub(),
     __raw__: '',
-    write: function(str) {
+    write: function (str) {
       this.__raw__ += str;
-    }
-  }
+    },
+  },
 });
 
-var ReadlineStub = function() {
+var ReadlineStub = function () {
   this.line = '';
   this.input = new EventEmitter();
   EventEmitter.apply(this, arguments);
