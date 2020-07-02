@@ -6,8 +6,12 @@ const select = require('.');
   answer = await select({
     message: 'Select a package manager',
     choices: [
-      { name: 'npm', value: 'npm' },
-      { name: 'yarn', value: 'yarn' },
+      {
+        name: 'npm',
+        value: 'npm',
+        description: 'npm is the most popular package manager'
+      },
+      { name: 'yarn', value: 'yarn', description: 'yarn is an awesome package manager' },
       { name: 'jspm', value: 'jspm', disabled: true }
     ]
   });
@@ -30,7 +34,7 @@ const select = require('.');
       { value: 'L' },
       { value: 'M' },
       { value: 'N' },
-      { value: 'O' },
+      { value: 'O', description: 'Letter O, not number 0' },
       { value: 'P' },
       { value: 'Q' },
       { value: 'R' },
