@@ -11,10 +11,11 @@ var chalk = require('chalk');
  */
 
 class Paginator {
-  constructor(screen, isInfinite) {
+  constructor(screen, options = {}) {
+    const { isInfinite = true } = options;
     this.lastIndex = 0;
     this.screen = screen;
-    this.isInfinite = isInfinite === undefined ? true : isInfinite;
+    this.isInfinite = isInfinite;
   }
 
   paginate(output, active, pageSize) {
@@ -31,8 +32,9 @@ class Paginator {
     if (lines.length <= pageSize) {
       return output;
     }
-    var getLinesFn = this.isInfinite ? this.getInfiniteLines : this.getFiniteLines;
-    var visibleLines = getLinesFn.call(this, lines, active, pageSize);
+    const visibleLines = this.isInfinite
+      ? this.getInfiniteLines(lines, active, pageSize)
+      : this.getFiniteLines(lines, active, pageSize);
     this.lastIndex = active;
     return (
       visibleLines.join('\n') +

@@ -79,7 +79,7 @@ b`);
   });
   describe('non infinite mode', function () {
     beforeEach(function () {
-      this.paginator = new Paginator(undefined, false);
+      this.paginator = new Paginator(undefined, { isInfinite: false });
     });
     it('shows start for as long as possible', function () {
       expect(getPage(this.paginator, 0)).equal(`\

@@ -49,8 +49,8 @@ class RawListPrompt extends Base {
     // Make sure no default is set (so it won't be printed)
     this.opt.default = null;
 
-    var shouldLoop = this.opt.loop === undefined ? true : this.opt.loop;
-    this.paginator = new Paginator(undefined, shouldLoop);
+    const shouldLoop = this.opt.loop === undefined ? true : this.opt.loop;
+    this.paginator = new Paginator(undefined, { isInfinite: shouldLoop });
   }
 
   /**
