@@ -42,7 +42,8 @@ class ListPrompt extends Base {
     // Make sure no default is set (so it won't be printed)
     this.opt.default = null;
 
-    this.paginator = new Paginator(this.screen);
+    const shouldLoop = this.opt.loop === undefined ? true : this.opt.loop;
+    this.paginator = new Paginator(this.screen, { isInfinite: shouldLoop });
   }
 
   /**

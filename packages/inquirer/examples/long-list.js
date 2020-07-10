@@ -24,6 +24,7 @@ inquirer
   .prompt([
     {
       type: 'list',
+      loop: false,
       name: 'letter',
       message: "What's your favorite letter?",
       choices: choices,

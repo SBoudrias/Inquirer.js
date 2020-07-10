@@ -223,4 +223,16 @@ describe('`list` prompt', function () {
     this.rl.input.emit('keypress', '', { name: 'down' });
     this.rl.emit('line');
   });
+
+  it('paginator uses non infinite version with loop:false', function () {
+    var list = new List(
+      {
+        name: 'numbers',
+        choices: [1, 2, 3],
+        loop: false,
+      },
+      this.rl
+    );
+    expect(list.paginator.isInfinite).equal(false);
+  });
 });
