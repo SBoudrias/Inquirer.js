@@ -15,6 +15,7 @@ var { map, takeUntil } = require('rxjs/operators');
 var Base = require('./base');
 var observe = require('../utils/events');
 var Paginator = require('../utils/paginator');
+var incrementListIndex = require('../utils/incrementListIndex');
 
 class CheckboxPrompt extends Base {
   constructor(questions, rl, answers) {
@@ -37,7 +38,8 @@ class CheckboxPrompt extends Base {
     // Make sure no default is set (so it won't be printed)
     this.opt.default = null;
 
-    this.paginator = new Paginator(this.screen);
+    const shouldLoop = this.opt.loop === undefined ? true : this.opt.loop;
+    this.paginator = new Paginator(this.screen, { isInfinite: shouldLoop });
   }
 
   /**
@@ -170,14 +172,12 @@ class CheckboxPrompt extends Base {
   }
 
   onUpKey() {
-    var len = this.opt.choices.realLength;
-    this.pointer = this.pointer > 0 ? this.pointer - 1 : len - 1;
+    this.pointer = incrementListIndex(this.pointer, 'up', this.opt);
     this.render();
   }
 
   onDownKey() {
-    var len = this.opt.choices.realLength;
-    this.pointer = this.pointer < len - 1 ? this.pointer + 1 : 0;
+    this.pointer = incrementListIndex(this.pointer, 'down', this.opt);
     this.render();
   }
 
