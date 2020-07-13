@@ -277,4 +277,69 @@ describe('`checkbox` prompt', function () {
       });
     });
   });
+
+  describe('going out of boundaries', function () {
+    describe('when loop undefined / true', function () {
+      it('loops to bottom when too far up', async function () {
+        var promise = this.checkbox.run();
+
+        this.rl.input.emit('keypress', null, { name: 'up' });
+        this.rl.input.emit('keypress', null, { name: 'up' });
+
+        this.rl.input.emit('keypress', ' ', { name: 'space' });
+        this.rl.emit('line');
+
+        var answer = await promise;
+        expect(answer.length).to.equal(1);
+        expect(answer[0]).to.equal('choice 2');
+      });
+      it('loops to top when too far down', async function () {
+        var promise = this.checkbox.run();
+
+        this.rl.input.emit('keypress', null, { name: 'down' });
+        this.rl.input.emit('keypress', null, { name: 'down' });
+        this.rl.input.emit('keypress', null, { name: 'down' });
+
+        this.rl.input.emit('keypress', ' ', { name: 'space' });
+        this.rl.emit('line');
+
+        var answer = await promise;
+        expect(answer.length).to.equal(1);
+        expect(answer[0]).to.equal('choice 1');
+      });
+    });
+
+    describe('when loop: false', function () {
+      beforeEach(function () {
+        this.checkbox = new Checkbox(_.assign(this.fixture, { loop: false }), this.rl);
+      });
+      it('stays at top when too far up', async function () {
+        var promise = this.checkbox.run();
+
+        this.rl.input.emit('keypress', null, { name: 'up' });
+        this.rl.input.emit('keypress', null, { name: 'up' });
+
+        this.rl.input.emit('keypress', ' ', { name: 'space' });
+        this.rl.emit('line');
+
+        var answer = await promise;
+        expect(answer.length).to.equal(1);
+        expect(answer[0]).to.equal('choice 1');
+      });
+      it('stays at bottom when too far down', async function () {
+        var promise = this.checkbox.run();
+
+        this.rl.input.emit('keypress', null, { name: 'down' });
+        this.rl.input.emit('keypress', null, { name: 'down' });
+        this.rl.input.emit('keypress', null, { name: 'down' });
+
+        this.rl.input.emit('keypress', ' ', { name: 'space' });
+        this.rl.emit('line');
+
+        var answer = await promise;
+        expect(answer.length).to.equal(1);
+        expect(answer[0]).to.equal('choice 3');
+      });
+    });
+  });
 });

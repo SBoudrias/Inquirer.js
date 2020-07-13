@@ -243,7 +243,7 @@ See `examples/expand.js` for a running example.
 
 #### Checkbox - `{type: 'checkbox'}`
 
-Take `type`, `name`, `message`, `choices`[, `filter`, `validate`, `default`] properties. `default` is expected to be an Array of the checked choices value.
+Take `type`, `name`, `message`, `choices`[, `filter`, `validate`, `default`, `loop`] properties. `default` is expected to be an Array of the checked choices value.
 
 Choices marked as `{checked: true}` will be checked by default.
 
