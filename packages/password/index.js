@@ -14,7 +14,7 @@ module.exports = (config, ...args) => {
       default: undefined,
       transformer: (input, { isFinal }) => {
         if (config.mask) {
-          return Array(input.length).fill(config.mask).join('');
+          return String(config.mask).repeat(input.length);
         }
 
         if (!isFinal) {
