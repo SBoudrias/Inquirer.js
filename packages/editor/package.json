@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/editor",
-  "version": "0.0.5-alpha.0",
+  "version": "0.0.6-alpha.0",
   "description": "Inquirer multiline editor prompt",
   "main": "index.js",
   "repository": "SBoudrias/Inquirer.js",
@@ -13,7 +13,7 @@
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "license": "MIT",
   "dependencies": {
-    "@inquirer/core": "^0.0.12-alpha.0",
+    "@inquirer/core": "^0.0.13-alpha.0",
     "chalk": "^4.1.0",
     "external-editor": "^3.0.3"
   },
