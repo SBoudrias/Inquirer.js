@@ -6,6 +6,17 @@ var _ = {
 var MuteStream = require('mute-stream');
 var readline = require('readline');
 
+if (readline && readline.Interface) {
+  const oldClose = readline && readline.Interface && readline.Interface.prototype.close;
+  const wrapClose = function () {
+    this.terminal = false;
+    oldClose.call(this);
+  };
+  if (readline.Interface.prototype.close !== wrapClose) {
+    readline.Interface.prototype.close = wrapClose;
+  }
+}
+
 /**
  * Base interface class other can inherits from
  */
