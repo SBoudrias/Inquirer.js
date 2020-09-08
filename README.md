@@ -369,7 +369,7 @@ look at issues found on other command line - feel free to report any!
   - gnome-terminal (Terminal GNOME)
   - konsole
 
-## Know issues
+## Known issues
 
 <a name="issues"></a>
 
