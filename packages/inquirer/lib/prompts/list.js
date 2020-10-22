@@ -87,8 +87,11 @@ class ListPrompt extends Base {
     // Render question
     var message = this.getQuestion();
 
+    // Offers a custom help message on first render
     if (this.firstRender) {
-      message += chalk.dim('(Use arrow keys)');
+      message += chalk.dim(
+        this.opt.suffixDim ? `(${this.opt.suffixDim})` : '(Use arrow keys)'
+      );
     }
 
     // Render choices or answer depending on the state
