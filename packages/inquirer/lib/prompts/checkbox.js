@@ -39,7 +39,10 @@ class CheckboxPrompt extends Base {
     this.opt.default = null;
 
     const shouldLoop = this.opt.loop === undefined ? true : this.opt.loop;
-    this.paginator = new Paginator(this.screen, { isInfinite: shouldLoop });
+    this.paginator = new Paginator(this.screen, {
+      isInfinite: shouldLoop,
+      pageHelper: this.opt.pageHelper,
+    });
   }
 
   /**
@@ -92,15 +95,18 @@ class CheckboxPrompt extends Base {
     var message = this.getQuestion();
     var bottomContent = '';
 
+    // Offers a custom help message on first render
     if (!this.spaceKeyPressed) {
-      message +=
-        '(Press ' +
-        chalk.cyan.bold('<space>') +
-        ' to select, ' +
-        chalk.cyan.bold('<a>') +
-        ' to toggle all, ' +
-        chalk.cyan.bold('<i>') +
-        ' to invert selection)';
+      var helper = this.opt.helper
+        ? this.opt.helper
+        : '(Press ' +
+          chalk.cyan.bold('<space>') +
+          ' to select, ' +
+          chalk.cyan.bold('<a>') +
+          ' to toggle all, ' +
+          chalk.cyan.bold('<i>') +
+          ' to invert selection)';
+      message += helper;
     }
 
     // Render choices or answer depending on the state

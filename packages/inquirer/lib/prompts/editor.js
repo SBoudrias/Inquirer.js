@@ -52,7 +52,10 @@ class EditorPrompt extends Base {
     if (this.status === 'answered') {
       message += chalk.dim('Received');
     } else {
-      message += chalk.dim('Press <enter> to launch your preferred editor.');
+      var helper = this.opt.helper
+        ? this.opt.helper
+        : 'Press <enter> to launch your preferred editor.';
+      message += chalk.dim(helper);
     }
 
     if (error) {

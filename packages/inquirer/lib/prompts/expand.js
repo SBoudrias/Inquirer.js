@@ -44,7 +44,7 @@ class ExpandPrompt extends Base {
     // Setup the default string (capitalize the default key)
     this.opt.default = this.generateChoicesString(this.opt.choices, this.opt.default);
 
-    this.paginator = new Paginator(this.screen);
+    this.paginator = new Paginator(this.screen, { pageHelper: this.opt.pageHelper });
   }
 
   /**
@@ -87,7 +87,8 @@ class ExpandPrompt extends Base {
     } else if (this.status === 'expanded') {
       var choicesStr = renderChoices(this.opt.choices, this.selectedKey);
       message += this.paginator.paginate(choicesStr, this.selectedKey, this.opt.pageSize);
-      message += '\n  Answer: ';
+      var helper = this.opt.helper ? this.opt.helper : 'Answer: ';
+      message += `\n  ${helper}: `;
     }
 
     message += this.rl.line;

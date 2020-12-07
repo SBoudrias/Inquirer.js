@@ -50,7 +50,10 @@ class RawListPrompt extends Base {
     this.opt.default = null;
 
     const shouldLoop = this.opt.loop === undefined ? true : this.opt.loop;
-    this.paginator = new Paginator(undefined, { isInfinite: shouldLoop });
+    this.paginator = new Paginator(undefined, {
+      isInfinite: shouldLoop,
+      pageHelper: this.opt.pageHelper,
+    });
   }
 
   /**
@@ -99,7 +102,8 @@ class RawListPrompt extends Base {
       var choicesStr = renderChoices(this.opt.choices, this.selected);
       message +=
         '\n' + this.paginator.paginate(choicesStr, this.selected, this.opt.pageSize);
-      message += '\n  Answer: ';
+      var helper = this.opt.helper ? this.opt.helper : 'Answer';
+      message += `\n  ${helper}: `;
     }
     message += this.rl.line;
 

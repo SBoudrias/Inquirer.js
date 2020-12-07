@@ -43,7 +43,10 @@ class ListPrompt extends Base {
     this.opt.default = null;
 
     const shouldLoop = this.opt.loop === undefined ? true : this.opt.loop;
-    this.paginator = new Paginator(this.screen, { isInfinite: shouldLoop });
+    this.paginator = new Paginator(this.screen, {
+      isInfinite: shouldLoop,
+      pageHelper: this.opt.pageHelper,
+    });
   }
 
   /**
@@ -89,7 +92,8 @@ class ListPrompt extends Base {
 
     // Offers a custom help message on first render
     if (this.firstRender) {
-      message += chalk.dim(this.opt.suffixDim);
+      var helper = this.opt.helper ? this.opt.helper : '(Use arrow keys)';
+      message += chalk.dim(helper);
     }
 
     // Render choices or answer depending on the state

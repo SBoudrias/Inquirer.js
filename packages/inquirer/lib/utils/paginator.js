@@ -13,6 +13,7 @@ var chalk = require('chalk');
 class Paginator {
   constructor(screen, options = {}) {
     const { isInfinite = true } = options;
+    this.pageHelper = options.pageHelper;
     this.lastIndex = 0;
     this.screen = screen;
     this.isInfinite = isInfinite;
@@ -36,11 +37,10 @@ class Paginator {
       ? this.getInfiniteLines(lines, active, pageSize)
       : this.getFiniteLines(lines, active, pageSize);
     this.lastIndex = active;
-    return (
-      visibleLines.join('\n') +
-      '\n' +
-      chalk.dim('(Move up and down to reveal more choices)')
-    );
+    var pageHelper = this.pageHelper
+      ? this.pageHelper
+      : '(Move up and down to reveal more choices)';
+    return visibleLines.join('\n') + '\n' + chalk.dim(pageHelper);
   }
 
   getInfiniteLines(lines, active, pageSize) {

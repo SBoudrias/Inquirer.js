@@ -29,7 +29,8 @@ class Prompt {
       when: () => true,
       suffix: '',
       prefix: chalk.green('?'),
-      suffixDim: '(Use arrow keys)',
+      helper: undefined,
+      pageHelper: undefined,
     });
 
     // Make sure name is present
