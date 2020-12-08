@@ -125,4 +125,8 @@ y
 z`);
     });
   });
+  it('should show a custom helper on paginator footer message', function () {
+    this.paginator.pageHelper = 'Testing custom pageHelper';
+    expect(this.paginator.paginate(output)).to.contain(this.paginator.pageHelper);
+  });
 });

@@ -21,23 +21,27 @@ var prompts = [
   },
   {
     name: 'rawlist',
-    apis: ['filter', 'message', 'choices', 'requiredValues'],
+    apis: ['filter', 'message', 'choices', 'requiredValues', 'helper'],
   },
   {
     name: 'list',
-    apis: ['filter', 'message', 'choices', 'requiredValues'],
+    apis: ['filter', 'message', 'choices', 'requiredValues', 'helper'],
   },
   {
     name: 'expand',
-    apis: ['requiredValues', 'message'],
+    apis: ['requiredValues', 'message', 'helper'],
   },
   {
     name: 'checkbox',
-    apis: ['requiredValues', 'message', 'choices', 'filter', 'validate'],
+    apis: ['requiredValues', 'message', 'choices', 'filter', 'validate', 'helper'],
   },
   {
     name: 'password',
     apis: ['requiredValues', 'message', 'filter', 'validate', 'default'],
+  },
+  {
+    name: 'editor',
+    apis: ['message', 'helper'],
   },
 ];
 
@@ -359,6 +363,26 @@ var tests = {
           delete this.fixture.name;
           return new this.Prompt(this.fixture, this.rl);
         }).to.throw(/name/);
+      });
+    });
+  },
+
+  helper: function () {
+    describe('helper API', function () {
+      it('should show a custom helper message', function (done) {
+        this.fixture.helper = 'Testing helper API';
+        var prompt = new this.Prompt(this.fixture, this.rl);
+        prompt.run();
+        if (this.Prompt.name === 'ExpandPrompt') {
+          this.rl.emit('line', '');
+          setTimeout(() => {
+            expect(this.rl.output.__raw__).to.contain(this.fixture.helper);
+            done();
+          }, 10);
+        } else {
+          expect(this.rl.output.__raw__).to.contain(this.fixture.helper);
+          done();
+        }
       });
     });
   },

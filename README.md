@@ -8,10 +8,6 @@
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js?ref=badge_shield)
 
 A collection of common interactive command line user interfaces.
-## Changes made by me: JezerM
-All these changes are made for a "better" user experience, specially to custom those default messages to other idioms.
-- Added some custom `helpers` such as in Lists, Expands, and Checkbox.
-- Now, you can use `helper` to change side messages, and `pageHelper` to change the footer message on long lists.\
 
 ## Table of Contents
 
@@ -217,7 +213,7 @@ Separator instances have a property `type` equal to `separator`. This should all
 
 #### List - `{type: 'list'}`
 
-Take `type`, `name`, `message`, `choices`, `helper`, `pageHelper`, [ `default`, `filter`, `loop`] properties. (Note that
+Take `type`, `name`, `message`, `choices`, [ `default`, `filter`, `loop`, `helper`, `pageHelper`] properties. (Note that
 default must be the choice `index` in the array or a choice `value`)
 
 ![List prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/list.svg)
@@ -226,7 +222,7 @@ default must be the choice `index` in the array or a choice `value`)
 
 #### Raw List - `{type: 'rawlist'}`
 
-Take `type`, `name`, `message`, `choices`, `helper`, `pageHelper`, [ `default`, `filter`, `loop`] properties. (Note that
+Take `type`, `name`, `message`, `choices`, [ `default`, `filter`, `loop`, `helper`, `pageHelper`] properties. (Note that
 default must be the choice `index` in the array)
 
 ![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
@@ -235,7 +231,7 @@ default must be the choice `index` in the array)
 
 #### Expand - `{type: 'expand'}`
 
-Take `type`, `name`, `message`, `choices`, `helper`, [`default`] properties. (Note that
+Take `type`, `name`, `message`, `choices`, [`default`, `helper`] properties. (Note that
 default must be the choice `index` in the array. If `default` key not provided, then `help` will be used as default choice)
 
 Note that the `choices` object will take an extra parameter called `key` for the `expand` prompt. This parameter must be a single (lowercased) character. The `h` option is added by the prompt and shouldn't be defined by the user.
@@ -249,7 +245,7 @@ See `examples/expand.js` for a running example.
 
 #### Checkbox - `{type: 'checkbox'}`
 
-Take `type`, `name`, `message`, `choices`, `helper`, `pageHelper`, [`filter`, `validate`, `default`, `loop`] properties. `default` is expected to be an Array of the checked choices value.
+Take `type`, `name`, `message`, `choices`, [`filter`, `validate`, `default`, `loop`, `helper`, `pageHelper`] properties. `default` is expected to be an Array of the checked choices value.
 
 Choices marked as `{checked: true}` will be checked by default.
 
@@ -277,13 +273,13 @@ Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `transformer`]
 
 #### Input - `{type: 'number'}`
 
-Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `transformer`] properties.
+Take `type`, `name`, `message`, [`default`, `filter`, `validate`, `transformer`] properties.
 
 ---
 
 #### Password - `{type: 'password'}`
 
-Take `type`, `name`, `message`, `mask`,[, `default`, `filter`, `validate`] properties.
+Take `type`, `name`, `message`, `mask`, [`default`, `filter`, `validate`] properties.
 
 ![Password prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/password.svg)
 
@@ -293,7 +289,7 @@ Note that `mask` is required to hide the actual user input.
 
 #### Editor - `{type: 'editor'}`
 
-Take `type`, `name`, `message`, `helper`, [`default`, `filter`, `validate`] properties
+Take `type`, `name`, `message`, [`default`, `filter`, `validate`,  `helper`] properties
 
 Launches an instance of the users preferred editor on a temporary file. Once the user exits their editor, the contents of the temporary file are read in as the result. The editor to use is determined by reading the $VISUAL or $EDITOR environment variables. If neither of those are present, notepad (on Windows) or vim (Linux or Mac) is used.
 

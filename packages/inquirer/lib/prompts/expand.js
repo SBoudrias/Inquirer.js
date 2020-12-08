@@ -87,7 +87,7 @@ class ExpandPrompt extends Base {
     } else if (this.status === 'expanded') {
       var choicesStr = renderChoices(this.opt.choices, this.selectedKey);
       message += this.paginator.paginate(choicesStr, this.selectedKey, this.opt.pageSize);
-      var helper = this.opt.helper ? this.opt.helper : 'Answer: ';
+      var helper = this.opt.helper ? this.opt.helper : 'Answer';
       message += `\n  ${helper}: `;
     }
 
