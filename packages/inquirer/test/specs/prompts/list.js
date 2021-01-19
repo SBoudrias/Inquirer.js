@@ -235,4 +235,22 @@ describe('`list` prompt', function () {
     );
     expect(list.paginator.isInfinite).equal(false);
   });
+
+  it('should provide answers in the "filter" callback option', function (done) {
+    const answers = {};
+    this.fixture.filter = function () {
+      return true;
+    };
+    sinon.spy(this.fixture, 'filter');
+
+    const list = new List(this.fixture, this.rl, answers);
+
+    list.run().then(() => {
+      const spyCall = this.fixture.filter.getCall(0);
+      expect(spyCall.args[1]).to.equal(answers);
+      done();
+    });
+
+    this.rl.emit('line');
+  });
 });

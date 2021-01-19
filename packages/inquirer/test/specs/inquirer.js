@@ -457,6 +457,32 @@ describe('inquirer.prompt', function () {
     });
   });
 
+  it('should provide answers in filter callback for lists', function (done) {
+    const filter = sinon.stub();
+    filter.returns('foo');
+
+    var prompts = [
+      {
+        type: 'list',
+        name: 'q1',
+        default: 'foo',
+        choices: ['foo', 'bar'],
+        message: 'message',
+        filter,
+      },
+    ];
+
+    var promise = this.prompt(prompts);
+    promise.ui.rl.emit('line');
+    promise.then(() => {
+      const spyCall = filter.getCall(0);
+
+      expect(spyCall.args[0]).to.equal('foo');
+      expect(spyCall.args[1]).to.be.an('object');
+      done();
+    });
+  });
+
   describe('hierarchical mode (`when`)', function () {
     it('should pass current answers to `when`', function () {
       var prompts = [
