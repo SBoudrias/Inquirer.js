@@ -421,6 +421,11 @@ Checkbox list with autocomplete and other additions<br>
 <br>
 ![checkbox-plus](https://github.com/faressoft/inquirer-checkbox-plus-prompt/raw/master/demo.gif)
 
+[**inquirer-date-prompt**](https://github.com/haversnail/inquirer-date-prompt)<br>
+Customizable date/time selector with localization support<br>
+<br>
+![Date Prompt](https://github.com/haversnail/inquirer-date-prompt/raw/master/examples/demo.gif)
+
 [**datetime**](https://github.com/DerekTBrown/inquirer-datepicker-prompt)<br>
 Customizable date/time selector using both number pad and arrow keys<br>
 <br>
