@@ -67,7 +67,9 @@ class ListPrompt extends Base {
       .pipe(
         take(1),
         map(this.getCurrentValue.bind(this)),
-        flatMap((value) => runAsync(self.opt.filter)(value).catch((err) => err))
+        flatMap((value) =>
+          runAsync(self.opt.filter)(value, self.answers).catch((err) => err)
+        )
       )
       .forEach(this.onSubmit.bind(this));
 
