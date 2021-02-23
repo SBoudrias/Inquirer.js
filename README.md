@@ -287,9 +287,11 @@ Note that `mask` is required to hide the actual user input.
 
 #### Editor - `{type: 'editor'}`
 
-Take `type`, `name`, `message`[, `default`, `filter`, `validate`] properties
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `postfix`] properties
 
 Launches an instance of the users preferred editor on a temporary file. Once the user exits their editor, the contents of the temporary file are read in as the result. The editor to use is determined by reading the $VISUAL or $EDITOR environment variables. If neither of those are present, notepad (on Windows) or vim (Linux or Mac) is used.
+
+The `postfix` property is useful if you want to provide an extension.
 
 <a name="layouts"></a>
 

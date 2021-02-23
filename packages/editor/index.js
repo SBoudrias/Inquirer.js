@@ -32,6 +32,8 @@ module.exports = createPrompt((config, done) => {
             setStatus('pending');
           }
         }
+      }, {
+        postfix: config.postfix || ".txt"
       });
     }
   });
