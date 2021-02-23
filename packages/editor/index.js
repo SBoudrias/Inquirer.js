@@ -16,25 +16,29 @@ module.exports = createPrompt((config, done) => {
 
     if (isEnterKey(key)) {
       rl.pause();
-      editAsync(config.default || '', async (error, answer) => {
-        rl.resume();
-        if (error) {
-          setError(error);
-        } else {
-          setStatus('loading');
-          const isValid = await config.validate(answer);
-          if (isValid === true) {
-            setError(undefined);
-            setStatus('done');
-            done(answer);
+      editAsync(
+        config.default || '',
+        async (error, answer) => {
+          rl.resume();
+          if (error) {
+            setError(error);
           } else {
-            setError(isValid || 'You must provide a valid value');
-            setStatus('pending');
+            setStatus('loading');
+            const isValid = await config.validate(answer);
+            if (isValid === true) {
+              setError(undefined);
+              setStatus('done');
+              done(answer);
+            } else {
+              setError(isValid || 'You must provide a valid value');
+              setStatus('pending');
+            }
           }
+        },
+        {
+          postfix: config.postfix || '.txt',
         }
-      }, {
-        postfix: config.postfix || ".txt"
-      });
+      );
     }
   });
 
