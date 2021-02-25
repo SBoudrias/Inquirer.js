@@ -89,11 +89,12 @@ node packages/inquirer/examples/checkbox.js
 
 <a name="methods"></a>
 
-#### `inquirer.prompt(questions) -> promise`
+#### `inquirer.prompt(questions, answers) -> promise`
 
 Launch the prompt interface (inquiry session)
 
 - **questions** (Array) containing [Question Object](#question) (using the [reactive interface](#reactive-interface), you can also pass a `Rx.Observable` instance)
+- **answers** (object) contains values of already answered questions. Inquirer will avoid asking answers already provided here. Defaults `{}`.
 - returns a **Promise**
 
 #### `inquirer.registerPrompt(name, prompt)`
