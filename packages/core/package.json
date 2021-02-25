@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/core",
-  "version": "0.0.13-alpha.0",
+  "version": "0.0.14-alpha.0",
   "description": "Core Inquirer prompt API",
   "main": "index.js",
   "repository": "SBoudrias/Inquirer.js",
