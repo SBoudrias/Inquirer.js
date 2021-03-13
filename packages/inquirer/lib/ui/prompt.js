@@ -34,7 +34,7 @@ class PromptUI extends Base {
     if (_.isPlainObject(questions)) {
       // It's either an object of questions or a single question
       questions = Object.values(questions).every(
-        (v) => _.isPlainObject(v) && !_.has(v, 'name')
+        (v) => _.isPlainObject(v) && v.name === undefined
       )
         ? Object.entries(questions).map(([name, question]) => ({ name, ...question }))
         : [questions];
