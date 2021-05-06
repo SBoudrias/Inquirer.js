@@ -94,7 +94,7 @@ class RawListPrompt extends Base {
     var bottomContent = '';
 
     if (this.status === 'answered') {
-      message += chalk.cyan(this.answer);
+      message += chalk.cyan(this.opt.choices.getChoice(this.selected).short);
     } else {
       var choicesStr = renderChoices(this.opt.choices, this.selected);
       message +=
