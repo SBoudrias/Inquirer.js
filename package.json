@@ -9,7 +9,7 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-config-xo": "^0.35.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "husky": "^5.1.1",
+    "husky": "^4.3.8",
     "jest": "^26.6.3",
     "lerna": "^3.20.2",
     "lint-staged": "^10.5.4",
@@ -21,8 +21,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
     "pretest": "eslint .",
-    "test": "jest --coverage && lerna exec npm test --scope inquirer",
-    "postinstall": "husky install"
+    "test": "jest --coverage && lerna exec npm test --scope inquirer"
   },
   "husky": {
     "hooks": {
