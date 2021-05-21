@@ -97,6 +97,26 @@ describe('inquirer.prompt', () => {
     });
   });
 
+  it('should take a prompts nested object and return answers', async function () {
+    var prompts = {
+      q1: {
+        type: 'confirm',
+        message: 'message',
+      },
+      q2: {
+        type: 'input',
+        message: 'message',
+        default: 'Foo',
+      },
+    };
+
+    var promise = this.prompt(prompts);
+    autosubmit(promise.ui);
+    const { q1, q2 } = await promise;
+    expect(q1).to.equal(true);
+    expect(q2).to.equal('Foo');
+  });
+
   it('should take a prompts array with nested names', function () {
     const prompts = [
       {
