@@ -3,7 +3,7 @@
  */
 
 'use strict';
-var inquirer = require('..');
+const inquirer = require('..');
 
 inquirer
   .prompt([
@@ -28,7 +28,7 @@ inquirer
       name: 'size',
       message: 'What size do you need?',
       choices: ['Jumbo', 'Large', 'Standard', 'Medium', 'Small', 'Micro'],
-      filter: function (val) {
+      filter(val) {
         return val.toLowerCase();
       },
     },

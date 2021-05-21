@@ -1,9 +1,9 @@
-var EventEmitter = require('events').EventEmitter;
-var sinon = require('sinon');
-var util = require('util');
-var _ = require('lodash');
+const { EventEmitter } = require('events');
+const sinon = require('sinon');
+const util = require('util');
+const _ = require('lodash');
 
-var stub = {};
+const stub = {};
 
 _.extend(stub, {
   write: sinon.stub().returns(stub),
@@ -18,15 +18,16 @@ _.extend(stub, {
     mute: sinon.stub(),
     unmute: sinon.stub(),
     __raw__: '',
-    write: function (str) {
+    write(str) {
       this.__raw__ += str;
     },
   },
 });
 
-var ReadlineStub = function () {
+const ReadlineStub = function () {
   this.line = '';
   this.input = new EventEmitter();
+  // eslint-disable-next-line
   EventEmitter.apply(this, arguments);
 };
 

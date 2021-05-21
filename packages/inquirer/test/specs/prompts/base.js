@@ -1,9 +1,9 @@
-var expect = require('chai').expect;
-var ReadlineStub = require('../../helpers/readline');
+const { expect } = require('chai');
+const ReadlineStub = require('../../helpers/readline');
 
-var Base = require('../../../lib/prompts/base');
+const Base = require('../../../lib/prompts/base');
 
-describe('`base` prompt (e.g. prompt helpers)', function () {
+describe('`base` prompt (e.g. prompt helpers)', () => {
   beforeEach(function () {
     this.rl = new ReadlineStub();
     this.base = new Base(
@@ -16,11 +16,11 @@ describe('`base` prompt (e.g. prompt helpers)', function () {
   });
 
   it('should not point by reference to the entry `question` object', function () {
-    var question = {
+    const question = {
       message: 'foo bar',
       name: 'name',
     };
-    var base = new Base(question, this.rl);
+    const base = new Base(question, this.rl);
     expect(question).to.not.equal(base.opt);
     expect(question.name).to.equal(base.opt.name);
     expect(question.message).to.equal(base.opt.message);

@@ -1,11 +1,11 @@
-var expect = require('chai').expect;
-var _ = require('lodash');
-var ReadlineStub = require('../../helpers/readline');
-var fixtures = require('../../helpers/fixtures');
+const { expect } = require('chai');
+const _ = require('lodash');
+const ReadlineStub = require('../../helpers/readline');
+const fixtures = require('../../helpers/fixtures');
 
-var Editor = require('../../../lib/prompts/editor');
+const Editor = require('../../../lib/prompts/editor');
 
-describe('`editor` prompt', function () {
+describe('`editor` prompt', () => {
   beforeEach(function () {
     this.previousVisual = process.env.VISUAL;
     // Writes the word "testing" to the file
@@ -19,9 +19,9 @@ describe('`editor` prompt', function () {
   });
 
   it('should retrieve temporary files contents', function () {
-    var prompt = new Editor(this.fixture, this.rl);
+    const prompt = new Editor(this.fixture, this.rl);
 
-    var promise = prompt.run();
+    const promise = prompt.run();
     this.rl.emit('line', '');
 
     return promise.then((answer) => {

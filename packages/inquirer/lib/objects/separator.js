@@ -1,6 +1,6 @@
 'use strict';
-var chalk = require('chalk');
-var figures = require('figures');
+const chalk = require('chalk');
+const figures = require('figures');
 
 /**
  * Separator object

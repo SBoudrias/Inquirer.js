@@ -1,18 +1,18 @@
-var expect = require('chai').expect;
+const { expect } = require('chai');
 
-var Choice = require('../../../lib/objects/choice');
-var Separator = require('../../../lib/objects/separator');
+const Choice = require('../../../lib/objects/choice');
+const Separator = require('../../../lib/objects/separator');
 
-describe('Choice object', function () {
-  it('should normalize accept String as value', function () {
-    var choice = new Choice('foo');
+describe('Choice object', () => {
+  it('should normalize accept String as value', () => {
+    const choice = new Choice('foo');
     expect(choice.name).to.equal('foo');
     expect(choice.value).to.equal('foo');
   });
 
-  it('should use value|name as default if default property is missing', function () {
-    var onlyName = new Choice({ name: 'foo' });
-    var onlyVal = new Choice({ value: 'bar' });
+  it('should use value|name as default if default property is missing', () => {
+    const onlyName = new Choice({ name: 'foo' });
+    const onlyVal = new Choice({ value: 'bar' });
 
     expect(onlyName.name).to.equal('foo');
     expect(onlyName.value).to.equal('foo');
@@ -22,22 +22,22 @@ describe('Choice object', function () {
     expect(onlyVal.short).to.equal('bar');
   });
 
-  it('should keep extra keys', function () {
-    var choice = new Choice({ name: 'foo', extra: '1' });
+  it('should keep extra keys', () => {
+    const choice = new Choice({ name: 'foo', extra: '1' });
 
     expect(choice.extra).to.equal('1');
     expect(choice.name).to.equal('foo');
     expect(choice.value).to.equal('foo');
   });
 
-  it("shouldn't process Separator object", function () {
-    var sep = new Choice(new Separator());
+  it("shouldn't process Separator object", () => {
+    const sep = new Choice(new Separator());
     expect(sep).to.be.instanceOf(Separator);
   });
 
-  it("shouldn't process object with property type=separator", function () {
-    var obj = { type: 'separator' };
-    var sep = new Choice(obj);
+  it("shouldn't process object with property type=separator", () => {
+    const obj = { type: 'separator' };
+    const sep = new Choice(obj);
     expect(sep).to.equal(obj);
   });
 });

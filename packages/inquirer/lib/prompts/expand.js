@@ -3,18 +3,18 @@
  * `rawlist` type prompt
  */
 
-var _ = {
+const _ = {
   uniq: require('lodash/uniq'),
   isString: require('lodash/isString'),
   isNumber: require('lodash/isNumber'),
   findIndex: require('lodash/findIndex'),
 };
-var chalk = require('chalk');
-var { map, takeUntil } = require('rxjs/operators');
-var Base = require('./base');
-var Separator = require('../objects/separator');
-var observe = require('../utils/events');
-var Paginator = require('../utils/paginator');
+const chalk = require('chalk');
+const { map, takeUntil } = require('rxjs/operators');
+const Base = require('./base');
+const Separator = require('../objects/separator');
+const observe = require('../utils/events');
+const Paginator = require('../utils/paginator');
 
 class ExpandPrompt extends Base {
   constructor(questions, rl, answers) {
@@ -57,8 +57,8 @@ class ExpandPrompt extends Base {
     this.done = cb;
 
     // Save user answer and update prompt to show selected option.
-    var events = observe(this.rl);
-    var validation = this.handleSubmitEvents(
+    const events = observe(this.rl);
+    const validation = this.handleSubmitEvents(
       events.line.pipe(map(this.getCurrentValue.bind(this)))
     );
     validation.success.forEach(this.onSubmit.bind(this));
@@ -79,13 +79,13 @@ class ExpandPrompt extends Base {
    */
 
   render(error, hint) {
-    var message = this.getQuestion();
-    var bottomContent = '';
+    let message = this.getQuestion();
+    let bottomContent = '';
 
     if (this.status === 'answered') {
       message += chalk.cyan(this.answer);
     } else if (this.status === 'expanded') {
-      var choicesStr = renderChoices(this.opt.choices, this.selectedKey);
+      const choicesStr = renderChoices(this.opt.choices, this.selectedKey);
       message += this.paginator.paginate(choicesStr, this.selectedKey, this.opt.pageSize);
       message += '\n  Answer: ';
     }
@@ -108,7 +108,7 @@ class ExpandPrompt extends Base {
       input = this.rawDefault;
     }
 
-    var selected = this.opt.choices.where({ key: input.toLowerCase().trim() })[0];
+    const selected = this.opt.choices.where({ key: input.toLowerCase().trim() })[0];
     if (!selected) {
       return null;
     }
@@ -122,7 +122,7 @@ class ExpandPrompt extends Base {
    */
 
   getChoices() {
-    var output = '';
+    let output = '';
 
     this.opt.choices.forEach((choice) => {
       output += '\n  ';
@@ -132,7 +132,7 @@ class ExpandPrompt extends Base {
         return;
       }
 
-      var choiceStr = choice.key + ') ' + choice.name;
+      let choiceStr = choice.key + ') ' + choice.name;
       if (this.selectedKey === choice.key) {
         choiceStr = chalk.cyan(choiceStr);
       }
@@ -160,7 +160,7 @@ class ExpandPrompt extends Base {
 
   onSubmit(state) {
     this.status = 'answered';
-    var choice = this.opt.choices.where({ value: state.value })[0];
+    const choice = this.opt.choices.where({ value: state.value })[0];
     this.answer = choice.short || choice.name;
 
     // Re-render prompt
@@ -175,7 +175,7 @@ class ExpandPrompt extends Base {
 
   onKeypress() {
     this.selectedKey = this.rl.line.toLowerCase();
-    var selected = this.opt.choices.where({ key: this.selectedKey })[0];
+    const selected = this.opt.choices.where({ key: this.selectedKey })[0];
     if (this.status === 'expanded') {
       this.render();
     } else {
@@ -189,20 +189,21 @@ class ExpandPrompt extends Base {
    */
 
   validateChoices(choices) {
-    var formatError;
-    var errors = [];
-    var keymap = {};
+    let formatError;
+    const errors = [];
+    const keymap = {};
     choices.filter(Separator.exclude).forEach((choice) => {
       if (!choice.key || choice.key.length !== 1) {
         formatError = true;
       }
+
+      choice.key = String(choice.key).toLowerCase();
 
       if (keymap[choice.key]) {
         errors.push(choice.key);
       }
 
       keymap[choice.key] = true;
-      choice.key = String(choice.key).toLowerCase();
     });
 
     if (formatError) {
@@ -232,18 +233,18 @@ class ExpandPrompt extends Base {
    * @return {String} The rendered choices key string
    */
   generateChoicesString(choices, defaultChoice) {
-    var defIndex = choices.realLength - 1;
+    let defIndex = choices.realLength - 1;
     if (_.isNumber(defaultChoice) && this.opt.choices.getChoice(defaultChoice)) {
       defIndex = defaultChoice;
     } else if (_.isString(defaultChoice)) {
-      let index = _.findIndex(
+      const index = _.findIndex(
         choices.realChoices,
         ({ value }) => value === defaultChoice
       );
       defIndex = index === -1 ? defIndex : index;
     }
 
-    var defStr = this.opt.choices.pluck('key');
+    const defStr = this.opt.choices.pluck('key');
     this.rawDefault = defStr[defIndex];
     defStr[defIndex] = String(defStr[defIndex]).toUpperCase();
     return defStr.join('');
@@ -257,7 +258,7 @@ class ExpandPrompt extends Base {
  */
 
 function renderChoices(choices, pointer) {
-  var output = '';
+  let output = '';
 
   choices.forEach((choice) => {
     output += '\n  ';
@@ -267,7 +268,7 @@ function renderChoices(choices, pointer) {
       return;
     }
 
-    var choiceStr = choice.key + ') ' + choice.name;
+    let choiceStr = choice.key + ') ' + choice.name;
     if (pointer === choice.key) {
       choiceStr = chalk.cyan(choiceStr);
     }

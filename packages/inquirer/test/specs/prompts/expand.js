@@ -1,11 +1,11 @@
-var expect = require('chai').expect;
-var _ = require('lodash');
-var ReadlineStub = require('../../helpers/readline');
-var fixtures = require('../../helpers/fixtures');
+const { expect } = require('chai');
+const _ = require('lodash');
+const ReadlineStub = require('../../helpers/readline');
+const fixtures = require('../../helpers/fixtures');
 
-var Expand = require('../../../lib/prompts/expand');
+const Expand = require('../../../lib/prompts/expand');
 
-describe('`expand` prompt', function () {
+describe('`expand` prompt', () => {
   beforeEach(function () {
     this.fixture = _.clone(fixtures.expand);
     this.rl = new ReadlineStub();
@@ -29,6 +29,16 @@ describe('`expand` prompt', function () {
     }).to.throw(/Duplicate key error/);
   });
 
+  it('should throw if `key` is duplicate case insensitive', function () {
+    expect(() => {
+      this.fixture.choices = [
+        { key: 'a', name: 'foo' },
+        { key: 'A', name: 'foo' },
+      ];
+      return new Expand(this.fixture, this.rl);
+    }).to.throw(/Duplicate key error/);
+  });
+
   it('should throw if `key` is `h`', function () {
     expect(() => {
       this.fixture.choices = [{ key: 'h', name: 'foo' }];
@@ -37,7 +47,7 @@ describe('`expand` prompt', function () {
   });
 
   it('should allow false as a value', function () {
-    var promise = this.expand.run();
+    const promise = this.expand.run();
 
     this.rl.emit('line', 'd');
     return promise.then((answer) => {
@@ -50,8 +60,8 @@ describe('`expand` prompt', function () {
       { key: 'a', name: 'A Name', value: 'a value', short: 'ShortA' },
       { key: 'b', name: 'B Name', value: 'b value', short: 'ShortB' },
     ];
-    var prompt = new Expand(this.fixture, this.rl);
-    var promise = prompt.run();
+    const prompt = new Expand(this.fixture, this.rl);
+    const promise = prompt.run();
     this.rl.emit('line', 'b');
 
     return promise.then((answer) => {
@@ -110,8 +120,8 @@ describe('`expand` prompt', function () {
   });
 
   it('should not allow invalid command', function () {
-    var self = this;
-    var promise = this.expand.run();
+    const self = this;
+    const promise = this.expand.run();
 
     this.rl.emit('line', 'blah');
     setTimeout(() => {

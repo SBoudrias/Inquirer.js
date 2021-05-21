@@ -1,13 +1,13 @@
 'use strict';
-var assert = require('assert');
-var _ = {
+const assert = require('assert');
+const _ = {
   isNumber: require('lodash/isNumber'),
   filter: require('lodash/filter'),
   map: require('lodash/map'),
   find: require('lodash/find'),
 };
-var Separator = require('./separator');
-var Choice = require('./choice');
+const Separator = require('./separator');
+const Choice = require('./choice');
 
 /**
  * Choices collection
@@ -96,29 +96,29 @@ module.exports = class Choices {
   }
 
   // Expose usual Array methods
-  indexOf() {
-    return this.choices.indexOf.apply(this.choices, arguments);
+  indexOf(...args) {
+    return this.choices.indexOf(...args);
   }
 
-  forEach() {
-    return this.choices.forEach.apply(this.choices, arguments);
+  forEach(...args) {
+    return this.choices.forEach(...args);
   }
 
-  filter() {
-    return this.choices.filter.apply(this.choices, arguments);
+  filter(...args) {
+    return this.choices.filter(...args);
   }
 
-  reduce() {
-    return this.choices.reduce.apply(this.choices, arguments);
+  reduce(...args) {
+    return this.choices.reduce(...args);
   }
 
   find(func) {
     return _.find(this.choices, func);
   }
 
-  push() {
-    var objs = _.map(arguments, (val) => new Choice(val));
-    this.choices.push.apply(this.choices, objs);
+  push(...args) {
+    const objs = _.map(args, (val) => new Choice(val));
+    this.choices.push(...objs);
     this.realChoices = this.choices
       .filter(Separator.exclude)
       .filter((item) => !item.disabled);

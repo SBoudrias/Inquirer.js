@@ -3,9 +3,9 @@
  */
 
 'use strict';
-var inquirer = require('..');
+const inquirer = require('..');
 
-var questions = [
+const questions = [
   {
     type: 'confirm',
     name: 'bacon',
@@ -15,7 +15,7 @@ var questions = [
     type: 'input',
     name: 'favorite',
     message: 'Bacon lover, what is your favorite type of bacon?',
-    when: function (answers) {
+    when(answers) {
       return answers.bacon;
     },
   },
@@ -23,7 +23,7 @@ var questions = [
     type: 'confirm',
     name: 'pizza',
     message: 'Ok... Do you like pizza?',
-    when: function (answers) {
+    when(answers) {
       return !likesFood('bacon')(answers);
     },
   },

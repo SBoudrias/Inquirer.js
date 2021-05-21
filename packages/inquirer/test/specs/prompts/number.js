@@ -1,13 +1,13 @@
-var expect = require('chai').expect;
-var _ = require('lodash');
-var ReadlineStub = require('../../helpers/readline');
-var fixtures = require('../../helpers/fixtures');
+const { expect } = require('chai');
+const _ = require('lodash');
+const ReadlineStub = require('../../helpers/readline');
+const fixtures = require('../../helpers/fixtures');
 
-var NumberPrompt = require('../../../lib/prompts/number');
+const NumberPrompt = require('../../../lib/prompts/number');
 
 const ACCEPTABLE_ERROR = 0.001;
 
-describe('`number` prompt', function () {
+describe('`number` prompt', () => {
   beforeEach(function () {
     this.fixture = _.clone(fixtures.number);
     this.rl = new ReadlineStub();

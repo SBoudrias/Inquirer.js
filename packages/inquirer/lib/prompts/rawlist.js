@@ -3,18 +3,18 @@
  * `rawlist` type prompt
  */
 
-var _ = {
+const _ = {
   extend: require('lodash/extend'),
   isNumber: require('lodash/isNumber'),
   findIndex: require('lodash/findIndex'),
 };
-var chalk = require('chalk');
-var { map, takeUntil } = require('rxjs/operators');
-var Base = require('./base');
-var Separator = require('../objects/separator');
-var observe = require('../utils/events');
-var Paginator = require('../utils/paginator');
-var incrementListIndex = require('../utils/incrementListIndex');
+const chalk = require('chalk');
+const { map, takeUntil } = require('rxjs/operators');
+const Base = require('./base');
+const Separator = require('../objects/separator');
+const observe = require('../utils/events');
+const Paginator = require('../utils/paginator');
+const incrementListIndex = require('../utils/incrementListIndex');
 
 class RawListPrompt extends Base {
   constructor(questions, rl, answers) {
@@ -30,18 +30,21 @@ class RawListPrompt extends Base {
     this.rawDefault = 0;
 
     _.extend(this.opt, {
-      validate: function (val) {
+      validate(val) {
         return val != null;
       },
     });
 
-    var def = this.opt.default;
+    const def = this.opt.default;
     if (_.isNumber(def) && def >= 0 && def < this.opt.choices.realLength) {
       this.selected = def;
       this.rawDefault = def;
     } else if (!_.isNumber(def) && def != null) {
-      let index = _.findIndex(this.opt.choices.realChoices, ({ value }) => value === def);
-      let safeIndex = Math.max(index, 0);
+      const index = _.findIndex(
+        this.opt.choices.realChoices,
+        ({ value }) => value === def
+      );
+      const safeIndex = Math.max(index, 0);
       this.selected = safeIndex;
       this.rawDefault = safeIndex;
     }
@@ -63,10 +66,10 @@ class RawListPrompt extends Base {
     this.done = cb;
 
     // Once user confirm (enter key)
-    var events = observe(this.rl);
-    var submit = events.line.pipe(map(this.getCurrentValue.bind(this)));
+    const events = observe(this.rl);
+    const submit = events.line.pipe(map(this.getCurrentValue.bind(this)));
 
-    var validation = this.handleSubmitEvents(submit);
+    const validation = this.handleSubmitEvents(submit);
     validation.success.forEach(this.onEnd.bind(this));
     validation.error.forEach(this.onError.bind(this));
 
@@ -90,13 +93,13 @@ class RawListPrompt extends Base {
 
   render(error) {
     // Render question
-    var message = this.getQuestion();
-    var bottomContent = '';
+    let message = this.getQuestion();
+    let bottomContent = '';
 
     if (this.status === 'answered') {
-      message += chalk.cyan(this.answer);
+      message += chalk.cyan(this.opt.choices.getChoice(this.selected).short);
     } else {
-      var choicesStr = renderChoices(this.opt.choices, this.selected);
+      const choicesStr = renderChoices(this.opt.choices, this.selected);
       message +=
         '\n' + this.paginator.paginate(choicesStr, this.selected, this.opt.pageSize);
       message += '\n  Answer: ';
@@ -123,7 +126,7 @@ class RawListPrompt extends Base {
       index -= 1;
     }
 
-    var choice = this.opt.choices.getChoice(index);
+    const choice = this.opt.choices.getChoice(index);
     return choice ? choice.value : null;
   }
 
@@ -147,7 +150,7 @@ class RawListPrompt extends Base {
    */
 
   onKeypress() {
-    var index = this.rl.line.length ? Number(this.rl.line) - 1 : 0;
+    const index = this.rl.line.length ? Number(this.rl.line) - 1 : 0;
 
     if (this.opt.choices.getChoice(index)) {
       this.selected = index;
@@ -191,10 +194,10 @@ class RawListPrompt extends Base {
  */
 
 function renderChoices(choices, pointer) {
-  var output = '';
-  var separatorOffset = 0;
+  let output = '';
+  let separatorOffset = 0;
 
-  choices.forEach(function (choice, i) {
+  choices.forEach((choice, i) => {
     output += '\n  ';
 
     if (choice.type === 'separator') {
@@ -203,8 +206,8 @@ function renderChoices(choices, pointer) {
       return;
     }
 
-    var index = i - separatorOffset;
-    var display = index + 1 + ') ' + choice.name;
+    const index = i - separatorOffset;
+    let display = index + 1 + ') ' + choice.name;
     if (index === pointer) {
       display = chalk.cyan(display);
     }

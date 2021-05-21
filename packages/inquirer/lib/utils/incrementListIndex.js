@@ -1,6 +1,6 @@
 function incrementListIndex(current, dir, opt) {
-  var len = opt.choices.realLength;
-  var shouldLoop = 'loop' in opt ? Boolean(opt.loop) : true;
+  const len = opt.choices.realLength;
+  const shouldLoop = 'loop' in opt ? Boolean(opt.loop) : true;
   if (dir === 'up') {
     if (current > 0) {
       return current - 1;

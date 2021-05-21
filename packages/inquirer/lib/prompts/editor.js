@@ -3,11 +3,11 @@
  * `editor` type prompt
  */
 
-var chalk = require('chalk');
-var editAsync = require('external-editor').editAsync;
-var Base = require('./base');
-var observe = require('../utils/events');
-var { Subject } = require('rxjs');
+const chalk = require('chalk');
+const { editAsync } = require('external-editor');
+const Base = require('./base');
+const observe = require('../utils/events');
+const { Subject } = require('rxjs');
 
 class EditorPrompt extends Base {
   /**
@@ -22,11 +22,11 @@ class EditorPrompt extends Base {
     this.editorResult = new Subject();
 
     // Open Editor on "line" (Enter Key)
-    var events = observe(this.rl);
+    const events = observe(this.rl);
     this.lineSubscription = events.line.subscribe(this.startExternalEditor.bind(this));
 
     // Trigger Validation when editor closes
-    var validation = this.handleSubmitEvents(this.editorResult);
+    const validation = this.handleSubmitEvents(this.editorResult);
     validation.success.forEach(this.onEnd.bind(this));
     validation.error.forEach(this.onError.bind(this));
 
@@ -46,8 +46,8 @@ class EditorPrompt extends Base {
    */
 
   render(error) {
-    var bottomContent = '';
-    var message = this.getQuestion();
+    let bottomContent = '';
+    let message = this.getQuestion();
 
     if (this.status === 'answered') {
       message += chalk.dim('Received');

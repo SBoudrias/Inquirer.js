@@ -1,4 +1,4 @@
-var inquirer = require('../../lib/inquirer');
+const inquirer = require('../../lib/inquirer');
 
 module.exports = {
   input: {

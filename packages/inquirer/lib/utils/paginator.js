@@ -1,10 +1,10 @@
 'use strict';
 
-var _ = {
+const _ = {
   sum: require('lodash/sum'),
   flatten: require('lodash/flatten'),
 };
-var chalk = require('chalk');
+const chalk = require('chalk');
 
 /**
  * The paginator returns a subset of the choices if the list is too long.
@@ -20,7 +20,7 @@ class Paginator {
 
   paginate(output, active, pageSize) {
     pageSize = pageSize || 7;
-    var lines = output.split('\n');
+    let lines = output.split('\n');
 
     if (this.screen) {
       lines = this.screen.breakLines(lines);
@@ -47,7 +47,7 @@ class Paginator {
     if (this.pointer === undefined) {
       this.pointer = 0;
     }
-    var middleOfList = Math.floor(pageSize / 2);
+    const middleOfList = Math.floor(pageSize / 2);
     // Move the pointer only when the user go down and limit it to the middle of the list
     if (
       this.pointer < middleOfList &&
@@ -58,14 +58,14 @@ class Paginator {
     }
 
     // Duplicate the lines so it give an infinite list look
-    var infinite = _.flatten([lines, lines, lines]);
-    var topIndex = Math.max(0, active + lines.length - this.pointer);
+    const infinite = _.flatten([lines, lines, lines]);
+    const topIndex = Math.max(0, active + lines.length - this.pointer);
 
     return infinite.splice(topIndex, pageSize);
   }
 
   getFiniteLines(lines, active, pageSize) {
-    var topIndex = active - pageSize / 2;
+    let topIndex = active - pageSize / 2;
     if (topIndex < 0) {
       topIndex = 0;
     } else if (topIndex + pageSize > lines.length) {

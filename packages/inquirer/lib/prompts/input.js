@@ -3,10 +3,10 @@
  * `input` type prompt
  */
 
-var chalk = require('chalk');
-var { map, takeUntil } = require('rxjs/operators');
-var Base = require('./base');
-var observe = require('../utils/events');
+const chalk = require('chalk');
+const { map, takeUntil } = require('rxjs/operators');
+const Base = require('./base');
+const observe = require('../utils/events');
 
 class InputPrompt extends Base {
   /**
@@ -19,10 +19,10 @@ class InputPrompt extends Base {
     this.done = cb;
 
     // Once user confirm (enter key)
-    var events = observe(this.rl);
-    var submit = events.line.pipe(map(this.filterInput.bind(this)));
+    const events = observe(this.rl);
+    const submit = events.line.pipe(map(this.filterInput.bind(this)));
 
-    var validation = this.handleSubmitEvents(submit);
+    const validation = this.handleSubmitEvents(submit);
     validation.success.forEach(this.onEnd.bind(this));
     validation.error.forEach(this.onError.bind(this));
 
@@ -42,11 +42,11 @@ class InputPrompt extends Base {
    */
 
   render(error) {
-    var bottomContent = '';
-    var appendContent = '';
-    var message = this.getQuestion();
-    var transformer = this.opt.transformer;
-    var isFinal = this.status === 'answered';
+    let bottomContent = '';
+    let appendContent = '';
+    let message = this.getQuestion();
+    const { transformer } = this.opt;
+    const isFinal = this.status === 'answered';
 
     if (isFinal) {
       appendContent = this.answer;

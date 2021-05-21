@@ -4,7 +4,7 @@
  * A collection of common interactive command line user interfaces.
  */
 
-var inquirer = module.exports;
+const inquirer = module.exports;
 
 /**
  * Client interfaces
@@ -23,14 +23,14 @@ inquirer.ui = {
  * Create a new self-contained prompt module.
  */
 inquirer.createPromptModule = function (opt) {
-  var promptModule = function (questions, answers) {
-    var ui;
+  const promptModule = function (questions, answers) {
+    let ui;
     try {
       ui = new inquirer.ui.Prompt(promptModule.prompts, opt);
     } catch (error) {
       return Promise.reject(error);
     }
-    var promise = ui.run(questions, answers);
+    const promise = ui.run(questions, answers);
 
     // Monkey patch the UI on the promise object so
     // that it remains publicly accessible.

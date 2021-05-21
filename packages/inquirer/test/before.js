@@ -1,10 +1,10 @@
-var mockery = require('mockery');
-var ReadlineStub = require('./helpers/readline');
+const mockery = require('mockery');
+const ReadlineStub = require('./helpers/readline');
 
 mockery.enable();
 mockery.warnOnUnregistered(false);
 mockery.registerMock('readline', {
-  createInterface: function () {
+  createInterface() {
     return new ReadlineStub();
   },
 });

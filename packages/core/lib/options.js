@@ -1,5 +1,5 @@
 exports.getPromptConfig = async (options) => {
-  let message = options.message;
+  let { message } = options;
   if (typeof options.message === 'function') {
     message = message();
   }

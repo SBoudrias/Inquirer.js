@@ -3,10 +3,10 @@
  * `password` type prompt
  */
 
-var chalk = require('chalk');
-var { map, takeUntil } = require('rxjs/operators');
-var Base = require('./base');
-var observe = require('../utils/events');
+const chalk = require('chalk');
+const { map, takeUntil } = require('rxjs/operators');
+const Base = require('./base');
+const observe = require('../utils/events');
 
 function mask(input, maskChar) {
   input = String(input);
@@ -28,12 +28,12 @@ class PasswordPrompt extends Base {
   _run(cb) {
     this.done = cb;
 
-    var events = observe(this.rl);
+    const events = observe(this.rl);
 
     // Once user confirm (enter key)
-    var submit = events.line.pipe(map(this.filterInput.bind(this)));
+    const submit = events.line.pipe(map(this.filterInput.bind(this)));
 
-    var validation = this.handleSubmitEvents(submit);
+    const validation = this.handleSubmitEvents(submit);
     validation.success.forEach(this.onEnd.bind(this));
     validation.error.forEach(this.onError.bind(this));
 
@@ -53,8 +53,8 @@ class PasswordPrompt extends Base {
    */
 
   render(error) {
-    var message = this.getQuestion();
-    var bottomContent = '';
+    let message = this.getQuestion();
+    let bottomContent = '';
 
     if (this.status === 'answered') {
       message += this.opt.mask

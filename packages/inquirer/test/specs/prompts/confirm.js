@@ -1,11 +1,11 @@
-var expect = require('chai').expect;
-var _ = require('lodash');
-var ReadlineStub = require('../../helpers/readline');
-var fixtures = require('../../helpers/fixtures');
+const { expect } = require('chai');
+const _ = require('lodash');
+const ReadlineStub = require('../../helpers/readline');
+const fixtures = require('../../helpers/fixtures');
 
-var Confirm = require('../../../lib/prompts/confirm');
+const Confirm = require('../../../lib/prompts/confirm');
 
-describe('`confirm` prompt', function () {
+describe('`confirm` prompt', () => {
   beforeEach(function () {
     this.fixture = _.clone(fixtures.confirm);
     this.rl = new ReadlineStub();
@@ -28,7 +28,7 @@ describe('`confirm` prompt', function () {
 
   it('should allow a default `false` value', function (done) {
     this.fixture.default = false;
-    var falseConfirm = new Confirm(this.fixture, this.rl);
+    const falseConfirm = new Confirm(this.fixture, this.rl);
 
     falseConfirm.run().then((answer) => {
       expect(this.rl.output.__raw__).to.contain('y/N');
@@ -41,7 +41,7 @@ describe('`confirm` prompt', function () {
 
   it('should allow a default `true` value', function (done) {
     this.fixture.default = true;
-    var falseConfirm = new Confirm(this.fixture, this.rl);
+    const falseConfirm = new Confirm(this.fixture, this.rl);
 
     falseConfirm.run().then((answer) => {
       expect(this.rl.output.__raw__).to.contain('Y/n');

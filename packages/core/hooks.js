@@ -5,7 +5,7 @@ const { getPromptConfig } = require('./lib/options');
 
 let sessionRl;
 let hooks = [];
-let hooksCleanup = [];
+const hooksCleanup = [];
 let index = 0;
 let handleChange = () => {};
 

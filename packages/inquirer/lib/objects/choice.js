@@ -1,5 +1,5 @@
 'use strict';
-var _ = {
+const _ = {
   isString: require('lodash/isString'),
   isNumber: require('lodash/isNumber'),
   extend: require('lodash/extend'),

@@ -3,7 +3,7 @@
  */
 
 'use strict';
-var inquirer = require('..');
+const inquirer = require('..');
 
 inquirer
   .prompt([
@@ -55,7 +55,7 @@ inquirer
           name: 'Extra cheese',
         },
       ],
-      validate: function (answer) {
+      validate(answer) {
         if (answer.length < 1) {
           return 'You must choose at least one topping.';
         }

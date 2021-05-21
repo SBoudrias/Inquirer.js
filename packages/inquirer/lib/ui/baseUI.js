@@ -1,10 +1,10 @@
 'use strict';
-var _ = {
+const _ = {
   extend: require('lodash/extend'),
   omit: require('lodash/omit'),
 };
-var MuteStream = require('mute-stream');
-var readline = require('readline');
+const MuteStream = require('mute-stream');
+const readline = require('readline');
 
 /**
  * Base interface class other can inherits from
@@ -69,7 +69,7 @@ function setupReadlineOptions(opt) {
   opt.skipTTYChecks = opt.skipTTYChecks === undefined ? true : opt.skipTTYChecks;
 
   // Default `input` to stdin
-  var input = opt.input || process.stdin;
+  const input = opt.input || process.stdin;
 
   // Check if prompt is being called in TTY environment
   // If it isn't return a failed promise
@@ -82,15 +82,15 @@ function setupReadlineOptions(opt) {
   }
 
   // Add mute capabilities to the output
-  var ms = new MuteStream();
+  const ms = new MuteStream();
   ms.pipe(opt.output || process.stdout);
-  var output = ms;
+  const output = ms;
 
   return _.extend(
     {
       terminal: true,
-      input: input,
-      output: output,
+      input,
+      output,
     },
     _.omit(opt, ['input', 'output'])
   );

@@ -4,11 +4,11 @@
  */
 
 'use strict';
-var inquirer = require('..');
+const inquirer = require('..');
 
 console.log('Hi, welcome to Node Pizza');
 
-var questions = [
+const questions = [
   {
     type: 'confirm',
     name: 'toBeDelivered',
@@ -19,8 +19,8 @@ var questions = [
     type: 'input',
     name: 'phone',
     message: "What's your phone number?",
-    validate: function (value) {
-      var pass = value.match(
+    validate(value) {
+      const pass = value.match(
         /^([01]{1})?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?){1}(?:\d+)?)?$/i
       );
       if (pass) {
@@ -35,7 +35,7 @@ var questions = [
     name: 'size',
     message: 'What size do you need?',
     choices: ['Large', 'Medium', 'Small'],
-    filter: function (val) {
+    filter(val) {
       return val.toLowerCase();
     },
   },
@@ -43,8 +43,8 @@ var questions = [
     type: 'input',
     name: 'quantity',
     message: 'How many do you need?',
-    validate: function (value) {
-      var valid = !isNaN(parseFloat(value));
+    validate(value) {
+      const valid = !isNaN(parseFloat(value));
       return valid || 'Please enter a number';
     },
     filter: Number,
@@ -88,7 +88,7 @@ var questions = [
     name: 'prize',
     message: 'For leaving a comment, you get a freebie',
     choices: ['cake', 'fries'],
-    when: function (answers) {
+    when(answers) {
       return answers.comments !== 'Nope, all good!';
     },
   },

@@ -1,12 +1,12 @@
-var expect = require('chai').expect;
-var _ = require('lodash');
-var ReadlineStub = require('../../helpers/readline');
-var fixtures = require('../../helpers/fixtures');
-var sinon = require('sinon');
+const { expect } = require('chai');
+const _ = require('lodash');
+const ReadlineStub = require('../../helpers/readline');
+const fixtures = require('../../helpers/fixtures');
+const sinon = require('sinon');
 
-var Checkbox = require('../../../lib/prompts/checkbox');
+const Checkbox = require('../../../lib/prompts/checkbox');
 
-describe('`checkbox` prompt', function () {
+describe('`checkbox` prompt', () => {
   beforeEach(function () {
     this.fixture = _.clone(fixtures.checkbox);
     this.rl = new ReadlineStub();
@@ -65,7 +65,7 @@ describe('`checkbox` prompt', function () {
     };
 
     this.checkbox = new Checkbox(this.fixture, this.rl);
-    var promise = this.checkbox.run();
+    const promise = this.checkbox.run();
     this.rl.emit('line');
     return promise;
   });
@@ -153,7 +153,7 @@ describe('`checkbox` prompt', function () {
   });
 
   it('should select all answers if <a> is pressed', function () {
-    var promise = this.checkbox.run();
+    const promise = this.checkbox.run();
 
     this.rl.input.emit('keypress', 'a', { name: 'a' });
     this.rl.emit('line');
@@ -164,7 +164,7 @@ describe('`checkbox` prompt', function () {
   });
 
   it('should select no answers if <a> is pressed a second time', function () {
-    var promise = this.checkbox.run();
+    const promise = this.checkbox.run();
 
     this.rl.input.emit('keypress', 'a', { name: 'a' });
     this.rl.input.emit('keypress', 'a', { name: 'a' });
@@ -176,7 +176,7 @@ describe('`checkbox` prompt', function () {
   });
 
   it('should select the inverse of the current selection when <i> is pressed', function () {
-    var promise = this.checkbox.run();
+    const promise = this.checkbox.run();
 
     this.rl.input.emit('keypress', 'i', { name: 'i' });
     this.rl.emit('line');
@@ -187,12 +187,12 @@ describe('`checkbox` prompt', function () {
   });
 
   it('pagination works with multiline choices', function (done) {
-    var multilineFixture = {
+    const multilineFixture = {
       message: 'message',
       name: 'name',
       choices: ['a\n\n', 'b\n\n'],
     };
-    var list = new Checkbox(multilineFixture, this.rl);
+    const list = new Checkbox(multilineFixture, this.rl);
     const spy = sinon.spy(list.paginator, 'paginate');
     list.run().then((answer) => {
       const realIndexPosition1 = spy.firstCall.args[1];
@@ -210,7 +210,7 @@ describe('`checkbox` prompt', function () {
     this.rl.emit('line');
   });
 
-  describe('with disabled choices', function () {
+  describe('with disabled choices', () => {
     beforeEach(function () {
       this.fixture.choices.push({
         name: 'dis1',
@@ -224,7 +224,7 @@ describe('`checkbox` prompt', function () {
     });
 
     it('output disabled choices and custom messages', function () {
-      var promise = this.checkbox.run();
+      const promise = this.checkbox.run();
       this.rl.emit('line');
       return promise.then(() => {
         expect(this.rl.output.__raw__).to.contain('- dis1 (Disabled)');
@@ -262,14 +262,14 @@ describe('`checkbox` prompt', function () {
       this.fixture.choices = [
         {
           name: 'dis1',
-          disabled: function (answers) {
+          disabled(answers) {
             expect(answers.foo).to.equal('foo');
             return true;
           },
         },
       ];
       this.checkbox = new Checkbox(this.fixture, this.rl, { foo: 'foo' });
-      var promise = this.checkbox.run();
+      const promise = this.checkbox.run();
       this.rl.emit('line');
 
       promise.then(() => {
@@ -278,10 +278,10 @@ describe('`checkbox` prompt', function () {
     });
   });
 
-  describe('going out of boundaries', function () {
-    describe('when loop undefined / true', function () {
+  describe('going out of boundaries', () => {
+    describe('when loop undefined / true', () => {
       it('loops to bottom when too far up', async function () {
-        var promise = this.checkbox.run();
+        const promise = this.checkbox.run();
 
         this.rl.input.emit('keypress', null, { name: 'up' });
         this.rl.input.emit('keypress', null, { name: 'up' });
@@ -289,12 +289,12 @@ describe('`checkbox` prompt', function () {
         this.rl.input.emit('keypress', ' ', { name: 'space' });
         this.rl.emit('line');
 
-        var answer = await promise;
+        const answer = await promise;
         expect(answer.length).to.equal(1);
         expect(answer[0]).to.equal('choice 2');
       });
       it('loops to top when too far down', async function () {
-        var promise = this.checkbox.run();
+        const promise = this.checkbox.run();
 
         this.rl.input.emit('keypress', null, { name: 'down' });
         this.rl.input.emit('keypress', null, { name: 'down' });
@@ -303,18 +303,18 @@ describe('`checkbox` prompt', function () {
         this.rl.input.emit('keypress', ' ', { name: 'space' });
         this.rl.emit('line');
 
-        var answer = await promise;
+        const answer = await promise;
         expect(answer.length).to.equal(1);
         expect(answer[0]).to.equal('choice 1');
       });
     });
 
-    describe('when loop: false', function () {
+    describe('when loop: false', () => {
       beforeEach(function () {
         this.checkbox = new Checkbox(_.assign(this.fixture, { loop: false }), this.rl);
       });
       it('stays at top when too far up', async function () {
-        var promise = this.checkbox.run();
+        const promise = this.checkbox.run();
 
         this.rl.input.emit('keypress', null, { name: 'up' });
         this.rl.input.emit('keypress', null, { name: 'up' });
@@ -322,12 +322,12 @@ describe('`checkbox` prompt', function () {
         this.rl.input.emit('keypress', ' ', { name: 'space' });
         this.rl.emit('line');
 
-        var answer = await promise;
+        const answer = await promise;
         expect(answer.length).to.equal(1);
         expect(answer[0]).to.equal('choice 1');
       });
       it('stays at bottom when too far down', async function () {
-        var promise = this.checkbox.run();
+        const promise = this.checkbox.run();
 
         this.rl.input.emit('keypress', null, { name: 'down' });
         this.rl.input.emit('keypress', null, { name: 'down' });
@@ -336,7 +336,7 @@ describe('`checkbox` prompt', function () {
         this.rl.input.emit('keypress', ' ', { name: 'space' });
         this.rl.emit('line');
 
-        var answer = await promise;
+        const answer = await promise;
         expect(answer.length).to.equal(1);
         expect(answer[0]).to.equal('choice 3');
       });

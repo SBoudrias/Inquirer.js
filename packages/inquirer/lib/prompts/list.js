@@ -3,20 +3,20 @@
  * `list` type prompt
  */
 
-var _ = {
+const _ = {
   isNumber: require('lodash/isNumber'),
   findIndex: require('lodash/findIndex'),
   isString: require('lodash/isString'),
 };
-var chalk = require('chalk');
-var figures = require('figures');
-var cliCursor = require('cli-cursor');
-var runAsync = require('run-async');
-var { flatMap, map, take, takeUntil } = require('rxjs/operators');
-var Base = require('./base');
-var observe = require('../utils/events');
-var Paginator = require('../utils/paginator');
-var incrementListIndex = require('../utils/incrementListIndex');
+const chalk = require('chalk');
+const figures = require('figures');
+const cliCursor = require('cli-cursor');
+const runAsync = require('run-async');
+const { flatMap, map, take, takeUntil } = require('rxjs/operators');
+const Base = require('./base');
+const observe = require('../utils/events');
+const Paginator = require('../utils/paginator');
+const incrementListIndex = require('../utils/incrementListIndex');
 
 class ListPrompt extends Base {
   constructor(questions, rl, answers) {
@@ -29,13 +29,16 @@ class ListPrompt extends Base {
     this.firstRender = true;
     this.selected = 0;
 
-    var def = this.opt.default;
+    const def = this.opt.default;
 
     // If def is a Number, then use as index. Otherwise, check for value.
     if (_.isNumber(def) && def >= 0 && def < this.opt.choices.realLength) {
       this.selected = def;
     } else if (!_.isNumber(def) && def != null) {
-      let index = _.findIndex(this.opt.choices.realChoices, ({ value }) => value === def);
+      const index = _.findIndex(
+        this.opt.choices.realChoices,
+        ({ value }) => value === def
+      );
       this.selected = Math.max(index, 0);
     }
 
@@ -55,9 +58,9 @@ class ListPrompt extends Base {
   _run(cb) {
     this.done = cb;
 
-    var self = this;
+    const self = this;
 
-    var events = observe(this.rl);
+    const events = observe(this.rl);
     events.normalizedUpKey.pipe(takeUntil(events.line)).forEach(this.onUpKey.bind(this));
     events.normalizedDownKey
       .pipe(takeUntil(events.line))
@@ -87,7 +90,7 @@ class ListPrompt extends Base {
 
   render() {
     // Render question
-    var message = this.getQuestion();
+    let message = this.getQuestion();
 
     if (this.firstRender) {
       message += chalk.dim('(Use arrow keys)');
@@ -97,12 +100,12 @@ class ListPrompt extends Base {
     if (this.status === 'answered') {
       message += chalk.cyan(this.opt.choices.getChoice(this.selected).short);
     } else {
-      var choicesStr = listRender(this.opt.choices, this.selected);
-      var indexPosition = this.opt.choices.indexOf(
+      const choicesStr = listRender(this.opt.choices, this.selected);
+      const indexPosition = this.opt.choices.indexOf(
         this.opt.choices.getChoice(this.selected)
       );
-      var realIndexPosition =
-        this.opt.choices.reduce(function (acc, value, i) {
+      const realIndexPosition =
+        this.opt.choices.reduce((acc, value, i) => {
           // Dont count lines past the choice we are looking at
           if (i > indexPosition) {
             return acc;
@@ -112,7 +115,7 @@ class ListPrompt extends Base {
             return acc + 1;
           }
 
-          var l = value.name;
+          let l = value.name;
           // Non-strings take up one line
           if (typeof l !== 'string') {
             return acc + 1;
@@ -178,8 +181,8 @@ class ListPrompt extends Base {
  * @return {String}         Rendered content
  */
 function listRender(choices, pointer) {
-  var output = '';
-  var separatorOffset = 0;
+  let output = '';
+  let separatorOffset = 0;
 
   choices.forEach((choice, i) => {
     if (choice.type === 'separator') {
@@ -196,8 +199,8 @@ function listRender(choices, pointer) {
       return;
     }
 
-    var isSelected = i - separatorOffset === pointer;
-    var line = (isSelected ? figures.pointer + ' ' : '  ') + choice.name;
+    const isSelected = i - separatorOffset === pointer;
+    let line = (isSelected ? figures.pointer + ' ' : '  ') + choice.name;
     if (isSelected) {
       line = chalk.cyan(line);
     }

@@ -3,22 +3,22 @@
  * Base prompt implementation
  * Should be extended by prompt types.
  */
-var _ = {
+const _ = {
   assign: require('lodash/assign'),
   defaults: require('lodash/defaults'),
   clone: require('lodash/clone'),
 };
-var chalk = require('chalk');
-var runAsync = require('run-async');
-var { filter, flatMap, share, take, takeUntil } = require('rxjs/operators');
-var Choices = require('../objects/choices');
-var ScreenManager = require('../utils/screen-manager');
+const chalk = require('chalk');
+const runAsync = require('run-async');
+const { filter, flatMap, share, take, takeUntil } = require('rxjs/operators');
+const Choices = require('../objects/choices');
+const ScreenManager = require('../utils/screen-manager');
 
 class Prompt {
   constructor(question, rl, answers) {
     // Setup instance defaults property
     _.assign(this, {
-      answers: answers,
+      answers,
       status: 'pending',
     });
 
@@ -94,10 +94,10 @@ class Prompt {
    * @return {Object}        Object containing two observables: `success` and `error`
    */
   handleSubmitEvents(submit) {
-    var self = this;
-    var validate = runAsync(this.opt.validate);
-    var asyncFilter = runAsync(this.opt.filter);
-    var validation = submit.pipe(
+    const self = this;
+    const validate = runAsync(this.opt.validate);
+    const asyncFilter = runAsync(this.opt.filter);
+    const validation = submit.pipe(
       flatMap((value) => {
         this.startSpinner(value, this.opt.filteringText);
         return asyncFilter(value, self.answers).then(
@@ -114,18 +114,18 @@ class Prompt {
       share()
     );
 
-    var success = validation.pipe(
+    const success = validation.pipe(
       filter((state) => state.isValid === true),
       take(1)
     );
-    var error = validation.pipe(
+    const error = validation.pipe(
       filter((state) => state.isValid !== true),
       takeUntil(success)
     );
 
     return {
-      success: success,
-      error: error,
+      success,
+      error,
     };
   }
 
@@ -143,7 +143,7 @@ class Prompt {
    * @return {String} prompt question string
    */
   getQuestion() {
-    var message =
+    let message =
       this.opt.prefix +
       ' ' +
       chalk.bold(this.opt.message) +

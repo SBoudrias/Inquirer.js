@@ -3,10 +3,10 @@
  * Sticky bottom bar user interface
  */
 
-var through = require('through');
-var Base = require('./baseUI');
-var rlUtils = require('../utils/readline');
-var _ = {
+const through = require('through');
+const Base = require('./baseUI');
+const rlUtils = require('../utils/readline');
+const _ = {
   last: require('lodash/last'),
 };
 
@@ -83,7 +83,7 @@ class BottomBar extends Base {
    * @param {String} message - The message to be output
    */
   write(message) {
-    var msgLines = message.split(/\n/);
+    const msgLines = message.split(/\n/);
     this.height = msgLines.length;
 
     // Write message to screen and setPrompt to control backspace
