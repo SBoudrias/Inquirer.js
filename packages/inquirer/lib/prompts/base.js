@@ -104,7 +104,7 @@ class Prompt {
           (filteredValue) => {
             this.startSpinner(filteredValue, this.opt.validatingText);
             return validate(filteredValue, self.answers).then(
-              (isValid) => ({ isValid: isValid, value: filteredValue }),
+              (isValid) => ({ isValid, value: filteredValue }),
               (err) => ({ isValid: err, value: filteredValue })
             );
           },
