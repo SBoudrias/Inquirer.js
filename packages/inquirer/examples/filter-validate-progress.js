@@ -3,11 +3,11 @@
  */
 
 'use strict';
-var inquirer = require('..');
+const inquirer = require('..');
 
 /* eslint-disable no-promise-executor-return */
 
-var questions = [
+const questions = [
   {
     type: 'input',
     name: 'first_question',
