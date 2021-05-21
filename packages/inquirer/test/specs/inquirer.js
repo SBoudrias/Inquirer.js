@@ -98,7 +98,7 @@ describe('inquirer.prompt', () => {
   });
 
   it('should take a prompts nested object and return answers', async function () {
-    var prompts = {
+    const prompts = {
       q1: {
         type: 'confirm',
         message: 'message',
@@ -110,7 +110,7 @@ describe('inquirer.prompt', () => {
       },
     };
 
-    var promise = this.prompt(prompts);
+    const promise = this.prompt(prompts);
     autosubmit(promise.ui);
     const { q1, q2 } = await promise;
     expect(q1).to.equal(true);
