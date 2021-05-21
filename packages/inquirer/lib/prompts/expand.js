@@ -197,12 +197,13 @@ class ExpandPrompt extends Base {
         formatError = true;
       }
 
+      choice.key = String(choice.key).toLowerCase();
+
       if (keymap[choice.key]) {
         errors.push(choice.key);
       }
 
       keymap[choice.key] = true;
-      choice.key = String(choice.key).toLowerCase();
     });
 
     if (formatError) {

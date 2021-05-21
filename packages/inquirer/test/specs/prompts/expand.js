@@ -29,6 +29,16 @@ describe('`expand` prompt', function () {
     }).to.throw(/Duplicate key error/);
   });
 
+  it('should throw if `key` is duplicate case insensitive', function () {
+    expect(() => {
+      this.fixture.choices = [
+        { key: 'a', name: 'foo' },
+        { key: 'A', name: 'foo' },
+      ];
+      return new Expand(this.fixture, this.rl);
+    }).to.throw(/Duplicate key error/);
+  });
+
   it('should throw if `key` is `h`', function () {
     expect(() => {
       this.fixture.choices = [{ key: 'h', name: 'foo' }];
