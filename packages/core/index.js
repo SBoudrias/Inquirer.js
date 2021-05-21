@@ -122,7 +122,7 @@ class StateManager {
     const { validate: configValidate = () => true } = this.config;
 
     const { mapStateToValue = defaultMapStateToValue } = this.config;
-    let value = mapStateToValue(state);
+    const value = mapStateToValue(state);
 
     const showLoader = setTimeout(this.startLoading, 500);
     this.rl.pause();
@@ -164,12 +164,12 @@ class StateManager {
   }
 
   setState(partialState) {
-    this.currentState = Object.assign({}, this.currentState, partialState);
+    this.currentState = { ...this.currentState, ...partialState };
     this.onChange(this.getState());
   }
 
   getState() {
-    return Object.assign({}, defaultState, this.initialState, this.currentState);
+    return { ...defaultState, ...this.initialState, ...this.currentState };
   }
 
   getPrefix() {
@@ -191,20 +191,16 @@ class StateManager {
       error = `${chalk.red('>>')} ${state.error}`;
     }
 
-    const renderState = Object.assign(
-      {
-        prefix: this.getPrefix(),
-      },
-      state,
-      {
-        // Only pass message down if it's a string. Otherwise we're still in init state
-        message: _.isFunction(message) ? 'Loading...' : message,
-        value: transformer(value, { isFinal: status === 'done' }),
-        validate: undefined,
-        filter: undefined,
-        transformer: undefined,
-      }
-    );
+    const renderState = {
+      prefix: this.getPrefix(),
+      ...state,
+      // Only pass message down if it's a string. Otherwise we're still in init state
+      message: _.isFunction(message) ? 'Loading...' : message,
+      value: transformer(value, { isFinal: status === 'done' }),
+      validate: undefined,
+      filter: undefined,
+      transformer: undefined,
+    };
     this.screen.render(this.render(renderState, this.config), error);
   }
 }

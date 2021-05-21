@@ -19,7 +19,7 @@
   "dependencies": {
     "@inquirer/core": "^0.0.14-alpha.0",
     "@inquirer/input": "^0.0.14-alpha.0",
-    "chalk": "^4.1.0"
+    "chalk": "^4.1.1"
   },
   "publishConfig": {
     "access": "public"

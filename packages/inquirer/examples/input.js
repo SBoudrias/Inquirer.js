@@ -3,10 +3,10 @@
  */
 
 'use strict';
-var inquirer = require('..');
-var chalkPipe = require('chalk-pipe');
+const inquirer = require('..');
+const chalkPipe = require('chalk-pipe');
 
-var questions = [
+const questions = [
   {
     type: 'input',
     name: 'first_name',
@@ -16,7 +16,7 @@ var questions = [
     type: 'input',
     name: 'last_name',
     message: "What's your last name",
-    default: function () {
+    default() {
       return 'Doe';
     },
   },
@@ -24,7 +24,7 @@ var questions = [
     type: 'input',
     name: 'fav_color',
     message: "What's your favorite color",
-    transformer: function (color, answers, flags) {
+    transformer(color, answers, flags) {
       const text = chalkPipe(color)(color);
       if (flags.isFinal) {
         return text + '!';
@@ -37,8 +37,8 @@ var questions = [
     type: 'input',
     name: 'phone',
     message: "What's your phone number",
-    validate: function (value) {
-      var pass = value.match(
+    validate(value) {
+      const pass = value.match(
         /^([01]{1})?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?){1}(?:\d+)?)?$/i
       );
       if (pass) {

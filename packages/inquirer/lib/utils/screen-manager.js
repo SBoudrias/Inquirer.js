@@ -1,12 +1,12 @@
 'use strict';
-var _ = {
+const _ = {
   last: require('lodash/last'),
   flatten: require('lodash/flatten'),
 };
-var util = require('./readline');
-var cliWidth = require('cli-width');
-var stripAnsi = require('strip-ansi');
-var stringWidth = require('string-width');
+const util = require('./readline');
+const cliWidth = require('cli-width');
+const stripAnsi = require('strip-ansi');
+const stringWidth = require('string-width');
 
 function height(content) {
   return content.split('\n').length;
@@ -33,13 +33,13 @@ class ScreenManager {
      * Write message to screen and setPrompt to control backspace
      */
 
-    var promptLine = lastLine(content);
-    var rawPromptLine = stripAnsi(promptLine);
+    const promptLine = lastLine(content);
+    const rawPromptLine = stripAnsi(promptLine);
 
     // Remove the rl.line from our prompt. We can't rely on the content of
     // rl.line (mainly because of the password prompt), so just rely on it's
     // length.
-    var prompt = rawPromptLine;
+    let prompt = rawPromptLine;
     if (this.rl.line.length) {
       prompt = prompt.slice(0, -this.rl.line.length);
     }
@@ -47,8 +47,8 @@ class ScreenManager {
     this.rl.setPrompt(prompt);
 
     // SetPrompt will change cursor position, now we can get correct value
-    var cursorPos = this.rl._getCursorPos();
-    var width = this.normalizedCliWidth();
+    const cursorPos = this.rl._getCursorPos();
+    const width = this.normalizedCliWidth();
 
     content = this.forceLineReturn(content, width);
     if (bottomContent) {
@@ -62,7 +62,7 @@ class ScreenManager {
       content += '\n';
     }
 
-    var fullContent = content + (bottomContent ? '\n' + bottomContent : '');
+    const fullContent = content + (bottomContent ? '\n' + bottomContent : '');
     this.rl.output.write(fullContent);
 
     /**
@@ -71,8 +71,8 @@ class ScreenManager {
 
     // We need to consider parts of the prompt under the cursor as part of the bottom
     // content in order to correctly cleanup and re-render.
-    var promptLineUpDiff = Math.floor(rawPromptLine.length / width) - cursorPos.rows;
-    var bottomContentHeight =
+    const promptLineUpDiff = Math.floor(rawPromptLine.length / width) - cursorPos.rows;
+    const bottomContentHeight =
       promptLineUpDiff + (bottomContent ? height(bottomContent) : 0);
     if (bottomContentHeight > 0) {
       util.up(this.rl, bottomContentHeight);
@@ -116,7 +116,7 @@ class ScreenManager {
   }
 
   normalizedCliWidth() {
-    var width = cliWidth({
+    const width = cliWidth({
       defaultWidth: 80,
       output: this.rl.output,
     });
@@ -127,9 +127,9 @@ class ScreenManager {
     // Break lines who're longer than the cli width so we can normalize the natural line
     // returns behavior across terminals.
     width = width || this.normalizedCliWidth();
-    var regex = new RegExp('(?:(?:\\033[[0-9;]*m)*.?){1,' + width + '}', 'g');
+    const regex = new RegExp('(?:(?:\\033[[0-9;]*m)*.?){1,' + width + '}', 'g');
     return lines.map((line) => {
-      var chunk = line.match(regex);
+      const chunk = line.match(regex);
       // Last match is always empty
       chunk.pop();
       return chunk || '';

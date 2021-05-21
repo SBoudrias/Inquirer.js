@@ -1,5 +1,5 @@
 'use strict';
-var ansiEscapes = require('ansi-escapes');
+const ansiEscapes = require('ansi-escapes');
 
 /**
  * Move cursor left by `x`

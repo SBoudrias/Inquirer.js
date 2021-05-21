@@ -3,19 +3,19 @@
  * `list` type prompt
  */
 
-var _ = {
+const _ = {
   isArray: require('lodash/isArray'),
   map: require('lodash/map'),
   isString: require('lodash/isString'),
 };
-var chalk = require('chalk');
-var cliCursor = require('cli-cursor');
-var figures = require('figures');
-var { map, takeUntil } = require('rxjs/operators');
-var Base = require('./base');
-var observe = require('../utils/events');
-var Paginator = require('../utils/paginator');
-var incrementListIndex = require('../utils/incrementListIndex');
+const chalk = require('chalk');
+const cliCursor = require('cli-cursor');
+const figures = require('figures');
+const { map, takeUntil } = require('rxjs/operators');
+const Base = require('./base');
+const observe = require('../utils/events');
+const Paginator = require('../utils/paginator');
+const incrementListIndex = require('../utils/incrementListIndex');
 
 class CheckboxPrompt extends Base {
   constructor(questions, rl, answers) {
@@ -51,9 +51,9 @@ class CheckboxPrompt extends Base {
   _run(cb) {
     this.done = cb;
 
-    var events = observe(this.rl);
+    const events = observe(this.rl);
 
-    var validation = this.handleSubmitEvents(
+    const validation = this.handleSubmitEvents(
       events.line.pipe(map(this.getCurrentValue.bind(this)))
     );
     validation.success.forEach(this.onEnd.bind(this));
@@ -89,8 +89,8 @@ class CheckboxPrompt extends Base {
 
   render(error) {
     // Render question
-    var message = this.getQuestion();
-    var bottomContent = '';
+    let message = this.getQuestion();
+    let bottomContent = '';
 
     if (!this.spaceKeyPressed) {
       message +=
@@ -107,12 +107,12 @@ class CheckboxPrompt extends Base {
     if (this.status === 'answered') {
       message += chalk.cyan(this.selection.join(', '));
     } else {
-      var choicesStr = renderChoices(this.opt.choices, this.pointer);
-      var indexPosition = this.opt.choices.indexOf(
+      const choicesStr = renderChoices(this.opt.choices, this.pointer);
+      const indexPosition = this.opt.choices.indexOf(
         this.opt.choices.getChoice(this.pointer)
       );
-      var realIndexPosition =
-        this.opt.choices.reduce(function (acc, value, i) {
+      const realIndexPosition =
+        this.opt.choices.reduce((acc, value, i) => {
           // Dont count lines past the choice we are looking at
           if (i > indexPosition) {
             return acc;
@@ -122,7 +122,7 @@ class CheckboxPrompt extends Base {
             return acc + 1;
           }
 
-          var l = value.name;
+          let l = value.name;
           // Non-strings take up one line
           if (typeof l !== 'string') {
             return acc + 1;
@@ -163,7 +163,7 @@ class CheckboxPrompt extends Base {
   }
 
   getCurrentValue() {
-    var choices = this.opt.choices.filter(function (choice) {
+    const choices = this.opt.choices.filter((choice) => {
       return Boolean(choice.checked) && !choice.disabled;
     });
 
@@ -197,13 +197,13 @@ class CheckboxPrompt extends Base {
   }
 
   onAllKey() {
-    var shouldBeChecked = Boolean(
-      this.opt.choices.find(function (choice) {
+    const shouldBeChecked = Boolean(
+      this.opt.choices.find((choice) => {
         return choice.type !== 'separator' && !choice.checked;
       })
     );
 
-    this.opt.choices.forEach(function (choice) {
+    this.opt.choices.forEach((choice) => {
       if (choice.type !== 'separator') {
         choice.checked = shouldBeChecked;
       }
@@ -213,7 +213,7 @@ class CheckboxPrompt extends Base {
   }
 
   onInverseKey() {
-    this.opt.choices.forEach(function (choice) {
+    this.opt.choices.forEach((choice) => {
       if (choice.type !== 'separator') {
         choice.checked = !choice.checked;
       }
@@ -223,7 +223,7 @@ class CheckboxPrompt extends Base {
   }
 
   toggleChoice(index) {
-    var item = this.opt.choices.getChoice(index);
+    const item = this.opt.choices.getChoice(index);
     if (item !== undefined) {
       this.opt.choices.getChoice(index).checked = !item.checked;
     }
@@ -237,10 +237,10 @@ class CheckboxPrompt extends Base {
  */
 
 function renderChoices(choices, pointer) {
-  var output = '';
-  var separatorOffset = 0;
+  let output = '';
+  let separatorOffset = 0;
 
-  choices.forEach(function (choice, i) {
+  choices.forEach((choice, i) => {
     if (choice.type === 'separator') {
       separatorOffset++;
       output += ' ' + choice + '\n';
@@ -252,7 +252,7 @@ function renderChoices(choices, pointer) {
       output += ' - ' + choice.name;
       output += ' (' + (_.isString(choice.disabled) ? choice.disabled : 'Disabled') + ')';
     } else {
-      var line = getCheckbox(choice.checked) + ' ' + choice.name;
+      const line = getCheckbox(choice.checked) + ' ' + choice.name;
       if (i - separatorOffset === pointer) {
         output += chalk.cyan(figures.pointer + line);
       } else {

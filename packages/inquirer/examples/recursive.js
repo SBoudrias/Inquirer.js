@@ -4,10 +4,10 @@
  */
 
 'use strict';
-var inquirer = require('..');
-var output = [];
+const inquirer = require('..');
+const output = [];
 
-var questions = [
+const questions = [
   {
     type: 'input',
     name: 'tvShow',

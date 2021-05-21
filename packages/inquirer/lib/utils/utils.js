@@ -1,9 +1,9 @@
 'use strict';
-var _ = {
+const _ = {
   isFunction: require('lodash/isFunction'),
 };
-var { from, of } = require('rxjs');
-var runAsync = require('run-async');
+const { from, of } = require('rxjs');
+const runAsync = require('run-async');
 
 /**
  * Resolve a question property value if it is passed as a function.

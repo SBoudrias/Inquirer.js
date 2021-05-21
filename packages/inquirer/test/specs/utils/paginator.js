@@ -1,4 +1,4 @@
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const ReadlineStub = require('../../helpers/readline');
 const Paginator = require('../../../lib/utils/paginator');
 
@@ -40,7 +40,7 @@ const getPage = (paginator, index) => {
   return lines.join('\n');
 };
 
-describe('paginator', function () {
+describe('paginator', () => {
   beforeEach(function () {
     this.rl = new ReadlineStub();
     this.paginator = new Paginator();
@@ -77,7 +77,7 @@ z
 a
 b`);
   });
-  describe('non infinite mode', function () {
+  describe('non infinite mode', () => {
     beforeEach(function () {
       this.paginator = new Paginator(undefined, { isInfinite: false });
     });

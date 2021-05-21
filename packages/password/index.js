@@ -9,8 +9,8 @@ module.exports = (config, ...args) => {
   }
 
   return input(
-    Object.assign({}, config, {
-      // Make sure we do not display the default password
+    {
+      ...config, // Make sure we do not display the default password
       default: undefined,
       transformer: (input, { isFinal }) => {
         if (config.mask) {
@@ -23,7 +23,7 @@ module.exports = (config, ...args) => {
 
         return '';
       },
-    }),
+    },
     ...args
   );
 };

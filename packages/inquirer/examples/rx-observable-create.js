@@ -1,7 +1,7 @@
-var inquirer = require('..');
-var { Observable } = require('rxjs');
+const inquirer = require('..');
+const { Observable } = require('rxjs');
 
-var observe = Observable.create(function (obs) {
+const observe = Observable.create((obs) => {
   obs.next({
     type: 'input',
     name: 'first_name',
@@ -12,7 +12,7 @@ var observe = Observable.create(function (obs) {
     type: 'input',
     name: 'last_name',
     message: "What's your last name",
-    default: function () {
+    default() {
       return 'Doe';
     },
   });
@@ -21,8 +21,8 @@ var observe = Observable.create(function (obs) {
     type: 'input',
     name: 'phone',
     message: "What's your phone number",
-    validate: function (value) {
-      var pass = value.match(
+    validate(value) {
+      const pass = value.match(
         /^([01]{1})?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?){1}(?:\d+)?)?$/i
       );
       if (pass) {

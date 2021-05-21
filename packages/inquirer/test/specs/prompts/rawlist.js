@@ -1,11 +1,11 @@
-var expect = require('chai').expect;
-var _ = require('lodash');
-var ReadlineStub = require('../../helpers/readline');
-var fixtures = require('../../helpers/fixtures');
+const { expect } = require('chai');
+const _ = require('lodash');
+const ReadlineStub = require('../../helpers/readline');
+const fixtures = require('../../helpers/fixtures');
 
-var Rawlist = require('../../../lib/prompts/rawlist');
+const Rawlist = require('../../../lib/prompts/rawlist');
 
-describe('`rawlist` prompt', function () {
+describe('`rawlist` prompt', () => {
   beforeEach(function () {
     this.rl = new ReadlineStub();
     this.fixture = _.clone(fixtures.rawlist);
@@ -31,8 +31,8 @@ describe('`rawlist` prompt', function () {
   });
 
   it('should not allow invalid index', function () {
-    var self = this;
-    var promise = this.rawlist.run();
+    const self = this;
+    const promise = this.rawlist.run();
 
     this.rl.emit('line', 'blah');
     setTimeout(() => {
@@ -42,8 +42,8 @@ describe('`rawlist` prompt', function () {
     return promise;
   });
 
-  it('should require a choices array', function () {
-    var mkPrompt = function () {
+  it('should require a choices array', () => {
+    const mkPrompt = function () {
       return new Rawlist({ name: 'foo', message: 'bar' });
     };
 
@@ -52,7 +52,7 @@ describe('`rawlist` prompt', function () {
 
   it('should allow a default index', function (done) {
     this.fixture.default = 1;
-    var list = new Rawlist(this.fixture, this.rl);
+    const list = new Rawlist(this.fixture, this.rl);
 
     list.run().then((answer) => {
       expect(answer).to.equal('bar');
@@ -64,7 +64,7 @@ describe('`rawlist` prompt', function () {
 
   it("shouldn't allow an invalid index as default", function (done) {
     this.fixture.default = 4;
-    var list = new Rawlist(this.fixture, this.rl);
+    const list = new Rawlist(this.fixture, this.rl);
 
     list.run().then((answer) => {
       expect(answer).to.equal('foo');
@@ -76,7 +76,7 @@ describe('`rawlist` prompt', function () {
 
   it('should allow string default being the value', function (done) {
     this.fixture.default = 'bum';
-    var list = new Rawlist(this.fixture, this.rl);
+    const list = new Rawlist(this.fixture, this.rl);
 
     list.run().then((answer) => {
       expect(answer).to.equal('bum');
@@ -88,7 +88,7 @@ describe('`rawlist` prompt', function () {
 
   it("shouldn't allow an invalid string default to change position", function (done) {
     this.fixture.default = 'bumby';
-    var list = new Rawlist(this.fixture, this.rl);
+    const list = new Rawlist(this.fixture, this.rl);
 
     list.run().then((answer) => {
       expect(answer).to.equal('foo');
@@ -110,44 +110,44 @@ describe('`rawlist` prompt', function () {
     this.rl.emit('line', this.rl.line);
   });
 
-  describe('going out of boundaries', function () {
+  describe('going out of boundaries', () => {
     beforeEach(function () {
       this.pressKey = function (dir, times) {
-        for (var i = 0; i < times; i++) {
+        for (let i = 0; i < times; i++) {
           this.rl.input.emit('keypress', '', { name: dir });
         }
         this.rl.emit('line', this.rl.line);
       };
     });
-    describe('when loop undefined / true', function () {
+    describe('when loop undefined / true', () => {
       it('loops to bottom when too far up', async function () {
-        var promise = this.rawlist.run();
+        const promise = this.rawlist.run();
         this.pressKey('up', 2);
-        var answer = await promise;
+        const answer = await promise;
         expect(answer).to.equal('bar');
       });
       it('loops to top when too far down', async function () {
-        var promise = this.rawlist.run();
+        const promise = this.rawlist.run();
         this.pressKey('down', 3);
-        var answer = await promise;
+        const answer = await promise;
         expect(answer).to.equal('foo');
       });
     });
 
-    describe('when loop: false', function () {
+    describe('when loop: false', () => {
       beforeEach(function () {
         this.rawlist = new Rawlist(_.assign(this.fixture, { loop: false }), this.rl);
       });
       it('stays at top when too far up', async function () {
-        var promise = this.rawlist.run();
+        const promise = this.rawlist.run();
         this.pressKey('up', 2);
-        var answer = await promise;
+        const answer = await promise;
         expect(answer).to.equal('foo');
       });
       it('stays at bottom when too far down', async function () {
-        var promise = this.rawlist.run();
+        const promise = this.rawlist.run();
         this.pressKey('down', 3);
-        var answer = await promise;
+        const answer = await promise;
         expect(answer).to.equal('bum');
       });
     });

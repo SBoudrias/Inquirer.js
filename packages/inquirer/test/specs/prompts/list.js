@@ -1,12 +1,12 @@
-var expect = require('chai').expect;
-var _ = require('lodash');
-var ReadlineStub = require('../../helpers/readline');
-var fixtures = require('../../helpers/fixtures');
-var sinon = require('sinon');
+const { expect } = require('chai');
+const _ = require('lodash');
+const ReadlineStub = require('../../helpers/readline');
+const fixtures = require('../../helpers/fixtures');
+const sinon = require('sinon');
 
-var List = require('../../../lib/prompts/list');
+const List = require('../../../lib/prompts/list');
 
-describe('`list` prompt', function () {
+describe('`list` prompt', () => {
   beforeEach(function () {
     this.fixture = _.clone(fixtures.list);
     this.rl = new ReadlineStub();
@@ -68,50 +68,50 @@ describe('`list` prompt', function () {
     this.rl.emit('line');
   });
 
-  describe('going out of boundaries', function () {
+  describe('going out of boundaries', () => {
     beforeEach(function () {
       this.pressKey = function (dir, times) {
-        for (var i = 0; i < times; i++) {
+        for (let i = 0; i < times; i++) {
           this.rl.input.emit('keypress', '', { name: dir });
         }
         this.rl.emit('line');
       };
     });
-    describe('when loop undefined / true', function () {
+    describe('when loop undefined / true', () => {
       it('loops to bottom when too far up', async function () {
-        var promise = this.list.run();
+        const promise = this.list.run();
         this.pressKey('up', 2);
-        var answer = await promise;
+        const answer = await promise;
         expect(answer).to.equal('bar');
       });
       it('loops to top when too far down', async function () {
-        var promise = this.list.run();
+        const promise = this.list.run();
         this.pressKey('down', 3);
-        var answer = await promise;
+        const answer = await promise;
         expect(answer).to.equal('foo');
       });
     });
 
-    describe('when loop: false', function () {
+    describe('when loop: false', () => {
       beforeEach(function () {
         this.list = new List(_.assign(this.fixture, { loop: false }), this.rl);
       });
       it('stays at top when too far up', async function () {
-        var promise = this.list.run();
+        const promise = this.list.run();
         this.pressKey('up', 2);
-        var answer = await promise;
+        const answer = await promise;
         expect(answer).to.equal('foo');
       });
       it('stays at bottom when too far down', async function () {
-        var promise = this.list.run();
+        const promise = this.list.run();
         this.pressKey('down', 3);
-        var answer = await promise;
+        const answer = await promise;
         expect(answer).to.equal('bum');
       });
     });
   });
 
-  it('should require a choices array', function () {
+  it('should require a choices array', () => {
     expect(() => {
       return new List({ name: 'foo', message: 'bar' });
     }).to.throw(/choices/);
@@ -119,7 +119,7 @@ describe('`list` prompt', function () {
 
   it('should allow a numeric default', function (done) {
     this.fixture.default = 1;
-    var list = new List(this.fixture, this.rl);
+    const list = new List(this.fixture, this.rl);
 
     list.run().then((answer) => {
       expect(answer).to.equal('bar');
@@ -131,7 +131,7 @@ describe('`list` prompt', function () {
 
   it('should work from a numeric default being the index', function (done) {
     this.fixture.default = 1;
-    var list = new List(this.fixture, this.rl);
+    const list = new List(this.fixture, this.rl);
 
     list.run().then((answer) => {
       expect(answer).to.equal('bum');
@@ -144,7 +144,7 @@ describe('`list` prompt', function () {
 
   it('should allow a string default being the value', function (done) {
     this.fixture.default = 'bar';
-    var list = new List(this.fixture, this.rl);
+    const list = new List(this.fixture, this.rl);
 
     list.run().then((answer) => {
       expect(answer).to.equal('bar');
@@ -156,7 +156,7 @@ describe('`list` prompt', function () {
 
   it('should work from a string default', function (done) {
     this.fixture.default = 'bar';
-    var list = new List(this.fixture, this.rl);
+    const list = new List(this.fixture, this.rl);
 
     list.run().then((answer) => {
       expect(answer).to.equal('bum');
@@ -169,7 +169,7 @@ describe('`list` prompt', function () {
 
   it("shouldn't allow an invalid string default to change position", function (done) {
     this.fixture.default = 'babar';
-    var list = new List(this.fixture, this.rl);
+    const list = new List(this.fixture, this.rl);
 
     list.run().then((answer) => {
       expect(answer).to.equal('foo');
@@ -181,7 +181,7 @@ describe('`list` prompt', function () {
 
   it("shouldn't allow an invalid index as default", function (done) {
     this.fixture.default = 4;
-    var list = new List(this.fixture, this.rl);
+    const list = new List(this.fixture, this.rl);
 
     list.run().then((answer) => {
       expect(answer).to.equal('foo');
@@ -202,12 +202,12 @@ describe('`list` prompt', function () {
   });
 
   it('pagination works with multiline choices', function (done) {
-    var multilineFixture = {
+    const multilineFixture = {
       message: 'message',
       name: 'name',
       choices: ['a\n\n', 'b\n\n'],
     };
-    var list = new List(multilineFixture, this.rl);
+    const list = new List(multilineFixture, this.rl);
     const spy = sinon.spy(list.paginator, 'paginate');
     list.run().then((answer) => {
       const realIndexPosition1 = spy.firstCall.args[1];
@@ -225,7 +225,7 @@ describe('`list` prompt', function () {
   });
 
   it('paginator uses non infinite version with loop:false', function () {
-    var list = new List(
+    const list = new List(
       {
         name: 'numbers',
         choices: [1, 2, 3],

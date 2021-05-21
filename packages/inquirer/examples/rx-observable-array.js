@@ -1,7 +1,7 @@
-var inquirer = require('..');
-var { from } = require('rxjs');
+const inquirer = require('..');
+const { from } = require('rxjs');
 
-var questions = [
+const questions = [
   {
     type: 'input',
     name: 'first_name',
@@ -11,7 +11,7 @@ var questions = [
     type: 'input',
     name: 'last_name',
     message: "What's your last name",
-    default: function () {
+    default() {
       return 'Doe';
     },
   },
@@ -19,8 +19,8 @@ var questions = [
     type: 'input',
     name: 'phone',
     message: "What's your phone number",
-    validate: function (value) {
-      var pass = value.match(
+    validate(value) {
+      const pass = value.match(
         /^([01]{1})?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?){1}(?:\d+)?)?$/i
       );
       if (pass) {
@@ -32,16 +32,16 @@ var questions = [
   },
 ];
 
-var observable = from(questions);
+const observable = from(questions);
 
 inquirer.prompt(observable).ui.process.subscribe(
-  function (ans) {
+  (ans) => {
     console.log('Answer is: ', ans);
   },
-  function (err) {
+  (err) => {
     console.log('Error: ', err);
   },
-  function () {
+  () => {
     console.log('Completed');
   }
 );

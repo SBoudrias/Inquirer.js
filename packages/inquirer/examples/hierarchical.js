@@ -3,9 +3,9 @@
  */
 
 'use strict';
-var inquirer = require('..');
+const inquirer = require('..');
 
-var directionsPrompt = {
+const directionsPrompt = {
   type: 'list',
   name: 'direction',
   message: 'Which direction would you like to go?',
@@ -34,7 +34,7 @@ function exitHouse() {
 
 function encounter1() {
   inquirer.prompt(directionsPrompt).then((answers) => {
-    var direction = answers.direction;
+    const { direction } = answers;
     if (direction === 'Forward') {
       console.log('You attempt to fight the wolf');
       console.log(
@@ -54,9 +54,9 @@ function encounter1() {
 
 function encounter2a() {
   inquirer.prompt(directionsPrompt).then((answers) => {
-    var direction = answers.direction;
+    const { direction } = answers;
     if (direction === 'Forward') {
-      var output = 'You find a painted wooden sign that says:';
+      let output = 'You find a painted wooden sign that says:';
       output += ' \n';
       output += ' ____  _____  ____  _____ \n';
       output += '(_  _)(  _  )(  _ \\(  _  ) \n';

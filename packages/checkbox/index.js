@@ -25,7 +25,7 @@ module.exports = createPrompt(
           showHelpTip: false,
           choices: choices.map((choice, i) => {
             if (i === cursorPosition) {
-              return Object.assign({}, choice, { checked: !choice.checked });
+              return { ...choice, checked: !choice.checked };
             }
 
             return choice;
@@ -34,15 +34,11 @@ module.exports = createPrompt(
       } else if (key.name === 'a') {
         const selectAll = Boolean(choices.find((choice) => !choice.checked));
         setState({
-          choices: choices.map((choice) =>
-            Object.assign({}, choice, { checked: selectAll })
-          ),
+          choices: choices.map((choice) => ({ ...choice, checked: selectAll })),
         });
       } else if (key.name === 'i') {
         setState({
-          choices: choices.map((choice) =>
-            Object.assign({}, choice, { checked: !choice.checked })
-          ),
+          choices: choices.map((choice) => ({ ...choice, checked: !choice.checked })),
         });
       } else if (isNumberKey(key)) {
         // Adjust index to start at 1
@@ -57,7 +53,7 @@ module.exports = createPrompt(
           cursorPosition: position,
           choices: choices.map((choice, i) => {
             if (i === position) {
-              return Object.assign({}, choice, { checked: !choice.checked });
+              return { ...choice, checked: !choice.checked };
             }
 
             return choice;

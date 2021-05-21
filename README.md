@@ -24,10 +24,10 @@ A collection of common interactive command line user interfaces.
     1.  [Reactive Interface](#reactive)
 3.  [Support](#support)
 4.  [Known issues](#issues)
-4.  [News](#news)
-5.  [Contributing](#contributing)
-6.  [License](#license)
-7.  [Plugins](#plugins)
+5.  [News](#news)
+6.  [Contributing](#contributing)
+7.  [License](#license)
+8.  [Plugins](#plugins)
 
 ## Goal and Philosophy
 
@@ -61,11 +61,11 @@ inquirer
   .prompt([
     /* Pass your questions in here */
   ])
-  .then(answers => {
+  .then((answers) => {
     // Use user feedback for... whatever!!
   })
-  .catch(error => {
-    if(error.isTtyError) {
+  .catch((error) => {
+    if (error.isTtyError) {
       // Prompt couldn't be rendered in the current environment
     } else {
       // Something else went wrong
@@ -297,8 +297,8 @@ The `postfix` property is useful if you want to provide an extension.
 <a name="layouts"></a>
 
 ### Use in Non-Interactive Environments
-`prompt()` requires that it is run in an interactive environment. (I.e. [One where `process.stdin.isTTY` is `true`](https://nodejs.org/docs/latest-v12.x/api/process.html#process_a_note_on_process_i_o)). If `prompt()` is invoked outside of such an environment, then `prompt()` will return a rejected promise with an error. For convenience, the error will have a `isTtyError` property to programmatically indicate the cause.
 
+`prompt()` requires that it is run in an interactive environment. (I.e. [One where `process.stdin.isTTY` is `true`](https://nodejs.org/docs/latest-v12.x/api/process.html#process_a_note_on_process_i_o)). If `prompt()` is invoked outside of such an environment, then `prompt()` will return a rejected promise with an error. For convenience, the error will have a `isTtyError` property to programmatically indicate the cause.
 
 ## User Interfaces and layouts
 

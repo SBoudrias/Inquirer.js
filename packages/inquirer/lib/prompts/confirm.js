@@ -3,24 +3,24 @@
  * `confirm` type prompt
  */
 
-var _ = {
+const _ = {
   extend: require('lodash/extend'),
   isBoolean: require('lodash/isBoolean'),
 };
-var chalk = require('chalk');
-var { take, takeUntil } = require('rxjs/operators');
-var Base = require('./base');
-var observe = require('../utils/events');
+const chalk = require('chalk');
+const { take, takeUntil } = require('rxjs/operators');
+const Base = require('./base');
+const observe = require('../utils/events');
 
 class ConfirmPrompt extends Base {
   constructor(questions, rl, answers) {
     super(questions, rl, answers);
 
-    var rawDefault = true;
+    let rawDefault = true;
 
     _.extend(this.opt, {
-      filter: function (input) {
-        var value = rawDefault;
+      filter(input) {
+        let value = rawDefault;
         if (input != null && input !== '') {
           value = /^y(es)?/i.test(input);
         }
@@ -46,7 +46,7 @@ class ConfirmPrompt extends Base {
     this.done = cb;
 
     // Once user confirm (enter key)
-    var events = observe(this.rl);
+    const events = observe(this.rl);
     events.keypress.pipe(takeUntil(events.line)).forEach(this.onKeypress.bind(this));
 
     events.line.pipe(take(1)).forEach(this.onEnd.bind(this));
@@ -63,7 +63,7 @@ class ConfirmPrompt extends Base {
    */
 
   render(answer) {
-    var message = this.getQuestion();
+    let message = this.getQuestion();
 
     if (typeof answer === 'boolean') {
       message += chalk.cyan(answer ? 'Yes' : 'No');
@@ -83,7 +83,7 @@ class ConfirmPrompt extends Base {
   onEnd(input) {
     this.status = 'answered';
 
-    var output = this.opt.filter(input);
+    const output = this.opt.filter(input);
     this.render(output);
 
     this.screen.done();

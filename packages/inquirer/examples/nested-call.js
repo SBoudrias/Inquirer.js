@@ -3,7 +3,7 @@
  */
 
 'use strict';
-var inquirer = require('..');
+const inquirer = require('..');
 
 inquirer
   .prompt({
