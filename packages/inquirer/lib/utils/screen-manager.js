@@ -7,6 +7,7 @@ const util = require('./readline');
 const cliWidth = require('cli-width');
 const stripAnsi = require('strip-ansi');
 const stringWidth = require('string-width');
+const ora = require('ora');
 
 function height(content) {
   return content.split('\n').length;
@@ -25,7 +26,36 @@ class ScreenManager {
     this.rl = rl;
   }
 
-  render(content, bottomContent) {
+  renderWithSpinner(content, bottomContent) {
+    if (this.spinnerId) {
+      clearInterval(this.spinnerId);
+    }
+
+    let spinner;
+    let contentFunc;
+    let bottomContentFunc;
+
+    if (bottomContent) {
+      spinner = ora(bottomContent);
+      contentFunc = () => content;
+      bottomContentFunc = () => spinner.frame();
+    } else {
+      spinner = ora(content);
+      contentFunc = () => spinner.frame();
+      bottomContentFunc = () => '';
+    }
+
+    this.spinnerId = setInterval(
+      () => this.render(contentFunc(), bottomContentFunc(), true),
+      spinner.interval
+    );
+  }
+
+  render(content, bottomContent, spinning = false) {
+    if (this.spinnerId && !spinning) {
+      clearInterval(this.spinnerId);
+    }
+
     this.rl.output.unmute();
     this.clean(this.extraLinesUnderPrompt);
 

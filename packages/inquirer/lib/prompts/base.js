@@ -25,7 +25,9 @@ class Prompt {
     // Set defaults prompt options
     this.opt = _.defaults(_.clone(question), {
       validate: () => true,
+      validatingText: '',
       filter: (val) => val,
+      filteringText: '',
       when: () => true,
       suffix: '',
       prefix: chalk.green('?'),
@@ -96,16 +98,19 @@ class Prompt {
     const validate = runAsync(this.opt.validate);
     const asyncFilter = runAsync(this.opt.filter);
     const validation = submit.pipe(
-      flatMap((value) =>
-        asyncFilter(value, self.answers).then(
-          (filteredValue) =>
-            validate(filteredValue, self.answers).then(
+      flatMap((value) => {
+        this.startSpinner(value, this.opt.filteringText);
+        return asyncFilter(value, self.answers).then(
+          (filteredValue) => {
+            this.startSpinner(filteredValue, this.opt.validatingText);
+            return validate(filteredValue, self.answers).then(
               (isValid) => ({ isValid, value: filteredValue }),
               (err) => ({ isValid: err, value: filteredValue })
-            ),
+            );
+          },
           (err) => ({ isValid: err })
-        )
-      ),
+        );
+      }),
       share()
     );
 
@@ -124,11 +129,19 @@ class Prompt {
     };
   }
 
+  startSpinner(value, bottomContent) {
+    // If the question will spin, cut off the prefix (for layout purposes)
+    const content = bottomContent
+      ? this.getQuestion() + value
+      : this.getQuestion().slice(this.opt.prefix.length + 1) + value;
+
+    this.screen.renderWithSpinner(content, bottomContent);
+  }
+
   /**
    * Generate the prompt question string
    * @return {String} prompt question string
    */
-
   getQuestion() {
     let message =
       this.opt.prefix +
