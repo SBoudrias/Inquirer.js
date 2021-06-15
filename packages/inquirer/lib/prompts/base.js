@@ -150,8 +150,12 @@ class Prompt {
       this.opt.suffix +
       chalk.reset(' ');
 
-    // Append the default if available, and if question isn't answered
-    if (this.opt.default != null && this.status !== 'answered') {
+    // Append the default if available, and if question isn't touched/answered
+    if (
+      this.opt.default != null &&
+      this.status !== 'touched' &&
+      this.status !== 'answered'
+    ) {
       // If default password is supplied, hide it
       if (this.opt.type === 'password') {
         message += chalk.italic.dim('[hidden] ');
