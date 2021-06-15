@@ -111,6 +111,7 @@ describe('`number` prompt', () => {
       done();
     });
 
-    this.rl.emit('line', '');
+    this.rl.input.emit('keypress', 'a', { name: 'a' });
+    this.rl.emit('line');
   });
 });
