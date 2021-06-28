@@ -23,6 +23,10 @@
     "pretest": "eslint .",
     "test": "jest --coverage && lerna exec npm test --scope inquirer"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
