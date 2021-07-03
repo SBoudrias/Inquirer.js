@@ -73,9 +73,11 @@ class RawListPrompt extends Base {
     validation.success.forEach(this.onEnd.bind(this));
     validation.error.forEach(this.onError.bind(this));
 
-    events.normalizedUpKey.pipe(takeUntil(events.line)).forEach(this.onUpKey.bind(this));
+    events.normalizedUpKey
+      .pipe(takeUntil(validation.success))
+      .forEach(this.onUpKey.bind(this));
     events.normalizedDownKey
-      .pipe(takeUntil(events.line))
+      .pipe(takeUntil(validation.success))
       .forEach(this.onDownKey.bind(this));
     events.keypress
       .pipe(takeUntil(validation.success))
