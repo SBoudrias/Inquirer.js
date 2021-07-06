@@ -111,14 +111,13 @@ describe('`rawlist` prompt', () => {
   });
 
   it('should allow for arrow navigation after invalid input', function (done) {
-    this.rawlist.run().then((answer) => {
-      try {
+    this.rawlist
+      .run()
+      .then((answer) => {
         expect(answer).to.equal('bar');
-      } catch (err) {
-        return done(err);
-      }
-      done();
-    });
+        done();
+      })
+      .catch(done);
 
     this.rl.emit('line', 'blah');
     this.rl.input.emit('keypress', '', { name: 'down' });
