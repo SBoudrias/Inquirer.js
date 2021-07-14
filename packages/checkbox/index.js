@@ -61,9 +61,8 @@ module.exports = createPrompt(
         });
       }
     },
-    mapStateToValue: ({ choices }) => {
-      return choices.filter((choice) => choice.checked).map((choice) => choice.value);
-    },
+    mapStateToValue: ({ choices }) =>
+      choices.filter((choice) => choice.checked).map((choice) => choice.value),
     paginator: new Paginator(readline),
   }),
   (state, { paginator }) => {

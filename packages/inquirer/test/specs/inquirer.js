@@ -54,9 +54,7 @@ describe('inquirer.prompt', () => {
 
   it('should close readline instance on rejected promise', function (done) {
     this.prompt.registerPrompt('stub', function () {
-      this.run = () => {
-        return Promise.reject(new Error('test error'));
-      };
+      this.run = () => Promise.reject(new Error('test error'));
     });
 
     const promise = this.prompt({

@@ -3,14 +3,14 @@
   "devDependencies": {
     "@babel/core": "^7.14.3",
     "@babel/preset-env": "^7.14.2",
-    "babel-jest": "^26.6.3",
+    "babel-jest": "^27.0.6",
     "codecov": "^3.8.2",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-config-xo": "^0.36.0",
+    "eslint-config-xo": "^0.37.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "husky": "^4.3.8",
-    "jest": "^26.6.3",
+    "husky": "^7.0.1",
+    "jest": "^27.0.6",
     "lerna": "^4.0.0",
     "lint-staged": "^11.0.0",
     "prettier": "^2.3.0"

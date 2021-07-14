@@ -163,9 +163,9 @@ class CheckboxPrompt extends Base {
   }
 
   getCurrentValue() {
-    const choices = this.opt.choices.filter((choice) => {
-      return Boolean(choice.checked) && !choice.disabled;
-    });
+    const choices = this.opt.choices.filter(
+      (choice) => Boolean(choice.checked) && !choice.disabled
+    );
 
     this.selection = _.map(choices, 'short');
     return _.map(choices, 'value');
@@ -198,9 +198,7 @@ class CheckboxPrompt extends Base {
 
   onAllKey() {
     const shouldBeChecked = Boolean(
-      this.opt.choices.find((choice) => {
-        return choice.type !== 'separator' && !choice.checked;
-      })
+      this.opt.choices.find((choice) => choice.type !== 'separator' && !choice.checked)
     );
 
     this.opt.choices.forEach((choice) => {

@@ -112,9 +112,7 @@ describe('`list` prompt', () => {
   });
 
   it('should require a choices array', () => {
-    expect(() => {
-      return new List({ name: 'foo', message: 'bar' });
-    }).to.throw(/choices/);
+    expect(() => new List({ name: 'foo', message: 'bar' })).to.throw(/choices/);
   });
 
   it('should allow a numeric default', function (done) {

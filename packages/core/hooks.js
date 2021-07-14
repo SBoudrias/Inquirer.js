@@ -70,54 +70,50 @@ exports.useEffect = (cb, depArray) => {
   index++;
 };
 
-exports.useRef = (val) => {
-  return exports.useState({ current: val })[0];
-};
+exports.useRef = (val) => exports.useState({ current: val })[0];
 
-exports.createPrompt = (view) => {
-  return (options) => {
-    // Default `input` to stdin
-    const input = process.stdin;
+exports.createPrompt = (view) => (options) => {
+  // Default `input` to stdin
+  const input = process.stdin;
 
-    // Add mute capabilities to the output
-    const output = new MuteStream();
-    output.pipe(process.stdout);
+  // Add mute capabilities to the output
+  const output = new MuteStream();
+  output.pipe(process.stdout);
 
-    const rl = readline.createInterface({
-      terminal: true,
-      input,
-      output,
-    });
-    const screen = new ScreenManager(rl);
+  const rl = readline.createInterface({
+    terminal: true,
+    input,
+    output,
+  });
+  const screen = new ScreenManager(rl);
 
-    return new Promise((resolve, reject) => {
-      sessionRl = rl;
+  return new Promise((resolve, reject) => {
+    sessionRl = rl;
 
-      const done = (value) => {
-        let len = cleanupHook.length;
-        while (len--) {
-          cleanupHook(len);
-        }
-        screen.done();
+    const done = (value) => {
+      let len = cleanupHook.length;
+      while (len--) {
+        cleanupHook(len);
+      }
+      screen.done();
 
-        // Reset hooks state
-        hooks = [];
-        index = 0;
-        sessionRl = undefined;
-
-        // Finally we resolve our promise
-        resolve(value);
-      };
-
+      // Reset hooks state
       hooks = [];
-      const workLoop = (config) => {
-        index = 0;
-        handleChange = () => workLoop(config);
-        screen.render(...[view(config, done)].flat().filter(Boolean));
-      };
+      index = 0;
+      sessionRl = undefined;
 
-      // TODO: we should display a loader while we get the default options.
-      getPromptConfig(options).then(workLoop, reject);
-    });
-  };
+      // Finally we resolve our promise
+      resolve(value);
+    };
+
+    hooks = [];
+    const workLoop = (config) => {
+      index = 0;
+      handleChange = () => workLoop(config);
+      screen.render(...[view(config, done)].flat().filter(Boolean));
+    };
+
+    // TODO: we should display a loader while we get the default options.
+    getPromptConfig(options).then(workLoop, reject);
+  });
 };

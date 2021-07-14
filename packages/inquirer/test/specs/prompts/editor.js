@@ -24,8 +24,6 @@ describe('`editor` prompt', () => {
     const promise = prompt.run();
     this.rl.emit('line', '');
 
-    return promise.then((answer) => {
-      return expect(answer).to.equal('testing');
-    });
+    return promise.then((answer) => expect(answer).to.equal('testing'));
   });
 });

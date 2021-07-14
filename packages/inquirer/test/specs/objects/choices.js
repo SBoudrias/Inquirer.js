@@ -70,9 +70,7 @@ describe('Choices collection', () => {
 
   it('should façade filter', () => {
     const choices = new Choices(['a', 'b', 'c']);
-    const filtered = choices.filter((val) => {
-      return val.name === 'a';
-    });
+    const filtered = choices.filter((val) => val.name === 'a');
     expect(filtered.length).to.equal(1);
     expect(filtered[0].name).to.equal('a');
   });
