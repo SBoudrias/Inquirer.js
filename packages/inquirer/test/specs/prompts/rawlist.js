@@ -110,6 +110,22 @@ describe('`rawlist` prompt', () => {
     this.rl.emit('line', this.rl.line);
   });
 
+  it('should allow for arrow navigation after invalid input', function (done) {
+    this.rawlist
+      .run()
+      .then((answer) => {
+        expect(answer).to.equal('bar');
+        done();
+      })
+      .catch(done);
+
+    this.rl.emit('line', 'blah');
+    this.rl.input.emit('keypress', '', { name: 'down' });
+    this.rl.input.emit('keypress', '', { name: 'down' });
+    this.rl.input.emit('keypress', '', { name: 'up' });
+    this.rl.emit('line', this.rl.line);
+  });
+
   describe('going out of boundaries', () => {
     beforeEach(function () {
       this.pressKey = function (dir, times) {
