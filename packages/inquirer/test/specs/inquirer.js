@@ -722,6 +722,32 @@ describe('inquirer.prompt', () => {
       });
     });
 
+    it('should not run prompt if nested answer exists for question', function () {
+      const throwFunc = function (step) {
+        throw new Error(`askAnswered Error ${step}`);
+      };
+      const prompts = [
+        {
+          type: 'input',
+          name: 'prefiled.nested',
+          when: throwFunc.bind(undefined, 'when'),
+          validate: throwFunc.bind(undefined, 'validate'),
+          transformer: throwFunc.bind(undefined, 'transformer'),
+          filter: throwFunc.bind(undefined, 'filter'),
+          message: 'message',
+          default: 'newValue',
+        },
+      ];
+
+      const answers = { prefiled: { nested: 'prefiled' } };
+      const promise = this.prompt(prompts, answers);
+      autosubmit(promise.ui);
+
+      return promise.then((answers) => {
+        expect(answers.prefiled.nested).to.equal('prefiled');
+      });
+    });
+
     it('should run prompt if answer exists for question and askAnswered is set', function () {
       const prompts = [
         {
@@ -739,6 +765,26 @@ describe('inquirer.prompt', () => {
 
       return promise.then((answers) => {
         expect(answers.prefiled).to.equal('newValue');
+      });
+    });
+
+    it('should run prompt if nested answer exists for question and askAnswered is set', function () {
+      const prompts = [
+        {
+          askAnswered: true,
+          type: 'input',
+          name: 'prefiled.nested',
+          message: 'message',
+          default: 'newValue',
+        },
+      ];
+
+      const answers = { prefiled: { nested: 'prefiled' } };
+      const promise = this.prompt(prompts, answers);
+      autosubmit(promise.ui);
+
+      return promise.then((answers) => {
+        expect(answers.prefiled.nested).to.equal('newValue');
       });
     });
   });
