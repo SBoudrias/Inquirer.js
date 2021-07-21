@@ -96,7 +96,7 @@ describe('`password` prompt', () => {
     };
 
     /* This test should fail if you uncomment this line: */
-    // password.spinningValue = value => value;
+    // password.getSpinningValue = (value) => value;
 
     const promise = password.run().then((answer) => {
       expect(output).to.not.contain(input);

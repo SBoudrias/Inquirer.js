@@ -57,9 +57,9 @@ class PasswordPrompt extends Base {
     let bottomContent = '';
 
     if (this.status === 'answered') {
-      message += this.maskedValue(this.answer);
+      message += this.getMaskedValue(this.answer);
     } else {
-      message += this.maskedValue(this.rl.line || '');
+      message += this.getMaskedValue(this.rl.line || '');
     }
 
     if (error) {
@@ -69,7 +69,7 @@ class PasswordPrompt extends Base {
     this.screen.render(message, bottomContent);
   }
 
-  maskedValue(value) {
+  getMaskedValue(value) {
     if (this.status === 'answered') {
       return this.opt.mask
         ? chalk.cyan(mask(value, this.opt.mask))
@@ -83,8 +83,8 @@ class PasswordPrompt extends Base {
   /**
    * Mask value during async filter/validation.
    */
-  spinningValue(value) {
-    return this.maskedValue(value);
+  getSpinningValue(value) {
+    return this.getMaskedValue(value);
   }
 
   /**
