@@ -92,16 +92,16 @@ class CheckboxPrompt extends Base {
     let message = this.getQuestion();
     let bottomContent = '';
 
-    if (!this.spaceKeyPressed) {
-      message +=
-        '(Press ' +
-        chalk.cyan.bold('<space>') +
-        ' to select, ' +
-        chalk.cyan.bold('<a>') +
-        ' to toggle all, ' +
-        chalk.cyan.bold('<i>') +
-        ' to invert selection)';
-    }
+    message +=
+      '(Press ' +
+      chalk.cyan.bold('<space>') +
+      ' to select, ' +
+      chalk.cyan.bold('<a>') +
+      ' to toggle all, ' +
+      chalk.cyan.bold('<i>') +
+      ' to invert selection, and ' + 
+      chalk.cyan.bold('<enter>') + 
+      ' to proceed)';
 
     // Render choices or answer depending on the state
     if (this.status === 'answered') {
