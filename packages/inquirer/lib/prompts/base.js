@@ -144,8 +144,7 @@ class Prompt {
    */
   getQuestion() {
     let message =
-      this.opt.prefix +
-      ' ' +
+      (this.opt.prefix ? this.opt.prefix + ' ' : '') +
       chalk.bold(this.opt.message) +
       this.opt.suffix +
       chalk.reset(' ');
