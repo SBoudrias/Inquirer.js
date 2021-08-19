@@ -213,7 +213,7 @@ Separator instances have a property `type` equal to `separator`. This should all
 #### List - `{type: 'list'}`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties. 
-(Note that default must be either set to the index or the value of one of the entries in the `choices` array)
+(`default` must be set to the index or the value of one of the entries in the `choices` array)
 
 ![List prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/list.svg)
 
@@ -222,7 +222,7 @@ Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] propert
 #### Raw List - `{type: 'rawlist'}`
 
 Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties. 
-((Note that default must be set to the index of one of the entries in the `choices` array)
+(`default` must be set to the index of one of the entries in the `choices` array)
 
 ![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
 
