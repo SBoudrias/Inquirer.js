@@ -212,8 +212,8 @@ Separator instances have a property `type` equal to `separator`. This should all
 
 #### List - `{type: 'list'}`
 
-Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties. 
-(`default` must be set to the index or the value of one of the entries in the `choices` array)
+Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties.  
+(Note: `default` must be set to the `index` or `value` of one of the entries in `choices`)
 
 ![List prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/list.svg)
 
@@ -221,8 +221,8 @@ Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] propert
 
 #### Raw List - `{type: 'rawlist'}`
 
-Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties. 
-(`default` must be set to the index of one of the entries in the `choices` array)
+Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties.  
+(Note: `default` must be set to the `index` of one of the entries in `choices`)
 
 ![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
 
@@ -230,8 +230,8 @@ Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] propert
 
 #### Expand - `{type: 'expand'}`
 
-Take `type`, `name`, `message`, `choices`[, `default`] properties. (Note that
-default must be the selected `index` in the array. If `default` key not provided, then `help` will be used as default choice)
+Take `type`, `name`, `message`, `choices`[, `default`] properties.  
+Note: `default` must be the `index` of the desired default selection of the array. If `default` key not provided, then `help` will be used as default choice
 
 Note that the `choices` object will take an extra parameter called `key` for the `expand` prompt. This parameter must be a single (lowercased) character. The `h` option is added by the prompt and shouldn't be defined by the user.
 
