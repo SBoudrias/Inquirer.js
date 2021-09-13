@@ -130,12 +130,23 @@ class Prompt {
   }
 
   startSpinner(value, bottomContent) {
+    value = this.getSpinningValue(value);
     // If the question will spin, cut off the prefix (for layout purposes)
     const content = bottomContent
       ? this.getQuestion() + value
       : this.getQuestion().slice(this.opt.prefix.length + 1) + value;
 
     this.screen.renderWithSpinner(content, bottomContent);
+  }
+
+  /**
+   * Allow override, e.g. for password prompts
+   * See: https://github.com/SBoudrias/Inquirer.js/issues/1022
+   *
+   * @return {String} value to display while spinning
+   */
+  getSpinningValue(value) {
+    return value;
   }
 
   /**

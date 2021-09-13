@@ -57,13 +57,9 @@ class PasswordPrompt extends Base {
     let bottomContent = '';
 
     if (this.status === 'answered') {
-      message += this.opt.mask
-        ? chalk.cyan(mask(this.answer, this.opt.mask))
-        : chalk.italic.dim('[hidden]');
-    } else if (this.opt.mask) {
-      message += mask(this.rl.line || '', this.opt.mask);
+      message += this.getMaskedValue(this.answer);
     } else {
-      message += chalk.italic.dim('[input is hidden] ');
+      message += this.getMaskedValue(this.rl.line || '');
     }
 
     if (error) {
@@ -71,6 +67,24 @@ class PasswordPrompt extends Base {
     }
 
     this.screen.render(message, bottomContent);
+  }
+
+  getMaskedValue(value) {
+    if (this.status === 'answered') {
+      return this.opt.mask
+        ? chalk.cyan(mask(value, this.opt.mask))
+        : chalk.italic.dim('[hidden]');
+    }
+    return this.opt.mask
+      ? mask(value, this.opt.mask)
+      : chalk.italic.dim('[input is hidden] ');
+  }
+
+  /**
+   * Mask value during async filter/validation.
+   */
+  getSpinningValue(value) {
+    return this.getMaskedValue(value);
   }
 
   /**

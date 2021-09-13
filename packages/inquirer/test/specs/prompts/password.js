@@ -66,4 +66,45 @@ describe('`password` prompt', () => {
     this.rl.emit('line', '');
     return promise;
   });
+
+  // See: https://github.com/SBoudrias/Inquirer.js/issues/1022
+  it('should not display input during async validation', function () {
+    let output = '';
+    let renderCount = 0;
+
+    this.fixture.validate = () =>
+      new Promise((resolve) => {
+        const id = setInterval(() => {
+          // Make sure we render at least once.
+          if (renderCount > 1) {
+            clearInterval(id);
+            resolve(true);
+          }
+        }, 10);
+      });
+
+    const password = new Password(this.fixture, this.rl);
+    const input = 'wvAq82yVujm5S9pf';
+
+    // Override screen.render to capture all output
+    const { screen } = password;
+    const { render } = screen;
+    screen.render = (...args) => {
+      output += stripAnsi(args.join(''));
+      renderCount += 1;
+      return render.call(screen, ...args);
+    };
+
+    /* This test should fail if you uncomment this line: */
+    // password.getSpinningValue = (value) => value;
+
+    const promise = password.run().then((answer) => {
+      expect(output).to.not.contain(input);
+      expect(answer).to.equal(input);
+    });
+
+    this.rl.emit('line', input);
+
+    return promise;
+  });
 });
