@@ -45,7 +45,7 @@
     "figures": "^3.0.0",
     "lodash": "^4.17.21",
     "mute-stream": "0.0.8",
-    "ora": "^5.3.0",
+    "ora": "^6.0.0",
     "run-async": "^2.4.0",
     "rxjs": "^7.2.0",
     "string-width": "^4.1.0",
