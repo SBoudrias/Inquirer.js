@@ -45,11 +45,11 @@
     "figures": "^3.0.0",
     "lodash": "^4.17.21",
     "mute-stream": "0.0.8",
-    "ora": "^5.4.1",
+    "ora": "^6.0.0",
     "run-async": "^2.4.0",
     "rxjs": "^7.2.0",
-    "string-width": "^4.1.0",
-    "strip-ansi": "^6.0.0",
+    "string-width": "^5.0.0",
+    "strip-ansi": "^7.0.0",
     "through": "^2.3.6"
   }
 }
