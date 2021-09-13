@@ -3,6 +3,7 @@ const _ = {
   isPlainObject: require('lodash/isPlainObject'),
   clone: require('lodash/clone'),
   isArray: require('lodash/isArray'),
+  get: require('lodash/get'),
   set: require('lodash/set'),
   isFunction: require('lodash/isFunction'),
 };
@@ -118,7 +119,10 @@ class PromptUI extends Base {
   }
 
   filterIfRunnable(question) {
-    if (question.askAnswered !== true && this.answers[question.name] !== undefined) {
+    if (
+      question.askAnswered !== true &&
+      _.get(this.answers, question.name) !== undefined
+    ) {
       return empty();
     }
 
