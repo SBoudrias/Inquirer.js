@@ -3,7 +3,7 @@
 # Inquirer.js
 
 [![npm](https://badge.fury.io/js/inquirer.svg)](http://badge.fury.io/js/inquirer)
-[![tests](https://travis-ci.org/SBoudrias/Inquirer.js.svg?branch=master)](http://travis-ci.org/SBoudrias/Inquirer.js)
+[![tests](https://travis-ci.com/SBoudrias/Inquirer.js.svg?branch=master)](https://app.travis-ci.com/github/SBoudrias/Inquirer.js)
 [![Coverage Status](https://codecov.io/gh/SBoudrias/Inquirer.js/branch/master/graph/badge.svg)](https://codecov.io/gh/SBoudrias/Inquirer.js)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js?ref=badge_shield)
 
@@ -212,7 +212,7 @@ Separator instances have a property `type` equal to `separator`. This should all
 
 #### List - `{type: 'list'}`
 
-Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties.  
+Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties.
 (Note: `default` must be set to the `index` or `value` of one of the entries in `choices`)
 
 ![List prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/list.svg)
@@ -221,7 +221,7 @@ Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] propert
 
 #### Raw List - `{type: 'rawlist'}`
 
-Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties.  
+Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] properties.
 (Note: `default` must be set to the `index` of one of the entries in `choices`)
 
 ![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
@@ -230,7 +230,7 @@ Take `type`, `name`, `message`, `choices`[, `default`, `filter`, `loop`] propert
 
 #### Expand - `{type: 'expand'}`
 
-Take `type`, `name`, `message`, `choices`[, `default`] properties.  
+Take `type`, `name`, `message`, `choices`[, `default`] properties.
 Note: `default` must be the `index` of the desired default selection of the array. If `default` key not provided, then `help` will be used as default choice
 
 Note that the `choices` object will take an extra parameter called `key` for the `expand` prompt. This parameter must be a single (lowercased) character. The `h` option is added by the prompt and shouldn't be defined by the user.
