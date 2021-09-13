@@ -20,8 +20,8 @@
     "lodash": "^4.17.21",
     "mute-stream": "^0.0.8",
     "run-async": "^2.3.0",
-    "string-width": "^4.1.0",
-    "strip-ansi": "^6.0.0"
+    "string-width": "^5.0.0",
+    "strip-ansi": "^7.0.0"
   },
   "publishConfig": {
     "access": "public"
