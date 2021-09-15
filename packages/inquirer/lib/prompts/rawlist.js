@@ -123,7 +123,8 @@ class RawListPrompt extends Base {
     if (index == null) {
       index = this.rawDefault;
     } else if (index === '') {
-      this.selected = this.selected ?? -1;
+      this.selected =
+        this.selected !== null && this.selected !== undefined ? this.selected : -1;
       index = this.selected;
     } else {
       index -= 1;
