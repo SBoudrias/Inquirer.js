@@ -92,7 +92,7 @@ class CheckboxPrompt extends Base {
     let message = this.getQuestion();
     let bottomContent = '';
 
-    if (!this.spaceKeyPressed) {
+    if (!this.dontShowHints) {
       message +=
         '(Press ' +
         chalk.cyan.bold('<space>') +
@@ -100,7 +100,9 @@ class CheckboxPrompt extends Base {
         chalk.cyan.bold('<a>') +
         ' to toggle all, ' +
         chalk.cyan.bold('<i>') +
-        ' to invert selection)';
+        ' to invert selection, and ' +
+        chalk.cyan.bold('<enter>') +
+        ' to proceed)';
     }
 
     // Render choices or answer depending on the state
@@ -149,7 +151,7 @@ class CheckboxPrompt extends Base {
 
   onEnd(state) {
     this.status = 'answered';
-    this.spaceKeyPressed = true;
+    this.dontShowHints = true;
     // Rerender prompt (and clean subline error)
     this.render();
 
@@ -191,7 +193,6 @@ class CheckboxPrompt extends Base {
   }
 
   onSpaceKey() {
-    this.spaceKeyPressed = true;
     this.toggleChoice(this.pointer);
     this.render();
   }
