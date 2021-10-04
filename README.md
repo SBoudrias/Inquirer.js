@@ -2,10 +2,11 @@
 
 # Inquirer.js
 
-[![npm](https://badge.fury.io/js/inquirer.svg)](http://badge.fury.io/js/inquirer)
-[![tests](https://travis-ci.com/SBoudrias/Inquirer.js.svg?branch=master)](https://app.travis-ci.com/github/SBoudrias/Inquirer.js)
-[![Coverage Status](https://codecov.io/gh/SBoudrias/Inquirer.js/branch/master/graph/badge.svg)](https://codecov.io/gh/SBoudrias/Inquirer.js)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js?ref=badge_shield)
+Salesforce fork of [SBoudrias/Inquirer.js](https://github.com/SBoudrias/Inquirer.js)
+
+Please post any issues related to this fork to [salesforcecli/cli](https://github.com/salesforcecli/cli/issues)
+
+This module is temporary and may be removed at anytime. Please **DO NOT** use this module as direct dependency.
 
 A collection of common interactive command line user interfaces.
 
