@@ -3,6 +3,7 @@
  */
 
 const fs = require('fs');
+const os = require('os');
 const stream = require('stream');
 const tty = require('tty');
 const { expect } = require('chai');
@@ -13,7 +14,15 @@ const { Observable } = require('rxjs');
 const inquirer = require('../../lib/inquirer');
 const { autosubmit } = require('../helpers/events');
 
+const ostype = os.type();
+
 describe('inquirer.prompt', () => {
+  let mocha;
+
+  before(function () {
+    mocha = this;
+  });
+
   beforeEach(function () {
     this.prompt = inquirer.createPromptModule();
   });
@@ -993,32 +1002,36 @@ describe('inquirer.prompt', () => {
 
     it('No exception when using tty other than process.stdin', () => {
       // Manually opens a new tty
-      const input = new tty.ReadStream(fs.openSync('/dev/tty', 'r+'));
+      if (ostype === 'Windows_NT') {
+        mocha.skip();
+      } else {
+        const input = new tty.ReadStream(fs.openSync('/dev/tty', 'r+'));
 
-      // Uses manually opened tty as input instead of process.stdin
-      const prompt = inquirer.createPromptModule({
-        input,
-        skipTTYChecks: false,
-      });
+        // Uses manually opened tty as input instead of process.stdin
+        const prompt = inquirer.createPromptModule({
+          input,
+          skipTTYChecks: false,
+        });
 
-      const prompts = [
-        {
-          type: 'input',
-          name: 'q1',
-          default: 'foo',
-          message: 'message',
-        },
-      ];
+        const prompts = [
+          {
+            type: 'input',
+            name: 'q1',
+            default: 'foo',
+            message: 'message',
+          },
+        ];
 
-      const promise = prompt(prompts);
-      promise.ui.rl.emit('line');
+        const promise = prompt(prompts);
+        promise.ui.rl.emit('line');
 
-      // Release the input tty socket
-      input.unref();
+        // Release the input tty socket
+        input.unref();
 
-      return promise.then((answers) => {
-        expect(answers).to.deep.equal({ q1: 'foo' });
-      });
+        return promise.then((answers) => {
+          expect(answers).to.deep.equal({ q1: 'foo' });
+        });
+      }
     });
   });
 });
