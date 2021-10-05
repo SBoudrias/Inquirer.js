@@ -6,7 +6,7 @@ Salesforce fork of [SBoudrias/Inquirer.js](https://github.com/SBoudrias/Inquirer
 
 Post any issues related to this fork to [salesforcecli/cli](https://github.com/salesforcecli/cli/issues).
 
-This module is temporary and may be removed at anytime. Please **DO NOT** use this module as direct dependency.
+This module is temporary and may be removed at any time. **DO NOT** use this module as a direct dependency.
 
 A collection of common interactive command line user interfaces.
 
