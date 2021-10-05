@@ -2,7 +2,7 @@
 
 # Inquirer.js
 
-Salesforce fork of [SBoudrias/Inquirer.js](https://github.com/SBoudrias/Inquirer.js)
+Salesforce fork of [SBoudrias/Inquirer.js](https://github.com/SBoudrias/Inquirer.js).
 
 Please post any issues related to this fork to [salesforcecli/cli](https://github.com/salesforcecli/cli/issues)
 
