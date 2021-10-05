@@ -4,7 +4,7 @@
 
 Salesforce fork of [SBoudrias/Inquirer.js](https://github.com/SBoudrias/Inquirer.js).
 
-Please post any issues related to this fork to [salesforcecli/cli](https://github.com/salesforcecli/cli/issues)
+Post any issues related to this fork to [salesforcecli/cli](https://github.com/salesforcecli/cli/issues).
 
 This module is temporary and may be removed at anytime. Please **DO NOT** use this module as direct dependency.
 
