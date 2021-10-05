@@ -1,8 +1,7 @@
 {
-  "name": "inquirer",
-  "version": "8.1.5",
-  "description": "A collection of common interactive command line user interfaces.",
-  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "name": "@salesforce/inquirer",
+  "version": "8.1.5-sf-tmp-01",
+  "description": "(Salesforce CLI fork) A collection of common interactive command line user interfaces.",
   "files": [
     "lib",
     "README.md"
@@ -32,9 +31,10 @@
     "test": "nyc mocha test/**/* -r ./test/before",
     "posttest": "nyc report --reporter=text-lcov > ../../coverage/nyc-report.lcov",
     "prepublishOnly": "cp ../../README.md .",
-    "postpublish": "rm -f README.md"
+    "postpublish": "rm -f README.md",
+    "build": "yarn prepublishOnly"
   },
-  "repository": "SBoudrias/Inquirer.js",
+  "repository": "salesforcecli/Inquirer.js",
   "license": "MIT",
   "dependencies": {
     "ansi-escapes": "^4.2.1",
