@@ -1002,7 +1002,7 @@ describe('inquirer.prompt', () => {
 
     it('No exception when using tty other than process.stdin', () => {
       // Manually opens a new tty
-      if (ostype === 'Windows_NT') {
+      if (ostype === 'Windows_NT' || process.env.GITHUB_ACTIONS) {
         mocha.skip();
       } else {
         const input = new tty.ReadStream(fs.openSync('/dev/tty', 'r+'));
