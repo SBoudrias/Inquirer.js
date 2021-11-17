@@ -4,7 +4,6 @@
  */
 
 const _ = {
-  isArray: require('lodash/isArray'),
   map: require('lodash/map'),
   isString: require('lodash/isString'),
 };
@@ -25,7 +24,7 @@ class CheckboxPrompt extends Base {
       this.throwParamError('choices');
     }
 
-    if (_.isArray(this.opt.default)) {
+    if (Array.isArray(this.opt.default)) {
       this.opt.choices.forEach(function (choice) {
         if (this.opt.default.indexOf(choice.value) >= 0) {
           choice.checked = true;

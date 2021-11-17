@@ -2,7 +2,6 @@
 const _ = {
   isPlainObject: require('lodash/isPlainObject'),
   clone: require('lodash/clone'),
-  isArray: require('lodash/isArray'),
   get: require('lodash/get'),
   set: require('lodash/set'),
   isFunction: require('lodash/isFunction'),
@@ -44,7 +43,7 @@ class PromptUI extends Base {
     // Create an observable, unless we received one as parameter.
     // Note: As this is a public interface, we cannot do an instanceof check as we won't
     // be using the exact same object in memory.
-    const obs = _.isArray(questions) ? from(questions) : questions;
+    const obs = Array.isArray(questions) ? from(questions) : questions;
 
     this.process = obs.pipe(
       concatMap(this.processQuestion.bind(this)),
