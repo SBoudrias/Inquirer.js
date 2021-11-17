@@ -1,7 +1,6 @@
 'use strict';
 const assert = require('assert');
 const _ = {
-  isNumber: require('lodash/isNumber'),
   filter: require('lodash/filter'),
   map: require('lodash/map'),
 };
@@ -57,7 +56,7 @@ module.exports = class Choices {
    */
 
   getChoice(selector) {
-    assert(_.isNumber(selector));
+    assert(typeof selector === 'number');
     return this.realChoices[selector];
   }
 
@@ -68,7 +67,7 @@ module.exports = class Choices {
    */
 
   get(selector) {
-    assert(_.isNumber(selector));
+    assert(typeof selector === 'number');
     return this.choices[selector];
   }
 

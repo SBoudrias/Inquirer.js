@@ -5,7 +5,6 @@
 
 const _ = {
   uniq: require('lodash/uniq'),
-  isNumber: require('lodash/isNumber'),
 };
 const chalk = require('chalk');
 const { map, takeUntil } = require('rxjs/operators');

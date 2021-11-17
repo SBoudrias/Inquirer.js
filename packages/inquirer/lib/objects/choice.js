@@ -1,6 +1,5 @@
 'use strict';
 const _ = {
-  isNumber: require('lodash/isNumber'),
   isFunction: require('lodash/isFunction'),
 };
 

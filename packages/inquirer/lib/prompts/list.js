@@ -3,9 +3,6 @@
  * `list` type prompt
  */
 
-const _ = {
-  isNumber: require('lodash/isNumber'),
-};
 const chalk = require('chalk');
 const figures = require('figures');
 const cliCursor = require('cli-cursor');
