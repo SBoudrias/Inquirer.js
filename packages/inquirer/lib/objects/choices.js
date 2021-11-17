@@ -1,10 +1,8 @@
 'use strict';
 const assert = require('assert');
 const _ = {
-  isNumber: require('lodash/isNumber'),
   filter: require('lodash/filter'),
   map: require('lodash/map'),
-  find: require('lodash/find'),
 };
 const Separator = require('./separator');
 const Choice = require('./choice');
@@ -12,11 +10,9 @@ const Choice = require('./choice');
 /**
  * Choices collection
  * Collection of multiple `choice` object
- * @constructor
- * @param {Array} choices  All `choice` to keep in the collection
  */
-
 module.exports = class Choices {
+  /** @param {Array} choices  All `choice` to keep in the collection */
   constructor(choices, answers) {
     this.choices = choices.map((val) => {
       if (val.type === 'separator') {
@@ -60,7 +56,7 @@ module.exports = class Choices {
    */
 
   getChoice(selector) {
-    assert(_.isNumber(selector));
+    assert(typeof selector === 'number');
     return this.realChoices[selector];
   }
 
@@ -71,7 +67,7 @@ module.exports = class Choices {
    */
 
   get(selector) {
-    assert(_.isNumber(selector));
+    assert(typeof selector === 'number');
     return this.choices[selector];
   }
 
@@ -113,11 +109,11 @@ module.exports = class Choices {
   }
 
   find(func) {
-    return _.find(this.choices, func);
+    return this.choices.find(func);
   }
 
   push(...args) {
-    const objs = _.map(args, (val) => new Choice(val));
+    const objs = args.map((val) => new Choice(val));
     this.choices.push(...objs);
     this.realChoices = this.choices
       .filter(Separator.exclude)

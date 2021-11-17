@@ -1,6 +1,5 @@
 const _ = {
   isFunction: require('lodash/isFunction'),
-  noop: require('lodash/noop'),
 };
 const readline = require('readline');
 const chalk = require('chalk');
@@ -85,14 +84,16 @@ class StateManager {
   }
 
   onKeypress(value, key) {
-    const { onKeypress = _.noop } = this.config;
+    const { onKeypress } = this.config;
     // Ignore enter keypress. The "line" event is handling those.
     if (key.name === 'enter' || key.name === 'return') {
       return;
     }
 
     this.setState({ value: this.rl.line, error: null });
-    onKeypress(this.rl.line, key, this.getState(), this.setState);
+    if (onKeypress) {
+      onKeypress(this.rl.line, key, this.getState(), this.setState);
+    }
   }
 
   startLoading() {

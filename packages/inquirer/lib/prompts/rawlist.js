@@ -3,11 +3,6 @@
  * `rawlist` type prompt
  */
 
-const _ = {
-  extend: require('lodash/extend'),
-  isNumber: require('lodash/isNumber'),
-  findIndex: require('lodash/findIndex'),
-};
 const chalk = require('chalk');
 const { map, takeUntil } = require('rxjs/operators');
 const Base = require('./base');
@@ -29,21 +24,18 @@ class RawListPrompt extends Base {
     this.selected = 0;
     this.rawDefault = 0;
 
-    _.extend(this.opt, {
+    Object.assign(this.opt, {
       validate(val) {
         return val != null;
       },
     });
 
     const def = this.opt.default;
-    if (_.isNumber(def) && def >= 0 && def < this.opt.choices.realLength) {
+    if (typeof def === 'number' && def >= 0 && def < this.opt.choices.realLength) {
       this.selected = def;
       this.rawDefault = def;
-    } else if (!_.isNumber(def) && def != null) {
-      const index = _.findIndex(
-        this.opt.choices.realChoices,
-        ({ value }) => value === def
-      );
+    } else if (typeof def !== 'number' && def != null) {
+      const index = this.opt.choices.realChoices.findIndex(({ value }) => value === def);
       const safeIndex = Math.max(index, 0);
       this.selected = safeIndex;
       this.rawDefault = safeIndex;

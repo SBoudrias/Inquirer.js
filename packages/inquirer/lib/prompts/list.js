@@ -3,10 +3,6 @@
  * `list` type prompt
  */
 
-const _ = {
-  isNumber: require('lodash/isNumber'),
-  findIndex: require('lodash/findIndex'),
-};
 const chalk = require('chalk');
 const figures = require('figures');
 const cliCursor = require('cli-cursor');
@@ -31,13 +27,10 @@ class ListPrompt extends Base {
     const def = this.opt.default;
 
     // If def is a Number, then use as index. Otherwise, check for value.
-    if (_.isNumber(def) && def >= 0 && def < this.opt.choices.realLength) {
+    if (typeof def === 'number' && def >= 0 && def < this.opt.choices.realLength) {
       this.selected = def;
-    } else if (!_.isNumber(def) && def != null) {
-      const index = _.findIndex(
-        this.opt.choices.realChoices,
-        ({ value }) => value === def
-      );
+    } else if (typeof def !== 'number' && def != null) {
+      const index = this.opt.choices.realChoices.findIndex(({ value }) => value === def);
       this.selected = Math.max(index, 0);
     }
 

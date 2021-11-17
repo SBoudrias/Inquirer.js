@@ -5,8 +5,6 @@
 
 const _ = {
   uniq: require('lodash/uniq'),
-  isNumber: require('lodash/isNumber'),
-  findIndex: require('lodash/findIndex'),
 };
 const chalk = require('chalk');
 const { map, takeUntil } = require('rxjs/operators');
@@ -233,13 +231,10 @@ class ExpandPrompt extends Base {
    */
   generateChoicesString(choices, defaultChoice) {
     let defIndex = choices.realLength - 1;
-    if (_.isNumber(defaultChoice) && this.opt.choices.getChoice(defaultChoice)) {
+    if (typeof defaultChoice === 'number' && this.opt.choices.getChoice(defaultChoice)) {
       defIndex = defaultChoice;
     } else if (typeof defaultChoice === 'string') {
-      const index = _.findIndex(
-        choices.realChoices,
-        ({ value }) => value === defaultChoice
-      );
+      const index = choices.realChoices.findIndex(({ value }) => value === defaultChoice);
       defIndex = index === -1 ? defIndex : index;
     }
 

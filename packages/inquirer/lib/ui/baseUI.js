@@ -1,6 +1,5 @@
 'use strict';
 const _ = {
-  extend: require('lodash/extend'),
   omit: require('lodash/omit'),
 };
 const MuteStream = require('mute-stream');
@@ -86,14 +85,12 @@ function setupReadlineOptions(opt) {
   ms.pipe(opt.output || process.stdout);
   const output = ms;
 
-  return _.extend(
-    {
-      terminal: true,
-      input,
-      output,
-    },
-    _.omit(opt, ['input', 'output'])
-  );
+  return {
+    terminal: true,
+    input,
+    output,
+    ..._.omit(opt, ['input', 'output']),
+  };
 }
 
 module.exports = UI;

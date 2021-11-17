@@ -4,7 +4,6 @@
  */
 
 const _ = {
-  extend: require('lodash/extend'),
   isBoolean: require('lodash/isBoolean'),
 };
 const chalk = require('chalk');
@@ -18,7 +17,7 @@ class ConfirmPrompt extends Base {
 
     let rawDefault = true;
 
-    _.extend(this.opt, {
+    Object.assign(this.opt, {
       filter(input) {
         let value = rawDefault;
         if (input != null && input !== '') {

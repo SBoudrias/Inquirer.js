@@ -8,7 +8,6 @@ const stream = require('stream');
 const tty = require('tty');
 const { expect } = require('chai');
 const sinon = require('sinon');
-const _ = require('lodash');
 const { Observable } = require('rxjs');
 
 const inquirer = require('../../lib/inquirer');
@@ -826,7 +825,7 @@ describe('inquirer.prompt', () => {
   describe('#restoreDefaultPrompts()', () => {
     it('restore default prompts', () => {
       const ConfirmPrompt = inquirer.prompt.prompts.confirm;
-      inquirer.registerPrompt('confirm', _.noop);
+      inquirer.registerPrompt('confirm', () => {});
       inquirer.restoreDefaultPrompts();
       expect(ConfirmPrompt).to.equal(inquirer.prompt.prompts.confirm);
     });
