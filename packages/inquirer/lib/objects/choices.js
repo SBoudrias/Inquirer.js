@@ -114,7 +114,7 @@ module.exports = class Choices {
   }
 
   push(...args) {
-    const objs = _.map(args, (val) => new Choice(val));
+    const objs = args.map((val) => new Choice(val));
     this.choices.push(...objs);
     this.realChoices = this.choices
       .filter(Separator.exclude)
