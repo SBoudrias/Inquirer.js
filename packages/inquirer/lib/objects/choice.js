@@ -1,6 +1,5 @@
 'use strict';
 const _ = {
-  isString: require('lodash/isString'),
   isNumber: require('lodash/isNumber'),
   extend: require('lodash/extend'),
   isFunction: require('lodash/isFunction'),
@@ -22,7 +21,7 @@ module.exports = class Choice {
       return val;
     }
 
-    if (_.isString(val) || _.isNumber(val)) {
+    if (typeof val === 'string' || _.isNumber(val)) {
       this.name = String(val);
       this.value = val;
       this.short = String(val);

@@ -5,7 +5,6 @@
 
 const _ = {
   uniq: require('lodash/uniq'),
-  isString: require('lodash/isString'),
   isNumber: require('lodash/isNumber'),
   findIndex: require('lodash/findIndex'),
 };
@@ -236,7 +235,7 @@ class ExpandPrompt extends Base {
     let defIndex = choices.realLength - 1;
     if (_.isNumber(defaultChoice) && this.opt.choices.getChoice(defaultChoice)) {
       defIndex = defaultChoice;
-    } else if (_.isString(defaultChoice)) {
+    } else if (typeof defaultChoice === 'string') {
       const index = _.findIndex(
         choices.realChoices,
         ({ value }) => value === defaultChoice

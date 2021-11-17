@@ -6,7 +6,6 @@
 const _ = {
   isNumber: require('lodash/isNumber'),
   findIndex: require('lodash/findIndex'),
-  isString: require('lodash/isString'),
 };
 const chalk = require('chalk');
 const figures = require('figures');
@@ -194,7 +193,9 @@ function listRender(choices, pointer) {
     if (choice.disabled) {
       separatorOffset++;
       output += '  - ' + choice.name;
-      output += ' (' + (_.isString(choice.disabled) ? choice.disabled : 'Disabled') + ')';
+      output += ` (${
+        typeof choice.disabled === 'string' ? choice.disabled : 'Disabled'
+      })`;
       output += '\n';
       return;
     }
