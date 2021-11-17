@@ -5,7 +5,6 @@
 
 const _ = {
   map: require('lodash/map'),
-  isString: require('lodash/isString'),
 };
 const chalk = require('chalk');
 const cliCursor = require('cli-cursor');
@@ -248,7 +247,9 @@ function renderChoices(choices, pointer) {
     if (choice.disabled) {
       separatorOffset++;
       output += ' - ' + choice.name;
-      output += ' (' + (_.isString(choice.disabled) ? choice.disabled : 'Disabled') + ')';
+      output += ` (${
+        typeof choice.disabled === 'string' ? choice.disabled : 'Disabled'
+      })`;
     } else {
       const line = getCheckbox(choice.checked) + ' ' + choice.name;
       if (i - separatorOffset === pointer) {
