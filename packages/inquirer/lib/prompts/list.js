@@ -5,7 +5,6 @@
 
 const _ = {
   isNumber: require('lodash/isNumber'),
-  findIndex: require('lodash/findIndex'),
 };
 const chalk = require('chalk');
 const figures = require('figures');
@@ -34,10 +33,7 @@ class ListPrompt extends Base {
     if (typeof def === 'number' && def >= 0 && def < this.opt.choices.realLength) {
       this.selected = def;
     } else if (typeof def !== 'number' && def != null) {
-      const index = _.findIndex(
-        this.opt.choices.realChoices,
-        ({ value }) => value === def
-      );
+      const index = this.opt.choices.realChoices.findIndex(({ value }) => value === def);
       this.selected = Math.max(index, 0);
     }
 
