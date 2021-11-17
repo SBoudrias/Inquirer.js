@@ -4,7 +4,6 @@
  */
 
 const _ = {
-  extend: require('lodash/extend'),
   isNumber: require('lodash/isNumber'),
   findIndex: require('lodash/findIndex'),
 };
@@ -29,7 +28,7 @@ class RawListPrompt extends Base {
     this.selected = 0;
     this.rawDefault = 0;
 
-    _.extend(this.opt, {
+    Object.assign(this.opt, {
       validate(val) {
         return val != null;
       },
