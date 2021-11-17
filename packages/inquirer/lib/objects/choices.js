@@ -12,11 +12,9 @@ const Choice = require('./choice');
 /**
  * Choices collection
  * Collection of multiple `choice` object
- * @constructor
- * @param {Array} choices  All `choice` to keep in the collection
  */
-
 module.exports = class Choices {
+  /** @param {Array} choices  All `choice` to keep in the collection */
   constructor(choices, answers) {
     this.choices = choices.map((val) => {
       if (val.type === 'separator') {
