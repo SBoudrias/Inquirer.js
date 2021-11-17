@@ -4,7 +4,6 @@ const _ = {
   isNumber: require('lodash/isNumber'),
   filter: require('lodash/filter'),
   map: require('lodash/map'),
-  find: require('lodash/find'),
 };
 const Separator = require('./separator');
 const Choice = require('./choice');
@@ -111,7 +110,7 @@ module.exports = class Choices {
   }
 
   find(func) {
-    return _.find(this.choices, func);
+    return this.choices.find(func);
   }
 
   push(...args) {
