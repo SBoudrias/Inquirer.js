@@ -233,7 +233,7 @@ class ExpandPrompt extends Base {
    */
   generateChoicesString(choices, defaultChoice) {
     let defIndex = choices.realLength - 1;
-    if (_.isNumber(defaultChoice) && this.opt.choices.getChoice(defaultChoice)) {
+    if (typeof defaultChoice === 'number' && this.opt.choices.getChoice(defaultChoice)) {
       defIndex = defaultChoice;
     } else if (typeof defaultChoice === 'string') {
       const index = _.findIndex(

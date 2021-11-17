@@ -31,9 +31,9 @@ class ListPrompt extends Base {
     const def = this.opt.default;
 
     // If def is a Number, then use as index. Otherwise, check for value.
-    if (_.isNumber(def) && def >= 0 && def < this.opt.choices.realLength) {
+    if (typeof def === 'number' && def >= 0 && def < this.opt.choices.realLength) {
       this.selected = def;
-    } else if (!_.isNumber(def) && def != null) {
+    } else if (typeof def !== 'number' && def != null) {
       const index = _.findIndex(
         this.opt.choices.realChoices,
         ({ value }) => value === def

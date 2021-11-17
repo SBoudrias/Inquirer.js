@@ -20,7 +20,7 @@ module.exports = class Choice {
       return val;
     }
 
-    if (typeof val === 'string' || _.isNumber(val)) {
+    if (typeof val === 'string' || typeof val === 'number') {
       this.name = String(val);
       this.value = val;
       this.short = String(val);

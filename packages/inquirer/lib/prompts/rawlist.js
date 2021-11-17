@@ -4,7 +4,6 @@
  */
 
 const _ = {
-  isNumber: require('lodash/isNumber'),
   findIndex: require('lodash/findIndex'),
 };
 const chalk = require('chalk');
@@ -35,10 +34,10 @@ class RawListPrompt extends Base {
     });
 
     const def = this.opt.default;
-    if (_.isNumber(def) && def >= 0 && def < this.opt.choices.realLength) {
+    if (typeof def === 'number' && def >= 0 && def < this.opt.choices.realLength) {
       this.selected = def;
       this.rawDefault = def;
-    } else if (!_.isNumber(def) && def != null) {
+    } else if (typeof def !== 'number' && def != null) {
       const index = _.findIndex(
         this.opt.choices.realChoices,
         ({ value }) => value === def
