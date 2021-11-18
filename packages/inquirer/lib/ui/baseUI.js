@@ -1,7 +1,4 @@
 'use strict';
-const _ = {
-  omit: require('lodash/omit'),
-};
 const MuteStream = require('mute-stream');
 const readline = require('readline');
 
@@ -61,8 +58,7 @@ class UI {
   }
 }
 
-function setupReadlineOptions(opt) {
-  opt = opt || {};
+function setupReadlineOptions(opt = {}) {
   // Inquirer 8.x:
   // opt.skipTTYChecks = opt.skipTTYChecks === undefined ? opt.input !== undefined : opt.skipTTYChecks;
   opt.skipTTYChecks = opt.skipTTYChecks === undefined ? true : opt.skipTTYChecks;
@@ -85,11 +81,13 @@ function setupReadlineOptions(opt) {
   ms.pipe(opt.output || process.stdout);
   const output = ms;
 
+  const { input: _, output: __, ...rest } = opt;
+
   return {
     terminal: true,
     input,
     output,
-    ..._.omit(opt, ['input', 'output']),
+    ...rest,
   };
 }
 
