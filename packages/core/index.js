@@ -1,6 +1,3 @@
-const _ = {
-  isFunction: require('lodash/isFunction'),
-};
 const readline = require('readline');
 const chalk = require('chalk');
 const MuteStream = require('mute-stream');
@@ -49,7 +46,7 @@ class StateManager {
     this.screen = new ScreenManager(this.rl);
 
     let config = configFactory;
-    if (_.isFunction(configFactory)) {
+    if (typeof configFactory === 'function') {
       config = configFactory(this.rl);
     }
 
@@ -69,7 +66,7 @@ class StateManager {
 
     // Load asynchronous properties
     const showLoader = setTimeout(this.startLoading, 500);
-    if (_.isFunction(message)) {
+    if (typeof message === 'function') {
       message = await runAsync(message)();
     }
 
@@ -196,7 +193,7 @@ class StateManager {
       prefix: this.getPrefix(),
       ...state,
       // Only pass message down if it's a string. Otherwise we're still in init state
-      message: _.isFunction(message) ? 'Loading...' : message,
+      message: typeof message === 'function' ? 'Loading...' : message,
       value: transformer(value, { isFinal: status === 'done' }),
       validate: undefined,
       filter: undefined,

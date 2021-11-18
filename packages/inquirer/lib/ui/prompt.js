@@ -4,7 +4,6 @@ const _ = {
   clone: require('lodash/clone'),
   get: require('lodash/get'),
   set: require('lodash/set'),
-  isFunction: require('lodash/isFunction'),
 };
 const { defer, empty, from, of } = require('rxjs');
 const { concatMap, filter, publish, reduce } = require('rxjs/operators');
@@ -129,7 +128,7 @@ class PromptUI extends Base {
       return empty();
     }
 
-    if (!_.isFunction(question.when)) {
+    if (typeof question.when !== 'function') {
       return of(question);
     }
 

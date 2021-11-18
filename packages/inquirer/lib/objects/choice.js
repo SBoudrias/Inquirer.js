@@ -1,7 +1,4 @@
 'use strict';
-const _ = {
-  isFunction: require('lodash/isFunction'),
-};
 
 /**
  * Choice object
@@ -31,7 +28,7 @@ module.exports = class Choice {
       });
     }
 
-    if (_.isFunction(val.disabled)) {
+    if (typeof val.disabled === 'function') {
       this.disabled = val.disabled(answers);
     } else {
       this.disabled = val.disabled;
