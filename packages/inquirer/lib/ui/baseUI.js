@@ -81,13 +81,11 @@ function setupReadlineOptions(opt = {}) {
   ms.pipe(opt.output || process.stdout);
   const output = ms;
 
-  const { input: _, output: __, ...rest } = opt;
-
   return {
     terminal: true,
+    ...opt,
     input,
     output,
-    ...rest,
   };
 }
 
