@@ -1,7 +1,6 @@
 'use strict';
 const _ = {
   isPlainObject: require('lodash/isPlainObject'),
-  clone: require('lodash/clone'),
   get: require('lodash/get'),
   set: require('lodash/set'),
 };
@@ -24,7 +23,7 @@ class PromptUI extends Base {
   run(questions, answers) {
     // Keep global reference to the answers
     if (_.isPlainObject(answers)) {
-      this.answers = _.clone(answers);
+      this.answers = { ...answers };
     } else {
       this.answers = {};
     }
@@ -78,7 +77,7 @@ class PromptUI extends Base {
   }
 
   processQuestion(question) {
-    question = _.clone(question);
+    question = { ...question };
     return defer(() => {
       const obs = of(question);
 
