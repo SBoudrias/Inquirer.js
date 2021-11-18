@@ -1,9 +1,5 @@
 'use strict';
 
-const _ = {
-  sum: require('lodash/sum'),
-  flatten: require('lodash/flatten'),
-};
 const chalk = require('chalk');
 
 /**
@@ -28,7 +24,10 @@ class Paginator {
 
     if (this.screen) {
       lines = this.screen.breakLines(lines);
-      active = _.sum(lines.map((lineParts) => lineParts.length).splice(0, active));
+      active = lines
+        .map((lineParts) => lineParts.length)
+        .splice(0, active)
+        .reduce((a, b) => a + b);
       lines = lines.flat();
     }
 
