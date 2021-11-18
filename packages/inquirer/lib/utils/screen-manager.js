@@ -1,6 +1,5 @@
 'use strict';
 const _ = {
-  last: require('lodash/last'),
   flatten: require('lodash/flatten'),
 };
 const util = require('./readline');
@@ -13,8 +12,9 @@ function height(content) {
   return content.split('\n').length;
 }
 
+/** @param {string} content */
 function lastLine(content) {
-  return _.last(content.split('\n'));
+  return content.split('\n').pop();
 }
 
 class ScreenManager {

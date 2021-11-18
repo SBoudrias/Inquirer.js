@@ -1,6 +1,3 @@
-const _ = {
-  last: require('lodash/last'),
-};
 const cliWidth = require('cli-width');
 const stripAnsi = require('strip-ansi');
 const stringWidth = require('string-width');
@@ -9,7 +6,7 @@ const util = require('./readline');
 const { breakLines } = require('./utils');
 
 const height = (content) => content.split('\n').length;
-const lastLine = (content) => _.last(content.split('\n'));
+const lastLine = (content) => content.split('\n').pop();
 
 module.exports = class ScreenManager {
   constructor(rl) {
