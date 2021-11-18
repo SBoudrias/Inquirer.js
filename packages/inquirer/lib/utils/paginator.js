@@ -27,7 +27,7 @@ class Paginator {
       active = lines
         .map((lineParts) => lineParts.length)
         .splice(0, active)
-        .reduce((a, b) => a + b);
+        .reduce((a, b) => a + b, 0);
       lines = lines.flat();
     }
 
