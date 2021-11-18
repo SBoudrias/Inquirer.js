@@ -11,6 +11,10 @@ const chalk = require('chalk');
  */
 
 class Paginator {
+  /**
+   * @param {import("./screen-manager")} [screen]
+   * @param {{isInfinite?: boolean}} [options]
+   */
   constructor(screen, options = {}) {
     const { isInfinite = true } = options;
     this.lastIndex = 0;
@@ -25,7 +29,7 @@ class Paginator {
     if (this.screen) {
       lines = this.screen.breakLines(lines);
       active = _.sum(lines.map((lineParts) => lineParts.length).splice(0, active));
-      lines = _.flatten(lines);
+      lines = lines.flat();
     }
 
     // Make sure there's enough lines to paginate
@@ -58,7 +62,7 @@ class Paginator {
     }
 
     // Duplicate the lines so it give an infinite list look
-    const infinite = _.flatten([lines, lines, lines]);
+    const infinite = [lines, lines, lines].flat();
     const topIndex = Math.max(0, active + lines.length - this.pointer);
 
     return infinite.splice(topIndex, pageSize);
