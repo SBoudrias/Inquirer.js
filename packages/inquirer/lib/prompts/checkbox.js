@@ -3,9 +3,6 @@
  * `list` type prompt
  */
 
-const _ = {
-  map: require('lodash/map'),
-};
 const chalk = require('chalk');
 const cliCursor = require('cli-cursor');
 const figures = require('figures');
@@ -167,8 +164,8 @@ class CheckboxPrompt extends Base {
       (choice) => Boolean(choice.checked) && !choice.disabled
     );
 
-    this.selection = _.map(choices, 'short');
-    return _.map(choices, 'value');
+    this.selection = choices.map((choice) => choice.short);
+    return choices.map((choice) => choice.value);
   }
 
   onUpKey() {

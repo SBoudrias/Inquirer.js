@@ -11,9 +11,7 @@ const _ = {
 };
 
 class BottomBar extends Base {
-  constructor(opt) {
-    opt = opt || {};
-
+  constructor(opt = {}) {
     super(opt);
 
     this.log = through(this.writeLog.bind(this));
@@ -79,7 +77,6 @@ class BottomBar extends Base {
 
   /**
    * Helper for writing message in Prompt
-   * @param {BottomBar} prompt  - The Prompt object that extends tty
    * @param {String} message - The message to be output
    */
   write(message) {

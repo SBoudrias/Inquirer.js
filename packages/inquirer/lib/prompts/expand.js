@@ -3,9 +3,6 @@
  * `rawlist` type prompt
  */
 
-const _ = {
-  uniq: require('lodash/uniq'),
-};
 const chalk = require('chalk');
 const { map, takeUntil } = require('rxjs/operators');
 const Base = require('./base');
@@ -218,7 +215,7 @@ class ExpandPrompt extends Base {
     if (errors.length) {
       throw new Error(
         'Duplicate key error: `key` param must be unique. Duplicates: ' +
-          _.uniq(errors).join(', ')
+          [...new Set(errors)].join(',')
       );
     }
   }

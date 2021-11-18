@@ -1,7 +1,4 @@
 'use strict';
-const _ = {
-  isFunction: require('lodash/isFunction'),
-};
 const { from, of } = require('rxjs');
 const runAsync = require('run-async');
 
@@ -15,7 +12,7 @@ const runAsync = require('run-async');
  */
 
 exports.fetchAsyncQuestionProperty = function (question, prop, answers) {
-  if (!_.isFunction(question[prop])) {
+  if (typeof question[prop] !== 'function') {
     return of(question);
   }
 

@@ -3,9 +3,6 @@
  * `confirm` type prompt
  */
 
-const _ = {
-  isBoolean: require('lodash/isBoolean'),
-};
 const chalk = require('chalk');
 const { take, takeUntil } = require('rxjs/operators');
 const Base = require('./base');
@@ -28,8 +25,8 @@ class ConfirmPrompt extends Base {
       },
     });
 
-    if (_.isBoolean(this.opt.default)) {
-      rawDefault = this.opt.default;
+    if (this.opt.default != null) {
+      rawDefault = Boolean(this.opt.default);
     }
 
     this.opt.default = rawDefault ? 'Y/n' : 'y/N';
