@@ -4,7 +4,6 @@
  * Should be extended by prompt types.
  */
 const _ = {
-  assign: require('lodash/assign'),
   defaults: require('lodash/defaults'),
   clone: require('lodash/clone'),
 };
@@ -17,7 +16,7 @@ const ScreenManager = require('../utils/screen-manager');
 class Prompt {
   constructor(question, rl, answers) {
     // Setup instance defaults property
-    _.assign(this, {
+    Object.assign(this, {
       answers,
       status: 'pending',
     });
