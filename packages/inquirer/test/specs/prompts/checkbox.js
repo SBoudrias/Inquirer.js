@@ -1,5 +1,4 @@
 const { expect } = require('chai');
-const _ = require('lodash');
 const ReadlineStub = require('../../helpers/readline');
 const fixtures = require('../../helpers/fixtures');
 const sinon = require('sinon');
@@ -8,7 +7,7 @@ const Checkbox = require('../../../lib/prompts/checkbox');
 
 describe('`checkbox` prompt', () => {
   beforeEach(function () {
-    this.fixture = _.clone(fixtures.checkbox);
+    this.fixture = { ...fixtures.checkbox };
     this.rl = new ReadlineStub();
     this.checkbox = new Checkbox(this.fixture, this.rl);
   });
@@ -311,7 +310,10 @@ describe('`checkbox` prompt', () => {
 
     describe('when loop: false', () => {
       beforeEach(function () {
-        this.checkbox = new Checkbox(_.assign(this.fixture, { loop: false }), this.rl);
+        this.checkbox = new Checkbox(
+          Object.assign(this.fixture, { loop: false }),
+          this.rl
+        );
       });
       it('stays at top when too far up', async function () {
         const promise = this.checkbox.run();

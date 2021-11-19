@@ -1,8 +1,5 @@
 'use strict';
 
-const _ = {
-  flatten: require('lodash/flatten'),
-};
 const chalk = require('chalk');
 const cliWidth = require('cli-width');
 const { breakLines } = require('./utils');
@@ -45,7 +42,7 @@ class Paginator {
     this.lastIndex = active;
 
     // Duplicate the lines so it give an infinite list look
-    const infinite = _.flatten([lines, lines, lines]);
+    const infinite = [lines, lines, lines].flat();
     const topIndex = Math.max(0, active + lines.length - this.pointer);
 
     const section = infinite.splice(topIndex, pageSize).join('\n');

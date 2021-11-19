@@ -1,6 +1,5 @@
 const stripAnsi = require('strip-ansi');
 const { expect } = require('chai');
-const _ = require('lodash');
 const ReadlineStub = require('../../helpers/readline');
 const fixtures = require('../../helpers/fixtures');
 
@@ -20,7 +19,7 @@ function testMasking(rl, mask) {
 
 describe('`password` prompt', () => {
   beforeEach(function () {
-    this.fixture = _.clone(fixtures.password);
+    this.fixture = { ...fixtures.password };
     this.rl = new ReadlineStub();
   });
 

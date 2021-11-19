@@ -1,5 +1,4 @@
 const { expect } = require('chai');
-const _ = require('lodash');
 const ReadlineStub = require('../../helpers/readline');
 const fixtures = require('../../helpers/fixtures');
 
@@ -9,7 +8,7 @@ const ACCEPTABLE_ERROR = 0.001;
 
 describe('`number` prompt', () => {
   beforeEach(function () {
-    this.fixture = _.clone(fixtures.number);
+    this.fixture = { ...fixtures.number };
     this.rl = new ReadlineStub();
     this.number = new NumberPrompt(this.fixture, this.rl);
   });

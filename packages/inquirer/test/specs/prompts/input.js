@@ -1,5 +1,4 @@
 const { expect } = require('chai');
-const _ = require('lodash');
 const ReadlineStub = require('../../helpers/readline');
 const fixtures = require('../../helpers/fixtures');
 
@@ -7,7 +6,7 @@ const Input = require('../../../lib/prompts/input');
 
 describe('`input` prompt', () => {
   beforeEach(function () {
-    this.fixture = _.clone(fixtures.input);
+    this.fixture = { ...fixtures.input };
     this.rl = new ReadlineStub();
   });
 

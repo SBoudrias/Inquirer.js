@@ -1,5 +1,4 @@
 const { expect } = require('chai');
-const _ = require('lodash');
 const ReadlineStub = require('../../helpers/readline');
 const fixtures = require('../../helpers/fixtures');
 
@@ -10,7 +9,7 @@ describe('`editor` prompt', () => {
     this.previousVisual = process.env.VISUAL;
     // Writes the word "testing" to the file
     process.env.VISUAL = 'node ./test/bin/write.js testing';
-    this.fixture = _.clone(fixtures.editor);
+    this.fixture = { ...fixtures.editor };
     this.rl = new ReadlineStub();
   });
 

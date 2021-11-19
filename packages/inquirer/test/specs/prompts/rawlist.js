@@ -1,5 +1,4 @@
 const { expect } = require('chai');
-const _ = require('lodash');
 const ReadlineStub = require('../../helpers/readline');
 const fixtures = require('../../helpers/fixtures');
 
@@ -8,7 +7,7 @@ const Rawlist = require('../../../lib/prompts/rawlist');
 describe('`rawlist` prompt', () => {
   beforeEach(function () {
     this.rl = new ReadlineStub();
-    this.fixture = _.clone(fixtures.rawlist);
+    this.fixture = { ...fixtures.rawlist };
     this.rawlist = new Rawlist(this.fixture, this.rl);
   });
 
@@ -152,7 +151,7 @@ describe('`rawlist` prompt', () => {
 
     describe('when loop: false', () => {
       beforeEach(function () {
-        this.rawlist = new Rawlist(_.assign(this.fixture, { loop: false }), this.rl);
+        this.rawlist = new Rawlist(Object.assign(this.fixture, { loop: false }), this.rl);
       });
       it('stays at top when too far up', async function () {
         const promise = this.rawlist.run();

@@ -1,5 +1,4 @@
 const { expect } = require('chai');
-const _ = require('lodash');
 const ReadlineStub = require('../../helpers/readline');
 const fixtures = require('../../helpers/fixtures');
 const sinon = require('sinon');
@@ -8,7 +7,7 @@ const List = require('../../../lib/prompts/list');
 
 describe('`list` prompt', () => {
   beforeEach(function () {
-    this.fixture = _.clone(fixtures.list);
+    this.fixture = { ...fixtures.list };
     this.rl = new ReadlineStub();
     this.list = new List(this.fixture, this.rl);
   });
@@ -94,7 +93,7 @@ describe('`list` prompt', () => {
 
     describe('when loop: false', () => {
       beforeEach(function () {
-        this.list = new List(_.assign(this.fixture, { loop: false }), this.rl);
+        this.list = new List(Object.assign(this.fixture, { loop: false }), this.rl);
       });
       it('stays at top when too far up', async function () {
         const promise = this.list.run();
