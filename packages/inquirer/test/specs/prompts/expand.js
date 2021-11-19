@@ -1,5 +1,4 @@
 const { expect } = require('chai');
-const _ = require('lodash');
 const ReadlineStub = require('../../helpers/readline');
 const fixtures = require('../../helpers/fixtures');
 
@@ -7,7 +6,7 @@ const Expand = require('../../../lib/prompts/expand');
 
 describe('`expand` prompt', () => {
   beforeEach(function () {
-    this.fixture = _.clone(fixtures.expand);
+    this.fixture = { ...fixtures.expand };
     this.rl = new ReadlineStub();
     this.expand = new Expand(this.fixture, this.rl);
   });

@@ -3,7 +3,6 @@
  */
 
 const { expect } = require('chai');
-const _ = require('lodash');
 const fixtures = require('../helpers/fixtures');
 const ReadlineStub = require('../helpers/readline');
 const inquirer = require('../../lib/inquirer');
@@ -345,7 +344,7 @@ const tests = {
 
         prompt.run();
 
-        _.each(choices.filter(inquirer.Separator.exclude), (choice) => {
+        choices.filter(inquirer.Separator.exclude).forEach((choice) => {
           expect(this.rl.output.__raw__).to.contain(choice.name);
         });
       });
@@ -366,15 +365,15 @@ const tests = {
 
 // Run tests
 describe('Prompt public APIs', () => {
-  _.each(prompts, (detail) => {
+  prompts.forEach((detail) => {
     describe('on ' + detail.name + ' prompt', () => {
       beforeEach(function () {
-        this.fixture = _.clone(fixtures[detail.name]);
+        this.fixture = { ...fixtures[detail.name] };
         this.Prompt = inquirer.prompt.prompts[detail.name];
         this.rl = new ReadlineStub();
       });
 
-      _.each(detail.apis, (apiName) => {
+      detail.apis.forEach((apiName) => {
         tests[apiName](detail.name);
       });
     });

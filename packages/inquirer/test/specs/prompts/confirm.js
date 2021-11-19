@@ -1,5 +1,4 @@
 const { expect } = require('chai');
-const _ = require('lodash');
 const ReadlineStub = require('../../helpers/readline');
 const fixtures = require('../../helpers/fixtures');
 
@@ -7,7 +6,7 @@ const Confirm = require('../../../lib/prompts/confirm');
 
 describe('`confirm` prompt', () => {
   beforeEach(function () {
-    this.fixture = _.clone(fixtures.confirm);
+    this.fixture = { ...fixtures.confirm };
     this.rl = new ReadlineStub();
     this.confirm = new Confirm(this.fixture, this.rl);
   });
