@@ -379,6 +379,9 @@ Running Inquirer together with network streams in Windows platform inside some t
 Workaround: run inside another terminal.
 Please refer to the https://github.com/nodejs/node/issues/21771
 
+Calling a node script that uses Inquirer from grunt-exec can cause the program to crash. To fix this, add to your grunt-exec config `stdio: 'inherit'`.
+Please refer to https://github.com/jharding/grunt-exec/issues/85
+
 ## News on the march (Release notes)
 
 <a name="news"></a>
