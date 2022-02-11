@@ -84,6 +84,16 @@ node packages/inquirer/examples/checkbox.js
 # etc...
 ```
 
+** Nodemon **
+
+Executing With [`Nodemon`](https://www.npmjs.com/package/nodemon) use "stdin": false
+```json
+{
+...otherArgs
+"stdin": false
+}
+```
+
 ### Methods
 
 <a name="methods"></a>
