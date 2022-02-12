@@ -86,11 +86,12 @@ node packages/inquirer/examples/checkbox.js
 
 ** Nodemon **
 
-Executing With [`Nodemon`](https://www.npmjs.com/package/nodemon) use "stdin": false
+Executing With [`Nodemon`](https://www.npmjs.com/package/nodemon) 
 ```json
 {
 ...otherArgs
-"stdin": false
+"stdin": false,
+"restartable": false
 }
 ```
 
