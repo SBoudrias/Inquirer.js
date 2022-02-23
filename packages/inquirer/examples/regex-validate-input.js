@@ -13,7 +13,7 @@ const questions = [
     message: 'Please enter a valid API key.',
     validate(input) {
       return Promise.resolve().then(() => {
-        if (!!input.match(/([a-f0-9]{40})/g)) {
+        if (/([a-f0-9]{40})/g.test(input)) {
           return true;
         } else throw "Please provide a valid API key.";
       });
