@@ -12,7 +12,7 @@ const questions = [
     name: 'api_key',
     message: 'Please enter a valid API key.',
     validate(input) {
-      if (!!input.match(/([a-f0-9]{40})/g)) {
+      if (/([a-f0-9]{40})/g.test(input)) {
         return true;
       } else throw 'Please provide a valid API key secret.';
     },
