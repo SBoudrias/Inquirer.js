@@ -5,7 +5,6 @@
 'use strict';
 const inquirer = require('..');
 
-/* eslint-disable no-promise-executor-return */
 const questions = [
   {
     type: 'input',
@@ -14,7 +13,9 @@ const questions = [
     validate(input) {
       if (/([a-f0-9]{40})/g.test(input)) {
         return true;
-      } else throw 'Please provide a valid API key secret.';
+      }
+
+      throw Error('Please provide a valid API key secret.');
     },
   },
 ];
