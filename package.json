@@ -1,19 +1,19 @@
 {
   "private": true,
   "devDependencies": {
-    "@babel/core": "^7.14.3",
-    "@babel/preset-env": "^7.14.2",
-    "babel-jest": "^27.0.6",
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
+    "babel-jest": "^27.5.1",
     "codecov": "^3.8.2",
-    "eslint": "^7.26.0",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-config-xo": "^0.37.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "husky": "^7.0.1",
-    "jest": "^27.0.6",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
     "lerna": "^4.0.0",
-    "lint-staged": "^11.0.0",
-    "prettier": "^2.3.0"
+    "lint-staged": "^12.3.5",
+    "prettier": "^2.5.1"
   },
   "workspaces": [
     "packages/*"
