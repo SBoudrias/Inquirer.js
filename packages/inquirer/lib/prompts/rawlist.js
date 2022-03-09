@@ -18,7 +18,6 @@ class RawListPrompt extends Base {
     this.hiddenLine = '';
     this.lastKey = '';
 
-
     if (!this.opt.choices) {
       this.throwParamError('choices');
     }
@@ -153,8 +152,7 @@ class RawListPrompt extends Base {
 
     if (this.lastKey === 'arrow') {
       index = this.hiddenLine.length ? Number(this.hiddenLine) - 1 : 0;
-    }
-    else {
+    } else {
       index = this.rl.line.length ? Number(this.rl.line) - 1 : 0;
     }
     this.lastKey = '';
