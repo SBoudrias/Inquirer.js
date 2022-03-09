@@ -15,6 +15,9 @@ class RawListPrompt extends Base {
   constructor(questions, rl, answers) {
     super(questions, rl, answers);
 
+    this.hiddenLine = '';
+    this.lastKey = '';
+
     if (!this.opt.choices) {
       this.throwParamError('choices');
     }
@@ -145,7 +148,14 @@ class RawListPrompt extends Base {
    */
 
   onKeypress() {
-    const index = this.rl.line.length ? Number(this.rl.line) - 1 : 0;
+    let index;
+
+    if (this.lastKey === 'arrow') {
+      index = this.hiddenLine.length ? Number(this.hiddenLine) - 1 : 0;
+    } else {
+      index = this.rl.line.length ? Number(this.rl.line) - 1 : 0;
+    }
+    this.lastKey = '';
 
     if (this.opt.choices.getChoice(index)) {
       this.selected = index;
@@ -178,7 +188,9 @@ class RawListPrompt extends Base {
 
   onArrowKey(type) {
     this.selected = incrementListIndex(this.selected, type, this.opt);
-    this.rl.line = String(this.selected + 1);
+    this.hiddenLine = String(this.selected + 1);
+    this.rl.line = '';
+    this.lastKey = 'arrow';
   }
 }
 
