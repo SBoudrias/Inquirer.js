@@ -205,7 +205,7 @@ function renderChoices(choices, pointer) {
   let separatorOffset = 0;
 
   choices.forEach((choice, i) => {
-    output += '\n  ';
+    output += output ? '\n  ' : '  ';
 
     if (choice.type === 'separator') {
       separatorOffset++;
