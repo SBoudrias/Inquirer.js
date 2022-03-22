@@ -187,7 +187,7 @@ class RawListPrompt extends Base {
    */
 
   onArrowKey(type) {
-    this.selected = incrementListIndex(this.selected, type, this.opt);
+    this.selected = incrementListIndex(this.selected, type, this.opt) || 0;
     this.hiddenLine = String(this.selected + 1);
     this.rl.line = '';
     this.lastKey = 'arrow';
