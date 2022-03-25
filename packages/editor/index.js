@@ -6,6 +6,7 @@ const { isEnterKey } = require('@inquirer/core/lib/key');
 
 module.exports = createPrompt((config, done) => {
   const [status, setStatus] = useState('pending');
+  const [value, setValue] = useState(config.default || '');
   const [errorMsg, setError] = useState();
 
   useKeypress(async (key, rl) => {
@@ -17,7 +18,7 @@ module.exports = createPrompt((config, done) => {
     if (isEnterKey(key)) {
       rl.pause();
       editAsync(
-        config.default || '',
+        value,
         async (error, answer) => {
           rl.resume();
           if (error) {
@@ -30,6 +31,7 @@ module.exports = createPrompt((config, done) => {
               setStatus('done');
               done(answer);
             } else {
+              setValue(answer);
               setError(isValid || 'You must provide a valid value');
               setStatus('pending');
             }
