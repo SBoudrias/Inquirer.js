@@ -407,7 +407,7 @@ to [@vaxilart](https://twitter.com/Vaxilart)) or just add your name to [the wiki
 
 <a name="license"></a>
 
-Copyright (c) 2016 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))
+Copyright (c) 2022 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))
 Licensed under the MIT license.
 
 ## Plugins

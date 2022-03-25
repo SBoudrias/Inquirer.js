@@ -31,5 +31,5 @@ const answer = await input({ message: 'Enter your name' });
 
 # License
 
-Copyright (c) 2019 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))
+Copyright (c) 2022 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))
 Licensed under the MIT license.
