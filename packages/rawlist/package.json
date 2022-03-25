@@ -1,0 +1,27 @@
+{
+  "name": "@inquirer/rawlist",
+  "version": "0.0.1-alpha.0",
+  "description": "Inquirer rawlist prompt",
+  "keywords": [
+    "cli",
+    "command",
+    "line",
+    "list",
+    "form",
+    "input",
+    "prompt",
+    "terminal"
+  ],
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "homepage": "https://github.com/SBoudrias/Inquirer.js#readme",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": "SBoudrias/Inquirer.js",
+  "dependencies": {
+    "@inquirer/core": "^0.0.18-alpha.0",
+    "chalk": "^4.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
