@@ -2,6 +2,8 @@
   "name": "@inquirer/password",
   "version": "0.0.17-alpha.0",
   "description": "Inquirer password prompt",
+  "main": "index.js",
+  "repository": "SBoudrias/Inquirer.js",
   "keywords": [
     "cli",
     "command",
@@ -13,10 +15,8 @@
     "terminal"
   ],
   "author": "Simon Boudrias <admin@simonboudrias.com>",
-  "homepage": "https://github.com/SBoudrias/Inquirer.js#readme",
   "license": "MIT",
-  "main": "index.js",
-  "repository": "SBoudrias/Inquirer.js",
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/password/README.md",
   "dependencies": {
     "@inquirer/input": "^0.0.18-alpha.0",
     "chalk": "^4.1.1"

@@ -12,6 +12,7 @@
   ],
   "author": "Simon Boudrias",
   "license": "MIT",
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/select/README.md",
   "dependencies": {
     "@inquirer/core": "^0.0.18-alpha.0",
     "chalk": "^4.1.1",

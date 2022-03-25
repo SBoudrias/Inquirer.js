@@ -2,6 +2,8 @@
 
 Simple interactive command line prompt to gather boolean input from users.
 
+![Confirm prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/confirm.svg)
+
 # Installation
 
 ```sh
