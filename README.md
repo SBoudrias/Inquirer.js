@@ -489,3 +489,8 @@ Inquirer prompt for to select a file or directory in file tree<br>
 A table-like prompt for Inquirer.<br>
 <br>
 ![inquirer-table-prompt](https://raw.githubusercontent.com/eduardoboucas/inquirer-table-prompt/master/screen-capture.gif)
+
+[**inquirer-interrupted-prompt**](https://github.com/lnquy065/inquirer-interrupted-prompt)<br>
+Turning any existing inquirer and its plugin prompts into prompts that can be interrupted with a custom key.<br>
+<br>
+![inquirer-interrupted-prompt](https://raw.githubusercontent.com/lnquy065/inquirer-interrupted-prompt/master/example/demo-menu.gif)
