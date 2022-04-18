@@ -40,7 +40,7 @@ describe('`number` prompt', () => {
     this.rl.emit('line', '42');
   });
 
-  it('should parse negative numbers', function (done) {
+  it('should parse a negative integer', function (done) {
     this.number.run().then((answer) => {
       expect(answer).to.equal(-363);
       done();
@@ -49,13 +49,22 @@ describe('`number` prompt', () => {
     this.rl.emit('line', '-363');
   });
 
-  it('should parse a regular float', function (done) {
+  it('should parse a positive float', function (done) {
     this.number.run().then((answer) => {
       expect(answer).to.be.closeTo(4353.43, ACCEPTABLE_ERROR);
       done();
     });
 
     this.rl.emit('line', '4353.43');
+  });
+
+  it('should parse a negative float', function (done) {
+    this.number.run().then((answer) => {
+      expect(answer).to.be.closeTo(-4353.43, ACCEPTABLE_ERROR);
+      done();
+    });
+
+    this.rl.emit('line', '-4353.43');
   });
 
   it('should parse a float with no digits before the decimal', function (done) {

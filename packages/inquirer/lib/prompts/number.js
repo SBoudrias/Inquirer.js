@@ -14,7 +14,7 @@ class NumberPrompt extends Input {
     if (input && typeof input === 'string') {
       input = input.trim();
       // Match a number in the input
-      const numberMatch = input.match(/(^-?\d+|^\d+\.\d*|^\d*\.\d+)(e\d+)?$/);
+      const numberMatch = input.match(/(^-?\d+|^-?\d+\.\d*|^\d*\.\d+)(e\d+)?$/);
       // If a number is found, return that input.
       if (numberMatch) {
         return Number(numberMatch[0]);
