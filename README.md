@@ -485,6 +485,11 @@ Inquirer prompt for to select a file or directory in file tree<br>
 <br>
 ![inquirer-file-tree-selection-prompt](https://github.com/anc95/inquirer-file-tree-selection/blob/master/example/screenshot.gif)
 
+[**inquirer-tree-prompt**](https://github.com/insightfuls/inquirer-tree-prompt)<br>
+Inquirer prompt to select from a tree<br>
+<br>
+![inquirer-tree-prompt](https://github.com/insightfuls/inquirer-tree-prompt/blob/main/example/screenshot.gif)
+
 [**inquirer-table-prompt**](https://github.com/eduardoboucas/inquirer-table-prompt)<br>
 A table-like prompt for Inquirer.<br>
 <br>
