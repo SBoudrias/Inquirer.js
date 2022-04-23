@@ -499,3 +499,9 @@ A table-like prompt for Inquirer.<br>
 Turning any existing inquirer and its plugin prompts into prompts that can be interrupted with a custom key.<br>
 <br>
 ![inquirer-interrupted-prompt](https://raw.githubusercontent.com/lnquy065/inquirer-interrupted-prompt/master/example/demo-menu.gif)
+
+[**inquirer-press-to-continue**](https://github.com/leonzalion/inquirer-press-to-continue)<br>
+A "press any key to continue" prompt for Inquirer.js<br>
+<br>
+![inquirer-press-to-continue](https://raw.githubusercontent.com/leonzalion/inquirer-press-to-continue/main/assets/press-to-continue.gif)
+
