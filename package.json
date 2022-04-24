@@ -45,5 +45,7 @@
     "coverageDirectory": "./coverage/",
     "collectCoverage": true
   },
-  "dependencies": {}
+  "dependencies": {
+    "wrap-ansi": "^7.0.0"
+  }
 }
