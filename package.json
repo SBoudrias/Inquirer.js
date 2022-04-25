@@ -44,8 +44,5 @@
   "jest": {
     "coverageDirectory": "./coverage/",
     "collectCoverage": true
-  },
-  "dependencies": {
-    "wrap-ansi": "^7.0.0"
   }
 }

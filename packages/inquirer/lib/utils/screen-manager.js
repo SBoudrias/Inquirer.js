@@ -156,9 +156,11 @@ class ScreenManager {
    */
   breakLines(lines, width = this.normalizedCliWidth()) {
     // Break lines who're longer than the cli width so we can normalize the natural line
-    // returns behavior across terminals. By default, `wrapAnsi` trims whitespace, which
+    // returns behavior across terminals.
+    // re: trim: false; by default, `wrap-ansi` trims whitespace, which
     // is not what we want.
-    return lines.map((line) => wrapAnsi(line, width, { trim: false }));
+    // re: hard: true; by default', `wrap-ansi` does soft wrapping
+    return lines.map((line) => wrapAnsi(line, width, { trim: false, hard: true }));
   }
 
   /**

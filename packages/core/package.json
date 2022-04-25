@@ -21,7 +21,8 @@
     "mute-stream": "^0.0.8",
     "run-async": "^2.3.0",
     "string-width": "^4.1.0",
-    "strip-ansi": "^6.0.0"
+    "strip-ansi": "^6.0.0",
+    "wrap-ansi": "^7.0.0"
   },
   "publishConfig": {
     "access": "public"
