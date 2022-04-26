@@ -1,6 +1,7 @@
 'use strict';
 const util = require('./readline');
 const cliWidth = require('cli-width');
+const wrapAnsi = require('wrap-ansi');
 const stripAnsi = require('strip-ansi');
 const stringWidth = require('string-width');
 const ora = require('ora');
@@ -156,13 +157,10 @@ class ScreenManager {
   breakLines(lines, width = this.normalizedCliWidth()) {
     // Break lines who're longer than the cli width so we can normalize the natural line
     // returns behavior across terminals.
-    const regex = new RegExp(`(?:(?:\\033[[0-9;]*m)*.?){1,${width}}`, 'g');
-    return lines.map((line) => {
-      const chunk = line.match(regex);
-      // Last match is always empty
-      chunk.pop();
-      return chunk || '';
-    });
+    // re: trim: false; by default, `wrap-ansi` trims whitespace, which
+    // is not what we want.
+    // re: hard: true; by default', `wrap-ansi` does soft wrapping
+    return lines.map((line) => wrapAnsi(line, width, { trim: false, hard: true }));
   }
 
   /**
