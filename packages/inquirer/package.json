@@ -26,7 +26,7 @@
     "mocha": "^9.2.2",
     "mockery": "^2.1.0",
     "nyc": "^15.0.0",
-    "sinon": "^13.0.1",
+    "sinon": "^13.0.2",
     "terminal-link": "^2.1.1"
   },
   "scripts": {
