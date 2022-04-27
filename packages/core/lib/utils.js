@@ -10,5 +10,5 @@ const wrapAnsi = require('wrap-ansi');
 exports.breakLines = (content, width) =>
   content
     .split('\n')
-    .map((line) => wrapAnsi(line, width, { trim: false, hard: true }))
+    .map((line) => wrapAnsi(line, width, { trim: false, hard: true }).split('\n'))
     .join('\n');

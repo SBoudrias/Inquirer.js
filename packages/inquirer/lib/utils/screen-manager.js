@@ -160,7 +160,9 @@ class ScreenManager {
     // re: trim: false; by default, `wrap-ansi` trims whitespace, which
     // is not what we want.
     // re: hard: true; by default', `wrap-ansi` does soft wrapping
-    return lines.map((line) => wrapAnsi(line, width, { trim: false, hard: true }));
+    return lines.map((line) =>
+      wrapAnsi(line, width, { trim: false, hard: true }).split('\n')
+    );
   }
 
   /**
