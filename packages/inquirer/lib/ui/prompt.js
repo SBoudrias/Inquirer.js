@@ -1,8 +1,8 @@
 'use strict';
 const _ = {
-  isPlainObject: require('lodash/isPlainObject'),
-  get: require('lodash/get'),
-  set: require('lodash/set'),
+  isPlainObject: require('lodash.isplainobject'),
+  get: require('lodash.get'),
+  set: require('lodash.set'),
 };
 const { defer, empty, from, of } = require('rxjs');
 const { concatMap, filter, publish, reduce } = require('rxjs/operators');

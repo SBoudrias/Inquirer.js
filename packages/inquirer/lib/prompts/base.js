@@ -4,8 +4,8 @@
  * Should be extended by prompt types.
  */
 const _ = {
-  defaults: require('lodash/defaults'),
-  clone: require('lodash/clone'),
+  defaults: require('lodash.defaults'),
+  clone: require('lodash.clone'),
 };
 const chalk = require('chalk');
 const runAsync = require('run-async');

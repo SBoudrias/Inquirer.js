@@ -1,8 +1,8 @@
 'use strict';
 const assert = require('assert');
 const _ = {
-  filter: require('lodash/filter'),
-  map: require('lodash/map'),
+  filter: require('lodash.filter'),
+  map: require('lodash.map'),
 };
 const Separator = require('./separator');
 const Choice = require('./choice');
