@@ -36,7 +36,6 @@ export function createPromptModule(opt) {
     try {
       uiInstance = new ui.Prompt(promptModule.prompts, opt);
     } catch (error) {
-      console.log('check: error', error);
       return Promise.reject(error);
     }
     const promise = uiInstance.run(questions, answers);
