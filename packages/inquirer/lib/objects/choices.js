@@ -1,17 +1,20 @@
 'use strict';
-const assert = require('assert');
+import assert from 'assert';
+import lodashFilter from 'lodash/filter';
+import lodashMap from 'lodash/filter';
+
 const _ = {
-  filter: require('lodash/filter'),
-  map: require('lodash/map'),
+  filter: lodashFilter,
+  map: lodashMap,
 };
-const Separator = require('./separator');
-const Choice = require('./choice');
+import Separator from './separator';
+import Choice from './choice';
 
 /**
  * Choices collection
  * Collection of multiple `choice` object
  */
-module.exports = class Choices {
+export default class Choices {
   /** @param {Array} choices  All `choice` to keep in the collection */
   constructor(choices, answers) {
     this.choices = choices.map((val) => {
@@ -120,4 +123,4 @@ module.exports = class Choices {
       .filter((item) => !item.disabled);
     return this.choices;
   }
-};
+}

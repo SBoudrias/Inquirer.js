@@ -3,12 +3,12 @@
  * `confirm` type prompt
  */
 
-const chalk = require('chalk');
-const { take, takeUntil } = require('rxjs/operators');
-const Base = require('./base');
-const observe = require('../utils/events');
+import chalk from 'chalk';
+import { take, takeUntil } from 'rxjs/operators';
+import Base from './base';
+import observe from '../utils/events';
 
-class ConfirmPrompt extends Base {
+export default class ConfirmPrompt extends Base {
   constructor(questions, rl, answers) {
     super(questions, rl, answers);
 
@@ -94,5 +94,3 @@ class ConfirmPrompt extends Base {
     this.render();
   }
 }
-
-module.exports = ConfirmPrompt;

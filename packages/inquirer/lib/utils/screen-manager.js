@@ -1,10 +1,10 @@
 'use strict';
-const util = require('./readline');
-const cliWidth = require('cli-width');
-const wrapAnsi = require('wrap-ansi');
-const stripAnsi = require('strip-ansi');
-const stringWidth = require('string-width');
-const ora = require('ora');
+import * as util from './readline';
+import cliWidth from 'cli-width';
+import wrapAnsi from 'wrap-ansi';
+import stripAnsi from 'strip-ansi';
+import stringWidth from 'string-width';
+import ora from 'ora';
 
 function height(content) {
   return content.split('\n').length;
@@ -15,7 +15,7 @@ function lastLine(content) {
   return content.split('\n').pop();
 }
 
-class ScreenManager {
+export default class ScreenManager {
   constructor(rl) {
     // These variables are keeping information to allow correct prompt re-rendering
     this.height = 0;
@@ -172,5 +172,3 @@ class ScreenManager {
     return this.breakLines(content.split('\n'), width).flat().join('\n');
   }
 }
-
-module.exports = ScreenManager;

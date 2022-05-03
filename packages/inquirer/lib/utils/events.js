@@ -1,12 +1,12 @@
 'use strict';
-const { fromEvent } = require('rxjs');
-const { filter, map, share, takeUntil } = require('rxjs/operators');
+import { fromEvent } from 'rxjs';
+import { filter, map, share, takeUntil } from 'rxjs/operators';
 
 function normalizeKeypressEvents(value, key) {
   return { value, key: key || {} };
 }
 
-module.exports = function (rl) {
+export default function (rl) {
   const keypress = fromEvent(rl.input, 'keypress', normalizeKeypressEvents)
     .pipe(takeUntil(fromEvent(rl, 'close')))
     // Ignore `enter` key. On the readline, we only care about the `line` event.
@@ -51,4 +51,4 @@ module.exports = function (rl) {
       share()
     ),
   };
-};
+}

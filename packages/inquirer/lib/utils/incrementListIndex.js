@@ -1,4 +1,4 @@
-function incrementListIndex(current, dir, opt) {
+export default function incrementListIndex(current, dir, opt) {
   const len = opt.choices.realLength;
   const shouldLoop = 'loop' in opt ? Boolean(opt.loop) : true;
   if (dir === 'up') {
@@ -15,5 +15,3 @@ function incrementListIndex(current, dir, opt) {
   }
   throw new Error('dir must be up or down');
 }
-
-module.exports = incrementListIndex;

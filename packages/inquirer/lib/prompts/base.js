@@ -1,19 +1,23 @@
 'use strict';
+
+import defaults from 'lodash/defaults';
+import clone from 'lodash/clone';
 /**
  * Base prompt implementation
  * Should be extended by prompt types.
  */
 const _ = {
-  defaults: require('lodash/defaults'),
-  clone: require('lodash/clone'),
+  defaults,
+  clone,
 };
-const chalk = require('chalk');
-const runAsync = require('run-async');
-const { filter, flatMap, share, take, takeUntil } = require('rxjs/operators');
-const Choices = require('../objects/choices');
-const ScreenManager = require('../utils/screen-manager');
 
-class Prompt {
+import chalk from 'chalk';
+import runAsync from 'run-async';
+import { filter, flatMap, share, take, takeUntil } from 'rxjs/operators';
+import Choices from '../objects/choices';
+import ScreenManager from '../utils/screen-manager';
+
+export default class Prompt {
   constructor(question, rl, answers) {
     // Setup instance defaults property
     Object.assign(this, {
@@ -176,5 +180,3 @@ class Prompt {
     return message;
   }
 }
-
-module.exports = Prompt;
