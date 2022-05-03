@@ -1,5 +1,6 @@
 {
   "private": true,
+  "type": "module",
   "devDependencies": {
     "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",
