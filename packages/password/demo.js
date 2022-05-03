@@ -1,4 +1,4 @@
-const password = require('.');
+import password from '.';
 
 (async () => {
   let answer;

@@ -1,9 +1,11 @@
-const readline = require('readline');
-const chalk = require('chalk');
-const MuteStream = require('mute-stream');
-const runAsync = require('run-async');
-const spinner = require('cli-spinners').dots;
-const ScreenManager = require('./lib/screen-manager');
+import readline from 'readline';
+import chalk from 'chalk';
+import MuteStream from 'mute-stream';
+import runAsync from 'run-async';
+import cliSpinners from 'cli-spinners';
+import ScreenManager from './lib/screen-manager';
+
+const spinner = cliSpinners.dots;
 
 const defaultState = {
   validate: () => true,

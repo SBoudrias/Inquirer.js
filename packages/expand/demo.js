@@ -1,4 +1,4 @@
-const expand = require('.');
+import expand from '.';
 
 (async () => {
   let answer;

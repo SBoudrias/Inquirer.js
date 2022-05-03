@@ -1,11 +1,12 @@
-const readline = require('readline');
-const { createPrompt } = require('.');
+import readline from 'readline';
+import { createPrompt } from '.';
 
 jest.mock('readline', () => {
   const readline = jest.requireActual('readline');
-  const EventEmitter = require('events');
-  const stream = require('stream');
-  const MuteStream = require('mute-stream');
+  const EventEmitter = jest.requireActual('events');
+  const stream = jest.requireActual('stream');
+  const MuteStream = jest.requireActual('mute-stream');
+
   const fakeInstance = new EventEmitter();
   fakeInstance.input = new stream.Duplex();
   fakeInstance.output = new MuteStream();

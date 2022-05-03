@@ -1,5 +1,5 @@
-const input = require('@inquirer/input');
-const chalk = require('chalk');
+import input from '@inquirer/input';
+import chalk from 'chalk';
 
 module.exports = (config, ...args) => {
   if (config.transformer) {

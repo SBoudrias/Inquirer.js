@@ -1,4 +1,4 @@
-const editor = require('.');
+import editor from '.';
 
 (async () => {
   const answer = await editor({

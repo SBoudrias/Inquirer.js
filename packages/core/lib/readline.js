@@ -1,4 +1,4 @@
-const ansiEscapes = require('ansi-escapes');
+import ansiEscapes from 'ansi-escapes';
 
 /**
  * Move cursor left by `x`

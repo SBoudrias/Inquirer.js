@@ -1,6 +1,8 @@
-const chalk = require('chalk');
-const spinner = require('cli-spinners').dots;
-const { useState, useEffect } = require('../hooks');
+import chalk from 'chalk';
+import cliSpinners from 'cli-spinners';
+import { useState, useEffect } from '../hooks';
+
+const spinner = cliSpinners.dots;
 
 exports.usePrefix = (isLoading) => {
   const [tick, setTick] = useState(0);

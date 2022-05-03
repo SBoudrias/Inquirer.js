@@ -1,4 +1,4 @@
-const wrapAnsi = require('wrap-ansi');
+import wrapAnsi from 'wrap-ansi';
 
 /**
  * Force line returns at specific width. This function is ANSI code friendly and it'll

@@ -1,7 +1,7 @@
-const chalk = require('chalk');
-const { createPrompt, useState, useKeypress } = require('@inquirer/core/hooks');
-const { isEnterKey } = require('@inquirer/core/lib/key');
-const { usePrefix } = require('@inquirer/core/lib/prefix');
+import chalk from 'chalk';
+import { createPrompt, useState, useKeypress } from '@inquirer/core/hooks';
+import { isEnterKey } from '@inquirer/core/lib/key';
+import { usePrefix } from '@inquirer/core/lib/prefix';
 
 module.exports = createPrompt((config, done) => {
   const [status, setStatus] = useState('pending');

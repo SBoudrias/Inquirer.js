@@ -1,7 +1,7 @@
-const readline = require('readline');
-const MuteStream = require('mute-stream');
-const ScreenManager = require('./lib/screen-manager');
-const { getPromptConfig } = require('./lib/options');
+import readline from 'readline';
+import MuteStream from 'mute-stream';
+import ScreenManager from './lib/screen-manager';
+import { getPromptConfig } from './lib/options';
 
 let sessionRl;
 let hooks = [];

@@ -1,7 +1,7 @@
-const { createPrompt, useState, useKeypress } = require('@inquirer/core/hooks');
-const { usePrefix } = require('@inquirer/core/lib/prefix');
-const { isEnterKey } = require('@inquirer/core/lib/key');
-const chalk = require('chalk');
+import { createPrompt, useState, useKeypress } from '@inquirer/core/hooks';
+import { usePrefix } from '@inquirer/core/lib/prefix';
+import { isEnterKey } from '@inquirer/core/lib/key';
+import chalk from 'chalk';
 
 const numberRegex = /[0-9]+/;
 
