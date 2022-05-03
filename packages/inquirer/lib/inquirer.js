@@ -92,8 +92,8 @@ export function createPromptModule(opt) {
 export const prompt = createPromptModule();
 
 // Expose helper functions on the top level for easiest usage by common users
-export function registerPrompt(name, prompt) {
-  prompt.registerPrompt(name, prompt);
+export function registerPrompt(name, newPrompt) {
+  prompt.registerPrompt(name, newPrompt);
 }
 
 export function restoreDefaultPrompts() {
