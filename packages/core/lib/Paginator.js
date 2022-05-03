@@ -50,4 +50,4 @@ class Paginator {
   }
 }
 
-module.exports = Paginator;
+export default Paginator;

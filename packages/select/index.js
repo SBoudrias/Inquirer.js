@@ -6,7 +6,7 @@ import chalk from 'chalk';
 import figures from 'figures';
 import { cursorHide } from 'ansi-escapes';
 
-module.exports = createPrompt((config, done) => {
+export default createPrompt((config, done) => {
   const [status, setStatus] = useState('pending');
   const [cursorPosition, setCursorPos] = useState(0);
   const { choices, pageSize = 7 } = config;

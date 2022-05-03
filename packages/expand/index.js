@@ -9,7 +9,7 @@ const helpChoice = {
   value: undefined,
 };
 
-module.exports = createPrompt((config, done) => {
+export default createPrompt((config, done) => {
   const {
     choices,
     default: defaultKey = 'h',

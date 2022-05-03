@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import figures from 'figures';
 import { cursorHide } from 'ansi-escapes';
 
-module.exports = createPrompt(
+export default createPrompt(
   (readline) => ({
     onKeypress: (value, key, { cursorPosition = 0, choices }, setState) => {
       let newCursorPosition = cursorPosition;

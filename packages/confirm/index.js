@@ -3,7 +3,7 @@ import { createPrompt, useState, useKeypress } from '@inquirer/core/hooks';
 import { isEnterKey } from '@inquirer/core/lib/key';
 import { usePrefix } from '@inquirer/core/lib/prefix';
 
-module.exports = createPrompt((config, done) => {
+export default createPrompt((config, done) => {
   const [status, setStatus] = useState('pending');
   const [value, setValue] = useState('');
   const prefix = usePrefix();

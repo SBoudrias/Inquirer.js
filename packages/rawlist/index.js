@@ -5,7 +5,7 @@ import chalk from 'chalk';
 
 const numberRegex = /[0-9]+/;
 
-module.exports = createPrompt((config, done) => {
+export default createPrompt((config, done) => {
   const { choices } = config;
   const [status, setStatus] = useState('pending');
   const [value, setValue] = useState('');

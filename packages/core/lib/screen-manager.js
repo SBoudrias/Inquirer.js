@@ -8,7 +8,7 @@ import { breakLines } from './utils';
 const height = (content) => content.split('\n').length;
 const lastLine = (content) => content.split('\n').pop();
 
-module.exports = class ScreenManager {
+export default class ScreenManager {
   constructor(rl) {
     // These variables are keeping information to allow correct prompt re-rendering
     this.height = 0;
@@ -109,4 +109,4 @@ module.exports = class ScreenManager {
       util.down(this.rl, this.extraLinesUnderPrompt);
     }
   }
-};
+}
