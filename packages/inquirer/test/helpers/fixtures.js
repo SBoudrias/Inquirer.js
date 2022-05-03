@@ -1,5 +1,7 @@
 import * as inquirer from '../../lib/inquirer';
 
+console.log('Separator', inquirer.Separator);
+
 export default {
   input: {
     message: 'message',

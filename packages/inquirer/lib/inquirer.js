@@ -17,13 +17,13 @@ import Editor from './prompts/editor';
 import BottomBar from './ui/bottom-bar';
 import Prompt from './ui/prompt';
 
-export * as Seperator from './objects/separator';
+export { default as Separator } from './objects/separator';
 
 /**
  * Client interfaces
  */
 
-inquirer.ui = {
+export const ui = {
   BottomBar,
   Prompt,
 };
@@ -35,7 +35,7 @@ export function createPromptModule(opt) {
   const promptModule = function (questions, answers) {
     let ui;
     try {
-      ui = new inquirer.ui.Prompt(promptModule.prompts, opt);
+      ui = new ui.Prompt(promptModule.prompts, opt);
     } catch (error) {
       return Promise.reject(error);
     }
@@ -90,7 +90,7 @@ export function createPromptModule(opt) {
  * @return {inquirer.ui.Prompt}
  */
 
-export const prompt = inquirer.createPromptModule();
+export const prompt = createPromptModule();
 
 // Expose helper functions on the top level for easiest usage by common users
 export function registerPrompt(name, prompt) {

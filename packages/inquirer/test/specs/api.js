@@ -5,7 +5,7 @@
 import { expect } from 'chai';
 import fixtures from '../helpers/fixtures';
 import ReadlineStub from '../helpers/readline';
-import inquirer from '../../lib/inquirer';
+import * as inquirer from '../../lib/inquirer';
 import { autosubmit } from '../helpers/events';
 
 // Define prompts and their public API
