@@ -22,7 +22,6 @@ export { default as Separator } from './objects/separator';
 /**
  * Client interfaces
  */
-
 export const ui = {
   BottomBar,
   Prompt,
@@ -35,7 +34,7 @@ export function createPromptModule(opt) {
   const promptModule = function (questions, answers) {
     let uiInstance;
     try {
-      uiInstance = new uiInstance.Prompt(promptModule.prompts, opt);
+      uiInstance = new ui.Prompt(promptModule.prompts, opt);
     } catch (error) {
       console.log('check: error', error);
       return Promise.reject(error);
@@ -88,7 +87,7 @@ export function createPromptModule(opt) {
  * Public CLI helper interface
  * @param  {Array|Object|Rx.Observable} questions - Questions settings array
  * @param  {Function} cb - Callback being passed the user answers
- * @return {inquirer.ui.Prompt}
+ * @return {ui.Prompt}
  */
 
 export const prompt = createPromptModule();
