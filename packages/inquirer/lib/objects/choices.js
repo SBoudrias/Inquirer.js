@@ -1,12 +1,7 @@
 'use strict';
 import assert from 'assert';
-import lodashFilter from 'lodash/filter';
-import lodashMap from 'lodash/filter';
+import _ from 'lodash';
 
-const _ = {
-  filter: lodashFilter,
-  map: lodashMap,
-};
 import Separator from './separator';
 import Choice from './choice';
 
@@ -57,7 +52,6 @@ export default class Choices {
    * @param  {Number} selector  The selected choice index
    * @return {Choice|Undefined} Return the matched choice or undefined
    */
-
   getChoice(selector) {
     assert(typeof selector === 'number');
     return this.realChoices[selector];
@@ -68,7 +62,6 @@ export default class Choices {
    * @param  {Number} selector  The selected index value
    * @return {Choice|Undefined} Return the matched choice or undefined
    */
-
   get(selector) {
     assert(typeof selector === 'number');
     return this.choices[selector];
@@ -79,7 +72,6 @@ export default class Choices {
    * @param  {Object} whereClause Lodash `where` clause
    * @return {Array}              Matching choices or empty array
    */
-
   where(whereClause) {
     return _.filter(this.realChoices, whereClause);
   }
@@ -89,7 +81,6 @@ export default class Choices {
    * @param  {String} propertyName Property name to select
    * @return {Array}               Selected properties
    */
-
   pluck(propertyName) {
     return _.map(this.realChoices, propertyName);
   }
