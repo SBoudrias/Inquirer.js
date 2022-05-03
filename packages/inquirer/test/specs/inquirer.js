@@ -947,7 +947,15 @@ describe('inquirer.prompt', () => {
     });
 
     it("Don't throw an exception when run in non-tty and custom input is provided", (done) => {
-      const prompt = inquirer.createPromptModule({ input: new stream.Readable() });
+      const prompt = inquirer.createPromptModule({
+        input: new stream.Readable({
+          // We must have a default read implementation
+          // for this to work, if not it will error out
+          // with the following error message during testing
+          // Uncaught Error [ERR_METHOD_NOT_IMPLEMENTED]: The _read() method is not implemented
+          read: () => {},
+        }),
+      });
       const prompts = [
         {
           type: 'confirm',

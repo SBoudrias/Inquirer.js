@@ -14,8 +14,8 @@ import { default as Checkbox } from './prompts/checkbox';
 import { default as Password } from './prompts/password';
 import { default as Editor } from './prompts/editor';
 
-import BottomBar from './ui/bottom-bar';
-import Prompt from './ui/prompt';
+import { default as BottomBar } from './ui/bottom-bar';
+import { default as Prompt } from './ui/prompt';
 
 export { default as Separator } from './objects/separator';
 

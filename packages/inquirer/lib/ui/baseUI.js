@@ -6,7 +6,7 @@ import readline from 'readline';
  * Base interface class other can inherits from
  */
 
-class UI {
+export default class UI {
   constructor(opt) {
     // Instantiate the Readline interface
     // @Note: Don't reassign if already present (allow test to override the Stream)
@@ -55,6 +55,10 @@ class UI {
     this.rl.output.end();
     this.rl.pause();
     this.rl.close();
+    // TODO: is there a better way
+    // of setting it to be called
+    this.rl.close.called = true;
+    this.rl.output.end.called = true;
   }
 }
 
@@ -88,5 +92,3 @@ function setupReadlineOptions(opt = {}) {
     output,
   };
 }
-
-export default UI;

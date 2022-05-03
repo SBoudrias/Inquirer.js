@@ -13,10 +13,10 @@ import { concatMap, filter, publish, reduce } from 'rxjs/operators';
 import runAsync from 'run-async';
 import * as utils from '../utils/utils';
 import Base from './baseUI';
+
 /**
  * Base interface class other can inherits from
  */
-
 export default class PromptUI extends Base {
   constructor(prompts, opt) {
     super(opt);
@@ -67,7 +67,6 @@ export default class PromptUI extends Base {
   /**
    * Once all prompt are over
    */
-
   onCompletion() {
     this.close();
 
