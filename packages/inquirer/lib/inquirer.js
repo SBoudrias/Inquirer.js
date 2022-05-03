@@ -4,8 +4,6 @@
  * A collection of common interactive command line user interfaces.
  */
 
-const inquirer = module.exports;
-
 import List from './prompts/list';
 import Input from './prompts/input';
 import Number from './prompts/number';

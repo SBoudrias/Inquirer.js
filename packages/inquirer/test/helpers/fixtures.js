@@ -1,4 +1,4 @@
-import inquirer from '../../lib/inquirer';
+import * as inquirer from '../../lib/inquirer';
 
 export default {
   input: {
