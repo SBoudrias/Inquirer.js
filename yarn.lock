@@ -928,7 +928,7 @@
   "resolved" "https://registry.npmjs.org/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz"
   "version" "3.0.2"
 
-"@inquirer/checkbox@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/checkbox":
+"@inquirer/checkbox@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/checkbox":
   "resolved" "file:packages/checkbox"
   "version" "0.0.20-alpha.0"
   dependencies:
@@ -936,7 +936,7 @@
     "chalk" "^4.1.1"
     "figures" "^3.0.0"
 
-"@inquirer/confirm@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/confirm":
+"@inquirer/confirm@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/confirm":
   "resolved" "file:packages/confirm"
   "version" "0.0.19-alpha.0"
   dependencies:
@@ -944,7 +944,7 @@
     "@inquirer/input" "^0.0.20-alpha.0"
     "chalk" "^4.1.1"
 
-"@inquirer/core@^0.0.20-alpha.0", "@inquirer/core@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/core":
+"@inquirer/core@^0.0.20-alpha.0", "@inquirer/core@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/core":
   "resolved" "file:packages/core"
   "version" "0.0.20-alpha.0"
   dependencies:
@@ -959,7 +959,7 @@
     "strip-ansi" "^6.0.0"
     "wrap-ansi" "^7.0.0"
 
-"@inquirer/editor@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/editor":
+"@inquirer/editor@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/editor":
   "resolved" "file:packages/editor"
   "version" "0.0.13-alpha.0"
   dependencies:
@@ -967,7 +967,7 @@
     "chalk" "^4.1.1"
     "external-editor" "^3.0.3"
 
-"@inquirer/expand@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/expand":
+"@inquirer/expand@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/expand":
   "resolved" "file:packages/expand"
   "version" "0.0.20-alpha.0"
   dependencies:
@@ -975,28 +975,28 @@
     "chalk" "^4.1.1"
     "figures" "^3.0.0"
 
-"@inquirer/input@^0.0.20-alpha.0", "@inquirer/input@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/input":
+"@inquirer/input@^0.0.20-alpha.0", "@inquirer/input@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/input":
   "resolved" "file:packages/input"
   "version" "0.0.20-alpha.0"
   dependencies:
     "@inquirer/core" "^0.0.20-alpha.0"
     "chalk" "^4.1.1"
 
-"@inquirer/password@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/password":
+"@inquirer/password@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/password":
   "resolved" "file:packages/password"
   "version" "0.0.19-alpha.0"
   dependencies:
     "@inquirer/input" "^0.0.20-alpha.0"
     "chalk" "^4.1.1"
 
-"@inquirer/rawlist@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/rawlist":
+"@inquirer/rawlist@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/rawlist":
   "resolved" "file:packages/rawlist"
   "version" "0.0.3-alpha.0"
   dependencies:
     "@inquirer/core" "^0.0.20-alpha.0"
     "chalk" "^4.1.1"
 
-"@inquirer/select@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/select":
+"@inquirer/select@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/select":
   "resolved" "file:packages/select"
   "version" "0.0.20-alpha.0"
   dependencies:
@@ -2543,17 +2543,6 @@
     "@types/babel__core" "^7.1.14"
     "@types/babel__traverse" "^7.0.6"
 
-"babel-plugin-module-resolver@^4.1.0":
-  "integrity" "sha512-MlX10UDheRr3lb3P0WcaIdtCSRlxdQsB1sBqL7W0raF070bGl1HQQq5K3T2vf2XAYie+ww+5AKC/WrkjRO2knA=="
-  "resolved" "https://registry.npmjs.org/babel-plugin-module-resolver/-/babel-plugin-module-resolver-4.1.0.tgz"
-  "version" "4.1.0"
-  dependencies:
-    "find-babel-config" "^1.2.0"
-    "glob" "^7.1.6"
-    "pkg-up" "^3.1.0"
-    "reselect" "^4.0.0"
-    "resolve" "^1.13.1"
-
 "babel-plugin-polyfill-corejs2@^0.3.0":
   "integrity" "sha512-v7/T6EQcNfVLfcN2X8Lulb7DjprieyLWJK/zOWH5DUYcAgex9sP3h25Q+DLsX9TloXe3y1O8l2q2Jv9q8UVB9w=="
   "resolved" "https://registry.npmjs.org/babel-plugin-polyfill-corejs2/-/babel-plugin-polyfill-corejs2-0.3.1.tgz"
@@ -3769,14 +3758,6 @@
   "resolved" "https://registry.npmjs.org/filter-obj/-/filter-obj-1.1.0.tgz"
   "version" "1.1.0"
 
-"find-babel-config@^1.2.0":
-  "integrity" "sha512-jB2CHJeqy6a820ssiqwrKMeyC6nNdmrcgkKWJWmpoxpE8RKciYJXCcXRq1h2AzCo5I5BJeN2tkGEO3hLTuePRA=="
-  "resolved" "https://registry.npmjs.org/find-babel-config/-/find-babel-config-1.2.0.tgz"
-  "version" "1.2.0"
-  dependencies:
-    "json5" "^0.5.1"
-    "path-exists" "^3.0.0"
-
 "find-cache-dir@^3.2.0":
   "integrity" "sha512-wXZV5emFEjrridIgED11OoUKLxiYjAcqot/NJdAkOhlJ+vGzwhOAfcG5OX1jP+S0PcjEn8bdMJv+g2jwQ3Onig=="
   "resolved" "https://registry.npmjs.org/find-cache-dir/-/find-cache-dir-3.3.2.tgz"
@@ -3792,13 +3773,6 @@
   "version" "2.1.0"
   dependencies:
     "locate-path" "^2.0.0"
-
-"find-up@^3.0.0":
-  "integrity" "sha512-1yD6RmLI1XBfxugvORwlck6f75tYL+iR0jqwsOrOxMZyGYqUuDhJ0l4AXdO1iX/FTs9cBAMEk1gWSEx1kSbylg=="
-  "resolved" "https://registry.npmjs.org/find-up/-/find-up-3.0.0.tgz"
-  "version" "3.0.0"
-  dependencies:
-    "locate-path" "^3.0.0"
 
 "find-up@^4.0.0", "find-up@^4.1.0":
   "integrity" "sha512-PpOwAdQ/YlXQ2vj8a3h8IipDuYRi3wceVQQGYWxNINccq40Anw7BlsEXCMbt1Zt+OLA6Fq9suIpIWD0OsnISlw=="
@@ -4372,7 +4346,7 @@
     "strip-ansi" "^6.0.0"
     "through" "^2.3.6"
 
-"inquirer@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/inquirer":
+"inquirer@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/inquirer":
   "resolved" "file:packages/inquirer"
   "version" "8.2.4"
   dependencies:
@@ -5146,11 +5120,6 @@
   "resolved" "https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz"
   "version" "5.0.1"
 
-"json5@^0.5.1":
-  "integrity" "sha1-Hq3nrMASA0rYTiOWdn6tn6VJWCE="
-  "resolved" "https://registry.npmjs.org/json5/-/json5-0.5.1.tgz"
-  "version" "0.5.1"
-
 "json5@^2.2.1":
   "integrity" "sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA=="
   "resolved" "https://registry.npmjs.org/json5/-/json5-2.2.1.tgz"
@@ -5331,14 +5300,6 @@
   "version" "2.0.0"
   dependencies:
     "p-locate" "^2.0.0"
-    "path-exists" "^3.0.0"
-
-"locate-path@^3.0.0":
-  "integrity" "sha512-7AO748wWnIhNqAuaty2ZWHkQHRSNfPVIsPIfwEOWO22AmaoVrWavlOcMR5nzTLNYvp36X220/maaRsrec1G65A=="
-  "resolved" "https://registry.npmjs.org/locate-path/-/locate-path-3.0.0.tgz"
-  "version" "3.0.0"
-  dependencies:
-    "p-locate" "^3.0.0"
     "path-exists" "^3.0.0"
 
 "locate-path@^5.0.0":
@@ -6168,7 +6129,7 @@
   dependencies:
     "p-try" "^1.0.0"
 
-"p-limit@^2.0.0", "p-limit@^2.2.0":
+"p-limit@^2.2.0":
   "integrity" "sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w=="
   "resolved" "https://registry.npmjs.org/p-limit/-/p-limit-2.3.0.tgz"
   "version" "2.3.0"
@@ -6188,13 +6149,6 @@
   "version" "2.0.0"
   dependencies:
     "p-limit" "^1.1.0"
-
-"p-locate@^3.0.0":
-  "integrity" "sha512-x+12w/To+4GFfgJhBEpiDcLozRJGegY+Ei7/z0tSLkMmxGZNybVMSfWj9aJn8Z5Fc7dBUNJOOVgPv2H7IwulSQ=="
-  "resolved" "https://registry.npmjs.org/p-locate/-/p-locate-3.0.0.tgz"
-  "version" "3.0.0"
-  dependencies:
-    "p-limit" "^2.0.0"
 
 "p-locate@^4.1.0":
   "integrity" "sha512-R79ZZ/0wAxKGu3oYMlz8jy/kbhsNrS7SKZ7PxEHBgJ5+F2mtFW2fK2cOtBh1cHYkQsbzFV7I+EoRKe6Yt0oK7A=="
@@ -6451,13 +6405,6 @@
   "version" "4.2.0"
   dependencies:
     "find-up" "^4.0.0"
-
-"pkg-up@^3.1.0":
-  "integrity" "sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA=="
-  "resolved" "https://registry.npmjs.org/pkg-up/-/pkg-up-3.1.0.tgz"
-  "version" "3.1.0"
-  dependencies:
-    "find-up" "^3.0.0"
 
 "prelude-ls@^1.2.1":
   "integrity" "sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g=="
@@ -6844,11 +6791,6 @@
   "resolved" "https://registry.npmjs.org/require-main-filename/-/require-main-filename-2.0.0.tgz"
   "version" "2.0.0"
 
-"reselect@^4.0.0":
-  "integrity" "sha512-uVdlz8J7OO+ASpBYoz1Zypgx0KasCY20H+N8JD13oUMtPvSHQuscrHop4KbXrbsBcdB9Ds7lVK7eRkBIfO43vQ=="
-  "resolved" "https://registry.npmjs.org/reselect/-/reselect-4.1.5.tgz"
-  "version" "4.1.5"
-
 "resolve-cwd@^3.0.0":
   "integrity" "sha512-OrZaX2Mb+rJCpH/6CpSqt9xFVpN++x01XnN2ie9g6P5/3xelLAkXWVADpdz1IHD/KFfEXyE6V0U01OQ3UO2rEg=="
   "resolved" "https://registry.npmjs.org/resolve-cwd/-/resolve-cwd-3.0.0.tgz"
@@ -6871,7 +6813,7 @@
   "resolved" "https://registry.npmjs.org/resolve.exports/-/resolve.exports-1.1.0.tgz"
   "version" "1.1.0"
 
-"resolve@^1.10.0", "resolve@^1.13.1", "resolve@^1.14.2", "resolve@^1.20.0":
+"resolve@^1.10.0", "resolve@^1.14.2", "resolve@^1.20.0":
   "integrity" "sha512-Hhtrw0nLeSrFQ7phPp4OOcVjLPIeMnRlr5mcnVuMe7M/7eBn98A3hmFRLoFo3DLZkivSYwhRUJTyPyWAk56WLw=="
   "resolved" "https://registry.npmjs.org/resolve/-/resolve-1.22.0.tgz"
   "version" "1.22.0"
