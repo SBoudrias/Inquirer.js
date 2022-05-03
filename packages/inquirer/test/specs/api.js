@@ -118,10 +118,13 @@ const tests = {
           },
         ];
 
+        console.log('check questions', questions);
+
         const promise = prompt(questions);
         autosubmit(promise.ui);
 
         return promise.then((answers) => {
+          console.log('check answers', answers);
           expect(answers.q1).to.equal(true);
           expect(answers.q2).to.equal(false);
         });

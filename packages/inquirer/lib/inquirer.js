@@ -33,17 +33,18 @@ export const ui = {
  */
 export function createPromptModule(opt) {
   const promptModule = function (questions, answers) {
-    let ui;
+    let uiInstance;
     try {
-      ui = new ui.Prompt(promptModule.prompts, opt);
+      uiInstance = new uiInstance.Prompt(promptModule.prompts, opt);
     } catch (error) {
+      console.log('check: error', error);
       return Promise.reject(error);
     }
-    const promise = ui.run(questions, answers);
+    const promise = uiInstance.run(questions, answers);
 
     // Monkey patch the UI on the promise object so
     // that it remains publicly accessible.
-    promise.ui = ui;
+    promise.ui = uiInstance;
 
     return promise;
   };

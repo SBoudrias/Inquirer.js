@@ -928,7 +928,7 @@
   "resolved" "https://registry.npmjs.org/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz"
   "version" "3.0.2"
 
-"@inquirer/checkbox@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/checkbox":
+"@inquirer/checkbox@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/checkbox":
   "resolved" "file:packages/checkbox"
   "version" "0.0.20-alpha.0"
   dependencies:
@@ -936,7 +936,7 @@
     "chalk" "^4.1.1"
     "figures" "^3.0.0"
 
-"@inquirer/confirm@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/confirm":
+"@inquirer/confirm@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/confirm":
   "resolved" "file:packages/confirm"
   "version" "0.0.19-alpha.0"
   dependencies:
@@ -944,7 +944,7 @@
     "@inquirer/input" "^0.0.20-alpha.0"
     "chalk" "^4.1.1"
 
-"@inquirer/core@^0.0.20-alpha.0", "@inquirer/core@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/core":
+"@inquirer/core@^0.0.20-alpha.0", "@inquirer/core@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/core":
   "resolved" "file:packages/core"
   "version" "0.0.20-alpha.0"
   dependencies:
@@ -959,7 +959,7 @@
     "strip-ansi" "^6.0.0"
     "wrap-ansi" "^7.0.0"
 
-"@inquirer/editor@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/editor":
+"@inquirer/editor@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/editor":
   "resolved" "file:packages/editor"
   "version" "0.0.13-alpha.0"
   dependencies:
@@ -967,7 +967,7 @@
     "chalk" "^4.1.1"
     "external-editor" "^3.0.3"
 
-"@inquirer/expand@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/expand":
+"@inquirer/expand@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/expand":
   "resolved" "file:packages/expand"
   "version" "0.0.20-alpha.0"
   dependencies:
@@ -975,28 +975,28 @@
     "chalk" "^4.1.1"
     "figures" "^3.0.0"
 
-"@inquirer/input@^0.0.20-alpha.0", "@inquirer/input@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/input":
+"@inquirer/input@^0.0.20-alpha.0", "@inquirer/input@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/input":
   "resolved" "file:packages/input"
   "version" "0.0.20-alpha.0"
   dependencies:
     "@inquirer/core" "^0.0.20-alpha.0"
     "chalk" "^4.1.1"
 
-"@inquirer/password@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/password":
+"@inquirer/password@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/password":
   "resolved" "file:packages/password"
   "version" "0.0.19-alpha.0"
   dependencies:
     "@inquirer/input" "^0.0.20-alpha.0"
     "chalk" "^4.1.1"
 
-"@inquirer/rawlist@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/rawlist":
+"@inquirer/rawlist@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/rawlist":
   "resolved" "file:packages/rawlist"
   "version" "0.0.3-alpha.0"
   dependencies:
     "@inquirer/core" "^0.0.20-alpha.0"
     "chalk" "^4.1.1"
 
-"@inquirer/select@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/select":
+"@inquirer/select@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/select":
   "resolved" "file:packages/select"
   "version" "0.0.20-alpha.0"
   dependencies:
@@ -4372,7 +4372,7 @@
     "strip-ansi" "^6.0.0"
     "through" "^2.3.6"
 
-"inquirer@file:/Users/unfocused/Documents/Projects/Inquirer.js/packages/inquirer":
+"inquirer@file:/Users/arvini/Desktop/sandbox/Inquirer.js/packages/inquirer":
   "resolved" "file:packages/inquirer"
   "version" "8.2.4"
   dependencies:
