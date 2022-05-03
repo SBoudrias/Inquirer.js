@@ -3,11 +3,11 @@
  * Sticky bottom bar user interface
  */
 
-const through = require('through');
-const Base = require('./baseUI');
-const rlUtils = require('../utils/readline');
+import through from 'through';
+import Base from './baseUI';
+import rlUtils from '../utils/readline';
 
-class BottomBar extends Base {
+export default class BottomBar extends Base {
   constructor(opt = {}) {
     super(opt);
 
@@ -92,5 +92,3 @@ class BottomBar extends Base {
     this.rl.output.write(message);
   }
 }
-
-module.exports = BottomBar;

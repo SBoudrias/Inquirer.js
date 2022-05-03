@@ -7,24 +7,33 @@
 const inquirer = module.exports;
 
 import List from './prompts/list';
+import Input from './prompts/input';
+import Number from './prompts/number';
+import Confirm from './prompts/confirm';
+import RawList from './prompts/rawlist';
+import Expand from './prompts/expand';
+import Checkbox from './prompts/checkbox';
+import Password from './prompts/password';
+import Editor from './prompts/editor';
+
+import BottomBar from './ui/bottom-bar';
+import Prompt from './ui/prompt';
+
+export * as Seperator from './objects/separator';
 
 /**
  * Client interfaces
  */
 
-inquirer.prompts = {};
-
-inquirer.Separator = require('./objects/separator.cjs');
-
 inquirer.ui = {
-  BottomBar: require('./ui/bottom-bar.cjs'),
-  Prompt: require('./ui/prompt.cjs'),
+  BottomBar,
+  Prompt,
 };
 
 /**
  * Create a new self-contained prompt module.
  */
-inquirer.createPromptModule = function (opt) {
+export function createPromptModule(opt) {
   const promptModule = function (questions, answers) {
     let ui;
     try {
@@ -61,20 +70,20 @@ inquirer.createPromptModule = function (opt) {
 
   promptModule.restoreDefaultPrompts = function () {
     this.registerPrompt('list', List);
-    this.registerPrompt('input', require('./prompts/input'));
-    this.registerPrompt('number', require('./prompts/number'));
-    this.registerPrompt('confirm', require('./prompts/confirm'));
-    this.registerPrompt('rawlist', require('./prompts/rawlist'));
-    this.registerPrompt('expand', require('./prompts/expand'));
-    this.registerPrompt('checkbox', require('./prompts/checkbox'));
-    this.registerPrompt('password', require('./prompts/password'));
-    this.registerPrompt('editor', require('./prompts/editor'));
+    this.registerPrompt('input', Input);
+    this.registerPrompt('number', Number);
+    this.registerPrompt('confirm', Confirm);
+    this.registerPrompt('rawlist', RawList);
+    this.registerPrompt('expand', Expand);
+    this.registerPrompt('checkbox', Checkbox);
+    this.registerPrompt('password', Password);
+    this.registerPrompt('editor', Editor);
   };
 
   promptModule.restoreDefaultPrompts();
 
   return promptModule;
-};
+}
 
 /**
  * Public CLI helper interface
@@ -83,13 +92,13 @@ inquirer.createPromptModule = function (opt) {
  * @return {inquirer.ui.Prompt}
  */
 
-inquirer.prompt = inquirer.createPromptModule();
+export const prompt = inquirer.createPromptModule();
 
 // Expose helper functions on the top level for easiest usage by common users
-inquirer.registerPrompt = function (name, prompt) {
-  inquirer.prompt.registerPrompt(name, prompt);
-};
+export function registerPrompt(name, prompt) {
+  prompt.registerPrompt(name, prompt);
+}
 
-inquirer.restoreDefaultPrompts = function () {
-  inquirer.prompt.restoreDefaultPrompts();
-};
+export function restoreDefaultPrompts() {
+  prompt.restoreDefaultPrompts();
+}

@@ -1,6 +1,6 @@
-import inquirer from '../../lib/inquirer.cjs';
+import inquirer from '../../lib/inquirer';
 
-module.exports = {
+export default {
   input: {
     message: 'message',
     name: 'name',

@@ -6,7 +6,7 @@
 const chalk = require('chalk');
 const { map, takeUntil } = require('rxjs/operators');
 const Base = require('./base');
-const Separator = require('../objects/separator.cjs');
+const Separator = require('../objects/separator');
 const observe = require('../utils/events');
 const Paginator = require('../utils/paginator');
 const incrementListIndex = require('../utils/incrementListIndex');
