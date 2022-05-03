@@ -1,9 +1,9 @@
-const stripAnsi = require('strip-ansi');
-const { expect } = require('chai');
-const ReadlineStub = require('../../helpers/readline');
-const fixtures = require('../../helpers/fixtures');
+import stripAnsi from 'strip-ansi';
+import { expect } from 'chai';
+import ReadlineStub from '../../helpers/readline';
+import fixtures from '../../helpers/fixtures';
 
-const Password = require('../../../lib/prompts/password');
+import Password from '../../../lib/prompts/password';
 
 function testMasking(rl, mask) {
   return function (answer) {

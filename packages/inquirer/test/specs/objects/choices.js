@@ -1,8 +1,8 @@
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-const inquirer = require('../../../lib/inquirer');
-const Choices = require('../../../lib/objects/choices');
-const Choice = require('../../../lib/objects/choice');
+import inquirer from '../../../lib/inquirer';
+import Choices from '../../../lib/objects/choices';
+import Choice from '../../../lib/objects/choice';
 
 describe('Choices collection', () => {
   it('should create Choice object from array member', () => {

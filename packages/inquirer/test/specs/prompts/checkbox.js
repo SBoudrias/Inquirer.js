@@ -1,9 +1,9 @@
-const { expect } = require('chai');
-const ReadlineStub = require('../../helpers/readline');
-const fixtures = require('../../helpers/fixtures');
-const sinon = require('sinon');
+import { expect } from 'chai';
+import ReadlineStub from '../../helpers/readline';
+import fixtures from '../../helpers/fixtures';
+import sinon from 'sinon';
 
-const Checkbox = require('../../../lib/prompts/checkbox');
+import Checkbox from '../../../lib/prompts/checkbox';
 
 describe('`checkbox` prompt', () => {
   beforeEach(function () {

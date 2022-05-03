@@ -1,7 +1,7 @@
-const { expect } = require('chai');
-const ReadlineStub = require('../../helpers/readline');
+import { expect } from 'chai';
+import ReadlineStub from '../../helpers/readline';
 
-const Base = require('../../../lib/prompts/base');
+import Base from '../../../lib/prompts/base';
 
 describe('`base` prompt (e.g. prompt helpers)', () => {
   beforeEach(function () {

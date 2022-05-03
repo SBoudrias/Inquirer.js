@@ -2,11 +2,11 @@
  * Test Prompt public APIs
  */
 
-const { expect } = require('chai');
-const fixtures = require('../helpers/fixtures');
-const ReadlineStub = require('../helpers/readline');
-const inquirer = require('../../lib/inquirer');
-const { autosubmit } = require('../helpers/events');
+import { expect } from 'chai';
+import fixtures from '../helpers/fixtures';
+import ReadlineStub from '../helpers/readline';
+import inquirer from '../../lib/inquirer';
+import { autosubmit } from '../helpers/events';
 
 // Define prompts and their public API
 const prompts = [

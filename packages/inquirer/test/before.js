@@ -1,5 +1,5 @@
-const mockery = require('mockery');
-const ReadlineStub = require('./helpers/readline');
+import mockery from 'mockery';
+import ReadlineStub from './helpers/readline';
 
 mockery.enable();
 mockery.warnOnUnregistered(false);

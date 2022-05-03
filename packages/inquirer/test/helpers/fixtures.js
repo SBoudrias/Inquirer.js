@@ -1,4 +1,4 @@
-const inquirer = require('../../lib/inquirer');
+import inquirer from '../../lib/inquirer';
 
 module.exports = {
   input: {

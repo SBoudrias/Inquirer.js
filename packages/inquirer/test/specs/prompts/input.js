@@ -1,8 +1,8 @@
-const { expect } = require('chai');
-const ReadlineStub = require('../../helpers/readline');
-const fixtures = require('../../helpers/fixtures');
+import { expect } from 'chai';
+import ReadlineStub from '../../helpers/readline';
+import fixtures from '../../helpers/fixtures';
 
-const Input = require('../../../lib/prompts/input');
+import Input from '../../../lib/prompts/input';
 
 describe('`input` prompt', () => {
   beforeEach(function () {

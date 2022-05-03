@@ -2,16 +2,16 @@
  * Inquirer public API test
  */
 
-const fs = require('fs');
-const os = require('os');
-const stream = require('stream');
-const tty = require('tty');
-const { expect } = require('chai');
-const sinon = require('sinon');
-const { Observable } = require('rxjs');
+import fs from 'fs';
+import os from 'os';
+import stream from 'stream';
+import tty from 'tty';
+import { expect } from 'chai';
+import sinon from 'sinon';
+import { Observable } from 'rxjs';
 
-const inquirer = require('../../lib/inquirer');
-const { autosubmit } = require('../helpers/events');
+import inquirer from '../../lib/inquirer';
+import { autosubmit } from '../helpers/events';
 
 const ostype = os.type();
 
