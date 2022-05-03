@@ -4,15 +4,15 @@
  * A collection of common interactive command line user interfaces.
  */
 
-import List from './prompts/list';
-import Input from './prompts/input';
-import Number from './prompts/number';
-import Confirm from './prompts/confirm';
-import RawList from './prompts/rawlist';
-import Expand from './prompts/expand';
-import Checkbox from './prompts/checkbox';
-import Password from './prompts/password';
-import Editor from './prompts/editor';
+import { default as List } from './prompts/list';
+import { default as Input } from './prompts/input';
+import { default as Number } from './prompts/number';
+import { default as Confirm } from './prompts/confirm';
+import { default as RawList } from './prompts/rawlist';
+import { default as Expand } from './prompts/expand';
+import { default as Checkbox } from './prompts/checkbox';
+import { default as Password } from './prompts/password';
+import { default as Editor } from './prompts/editor';
 
 import BottomBar from './ui/bottom-bar';
 import Prompt from './ui/prompt';
