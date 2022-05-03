@@ -6,17 +6,19 @@
 
 const inquirer = module.exports;
 
+import List from './prompts/list';
+
 /**
  * Client interfaces
  */
 
 inquirer.prompts = {};
 
-inquirer.Separator = require('./objects/separator');
+inquirer.Separator = require('./objects/separator.cjs');
 
 inquirer.ui = {
-  BottomBar: require('./ui/bottom-bar'),
-  Prompt: require('./ui/prompt'),
+  BottomBar: require('./ui/bottom-bar.cjs'),
+  Prompt: require('./ui/prompt.cjs'),
 };
 
 /**
@@ -58,7 +60,7 @@ inquirer.createPromptModule = function (opt) {
    */
 
   promptModule.restoreDefaultPrompts = function () {
-    this.registerPrompt('list', require('./prompts/list'));
+    this.registerPrompt('list', List);
     this.registerPrompt('input', require('./prompts/input'));
     this.registerPrompt('number', require('./prompts/number'));
     this.registerPrompt('confirm', require('./prompts/confirm'));

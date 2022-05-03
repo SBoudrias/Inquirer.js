@@ -4,7 +4,7 @@ const _ = {
   filter: require('lodash/filter'),
   map: require('lodash/map'),
 };
-const Separator = require('./separator');
+const Separator = require('./separator.cjs');
 const Choice = require('./choice');
 
 /**

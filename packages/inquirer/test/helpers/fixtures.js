@@ -1,4 +1,4 @@
-import inquirer from '../../lib/inquirer';
+import inquirer from '../../lib/inquirer.cjs';
 
 module.exports = {
   input: {

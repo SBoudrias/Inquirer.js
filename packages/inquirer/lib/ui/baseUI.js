@@ -1,6 +1,6 @@
 'use strict';
-const MuteStream = require('mute-stream');
-const readline = require('readline');
+import MuteStream from 'mute-stream';
+import readline from 'readline';
 
 /**
  * Base interface class other can inherits from
@@ -89,4 +89,4 @@ function setupReadlineOptions(opt = {}) {
   };
 }
 
-module.exports = UI;
+export default UI;
