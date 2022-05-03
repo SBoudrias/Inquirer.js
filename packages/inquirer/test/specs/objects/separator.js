@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import stripAnsi from 'strip-ansi';
 
 import Separator from '../../../lib/objects/separator';
-import Inquirer from '../../../lib/inquirer';
+import * as inquirer from '../../../lib/inquirer';
 
 describe('Separator constructor', () => {
   it('should set a default', () => {
@@ -21,7 +21,7 @@ describe('Separator constructor', () => {
   });
 
   it('should be exposed on Inquirer object', () => {
-    expect(Inquirer.Separator).to.equal(Separator);
+    expect(inquirer.Separator).to.equal(Separator);
   });
 
   it('should expose a helper function to check for separator', () => {

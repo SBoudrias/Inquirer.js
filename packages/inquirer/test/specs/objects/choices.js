@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import inquirer from '../../../lib/inquirer';
+import * as inquirer from '../../../lib/inquirer';
 import Choices from '../../../lib/objects/choices';
 import Choice from '../../../lib/objects/choice';
 

@@ -10,7 +10,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { Observable } from 'rxjs';
 
-import inquirer from '../../lib/inquirer';
+import * as inquirer from '../../lib/inquirer';
 import { autosubmit } from '../helpers/events';
 
 const ostype = os.type();
