@@ -3,13 +3,13 @@
  * `input` type prompt
  */
 
-const Input = require('./input');
+import Input from './input';
 
 /**
  * Extention of the Input prompt specifically for use with number inputs.
  */
 
-class NumberPrompt extends Input {
+export default class NumberPrompt extends Input {
   filterInput(input) {
     if (input && typeof input === 'string') {
       input = input.trim();
@@ -25,5 +25,3 @@ class NumberPrompt extends Input {
     return this.opt.default == null ? NaN : this.opt.default;
   }
 }
-
-module.exports = NumberPrompt;

@@ -3,14 +3,14 @@
  * `rawlist` type prompt
  */
 
-const chalk = require('chalk');
-const { map, takeUntil } = require('rxjs/operators');
-const Base = require('./base');
-const Separator = require('../objects/separator');
-const observe = require('../utils/events');
-const Paginator = require('../utils/paginator');
+import chalk from 'chalk';
+import { map, takeUntil } from 'rxjs/operators';
+import Base from './base';
+import Separator from '../objects/separator';
+import observe from '../utils/events';
+import Paginator from '../utils/paginator';
 
-class ExpandPrompt extends Base {
+export default class ExpandPrompt extends Base {
   constructor(questions, rl, answers) {
     super(questions, rl, answers);
 
@@ -269,5 +269,3 @@ function renderChoices(choices, pointer) {
 
   return output;
 }
-
-module.exports = ExpandPrompt;

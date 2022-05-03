@@ -3,17 +3,17 @@
  * `list` type prompt
  */
 
-const chalk = require('chalk');
-const figures = require('figures');
-const cliCursor = require('cli-cursor');
-const runAsync = require('run-async');
-const { flatMap, map, take, takeUntil } = require('rxjs/operators');
-const Base = require('./base');
-const observe = require('../utils/events');
-const Paginator = require('../utils/paginator');
-const incrementListIndex = require('../utils/incrementListIndex');
+import chalk from 'chalk';
+import figures from 'figures';
+import cliCursor from 'cli-cursor';
+import runAsync from 'run-async';
+import { flatMap, map, take, takeUntil } from 'rxjs/operators';
+import Base from './base';
+import observe from '../utils/events';
+import Paginator from '../utils/paginator';
+import incrementListIndex from '../utils/incrementListIndex';
 
-class ListPrompt extends Base {
+export default class ListPrompt extends Base {
   constructor(questions, rl, answers) {
     super(questions, rl, answers);
 
