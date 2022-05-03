@@ -1,5 +1,6 @@
 {
   "name": "@inquirer/editor",
+  "type": "module",
   "version": "0.0.13-alpha.0",
   "description": "Inquirer multiline editor prompt",
   "main": "index.js",

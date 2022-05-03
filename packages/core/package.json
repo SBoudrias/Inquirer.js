@@ -1,5 +1,6 @@
 {
   "name": "@inquirer/core",
+  "type": "module",
   "version": "0.0.20-alpha.0",
   "description": "Core Inquirer prompt API",
   "main": "index.js",

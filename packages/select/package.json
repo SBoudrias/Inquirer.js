@@ -1,5 +1,6 @@
 {
   "name": "@inquirer/select",
+  "type": "module",
   "version": "0.0.20-alpha.0",
   "description": "Inquirer select/list prompt",
   "main": "index.js",

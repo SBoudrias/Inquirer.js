@@ -1,5 +1,6 @@
 {
   "name": "@inquirer/expand",
+  "type": "module",
   "version": "0.0.20-alpha.0",
   "description": "Inquirer checkbox prompt",
   "main": "index.js",

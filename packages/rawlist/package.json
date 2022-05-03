@@ -1,5 +1,6 @@
 {
   "name": "@inquirer/rawlist",
+  "type": "module",
   "version": "0.0.3-alpha.0",
   "description": "Inquirer rawlist prompt",
   "main": "index.js",
