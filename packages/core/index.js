@@ -2,10 +2,8 @@ import readline from 'readline';
 import chalk from 'chalk';
 import MuteStream from 'mute-stream';
 import runAsync from 'run-async';
-import cliSpinners from 'cli-spinners';
+import { dots as spinner } from 'cli-spinners';
 import ScreenManager from './lib/screen-manager';
-
-const spinner = cliSpinners.dots;
 
 const defaultState = {
   validate: () => true,
