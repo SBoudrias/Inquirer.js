@@ -1,8 +1,6 @@
 import chalk from 'chalk';
-import cliSpinners from 'cli-spinners';
-import { useState, useEffect } from '../hooks';
-
-const spinner = cliSpinners.dots;
+import { dots as spinner } from 'cli-spinners';
+import ScreenManager from './lib/screen-manager';
 
 exports.usePrefix = (isLoading) => {
   const [tick, setTick] = useState(0);
