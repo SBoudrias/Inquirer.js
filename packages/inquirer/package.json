@@ -1,5 +1,6 @@
 {
   "name": "inquirer",
+  "type": "module",
   "version": "8.2.4",
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
@@ -30,7 +31,7 @@
     "terminal-link": "^2.1.1"
   },
   "scripts": {
-    "test": "nyc mocha test/**/* -r ./test/before",
+    "test": "nyc mocha --es-module-specifier-resolution=node test/**/* -r ./test/before",
     "posttest": "nyc report --reporter=text-lcov > ../../coverage/nyc-report.lcov",
     "prepublishOnly": "cp ../../README.md .",
     "postpublish": "rm -f README.md"

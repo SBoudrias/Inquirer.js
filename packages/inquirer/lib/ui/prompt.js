@@ -1,20 +1,22 @@
-'use strict';
+import isPlainObject from 'lodash/isPlainObject';
+import get from 'lodash/get';
+import set from 'lodash/set';
+
 const _ = {
-  isPlainObject: require('lodash/isPlainObject'),
-  get: require('lodash/get'),
-  set: require('lodash/set'),
+  isPlainObject,
+  set,
+  get,
 };
-const { defer, empty, from, of } = require('rxjs');
-const { concatMap, filter, publish, reduce } = require('rxjs/operators');
-const runAsync = require('run-async');
-const utils = require('../utils/utils');
-const Base = require('./baseUI');
+import { defer, empty, from, of } from 'rxjs';
+import { concatMap, filter, publish, reduce } from 'rxjs/operators';
+import runAsync from 'run-async';
+import * as utils from '../utils/utils';
+import Base from './baseUI';
 
 /**
  * Base interface class other can inherits from
  */
-
-class PromptUI extends Base {
+export default class PromptUI extends Base {
   constructor(prompts, opt) {
     super(opt);
     this.prompts = prompts;
@@ -64,7 +66,6 @@ class PromptUI extends Base {
   /**
    * Once all prompt are over
    */
-
   onCompletion() {
     this.close();
 
@@ -143,5 +144,3 @@ class PromptUI extends Base {
     );
   }
 }
-
-module.exports = PromptUI;

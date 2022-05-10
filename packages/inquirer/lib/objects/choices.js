@@ -1,17 +1,14 @@
-'use strict';
-const assert = require('assert');
-const _ = {
-  filter: require('lodash/filter'),
-  map: require('lodash/map'),
-};
-const Separator = require('./separator');
-const Choice = require('./choice');
+import assert from 'assert';
+import _ from 'lodash';
+
+import Separator from './separator';
+import Choice from './choice';
 
 /**
  * Choices collection
  * Collection of multiple `choice` object
  */
-module.exports = class Choices {
+export default class Choices {
   /** @param {Array} choices  All `choice` to keep in the collection */
   constructor(choices, answers) {
     this.choices = choices.map((val) => {
@@ -54,7 +51,6 @@ module.exports = class Choices {
    * @param  {Number} selector  The selected choice index
    * @return {Choice|Undefined} Return the matched choice or undefined
    */
-
   getChoice(selector) {
     assert(typeof selector === 'number');
     return this.realChoices[selector];
@@ -65,7 +61,6 @@ module.exports = class Choices {
    * @param  {Number} selector  The selected index value
    * @return {Choice|Undefined} Return the matched choice or undefined
    */
-
   get(selector) {
     assert(typeof selector === 'number');
     return this.choices[selector];
@@ -76,7 +71,6 @@ module.exports = class Choices {
    * @param  {Object} whereClause Lodash `where` clause
    * @return {Array}              Matching choices or empty array
    */
-
   where(whereClause) {
     return _.filter(this.realChoices, whereClause);
   }
@@ -86,7 +80,6 @@ module.exports = class Choices {
    * @param  {String} propertyName Property name to select
    * @return {Array}               Selected properties
    */
-
   pluck(propertyName) {
     return _.map(this.realChoices, propertyName);
   }
@@ -120,4 +113,4 @@ module.exports = class Choices {
       .filter((item) => !item.disabled);
     return this.choices;
   }
-};
+}

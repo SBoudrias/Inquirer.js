@@ -1,40 +1,39 @@
-'use strict';
 /**
  * Inquirer.js
  * A collection of common interactive command line user interfaces.
  */
 
-const inquirer = module.exports;
+import { default as List } from './prompts/list';
+import { default as Input } from './prompts/input';
+import { default as Number } from './prompts/number';
+import { default as Confirm } from './prompts/confirm';
+import { default as RawList } from './prompts/rawlist';
+import { default as Expand } from './prompts/expand';
+import { default as Checkbox } from './prompts/checkbox';
+import { default as Password } from './prompts/password';
+import { default as Editor } from './prompts/editor';
 
-/**
- * Client interfaces
- */
+import { default as BottomBar } from './ui/bottom-bar';
+import { default as Prompt } from './ui/prompt';
 
-inquirer.prompts = {};
-
-inquirer.Separator = require('./objects/separator');
-
-inquirer.ui = {
-  BottomBar: require('./ui/bottom-bar'),
-  Prompt: require('./ui/prompt'),
-};
+import { default as Separator } from './objects/separator';
 
 /**
  * Create a new self-contained prompt module.
  */
-inquirer.createPromptModule = function (opt) {
+export function createPromptModule(opt) {
   const promptModule = function (questions, answers) {
-    let ui;
+    let uiInstance;
     try {
-      ui = new inquirer.ui.Prompt(promptModule.prompts, opt);
+      uiInstance = new Prompt(promptModule.prompts, opt);
     } catch (error) {
       return Promise.reject(error);
     }
-    const promise = ui.run(questions, answers);
+    const promise = uiInstance.run(questions, answers);
 
     // Monkey patch the UI on the promise object so
     // that it remains publicly accessible.
-    promise.ui = ui;
+    promise.ui = uiInstance;
 
     return promise;
   };
@@ -58,36 +57,50 @@ inquirer.createPromptModule = function (opt) {
    */
 
   promptModule.restoreDefaultPrompts = function () {
-    this.registerPrompt('list', require('./prompts/list'));
-    this.registerPrompt('input', require('./prompts/input'));
-    this.registerPrompt('number', require('./prompts/number'));
-    this.registerPrompt('confirm', require('./prompts/confirm'));
-    this.registerPrompt('rawlist', require('./prompts/rawlist'));
-    this.registerPrompt('expand', require('./prompts/expand'));
-    this.registerPrompt('checkbox', require('./prompts/checkbox'));
-    this.registerPrompt('password', require('./prompts/password'));
-    this.registerPrompt('editor', require('./prompts/editor'));
+    this.registerPrompt('list', List);
+    this.registerPrompt('input', Input);
+    this.registerPrompt('number', Number);
+    this.registerPrompt('confirm', Confirm);
+    this.registerPrompt('rawlist', RawList);
+    this.registerPrompt('expand', Expand);
+    this.registerPrompt('checkbox', Checkbox);
+    this.registerPrompt('password', Password);
+    this.registerPrompt('editor', Editor);
   };
 
   promptModule.restoreDefaultPrompts();
 
   return promptModule;
-};
+}
 
 /**
  * Public CLI helper interface
  * @param  {Array|Object|Rx.Observable} questions - Questions settings array
  * @param  {Function} cb - Callback being passed the user answers
- * @return {inquirer.ui.Prompt}
+ * @return {ui.Prompt}
  */
 
-inquirer.prompt = inquirer.createPromptModule();
+const prompt = createPromptModule();
 
 // Expose helper functions on the top level for easiest usage by common users
-inquirer.registerPrompt = function (name, prompt) {
-  inquirer.prompt.registerPrompt(name, prompt);
+function registerPrompt(name, newPrompt) {
+  prompt.registerPrompt(name, newPrompt);
+}
+
+function restoreDefaultPrompts() {
+  prompt.restoreDefaultPrompts();
+}
+
+const inquirer = {
+  prompt,
+  ui: {
+    BottomBar,
+    Prompt,
+  },
+  createPromptModule,
+  registerPrompt,
+  restoreDefaultPrompts,
+  Separator,
 };
 
-inquirer.restoreDefaultPrompts = function () {
-  inquirer.prompt.restoreDefaultPrompts();
-};
+export default inquirer;

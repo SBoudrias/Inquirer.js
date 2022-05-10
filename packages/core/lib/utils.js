@@ -1,4 +1,4 @@
-const wrapAnsi = require('wrap-ansi');
+import wrapAnsi from 'wrap-ansi';
 
 /**
  * Force line returns at specific width. This function is ANSI code friendly and it'll
@@ -7,7 +7,7 @@ const wrapAnsi = require('wrap-ansi');
  * @param {number} width
  * @return {string}
  */
-exports.breakLines = (content, width) =>
+export const breakLines = (content, width) =>
   content
     .split('\n')
     .map((line) => wrapAnsi(line, width, { trim: false, hard: true }).split('\n'))

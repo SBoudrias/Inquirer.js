@@ -1,4 +1,4 @@
-const checkbox = require('.');
+import checkbox from '.';
 
 (async () => {
   let answer;

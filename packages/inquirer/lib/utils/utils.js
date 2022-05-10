@@ -1,6 +1,5 @@
-'use strict';
-const { from, of } = require('rxjs');
-const runAsync = require('run-async');
+import { from, of } from 'rxjs';
+import runAsync from 'run-async';
 
 /**
  * Resolve a question property value if it is passed as a function.
@@ -11,7 +10,7 @@ const runAsync = require('run-async');
  * @return {Rx.Observable}   - Observable emitting once value is known
  */
 
-exports.fetchAsyncQuestionProperty = function (question, prop, answers) {
+export const fetchAsyncQuestionProperty = function (question, prop, answers) {
   if (typeof question[prop] !== 'function') {
     return of(question);
   }

@@ -1,6 +1,7 @@
 {
   "name": "@inquirer/checkbox",
   "version": "0.0.20-alpha.0",
+  "type": "module",
   "description": "Inquirer checkbox prompt",
   "main": "index.js",
   "repository": "SBoudrias/Inquirer.js",

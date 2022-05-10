@@ -1,14 +1,14 @@
-const cliWidth = require('cli-width');
-const stripAnsi = require('strip-ansi');
-const stringWidth = require('string-width');
-const { cursorShow } = require('ansi-escapes');
-const util = require('./readline');
-const { breakLines } = require('./utils');
+import cliWidth from 'cli-width';
+import stripAnsi from 'strip-ansi';
+import stringWidth from 'string-width';
+import { cursorShow } from 'ansi-escapes';
+import * as util from './readline';
+import { breakLines } from './utils';
 
 const height = (content) => content.split('\n').length;
 const lastLine = (content) => content.split('\n').pop();
 
-module.exports = class ScreenManager {
+export default class ScreenManager {
   constructor(rl) {
     // These variables are keeping information to allow correct prompt re-rendering
     this.height = 0;
@@ -109,4 +109,4 @@ module.exports = class ScreenManager {
       util.down(this.rl, this.extraLinesUnderPrompt);
     }
   }
-};
+}

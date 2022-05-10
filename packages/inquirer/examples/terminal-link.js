@@ -4,7 +4,6 @@
  * For screenshots of the expected behavior, see https://github.com/SBoudrias/Inquirer.js/pull/1106
  */
 
-'use strict';
 const inquirer = require('..');
 const terminalLink = require('terminal-link');
 

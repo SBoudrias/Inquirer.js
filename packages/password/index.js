@@ -1,7 +1,7 @@
-const input = require('@inquirer/input');
-const chalk = require('chalk');
+import input from '@inquirer/input';
+import chalk from 'chalk';
 
-module.exports = (config, ...args) => {
+export default (config, ...args) => {
   if (config.transformer) {
     throw new Error(
       'Inquirer password prompt do not support custom transformer function. Use the input prompt instead.'

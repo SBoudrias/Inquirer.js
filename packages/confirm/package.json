@@ -1,5 +1,6 @@
 {
   "name": "@inquirer/confirm",
+  "type": "module",
   "version": "0.0.19-alpha.0",
   "description": "Inquirer confirm prompt",
   "main": "index.js",

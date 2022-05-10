@@ -1,12 +1,12 @@
-const { createPrompt, useState, useKeypress, useRef } = require('@inquirer/core/hooks');
-const { usePrefix } = require('@inquirer/core/lib/prefix');
-const { isEnterKey, isUpKey, isDownKey, isNumberKey } = require('@inquirer/core/lib/key');
-const Paginator = require('@inquirer/core/lib/Paginator');
-const chalk = require('chalk');
-const figures = require('figures');
-const { cursorHide } = require('ansi-escapes');
+import { createPrompt, useState, useKeypress, useRef } from '@inquirer/core/hooks';
+import { usePrefix } from '@inquirer/core/lib/prefix';
+import { isEnterKey, isUpKey, isDownKey, isNumberKey } from '@inquirer/core/lib/key';
+import Paginator from '@inquirer/core/lib/Paginator';
+import chalk from 'chalk';
+import figures from 'figures';
+import { cursorHide } from 'ansi-escapes';
 
-module.exports = createPrompt((config, done) => {
+export default createPrompt((config, done) => {
   const [status, setStatus] = useState('pending');
   const [cursorPosition, setCursorPos] = useState(0);
   const { choices, pageSize = 7 } = config;

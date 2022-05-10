@@ -2,7 +2,6 @@
  * When example
  */
 
-'use strict';
 const inquirer = require('..');
 
 const questions = [

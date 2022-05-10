@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Choice object
  * Normalize input as choice object
@@ -8,7 +6,7 @@
  *                                    at least one of `value` or `name` property
  */
 
-module.exports = class Choice {
+export default class Choice {
   constructor(val, answers) {
     // Don't process Choice and Separator object
     if (val instanceof Choice || val.type === 'separator') {
@@ -34,4 +32,4 @@ module.exports = class Choice {
       this.disabled = val.disabled;
     }
   }
-};
+}

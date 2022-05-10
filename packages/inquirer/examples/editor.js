@@ -2,7 +2,6 @@
  * Editor prompt example
  */
 
-'use strict';
 const inquirer = require('..');
 
 const questions = [

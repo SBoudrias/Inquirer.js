@@ -1,5 +1,6 @@
 {
   "name": "@inquirer/input",
+  "type": "module",
   "version": "0.0.20-alpha.0",
   "description": "Inquirer input text prompt",
   "main": "index.js",

@@ -2,7 +2,6 @@
  * Nested Inquirer call
  */
 
-'use strict';
 const inquirer = require('..');
 
 inquirer

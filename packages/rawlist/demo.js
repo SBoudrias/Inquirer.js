@@ -1,4 +1,4 @@
-const rawlist = require('.');
+import rawlist from '.';
 
 (async () => {
   let answer;

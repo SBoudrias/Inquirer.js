@@ -1,8 +1,8 @@
-const { expect } = require('chai');
-const stripAnsi = require('strip-ansi');
+import { expect } from 'chai';
+import stripAnsi from 'strip-ansi';
 
-const Separator = require('../../../lib/objects/separator');
-const Inquirer = require('../../../lib/inquirer');
+import Separator from '../../../lib/objects/separator';
+import inquirer from '../../../lib/inquirer';
 
 describe('Separator constructor', () => {
   it('should set a default', () => {
@@ -21,7 +21,7 @@ describe('Separator constructor', () => {
   });
 
   it('should be exposed on Inquirer object', () => {
-    expect(Inquirer.Separator).to.equal(Separator);
+    expect(inquirer.Separator).to.equal(Separator);
   });
 
   it('should expose a helper function to check for separator', () => {

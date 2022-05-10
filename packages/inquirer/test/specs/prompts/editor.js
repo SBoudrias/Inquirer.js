@@ -1,8 +1,8 @@
-const { expect } = require('chai');
-const ReadlineStub = require('../../helpers/readline');
-const fixtures = require('../../helpers/fixtures');
+import { expect } from 'chai';
+import ReadlineStub from '../../helpers/readline';
+import fixtures from '../../helpers/fixtures';
 
-const Editor = require('../../../lib/prompts/editor');
+import Editor from '../../../lib/prompts/editor';
 
 describe('`editor` prompt', () => {
   beforeEach(function () {

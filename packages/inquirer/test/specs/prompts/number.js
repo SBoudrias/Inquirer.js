@@ -1,8 +1,8 @@
-const { expect } = require('chai');
-const ReadlineStub = require('../../helpers/readline');
-const fixtures = require('../../helpers/fixtures');
+import { expect } from 'chai';
+import ReadlineStub from '../../helpers/readline';
+import fixtures from '../../helpers/fixtures';
 
-const NumberPrompt = require('../../../lib/prompts/number');
+import NumberPrompt from '../../../lib/prompts/number';
 
 const ACCEPTABLE_ERROR = 0.001;
 

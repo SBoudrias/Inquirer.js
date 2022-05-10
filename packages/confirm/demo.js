@@ -1,4 +1,4 @@
-const confirm = require('.');
+import confirm from '.';
 
 (async () => {
   let answer;

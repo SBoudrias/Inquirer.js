@@ -1,12 +1,11 @@
-'use strict';
 /**
  * `password` type prompt
  */
 
-const chalk = require('chalk');
-const { map, takeUntil } = require('rxjs/operators');
-const Base = require('./base');
-const observe = require('../utils/events');
+import chalk from 'chalk';
+import { map, takeUntil } from 'rxjs/operators';
+import Base from './base';
+import observe from '../utils/events';
 
 function mask(input, maskChar) {
   input = String(input);
@@ -18,7 +17,7 @@ function mask(input, maskChar) {
   return new Array(input.length + 1).join(maskChar);
 }
 
-class PasswordPrompt extends Base {
+export default class PasswordPrompt extends Base {
   /**
    * Start the Inquiry session
    * @param  {Function} cb      Callback when prompt is done
@@ -123,5 +122,3 @@ class PasswordPrompt extends Base {
     this.render();
   }
 }
-
-module.exports = PasswordPrompt;

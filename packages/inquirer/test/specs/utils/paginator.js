@@ -1,6 +1,6 @@
-const { expect } = require('chai');
-const ReadlineStub = require('../../helpers/readline');
-const Paginator = require('../../../lib/utils/paginator');
+import { expect } from 'chai';
+import ReadlineStub from '../../helpers/readline';
+import Paginator from '../../../lib/utils/paginator';
 
 const output = `\
 a

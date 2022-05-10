@@ -1,11 +1,11 @@
-const { createPrompt } = require('@inquirer/core');
-const { isUpKey, isDownKey, isSpaceKey, isNumberKey } = require('@inquirer/core/lib/key');
-const Paginator = require('@inquirer/core/lib/Paginator');
-const chalk = require('chalk');
-const figures = require('figures');
-const { cursorHide } = require('ansi-escapes');
+import { createPrompt } from '@inquirer/core';
+import { isUpKey, isDownKey, isSpaceKey, isNumberKey } from '@inquirer/core/lib/key';
+import Paginator from '@inquirer/core/lib/Paginator';
+import chalk from 'chalk';
+import figures from 'figures';
+import { cursorHide } from 'ansi-escapes';
 
-module.exports = createPrompt(
+export default createPrompt(
   (readline) => ({
     onKeypress: (value, key, { cursorPosition = 0, choices }, setState) => {
       let newCursorPosition = cursorPosition;

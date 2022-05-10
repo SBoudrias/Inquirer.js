@@ -1,4 +1,4 @@
-const select = require('.');
+import select from '.';
 
 (async () => {
   let answer;

@@ -1,5 +1,5 @@
-const chalk = require('chalk');
-const input = require('.');
+import chalk from 'chalk';
+import input from '.';
 
 const hexRegEx = /([0-9]|[a-f])/gim;
 const isHex = (value) =>

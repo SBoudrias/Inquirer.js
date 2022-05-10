@@ -1,7 +1,7 @@
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-const Choice = require('../../../lib/objects/choice');
-const Separator = require('../../../lib/objects/separator');
+import Choice from '../../../lib/objects/choice';
+import Separator from '../../../lib/objects/separator';
 
 describe('Choice object', () => {
   it('should normalize accept String as value', () => {

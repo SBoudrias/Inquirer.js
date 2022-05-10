@@ -1,8 +1,6 @@
-'use strict';
-
-const chalk = require('chalk');
-const cliWidth = require('cli-width');
-const { breakLines } = require('./utils');
+import chalk from 'chalk';
+import cliWidth from 'cli-width';
+import { breakLines } from './utils';
 
 /**
  * The paginator keeps track of a pointer index in a list and returns
@@ -50,4 +48,4 @@ class Paginator {
   }
 }
 
-module.exports = Paginator;
+export default Paginator;

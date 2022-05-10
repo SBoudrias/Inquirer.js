@@ -1,6 +1,6 @@
-const { EventEmitter } = require('events');
-const sinon = require('sinon');
-const util = require('util');
+import { EventEmitter } from 'events';
+import sinon from 'sinon';
+import util from 'util';
 
 const stub = {};
 
@@ -33,4 +33,4 @@ const ReadlineStub = function () {
 util.inherits(ReadlineStub, EventEmitter);
 Object.assign(ReadlineStub.prototype, stub);
 
-module.exports = ReadlineStub;
+export default ReadlineStub;
