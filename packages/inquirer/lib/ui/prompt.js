@@ -1,4 +1,3 @@
-'use strict';
 import isPlainObject from 'lodash/isPlainObject';
 import get from 'lodash/get';
 import set from 'lodash/set';

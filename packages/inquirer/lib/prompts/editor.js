@@ -1,4 +1,3 @@
-'use strict';
 /**
  * `editor` type prompt
  */

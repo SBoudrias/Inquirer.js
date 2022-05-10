@@ -2,7 +2,6 @@
  * Heirarchical conversation example
  */
 
-'use strict';
 const inquirer = require('..');
 
 const directionsPrompt = {

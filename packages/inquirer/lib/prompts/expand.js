@@ -1,4 +1,3 @@
-'use strict';
 /**
  * `rawlist` type prompt
  */

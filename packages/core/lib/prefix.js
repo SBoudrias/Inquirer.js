@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { dots as spinner } from 'cli-spinners';
 import { useState, useEffect } from '../hooks';
 
-exports.usePrefix = (isLoading) => {
+export const usePrefix = (isLoading) => {
   const [tick, setTick] = useState(0);
 
   useEffect(() => {

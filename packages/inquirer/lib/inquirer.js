@@ -1,4 +1,3 @@
-'use strict';
 /**
  * Inquirer.js
  * A collection of common interactive command line user interfaces.

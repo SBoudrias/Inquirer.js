@@ -203,7 +203,7 @@ class StateManager {
   }
 }
 
-exports.createPrompt = (config, render) => {
+export const createPrompt = (config, render) => {
   const run = (initialState) =>
     new Promise((resolve) => {
       const prompt = new StateManager(config, initialState, render);

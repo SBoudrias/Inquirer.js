@@ -1,4 +1,3 @@
-'use strict';
 import ansiEscapes from 'ansi-escapes';
 
 /**

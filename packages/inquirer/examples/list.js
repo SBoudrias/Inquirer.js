@@ -2,7 +2,6 @@
  * List prompt example
  */
 
-'use strict';
 const inquirer = require('..');
 
 inquirer

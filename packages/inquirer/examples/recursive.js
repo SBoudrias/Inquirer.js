@@ -3,7 +3,6 @@
  * Allows user to choose when to exit prompt
  */
 
-'use strict';
 const inquirer = require('..');
 const output = [];
 

@@ -3,7 +3,6 @@
  * run example by writing `node pizza.js` in your console
  */
 
-'use strict';
 const inquirer = require('..');
 
 console.log('Hi, welcome to Node Pizza');

@@ -1,5 +1,3 @@
-'use strict';
-
 import defaults from 'lodash/defaults';
 import clone from 'lodash/clone';
 /**

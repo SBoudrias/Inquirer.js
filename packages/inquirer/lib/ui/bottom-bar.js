@@ -1,4 +1,3 @@
-'use strict';
 /**
  * Sticky bottom bar user interface
  */

@@ -2,7 +2,6 @@
  * Paginated list
  */
 
-'use strict';
 const inquirer = require('..');
 
 const choices = Array.apply(0, new Array(26)).map((x, y) => String.fromCharCode(y + 65));

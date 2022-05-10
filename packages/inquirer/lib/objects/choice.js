@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Choice object
  * Normalize input as choice object

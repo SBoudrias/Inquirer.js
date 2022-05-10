@@ -2,7 +2,6 @@
  * Input prompt example
  */
 
-'use strict';
 const inquirer = require('..');
 const chalkPipe = require('chalk-pipe');
 

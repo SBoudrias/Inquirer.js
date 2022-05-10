@@ -1,4 +1,3 @@
-'use strict';
 import { from, of } from 'rxjs';
 import runAsync from 'run-async';
 

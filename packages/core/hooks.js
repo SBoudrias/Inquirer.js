@@ -16,7 +16,7 @@ const cleanupHook = (index) => {
   }
 };
 
-exports.useState = (defaultValue) => {
+export const useState = (defaultValue) => {
   const _idx = index;
   const value = _idx in hooks ? hooks[_idx] : defaultValue;
 
@@ -33,7 +33,7 @@ exports.useState = (defaultValue) => {
   ];
 };
 
-exports.useKeypress = (userHandler) => {
+export const useKeypress = (userHandler) => {
   const _idx = index;
   const prevHandler = hooks[_idx];
   const handler = (input, event) => {
@@ -53,7 +53,7 @@ exports.useKeypress = (userHandler) => {
   index++;
 };
 
-exports.useEffect = (cb, depArray) => {
+export const useEffect = (cb, depArray) => {
   const _idx = index;
 
   const oldDeps = hooks[_idx];
@@ -70,9 +70,9 @@ exports.useEffect = (cb, depArray) => {
   index++;
 };
 
-exports.useRef = (val) => exports.useState({ current: val })[0];
+export const useRef = (val) => useState({ current: val })[0];
 
-exports.createPrompt = (view) => (options) => {
+export const createPrompt = (view) => (options) => {
   // Default `input` to stdin
   const input = process.stdin;
 

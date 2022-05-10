@@ -2,7 +2,6 @@
  * Password prompt example
  */
 
-'use strict';
 const inquirer = require('..');
 
 const requireLetterAndNumber = (value) => {

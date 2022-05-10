@@ -2,7 +2,7 @@ import cliWidth from 'cli-width';
 import stripAnsi from 'strip-ansi';
 import stringWidth from 'string-width';
 import { cursorShow } from 'ansi-escapes';
-import util from './readline';
+import * as util from './readline';
 import { breakLines } from './utils';
 
 const height = (content) => content.split('\n').length;

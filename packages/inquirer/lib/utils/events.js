@@ -1,4 +1,3 @@
-'use strict';
 import { fromEvent } from 'rxjs';
 import { filter, map, share, takeUntil } from 'rxjs/operators';
 

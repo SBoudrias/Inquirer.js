@@ -1,4 +1,3 @@
-'use strict';
 import MuteStream from 'mute-stream';
 import readline from 'readline';
 

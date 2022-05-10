@@ -1,4 +1,3 @@
-'use strict';
 import * as util from './readline';
 import cliWidth from 'cli-width';
 import wrapAnsi from 'wrap-ansi';

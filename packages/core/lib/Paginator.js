@@ -1,5 +1,3 @@
-'use strict';
-
 import chalk from 'chalk';
 import cliWidth from 'cli-width';
 import { breakLines } from './utils';

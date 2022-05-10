@@ -2,7 +2,6 @@
  * Filter and validate progress example
  */
 
-'use strict';
 const inquirer = require('..');
 
 /* eslint-disable no-promise-executor-return */
