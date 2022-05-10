@@ -4,7 +4,7 @@
 
 import through from 'through';
 import Base from './baseUI';
-import { left, clearLine } from '../utils/readline';
+import * as rlUtils from '../utils/readline';
 
 export default class BottomBar extends Base {
   constructor(opt = {}) {
@@ -26,7 +26,7 @@ export default class BottomBar extends Base {
   }
 
   clean() {
-    clearLine(this.rl, this.bottomBar.split('\n').length);
+    rlUtils.clearLine(this.rl, this.bottomBar.split('\n').length);
     return this;
   }
 
@@ -37,7 +37,7 @@ export default class BottomBar extends Base {
    */
 
   updateBottomBar(bottomBar) {
-    clearLine(this.rl, 1);
+    rlUtils.clearLine(this.rl, 1);
     this.rl.output.unmute();
     this.clean();
     this.bottomBar = bottomBar;
@@ -85,7 +85,7 @@ export default class BottomBar extends Base {
     if (this.rl.output.rows === 0 && this.rl.output.columns === 0) {
       /* When it's a tty through serial port there's no terminal info and the render will malfunction,
          so we need enforce the cursor to locate to the leftmost position for rendering. */
-      left(this.rl, message.length + this.rl.line.length);
+      rlUtils.left(this.rl, message.length + this.rl.line.length);
     }
 
     this.rl.output.write(message);
