@@ -16,6 +16,7 @@ import { autosubmit } from '../helpers/events';
 const ostype = os.type();
 
 describe('inquirer.prompt', () => {
+  const sandbox = sinon.createSandbox();
   let mocha;
 
   before(function () {
@@ -24,6 +25,10 @@ describe('inquirer.prompt', () => {
 
   beforeEach(function () {
     this.prompt = inquirer.createPromptModule();
+  });
+
+  afterEach(() => {
+    sandbox.restore();
   });
 
   it("should close and create a new readline instances each time it's called", function () {
@@ -36,11 +41,13 @@ describe('inquirer.prompt', () => {
     });
 
     const rl1 = promise.ui.rl;
+    sandbox.spy(rl1, 'close');
+    sandbox.spy(rl1.output, 'end');
     rl1.emit('line');
 
     return promise.then(() => {
-      expect(rl1.close.called).to.equal(true);
-      expect(rl1.output.end.called).to.equal(true);
+      expect(rl1.close.calledOnce).to.equal(true);
+      expect(rl1.output.end.calledOnce).to.equal(true);
 
       const promise2 = ctx.prompt({
         type: 'confirm',
@@ -49,11 +56,13 @@ describe('inquirer.prompt', () => {
       });
 
       const rl2 = promise2.ui.rl;
+      sandbox.spy(rl2, 'close');
+      sandbox.spy(rl2.output, 'end');
       rl2.emit('line');
 
       return promise2.then(() => {
-        expect(rl2.close.called).to.equal(true);
-        expect(rl2.output.end.called).to.equal(true);
+        expect(rl2.close.calledOnce).to.equal(true);
+        expect(rl2.output.end.calledOnce).to.equal(true);
 
         expect(rl1).to.not.equal(rl2);
       });
@@ -71,10 +80,12 @@ describe('inquirer.prompt', () => {
     });
 
     const rl1 = promise.ui.rl;
+    sandbox.spy(rl1, 'close');
+    sandbox.spy(rl1.output, 'end');
 
     promise.catch(() => {
-      expect(rl1.close.called).to.equal(true);
-      expect(rl1.output.end.called).to.equal(true);
+      expect(rl1.close.calledOnce).to.equal(true);
+      expect(rl1.output.end.calledOnce).to.equal(true);
       done();
     });
   });

@@ -54,10 +54,6 @@ export default class UI {
     this.rl.output.end();
     this.rl.pause();
     this.rl.close();
-    // TODO: is there a better way
-    // of setting it to be called
-    this.rl.close.called = true;
-    this.rl.output.end.called = true;
   }
 }
 
