@@ -17,15 +17,7 @@ import { default as Editor } from './prompts/editor';
 import { default as BottomBar } from './ui/bottom-bar';
 import { default as Prompt } from './ui/prompt';
 
-export { default as Separator } from './objects/separator';
-
-/**
- * Client interfaces
- */
-export const ui = {
-  BottomBar,
-  Prompt,
-};
+import { default as Separator } from './objects/separator';
 
 /**
  * Create a new self-contained prompt module.
@@ -34,7 +26,7 @@ export function createPromptModule(opt) {
   const promptModule = function (questions, answers) {
     let uiInstance;
     try {
-      uiInstance = new ui.Prompt(promptModule.prompts, opt);
+      uiInstance = new Prompt(promptModule.prompts, opt);
     } catch (error) {
       return Promise.reject(error);
     }
@@ -89,13 +81,27 @@ export function createPromptModule(opt) {
  * @return {ui.Prompt}
  */
 
-export const prompt = createPromptModule();
+const prompt = createPromptModule();
 
 // Expose helper functions on the top level for easiest usage by common users
-export function registerPrompt(name, newPrompt) {
+function registerPrompt(name, newPrompt) {
   prompt.registerPrompt(name, newPrompt);
 }
 
-export function restoreDefaultPrompts() {
+function restoreDefaultPrompts() {
   prompt.restoreDefaultPrompts();
 }
+
+const inquirer = {
+  prompt,
+  ui: {
+    BottomBar,
+    Prompt,
+  },
+  createPromptModule,
+  registerPrompt,
+  restoreDefaultPrompts,
+  Separator,
+};
+
+export default inquirer;
