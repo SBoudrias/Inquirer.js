@@ -1,17 +1,62 @@
-import readline from 'readline';
+import * as readline from 'readline';
 import chalk from 'chalk';
 import MuteStream from 'mute-stream';
 import runAsync from 'run-async';
 import { dots as spinner } from 'cli-spinners';
 import ScreenManager from './lib/screen-manager';
 
-const defaultState = {
-  validate: () => true,
-  filter: (val) => val,
-  transformer: (val) => val,
+type Status = 'idle' | 'loading' | 'done';
+type FullState<Value> = {
+  loadingIncrement: number;
+  value: string;
+  status: Status;
+  default: string;
+  message: string;
+  error?: string;
+  validate: (value: string) => boolean | string | Promise<boolean | string>;
+  filter: (value: string) => Value;
+  transformer: (value: string, flags: { isFinal: boolean }) => string;
 };
 
-const defaultMapStateToValue = (state) => {
+type RenderState = {
+  prefix: string;
+  message: string;
+  value: string;
+  validate: undefined;
+  filter: undefined;
+  transformer: undefined;
+};
+
+type Config<Value> = {
+  onKeypress?: (
+    line: string,
+    key: { name: string },
+    state: FullState<Value>,
+    setState: (state: Partial<FullState<Value>>) => void
+  ) => unknown;
+  onLine?: (
+    state: FullState<Value>,
+    callbacks: {
+      submit: () => void;
+      setState: (state: Partial<FullState<Value>>) => void;
+    }
+  ) => void;
+  mapStateToValue?: (state: FullState<Value>) => Value;
+  validate: (value: string, state: FullState<Value>) => boolean | string;
+  configValidate?: () => unknown;
+};
+
+const defaultState = {
+  loadingIncrement: 0,
+  value: '',
+  status: 'idle',
+  error: undefined,
+  validate: () => true,
+  filter: (val: unknown) => val,
+  transformer: (val: unknown) => val,
+};
+
+const defaultMapStateToValue = (state: FullState<unknown>) => {
   if (!state.value) {
     return state.default;
   }
@@ -19,17 +64,36 @@ const defaultMapStateToValue = (state) => {
   return state.value;
 };
 
-const defaultOnLine = (state, { submit }) => submit();
+const defaultOnLine = (
+  _state: FullState<unknown>,
+  { submit }: { submit: () => unknown }
+) => submit();
 
-class StateManager {
-  constructor(configFactory, initialState, render) {
-    this.initialState = initialState;
+class StateManager<
+  Value extends string,
+  State extends FullState<Value>,
+  Render extends (
+    state: Omit<State, keyof RenderState> & RenderState,
+    config: Config<Value>
+  ) => string
+> {
+  config: Config<Value>;
+  initialState: Partial<State>;
+  currentState: Partial<FullState<Value>>;
+  render: Render;
+  screen: ScreenManager;
+  rl: readline.ReadLine;
+  cb?: (value: Value) => unknown;
+
+  constructor(
+    configFactory: Config<Value> | ((readline: readline.ReadLine) => Config<Value>),
+    initialState: State,
+    render: Render
+  ) {
     this.render = render;
-    this.currentState = {
-      loadingIncrement: 0,
-      value: '',
-      status: 'idle',
-    };
+
+    this.initialState = initialState;
+    this.currentState = {};
 
     // Default `input` to stdin
     const input = process.stdin;
@@ -45,12 +109,8 @@ class StateManager {
     });
     this.screen = new ScreenManager(this.rl);
 
-    let config = configFactory;
-    if (typeof configFactory === 'function') {
-      config = configFactory(this.rl);
-    }
-
-    this.config = config;
+    this.config =
+      typeof configFactory === 'function' ? configFactory(this.rl) : configFactory;
 
     this.onKeypress = this.onKeypress.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -60,7 +120,7 @@ class StateManager {
     this.handleLineEvent = this.handleLineEvent.bind(this);
   }
 
-  async execute(cb) {
+  async execute(cb: (value: Value) => unknown) {
     let { message } = this.getState();
     this.cb = cb;
 
@@ -76,18 +136,18 @@ class StateManager {
     clearTimeout(showLoader);
 
     // Setup event listeners once we're done fetching the configs
-    this.rl.input.on('keypress', this.onKeypress);
+    ((this.rl as any).input as NodeJS.ReadableStream).on('keypress', this.onKeypress);
     this.rl.on('line', this.handleLineEvent);
   }
 
-  onKeypress(value, key) {
+  onKeypress(_input: string, key: { name: string }) {
     const { onKeypress } = this.config;
     // Ignore enter keypress. The "line" event is handling those.
     if (key.name === 'enter' || key.name === 'return') {
       return;
     }
 
-    this.setState({ value: this.rl.line, error: null });
+    this.setState({ value: this.rl.line, error: undefined });
     if (onKeypress) {
       onKeypress(this.rl.line, key, this.getState(), this.setState);
     }
@@ -117,7 +177,7 @@ class StateManager {
   async onSubmit() {
     const state = this.getState();
     const { validate, filter } = state;
-    const { validate: configValidate = () => true } = this.config;
+    const { validate: configValidate = defaultState.validate } = this.config;
 
     const { mapStateToValue = defaultMapStateToValue } = this.config;
     const value = mapStateToValue(state);
@@ -138,7 +198,7 @@ class StateManager {
       }
 
       this.onError(isValid);
-    } catch (err) {
+    } catch (err: any) {
       this.onError(err.message + '\n' + err.stack);
     }
 
@@ -146,27 +206,34 @@ class StateManager {
     this.rl.resume();
   }
 
-  onError(error) {
+  onError(error: false | string) {
     this.setState({
       status: 'idle',
       error: error || 'You must provide a valid value',
     });
   }
 
-  onDone(value) {
+  onDone(value: Value) {
+    if (typeof this.cb !== 'function') {
+      throw new Error('StateManager#execute must be called before StateManager#onDone');
+    }
+
     this.setState({ status: 'done' });
-    this.rl.input.removeListener('keypress', this.onKeypress);
+    ((this.rl as any).input as NodeJS.ReadableStream).removeListener(
+      'keypress',
+      this.onKeypress
+    );
     this.rl.removeListener('line', this.handleLineEvent);
     this.screen.done();
     this.cb(value);
   }
 
-  setState(partialState) {
+  setState(partialState: Partial<FullState<Value>>) {
     this.currentState = { ...this.currentState, ...partialState };
     this.onChange(this.getState());
   }
 
-  getState() {
+  getState(): FullState<Value> {
     return { ...defaultState, ...this.initialState, ...this.currentState };
   }
 
@@ -181,7 +248,7 @@ class StateManager {
     return prefix;
   }
 
-  onChange(state) {
+  onChange(state: FullState<Value>) {
     const { status, message, value, transformer } = this.getState();
 
     let error;

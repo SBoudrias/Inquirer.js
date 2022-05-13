@@ -1,5 +1,5 @@
 import readline from 'readline';
-import { createPrompt } from '.';
+import { createPrompt } from './src';
 
 jest.mock('readline', () => {
   const readline = jest.requireActual('readline');
@@ -170,7 +170,10 @@ describe('createPrompt()', () => {
     // New input will clear the error message
     rl.input.emit('keypress', null, { name: 'a' });
     expect(render).toHaveBeenCalledTimes(3);
-    expect(render).toHaveBeenLastCalledWith(expect.objectContaining({ error: null }), {});
+    expect(render).toHaveBeenLastCalledWith(
+      expect.objectContaining({ error: undefined }),
+      {}
+    );
   });
 
   it('submit: handle validation error (rejected promise)', async () => {

@@ -1,9 +1,10 @@
 {
   "name": "@inquirer/input",
+  "type": "module",
   "version": "0.0.20-alpha.0",
   "description": "Inquirer input text prompt",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "repository": "SBoudrias/Inquirer.js",
   "keywords": [
     "cli",

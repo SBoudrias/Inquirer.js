@@ -5,6 +5,7 @@
     "jest": true,
     "node": true
   },
+  "parser": "@typescript-eslint/parser",
   "rules": {
     "default-param-last": "off",
     "padding-line-between-statements": "off",
@@ -18,5 +19,5 @@
     ],
     "prettier/prettier": "error"
   },
-  "plugins": ["prettier"]
+  "plugins": ["@typescript-eslint", "prettier"]
 }

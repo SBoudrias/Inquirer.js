@@ -1,22 +1,14 @@
 {
+  "extends": "@sindresorhus/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "module": "es6",
-    "moduleResolution": "node",
-    "declaration": true,
-    "noImplicitAny": true,
-    "removeComments": false,
-    "noLib": false,
-    "target": "es6",
-    "sourceMap": true,
-    "lib": [
-      "es6"
-    ]
+    "allowJs": true,
+    "target": "es2020",
+    "declaration": false,
+    "esModuleInterop": true,
+    "noUncheckedIndexedAccess": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ],
-  "include": [
-    "packages/**"
-  ]
- }
+  "exclude": ["node_modules"],
+  "include": ["packages"]
+}

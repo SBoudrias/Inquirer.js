@@ -3,7 +3,8 @@
   "type": "module",
   "version": "0.0.20-alpha.0",
   "description": "Core Inquirer prompt API",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "repository": "SBoudrias/Inquirer.js",
   "keywords": [
     "cli",
@@ -24,6 +25,9 @@
     "string-width": "^4.1.0",
     "strip-ansi": "^6.0.0",
     "wrap-ansi": "^7.0.0"
+  },
+  "scripts": {
+    "tsc": "tsc"
   },
   "publishConfig": {
     "access": "public"
