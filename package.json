@@ -3,7 +3,10 @@
   "type": "module",
   "devDependencies": {
     "@babel/core": "^7.17.9",
+    "@babel/parser": "^7.17.10",
     "@babel/preset-env": "^7.16.11",
+    "@babel/types": "^7.17.10",
+    "@types/node": "^17.0.33",
     "babel-jest": "^28.1.0",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
@@ -13,7 +16,9 @@
     "jest": "^28.1.0",
     "lerna": "^4.0.0",
     "lint-staged": "^12.4.1",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4"
   },
   "workspaces": [
     "packages/*"
@@ -21,6 +26,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
     "pretest": "eslint .",
+    "publish": "lerna run tsc && lerna publish",
     "test": "jest --coverage && lerna exec npm test --scope inquirer"
   },
   "repository": {

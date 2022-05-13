@@ -1,9 +1,9 @@
 {
   "name": "@inquirer/input",
-  "type": "module",
   "version": "0.0.20-alpha.0",
   "description": "Inquirer input text prompt",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "repository": "SBoudrias/Inquirer.js",
   "keywords": [
     "cli",
@@ -14,6 +14,9 @@
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/input/README.md",
+  "scripts": {
+    "tsc": "tsc"
+  },
   "dependencies": {
     "@inquirer/core": "^0.0.20-alpha.0",
     "chalk": "^4.1.1"
