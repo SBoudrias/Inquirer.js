@@ -4,10 +4,10 @@ import { useState, useEffect } from '../index.js';
 
 const spinner = spinners.dots;
 
-export const usePrefix = (isLoading) => {
+export const usePrefix = (isLoading: boolean): string => {
   const [tick, setTick] = useState(0);
 
-  useEffect(() => {
+  useEffect((): void | (() => unknown) => {
     if (isLoading) {
       const timeout = setTimeout(() => {
         setTick(tick + 1);

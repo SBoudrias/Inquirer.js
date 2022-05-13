@@ -8,7 +8,7 @@ import {
   isDownKey,
   isUpKey,
   isEnterKey,
-} from './index.js';
+} from './dist/index.js';
 import { Stream } from 'node:stream';
 
 describe('createPrompt()', () => {

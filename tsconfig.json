@@ -1,0 +1,13 @@
+{
+  "extends": "@sindresorhus/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "es2022",
+    "declaration": false,
+    "esModuleInterop": true,
+    "noUncheckedIndexedAccess": false,
+    "noPropertyAccessFromIndexSignature": false,
+  },
+  "exclude": ["node_modules"],
+  "include": ["packages"]
+}
