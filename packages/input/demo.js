@@ -11,7 +11,7 @@ const isHex = (value) =>
 
   answer = await input({
     message: 'Enter an hex color?',
-    transformer: (value = '', { isFinal }) => {
+    transformer(value = '', { isFinal }) {
       const color = chalk.hex(isHex(value) ? value : 'fff');
       return isFinal ? color.underline(value) : color(value);
     },

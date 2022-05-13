@@ -11,11 +11,11 @@ const questions = [
     type: 'input',
     name: 'first_question',
     message: 'Question with filtering and validating text',
-    validate: async () => {
+    async validate() {
       await new Promise((r) => setTimeout(r, 3000));
       return true;
     },
-    filter: async (answer) => {
+    async filter(answer) {
       await new Promise((r) => setTimeout(r, 3000));
       return `filtered${answer}`;
     },
@@ -26,11 +26,11 @@ const questions = [
     type: 'input',
     name: 'second_question',
     message: 'Question without filtering and validating text',
-    validate: async () => {
+    async validate() {
       await new Promise((r) => setTimeout(r, 3000));
       return true;
     },
-    filter: async (answer) => {
+    async filter(answer) {
       await new Promise((r) => setTimeout(r, 3000));
       return `filtered${answer}`;
     },

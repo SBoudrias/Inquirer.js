@@ -964,7 +964,7 @@ describe('inquirer.prompt', () => {
           // for this to work, if not it will error out
           // with the following error message during testing
           // Uncaught Error [ERR_METHOD_NOT_IMPLEMENTED]: The _read() method is not implemented
-          read: () => {},
+          read() {},
         }),
       });
       const prompts = [

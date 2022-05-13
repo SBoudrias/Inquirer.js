@@ -7,7 +7,7 @@ import { cursorHide } from 'ansi-escapes';
 
 export default createPrompt(
   (readline) => ({
-    onKeypress: (value, key, { cursorPosition = 0, choices }, setState) => {
+    onKeypress(value, key, { cursorPosition = 0, choices }, setState) {
       let newCursorPosition = cursorPosition;
       if (isUpKey(key) || isDownKey(key)) {
         const offset = isUpKey(key) ? -1 : 1;

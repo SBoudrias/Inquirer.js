@@ -12,7 +12,7 @@ export default (config, ...args) => {
     {
       ...config, // Make sure we do not display the default password
       default: undefined,
-      transformer: (input, { isFinal }) => {
+      transformer(input, { isFinal }) {
         if (config.mask) {
           return String(config.mask).repeat(input.length);
         }
