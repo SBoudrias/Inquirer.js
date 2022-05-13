@@ -11,8 +11,8 @@ class Paginator {
   pointer = 0;
   lastIndex = 0;
 
-  paginate(output, active, pageSize) {
-    pageSize = pageSize || 7;
+  paginate(output: string, active: number, pageSize: number | undefined) {
+    pageSize = pageSize ?? 7;
     const middleOfList = Math.floor(pageSize / 2);
 
     // TODO: I've remove the dependency on readline here. But we should refactor the

@@ -1,4 +1,5 @@
 import ansiEscapes from 'ansi-escapes';
+import type { InquirerReadline } from '../index.js';
 
 /**
  * Move cursor left by `x`
@@ -6,7 +7,7 @@ import ansiEscapes from 'ansi-escapes';
  * @param  {Number}   x  - How far to go left (default to 1)
  */
 
-export const left = function (rl, x) {
+export const left = function (rl: InquirerReadline, x: number) {
   rl.output.write(ansiEscapes.cursorBackward(x));
 };
 
@@ -16,7 +17,7 @@ export const left = function (rl, x) {
  * @param  {Number}   x  - How far to go left (default to 1)
  */
 
-export const right = function (rl, x) {
+export const right = function (rl: InquirerReadline, x: number) {
   rl.output.write(ansiEscapes.cursorForward(x));
 };
 
@@ -26,7 +27,7 @@ export const right = function (rl, x) {
  * @param  {Number}   x  - How far to go up (default to 1)
  */
 
-export const up = function (rl, x) {
+export const up = function (rl: InquirerReadline, x: number) {
   rl.output.write(ansiEscapes.cursorUp(x));
 };
 
@@ -36,7 +37,7 @@ export const up = function (rl, x) {
  * @param  {Number}   x  - How far to go down (default to 1)
  */
 
-export const down = function (rl, x) {
+export const down = function (rl: InquirerReadline, x: number) {
   rl.output.write(ansiEscapes.cursorDown(x));
 };
 
@@ -45,6 +46,6 @@ export const down = function (rl, x) {
  * @param  {Readline} rl  - Readline instance
  * @param  {Number}   len - number of line to delete
  */
-export const clearLine = function (rl, len) {
+export const clearLine = function (rl: InquirerReadline, len: number) {
   rl.output.write(ansiEscapes.eraseLines(len));
 };

@@ -7,7 +7,7 @@ import wrapAnsi from 'wrap-ansi';
  * @param {number} width
  * @return {string}
  */
-export const breakLines = (content, width) =>
+export const breakLines = (content: string, width: number): string =>
   content
     .split('\n')
     .map((line) => wrapAnsi(line, width, { trim: false, hard: true }).split('\n'))

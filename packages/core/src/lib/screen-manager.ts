@@ -4,12 +4,16 @@ import stringWidth from 'string-width';
 import ansiEscapes from 'ansi-escapes';
 import * as util from './readline.js';
 import { breakLines } from './utils.js';
+import { InquirerReadline } from '../index.js';
 
-const height = (content) => content.split('\n').length;
-const lastLine = (content) => content.split('\n').pop();
+const height = (content: string): number => content.split('\n').length;
+const lastLine = (content: string): string => content.split('\n').pop() ?? '';
 
 export default class ScreenManager {
-  constructor(rl) {
+  height: number;
+  extraLinesUnderPrompt: number;
+
+  constructor(private readonly rl: InquirerReadline) {
     // These variables are keeping information to allow correct prompt re-rendering
     this.height = 0;
     this.extraLinesUnderPrompt = 0;
@@ -17,7 +21,7 @@ export default class ScreenManager {
     this.rl = rl;
   }
 
-  render(content, bottomContent = '') {
+  render(content: string, bottomContent: string | void = '') {
     this.rl.output.unmute();
     this.clean(this.extraLinesUnderPrompt);
 
@@ -39,7 +43,7 @@ export default class ScreenManager {
     this.rl.setPrompt(prompt);
 
     // SetPrompt will change cursor position, now we can get correct value
-    const cursorPos = this.rl._getCursorPos();
+    const cursorPos = (this.rl as any)._getCursorPos();
     const width = cliWidth({ defaultWidth: 80, output: this.rl.output });
 
     content = breakLines(content, width);
@@ -87,7 +91,7 @@ export default class ScreenManager {
     this.rl.output.mute();
   }
 
-  clean(extraLines) {
+  clean(extraLines: number) {
     if (extraLines > 0) {
       util.down(this.rl, extraLines);
     }
