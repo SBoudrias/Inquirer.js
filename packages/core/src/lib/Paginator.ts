@@ -1,3 +1,4 @@
+import * as readline from 'readline';
 import chalk from 'chalk';
 import cliWidth from 'cli-width';
 import { breakLines } from './utils';
@@ -8,13 +9,17 @@ import { breakLines } from './utils';
  */
 
 class Paginator {
-  constructor(rl) {
+  pointer: number;
+  lastIndex: number;
+  rl: readline.ReadLine;
+  
+  constructor(rl: readline.ReadLine) {
     this.pointer = 0;
     this.lastIndex = 0;
     this.rl = rl;
   }
 
-  paginate(output, active, pageSize) {
+  paginate(output: string, active: number, pageSize: number | undefined) {
     pageSize = pageSize || 7;
     const middleOfList = Math.floor(pageSize / 2);
 
