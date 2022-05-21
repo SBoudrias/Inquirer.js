@@ -2,6 +2,8 @@
   "private": true,
   "type": "module",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-xo": "^0.41.0",
@@ -10,7 +12,8 @@
     "jest": "^28.1.0",
     "lerna": "^4.0.0",
     "lint-staged": "^12.4.1",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "typescript": "^4.6.4"
   },
   "workspaces": [
     "packages/*"

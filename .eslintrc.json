@@ -1,9 +1,13 @@
 {
   "extends": ["xo", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "prettier"],
   "env": {
-    "mocha": true,
-    "jest": true,
-    "node": true
+    "node": true,
+    "es2021": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
   },
   "rules": {
     "default-param-last": "off",
@@ -18,5 +22,22 @@
     ],
     "prettier/prettier": "error"
   },
-  "plugins": ["prettier"]
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "rules": {
+        // Disabled per typescript-eslint recommendation: https://github.com/typescript-eslint/typescript-eslint/blob/e26e43ffba96f6d46198b22f1c8dd5c814db2652/docs/getting-started/linting/FAQ.md#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
+        "no-undef": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "error"
+      }
+    },
+    {
+      "files": ["test.js", "*.test.js", "**/test/**"],
+      "env": {
+        "mocha": true,
+        "jest": true
+      }
+    }
+  ]
 }
