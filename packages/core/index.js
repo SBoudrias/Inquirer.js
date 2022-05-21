@@ -22,7 +22,7 @@ const defaultMapStateToValue = (state) => {
 const defaultOnLine = (state, { submit }) => submit();
 
 class StateManager {
-  constructor(configFactory, initialState, render) {
+  constructor(configFactory, initialState, render, stdio) {
     this.initialState = initialState;
     this.render = render;
     this.currentState = {
@@ -31,17 +31,14 @@ class StateManager {
       status: 'idle',
     };
 
-    // Default `input` to stdin
-    const input = process.stdin;
-
     // Add mute capabilities to the output
     const output = new MuteStream();
     output.pipe(process.stdout);
 
     this.rl = readline.createInterface({
       terminal: true,
-      input,
-      output,
+      input: stdio?.input ?? process.stdin,
+      output: stdio?.output ?? output,
     });
     this.screen = new ScreenManager(this.rl);
 
@@ -49,7 +46,6 @@ class StateManager {
     if (typeof configFactory === 'function') {
       config = configFactory(this.rl);
     }
-
     this.config = config;
 
     this.onKeypress = this.onKeypress.bind(this);
@@ -204,9 +200,9 @@ class StateManager {
 }
 
 export const createPrompt = (config, render) => {
-  const run = (initialState) =>
+  const run = (initialState, stdio) =>
     new Promise((resolve) => {
-      const prompt = new StateManager(config, initialState, render);
+      const prompt = new StateManager(config, initialState, render, stdio);
       prompt.execute(resolve);
     });
 
