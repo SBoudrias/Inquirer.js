@@ -24,7 +24,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
     "pretest": "eslint .",
-    "jest": "yarn node --experimental-vm-modules $(yarn bin jest)",
+    "jest": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test": "yarn jest && lerna exec npm test --scope inquirer"
   },
   "repository": {
