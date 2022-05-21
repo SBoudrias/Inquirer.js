@@ -16,8 +16,8 @@
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/select/README.md",
   "dependencies": {
     "@inquirer/core": "^0.0.20-alpha.0",
-    "chalk": "^4.1.1",
-    "figures": "^3.0.0"
+    "chalk": "^5.0.1",
+    "figures": "^4.0.1"
   },
   "publishConfig": {
     "access": "public"

@@ -2,12 +2,9 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@babel/core": "^7.17.9",
-    "@babel/preset-env": "^7.16.11",
-    "babel-jest": "^28.1.0",
-    "eslint": "^8.15.0",
+    "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-config-xo": "^0.40.0",
+    "eslint-config-xo": "^0.41.0",
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^8.0.1",
     "jest": "^28.1.0",
@@ -21,7 +18,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
     "pretest": "eslint .",
-    "test": "jest --coverage && lerna exec npm test --scope inquirer"
+    "jest": "yarn node --experimental-vm-modules $(yarn bin jest)",
+    "test": "yarn jest && lerna exec npm test --scope inquirer"
   },
   "repository": {
     "type": "git",
@@ -44,6 +42,10 @@
   },
   "jest": {
     "coverageDirectory": "./coverage/",
-    "collectCoverage": true
+    "collectCoverage": true,
+    "moduleNameMapper": {
+      "#ansi-styles": "ansi-styles",
+      "#supports-color": "supports-color"
+    }
   }
 }

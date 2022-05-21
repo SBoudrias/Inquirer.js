@@ -3,7 +3,7 @@ import { isUpKey, isDownKey, isSpaceKey, isNumberKey } from '@inquirer/core/lib/
 import Paginator from '@inquirer/core/lib/Paginator';
 import chalk from 'chalk';
 import figures from 'figures';
-import { cursorHide } from 'ansi-escapes';
+import ansiEscapes from 'ansi-escapes';
 
 export default createPrompt(
   (readline) => ({
@@ -102,6 +102,6 @@ export default createPrompt(
       })
       .join('\n');
     const windowedChoices = paginator.paginate(allChoices, cursorPosition, pageSize);
-    return `${prefix} ${message}${helpTip}\n${windowedChoices}${cursorHide}`;
+    return `${prefix} ${message}${helpTip}\n${windowedChoices}${ansiEscapes.cursorHide}`;
   }
 );

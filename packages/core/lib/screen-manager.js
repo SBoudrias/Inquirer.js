@@ -1,7 +1,7 @@
 import cliWidth from 'cli-width';
 import stripAnsi from 'strip-ansi';
 import stringWidth from 'string-width';
-import { cursorShow } from 'ansi-escapes';
+import ansiEscapes from 'ansi-escapes';
 import * as util from './readline';
 import { breakLines } from './utils';
 
@@ -100,7 +100,7 @@ export default class ScreenManager {
     this.rl.setPrompt('');
     this.rl.output.unmute();
     this.rl.output.write('\n');
-    this.rl.output.write(cursorShow);
+    this.rl.output.write(ansiEscapes.cursorShow);
     this.rl.close();
   }
 

@@ -39,20 +39,20 @@
   "repository": "SBoudrias/Inquirer.js",
   "license": "MIT",
   "dependencies": {
-    "ansi-escapes": "^4.2.1",
-    "chalk": "^4.1.1",
-    "cli-cursor": "^3.1.0",
-    "cli-width": "^3.0.0",
+    "ansi-escapes": "^5.0.0",
+    "chalk": "^5.0.1",
+    "cli-cursor": "^4.0.0",
+    "cli-width": "^4.0.0",
     "external-editor": "^3.0.3",
-    "figures": "^3.0.0",
+    "figures": "^4.0.1",
     "lodash": "^4.17.21",
     "mute-stream": "0.0.8",
-    "ora": "^5.4.1",
+    "ora": "^6.1.0",
     "run-async": "^2.4.0",
     "rxjs": "^7.5.5",
-    "string-width": "^4.1.0",
-    "strip-ansi": "^6.0.0",
+    "string-width": "^5.1.2",
+    "strip-ansi": "^7.0.1",
     "through": "^2.3.6",
-    "wrap-ansi": "^7.0.0"
+    "wrap-ansi": "^8.0.1"
   }
 }

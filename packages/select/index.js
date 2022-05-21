@@ -4,7 +4,7 @@ import { isEnterKey, isUpKey, isDownKey, isNumberKey } from '@inquirer/core/lib/
 import Paginator from '@inquirer/core/lib/Paginator';
 import chalk from 'chalk';
 import figures from 'figures';
-import { cursorHide } from 'ansi-escapes';
+import ansiEscapes from 'ansi-escapes';
 
 export default createPrompt((config, done) => {
   const [status, setStatus] = useState('pending');
@@ -68,5 +68,5 @@ export default createPrompt((config, done) => {
   const choice = choices[cursorPosition];
   const choiceDescription = choice && choice.description ? `\n${choice.description}` : ``;
 
-  return `${prefix} ${message}\n${windowedChoices}${choiceDescription}${cursorHide}`;
+  return `${prefix} ${message}\n${windowedChoices}${choiceDescription}${ansiEscapes.cursorHide}`;
 });

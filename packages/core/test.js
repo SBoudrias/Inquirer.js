@@ -1,4 +1,5 @@
 import MuteStream from 'mute-stream';
+import { jest } from '@jest/globals';
 import { createPrompt } from '.';
 
 jest.useFakeTimers();
