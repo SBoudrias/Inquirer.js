@@ -2,7 +2,7 @@
  * Password prompt example
  */
 
-const inquirer = require('..');
+import inquirer from '../lib/inquirer.js';
 
 const requireLetterAndNumber = (value) => {
   if (/\w/.test(value) && /\d/.test(value)) {

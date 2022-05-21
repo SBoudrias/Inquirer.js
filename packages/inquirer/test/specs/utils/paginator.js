@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import ReadlineStub from '../../helpers/readline';
-import Paginator from '../../../lib/utils/paginator';
+import ReadlineStub from '../../helpers/readline.js';
+import Paginator from '../../../lib/utils/paginator.js';
 
 const output = `\
 a

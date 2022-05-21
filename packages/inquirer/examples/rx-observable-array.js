@@ -1,5 +1,5 @@
-const inquirer = require('..');
-const { from } = require('rxjs');
+import inquirer from '../lib/inquirer.js';
+import { from } from 'rxjs';
 
 const questions = [
   {

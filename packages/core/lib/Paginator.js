@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import cliWidth from 'cli-width';
-import { breakLines } from './utils';
+import { breakLines } from './utils.js';
 
 /**
  * The paginator keeps track of a pointer index in a list and returns

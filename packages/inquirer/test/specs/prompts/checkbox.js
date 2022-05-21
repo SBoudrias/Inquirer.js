@@ -1,9 +1,9 @@
 import { expect } from 'chai';
-import ReadlineStub from '../../helpers/readline';
-import fixtures from '../../helpers/fixtures';
+import ReadlineStub from '../../helpers/readline.js';
+import fixtures from '../../helpers/fixtures.js';
 import sinon from 'sinon';
 
-import Checkbox from '../../../lib/prompts/checkbox';
+import Checkbox from '../../../lib/prompts/checkbox.js';
 
 describe('`checkbox` prompt', () => {
   beforeEach(function () {

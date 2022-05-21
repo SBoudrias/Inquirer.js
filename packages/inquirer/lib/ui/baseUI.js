@@ -1,5 +1,5 @@
 import MuteStream from 'mute-stream';
-import readline from 'readline';
+import readline from 'node:readline';
 
 /**
  * Base interface class other can inherits from

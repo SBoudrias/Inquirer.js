@@ -1,4 +1,4 @@
-import * as util from './readline';
+import * as util from './readline.js';
 import cliWidth from 'cli-width';
 import wrapAnsi from 'wrap-ansi';
 import stripAnsi from 'strip-ansi';

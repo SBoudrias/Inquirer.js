@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 
-import inquirer from '../../../lib/inquirer';
-import Choices from '../../../lib/objects/choices';
-import Choice from '../../../lib/objects/choice';
+import inquirer from '../../../lib/inquirer.js';
+import Choices from '../../../lib/objects/choices.js';
+import Choice from '../../../lib/objects/choice.js';
 
 describe('Choices collection', () => {
   it('should create Choice object from array member', () => {

@@ -1,5 +1,5 @@
 import mockery from 'mockery';
-import ReadlineStub from './helpers/readline';
+import ReadlineStub from './helpers/readline.js';
 
 mockery.enable();
 mockery.warnOnUnregistered(false);

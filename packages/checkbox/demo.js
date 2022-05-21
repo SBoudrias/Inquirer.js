@@ -1,4 +1,4 @@
-import checkbox from '.';
+import checkbox from './index.js';
 
 (async () => {
   let answer;

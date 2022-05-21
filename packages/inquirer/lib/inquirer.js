@@ -3,20 +3,20 @@
  * A collection of common interactive command line user interfaces.
  */
 
-import { default as List } from './prompts/list';
-import { default as Input } from './prompts/input';
-import { default as Number } from './prompts/number';
-import { default as Confirm } from './prompts/confirm';
-import { default as RawList } from './prompts/rawlist';
-import { default as Expand } from './prompts/expand';
-import { default as Checkbox } from './prompts/checkbox';
-import { default as Password } from './prompts/password';
-import { default as Editor } from './prompts/editor';
+import { default as List } from './prompts/list.js';
+import { default as Input } from './prompts/input.js';
+import { default as Number } from './prompts/number.js';
+import { default as Confirm } from './prompts/confirm.js';
+import { default as RawList } from './prompts/rawlist.js';
+import { default as Expand } from './prompts/expand.js';
+import { default as Checkbox } from './prompts/checkbox.js';
+import { default as Password } from './prompts/password.js';
+import { default as Editor } from './prompts/editor.js';
 
-import { default as BottomBar } from './ui/bottom-bar';
-import { default as Prompt } from './ui/prompt';
+import { default as BottomBar } from './ui/bottom-bar.js';
+import { default as Prompt } from './ui/prompt.js';
 
-import { default as Separator } from './objects/separator';
+import { default as Separator } from './objects/separator.js';
 
 /**
  * Create a new self-contained prompt module.

@@ -1,12 +1,13 @@
 {
   "extends": ["xo", "prettier"],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["@typescript-eslint", "node", "unicorn", "prettier"],
   "env": {
     "node": true,
-    "es2021": true
+    "es2022": true
   },
   "parserOptions": {
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "rules": {
@@ -20,7 +21,9 @@
         "null": "ignore"
       }
     ],
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "unicorn/prefer-module": "error",
+    "unicorn/prefer-node-protocol": "error"
   },
   "overrides": [
     {
@@ -30,6 +33,14 @@
         "no-undef": "off",
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "error"
+      }
+    },
+    {
+      "files": ["*.js"],
+      "rules": {
+        "node/file-extension-in-import": "error",
+        "node/no-missing-import": "error",
+        "node/no-extraneous-import": "error"
       }
     },
     {

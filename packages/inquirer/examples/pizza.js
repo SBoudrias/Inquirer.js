@@ -3,7 +3,7 @@
  * run example by writing `node pizza.js` in your console
  */
 
-const inquirer = require('..');
+import inquirer from '../lib/inquirer.js';
 
 console.log('Hi, welcome to Node Pizza');
 

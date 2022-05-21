@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import Choice from '../../../lib/objects/choice';
-import Separator from '../../../lib/objects/separator';
+import Choice from '../../../lib/objects/choice.js';
+import Separator from '../../../lib/objects/separator.js';
 
 describe('Choice object', () => {
   it('should normalize accept String as value', () => {

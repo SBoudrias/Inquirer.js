@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import ReadlineStub from '../../helpers/readline';
-import fixtures from '../../helpers/fixtures';
+import ReadlineStub from '../../helpers/readline.js';
+import fixtures from '../../helpers/fixtures.js';
 
-import NumberPrompt from '../../../lib/prompts/number';
+import NumberPrompt from '../../../lib/prompts/number.js';
 
 const ACCEPTABLE_ERROR = 0.001;
 

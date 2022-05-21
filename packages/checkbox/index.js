@@ -1,6 +1,6 @@
 import { createPrompt } from '@inquirer/core';
-import { isUpKey, isDownKey, isSpaceKey, isNumberKey } from '@inquirer/core/lib/key';
-import Paginator from '@inquirer/core/lib/Paginator';
+import { isUpKey, isDownKey, isSpaceKey, isNumberKey } from '@inquirer/core/lib/key.js';
+import Paginator from '@inquirer/core/lib/Paginator.js';
 import chalk from 'chalk';
 import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';

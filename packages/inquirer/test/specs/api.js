@@ -3,10 +3,10 @@
  */
 
 import { expect } from 'chai';
-import fixtures from '../helpers/fixtures';
-import ReadlineStub from '../helpers/readline';
-import inquirer from '../../lib/inquirer';
-import { autosubmit } from '../helpers/events';
+import fixtures from '../helpers/fixtures.js';
+import ReadlineStub from '../helpers/readline.js';
+import inquirer from '../../lib/inquirer.js';
+import { autosubmit } from '../helpers/events.js';
 
 // Define prompts and their public API
 const prompts = [

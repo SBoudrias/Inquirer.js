@@ -5,11 +5,11 @@
 import chalk from 'chalk';
 import cliCursor from 'cli-cursor';
 import figures from 'figures';
-import { map, takeUntil } from 'rxjs/operators';
-import Base from './base';
-import observe from '../utils/events';
-import Paginator from '../utils/paginator';
-import incrementListIndex from '../utils/incrementListIndex';
+import { map, takeUntil } from 'rxjs';
+import Base from './base.js';
+import observe from '../utils/events.js';
+import Paginator from '../utils/paginator.js';
+import incrementListIndex from '../utils/incrementListIndex.js';
 
 export default class CheckboxPrompt extends Base {
   constructor(questions, rl, answers) {

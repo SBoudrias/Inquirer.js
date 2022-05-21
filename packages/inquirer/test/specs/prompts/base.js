@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import ReadlineStub from '../../helpers/readline';
+import ReadlineStub from '../../helpers/readline.js';
 
-import Base from '../../../lib/prompts/base';
+import Base from '../../../lib/prompts/base.js';
 
 describe('`base` prompt (e.g. prompt helpers)', () => {
   beforeEach(function () {

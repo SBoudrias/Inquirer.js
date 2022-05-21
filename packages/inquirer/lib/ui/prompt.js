@@ -1,6 +1,6 @@
-import isPlainObject from 'lodash/isPlainObject';
-import get from 'lodash/get';
-import set from 'lodash/set';
+import isPlainObject from 'lodash/isPlainObject.js';
+import get from 'lodash/get.js';
+import set from 'lodash/set.js';
 
 const _ = {
   isPlainObject,
@@ -8,10 +8,10 @@ const _ = {
   get,
 };
 import { defer, empty, from, of } from 'rxjs';
-import { concatMap, filter, publish, reduce } from 'rxjs/operators';
+import { concatMap, filter, publish, reduce } from 'rxjs';
 import runAsync from 'run-async';
-import * as utils from '../utils/utils';
-import Base from './baseUI';
+import * as utils from '../utils/utils.js';
+import Base from './baseUI.js';
 
 /**
  * Base interface class other can inherits from

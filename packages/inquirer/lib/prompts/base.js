@@ -1,5 +1,5 @@
-import defaults from 'lodash/defaults';
-import clone from 'lodash/clone';
+import defaults from 'lodash/defaults.js';
+import clone from 'lodash/clone.js';
 /**
  * Base prompt implementation
  * Should be extended by prompt types.
@@ -11,9 +11,9 @@ const _ = {
 
 import chalk from 'chalk';
 import runAsync from 'run-async';
-import { filter, flatMap, share, take, takeUntil } from 'rxjs/operators';
-import Choices from '../objects/choices';
-import ScreenManager from '../utils/screen-manager';
+import { filter, flatMap, share, take, takeUntil } from 'rxjs';
+import Choices from '../objects/choices.js';
+import ScreenManager from '../utils/screen-manager.js';
 
 export default class Prompt {
   constructor(question, rl, answers) {

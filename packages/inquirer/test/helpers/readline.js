@@ -1,6 +1,6 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'node:events';
 import sinon from 'sinon';
-import util from 'util';
+import util from 'node:util';
 
 const stub = {};
 

@@ -1,4 +1,4 @@
-import confirm from '.';
+import confirm from './index.js';
 
 (async () => {
   let answer;

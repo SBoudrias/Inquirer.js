@@ -3,9 +3,9 @@
  */
 
 import chalk from 'chalk';
-import { take, takeUntil } from 'rxjs/operators';
-import Base from './base';
-import observe from '../utils/events';
+import { take, takeUntil } from 'rxjs';
+import Base from './base.js';
+import observe from '../utils/events.js';
 
 export default class ConfirmPrompt extends Base {
   constructor(questions, rl, answers) {

@@ -1,8 +1,8 @@
-import assert from 'assert';
+import assert from 'node:assert';
 import _ from 'lodash';
 
-import Separator from './separator';
-import Choice from './choice';
+import Separator from './separator.js';
+import Choice from './choice.js';
 
 /**
  * Choices collection

@@ -2,8 +2,8 @@ import cliWidth from 'cli-width';
 import stripAnsi from 'strip-ansi';
 import stringWidth from 'string-width';
 import ansiEscapes from 'ansi-escapes';
-import * as util from './readline';
-import { breakLines } from './utils';
+import * as util from './readline.js';
+import { breakLines } from './utils.js';
 
 const height = (content) => content.split('\n').length;
 const lastLine = (content) => content.split('\n').pop();

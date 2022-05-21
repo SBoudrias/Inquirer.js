@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import ReadlineStub from '../../helpers/readline';
-import fixtures from '../../helpers/fixtures';
+import ReadlineStub from '../../helpers/readline.js';
+import fixtures from '../../helpers/fixtures.js';
 
-import Rawlist from '../../../lib/prompts/rawlist';
+import Rawlist from '../../../lib/prompts/rawlist.js';
 
 describe('`rawlist` prompt', () => {
   beforeEach(function () {

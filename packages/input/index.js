@@ -1,6 +1,6 @@
-import { createPrompt, useState, useKeypress } from '@inquirer/core/hooks';
-import { usePrefix } from '@inquirer/core/lib/prefix';
-import { isEnterKey, isBackspaceKey } from '@inquirer/core/lib/key';
+import { createPrompt, useState, useKeypress } from '@inquirer/core/hooks.js';
+import { usePrefix } from '@inquirer/core/lib/prefix.js';
+import { isEnterKey, isBackspaceKey } from '@inquirer/core/lib/key.js';
 import chalk from 'chalk';
 
 export default createPrompt((config, done) => {

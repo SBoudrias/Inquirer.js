@@ -3,11 +3,11 @@
  */
 
 import chalk from 'chalk';
-import { map, takeUntil } from 'rxjs/operators';
-import Base from './base';
-import Separator from '../objects/separator';
-import observe from '../utils/events';
-import Paginator from '../utils/paginator';
+import { map, takeUntil } from 'rxjs';
+import Base from './base.js';
+import Separator from '../objects/separator.js';
+import observe from '../utils/events.js';
+import Paginator from '../utils/paginator.js';
 
 export default class ExpandPrompt extends Base {
   constructor(questions, rl, answers) {

@@ -2,7 +2,7 @@
  * `input` type prompt
  */
 
-import Input from './input';
+import Input from './input.js';
 
 /**
  * Extention of the Input prompt specifically for use with number inputs.

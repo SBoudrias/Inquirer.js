@@ -2,7 +2,7 @@
  * Filter and validate progress example
  */
 
-const inquirer = require('..');
+import inquirer from '../lib/inquirer.js';
 
 /* eslint-disable no-promise-executor-return */
 

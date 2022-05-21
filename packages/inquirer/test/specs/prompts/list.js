@@ -1,9 +1,9 @@
 import { expect } from 'chai';
-import ReadlineStub from '../../helpers/readline';
-import fixtures from '../../helpers/fixtures';
+import ReadlineStub from '../../helpers/readline.js';
+import fixtures from '../../helpers/fixtures.js';
 import sinon from 'sinon';
 
-import List from '../../../lib/prompts/list';
+import List from '../../../lib/prompts/list.js';
 
 describe('`list` prompt', () => {
   beforeEach(function () {

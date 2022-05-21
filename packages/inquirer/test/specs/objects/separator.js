@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import stripAnsi from 'strip-ansi';
 
-import Separator from '../../../lib/objects/separator';
-import inquirer from '../../../lib/inquirer';
+import Separator from '../../../lib/objects/separator.js';
+import inquirer from '../../../lib/inquirer.js';
 
 describe('Separator constructor', () => {
   it('should set a default', () => {

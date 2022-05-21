@@ -1,9 +1,9 @@
-import readline from 'readline';
+import readline from 'node:readline';
 import chalk from 'chalk';
 import MuteStream from 'mute-stream';
 import runAsync from 'run-async';
 import spinners from 'cli-spinners';
-import ScreenManager from './lib/screen-manager';
+import ScreenManager from './lib/screen-manager.js';
 
 const spinner = spinners.dots;
 

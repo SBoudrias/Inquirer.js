@@ -2,7 +2,7 @@
  * Raw List prompt example
  */
 
-const inquirer = require('..');
+import inquirer from '../lib/inquirer.js';
 
 inquirer
   .prompt([

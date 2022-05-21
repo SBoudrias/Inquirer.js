@@ -2,16 +2,16 @@
  * Inquirer public API test
  */
 
-import fs from 'fs';
-import os from 'os';
-import stream from 'stream';
-import tty from 'tty';
+import fs from 'node:fs';
+import os from 'node:os';
+import stream from 'node:stream';
+import tty from 'node:tty';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { Observable } from 'rxjs';
 
-import inquirer from '../../lib/inquirer';
-import { autosubmit } from '../helpers/events';
+import inquirer from '../../lib/inquirer.js';
+import { autosubmit } from '../helpers/events.js';
 
 const ostype = os.type();
 

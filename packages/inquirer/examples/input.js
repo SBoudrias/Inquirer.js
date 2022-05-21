@@ -2,8 +2,9 @@
  * Input prompt example
  */
 
-const inquirer = require('..');
-const chalkPipe = require('chalk-pipe');
+import inquirer from '../lib/inquirer.js';
+// eslint-disable-next-line node/no-missing-import
+import chalkPipe from 'chalk-pipe';
 
 const questions = [
   {

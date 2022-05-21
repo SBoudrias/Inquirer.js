@@ -6,11 +6,11 @@ import chalk from 'chalk';
 import figures from 'figures';
 import cliCursor from 'cli-cursor';
 import runAsync from 'run-async';
-import { flatMap, map, take, takeUntil } from 'rxjs/operators';
-import Base from './base';
-import observe from '../utils/events';
-import Paginator from '../utils/paginator';
-import incrementListIndex from '../utils/incrementListIndex';
+import { flatMap, map, take, takeUntil } from 'rxjs';
+import Base from './base.js';
+import observe from '../utils/events.js';
+import Paginator from '../utils/paginator.js';
+import incrementListIndex from '../utils/incrementListIndex.js';
 
 export default class ListPrompt extends Base {
   constructor(questions, rl, answers) {

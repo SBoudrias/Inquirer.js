@@ -1,7 +1,7 @@
-import readline from 'readline';
+import readline from 'node:readline';
 import MuteStream from 'mute-stream';
-import ScreenManager from './lib/screen-manager';
-import { getPromptConfig } from './lib/options';
+import ScreenManager from './lib/screen-manager.js';
+import { getPromptConfig } from './lib/options.js';
 
 let sessionRl;
 let hooks = [];

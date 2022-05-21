@@ -2,7 +2,7 @@
  * When example
  */
 
-const inquirer = require('..');
+import inquirer from '../lib/inquirer.js';
 
 const questions = [
   {

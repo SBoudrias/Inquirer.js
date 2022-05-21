@@ -2,7 +2,7 @@
  * Expand list examples
  */
 
-const inquirer = require('..');
+import inquirer from '../lib/inquirer.js';
 
 inquirer
   .prompt([

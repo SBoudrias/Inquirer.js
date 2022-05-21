@@ -1,6 +1,7 @@
 import MuteStream from 'mute-stream';
+// eslint-disable-next-line node/no-extraneous-import
 import { jest } from '@jest/globals';
-import { createPrompt } from '.';
+import { createPrompt } from './index.js';
 
 jest.useFakeTimers();
 

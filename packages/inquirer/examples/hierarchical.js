@@ -2,7 +2,7 @@
  * Heirarchical conversation example
  */
 
-const inquirer = require('..');
+import inquirer from '../lib/inquirer.js';
 
 const directionsPrompt = {
   type: 'list',
