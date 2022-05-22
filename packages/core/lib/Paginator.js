@@ -8,11 +8,8 @@ import { breakLines } from './utils.js';
  */
 
 class Paginator {
-  constructor(rl) {
-    this.pointer = 0;
-    this.lastIndex = 0;
-    this.rl = rl;
-  }
+  pointer = 0;
+  lastIndex = 0;
 
   paginate(output, active, pageSize) {
     pageSize = pageSize || 7;
