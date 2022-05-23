@@ -76,13 +76,13 @@ export const useEffect = (cb, depArray) => {
 
 export const useRef = (val) => useState({ current: val })[0];
 
-export const createPrompt = (view) => (options) => {
+export const createPrompt = (view) => (options, stdio) => {
   // Default `input` to stdin
-  const input = process.stdin;
+  const input = stdio?.input ?? process.stdin;
 
   // Add mute capabilities to the output
   const output = new MuteStream();
-  output.pipe(process.stdout);
+  output.pipe(stdio?.output ?? process.stdout);
 
   const rl = readline.createInterface({
     terminal: true,
@@ -114,7 +114,7 @@ export const createPrompt = (view) => (options) => {
     const workLoop = (config) => {
       index = 0;
       handleChange = () => workLoop(config);
-      screen.render(...[view(config, done)].flat().filter(Boolean));
+      screen.render(...[view(config, done)].flat().filter((line) => line != null));
     };
 
     // TODO: we should display a loader while we get the default options.

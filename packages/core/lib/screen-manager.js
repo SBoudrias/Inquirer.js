@@ -17,7 +17,7 @@ export default class ScreenManager {
     this.rl = rl;
   }
 
-  render(content, bottomContent) {
+  render(content, bottomContent = '') {
     this.rl.output.unmute();
     this.clean(this.extraLinesUnderPrompt);
 
