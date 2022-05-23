@@ -1,6 +1,6 @@
 import MuteStream from 'mute-stream';
-// eslint-disable-next-line node/no-extraneous-import
 import { jest } from '@jest/globals';
+import { Stream } from 'node:stream';
 import {
   createPrompt,
   useKeypress,
@@ -8,8 +8,7 @@ import {
   isDownKey,
   isUpKey,
   isEnterKey,
-} from './dist/index.js';
-import { Stream } from 'node:stream';
+} from './src';
 
 describe('createPrompt()', () => {
   it('handle async function message', async () => {
@@ -49,7 +48,7 @@ describe('createPrompt()', () => {
   });
 
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
-    const Prompt = (config, done) => {
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
       const [value, setValue] = useState('');
 
       useKeypress((key) => {
@@ -69,7 +68,7 @@ describe('createPrompt()', () => {
     const input = new MuteStream();
     const data = jest.fn();
     const output = new Stream.Writable({
-      write(chunk, encoding, next) {
+      write(chunk, _encoding, next) {
         data(chunk.toString());
         next();
       },
