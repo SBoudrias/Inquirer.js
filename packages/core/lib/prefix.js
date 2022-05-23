@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import spinners from 'cli-spinners';
-import { useState, useEffect } from '../hooks.js';
+import { useState, useEffect } from '../index.js';
 
 const spinner = spinners.dots;
 

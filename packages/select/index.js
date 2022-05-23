@@ -1,7 +1,15 @@
-import { createPrompt, useState, useKeypress, useRef } from '@inquirer/core/hooks.js';
-import { usePrefix } from '@inquirer/core/lib/prefix.js';
-import { isEnterKey, isUpKey, isDownKey, isNumberKey } from '@inquirer/core/lib/key.js';
-import Paginator from '@inquirer/core/lib/Paginator.js';
+import {
+  createPrompt,
+  useState,
+  useKeypress,
+  useRef,
+  usePrefix,
+  isEnterKey,
+  isUpKey,
+  isDownKey,
+  isNumberKey,
+  Paginator,
+} from '@inquirer/core';
 import chalk from 'chalk';
 import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';

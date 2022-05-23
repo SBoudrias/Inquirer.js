@@ -1,215 +1,123 @@
 import readline from 'node:readline';
-import chalk from 'chalk';
 import MuteStream from 'mute-stream';
-import runAsync from 'run-async';
-import spinners from 'cli-spinners';
 import ScreenManager from './lib/screen-manager.js';
+import { getPromptConfig } from './lib/options.js';
 
-const spinner = spinners.dots;
+export { usePrefix } from './lib/prefix.js';
+export * from './lib/key.js';
+export * from './lib/Paginator.js';
 
-const defaultState = {
-  validate: () => true,
-  filter: (val) => val,
-  transformer: (val) => val,
+let sessionRl;
+let hooks = [];
+const hooksCleanup = [];
+let index = 0;
+let handleChange = () => {};
+
+const cleanupHook = (index) => {
+  const cleanFn = hooksCleanup[index];
+  if (typeof cleanFn === 'function') {
+    cleanFn();
+  }
 };
 
-const defaultMapStateToValue = (state) => {
-  if (!state.value) {
-    return state.default;
-  }
+export const useState = (defaultValue) => {
+  const _idx = index;
+  const value = _idx in hooks ? hooks[_idx] : defaultValue;
 
-  return state.value;
+  index++;
+
+  return [
+    value,
+    (newValue) => {
+      hooks[_idx] = newValue;
+
+      // Trigger re-render
+      handleChange();
+    },
+  ];
 };
 
-const defaultOnLine = (state, { submit }) => submit();
+export const useKeypress = (userHandler) => {
+  const _idx = index;
+  const prevHandler = hooks[_idx];
+  const handler = (input, event) => {
+    userHandler(event, sessionRl);
+  };
 
-class StateManager {
-  constructor(configFactory, initialState, render, stdio) {
-    this.initialState = initialState;
-    this.render = render;
-    this.currentState = {
-      loadingIncrement: 0,
-      value: '',
-      status: 'idle',
+  if (prevHandler !== handler) {
+    cleanupHook(_idx);
+
+    sessionRl.input.on('keypress', handler);
+    hooks[_idx] = handler;
+    hooksCleanup[_idx] = () => {
+      sessionRl.input.removeListener('keypress', handler);
+    };
+  }
+
+  index++;
+};
+
+export const useEffect = (cb, depArray) => {
+  const _idx = index;
+
+  const oldDeps = hooks[_idx];
+  let hasChanged = true;
+  if (oldDeps) {
+    hasChanged = depArray.some((dep, i) => !Object.is(dep, oldDeps[i]));
+  }
+  if (hasChanged) {
+    cleanupHook(_idx);
+    hooksCleanup[_idx] = cb();
+  }
+  hooks[_idx] = depArray;
+
+  index++;
+};
+
+export const useRef = (val) => useState({ current: val })[0];
+
+export const createPrompt = (view) => (options) => {
+  // Default `input` to stdin
+  const input = process.stdin;
+
+  // Add mute capabilities to the output
+  const output = new MuteStream();
+  output.pipe(process.stdout);
+
+  const rl = readline.createInterface({
+    terminal: true,
+    input,
+    output,
+  });
+  const screen = new ScreenManager(rl);
+
+  return new Promise((resolve, reject) => {
+    sessionRl = rl;
+
+    const done = (value) => {
+      let len = cleanupHook.length;
+      while (len--) {
+        cleanupHook(len);
+      }
+      screen.done();
+
+      // Reset hooks state
+      hooks = [];
+      index = 0;
+      sessionRl = undefined;
+
+      // Finally we resolve our promise
+      resolve(value);
     };
 
-    // Add mute capabilities to the output
-    const output = new MuteStream();
-    output.pipe(process.stdout);
-
-    this.rl = readline.createInterface({
-      terminal: true,
-      input: stdio?.input ?? process.stdin,
-      output: stdio?.output ?? output,
-    });
-    this.screen = new ScreenManager(this.rl);
-
-    let config = configFactory;
-    if (typeof configFactory === 'function') {
-      config = configFactory(this.rl);
-    }
-    this.config = config;
-
-    this.onKeypress = this.onKeypress.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.startLoading = this.startLoading.bind(this);
-    this.onLoaderTick = this.onLoaderTick.bind(this);
-    this.setState = this.setState.bind(this);
-    this.handleLineEvent = this.handleLineEvent.bind(this);
-  }
-
-  async execute(cb) {
-    let { message } = this.getState();
-    this.cb = cb;
-
-    // Load asynchronous properties
-    const showLoader = setTimeout(this.startLoading, 500);
-    if (typeof message === 'function') {
-      message = await runAsync(message)();
-    }
-
-    this.setState({ message, status: 'idle' });
-
-    // Disable the loader if it didn't launch
-    clearTimeout(showLoader);
-
-    // Setup event listeners once we're done fetching the configs
-    this.rl.input.on('keypress', this.onKeypress);
-    this.rl.on('line', this.handleLineEvent);
-  }
-
-  onKeypress(value, key) {
-    const { onKeypress } = this.config;
-    // Ignore enter keypress. The "line" event is handling those.
-    if (key.name === 'enter' || key.name === 'return') {
-      return;
-    }
-
-    this.setState({ value: this.rl.line, error: null });
-    if (onKeypress) {
-      onKeypress(this.rl.line, key, this.getState(), this.setState);
-    }
-  }
-
-  startLoading() {
-    this.setState({ loadingIncrement: 0, status: 'loading' });
-    setTimeout(this.onLoaderTick, spinner.interval);
-  }
-
-  onLoaderTick() {
-    const { status, loadingIncrement } = this.getState();
-    if (status === 'loading') {
-      this.setState({ loadingIncrement: loadingIncrement + 1 });
-      setTimeout(this.onLoaderTick, spinner.interval);
-    }
-  }
-
-  handleLineEvent() {
-    const { onLine = defaultOnLine } = this.config;
-    onLine(this.getState(), {
-      submit: this.onSubmit,
-      setState: this.setState,
-    });
-  }
-
-  async onSubmit() {
-    const state = this.getState();
-    const { validate, filter } = state;
-    const { validate: configValidate = () => true } = this.config;
-
-    const { mapStateToValue = defaultMapStateToValue } = this.config;
-    const value = mapStateToValue(state);
-
-    const showLoader = setTimeout(this.startLoading, 500);
-    this.rl.pause();
-    try {
-      const filteredValue = await runAsync(filter)(value);
-      let isValid = configValidate(value, state);
-      if (isValid === true) {
-        isValid = await runAsync(validate)(filteredValue);
-      }
-
-      if (isValid === true) {
-        this.onDone(filteredValue);
-        clearTimeout(showLoader);
-        return;
-      }
-
-      this.onError(isValid);
-    } catch (err) {
-      this.onError(err.message + '\n' + err.stack);
-    }
-
-    clearTimeout(showLoader);
-    this.rl.resume();
-  }
-
-  onError(error) {
-    this.setState({
-      status: 'idle',
-      error: error || 'You must provide a valid value',
-    });
-  }
-
-  onDone(value) {
-    this.setState({ status: 'done' });
-    this.rl.input.removeListener('keypress', this.onKeypress);
-    this.rl.removeListener('line', this.handleLineEvent);
-    this.screen.done();
-    this.cb(value);
-  }
-
-  setState(partialState) {
-    this.currentState = { ...this.currentState, ...partialState };
-    this.onChange(this.getState());
-  }
-
-  getState() {
-    return { ...defaultState, ...this.initialState, ...this.currentState };
-  }
-
-  getPrefix() {
-    const { status, loadingIncrement } = this.getState();
-    let prefix = chalk.green('?');
-    if (status === 'loading') {
-      const frame = loadingIncrement % spinner.frames.length;
-      prefix = chalk.yellow(spinner.frames[frame]);
-    }
-
-    return prefix;
-  }
-
-  onChange(state) {
-    const { status, message, value, transformer } = this.getState();
-
-    let error;
-    if (state.error) {
-      error = `${chalk.red('>>')} ${state.error}`;
-    }
-
-    const renderState = {
-      prefix: this.getPrefix(),
-      ...state,
-      // Only pass message down if it's a string. Otherwise we're still in init state
-      message: typeof message === 'function' ? 'Loading...' : message,
-      value: transformer(value, { isFinal: status === 'done' }),
-      validate: undefined,
-      filter: undefined,
-      transformer: undefined,
+    hooks = [];
+    const workLoop = (config) => {
+      index = 0;
+      handleChange = () => workLoop(config);
+      screen.render(...[view(config, done)].flat().filter(Boolean));
     };
-    this.screen.render(this.render(renderState, this.config), error);
-  }
-}
 
-export const createPrompt = (config, render) => {
-  const run = (initialState, stdio) =>
-    new Promise((resolve) => {
-      const prompt = new StateManager(config, initialState, render, stdio);
-      prompt.execute(resolve);
-    });
-
-  run.render = render;
-  run.config = config;
-
-  return run;
+    // TODO: we should display a loader while we get the default options.
+    getPromptConfig(options).then(workLoop, reject);
+  });
 };

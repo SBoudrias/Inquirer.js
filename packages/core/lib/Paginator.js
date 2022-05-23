@@ -45,4 +45,4 @@ class Paginator {
   }
 }
 
-export default Paginator;
+export { Paginator };

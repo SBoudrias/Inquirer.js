@@ -1,8 +1,12 @@
 import chalk from 'chalk';
 import { editAsync } from 'external-editor';
-import { createPrompt, useState, useKeypress } from '@inquirer/core/hooks.js';
-import { usePrefix } from '@inquirer/core/lib/prefix.js';
-import { isEnterKey } from '@inquirer/core/lib/key.js';
+import {
+  createPrompt,
+  useState,
+  useKeypress,
+  usePrefix,
+  isEnterKey,
+} from '@inquirer/core';
 
 export default createPrompt((config, done) => {
   const [status, setStatus] = useState('pending');
