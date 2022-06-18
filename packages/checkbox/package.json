@@ -3,7 +3,8 @@
   "version": "0.0.20-alpha.0",
   "type": "module",
   "description": "Inquirer checkbox prompt",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "repository": "SBoudrias/Inquirer.js",
   "keywords": [
     "cli",
@@ -20,6 +21,9 @@
     "ansi-escapes": "^5.0.0",
     "chalk": "^5.0.1",
     "figures": "^4.0.1"
+  },
+  "scripts": {
+    "tsc": "tsc"
   },
   "publishConfig": {
     "access": "public"
