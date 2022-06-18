@@ -7,12 +7,11 @@ import { breakLines } from './utils.js';
  * a subset of the choices if the list is too long.
  */
 
-class Paginator {
+export class Paginator {
   pointer = 0;
   lastIndex = 0;
 
-  paginate(output: string, active: number, pageSize: number | undefined) {
-    pageSize = pageSize ?? 7;
+  paginate(output: string, active: number, pageSize: number = 7) {
     const middleOfList = Math.floor(pageSize / 2);
 
     // TODO: I've remove the dependency on readline here. But we should refactor the
@@ -44,5 +43,3 @@ class Paginator {
     return section + '\n' + chalk.dim('(Move up and down to reveal more choices)');
   }
 }
-
-export { Paginator };

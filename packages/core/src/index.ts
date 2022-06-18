@@ -108,7 +108,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
   view: (
     config: Config & ResolvedPromptConfig,
     done: (value: Value) => void
-  ) => string | [string, string | void]
+  ) => string | [string, string | undefined]
 ) {
   return async function (options: Config, stdio?: StdioOptions): Promise<Value> {
     // Default `input` to stdin

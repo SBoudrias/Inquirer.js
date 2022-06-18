@@ -4,7 +4,7 @@ import { useState, useEffect } from '../index.js';
 
 const spinner = spinners.dots;
 
-export const usePrefix = (isLoading: boolean): string => {
+export function usePrefix(isLoading: boolean): string {
   const [tick, setTick] = useState(0);
 
   useEffect((): void | (() => unknown) => {
@@ -23,4 +23,4 @@ export const usePrefix = (isLoading: boolean): string => {
   }
 
   return chalk.green('?');
-};
+}

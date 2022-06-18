@@ -10,18 +10,15 @@ const height = (content: string): number => content.split('\n').length;
 const lastLine = (content: string): string => content.split('\n').pop() ?? '';
 
 export default class ScreenManager {
-  height: number;
-  extraLinesUnderPrompt: number;
+  // These variables are keeping information to allow correct prompt re-rendering
+  private height: number = 0;
+  private extraLinesUnderPrompt: number = 0;
 
   constructor(private readonly rl: InquirerReadline) {
-    // These variables are keeping information to allow correct prompt re-rendering
-    this.height = 0;
-    this.extraLinesUnderPrompt = 0;
-
     this.rl = rl;
   }
 
-  render(content: string, bottomContent: string | void = '') {
+  render(content: string, bottomContent: string = '') {
     this.rl.output.unmute();
     this.clean(this.extraLinesUnderPrompt);
 
@@ -47,9 +44,7 @@ export default class ScreenManager {
     const width = cliWidth({ defaultWidth: 80, output: this.rl.output });
 
     content = breakLines(content, width);
-    if (bottomContent) {
-      bottomContent = breakLines(bottomContent, width);
-    }
+    bottomContent = breakLines(bottomContent, width);
 
     // Manually insert an extra line if we're at the end of the line.
     // This prevent the cursor from appearing at the beginning of the
@@ -70,17 +65,12 @@ export default class ScreenManager {
     const promptLineUpDiff = Math.floor(rawPromptLine.length / width) - cursorPos.rows;
     const bottomContentHeight =
       promptLineUpDiff + (bottomContent ? height(bottomContent) : 0);
-    if (bottomContentHeight > 0) {
-      util.up(this.rl, bottomContentHeight);
-    }
 
-    // Reset cursor at the beginning of the line
+    // Return cursor to the input position (on top of the bottomContent)
+    util.up(this.rl, bottomContentHeight);
+    // Move cursor at the start of the line, then return to the initial left offset.
     util.left(this.rl, stringWidth(lastLine(fullContent)));
-
-    // Adjust cursor on the right
-    if (cursorPos.cols > 0) {
-      util.right(this.rl, cursorPos.cols);
-    }
+    util.right(this.rl, cursorPos.cols);
 
     /**
      * Set up state for next re-rendering
@@ -92,25 +82,18 @@ export default class ScreenManager {
   }
 
   clean(extraLines: number) {
-    if (extraLines > 0) {
-      util.down(this.rl, extraLines);
-    }
-
+    util.down(this.rl, extraLines);
     util.clearLine(this.rl, this.height);
   }
 
   done() {
-    this.releaseCursor();
+    // Reset the cursor at the end of the previously displayed content
+    util.down(this.rl, this.extraLinesUnderPrompt);
+
     this.rl.setPrompt('');
     this.rl.output.unmute();
     this.rl.output.write('\n');
     this.rl.output.write(ansiEscapes.cursorShow);
     this.rl.close();
-  }
-
-  releaseCursor() {
-    if (this.extraLinesUnderPrompt > 0) {
-      util.down(this.rl, this.extraLinesUnderPrompt);
-    }
   }
 }
