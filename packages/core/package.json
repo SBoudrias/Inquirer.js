@@ -5,6 +5,7 @@
   "description": "Core Inquirer prompt API",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "files": ["dist/"],
   "repository": "SBoudrias/Inquirer.js",
   "keywords": [
     "cli",
