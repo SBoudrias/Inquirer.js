@@ -8,7 +8,8 @@ import {
   isDownKey,
   isUpKey,
   isEnterKey,
-} from './src';
+  type KeypressEvent,
+} from './src/index.js';
 
 describe('createPrompt()', () => {
   it('handle async function message', async () => {
@@ -51,7 +52,7 @@ describe('createPrompt()', () => {
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       const [value, setValue] = useState('');
 
-      useKeypress((key) => {
+      useKeypress((key: KeypressEvent) => {
         if (isEnterKey(key)) {
           done(value);
         } else if (isDownKey(key)) {

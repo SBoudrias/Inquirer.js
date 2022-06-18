@@ -17,7 +17,7 @@ export type InquirerReadline = readline.ReadLine & {
   input: NodeJS.ReadableStream;
 };
 
-type KeypressEvent = {
+export type KeypressEvent = {
   name: string;
   ctrl: boolean;
 };

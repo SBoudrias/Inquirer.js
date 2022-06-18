@@ -14,6 +14,9 @@
     "default-param-last": "off",
     "padding-line-between-statements": "off",
     "no-eq-null": "off",
+    "node/no-extraneous-import": ["error", {
+      "allowModules": ["@jest/globals"]
+    }],
     "eqeqeq": [
       "error",
       "always",
