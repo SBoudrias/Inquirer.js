@@ -4,7 +4,7 @@ import { useState, useEffect } from '../index.js';
 
 const spinner = spinners.dots;
 
-export function usePrefix(isLoading: boolean): string {
+export function usePrefix(isLoading: boolean = false): string {
   const [tick, setTick] = useState(0);
 
   useEffect((): void | (() => unknown) => {
