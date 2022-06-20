@@ -1,13 +1,6 @@
 import input from '@inquirer/input';
 import chalk from 'chalk';
 
-/**
- * Notes
- * On https://www.npmjs.com/package/@inquirer/password
- Mask is a boolean but string is required
- Filter => doesn't seem to work on direct package import, but works on inquirer/prompt
- */
-
 type PasswordConfig = {
   type: string;
   name: string;
