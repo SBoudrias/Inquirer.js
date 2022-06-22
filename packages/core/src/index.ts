@@ -35,9 +35,7 @@ const cleanupHook = (index: number) => {
   }
 };
 
-export function useState<Value>(
-  defaultValue?: Value
-): [Value, (newValue: Value) => void] {
+export function useState<Value>(defaultValue: Value): [Value, (newValue: Value) => void] {
   const _idx = index;
   const value = _idx in hooks ? hooks[_idx] : defaultValue;
 
