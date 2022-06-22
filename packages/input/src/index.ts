@@ -15,10 +15,10 @@ export type InputConfig = AsyncPromptConfig & {
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {
-  const [status, setStatus] = useState('pending');
-  const [defaultValue, setDefaultValue] = useState(config.default);
-  const [errorMsg, setError] = useState<any>(null);
-  const [value, setValue] = useState('');
+  const [status, setStatus] = useState<string>('pending');
+  const [defaultValue, setDefaultValue] = useState<string | undefined>(config.default);
+  const [errorMsg, setError] = useState<string | boolean | undefined>(undefined);
+  const [value, setValue] = useState<string>('');
 
   const isLoading = status === 'loading';
   const prefix = usePrefix(isLoading);
