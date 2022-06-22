@@ -9,7 +9,7 @@ import {
 import chalk from 'chalk';
 
 type InputConfig = {
-  message: string | (() => string | Promise<string>);
+  message: string | Promise<string> | (() => Promise<string>);
   default?: string;
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
   validate?: (value: string) => (boolean | string | Promise<string | boolean>);
