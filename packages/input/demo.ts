@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import input from './src/index.js';
 
 const hexRegEx = /([0-9]|[a-f])/gim;
-const isHex = (value : string) =>
+const isHex = (value: string) =>
   (value.match(hexRegEx) || []).length === value.length &&
   (value.length === 3 || value.length === 6);
 

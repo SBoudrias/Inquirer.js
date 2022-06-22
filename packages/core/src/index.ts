@@ -96,12 +96,12 @@ export function useRef<Value>(val: Value): { current: Value } {
 
 export type AsyncPromptConfig = {
   message: string | Promise<string> | (() => Promise<string>);
-  validate?: () => boolean;
+  validate?: (value: string) => boolean | string | Promise<string | boolean>;
 };
 
 export type ResolvedPromptConfig = {
   message: string;
-  validate: () => boolean;
+  validate: (value: string) => boolean | string | Promise<string | boolean>;
 };
 
 export function createPrompt<Value, Config extends AsyncPromptConfig>(

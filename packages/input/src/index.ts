@@ -5,14 +5,13 @@ import {
   usePrefix,
   isEnterKey,
   isBackspaceKey,
-} from '@inquirer/core/src';
+  AsyncPromptConfig,
+} from '@inquirer/core';
 import chalk from 'chalk';
 
-type InputConfig = {
-  message: string | Promise<string> | (() => Promise<string>);
+export type InputConfig = AsyncPromptConfig & {
   default?: string;
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
-  validate?: (value: string) => (boolean | string | Promise<string | boolean>);
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {

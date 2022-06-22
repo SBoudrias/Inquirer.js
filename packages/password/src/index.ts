@@ -1,13 +1,8 @@
-import input from '@inquirer/input/src';
+import input, { InputConfig } from '@inquirer/input/src';
 import chalk from 'chalk';
 
-type PasswordConfig = {
-  message: string | Promise<string> | (() => Promise<string>);
-  mask?: boolean | string; 
-  default?: any; 
-  filter?: () => any; 
-  validate?: (input: string) => string | boolean | Promise<string | boolean>;
-  transformer?: (input: string, { isFinal }: { isFinal: boolean }) => string;
+type PasswordConfig = InputConfig & {
+  mask?: boolean | string;
 };
 
 export default (config: PasswordConfig, ...args: any[]) => {
