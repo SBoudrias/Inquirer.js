@@ -1,4 +1,4 @@
-import input from '@inquirer/input';
+import input from '@inquirer/input/src';
 import chalk from 'chalk';
 
 type PasswordConfig = {

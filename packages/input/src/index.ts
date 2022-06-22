@@ -5,13 +5,20 @@ import {
   usePrefix,
   isEnterKey,
   isBackspaceKey,
-} from '@inquirer/core';
+} from '@inquirer/core/src';
 import chalk from 'chalk';
 
-export default createPrompt((config, done) => {
+type InputConfig = {
+  message: string | (() => string | Promise<string>);
+  default?: string;
+  transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
+  validate?: (value: string) => (boolean | string | Promise<string | boolean>);
+};
+
+export default createPrompt<string, InputConfig>((config, done) => {
   const [status, setStatus] = useState('pending');
   const [defaultValue, setDefaultValue] = useState(config.default);
-  const [errorMsg, setError] = useState();
+  const [errorMsg, setError] = useState<any>(null);
   const [value, setValue] = useState('');
 
   const isLoading = status === 'loading';

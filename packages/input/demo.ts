@@ -1,8 +1,8 @@
 import chalk from 'chalk';
-import input from './index.js';
+import input from './src/index.js';
 
 const hexRegEx = /([0-9]|[a-f])/gim;
-const isHex = (value) =>
+const isHex = (value : string) =>
   (value.match(hexRegEx) || []).length === value.length &&
   (value.length === 3 || value.length === 6);
 
@@ -11,7 +11,7 @@ const isHex = (value) =>
 
   answer = await input({
     message: 'Enter an hex color?',
-    transformer(value = '', { isFinal }) {
+    transformer(value = '', { isFinal }: { isFinal: boolean }) {
       const color = chalk.hex(isHex(value) ? value : 'fff');
       return isFinal ? color.underline(value) : color(value);
     },
@@ -21,7 +21,7 @@ const isHex = (value) =>
 
   answer = await input({
     message: '(Slow validation) provide a number:',
-    validate: (value) =>
+    validate: (value: unknown) =>
       new Promise((resolve) => {
         setTimeout(
           () => resolve(!Number.isNaN(Number(value)) || 'You must provide a number'),
