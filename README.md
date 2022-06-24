@@ -51,11 +51,12 @@ A collection of common interactive command line user interfaces.
 <a name="installation"></a>
 
 ```shell
-npm install inquirer
+npm install --save inquirer
 ```
 
 ```javascript
-var inquirer = require('inquirer');
+import inquirer from 'inquirer';
+
 inquirer
   .prompt([
     /* Pass your questions in here */
@@ -70,6 +71,18 @@ inquirer
       // Something else went wrong
     }
   });
+```
+
+Inquirer v9 and higher are native esm modules, this mean you cannot use the commonjs syntax `require('inquirer')` anymore. If you want to learn more about using native esm in Node, I'd recommend reading [the following guide](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c). Alternatively, you can rely on an older version until you're ready to upgrade your environment:
+
+```sh
+npm install --save inquirer@^8.0.0
+```
+
+This will then allow import inquirer with the commonjs `require`:
+
+```js
+const inquirer = require('inquirer');
 ```
 
 <a name="examples"></a>
@@ -108,7 +121,7 @@ Register prompt plugins under `name`.
 Create a self contained inquirer module. If you don't want to affect other libraries that also rely on inquirer when you overwrite or add new prompt types.
 
 ```js
-var prompt = inquirer.createPromptModule();
+const prompt = inquirer.createPromptModule();
 
 prompt(questions).then(/* ... */);
 ```
@@ -151,7 +164,7 @@ A question object is a `hash` containing question related values:
   /* Legacy way: with this.async */
   validate: function (input) {
     // Declare function as asynchronous, and save the done callback
-    var done = this.async();
+    const done = this.async();
 
     // Do async stuff
     setTimeout(function() {
@@ -308,7 +321,7 @@ Along with the prompts, Inquirer offers some basic text UI.
 This UI present a fixed text at the bottom of a free text zone. This is useful to keep a message to the bottom of the screen while outputting command outputs on the higher section.
 
 ```javascript
-var ui = new inquirer.ui.BottomBar();
+const ui = new inquirer.ui.BottomBar();
 
 // pipe a Stream to the log zone
 outputStream.pipe(ui.log);
@@ -331,7 +344,7 @@ Internally, Inquirer uses the [JS reactive extension](https://github.com/Reactiv
 This mean you can take advantage of this feature to provide more advanced flows. For example, you can dynamically add questions to be asked:
 
 ```js
-var prompts = new Rx.Subject();
+const prompts = new Rx.Subject();
 inquirer.prompt(prompts);
 
 // At some point in the future, push new questions
