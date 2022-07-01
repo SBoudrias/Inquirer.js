@@ -16,11 +16,15 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: yarn install and test
+      - name: yarn install
         run: |
           node --version
           yarn
-          yarn test
+        env:
+          CI: true
+          FORCE_COLOR: 1
+      - name: yarn test
+        run: yarn test
         env:
           CI: true
           FORCE_COLOR: 1
