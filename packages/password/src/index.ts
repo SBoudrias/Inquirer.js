@@ -1,7 +1,11 @@
-import input from '@inquirer/input';
+import input, { InputConfig } from '@inquirer/input/src';
 import chalk from 'chalk';
 
-export default (config, ...args) => {
+type PasswordConfig = InputConfig & {
+  mask?: boolean | string;
+};
+
+export default (config: PasswordConfig, ...args: any[]) => {
   if (config.transformer) {
     throw new Error(
       'Inquirer password prompt do not support custom transformer function. Use the input prompt instead.'
@@ -12,7 +16,7 @@ export default (config, ...args) => {
     {
       ...config, // Make sure we do not display the default password
       default: undefined,
-      transformer(input, { isFinal }) {
+      transformer(input: string, { isFinal }: { isFinal: boolean }) {
         if (config.mask) {
           return String(config.mask).repeat(input.length);
         }

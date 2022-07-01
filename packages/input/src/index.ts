@@ -5,14 +5,20 @@ import {
   usePrefix,
   isEnterKey,
   isBackspaceKey,
+  AsyncPromptConfig,
 } from '@inquirer/core';
 import chalk from 'chalk';
 
-export default createPrompt((config, done) => {
-  const [status, setStatus] = useState('pending');
-  const [defaultValue, setDefaultValue] = useState(config.default);
-  const [errorMsg, setError] = useState();
-  const [value, setValue] = useState('');
+export type InputConfig = AsyncPromptConfig & {
+  default?: string;
+  transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
+};
+
+export default createPrompt<string, InputConfig>((config, done) => {
+  const [status, setStatus] = useState<string>('pending');
+  const [defaultValue, setDefaultValue] = useState<string | undefined>(config.default);
+  const [errorMsg, setError] = useState<any>(null);
+  const [value, setValue] = useState<string>('');
 
   const isLoading = status === 'loading';
   const prefix = usePrefix(isLoading);

@@ -1,7 +1,7 @@
-import password from './index.js';
+import password from './src/index.js';
 
 (async () => {
-  let answer;
+  let answer: string;
 
   answer = await password({
     message: 'Enter a silent password?',
