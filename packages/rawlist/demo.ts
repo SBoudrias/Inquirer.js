@@ -1,4 +1,4 @@
-import rawlist from './index.js';
+import rawlist from './src/index.js';
 
 (async () => {
   let answer;
