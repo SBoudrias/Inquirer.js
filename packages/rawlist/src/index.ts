@@ -11,9 +11,7 @@ import chalk from 'chalk';
 const numberRegex = /[0-9]+/;
 
 type RawlistConfig = AsyncPromptConfig & {
-  default?: number;
   choices: { value: string; name?: string; key?: string }[];
-  filter?: (input: string) => string;
 };
 
 export default createPrompt<string, RawlistConfig>((config, done) => {
