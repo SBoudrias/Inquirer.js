@@ -5,7 +5,7 @@ type PasswordConfig = InputConfig & {
   mask?: boolean | string;
 };
 
-export default (config: PasswordConfig, stdio: Parameters<typeof input>[1]) => {
+export default (config: PasswordConfig, stdio?: Parameters<typeof input>[1]) => {
   if (config.transformer) {
     throw new Error(
       'Inquirer password prompt do not support custom transformer function. Use the input prompt instead.'
