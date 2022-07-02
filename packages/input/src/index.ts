@@ -12,7 +12,6 @@ import chalk from 'chalk';
 export type InputConfig = AsyncPromptConfig & {
   default?: string;
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
-  filter?: (input: string) => string 
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {
