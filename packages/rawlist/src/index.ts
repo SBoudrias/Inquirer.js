@@ -4,16 +4,23 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
-} from '@inquirer/core';
+  AsyncPromptConfig,
+} from '@inquirer/core/src';
 import chalk from 'chalk';
 
 const numberRegex = /[0-9]+/;
 
-export default createPrompt((config, done) => {
+type RawlistConfig = AsyncPromptConfig & {
+  default?: number;
+  choices: { value: string; name?: string; key?: string }[];
+  filter?: (input: string) => string;
+};
+
+export default createPrompt<string, RawlistConfig>((config, done) => {
   const { choices } = config;
-  const [status, setStatus] = useState('pending');
-  const [value, setValue] = useState('');
-  const [errorMsg, setError] = useState();
+  const [status, setStatus] = useState<string>('pending');
+  const [value, setValue] = useState<string>('');
+  const [errorMsg, setError] = useState<string | undefined>(undefined);
   const prefix = usePrefix();
 
   useKeypress((key, rl) => {
@@ -29,9 +36,9 @@ export default createPrompt((config, done) => {
 
       if (selectedChoice) {
         const finalValue = selectedChoice.value || selectedChoice.name;
-        setValue(finalValue);
+        setValue(finalValue!);
         setStatus('done');
-        done(finalValue);
+        done(finalValue!);
       } else if (value === '') {
         setError('Please input a value');
       } else {
