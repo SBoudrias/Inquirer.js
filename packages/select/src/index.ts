@@ -9,12 +9,18 @@ import {
   isDownKey,
   isNumberKey,
   Paginator,
+  AsyncPromptConfig,
 } from '@inquirer/core';
 import chalk from 'chalk';
 import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
 
-export default createPrompt((config, done) => {
+type SelectConfig = AsyncPromptConfig & {
+  choices: { value: string, name?: string, description?: string, disabled?: boolean }[];
+  pageSize?: number;
+};
+
+export default createPrompt<string, SelectConfig>((config, done) => {
   const [status, setStatus] = useState('pending');
   const [cursorPosition, setCursorPos] = useState(0);
   const { choices, pageSize = 7 } = config;
@@ -24,7 +30,7 @@ export default createPrompt((config, done) => {
   useKeypress((key) => {
     if (isEnterKey(key)) {
       setStatus('done');
-      done(choices[cursorPosition].value);
+      done(choices[cursorPosition]!.value);
     } else if (isUpKey(key) || isDownKey(key)) {
       let newCursorPosition = cursorPosition;
       const offset = isUpKey(key) ? -1 : 1;
@@ -42,7 +48,7 @@ export default createPrompt((config, done) => {
       const newCursorPosition = Number(key.name) - 1;
 
       // Abort if the choice doesn't exists or if disabled
-      if (!choices[newCursorPosition] || choices[newCursorPosition].disabled) {
+      if (!choices[newCursorPosition] || choices[newCursorPosition]!.disabled) {
         return;
       }
 
@@ -53,7 +59,7 @@ export default createPrompt((config, done) => {
   const message = chalk.bold(config.message);
 
   if (status === 'done') {
-    const choice = choices[cursorPosition];
+    const choice = choices[cursorPosition]!;
     return `${prefix} ${message} ${chalk.cyan(choice.name || choice.value)}`;
   }
 
