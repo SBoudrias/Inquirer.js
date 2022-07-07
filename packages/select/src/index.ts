@@ -16,7 +16,7 @@ import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
 
 type SelectConfig = AsyncPromptConfig & {
-  choices: { value: string, name?: string, description?: string, disabled?: boolean }[];
+  choices: { value: string; name?: string; description?: string; disabled?: boolean }[];
   pageSize?: number;
 };
 
