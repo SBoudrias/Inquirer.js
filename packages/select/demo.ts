@@ -1,4 +1,4 @@
-import select from './index.js';
+import select from './src/index.js';
 
 (async () => {
   let answer;
