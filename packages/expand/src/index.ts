@@ -4,8 +4,15 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
+  AsyncPromptConfig,
 } from '@inquirer/core';
 import chalk from 'chalk';
+
+type ExpandConfig = AsyncPromptConfig & {
+  choices: { key: string; name: string; value?: string }[];
+  default?: string;
+  expanded?: boolean;
+};
 
 const helpChoice = {
   key: 'h',
@@ -13,16 +20,16 @@ const helpChoice = {
   value: undefined,
 };
 
-export default createPrompt((config, done) => {
+export default createPrompt<string, ExpandConfig>((config, done) => {
   const {
     choices,
     default: defaultKey = 'h',
     expanded: defaultExpandState = false,
   } = config;
-  const [status, setStatus] = useState('pending');
-  const [value, setValue] = useState('');
-  const [expanded, setExpanded] = useState(defaultExpandState);
-  const [errorMsg, setError] = useState();
+  const [status, setStatus] = useState<string>('pending');
+  const [value, setValue] = useState<string>('');
+  const [expanded, setExpanded] = useState<boolean>(defaultExpandState);
+  const [errorMsg, setError] = useState<string | undefined>(undefined);
   const prefix = usePrefix();
 
   useKeypress((key, rl) => {
