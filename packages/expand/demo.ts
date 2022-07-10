@@ -1,4 +1,4 @@
-import expand from './index.js';
+import expand from './src/index.js';
 
 (async () => {
   let answer;
