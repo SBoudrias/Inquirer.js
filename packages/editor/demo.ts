@@ -1,4 +1,4 @@
-import editor from './index.js';
+import editor from './src/index.js';
 
 (async () => {
   const answer = await editor({

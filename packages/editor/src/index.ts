@@ -6,12 +6,18 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
+  AsyncPromptConfig,
 } from '@inquirer/core';
 
-export default createPrompt((config, done) => {
-  const [status, setStatus] = useState('pending');
-  const [value, setValue] = useState(config.default || '');
-  const [errorMsg, setError] = useState();
+type EditorConfig = AsyncPromptConfig & {
+  default?: string;
+  postfix?: string;
+};
+
+export default createPrompt<string, EditorConfig>((config, done) => {
+  const [status, setStatus] = useState<string>('pending');
+  const [value, setValue] = useState<string>(config.default || '');
+  const [errorMsg, setError] = useState<string | undefined>(undefined);
 
   useKeypress(async (key, rl) => {
     // Ignore keypress while our prompt is doing other processing.
@@ -26,7 +32,7 @@ export default createPrompt((config, done) => {
         async (error, answer) => {
           rl.resume();
           if (error) {
-            setError(error);
+            setError(error.toString());
           } else {
             setStatus('loading');
             const isValid = await config.validate(answer);

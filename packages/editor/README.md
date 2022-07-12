@@ -25,6 +25,7 @@ const answer = await editor({
 | Property | Type      | Required | Description                    |
 | -------- | --------- | -------- | ------------------------------ |
 | message  | `string`  | yes      | The question to ask            |
+| default  | `string`  | no       | Default value which will automatically be present in the editor |
 | validate    | `string => boolean \| string \| Promise<string \| boolean>` | no       | On submit, validate the content. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
 | postfix  | `string`  | no (default to `.txt`) | The postfix of the file being edited. Adding this will add color highlighting to the file content in most editors. |
 
