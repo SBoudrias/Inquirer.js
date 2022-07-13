@@ -23,13 +23,14 @@ export type Choice<Value> = {
 type State<Value> = {
   prefix?: string;
   pageSize?: number;
+  instructions?: string | boolean;
   message: string;
   choices: ReadonlyArray<Choice<Value>>;
 };
 
 export default createPrompt(
   <Value>(state: State<Value>, done: (value: Array<Value>) => void): string => {
-    const { prefix, pageSize = 7 } = state;
+    const { prefix, pageSize = 7, instructions } = state;
     const paginator = useRef(new Paginator()).current;
 
     const [status, setStatus] = useState('pending');
@@ -103,13 +104,17 @@ export default createPrompt(
     }
 
     let helpTip = '';
-    if (showHelpTip !== false) {
-      const keys = [
-        `${chalk.cyan.bold('<space>')} to select`,
-        `${chalk.cyan.bold('<a>')} to toggle all`,
-        `${chalk.cyan.bold('<i>')} to invert selection`,
-      ];
-      helpTip = ` (Press ${keys.join(', ')})`;
+    if (showHelpTip && (instructions === undefined || instructions)) {
+      if (typeof instructions === 'string') {
+        helpTip = instructions;
+      } else {
+        const keys = [
+          `${chalk.cyan.bold('<space>')} to select`,
+          `${chalk.cyan.bold('<a>')} to toggle all`,
+          `${chalk.cyan.bold('<i>')} to invert selection`,
+        ];
+        helpTip = ` (Press ${keys.join(', ')})`;
+      }
     }
 
     const allChoices = choices
