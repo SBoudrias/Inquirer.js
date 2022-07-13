@@ -49,7 +49,7 @@
     "mute-stream": "0.0.8",
     "ora": "^6.1.2",
     "run-async": "^2.4.0",
-    "rxjs": "^7.5.5",
+    "rxjs": "^7.5.6",
     "string-width": "^5.1.2",
     "strip-ansi": "^7.0.1",
     "through": "^2.3.6",
