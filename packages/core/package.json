@@ -1,11 +1,13 @@
 {
   "name": "@inquirer/core",
   "type": "module",
-  "version": "0.0.21-alpha.0",
+  "version": "0.0.22-alpha.0",
   "description": "Core Inquirer prompt API",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "repository": "SBoudrias/Inquirer.js",
   "keywords": [
     "cli",
