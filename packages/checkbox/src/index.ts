@@ -38,7 +38,7 @@ export default createPrompt(
       ...state.choices,
     ]);
     const [cursorPosition, setCursorPosition] = useState(0);
-    const [showHelpTip, setShowHelpTip] = useState(false);
+    const [showHelpTip, setShowHelpTip] = useState(true);
 
     useKeypress((key) => {
       let newCursorPosition = cursorPosition;
