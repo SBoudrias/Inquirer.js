@@ -3,6 +3,7 @@ import {
   useState,
   useRef,
   useKeypress,
+  usePrefix,
   isUpKey,
   isDownKey,
   isSpaceKey,
@@ -30,7 +31,7 @@ type State<Value> = {
 
 export default createPrompt(
   <Value>(state: State<Value>, done: (value: Array<Value>) => void): string => {
-    const { prefix, pageSize = 7, instructions } = state;
+    const { prefix = usePrefix(), pageSize = 7, instructions } = state;
     const paginator = useRef(new Paginator()).current;
 
     const [status, setStatus] = useState('pending');
