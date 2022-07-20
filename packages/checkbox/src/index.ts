@@ -44,6 +44,7 @@ export default createPrompt(
     useKeypress((key) => {
       let newCursorPosition = cursorPosition;
       if (isEnterKey(key)) {
+        setShowHelpTip(false);
         setStatus('done');
         done(choices.filter((choice) => choice.checked).map((choice) => choice.value));
       } else if (isUpKey(key) || isDownKey(key)) {
@@ -58,7 +59,6 @@ export default createPrompt(
 
         setCursorPosition(newCursorPosition);
       } else if (isSpaceKey(key)) {
-        setShowHelpTip(false);
         setChoices(
           choices.map((choice, i) => {
             if (i === cursorPosition) {
