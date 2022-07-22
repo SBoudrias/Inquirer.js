@@ -12,4 +12,5 @@ export const breakLines = (content: string, width: number): string =>
     .split('\n')
     // @ts-expect-error broken type check from library
     .map((line) => wrapAnsi(line, width, { trim: false, hard: true }).split('\n'))
+    .flat()
     .join('\n');
