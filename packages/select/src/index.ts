@@ -3,6 +3,7 @@ import {
   useState,
   useKeypress,
   useRef,
+  useEffect,
   usePrefix,
   isEnterKey,
   isUpKey,
@@ -23,7 +24,6 @@ type SelectConfig = AsyncPromptConfig & {
 export default createPrompt<string, SelectConfig>((config, done) => {
   const [status, setStatus] = useState('pending');
   const [cursorPosition, setCursorPos] = useState(0);
-  const [firstRender, setFirstRender] = useState(true);
   const { choices, pageSize = 7 } = config;
   const paginator = useRef(new Paginator()).current;
   const prefix = usePrefix();
@@ -59,10 +59,9 @@ export default createPrompt<string, SelectConfig>((config, done) => {
 
   let message = chalk.bold(config.message);
 
-  if (firstRender) {
+  useEffect(() => {
     message += chalk.dim('(Use arrow keys)');
-    setFirstRender(false);
-  }
+  }, []);
 
   if (status === 'done') {
     const choice = choices[cursorPosition]!;
