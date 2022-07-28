@@ -33,7 +33,8 @@
     "publish": "lerna run tsc && lerna publish",
     "pretest": "lerna run tsc && eslint . --ext .js --ext .ts",
     "jest": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test": "yarn jest && lerna exec npm test --scope inquirer"
+    "test": "yarn jest && lerna exec npm test --scope inquirer",
+    "ts-node": "lerna run tsc && ts-node"
   },
   "repository": {
     "type": "git",
