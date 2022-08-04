@@ -151,6 +151,7 @@ A question object is a `hash` containing question related values:
 - **suffix**: (String) Change the default _suffix_ message.
 - **askAnswered**: (Boolean) Force to prompt the question if the answer already exists.
 - **loop**: (Boolean) Enable list looping. Defaults: `true`
+- **waitUserInput**: (Boolean) Flag to enable/disable wait for user input before opening system editor - Defaults: `true`
 
 `default`, `choices`(if defined as functions), `validate`, `filter` and `when` functions can be called asynchronously. Either return a promise or use `this.async()` to get a callback you'll call with the final value.
 
@@ -300,7 +301,7 @@ Note that `mask` is required to hide the actual user input.
 
 #### Editor - `{type: 'editor'}`
 
-Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `postfix`] properties
+Take `type`, `name`, `message`[, `default`, `filter`, `validate`, `postfix`, `waitUserInput`] properties
 
 Launches an instance of the users preferred editor on a temporary file. Once the user exits their editor, the contents of the temporary file are read in as the result. The editor to use is determined by reading the $VISUAL or $EDITOR environment variables. If neither of those are present, notepad (on Windows) or vim (Linux or Mac) is used.
 

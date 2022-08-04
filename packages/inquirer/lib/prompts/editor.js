@@ -23,6 +23,12 @@ export default class EditorPrompt extends Base {
     // Open Editor on "line" (Enter Key)
     const events = observe(this.rl);
     this.lineSubscription = events.line.subscribe(this.startExternalEditor.bind(this));
+    const waitUserInput =
+      this.opt.waitUserInput === undefined ? true : this.opt.waitUserInput;
+
+    if (!waitUserInput) {
+      this.startExternalEditor();
+    }
 
     // Trigger Validation when editor closes
     const validation = this.handleSubmitEvents(this.editorResult);
