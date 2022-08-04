@@ -1,7 +1,7 @@
 {
   "name": "@inquirer/core",
   "type": "module",
-  "version": "0.0.22-alpha.0",
+  "version": "0.0.23-alpha.0",
   "description": "Core Inquirer prompt API",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
