@@ -16,6 +16,7 @@ const questions = [
 
       return true;
     },
+    waitUserInput: true,
   },
 ];
 

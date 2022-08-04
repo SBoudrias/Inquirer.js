@@ -25,4 +25,13 @@ describe('`editor` prompt', () => {
 
     return promise.then((answer) => expect(answer).to.equal('testing'));
   });
+
+  it('should open editor without waiting for the user to press enter', function () {
+    this.fixture.waitUserInput = false;
+    const prompt = new Editor(this.fixture, this.rl);
+
+    const promise = prompt.run();
+
+    return promise.then((answer) => expect(answer).to.equal('testing'));
+  });
 });
