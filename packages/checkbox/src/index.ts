@@ -113,6 +113,7 @@ export default createPrompt(
           `${chalk.cyan.bold('<space>')} to select`,
           `${chalk.cyan.bold('<a>')} to toggle all`,
           `${chalk.cyan.bold('<i>')} to invert selection`,
+          `and ${chalk.cyan.bold('<enter>')} to proceed`,
         ];
         helpTip = ` (Press ${keys.join(', ')})`;
       }
