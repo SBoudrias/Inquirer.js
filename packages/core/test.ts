@@ -3,6 +3,7 @@ import { jest } from '@jest/globals';
 import { Stream } from 'node:stream';
 import {
   createPrompt,
+  useEffect,
   useKeypress,
   useState,
   isDownKey,
@@ -85,6 +86,57 @@ describe('createPrompt()', () => {
     expect(data).not.toHaveBeenCalledWith('Question up');
     input.emit('keypress', null, { name: 'up' });
     expect(data).toHaveBeenCalledWith('Question up');
+    input.emit('keypress', null, { name: 'enter' });
+
+    await expect(answer).resolves.toEqual('up');
+  });
+
+  it('useEffect: re-run only on change', async () => {
+    const effect = jest.fn();
+    const effectCleanup = jest.fn();
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      const [value, setValue] = useState('');
+
+      useEffect(() => {
+        effect(value);
+
+        return effectCleanup;
+      }, [value]);
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(value);
+        } else if (isDownKey(key)) {
+          setValue('down');
+        } else if (isUpKey(key)) {
+          setValue('up');
+        }
+      });
+
+      return `${config.message} ${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const input = new MuteStream();
+    const answer = prompt({ message: 'Question' }, { input });
+
+    // Wait for event listeners to be ready
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(effect).toHaveBeenLastCalledWith('');
+    expect(effect).toHaveBeenCalledTimes(1);
+    input.emit('keypress', null, { name: 'down' });
+    expect(effect).toHaveBeenLastCalledWith('down');
+    expect(effect).toHaveBeenCalledTimes(2);
+
+    // No change, no cleanup
+    input.emit('keypress', null, { name: 'down' });
+    expect(effect).toHaveBeenCalledTimes(2);
+
+    input.emit('keypress', null, { name: 'up' });
+    expect(effect).toHaveBeenLastCalledWith('up');
+    expect(effect).toHaveBeenCalledTimes(3);
     input.emit('keypress', null, { name: 'enter' });
 
     await expect(answer).resolves.toEqual('up');
