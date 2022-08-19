@@ -130,7 +130,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
 
     return new Promise((resolve) => {
       const done = (value: Value) => {
-        let len = cleanupHook.length;
+        let len = hooksCleanup.length;
         while (len--) {
           cleanupHook(len);
         }
