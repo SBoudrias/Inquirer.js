@@ -105,13 +105,18 @@ export type ResolvedPromptConfig = {
   validate: (value: string) => boolean | string | Promise<string | boolean>;
 };
 
+export type Prompt<Value, Config> = (
+  options: Config,
+  stdio?: StdioOptions
+) => Promise<Value>;
+
 export function createPrompt<Value, Config extends AsyncPromptConfig>(
   view: (
     config: Config & ResolvedPromptConfig,
     done: (value: Value) => void
   ) => string | [string, string | undefined]
 ) {
-  return async function (options: Config, stdio?: StdioOptions): Promise<Value> {
+  const prompt: Prompt<Value, Config> = async (options, stdio) => {
     // Default `input` to stdin
     const input = stdio?.input ?? process.stdin;
 
@@ -161,4 +166,6 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
       workLoop(resolvedConfig);
     });
   };
+
+  return prompt;
 }

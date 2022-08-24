@@ -18,7 +18,11 @@
   "author": "Simon Boudrias",
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/testing/README.md",
-  "dependencies": {},
+  "dependencies": {
+    "mute-stream": "^0.0.8",
+    "strip-ansi": "^7.0.1",
+    "@inquirer/core": "^0.0.24-alpha.0"
+  },
   "scripts": {
     "tsc": "tsc"
   },
