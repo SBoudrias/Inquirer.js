@@ -37,12 +37,14 @@ const cleanupHook = (index: number) => {
 
 export function useState<Value>(defaultValue: Value): [Value, (newValue: Value) => void] {
   const _idx = index;
-  const value = _idx in hooks ? hooks[_idx] : defaultValue;
-
   index++;
 
+  if (!(_idx in hooks)) {
+    hooks[_idx] = defaultValue;
+  }
+
   return [
-    value,
+    hooks[_idx],
     (newValue) => {
       hooks[_idx] = newValue;
 
@@ -54,6 +56,7 @@ export function useState<Value>(defaultValue: Value): [Value, (newValue: Value) 
 
 export function useEffect(cb: () => void | (() => void), depArray: unknown[]): void {
   const _idx = index;
+  index++;
 
   const oldDeps = hooks[_idx];
   let hasChanged = true;
@@ -65,8 +68,6 @@ export function useEffect(cb: () => void | (() => void), depArray: unknown[]): v
     hooksCleanup[_idx] = cb();
   }
   hooks[_idx] = depArray;
-
-  index++;
 }
 
 export function useKeypress(

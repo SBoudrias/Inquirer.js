@@ -6,6 +6,7 @@ import {
   useEffect,
   useKeypress,
   useState,
+  useRef,
   isDownKey,
   isUpKey,
   isEnterKey,
@@ -139,6 +140,48 @@ describe('createPrompt()', () => {
     expect(effect).toHaveBeenCalledTimes(3);
     input.emit('keypress', null, { name: 'enter' });
 
+    await expect(answer).resolves.toEqual('up');
+  });
+
+  it('useEffect: re-run only on change', async () => {
+    const effect = jest.fn();
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      const [value, setValue] = useState('');
+      const ref = useRef({ foo: 'bar' });
+
+      // If the ref is always the same object, then the effect will no re-run.
+      useEffect(() => {
+        effect(ref);
+        expect(ref.current.foo).toEqual('bar');
+      }, [ref.current]);
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(value);
+        } else if (isDownKey(key)) {
+          setValue('down');
+        } else if (isUpKey(key)) {
+          setValue('up');
+        }
+      });
+
+      return `${config.message} ${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const input = new MuteStream();
+    const answer = prompt({ message: 'Question' }, { input });
+
+    // Wait for event listeners to be ready
+    await Promise.resolve();
+    await Promise.resolve();
+
+    input.emit('keypress', null, { name: 'down' });
+    input.emit('keypress', null, { name: 'down' });
+    input.emit('keypress', null, { name: 'up' });
+    input.emit('keypress', null, { name: 'enter' });
+
+    expect(effect).toHaveBeenCalledTimes(1);
     await expect(answer).resolves.toEqual('up');
   });
 });

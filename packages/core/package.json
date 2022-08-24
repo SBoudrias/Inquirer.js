@@ -29,6 +29,9 @@
     "strip-ansi": "^7.0.1",
     "wrap-ansi": "^8.0.1"
   },
+  "devDependencies": {
+    "@inquirer/testing": "*"
+  },
   "scripts": {
     "tsc": "tsc"
   },
