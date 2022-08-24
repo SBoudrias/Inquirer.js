@@ -1,6 +1,5 @@
-import MuteStream from 'mute-stream';
 import { jest } from '@jest/globals';
-import { Stream } from 'node:stream';
+import { render } from '@inquirer/testing';
 import {
   createPrompt,
   useEffect,
@@ -15,36 +14,32 @@ import {
 
 describe('createPrompt()', () => {
   it('handle async function message', async () => {
-    const render = jest.fn(() => '');
-    const input = new MuteStream();
-    const prompt = createPrompt(render);
+    const viewFunction = jest.fn(() => '');
+    const prompt = createPrompt(viewFunction);
     const promise = Promise.resolve('Async message:');
-    prompt({ message: () => promise }, { input });
+    const renderingDone = render(prompt, { message: () => promise });
 
     // Initially, we leave a few ms for message to resolve
-    expect(render).not.toHaveBeenCalled();
+    expect(viewFunction).not.toHaveBeenCalled();
 
-    await promise;
-    await Promise.resolve(); // Wait one extra tick
-    expect(render).toHaveBeenLastCalledWith(
+    await renderingDone;
+    expect(viewFunction).toHaveBeenLastCalledWith(
       expect.objectContaining({ message: 'Async message:' }),
       expect.any(Function)
     );
   });
 
   it('handle deferred message', async () => {
-    const render = jest.fn(() => '');
-    const input = new MuteStream();
-    const prompt = createPrompt(render);
+    const viewFunction = jest.fn(() => '');
+    const prompt = createPrompt(viewFunction);
     const promise = Promise.resolve('Async message:');
-    prompt({ message: promise }, { input });
+    const renderingDone = render(prompt, { message: promise });
 
     // Initially, we leave a few ms for message to resolve
-    expect(render).not.toHaveBeenCalled();
+    expect(viewFunction).not.toHaveBeenCalled();
 
-    await promise;
-    await Promise.resolve(); // Wait one extra tick
-    expect(render).toHaveBeenLastCalledWith(
+    await renderingDone;
+    expect(viewFunction).toHaveBeenLastCalledWith(
       expect.objectContaining({ message: 'Async message:' }),
       expect.any(Function)
     );
@@ -68,26 +63,13 @@ describe('createPrompt()', () => {
     };
 
     const prompt = createPrompt(Prompt);
-    const input = new MuteStream();
-    const data = jest.fn();
-    const output = new Stream.Writable({
-      write(chunk, _encoding, next) {
-        data(chunk.toString());
-        next();
-      },
-    });
-    const answer = prompt({ message: 'Question' }, { input, output });
+    const { answer, events, getScreen } = await render(prompt, { message: 'Question' });
 
-    // Wait for event listeners to be ready
-    await Promise.resolve();
-    await Promise.resolve();
-
-    input.emit('keypress', null, { name: 'down' });
-    expect(data).toHaveBeenCalledWith('Question down');
-    expect(data).not.toHaveBeenCalledWith('Question up');
-    input.emit('keypress', null, { name: 'up' });
-    expect(data).toHaveBeenCalledWith('Question up');
-    input.emit('keypress', null, { name: 'enter' });
+    events.keypress('down');
+    expect(getScreen()).toEqual('Question down');
+    events.keypress('up');
+    expect(getScreen()).toEqual('Question up');
+    events.keypress('enter');
 
     await expect(answer).resolves.toEqual('up');
   });
@@ -118,27 +100,22 @@ describe('createPrompt()', () => {
     };
 
     const prompt = createPrompt(Prompt);
-    const input = new MuteStream();
-    const answer = prompt({ message: 'Question' }, { input });
-
-    // Wait for event listeners to be ready
-    await Promise.resolve();
-    await Promise.resolve();
+    const { answer, events } = await render(prompt, { message: 'Question' });
 
     expect(effect).toHaveBeenLastCalledWith('');
     expect(effect).toHaveBeenCalledTimes(1);
-    input.emit('keypress', null, { name: 'down' });
+    events.keypress('down');
     expect(effect).toHaveBeenLastCalledWith('down');
     expect(effect).toHaveBeenCalledTimes(2);
 
     // No change, no cleanup
-    input.emit('keypress', null, { name: 'down' });
+    events.keypress('down');
     expect(effect).toHaveBeenCalledTimes(2);
 
-    input.emit('keypress', null, { name: 'up' });
+    events.keypress('up');
     expect(effect).toHaveBeenLastCalledWith('up');
     expect(effect).toHaveBeenCalledTimes(3);
-    input.emit('keypress', null, { name: 'enter' });
+    events.keypress('enter');
 
     await expect(answer).resolves.toEqual('up');
   });
@@ -169,17 +146,16 @@ describe('createPrompt()', () => {
     };
 
     const prompt = createPrompt(Prompt);
-    const input = new MuteStream();
-    const answer = prompt({ message: 'Question' }, { input });
+    const { answer, events } = await render(prompt, { message: 'Question' });
 
     // Wait for event listeners to be ready
     await Promise.resolve();
     await Promise.resolve();
 
-    input.emit('keypress', null, { name: 'down' });
-    input.emit('keypress', null, { name: 'down' });
-    input.emit('keypress', null, { name: 'up' });
-    input.emit('keypress', null, { name: 'enter' });
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('up');
+    events.keypress('enter');
 
     expect(effect).toHaveBeenCalledTimes(1);
     await expect(answer).resolves.toEqual('up');
