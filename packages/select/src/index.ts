@@ -21,11 +21,14 @@ type SelectConfig = AsyncPromptConfig & {
 };
 
 export default createPrompt<string, SelectConfig>((config, done) => {
+  const { choices, pageSize = 7 } = config;
+
+  const paginator = useRef(new Paginator()).current;
+  const firstRender = useRef(true);
+
+  const prefix = usePrefix();
   const [status, setStatus] = useState('pending');
   const [cursorPosition, setCursorPos] = useState(0);
-  const { choices, pageSize = 7 } = config;
-  const paginator = useRef(new Paginator()).current;
-  const prefix = usePrefix();
 
   useKeypress((key) => {
     if (isEnterKey(key)) {
@@ -56,7 +59,11 @@ export default createPrompt<string, SelectConfig>((config, done) => {
     }
   });
 
-  const message = chalk.bold(config.message);
+  let message: string = chalk.bold(config.message);
+  if (firstRender.current) {
+    message += chalk.dim(' (Use arrow keys)');
+    firstRender.current = false;
+  }
 
   if (status === 'done') {
     const choice = choices[cursorPosition]!;

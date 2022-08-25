@@ -151,7 +151,9 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
         resolve(value);
       };
 
+      index = 0;
       hooks = [];
+
       const workLoop = (config: Config & ResolvedPromptConfig) => {
         sessionRl = rl;
         index = 0;
