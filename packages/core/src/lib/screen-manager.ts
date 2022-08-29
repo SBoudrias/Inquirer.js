@@ -94,6 +94,7 @@ export default class ScreenManager {
     this.rl.output.unmute();
     this.rl.output.write('\n');
     this.rl.output.write(ansiEscapes.cursorShow);
+    this.rl.output.end();
     this.rl.close();
   }
 }
