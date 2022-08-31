@@ -336,6 +336,22 @@
   resolved "https://registry.npmjs.org/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
 
+"@inquirer/core@^0.0.25-alpha.0":
+  version "0.0.25-alpha.0"
+  resolved "https://registry.yarnpkg.com/@inquirer/core/-/core-0.0.25-alpha.0.tgz#1e484b226fa7243f59830ba7c2495ba6622c091b"
+  integrity sha512-ncvIGy01Nc1pwKWfd564HmIMEXaV3mB1C+jd1M7SEy2GEIP5zaS849KejVc91s87cVJtE57WcnDuK/JXpLgLQw==
+  dependencies:
+    ansi-escapes "^5.0.0"
+    chalk "^5.0.1"
+    cli-spinners "^2.7.0"
+    cli-width "^4.0.0"
+    lodash "^4.17.21"
+    mute-stream "^0.0.8"
+    run-async "^2.3.0"
+    string-width "^5.1.2"
+    strip-ansi "^7.0.1"
+    wrap-ansi "^8.0.1"
+
 "@isaacs/string-locale-compare@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@isaacs/string-locale-compare/-/string-locale-compare-1.1.0.tgz#291c227e93fd407a96ecd59879a35809120e432b"
