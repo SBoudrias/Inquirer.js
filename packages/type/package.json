@@ -1,0 +1,23 @@
+{
+  "name": "@inquirer/type",
+  "type": "module",
+  "version": "0.0.1-alpha.0",
+  "description": "Inquirer core TS types",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "repository": "SBoudrias/Inquirer.js",
+  "keywords": [
+    "cli",
+    "prompt",
+    "command-line",
+    "input"
+  ],
+  "author": "Simon Boudrias",
+  "license": "MIT",
+  "scripts": {
+    "tsc": "tsc"
+  }
+}

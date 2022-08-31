@@ -1,7 +1,7 @@
 import MuteStream from 'mute-stream';
 import stripAnsi from 'strip-ansi';
 import { Stream } from 'node:stream';
-import type { Prompt } from '@inquirer/core';
+import type { Prompt } from '@inquirer/type';
 
 const logStore: Array<Parameters<typeof console.log>> = [];
 

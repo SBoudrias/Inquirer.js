@@ -1,4 +1,5 @@
 import readline from 'node:readline';
+import type { Prompt } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import ScreenManager from './lib/screen-manager.js';
 import { getPromptConfig } from './lib/options.js';
@@ -6,12 +7,6 @@ import { getPromptConfig } from './lib/options.js';
 export { usePrefix } from './lib/prefix.js';
 export * from './lib/key.js';
 export * from './lib/Paginator.js';
-
-type Context = {
-  input?: NodeJS.ReadableStream;
-  output?: NodeJS.WritableStream;
-  clearPromptOnDone?: boolean;
-};
 
 export type InquirerReadline = readline.ReadLine & {
   output: MuteStream;
@@ -105,11 +100,6 @@ export type ResolvedPromptConfig = {
   message: string;
   validate: (value: string) => boolean | string | Promise<string | boolean>;
 };
-
-export type Prompt<Value, Config> = (
-  options: Config,
-  context?: Context
-) => Promise<Value>;
 
 export function createPrompt<Value, Config extends AsyncPromptConfig>(
   view: (
