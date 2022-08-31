@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/checkbox",
-  "version": "0.0.25-alpha.0",
+  "version": "0.0.26-alpha.0",
   "type": "module",
   "description": "Inquirer checkbox prompt",
   "main": "dist/index.js",
@@ -20,7 +20,7 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/checkbox/README.md",
   "dependencies": {
-    "@inquirer/core": "^0.0.24-alpha.0",
+    "@inquirer/core": "^0.0.25-alpha.0",
     "ansi-escapes": "^5.0.0",
     "chalk": "^5.0.1",
     "figures": "^4.0.1"
