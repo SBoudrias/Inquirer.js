@@ -4,10 +4,20 @@ type KeypressEvent = {
 };
 
 export const isUpKey = (key: KeypressEvent): boolean =>
-  key.name === 'up' || key.name === 'k' || (key.name === 'p' && key.ctrl);
+  // The up key
+  key.name === 'up' ||
+  // Vim keybinding
+  key.name === 'k' ||
+  // Emacs keybinding
+  (key.ctrl && key.name === 'p');
 
 export const isDownKey = (key: KeypressEvent): boolean =>
-  key.name === 'down' || key.name === 'j' || (key.name === 'n' && key.ctrl);
+  // The down key
+  key.name === 'down' ||
+  // Vim keybinding
+  key.name === 'j' ||
+  // Emacs keybinding
+  (key.ctrl && key.name === 'n');
 
 export const isSpaceKey = (key: KeypressEvent): boolean => key.name === 'space';
 

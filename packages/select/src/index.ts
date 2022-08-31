@@ -21,7 +21,7 @@ type SelectConfig = AsyncPromptConfig & {
 };
 
 export default createPrompt<string, SelectConfig>((config, done) => {
-  const { choices, pageSize = 7 } = config;
+  const { choices } = config;
 
   const paginator = useRef(new Paginator()).current;
   const firstRender = useRef(true);
@@ -84,7 +84,7 @@ export default createPrompt<string, SelectConfig>((config, done) => {
       return `  ${line}`;
     })
     .join('\n');
-  const windowedChoices = paginator.paginate(allChoices, cursorPosition, pageSize);
+  const windowedChoices = paginator.paginate(allChoices, cursorPosition, config.pageSize);
 
   const choice = choices[cursorPosition];
   const choiceDescription = choice && choice.description ? `\n${choice.description}` : ``;

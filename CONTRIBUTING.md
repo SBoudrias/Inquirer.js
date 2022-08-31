@@ -60,7 +60,7 @@ yarn lerna publish
 ## Running demos
 
 ```sh
-yarn ts-node packages/checkbox/demo.js
+yarn ts-node packages/checkbox/demo.ts
 ```
 
 (Note that TypeScript is still super weird with native esmodules for node, so the extension must be `.js` instead of the `.ts` you might expect!)

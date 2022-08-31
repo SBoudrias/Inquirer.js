@@ -21,7 +21,7 @@ export type Choice<Value> = {
   disabled?: boolean;
 };
 
-type State<Value> = {
+type Config<Value> = {
   prefix?: string;
   pageSize?: number;
   instructions?: string | boolean;
@@ -30,13 +30,13 @@ type State<Value> = {
 };
 
 export default createPrompt(
-  <Value>(state: State<Value>, done: (value: Array<Value>) => void): string => {
-    const { prefix = usePrefix(), pageSize = 7, instructions } = state;
+  <Value>(config: Config<Value>, done: (value: Array<Value>) => void): string => {
+    const { prefix = usePrefix(), instructions } = config;
     const paginator = useRef(new Paginator()).current;
 
     const [status, setStatus] = useState('pending');
     const [choices, setChoices] = useState<Array<Choice<Value> & { checked?: boolean }>>([
-      ...state.choices,
+      ...config.choices,
     ]);
     const [cursorPosition, setCursorPosition] = useState(0);
     const [showHelpTip, setShowHelpTip] = useState(true);
@@ -95,7 +95,7 @@ export default createPrompt(
       }
     });
 
-    const message = chalk.bold(state.message);
+    const message = chalk.bold(config.message);
 
     if (status === 'done') {
       const selection = choices
@@ -135,7 +135,11 @@ export default createPrompt(
       })
       .join('\n');
 
-    const windowedChoices = paginator.paginate(allChoices, cursorPosition, pageSize);
+    const windowedChoices = paginator.paginate(
+      allChoices,
+      cursorPosition,
+      config.pageSize
+    );
     return `${prefix} ${message}${helpTip}\n${windowedChoices}${ansiEscapes.cursorHide}`;
   }
 );

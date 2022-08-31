@@ -1,7 +1,7 @@
-import input, { InputConfig } from '@inquirer/input/src';
+import input from '@inquirer/input';
 import chalk from 'chalk';
 
-type PasswordConfig = InputConfig & {
+type PasswordConfig = Parameters<typeof input>[0] & {
   mask?: boolean | string;
 };
 

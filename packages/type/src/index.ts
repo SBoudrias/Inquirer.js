@@ -4,7 +4,4 @@ type Context = {
   clearPromptOnDone?: boolean;
 };
 
-export type Prompt<Value, Config> = (
-  options: Config,
-  context?: Context
-) => Promise<Value>;
+export type Prompt<Value, Config> = (config: Config, context?: Context) => Promise<Value>;

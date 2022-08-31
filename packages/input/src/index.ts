@@ -9,7 +9,7 @@ import {
 } from '@inquirer/core';
 import chalk from 'chalk';
 
-export type InputConfig = AsyncPromptConfig & {
+type InputConfig = AsyncPromptConfig & {
   default?: string;
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
 };

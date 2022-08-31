@@ -107,7 +107,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     done: (value: Value) => void
   ) => string | [string, string | undefined]
 ) {
-  const prompt: Prompt<Value, Config> = async (options, context) => {
+  const prompt: Prompt<Value, Config> = async (config, context) => {
     // Default `input` to stdin
     const input = context?.input ?? process.stdin;
 
@@ -123,7 +123,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     const screen = new ScreenManager(rl);
 
     // TODO: we should display a loader while we get the default options.
-    const resolvedConfig = await getPromptConfig(options);
+    const resolvedConfig = await getPromptConfig(config);
 
     return new Promise((resolve) => {
       const done = (value: Value) => {
@@ -150,18 +150,18 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
       index = 0;
       hooks = [];
 
-      const workLoop = (config: Config & ResolvedPromptConfig) => {
+      const workLoop = () => {
         sessionRl = rl;
         index = 0;
-        handleChange = () => workLoop(config);
+        handleChange = () => workLoop();
 
-        const nextView = view(config, done);
+        const nextView = view(resolvedConfig, done);
         const [content, bottomContent] =
           typeof nextView === 'string' ? [nextView] : nextView;
         screen.render(content, bottomContent);
       };
 
-      workLoop(resolvedConfig);
+      workLoop();
     });
   };
 
