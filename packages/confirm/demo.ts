@@ -15,4 +15,10 @@ import confirm from './src/index.js';
       default: false,
     })
   );
+
+  console.log('This next prompt will be cleared on exit');
+  console.log(
+    'Cleared prompt answer:',
+    await confirm({ message: 'Confirm?' }, { clearPromptOnDone: true })
+  );
 })();

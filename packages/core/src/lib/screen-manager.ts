@@ -19,9 +19,9 @@ export default class ScreenManager {
   }
 
   render(content: string, bottomContent: string = '') {
-    this.rl.output.unmute();
-    this.clean(this.extraLinesUnderPrompt);
+    this.clean();
 
+    this.rl.output.unmute();
     /**
      * Write message to screen and setPrompt to control backspace
      */
@@ -81,18 +81,26 @@ export default class ScreenManager {
     this.rl.output.mute();
   }
 
-  clean(extraLines: number) {
-    util.down(this.rl, extraLines);
+  clean() {
+    this.rl.output.unmute();
+    util.down(this.rl, this.extraLinesUnderPrompt);
     util.clearLine(this.rl, this.height);
+
+    this.extraLinesUnderPrompt = 0;
+    this.rl.output.mute();
+  }
+
+  clearContent() {
+    this.rl.output.unmute();
+    // Reset the cursor at the end of the previously displayed content
+    util.down(this.rl, this.extraLinesUnderPrompt);
+    this.rl.output.write('\n');
+    this.rl.output.mute();
   }
 
   done() {
-    // Reset the cursor at the end of the previously displayed content
-    util.down(this.rl, this.extraLinesUnderPrompt);
-
     this.rl.setPrompt('');
     this.rl.output.unmute();
-    this.rl.output.write('\n');
     this.rl.output.write(ansiEscapes.cursorShow);
     this.rl.output.end();
     this.rl.close();

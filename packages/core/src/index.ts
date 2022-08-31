@@ -7,9 +7,10 @@ export { usePrefix } from './lib/prefix.js';
 export * from './lib/key.js';
 export * from './lib/Paginator.js';
 
-type StdioOptions = {
+type Context = {
   input?: NodeJS.ReadableStream;
   output?: NodeJS.WritableStream;
+  clearPromptOnDone?: boolean;
 };
 
 export type InquirerReadline = readline.ReadLine & {
@@ -107,7 +108,7 @@ export type ResolvedPromptConfig = {
 
 export type Prompt<Value, Config> = (
   options: Config,
-  stdio?: StdioOptions
+  context?: Context
 ) => Promise<Value>;
 
 export function createPrompt<Value, Config extends AsyncPromptConfig>(
@@ -116,13 +117,13 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     done: (value: Value) => void
   ) => string | [string, string | undefined]
 ) {
-  const prompt: Prompt<Value, Config> = async (options, stdio) => {
+  const prompt: Prompt<Value, Config> = async (options, context) => {
     // Default `input` to stdin
-    const input = stdio?.input ?? process.stdin;
+    const input = context?.input ?? process.stdin;
 
     // Add mute capabilities to the output
     const output = new MuteStream();
-    output.pipe(stdio?.output ?? process.stdout);
+    output.pipe(context?.output ?? process.stdout);
 
     const rl = readline.createInterface({
       terminal: true,
@@ -139,6 +140,11 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
         let len = hooksCleanup.length;
         while (len--) {
           cleanupHook(len);
+        }
+        if (context?.clearPromptOnDone) {
+          screen.clean();
+        } else {
+          screen.clearContent();
         }
         screen.done();
 
