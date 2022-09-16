@@ -8,13 +8,15 @@
   "files": [
     "dist/"
   ],
-  "repository": "SBoudrias/Inquirer.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
   "keywords": [
     "answer",
     "answers",
     "ask",
     "base",
-    "cli",
     "cli",
     "command",
     "command-line",
@@ -44,16 +46,19 @@
     "stdout",
     "terminal",
     "tty",
-    "types",
-    "typescript",
     "ui",
     "yeoman",
     "yo",
-    "zsh"
+    "zsh",
+    "types",
+    "typescript"
   ],
-  "author": "Simon Boudrias",
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
   "license": "MIT",
   "scripts": {
     "tsc": "tsc"
+  },
+  "engines": {
+    "node": ">=14.18.0"
   }
 }

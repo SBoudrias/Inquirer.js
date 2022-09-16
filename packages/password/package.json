@@ -11,13 +11,15 @@
   "files": [
     "dist/"
   ],
-  "repository": "SBoudrias/Inquirer.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
   "keywords": [
     "answer",
     "answers",
     "ask",
     "base",
-    "cli",
     "cli",
     "command",
     "command-line",

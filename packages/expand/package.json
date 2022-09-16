@@ -8,13 +8,15 @@
   "files": [
     "dist/"
   ],
-  "repository": "SBoudrias/Inquirer.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
   "keywords": [
     "answer",
     "answers",
     "ask",
     "base",
-    "cli",
     "cli",
     "command",
     "command-line",
@@ -49,7 +51,7 @@
     "yo",
     "zsh"
   ],
-  "author": "Simon Boudrias",
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/expand/README.md",
   "dependencies": {
@@ -62,5 +64,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=14.18.0"
   }
 }
