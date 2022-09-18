@@ -1,7 +1,7 @@
 {
   "name": "@inquirer/rawlist",
   "type": "module",
-  "version": "0.0.9-alpha.0",
+  "version": "0.0.10-alpha.0",
   "description": "Inquirer rawlist prompt",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
