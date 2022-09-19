@@ -1,8 +1,11 @@
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
+import chaiString from 'chai-string';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
 import Input from '../../../lib/prompts/input.js';
+
+chai.use(chaiString);
 
 describe('`input` prompt', () => {
   beforeEach(function () {
@@ -91,6 +94,26 @@ describe('`input` prompt', () => {
     this.rl.input.emit('keypress');
     setTimeout(() => {
       expect(this.rl.output.__raw__).to.contain('INQUIRER');
+      done();
+    }, 200);
+  });
+
+  it('should clear default on input', function (done) {
+    const defaultValue = 'default-string';
+    const input = new Input(
+      {
+        ...this.fixture,
+        default: defaultValue,
+      },
+      this.rl
+    );
+
+    input.run();
+
+    this.rl.line = 'inquirer';
+    this.rl.input.emit('keypress');
+    setTimeout(() => {
+      expect(this.rl.output.__raw__).to.have.entriesCount(defaultValue, 1);
       done();
     }, 200);
   });

@@ -100,7 +100,7 @@ export default class InputPrompt extends Base {
    */
 
   onKeypress() {
-    this.state = 'touched';
+    this.status = 'touched';
 
     this.render();
   }

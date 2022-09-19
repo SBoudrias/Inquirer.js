@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "chai": "^4.3.6",
+    "chai-string": "^1.5.0",
     "chalk-pipe": "^5.1.1",
     "cmdify": "^0.0.4",
     "mocha": "^10.0.0",
