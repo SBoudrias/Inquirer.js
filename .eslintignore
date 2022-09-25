@@ -4,3 +4,4 @@ coverage
 dist
 packages/*/node_modules
 packages/*/__snapshots__
+*.test-d.ts
