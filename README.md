@@ -377,6 +377,7 @@ look at issues found on other command line - feel free to report any!
   - Terminal.app
   - iTerm
 - **Windows ([Known issues](#issues))**:
+  - [Windows Terminal](https://github.com/microsoft/terminal)
   - [ConEmu](https://conemu.github.io/)
   - cmd.exe
   - Powershell
