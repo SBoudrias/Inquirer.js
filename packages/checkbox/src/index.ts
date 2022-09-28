@@ -47,6 +47,10 @@ export default createPrompt(
         setStatus('done');
         done(choices.filter((choice) => choice.checked).map((choice) => choice.value));
       } else if (isUpKey(key) || isDownKey(key)) {
+        const realChoices = choices.find((choice) => !choice.disabled);
+        if (!realChoices) {
+          return;
+        }
         const offset = isUpKey(key) ? -1 : 1;
         let selectedOption;
 
