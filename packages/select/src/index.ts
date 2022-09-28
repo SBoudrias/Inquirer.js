@@ -33,7 +33,7 @@ export default createPrompt<string, SelectConfig>((config, done) => {
   useKeypress((key) => {
     if (isEnterKey(key)) {
       setStatus('done');
-      done(choices[cursorPosition]!.value);
+      done(choices[cursorPosition]!.disabled ? '' : choices[cursorPosition]!.value);
     } else if (isUpKey(key) || isDownKey(key)) {
       let newCursorPosition = cursorPosition;
       const offset = isUpKey(key) ? -1 : 1;
@@ -66,6 +66,9 @@ export default createPrompt<string, SelectConfig>((config, done) => {
   }
 
   if (status === 'done') {
+    if (choices[cursorPosition]!.disabled) {
+      return `${prefix} ${message} ${chalk.cyan('')}`;
+    }
     const choice = choices[cursorPosition]!;
     return `${prefix} ${message} ${chalk.cyan(choice.name || choice.value)}`;
   }
