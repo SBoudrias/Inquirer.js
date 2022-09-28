@@ -35,6 +35,10 @@ export default createPrompt<string, SelectConfig>((config, done) => {
       setStatus('done');
       done(choices[cursorPosition]!.value);
     } else if (isUpKey(key) || isDownKey(key)) {
+      const realChoices = choices.find((choice) => !choice.disabled);
+      if (!realChoices) {
+        return;
+      }
       let newCursorPosition = cursorPosition;
       const offset = isUpKey(key) ? -1 : 1;
       let selectedOption;
