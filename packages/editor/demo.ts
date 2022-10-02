@@ -2,6 +2,7 @@ import editor from './src/index.js';
 
 (async () => {
   const answer = await editor({
+    waitUserInput: true,
     message: 'Please write a short bio of at least 3 lines.',
     validate(text) {
       if (text.trim().split('\n').length < 3) {

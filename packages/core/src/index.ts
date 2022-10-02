@@ -91,6 +91,18 @@ export function useRef<Value>(val: Value): { current: Value } {
   return useState({ current: val })[0];
 }
 
+export function useReadline(
+  userHandler: (rl: InquirerReadline) => void
+) {
+  const rl = sessionRl;
+
+  if (!rl) {
+    throw new Error('useReadline must be used within a prompt');
+  }
+
+  userHandler(rl);
+}
+
 export type AsyncPromptConfig = {
   message: string | Promise<string> | (() => Promise<string>);
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
