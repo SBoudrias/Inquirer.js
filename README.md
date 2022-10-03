@@ -22,7 +22,7 @@ A collection of common interactive command line user interfaces.
 2.  [User Interfaces and Layouts](#layouts)
     1.  [Reactive Interface](#reactive)
 3.  [Support](#support)
-4.  [Nodemon](#nodemon)
+4.  [Nodemon](#nodemon-support)
 5.  [Known issues](#issues)
 6.  [News](#news)
 7.  [Contributing](#contributing)
