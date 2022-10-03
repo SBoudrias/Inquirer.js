@@ -372,29 +372,28 @@ look at issues found on other command line - feel free to report any!
   - gnome-terminal (Terminal GNOME)
   - konsole
 
-
 ## Nodemon Support
 
-Executing With [`Nodemon`](https://www.npmjs.com/package/nodemon) 
-make sure do changes as based your project directories/files "watch", "ignore" and "script".
-```json
-{
-  "watch": [
-    "dist/" 
-  ],
-  "ext": "js, json",
-  "stdin": false,
-  "ignore": [
-    "src/*/.spec.ts",
-    "typescript",
-    "node_modules"
-  ],
-  "events": {
-    "start": "cls || clear"
-  },
-  "script": "dist/myApp.js",
-  "restartable": false
-}
+When executing with [`Nodemon`](https://www.npmjs.com/package/nodemon), you'll need to set `stdin: false` in your config:
+
+```diff
+  {
+    "watch": [
+      "dist/" 
+    ],
+    "ext": "js, json",
++   "stdin": false,
+    "ignore": [
+      "src/*/.spec.ts",
+      "typescript",
+      "node_modules"
+    ],
+    "events": {
+      "start": "cls || clear"
+    },
+    "script": "dist/myApp.js",
+    "restartable": false
+  }
 ```
 
 ## Known issues
