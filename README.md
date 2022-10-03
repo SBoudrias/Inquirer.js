@@ -22,11 +22,12 @@ A collection of common interactive command line user interfaces.
 2.  [User Interfaces and Layouts](#layouts)
     1.  [Reactive Interface](#reactive)
 3.  [Support](#support)
-4.  [Known issues](#issues)
-5.  [News](#news)
-6.  [Contributing](#contributing)
-7.  [License](#license)
-8.  [Plugins](#plugins)
+4.  [Nodemon](#nodemon-support)
+5.  [Known issues](#issues)
+6.  [News](#news)
+7.  [Contributing](#contributing)
+8.  [License](#license)
+9.  [Plugins](#plugins)
 
 ## Goal and Philosophy
 
@@ -385,6 +386,30 @@ look at issues found on other command line - feel free to report any!
 - **Linux (Ubuntu, openSUSE, Arch Linux, etc)**:
   - gnome-terminal (Terminal GNOME)
   - konsole
+
+## Nodemon Support
+
+When executing with [`Nodemon`](https://www.npmjs.com/package/nodemon), you'll need to set `stdin: false` in your config:
+
+```diff
+  {
+    "watch": [
+      "dist/" 
+    ],
+    "ext": "js, json",
++   "stdin": false,
+    "ignore": [
+      "src/*/.spec.ts",
+      "typescript",
+      "node_modules"
+    ],
+    "events": {
+      "start": "cls || clear"
+    },
+    "script": "dist/myApp.js",
+    "restartable": false
+  }
+```
 
 ## Known issues
 
