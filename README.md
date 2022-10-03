@@ -22,11 +22,12 @@ A collection of common interactive command line user interfaces.
 2.  [User Interfaces and Layouts](#layouts)
     1.  [Reactive Interface](#reactive)
 3.  [Support](#support)
-4.  [Known issues](#issues)
-5.  [News](#news)
-6.  [Contributing](#contributing)
-7.  [License](#license)
-8.  [Plugins](#plugins)
+4.  [Nodemon](#nodemon)
+5.  [Known issues](#issues)
+6.  [News](#news)
+7.  [Contributing](#contributing)
+8.  [License](#license)
+9.  [Plugins](#plugins)
 
 ## Goal and Philosophy
 
@@ -82,17 +83,6 @@ Check out the [`packages/inquirer/examples/`](https://github.com/SBoudrias/Inqui
 node packages/inquirer/examples/pizza.js
 node packages/inquirer/examples/checkbox.js
 # etc...
-```
-
-** Nodemon **
-
-Executing With [`Nodemon`](https://www.npmjs.com/package/nodemon) 
-```json
-{
-...otherArgs
-"stdin": false,
-"restartable": false
-}
 ```
 
 ### Methods
@@ -381,6 +371,31 @@ look at issues found on other command line - feel free to report any!
 - **Linux (Ubuntu, openSUSE, Arch Linux, etc)**:
   - gnome-terminal (Terminal GNOME)
   - konsole
+
+
+## Nodemon Support
+
+Executing With [`Nodemon`](https://www.npmjs.com/package/nodemon) 
+make sure do changes as based your project directories/files "watch", "ignore" and "script".
+```json
+{
+  "watch": [
+    "dist/" 
+  ],
+  "ext": "js, json",
+  "stdin": false,
+  "ignore": [
+    "src/*/.spec.ts",
+    "typescript",
+    "node_modules"
+  ],
+  "events": {
+    "start": "cls || clear"
+  },
+  "script": "dist/myApp.js",
+  "restartable": false
+}
+```
 
 ## Known issues
 
