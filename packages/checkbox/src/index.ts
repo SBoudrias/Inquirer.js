@@ -18,7 +18,7 @@ import ansiEscapes from 'ansi-escapes';
 export type Choice<Value> = {
   name?: string;
   value: Value;
-  disabled?: boolean;
+  disabled?: boolean | string;
 };
 
 type Config<Value> = {
@@ -127,7 +127,9 @@ export default createPrompt(
       .map(({ name, value, checked, disabled }, index) => {
         const line = name || value;
         if (disabled) {
-          return chalk.dim(` - ${line} (disabled)`);
+          return chalk.dim(
+            ` - ${line} (${typeof disabled === 'string' ? disabled : 'disabled'})`
+          );
         }
 
         const checkbox = checked ? chalk.green(figures.circleFilled) : figures.circle;
