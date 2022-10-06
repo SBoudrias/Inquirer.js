@@ -6,7 +6,7 @@
     "@sindresorhus/tsconfig": "^3.0.1",
     "@types/jest": "^29.1.2",
     "@types/mute-stream": "^0.0.1",
-    "@types/node": "^18.8.2",
+    "@types/node": "^18.8.3",
     "@types/wrap-ansi": "^8.0.1",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
