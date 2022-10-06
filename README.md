@@ -22,12 +22,11 @@ A collection of common interactive command line user interfaces.
 2.  [User Interfaces and Layouts](#layouts)
     1.  [Reactive Interface](#reactive)
 3.  [Support](#support)
-4.  [Nodemon](#nodemon-support)
-5.  [Known issues](#issues)
-6.  [News](#news)
-7.  [Contributing](#contributing)
-8.  [License](#license)
-9.  [Plugins](#plugins)
+4.  [Known issues](#issues)
+5.  [News](#news)
+6.  [Contributing](#contributing)
+7.  [License](#license)
+8.  [Plugins](#plugins)
 
 ## Goal and Philosophy
 
@@ -136,8 +135,7 @@ prompt(questions).then(/* ... */);
 <a name="questions"></a>
 A question object is a `hash` containing question related values:
 
-- **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `number`, `confirm`,
-  `list`, `rawlist`, `expand`, `checkbox`, `password`, `editor`
+- **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `number`, `confirm`, `list`, `rawlist`, `expand`, `checkbox`, `password`, `editor`
 - **name**: (String) The name to use when storing the answer in the answers hash. If the name contains periods, it will define a path in the answers hash.
 - **message**: (String|Function) The question to print. If defined as a function, the first parameter will be the current inquirer session answers. Defaults to the value of `name` (followed by a colon).
 - **default**: (String|Number|Boolean|Array|Function) Default value(s) to use if nothing is entered, or a function that returns the default value(s). If defined as a function, the first parameter will be the current inquirer session answers.
@@ -386,30 +384,6 @@ look at issues found on other command line - feel free to report any!
 - **Linux (Ubuntu, openSUSE, Arch Linux, etc)**:
   - gnome-terminal (Terminal GNOME)
   - konsole
-
-## Nodemon Support
-
-When executing with [`Nodemon`](https://www.npmjs.com/package/nodemon), you'll need to set `stdin: false` in your config:
-
-```diff
-  {
-    "watch": [
-      "dist/" 
-    ],
-    "ext": "js, json",
-+   "stdin": false,
-    "ignore": [
-      "src/*/.spec.ts",
-      "typescript",
-      "node_modules"
-    ],
-    "events": {
-      "start": "cls || clear"
-    },
-    "script": "dist/myApp.js",
-    "restartable": false
-  }
-```
 
 ## Known issues
 
