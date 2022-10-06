@@ -1,5 +1,4 @@
 {
-  "private": true,
   "type": "module",
   "devDependencies": {
     "@jest/globals": "^29.1.2",
