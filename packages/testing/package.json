@@ -1,7 +1,7 @@
 {
   "name": "@inquirer/testing",
   "type": "module",
-  "version": "0.0.4-alpha.0",
+  "version": "0.0.5-alpha.0",
   "description": "Inquirer testing utilities",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -56,7 +56,7 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/testing/README.md",
   "dependencies": {
-    "@inquirer/type": "^0.0.3-alpha.0",
+    "@inquirer/type": "^0.0.4-alpha.0",
     "mute-stream": "^0.0.8",
     "strip-ansi": "^7.0.1"
   },
