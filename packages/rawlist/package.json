@@ -1,7 +1,7 @@
 {
   "name": "@inquirer/rawlist",
   "type": "module",
-  "version": "0.0.10-alpha.0",
+  "version": "0.0.11-alpha.0",
   "description": "Inquirer rawlist prompt",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -53,7 +53,7 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/rawlist/README.md",
   "dependencies": {
-    "@inquirer/core": "^0.0.29-alpha.0",
+    "@inquirer/core": "^0.0.30-alpha.0",
     "chalk": "^5.1.2"
   },
   "scripts": {
