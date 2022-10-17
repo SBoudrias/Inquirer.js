@@ -1,7 +1,7 @@
 {
   "name": "@inquirer/select",
   "type": "module",
-  "version": "0.0.27-alpha.0",
+  "version": "0.0.28-alpha.0",
   "description": "Inquirer select/list prompt",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

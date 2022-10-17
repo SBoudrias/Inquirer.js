@@ -45,7 +45,11 @@ export default createPrompt(
       let newCursorPosition = cursorPosition;
       if (isEnterKey(key)) {
         setStatus('done');
-        done(choices.filter((choice) => choice.checked).map((choice) => choice.value));
+        done(
+          choices
+            .filter((choice) => choice.checked && !choice.disabled)
+            .map((choice) => choice.value)
+        );
       } else if (isUpKey(key) || isDownKey(key)) {
         const offset = isUpKey(key) ? -1 : 1;
         let selectedOption;

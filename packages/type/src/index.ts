@@ -1,4 +1,4 @@
-type Context = {
+export type Context = {
   input?: NodeJS.ReadableStream;
   output?: NodeJS.WritableStream;
   clearPromptOnDone?: boolean;

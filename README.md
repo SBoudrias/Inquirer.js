@@ -135,8 +135,7 @@ prompt(questions).then(/* ... */);
 <a name="questions"></a>
 A question object is a `hash` containing question related values:
 
-- **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `number`, `confirm`,
-  `list`, `rawlist`, `expand`, `checkbox`, `password`, `editor`
+- **type**: (String) Type of the prompt. Defaults: `input` - Possible values: `input`, `number`, `confirm`, `list`, `rawlist`, `expand`, `checkbox`, `password`, `editor`
 - **name**: (String) The name to use when storing the answer in the answers hash. If the name contains periods, it will define a path in the answers hash.
 - **message**: (String|Function) The question to print. If defined as a function, the first parameter will be the current inquirer session answers. Defaults to the value of `name` (followed by a colon).
 - **default**: (String|Number|Boolean|Array|Function) Default value(s) to use if nothing is entered, or a function that returns the default value(s). If defined as a function, the first parameter will be the current inquirer session answers.
@@ -377,6 +376,7 @@ look at issues found on other command line - feel free to report any!
   - Terminal.app
   - iTerm
 - **Windows ([Known issues](#issues))**:
+  - [Windows Terminal](https://github.com/microsoft/terminal)
   - [ConEmu](https://conemu.github.io/)
   - cmd.exe
   - Powershell

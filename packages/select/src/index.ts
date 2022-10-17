@@ -22,13 +22,17 @@ type SelectConfig = AsyncPromptConfig & {
 
 export default createPrompt<string, SelectConfig>((config, done) => {
   const { choices } = config;
+  const startIndex = Math.max(
+    choices.findIndex(({ disabled }) => !disabled),
+    0
+  );
 
   const paginator = useRef(new Paginator()).current;
   const firstRender = useRef(true);
 
   const prefix = usePrefix();
   const [status, setStatus] = useState('pending');
-  const [cursorPosition, setCursorPos] = useState(0);
+  const [cursorPosition, setCursorPos] = useState(startIndex);
 
   useKeypress((key) => {
     if (isEnterKey(key)) {
