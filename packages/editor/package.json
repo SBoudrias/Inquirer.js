@@ -53,8 +53,8 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/editor/README.md",
   "dependencies": {
-    "@inquirer/core": "^0.0.26-alpha.0",
-    "chalk": "^5.0.1",
+    "@inquirer/core": "^0.0.29-alpha.0",
+    "chalk": "^5.1.2",
     "external-editor": "^3.0.3"
   },
   "scripts": {
