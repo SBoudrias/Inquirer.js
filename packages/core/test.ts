@@ -107,6 +107,7 @@ describe('createPrompt()', () => {
     events.keypress('down');
     expect(effect).toHaveBeenLastCalledWith('down');
     expect(effect).toHaveBeenCalledTimes(2);
+    expect(effectCleanup).toHaveBeenCalledTimes(1);
 
     // No change, no cleanup
     events.keypress('down');
@@ -115,6 +116,7 @@ describe('createPrompt()', () => {
     events.keypress('up');
     expect(effect).toHaveBeenLastCalledWith('up');
     expect(effect).toHaveBeenCalledTimes(3);
+    expect(effectCleanup).toHaveBeenCalledTimes(2);
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('up');
@@ -159,5 +161,36 @@ describe('createPrompt()', () => {
 
     expect(effect).toHaveBeenCalledTimes(1);
     await expect(answer).resolves.toEqual('up');
+  });
+
+  it('useEffect: is not called synchronously during render', async () => {
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      let value = 'outside';
+
+      useEffect(() => {
+        value = 'inside';
+      }, []);
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done('done');
+        }
+      });
+
+      expect(value).toEqual('outside');
+
+      return `${config.message} ${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+
+    // Wait for event listeners to be ready
+    await Promise.resolve();
+    await Promise.resolve();
+
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual('done');
   });
 });

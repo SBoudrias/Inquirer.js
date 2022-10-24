@@ -18,11 +18,12 @@ export type KeypressEvent = {
   ctrl: boolean;
 };
 
-let sessionRl: InquirerReadline | void;
 const hooks: any[] = [];
 const hooksCleanup: any[] = [];
+const hooksEffect: Array<() => void> = [];
 let index = 0;
 let handleChange = () => {};
+let sessionRl: InquirerReadline | void;
 
 const cleanupHook = (index: number) => {
   const cleanFn = hooksCleanup[index];
@@ -60,8 +61,10 @@ export function useEffect(cb: () => void | (() => void), depArray: unknown[]): v
     hasChanged = depArray.some((dep, i) => !Object.is(dep, oldDeps[i]));
   }
   if (hasChanged) {
-    cleanupHook(_idx);
-    hooksCleanup[_idx] = cb();
+    hooksEffect.push(() => {
+      cleanupHook(_idx);
+      hooksCleanup[_idx] = cb();
+    });
   }
   hooks[_idx] = depArray;
 }
@@ -153,9 +156,14 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
 
       const workLoop = () => {
         index = 0;
+        hooksEffect.length = 0;
         handleChange = () => workLoop();
 
         const nextView = view(resolvedConfig, done);
+        for (const effect of hooksEffect) {
+          effect();
+        }
+
         const [content, bottomContent] =
           typeof nextView === 'string' ? [nextView] : nextView;
         screen.render(content, bottomContent);
