@@ -1,8 +1,12 @@
 const { expect } = require('chai');
+const chai = require('chai');
+const chaiString = require('chai-string');
 const ReadlineStub = require('../../helpers/readline');
 const fixtures = require('../../helpers/fixtures');
 
 const Input = require('../../../lib/prompts/input');
+
+chai.use(chaiString);
 
 describe('`input` prompt', () => {
   beforeEach(function () {
@@ -91,6 +95,26 @@ describe('`input` prompt', () => {
     this.rl.input.emit('keypress');
     setTimeout(() => {
       expect(this.rl.output.__raw__).to.contain('INQUIRER');
+      done();
+    }, 200);
+  });
+
+  it('should clear default on input', function (done) {
+    const defaultValue = 'default-string';
+    const input = new Input(
+      {
+        ...this.fixture,
+        default: defaultValue,
+      },
+      this.rl
+    );
+
+    input.run();
+
+    this.rl.line = 'inquirer';
+    this.rl.input.emit('keypress');
+    setTimeout(() => {
+      expect(this.rl.output.__raw__).to.have.entriesCount(defaultValue, 1);
       done();
     }, 200);
   });
