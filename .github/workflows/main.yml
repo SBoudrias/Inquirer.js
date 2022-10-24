@@ -19,6 +19,7 @@ jobs:
       - name: yarn install and test
         run: |
           node --version
+          mkdir -p ./coverage/
           yarn
           yarn test
         env:
