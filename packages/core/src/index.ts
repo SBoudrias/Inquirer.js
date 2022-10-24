@@ -19,7 +19,7 @@ export type KeypressEvent = {
 };
 
 let sessionRl: InquirerReadline | void;
-let hooks: any[] = [];
+const hooks: any[] = [];
 const hooksCleanup: any[] = [];
 let index = 0;
 let handleChange = () => {};
@@ -122,6 +122,10 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     }) as InquirerReadline;
     const screen = new ScreenManager(rl);
 
+    // Set our state before starting the prompt.
+    hooks.length = 0;
+    sessionRl = rl;
+
     // TODO: we should display a loader while we get the default options.
     const resolvedConfig = await getPromptConfig(config);
 
@@ -139,19 +143,15 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
         screen.done();
 
         // Reset hooks state
-        hooks = [];
         index = 0;
+        hooks.length = 0;
         sessionRl = undefined;
 
         // Finally we resolve our promise
         resolve(value);
       };
 
-      index = 0;
-      hooks = [];
-
       const workLoop = () => {
-        sessionRl = rl;
         index = 0;
         handleChange = () => workLoop();
 
