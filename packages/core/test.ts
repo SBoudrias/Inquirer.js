@@ -150,10 +150,6 @@ describe('createPrompt()', () => {
     const prompt = createPrompt(Prompt);
     const { answer, events } = await render(prompt, { message: 'Question' });
 
-    // Wait for event listeners to be ready
-    await Promise.resolve();
-    await Promise.resolve();
-
     events.keypress('down');
     events.keypress('down');
     events.keypress('up');
@@ -184,10 +180,6 @@ describe('createPrompt()', () => {
 
     const prompt = createPrompt(Prompt);
     const { answer, events } = await render(prompt, { message: 'Question' });
-
-    // Wait for event listeners to be ready
-    await Promise.resolve();
-    await Promise.resolve();
 
     events.keypress('enter');
 
