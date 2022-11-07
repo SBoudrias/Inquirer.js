@@ -53,14 +53,14 @@
     "node": ">=12.0.0"
   },
   "devDependencies": {
-    "chai": "^4.3.6",
+    "chai": "^4.3.7",
     "chai-string": "^1.5.0",
     "chalk-pipe": "^5.1.2",
     "cmdify": "^0.0.4",
     "mocha": "^10.1.0",
     "mockery": "^2.1.0",
     "nyc": "^15.0.0",
-    "sinon": "^14.0.1",
+    "sinon": "^14.0.2",
     "terminal-link": "^3.0.0"
   },
   "scripts": {
