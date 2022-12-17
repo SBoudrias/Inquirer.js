@@ -1,5 +1,5 @@
-import defaults from 'lodash/defaults.js';
-import clone from 'lodash/clone.js';
+import defaults from 'lodash.defaults';
+import clone from 'lodash.clone';
 /**
  * Base prompt implementation
  * Should be extended by prompt types.

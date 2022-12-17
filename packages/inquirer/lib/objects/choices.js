@@ -1,8 +1,14 @@
 import assert from 'node:assert';
-import _ from 'lodash';
+import filter from 'lodash.filter';
+import map from 'lodash.map';
 
 import Separator from './separator.js';
 import Choice from './choice.js';
+
+const _ = {
+  map,
+  filter,
+};
 
 /**
  * Choices collection
