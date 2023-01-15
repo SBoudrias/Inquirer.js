@@ -2,7 +2,7 @@
  * `rawlist` type prompt
  */
 
-import chalk from 'chalk';
+import chalk from '#chalk';
 import { map, takeUntil } from 'rxjs';
 import Base from './base.js';
 import Separator from '../objects/separator.js';

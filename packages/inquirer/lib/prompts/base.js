@@ -9,7 +9,7 @@ const _ = {
   clone,
 };
 
-import chalk from 'chalk';
+import chalk from '#chalk';
 import runAsync from 'run-async';
 import { filter, flatMap, share, take, takeUntil } from 'rxjs';
 import Choices from '../objects/choices.js';

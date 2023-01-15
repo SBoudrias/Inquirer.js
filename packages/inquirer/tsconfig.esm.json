@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig.base",
+    "compilerOptions": {
+        "lib": ["ES2022"],
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "NodeNext",
+        "outDir": "./lib"
+    }
+}

@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalk from '#chalk';
 
 /**
  * The paginator returns a subset of the choices if the list is too long.

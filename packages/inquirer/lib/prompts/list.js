@@ -2,9 +2,9 @@
  * `list` type prompt
  */
 
-import chalk from 'chalk';
-import figures from 'figures';
-import cliCursor from 'cli-cursor';
+import chalk from '#chalk';
+import figures from '#figures';
+import cliCursor from '#cli-cursor';
 import runAsync from 'run-async';
 import { flatMap, map, take, takeUntil } from 'rxjs';
 import Base from './base.js';

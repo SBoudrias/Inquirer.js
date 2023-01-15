@@ -2,9 +2,9 @@
  * `list` type prompt
  */
 
-import chalk from 'chalk';
-import cliCursor from 'cli-cursor';
-import figures from 'figures';
+import chalk from '#chalk';
+import cliCursor from '#cli-cursor';
+import figures from '#figures';
 import { map, takeUntil } from 'rxjs';
 import Base from './base.js';
 import observe from '../utils/events.js';

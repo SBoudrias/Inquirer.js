@@ -6,9 +6,67 @@
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "files": [
     "lib",
+    "lib-cjs",
     "README.md"
   ],
   "main": "lib/inquirer.js",
+  "exports": {
+    ".": {
+      "require": "./lib-cjs/inquirer-default.js",
+      "default": "./lib/inquirer.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "imports": {
+    "#ansi-escapes": {
+      "node": {
+        "require": "ansi-escapes-4",
+        "default": "ansi-escapes"
+      }
+    },
+    "#chalk": {
+      "node": {
+        "require": "chalk-4",
+        "default": "chalk"
+      }
+    },
+    "#cli-cursor": {
+      "node": {
+        "require": "cli-cursor-3",
+        "default": "cli-cursor"
+      }
+    },
+    "#figures": {
+      "node": {
+        "require": "figures-3",
+        "default": "figures"
+      }
+    },
+    "#ora": {
+      "node": {
+        "require": "ora-5",
+        "default": "ora"
+      }
+    },
+    "#string-width": {
+      "node": {
+        "require": "string-width-4",
+        "default": "string-width"
+      }
+    },
+    "#strip-ansi": {
+      "node": {
+        "require": "strip-ansi-6",
+        "default": "strip-ansi"
+      }
+    },
+    "#wrap-ansi": {
+      "node": {
+        "require": "wrap-ansi-7",
+        "default": "wrap-ansi"
+      }
+    }
+  },
   "keywords": [
     "answer",
     "answers",
@@ -50,7 +108,7 @@
     "zsh"
   ],
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.18.0"
   },
   "devDependencies": {
     "chai": "^4.3.7",
@@ -66,26 +124,36 @@
   "scripts": {
     "test": "nyc mocha --es-module-specifier-resolution=node test/**/* -r ./test/before",
     "posttest": "mkdir -p ../../coverage/ && nyc report --reporter=text-lcov > ../../coverage/nyc-report.lcov",
-    "prepublishOnly": "cp ../../README.md .",
+    "prebuild": "find ./lib-cjs/* ! -name 'inquirer-default.js' -exec rm -rf {} +",
+    "build": "tsc -p ./tsconfig.cjs.json && tsconfig-to-dual-package ./tsconfig.cjs.json",
+    "prepublishOnly": "cp ../../README.md . && npm run build",
     "postpublish": "rm -f README.md"
   },
   "repository": "SBoudrias/Inquirer.js",
   "license": "MIT",
   "dependencies": {
     "ansi-escapes": "^6.0.0",
+    "ansi-escapes-4": "npm:ansi-escapes@^4.3.2",
     "chalk": "^5.1.2",
+    "chalk-4": "npm:chalk@^4.1.2",
     "cli-cursor": "^4.0.0",
+    "cli-cursor-3": "npm:cli-cursor@^3.1.0",
     "cli-width": "^4.0.0",
     "external-editor": "^3.0.3",
     "figures": "^5.0.0",
+    "figures-3": "npm:figures@^3.2.0",
     "lodash": "^4.17.21",
     "mute-stream": "0.0.8",
     "ora": "^6.1.2",
+    "ora-5": "npm:ora@^5.4.1",
     "run-async": "^2.4.0",
     "rxjs": "^7.5.7",
     "string-width": "^5.1.2",
+    "string-width-4": "npm:string-width@^4.2.3",
     "strip-ansi": "^7.0.1",
+    "strip-ansi-6": "npm:strip-ansi@^6.0.1",
     "through": "^2.3.6",
-    "wrap-ansi": "^8.0.1"
+    "wrap-ansi": "^8.0.1",
+    "wrap-ansi-7": "npm:wrap-ansi@^7.0.0"
   }
 }

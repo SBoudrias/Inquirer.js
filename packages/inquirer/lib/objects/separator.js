@@ -1,5 +1,5 @@
-import chalk from 'chalk';
-import figures from 'figures';
+import chalk from '#chalk';
+import figures from '#figures';
 
 /**
  * Separator object

@@ -2,7 +2,7 @@
  * `editor` type prompt
  */
 
-import chalk from 'chalk';
+import chalk from '#chalk';
 import { editAsync } from 'external-editor';
 import Base from './base.js';
 import observe from '../utils/events.js';
