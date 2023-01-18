@@ -481,10 +481,11 @@ Prompt for inputting emojis.<br>
 [**inquirer-chalk-pipe**](https://github.com/LitoMore/inquirer-chalk-pipe)<br>
 Prompt for input chalk-pipe style strings<br>
 <br>
-![inquirer-chalk-pipe](https://github.com/LitoMore/inquirer-chalk-pipe/raw/master/screenshot.gif)
+![inquirer-chalk-pipe](https://github.com/LitoMore/inquirer-chalk-pipe/blob/main/screenshot.gif)
 
 [**inquirer-search-checkbox**](https://github.com/clinyong/inquirer-search-checkbox)<br>
 Searchable Inquirer checkbox<br>
+![inquirer-search-checkbox](https://github.com/clinyong/inquirer-search-checkbox/blob/master/screenshot.png)
 
 [**inquirer-search-list**](https://github.com/robin-rpr/inquirer-search-list)<br>
 Searchable Inquirer list<br>
