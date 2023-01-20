@@ -20,19 +20,21 @@ jobs:
       - name: yarn install
         run: |
           node --version
-          yarn
+          yarn install --immutable --immutable-cache --check-cache
         env:
           CI: true
           FORCE_COLOR: 1
+
+      # TS must run before we check dependencies since otherwise our exports map points to nothing.
+      - name: Typescript
+        run: yarn lerna run tsc
 
       - name: Eslint
         run: yarn eslint . --ext .js --ext .ts
       - name: Test inquirer package (current version)
         run: yarn lerna exec npm test --scope inquirer
       - name: Test monorepo packages (new version)
-        run: |
-          yarn lerna run tsc
-          yarn jest
+        run: yarn jest
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v2
