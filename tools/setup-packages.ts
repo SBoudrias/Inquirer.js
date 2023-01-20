@@ -42,6 +42,18 @@ paths.forEach(async (pkgPath) => {
   if (isTS) {
     pkg.scripts = pkg.scripts ?? {};
     pkg.scripts.tsc = 'tsc';
+
+    const tsConfig = {
+      extends: path.relative(dir, path.join(__dirname, '../tsconfig.json')),
+      compilerOptions: {
+        outDir: './dist',
+      },
+      include: ['./src'],
+    };
+    fs.promises.writeFile(
+      path.join(dir, 'tsconfig.json'),
+      JSON.stringify(tsConfig, null, 2)
+    );
   }
 
   fs.promises.writeFile(pkgPath, JSON.stringify(pkg, null, 2));
