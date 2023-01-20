@@ -59,6 +59,7 @@
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/checkbox/README.md",
   "dependencies": {
     "@inquirer/core": "^0.0.30-alpha.0",
+    "@inquirer/type": "^0.0.4-alpha.0",
     "ansi-escapes": "^6.0.0",
     "chalk": "^5.2.0",
     "figures": "^5.0.0"

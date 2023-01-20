@@ -7,6 +7,7 @@ import {
   isBackspaceKey,
   AsyncPromptConfig,
 } from '@inquirer/core';
+import type {} from '@inquirer/type';
 import chalk from 'chalk';
 
 type InputConfig = AsyncPromptConfig & {

@@ -8,6 +8,7 @@ import {
   isEnterKey,
   AsyncPromptConfig,
 } from '@inquirer/core';
+import type {} from '@inquirer/type';
 
 type EditorConfig = AsyncPromptConfig & {
   default?: string;

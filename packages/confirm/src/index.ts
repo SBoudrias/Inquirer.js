@@ -6,6 +6,7 @@ import {
   isEnterKey,
   usePrefix,
 } from '@inquirer/core';
+import type {} from '@inquirer/type';
 
 export default createPrompt<boolean, { message: string; default?: boolean }>(
   (config, done) => {
