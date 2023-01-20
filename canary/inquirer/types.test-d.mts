@@ -1,9 +1,10 @@
-import inquirer from './src/index.js';
+import { describe, it, expect } from 'vitest';
+import inquirer from './src/index.mjs';
 
 describe('Library types work properly', () => {
   it('input', () => {
-    expect(() => {
-      return inquirer.prompt([
+    expect(() =>
+      inquirer.prompt([
         {
           type: 'input',
           name: 'first_name',
@@ -56,13 +57,13 @@ describe('Library types work properly', () => {
             return 1;
           },
         },
-      ]);
-    }).toBeInstanceOf(Function);
+      ]),
+    ).toBeInstanceOf(Function);
   });
 
   it('select', () => {
-    expect(() => {
-      return inquirer.prompt([
+    expect(() =>
+      inquirer.prompt([
         {
           type: 'select',
           name: 'ask_last_name',
@@ -75,6 +76,28 @@ describe('Library types work properly', () => {
         /* @ts-expect-error: choices option is required */
         {
           type: 'select',
+          name: 'ask_last_name',
+          message: 'Are you willing to share your last name',
+        },
+      ]),
+    ).toBeInstanceOf(Function);
+  });
+
+  it('register prompt', () => {
+    expect(() => {
+      inquirer.prompt([
+        {
+          /* @ts-expect-error: this prompt doesn't exist */
+          type: 'unknown-prompt',
+          name: 'ask_last_name',
+          message: 'Are you willing to share your last name',
+        },
+      ]);
+
+      inquirer.registerPrompt('unknown-prompt', {} as any);
+      inquirer.prompt([
+        {
+          type: 'unknown-prompt',
           name: 'ask_last_name',
           message: 'Are you willing to share your last name',
         },

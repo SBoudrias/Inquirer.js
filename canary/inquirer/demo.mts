@@ -1,4 +1,4 @@
-import inquirer from './src/index.js';
+import inquirer from './src/index.mjs';
 
 const answers = await inquirer.prompt([
   {
@@ -18,7 +18,7 @@ const answers = await inquirer.prompt([
   {
     type: 'input',
     name: 'last_name',
-    when: (answers) => Boolean(answers.ask_last_name),
+    when: (currentAnswers) => Boolean(currentAnswers.ask_last_name),
     message: "What's your last name",
   },
   {

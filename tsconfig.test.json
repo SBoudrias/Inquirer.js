@@ -1,9 +1,11 @@
 {
   "extends": "./tsconfig.json",
+  "include": ["**/*.test-d.mts"],
+  "exclude": ["**/*.test.mts"],
   "compilerOptions": {
     "noEmit": true,
+    "skipLibCheck": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false
-  },
-  "include": ["**/*.test-d.ts"]
+  }
 }

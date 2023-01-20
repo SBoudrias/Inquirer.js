@@ -72,7 +72,8 @@
   },
   "workspaces": [
     "packages/*",
-    "integration/*"
+    "integration/*",
+    "canary/*"
   ],
   "scripts": {
     "prepare": "husky && turbo tsc",

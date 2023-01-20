@@ -23,13 +23,9 @@ function createPromptModule() {
     select,
   };
 
-  type GetPrompt<U extends keyof typeof promptStore> = typeof promptStore[U];
-  type GetAnswerType<U extends keyof typeof promptStore> = GetPrompt<U> extends Prompt<
-    infer Answer,
-    any
-  >
-    ? Answer
-    : never;
+  type GetPrompt<U extends keyof typeof promptStore> = (typeof promptStore)[U];
+  type GetAnswerType<U extends keyof typeof promptStore> =
+    GetPrompt<U> extends Prompt<infer Answer, any> ? Answer : never;
   type GetPromptFnConfig<U> = U extends any
     ? U extends Prompt<any, infer Config>
       ? Config
@@ -46,7 +42,7 @@ function createPromptModule() {
         when?: (answers: Answers) => boolean | Promise<boolean>;
         filter?: (
           answer: GetAnswerType<U>,
-          answers: Answers
+          answers: Answers,
         ) => AsyncValue<GetAnswerType<U>>;
       }
     : never;
@@ -58,7 +54,7 @@ function createPromptModule() {
     config:
       | PromptNameToFullConfig<keyof typeof promptStore>
       | PromptNameToFullConfig<keyof typeof promptStore>[],
-    context?: Context
+    context?: Context,
   ) {
     const answers: Answers = {};
     const promptSeries = Array.isArray(config) ? config : [config];
@@ -96,6 +92,7 @@ function createPromptModule() {
     registerPrompt('select', select);
   }
 
+  prompt.prompt = prompt;
   prompt.registerPrompt = registerPrompt;
   prompt.createPromptModule = createPromptModule;
   prompt.restoreDefaultPrompts = restoreDefaultPrompts;
@@ -103,13 +100,7 @@ function createPromptModule() {
   return prompt;
 }
 
-const prompt = createPromptModule();
-const inquirer = {
-  prompt,
-  registerPrompt: prompt.registerPrompt,
-  createPromptModule: prompt.createPromptModule,
-  restoreDefaultPrompts: prompt.restoreDefaultPrompts,
-};
+const inquirer = createPromptModule();
 export default inquirer;
 
 export {

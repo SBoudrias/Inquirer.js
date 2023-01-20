@@ -320,6 +320,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@inquirer/canary@workspace:canary/inquirer":
+  version: 0.0.0-use.local
+  resolution: "@inquirer/canary@workspace:canary/inquirer"
+  dependencies:
+    "@inquirer/checkbox": ^2.1.0
+    "@inquirer/confirm": ^3.0.0
+    "@inquirer/core": ^7.0.0
+    "@inquirer/editor": ^2.0.0
+    "@inquirer/expand": ^2.0.0
+    "@inquirer/input": ^2.0.0
+    "@inquirer/password": ^2.0.0
+    "@inquirer/rawlist": ^2.0.0
+    "@inquirer/select": ^2.0.0
+    "@inquirer/type": ^1.0.5
+    lodash: ^4.17.21
+  languageName: unknown
+  linkType: soft
+
 "@inquirer/checkbox@^2.1.0, @inquirer/checkbox@workspace:packages/checkbox":
   version: 0.0.0-use.local
   resolution: "@inquirer/checkbox@workspace:packages/checkbox"
@@ -488,7 +506,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/type@^1.2.0, @inquirer/type@workspace:packages/type":
+"@inquirer/type@^1.0.5, @inquirer/type@^1.2.0, @inquirer/type@workspace:packages/type":
   version: 0.0.0-use.local
   resolution: "@inquirer/type@workspace:packages/type"
   languageName: unknown
