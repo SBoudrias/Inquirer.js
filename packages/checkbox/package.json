@@ -2,6 +2,9 @@
   "name": "@inquirer/checkbox",
   "version": "0.0.30-alpha.0",
   "type": "module",
+  "engines": {
+    "node": ">=14.18.0"
+  },
   "description": "Inquirer checkbox prompt",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

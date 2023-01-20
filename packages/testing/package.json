@@ -2,6 +2,9 @@
   "name": "@inquirer/testing",
   "type": "module",
   "version": "0.0.5-alpha.0",
+  "engines": {
+    "node": ">=14.18.0"
+  },
   "description": "Inquirer testing utilities",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

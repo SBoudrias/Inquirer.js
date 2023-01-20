@@ -1,22 +1,20 @@
 {
-  "extends": ["xo", "prettier"],
+  "root": true,
+  "extends": ["xo", "prettier", "plugin:n/recommended-module"],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "node", "unicorn", "prettier"],
+  "plugins": ["@typescript-eslint", "unicorn", "prettier"],
   "env": {
     "node": true,
     "es2022": true
   },
   "parserOptions": {
-    "ecmaVersion": "latest",
+    "ecmaVersion": 2020,
     "sourceType": "module"
   },
   "rules": {
     "default-param-last": "off",
     "padding-line-between-statements": "off",
     "no-eq-null": "off",
-    "node/no-extraneous-import": ["error", {
-      "allowModules": ["@jest/globals"]
-    }],
     "eqeqeq": [
       "error",
       "always",
@@ -36,14 +34,6 @@
         "no-undef": "off",
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "error"
-      }
-    },
-    {
-      "files": ["*.js"],
-      "rules": {
-        "node/file-extension-in-import": "error",
-        "node/no-missing-import": "error",
-        "node/no-extraneous-import": "error"
       }
     },
     {

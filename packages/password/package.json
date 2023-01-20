@@ -2,6 +2,9 @@
   "name": "@inquirer/password",
   "type": "module",
   "version": "0.0.28-alpha.0",
+  "engines": {
+    "node": ">=14.18.0"
+  },
   "description": "Inquirer password prompt",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

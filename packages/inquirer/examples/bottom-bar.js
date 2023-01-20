@@ -14,5 +14,6 @@ const cmd = spawn(cmdify('npm'), ['-g', 'install', 'inquirer'], { stdio: 'pipe' 
 cmd.stdout.pipe(ui.log);
 cmd.on('close', () => {
   ui.updateBottomBar('Installation done!\n');
+  // eslint-disable-next-line n/no-process-exit
   process.exit();
 });

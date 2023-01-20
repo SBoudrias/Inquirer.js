@@ -2,6 +2,9 @@
   "name": "@inquirer/core",
   "type": "module",
   "version": "0.0.30-alpha.0",
+  "engines": {
+    "node": ">=14.18.0"
+  },
   "description": "Core Inquirer prompt API",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -66,7 +69,8 @@
     "wrap-ansi": "^8.0.1"
   },
   "devDependencies": {
-    "@inquirer/testing": "^0.0.5-alpha.0"
+    "@inquirer/testing": "^0.0.5-alpha.0",
+    "@jest/globals": "^29.3.0"
   },
   "scripts": {
     "tsc": "tsc"

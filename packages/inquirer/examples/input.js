@@ -3,7 +3,6 @@
  */
 
 import inquirer from '../lib/inquirer.js';
-// eslint-disable-next-line node/no-missing-import
 import chalkPipe from 'chalk-pipe';
 
 const questions = [
