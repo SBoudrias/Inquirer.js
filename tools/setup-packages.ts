@@ -43,16 +43,63 @@ paths.forEach(async (pkgPath) => {
     pkg.scripts = pkg.scripts ?? {};
     pkg.scripts.tsc = 'tsc';
 
-    const tsConfig = {
-      extends: path.relative(dir, path.join(__dirname, '../tsconfig.json')),
-      compilerOptions: {
-        outDir: './dist',
+    // If the package supports Typescript, then apply the configs.
+    pkg.exports = {
+      '.': {
+        import: {
+          types: './dist/esm/types/index.d.ts',
+          default: './dist/esm/index.mjs',
+        },
+        require: {
+          types: './dist/cjs/types/index.d.ts',
+          default: './dist/cjs/index.js',
+        },
       },
-      include: ['./src'],
     };
+
+    pkg.main = './dist/cjs/index.js';
+    pkg.files = ['dist/**/*'];
+    delete pkg.typings;
+    delete pkg.type;
+    pkg.scripts = {
+      tsc: 'yarn run tsc:esm && yarn run tsc:cjs',
+      'tsc:esm': 'tsc -p ./tsconfig.esm.json && mv dist/esm/index.js dist/esm/index.mjs',
+      'tsc:cjs': 'tsc -p ./tsconfig.cjs.json',
+    };
+
+    // Set CJS tsconfig
+    const cjsTsconfig = {
+      extends: '../../tsconfig.json',
+      compilerOptions: {
+        lib: ['ES6'],
+        target: 'ES6',
+        module: 'CommonJS',
+        moduleResolution: 'Node',
+        outDir: 'dist/cjs',
+        declarationDir: 'dist/cjs/types',
+      },
+    };
+
+    // Set ESM tsconfig
+    const esmTsconfig = {
+      extends: '../../tsconfig.json',
+      compilerOptions: {
+        lib: ['ES2022'],
+        target: 'ES2022',
+        module: 'ESNext',
+        moduleResolution: 'NodeNext',
+        outDir: 'dist/esm',
+        declarationDir: 'dist/esm/types',
+      },
+    };
+
     fs.promises.writeFile(
-      path.join(dir, 'tsconfig.json'),
-      JSON.stringify(tsConfig, null, 2)
+      path.join(dir, 'tsconfig.cjs.json'),
+      JSON.stringify(cjsTsconfig, null, 2)
+    );
+    fs.promises.writeFile(
+      path.join(dir, 'tsconfig.esm.json'),
+      JSON.stringify(esmTsconfig, null, 2)
     );
   }
 
