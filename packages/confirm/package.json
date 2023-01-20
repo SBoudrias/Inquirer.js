@@ -57,7 +57,7 @@
   "dependencies": {
     "@inquirer/core": "^0.0.30-alpha.0",
     "@inquirer/input": "^0.0.28-alpha.0",
-    "chalk": "^5.1.2"
+    "chalk": "^5.2.0"
   },
   "scripts": {
     "tsc": "tsc"
