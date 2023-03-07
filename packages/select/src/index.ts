@@ -17,7 +17,12 @@ import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
 
 type SelectConfig = AsyncPromptConfig & {
-  choices: { value: string; name?: string; description?: string; disabled?: boolean }[];
+  choices: {
+    value: string;
+    name?: string;
+    description?: string;
+    disabled?: boolean | string;
+  }[];
   pageSize?: number;
 };
 
@@ -79,7 +84,9 @@ export default createPrompt<string, SelectConfig>((config, done) => {
     .map(({ name, value, disabled }, index) => {
       const line = name || value;
       if (disabled) {
-        return chalk.dim(`- ${line} (disabled)`);
+        return chalk.dim(
+          `- ${line} (${typeof disabled === 'string' ? disabled : 'disabled'})`
+        );
       }
 
       if (index === cursorPosition) {
