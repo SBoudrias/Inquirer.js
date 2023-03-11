@@ -40,8 +40,8 @@ paths.forEach(async (pkgPath) => {
   }
 
   if (isTS) {
+    delete pkg.type;
     pkg.scripts = pkg.scripts ?? {};
-    pkg.scripts.tsc = 'tsc';
 
     // If the package supports Typescript, then apply the configs.
     pkg.exports = {
@@ -57,10 +57,10 @@ paths.forEach(async (pkgPath) => {
       },
     };
 
-    pkg.main = './dist/cjs/index.js';
+    pkg.main = pkg.exports['.'].require.default;
+    pkg.typings = pkg.exports['.'].require.types;
     pkg.files = ['dist/**/*'];
-    delete pkg.typings;
-    delete pkg.type;
+
     pkg.scripts = {
       clean: 'rm -rf dist',
       tsc: 'yarn run clean && yarn run tsc:esm && yarn run tsc:cjs',
