@@ -73,9 +73,8 @@ paths.forEach(async (pkgPath) => {
       extends: '../../tsconfig.json',
       compilerOptions: {
         lib: ['ES6'],
-        target: 'ES6',
-        module: 'CommonJS',
-        moduleResolution: 'Node',
+        target: 'es6',
+        moduleResolution: 'node',
         outDir: 'dist/cjs',
         declarationDir: 'dist/cjs/types',
       },
@@ -85,10 +84,9 @@ paths.forEach(async (pkgPath) => {
     const esmTsconfig = {
       extends: '../../tsconfig.json',
       compilerOptions: {
-        lib: ['ES2022'],
-        target: 'ES2022',
-        module: 'ESNext',
-        moduleResolution: 'NodeNext',
+        lib: ['ESNext'],
+        target: 'es2022',
+        moduleResolution: 'nodenext',
         outDir: 'dist/esm',
         declarationDir: 'dist/esm/types',
       },
