@@ -51,7 +51,7 @@ paths.forEach(async (pkgPath) => {
           default: './dist/esm/index.mjs',
         },
         require: {
-          types: './dist/cjs/types/index.d.ts',
+          types: './dist/cjs/types/index.d.mts',
           default: './dist/cjs/index.js',
         },
       },
@@ -65,8 +65,7 @@ paths.forEach(async (pkgPath) => {
       clean: 'rm -rf dist',
       tsc: 'yarn run clean && yarn run tsc:esm && yarn run tsc:cjs',
       'tsc:esm': 'tsc -p ./tsconfig.esm.json',
-      'tsc:cjs':
-        'tsc -p ./tsconfig.cjs.json && mv dist/cjs/index.mjs dist/cjs/index.js && mv dist/cjs/types/index.d.mts dist/cjs/types/index.d.ts',
+      'tsc:cjs': 'tsc -p ./tsconfig.cjs.json && mv dist/cjs/index.mjs dist/cjs/index.js',
     };
 
     // Set CJS tsconfig
