@@ -1,12 +1,11 @@
 {
   "name": "@inquirer/select",
-  "type": "module",
   "version": "0.0.29-alpha.0",
   "description": "Inquirer select/list prompt",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "typings": "./dist/cjs/types/index.d.mts",
   "files": [
-    "dist/"
+    "dist/**/*"
   ],
   "repository": {
     "type": "git",
@@ -62,12 +61,28 @@
     "figures": "^5.0.0"
   },
   "scripts": {
-    "tsc": "tsc"
+    "tsc": "yarn run clean && yarn run tsc:esm && yarn run tsc:cjs",
+    "clean": "rm -rf dist",
+    "tsc:esm": "tsc -p ./tsconfig.esm.json",
+    "tsc:cjs": "tsc -p ./tsconfig.cjs.json && yarn run fix-ext",
+    "fix-ext": "ts-node ../../tools/rename-ext.ts"
   },
   "publishConfig": {
     "access": "public"
   },
   "engines": {
     "node": ">=14.18.0"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/types/index.d.mts",
+        "default": "./dist/esm/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/types/index.d.mts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
   }
 }

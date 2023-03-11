@@ -76,10 +76,9 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
     "publish": "lerna run tsc && lerna publish",
-    "pretest": "lerna run tsc && eslint . --ext .js --ext .ts",
+    "pretest": "lerna run tsc && eslint . --ext .js --ext .ts --ext .mts",
     "jest": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test": "yarn jest && lerna exec npm test --scope inquirer",
-    "ts-node": "lerna run tsc && ts-node"
+    "test": "yarn jest && lerna exec npm test --scope inquirer"
   },
   "repository": {
     "type": "git",
@@ -95,29 +94,9 @@
       "prettier --write",
       "git add"
     ],
-    "*.[jt]sx?": [
+    "*.m?[jt]sx?": [
       "eslint --fix",
       "git add"
-    ]
-  },
-  "jest": {
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true,
-    "transform": {
-      "\\.[jt]sx?$": [
-        "ts-jest",
-        {
-          "useESM": true
-        }
-      ]
-    },
-    "moduleNameMapper": {
-      "(.+)\\.js": "$1",
-      "#ansi-styles": "ansi-styles",
-      "#supports-color": "supports-color"
-    },
-    "extensionsToTreatAsEsm": [
-      ".ts"
     ]
   }
 }

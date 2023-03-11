@@ -28,16 +28,17 @@
   },
   "overrides": [
     {
-      "files": ["*.ts"],
+      "files": ["*.ts", "*.mts"],
       "rules": {
         // Disabled per typescript-eslint recommendation: https://github.com/typescript-eslint/typescript-eslint/blob/e26e43ffba96f6d46198b22f1c8dd5c814db2652/docs/getting-started/linting/FAQ.md#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
         "no-undef": "off",
         "no-unused-vars": "off",
+        "n/no-missing-import": "off",
         "@typescript-eslint/no-unused-vars": "error"
       }
     },
     {
-      "files": ["test.js", "*.test.js", "**/test/**"],
+      "files": ["test.m?[tj]s", "*.test.m?[tj]s", "**/test/**"],
       "env": {
         "mocha": true,
         "jest": true

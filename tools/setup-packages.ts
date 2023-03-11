@@ -40,19 +40,68 @@ paths.forEach(async (pkgPath) => {
   }
 
   if (isTS) {
+    delete pkg.type;
     pkg.scripts = pkg.scripts ?? {};
-    pkg.scripts.tsc = 'tsc';
 
-    const tsConfig = {
-      extends: path.relative(dir, path.join(__dirname, '../tsconfig.json')),
-      compilerOptions: {
-        outDir: './dist',
+    // If the package supports Typescript, then apply the configs.
+    pkg.exports = {
+      '.': {
+        import: {
+          types: './dist/esm/types/index.d.mts',
+          default: './dist/esm/index.mjs',
+        },
+        require: {
+          types: './dist/cjs/types/index.d.mts',
+          default: './dist/cjs/index.js',
+        },
       },
-      include: ['./src'],
     };
+
+    pkg.main = pkg.exports['.'].require.default;
+    pkg.typings = pkg.exports['.'].require.types;
+    pkg.files = ['dist/**/*'];
+
+    pkg.scripts = {
+      tsc: 'yarn run clean && yarn run tsc:esm && yarn run tsc:cjs',
+      clean: 'rm -rf dist',
+      'tsc:esm': 'tsc -p ./tsconfig.esm.json',
+      'tsc:cjs': 'tsc -p ./tsconfig.cjs.json && yarn run fix-ext',
+      'fix-ext': 'ts-node ../../tools/rename-ext.ts',
+    };
+
+    // Set CJS tsconfig
+    const cjsTsconfig = {
+      extends: '../../tsconfig.json',
+      include: ['./src'],
+      compilerOptions: {
+        lib: ['ES6'],
+        target: 'es6',
+        moduleResolution: 'node',
+        outDir: 'dist/cjs',
+        declarationDir: 'dist/cjs/types',
+      },
+    };
+
+    // Set ESM tsconfig
+    const esmTsconfig = {
+      extends: '../../tsconfig.json',
+      include: ['./src'],
+      compilerOptions: {
+        lib: ['ESNext'],
+        target: 'es2022',
+        moduleResolution: 'nodenext',
+        outDir: 'dist/esm',
+        declarationDir: 'dist/esm/types',
+      },
+    };
+
     fs.promises.writeFile(
-      path.join(dir, 'tsconfig.json'),
-      JSON.stringify(tsConfig, null, 2)
+      path.join(dir, 'tsconfig.cjs.json'),
+      JSON.stringify(cjsTsconfig, null, 2)
+    );
+    fs.promises.writeFile(
+      path.join(dir, 'tsconfig.esm.json'),
+      JSON.stringify(esmTsconfig, null, 2)
     );
   }
 

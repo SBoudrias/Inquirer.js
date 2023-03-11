@@ -1,24 +1,20 @@
-import select from './src/index.js';
+import checkbox from './src/index.mjs';
 
 (async () => {
   let answer;
 
-  answer = await select({
+  answer = await checkbox({
     message: 'Select a package manager',
     choices: [
-      {
-        name: 'npm',
-        value: 'npm',
-        description: 'npm is the most popular package manager',
-      },
-      { name: 'yarn', value: 'yarn', description: 'yarn is an awesome package manager' },
+      { name: 'npm', value: 'npm' },
+      { name: 'yarn', value: 'yarn' },
       { name: 'jspm', value: 'jspm', disabled: true },
     ],
   });
   console.log('Answer:', answer);
 
-  answer = await select({
-    message: 'Select your favorite letter',
+  answer = await checkbox({
+    message: 'Select your favorite letters',
     choices: [
       { value: 'A' },
       { value: 'B' },
@@ -34,7 +30,7 @@ import select from './src/index.js';
       { value: 'L' },
       { value: 'M' },
       { value: 'N' },
-      { value: 'O', description: 'Letter O, not number 0' },
+      { value: 'O' },
       { value: 'P' },
       { value: 'Q' },
       { value: 'R' },

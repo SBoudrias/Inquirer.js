@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import input from './src/index.js';
+import input from './src/index.mjs';
 
 const hexRegEx = /([0-9]|[a-f])/gim;
 const isHex = (value: string) =>

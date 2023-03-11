@@ -1,4 +1,4 @@
-import confirm from './src/index.js';
+import confirm from './src/index.mjs';
 
 (async () => {
   console.log(

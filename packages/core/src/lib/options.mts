@@ -1,4 +1,4 @@
-import type { AsyncPromptConfig, ResolvedPromptConfig } from '../index.js';
+import type { AsyncPromptConfig, ResolvedPromptConfig } from '../index.mjs';
 
 export async function getPromptConfig<In extends AsyncPromptConfig>(
   option: In
