@@ -31,7 +31,7 @@ type Config<Value> = {
 };
 
 export default createPrompt(
-  <Value>(config: Config<Value>, done: (value: Array<Value>) => void): string => {
+  <Value,>(config: Config<Value>, done: (value: Array<Value>) => void): string => {
     const { prefix = usePrefix(), instructions } = config;
     const paginator = useRef(new Paginator()).current;
 
