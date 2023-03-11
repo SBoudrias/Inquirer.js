@@ -1,4 +1,4 @@
-import password from './src/index.js';
+import password from './src/index.mjs';
 
 (async () => {
   let answer: string;
