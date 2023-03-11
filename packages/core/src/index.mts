@@ -1,12 +1,12 @@
 import readline from 'node:readline';
 import type { Prompt } from '@inquirer/type';
 import MuteStream from 'mute-stream';
-import ScreenManager from './lib/screen-manager.js';
-import { getPromptConfig } from './lib/options.js';
+import ScreenManager from './lib/screen-manager.mjs';
+import { getPromptConfig } from './lib/options.mjs';
 
-export { usePrefix } from './lib/prefix.js';
-export * from './lib/key.js';
-export * from './lib/Paginator.js';
+export { usePrefix } from './lib/prefix.mjs';
+export * from './lib/key.mjs';
+export * from './lib/Paginator.mjs';
 
 export type InquirerReadline = readline.ReadLine & {
   output: MuteStream;

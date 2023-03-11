@@ -10,7 +10,7 @@ import {
   isUpKey,
   isEnterKey,
   type KeypressEvent,
-} from './src/index.js';
+} from './src/index.mjs';
 
 describe('createPrompt()', () => {
   it('handle async function message', async () => {

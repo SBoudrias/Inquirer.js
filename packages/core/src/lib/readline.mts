@@ -1,5 +1,5 @@
 import ansiEscapes from 'ansi-escapes';
-import type { InquirerReadline } from '../index.js';
+import type { InquirerReadline } from '../index.mjs';
 
 /**
  * Move cursor left by `x`

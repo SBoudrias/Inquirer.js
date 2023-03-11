@@ -2,9 +2,9 @@ import cliWidth from 'cli-width';
 import stripAnsi from 'strip-ansi';
 import stringWidth from 'string-width';
 import ansiEscapes from 'ansi-escapes';
-import * as util from './readline.js';
-import { breakLines } from './utils.js';
-import { InquirerReadline } from '../index.js';
+import * as util from './readline.mjs';
+import { breakLines } from './utils.mjs';
+import { InquirerReadline } from '../index.mjs';
 
 const height = (content: string): number => content.split('\n').length;
 const lastLine = (content: string): string => content.split('\n').pop() ?? '';
