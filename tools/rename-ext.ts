@@ -12,5 +12,6 @@ paths.forEach(async (pathname) => {
     ext: '.js',
   });
 
+  console.log(`Renaming ${pathname} to ${newPath}...`);
   await fs.promises.rename(pathname, newPath);
 });
