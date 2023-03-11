@@ -88,6 +88,6 @@
     "string-width": "^5.1.2",
     "strip-ansi": "^7.0.1",
     "through": "^2.3.6",
-    "wrap-ansi": "^8.0.1"
+    "wrap-ansi": "^8.1.0"
   }
 }

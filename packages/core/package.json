@@ -68,11 +68,11 @@
     "run-async": "^2.3.0",
     "string-width": "^5.1.2",
     "strip-ansi": "^7.0.1",
-    "wrap-ansi": "^8.0.1"
+    "wrap-ansi": "^8.1.0"
   },
   "devDependencies": {
     "@inquirer/testing": "^0.0.5-alpha.0",
-    "@jest/globals": "^29.3.0"
+    "@jest/globals": "^29.5.0"
   },
   "scripts": {
     "tsc": "tsc"
