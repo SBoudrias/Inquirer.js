@@ -62,8 +62,9 @@ paths.forEach(async (pkgPath) => {
     delete pkg.typings;
     delete pkg.type;
     pkg.scripts = {
-      tsc: 'yarn run tsc:esm && yarn run tsc:cjs',
-      'tsc:esm': 'tsc -p ./tsconfig.esm.json && mv dist/esm/index.js dist/esm/index.mjs',
+      clean: 'rm -rf dist',
+      tsc: 'yarn run clean && yarn run tsc:esm && yarn run tsc:cjs',
+      'tsc:esm': 'tsc -p ./tsconfig.esm.json',
       'tsc:cjs': 'tsc -p ./tsconfig.cjs.json',
     };
 
