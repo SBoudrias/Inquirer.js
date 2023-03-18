@@ -85,7 +85,7 @@ export default createPrompt<string, SelectConfig>((config, done) => {
       const line = name || value;
       if (disabled) {
         return chalk.dim(
-          `- ${line} (${typeof disabled === 'string' ? disabled : 'disabled'})`
+          `- ${line} ${typeof disabled === 'string' ? disabled : '(disabled)'}`
         );
       }
 
