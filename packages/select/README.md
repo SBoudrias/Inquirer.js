@@ -35,6 +35,11 @@ const answer = await select({
       value: 'jspm',
       disabled: true,
     },
+    {
+      name: 'pnpm',
+      value: 'pnpm',
+      disabled: '(pnpm is not available)',
+    },
   ],
 });
 ```
@@ -44,7 +49,7 @@ const answer = await select({
 | Property | Type      | Required | Description                    |
 | -------- | --------- | -------- | ------------------------------ |
 | message  | `string`  | yes      | The question to ask            |
-| choices  | `Array<{ value: string, name?: string, description?: string, disabled?: boolean }>` | yes       | List of the available choices. The `value` will be returned as the answer, and used as display if no `name` is defined. Choices who're `disabled` will be displayed, but not selectable. The `description` will be displayed under the prompt when the cursor land over the choice. |
+| choices  | `Array<{ value: string, name?: string, description?: string, disabled?: boolean \| string }>` | yes       | List of the available choices. The `value` will be returned as the answer, and used as display if no `name` is defined. Choices who're `disabled` will be displayed, but not selectable. The `description` will be displayed under the prompt when the cursor land over the choice. |
 | pageSize  | `number`  | no      | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once. |
 
 # License

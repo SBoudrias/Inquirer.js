@@ -13,6 +13,11 @@ import select from './src/index.mjs';
       },
       { name: 'yarn', value: 'yarn', description: 'yarn is an awesome package manager' },
       { name: 'jspm', value: 'jspm', disabled: true },
+      {
+        name: 'pnpm',
+        value: 'pnpm',
+        disabled: '(pnpm is not available)',
+      },
     ],
   });
   console.log('Answer:', answer);
