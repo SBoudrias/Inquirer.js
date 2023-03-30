@@ -9,6 +9,11 @@ import checkbox from './src/index.mjs';
       { name: 'npm', value: 'npm' },
       { name: 'yarn', value: 'yarn' },
       { name: 'jspm', value: 'jspm', disabled: true },
+      {
+        name: 'pnpm',
+        value: 'pnpm',
+        disabled: '(pnpm is not available)',
+      },
     ],
   });
   console.log('Answer:', answer);
