@@ -1,6 +1,4 @@
-import isPlainObject from 'lodash/isPlainObject.js';
-import get from 'lodash/get.js';
-import set from 'lodash/set.js';
+import { isPlainObject, get, set } from 'purekit';
 
 const _ = {
   isPlainObject,

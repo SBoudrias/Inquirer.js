@@ -1,5 +1,4 @@
-import defaults from 'lodash/defaults.js';
-import clone from 'lodash/clone.js';
+import { defaults, clone } from 'purekit';
 /**
  * Base prompt implementation
  * Should be extended by prompt types.

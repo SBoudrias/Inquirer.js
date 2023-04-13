@@ -1,5 +1,10 @@
 import assert from 'node:assert';
-import _ from 'lodash';
+import { filter as _filter, map as _map } from 'purekit';
+
+const _ = {
+  filter: _filter,
+  map: _map,
+};
 
 import Separator from './separator.js';
 import Choice from './choice.js';
