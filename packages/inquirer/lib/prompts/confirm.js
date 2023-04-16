@@ -24,6 +24,9 @@ export default class ConfirmPrompt extends Base {
       },
     });
 
+    // Attach the transform function if provided
+    if (questions.transform != null) Object.assign(this.opt, questions.transform);
+
     if (this.opt.default != null) {
       rawDefault = Boolean(this.opt.default);
     }
@@ -78,7 +81,9 @@ export default class ConfirmPrompt extends Base {
   onEnd(input) {
     this.status = 'answered';
 
-    const output = this.opt.filter(input);
+    let output = this.opt.filter(input);
+    const transformedOutput = this.opt.transform(output);
+    if (transformedOutput !== output) output = transformedOutput;
     this.render(output);
 
     this.screen.done();

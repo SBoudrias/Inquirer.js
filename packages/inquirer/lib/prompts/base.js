@@ -32,6 +32,7 @@ export default class Prompt {
       when: () => true,
       suffix: '',
       prefix: chalk.green('?'),
+      transform: (val) => val,
     });
 
     // Make sure name is present
