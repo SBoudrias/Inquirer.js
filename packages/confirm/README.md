@@ -26,6 +26,7 @@ const answer = await confirm({ message: 'Enter your name' });
 | -------- | --------- | -------- | ------------------------------ |
 | message  | `string`  | yes      | The question to ask            |
 | default  | `boolean` | no       | Default answer (true or false) |
+| transformer | `(boolean) => string`                  | no       | Transform/Format the raw value entered by the user. The function should return the transformed output for both the boolean values: `true` (positive confirmation) and `false` (negative confirmation) by the user |
 
 # License
 

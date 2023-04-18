@@ -24,9 +24,6 @@ export default class ConfirmPrompt extends Base {
       },
     });
 
-    // Attach the transform function if provided
-    if (questions.transform != null) Object.assign(this.opt, questions.transform);
-
     if (this.opt.default != null) {
       rawDefault = Boolean(this.opt.default);
     }
@@ -65,6 +62,8 @@ export default class ConfirmPrompt extends Base {
 
     if (typeof answer === 'boolean') {
       message += chalk.cyan(answer ? 'Yes' : 'No');
+    } else if (answer) {
+      message += answer;
     } else {
       message += this.rl.line;
     }
@@ -82,8 +81,9 @@ export default class ConfirmPrompt extends Base {
     this.status = 'answered';
 
     let output = this.opt.filter(input);
-    const transformedOutput = this.opt.transform(output);
-    if (transformedOutput !== output) output = transformedOutput;
+    if (this.opt.transformer) {
+      output = this.opt.transformer(output);
+    }
     this.render(output);
 
     this.screen.done();

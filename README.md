@@ -269,7 +269,7 @@ Choices whose property `disabled` is truthy will be unselectable. If `disabled` 
 
 #### Confirm - `{type: 'confirm'}`
 
-Take `type`, `name`, `message`, [`default`] properties. `default` is expected to be a boolean if used.
+Take `type`, `name`, `message`, `transformer`, [`default`] properties. `default` is expected to be a boolean if used.
 
 ![Confirm prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/confirm.svg)
 

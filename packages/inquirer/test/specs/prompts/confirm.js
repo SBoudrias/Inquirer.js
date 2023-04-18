@@ -88,7 +88,7 @@ describe('`confirm` prompt', () => {
   });
 
   it('should tranform the output based on the boolean value', function (done) {
-    this.fixture.transform = (value) => (value ? '👍' : '👎');
+    this.fixture.transformer = (value) => (value ? '👍' : '👎');
     const confirmOutput = new Confirm(this.fixture, this.rl);
     confirmOutput
       .run()
