@@ -73,11 +73,11 @@ See more examples:
 
 ## API
 
-### `createPrompt(config, context)`
+### `createPrompt(viewFn)`
 
-The `createPrompt` function returns an asynchronous function that returns a promise that'll resolve to the valid answer a user submit. This prompt function takes the prompt configuration as its first argument (this is defined by each prompt), and the context options as a second argument.
+The `createPrompt` function returns an asynchronous function that returns a promise resolving to the valid answer a user submit. This prompt function takes the prompt configuration as its first argument (this is defined by each prompt), and the context options as a second argument.
 
-The context options are:
+The prompt configuration is unique to each prompt. The context options are:
 
 | Property          | Type                    | Required | Description                                                  |
 | ----------------- | ----------------------- | -------- | ------------------------------------------------------------ |
