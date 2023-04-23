@@ -1,0 +1,89 @@
+{
+  "name": "@inquirer/prompts",
+  "version": "0.1.0",
+  "description": "Inquirer prompts, combined in a single package",
+  "main": "./dist/cjs/index.js",
+  "typings": "./dist/cjs/types/index.d.mts",
+  "files": [
+    "dist/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
+  "keywords": [
+    "answer",
+    "answers",
+    "ask",
+    "base",
+    "cli",
+    "command",
+    "command-line",
+    "confirm",
+    "enquirer",
+    "generate",
+    "generator",
+    "hyper",
+    "input",
+    "inquire",
+    "inquirer",
+    "interface",
+    "iterm",
+    "javascript",
+    "menu",
+    "node",
+    "nodejs",
+    "prompt",
+    "promptly",
+    "prompts",
+    "question",
+    "readline",
+    "scaffold",
+    "scaffolder",
+    "scaffolding",
+    "stdin",
+    "stdout",
+    "terminal",
+    "tty",
+    "ui",
+    "yeoman",
+    "yo",
+    "zsh",
+    "types",
+    "typescript"
+  ],
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "license": "MIT",
+  "scripts": {
+    "tsc": "yarn run clean && yarn run tsc:esm && yarn run tsc:cjs",
+    "clean": "rm -rf dist",
+    "tsc:esm": "tsc -p ./tsconfig.esm.json",
+    "tsc:cjs": "tsc -p ./tsconfig.cjs.json && yarn run fix-ext",
+    "fix-ext": "ts-node ../../tools/rename-ext.ts"
+  },
+  "engines": {
+    "node": ">=14.18.0"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/types/index.d.mts",
+        "default": "./dist/esm/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/types/index.d.mts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "dependencies": {
+    "@inquirer/checkbox": "^0.1.0",
+    "@inquirer/confirm": "^0.1.0",
+    "@inquirer/editor": "^0.1.0",
+    "@inquirer/expand": "^0.1.0",
+    "@inquirer/input": "^0.1.0",
+    "@inquirer/password": "^0.1.0",
+    "@inquirer/rawlist": "^0.1.0",
+    "@inquirer/select": "^0.1.0"
+  }
+}

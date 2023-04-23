@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "ESNext"
+    ],
+    "target": "es2022",
+    "moduleResolution": "nodenext",
+    "outDir": "dist/esm",
+    "declarationDir": "dist/esm/types"
+  }
+}
