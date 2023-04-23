@@ -179,18 +179,22 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
       };
 
       const workLoop = () => {
-        index = 0;
-        hooksEffect.length = 0;
-        handleChange = () => workLoop();
+        try {
+          index = 0;
+          hooksEffect.length = 0;
+          handleChange = () => workLoop();
 
-        const nextView = view(resolvedConfig, done);
-        for (const effect of hooksEffect) {
-          effect();
+          const nextView = view(resolvedConfig, done);
+          for (const effect of hooksEffect) {
+            effect();
+          }
+
+          const [content, bottomContent] =
+            typeof nextView === 'string' ? [nextView] : nextView;
+          screen.render(content, bottomContent);
+        } catch (err) {
+          reject(err);
         }
-
-        const [content, bottomContent] =
-          typeof nextView === 'string' ? [nextView] : nextView;
-        screen.render(content, bottomContent);
       };
 
       workLoop();
