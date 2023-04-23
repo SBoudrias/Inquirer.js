@@ -30,6 +30,16 @@ const answer = await input({ message: 'Enter your name' });
 
 # Prompts
 
+## [Input](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/input)
+
+![Input prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/input.svg)
+
+```js
+import { input } from '@inquirer/prompts';
+```
+
+[See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/input) for usage example and options documentation.
+
 ## [Select](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/select)
 
 ![Select prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/list.svg)
@@ -39,27 +49,6 @@ import { select } from '@inquirer/prompts';
 ```
 
 [See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/select) for usage example and options documentation.
-
-## [Raw List](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/rawlist)
-
-![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
-
-```js
-import { rawlist } from '@inquirer/prompts';
-```
-
-[See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/rawlist) for usage example and options documentation.
-
-## [Expand](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/expand)
-
-![Expand prompt closed](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-y.svg)
-![Expand prompt expanded](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-d.svg)
-
-```js
-import { expand } from '@inquirer/prompts';
-```
-
-[See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/expand) for usage example and options documentation.
 
 ## [Checkbox](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/checkbox)
 
@@ -81,16 +70,6 @@ import { confirm } from '@inquirer/prompts';
 
 [See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/confirm) for usage example and options documentation.
 
-## [Input](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/input)
-
-![Input prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/input.svg)
-
-```js
-import { input } from '@inquirer/prompts';
-```
-
-[See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/input) for usage example and options documentation.
-
 ## [Password](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/password)
 
 ![Password prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/password.svg)
@@ -101,6 +80,17 @@ import { password } from '@inquirer/prompts';
 
 [See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/password) for usage example and options documentation.
 
+## [Expand](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/expand)
+
+![Expand prompt closed](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-y.svg)
+![Expand prompt expanded](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-d.svg)
+
+```js
+import { expand } from '@inquirer/prompts';
+```
+
+[See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/expand) for usage example and options documentation.
+
 ## [Editor](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/editor)
 
 Launches an instance of the users preferred editor on a temporary file. Once the user exits their editor, the content of the temporary file is read as the answer. The editor used is determined by reading the $VISUAL or $EDITOR environment variables. If neither of those are present, the OS default is used (notepad on Windows, vim on Mac or Linux.)
@@ -110,6 +100,16 @@ import { editor } from '@inquirer/prompts';
 ```
 
 [See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/editor) for usage example and options documentation.
+
+## [Raw List](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/rawlist)
+
+![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
+
+```js
+import { rawlist } from '@inquirer/prompts';
+```
+
+[See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/rawlist) for usage example and options documentation.
 
 # Create your own prompts
 
