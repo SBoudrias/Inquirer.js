@@ -12,6 +12,7 @@
     "sourceType": "module"
   },
   "rules": {
+    "capitalized-comments": "off",
     "default-param-last": "off",
     "padding-line-between-statements": "off",
     "no-eq-null": "off",
