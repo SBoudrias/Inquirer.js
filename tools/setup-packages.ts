@@ -97,13 +97,13 @@ paths.forEach(async (pkgPath) => {
 
     fs.promises.writeFile(
       path.join(dir, 'tsconfig.cjs.json'),
-      JSON.stringify(cjsTsconfig, null, 2)
+      JSON.stringify(cjsTsconfig, null, 2) + '\n'
     );
     fs.promises.writeFile(
       path.join(dir, 'tsconfig.esm.json'),
-      JSON.stringify(esmTsconfig, null, 2)
+      JSON.stringify(esmTsconfig, null, 2) + '\n'
     );
   }
 
-  fs.promises.writeFile(pkgPath, JSON.stringify(pkg, null, 2));
+  fs.promises.writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
 });
