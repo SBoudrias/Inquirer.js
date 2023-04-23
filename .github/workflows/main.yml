@@ -37,6 +37,6 @@ jobs:
         run: yarn jest
 
       - name: Upload code coverage
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
-          file: ./coverage/clover.xml
+          file: ./coverage/clover.xml,./coverage/nyc-report.lcov
