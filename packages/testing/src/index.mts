@@ -5,6 +5,27 @@ import type { Prompt } from '@inquirer/type';
 
 const logStore: Array<Parameters<typeof console.log>> = [];
 
+class BufferedStream extends Stream.Writable {
+  #_chunks: Array<string> = [];
+
+  override _write(chunk: Buffer, _encoding: string, callback: () => void) {
+    const str = chunk.toString();
+
+    // Stripping the ANSI codes here because Inquirer will push commands ANSI (like cursor move.)
+    // This is probably fine since we don't care about those for testing; but this could become
+    // an issue if we ever want to test for those.
+    if (stripAnsi(str).trim().length > 0) {
+      this.#_chunks.push(chunk.toString());
+    }
+    callback();
+  }
+
+  getLastChunk(): string {
+    const lastChunk = this.#_chunks[this.#_chunks.length - 1];
+    return lastChunk ?? '';
+  }
+}
+
 beforeEach(() => {
   logStore.length = 0;
 });
@@ -23,23 +44,9 @@ export async function render<TestedPrompt extends Prompt<any, any>>(
   options?: Parameters<TestedPrompt>[1]
 ) {
   const input = new MuteStream();
+  input.unmute();
 
-  const buffer: Array<string> = [];
-  const data: Array<string> = [];
-  const output = new Stream.Writable({
-    write(chunk, _encoding, next) {
-      buffer.push(chunk.toString());
-      next();
-    },
-  });
-
-  const processScreen = () => {
-    if (buffer.length > 0) {
-      const prevScreen = buffer.join('');
-      data.push(stripAnsi(prevScreen));
-      buffer.length = 0;
-    }
-  };
+  const output = new BufferedStream();
 
   const answer = prompt(props, { input, output, ...options });
 
@@ -49,8 +56,13 @@ export async function render<TestedPrompt extends Prompt<any, any>>(
 
   const events = {
     keypress(name: string) {
-      processScreen();
       input.emit('keypress', null, { name });
+    },
+    type(text: string) {
+      input.write(text);
+      for (const char of text) {
+        input.emit('keypress', null, { name: char });
+      }
     },
   };
 
@@ -58,9 +70,9 @@ export async function render<TestedPrompt extends Prompt<any, any>>(
     answer,
     input,
     events,
-    getScreen(): string {
-      processScreen();
-      return data[data.length - 1] ?? '';
+    getScreen({ raw }: { raw?: boolean } = {}): string {
+      const lastScreen = output.getLastChunk();
+      return raw ? lastScreen : stripAnsi(lastScreen).trim();
     },
   };
 }
