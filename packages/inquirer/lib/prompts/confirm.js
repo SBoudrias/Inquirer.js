@@ -62,6 +62,8 @@ export default class ConfirmPrompt extends Base {
 
     if (typeof answer === 'boolean') {
       message += chalk.cyan(answer ? 'Yes' : 'No');
+    } else if (answer) {
+      message += answer;
     } else {
       message += this.rl.line;
     }
@@ -78,7 +80,10 @@ export default class ConfirmPrompt extends Base {
   onEnd(input) {
     this.status = 'answered';
 
-    const output = this.opt.filter(input);
+    let output = this.opt.filter(input);
+    if (this.opt.transformer) {
+      output = this.opt.transformer(output);
+    }
     this.render(output);
 
     this.screen.done();

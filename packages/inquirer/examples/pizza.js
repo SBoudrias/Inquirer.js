@@ -13,6 +13,7 @@ const questions = [
     name: 'toBeDelivered',
     message: 'Is this for delivery?',
     default: false,
+    transformer: (answer) => (answer ? '👍' : '👎'),
   },
   {
     type: 'input',

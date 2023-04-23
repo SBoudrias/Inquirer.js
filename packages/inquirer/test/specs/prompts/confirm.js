@@ -86,4 +86,18 @@ describe('`confirm` prompt', () => {
 
     this.rl.emit('line', 'bla bla foo');
   });
+
+  it('should tranform the output based on the boolean value', function (done) {
+    this.fixture.transformer = (value) => (value ? '👍' : '👎');
+    const confirmOutput = new Confirm(this.fixture, this.rl);
+    confirmOutput
+      .run()
+      .then((answer) => {
+        expect(answer).to.equal('👍');
+        done();
+      })
+      .catch((err) => console.log(err));
+
+    this.rl.emit('line', 'y');
+  });
 });
