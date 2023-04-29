@@ -183,5 +183,5 @@ If you created a cool prompt, [send us a PR adding it](https://github.com/SBoudr
 
 # License
 
-Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))
+Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
 Licensed under the MIT license.

@@ -57,5 +57,5 @@ You can refer to [the `@inquirer/input` prompt test suite](https://github.com/SB
 
 # License
 
-Copyright (c) 2022 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))
+Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
 Licensed under the MIT license.
