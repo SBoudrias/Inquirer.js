@@ -55,15 +55,10 @@
     "chai-string": "^1.5.0",
     "chalk-pipe": "^6.0.0",
     "cmdify": "^0.0.4",
-    "mocha": "^10.2.0",
     "mockery": "^2.1.0",
     "nyc": "^15.0.0",
     "sinon": "^15.0.4",
     "terminal-link": "^3.0.0"
-  },
-  "scripts": {
-    "test": "nyc mocha --es-module-specifier-resolution=node test/**/* -r ./test/before",
-    "posttest": "mkdir -p ../../coverage/ && nyc report --reporter=text-lcov > ../../coverage/nyc-report.lcov"
   },
   "repository": {
     "type": "git",

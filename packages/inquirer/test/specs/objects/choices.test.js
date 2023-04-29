@@ -1,3 +1,4 @@
+import { describe, it } from 'vitest';
 import { expect } from 'chai';
 
 import inquirer from '../../../lib/inquirer.js';

@@ -416,7 +416,7 @@ Please refer to the [GitHub releases section for the changelog](https://github.c
 <a name="contributing"></a>
 
 **Unit test**
-Unit test are written in [Mocha](https://mochajs.org/). Please add a unit test for every new feature or bug fix. `npm test` to run the test suite.
+Please add a unit test for every new feature or bug fix. `npm test` to run the test suite.
 
 **Documentation**
 Add documentation for every API change. Feel free to send typo fixes and better docs!

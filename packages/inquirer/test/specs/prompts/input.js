@@ -1,3 +1,4 @@
+import { describe, it, beforeEach } from 'vitest';
 import chai, { expect } from 'chai';
 import chaiString from 'chai-string';
 import ReadlineStub from '../../helpers/readline.js';

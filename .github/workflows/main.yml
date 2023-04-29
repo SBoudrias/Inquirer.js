@@ -31,12 +31,10 @@ jobs:
 
       - name: Eslint
         run: yarn eslint .
-      - name: Test inquirer package (current version)
-        run: yarn lerna exec npm test --scope inquirer
-      - name: Test monorepo packages (new version)
+      - name: Test packages
         run: yarn vitest --run --coverage
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v3
         with:
-          file: ./coverage/clover.xml,./coverage/nyc-report.lcov
+          file: ./coverage/clover.xml

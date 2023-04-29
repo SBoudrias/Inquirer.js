@@ -2,6 +2,7 @@
  * Test Prompt public APIs
  */
 
+import { beforeEach, describe, it } from 'vitest';
 import { expect } from 'chai';
 import fixtures from '../helpers/fixtures.js';
 import ReadlineStub from '../helpers/readline.js';
@@ -42,44 +43,46 @@ const prompts = [
 
 // Define tests
 const tests = {
-  filter() {
+  filter(ctx) {
     describe('filter API', () => {
-      it('should filter the user input', function (done) {
-        this.fixture.filter = function () {
-          return 'pass';
-        };
+      it('should filter the user input', () =>
+        new Promise((done) => {
+          ctx.fixture.filter = function () {
+            return 'pass';
+          };
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run().then((answer) => {
-          expect(answer).to.equal('pass');
-          done();
-        });
+          const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
+          prompt.run().then((answer) => {
+            expect(answer).to.equal('pass');
+            done();
+          });
 
-        this.rl.emit('line', '');
-      });
+          ctx.rl.emit('line', '');
+        }));
 
-      it('should allow filter function to be asynchronous', function (done) {
-        this.fixture.filter = function () {
-          const done = this.async();
-          setTimeout(() => {
-            done(null, 'pass');
-          }, 0);
-        };
+      it('should allow filter function to be asynchronous', () =>
+        new Promise((done) => {
+          ctx.fixture.filter = function () {
+            const done = this.async();
+            setTimeout(() => {
+              done(null, 'pass');
+            }, 0);
+          };
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run().then((answer) => {
-          expect(answer).to.equal('pass');
-          done();
-        });
+          const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
+          prompt.run().then((answer) => {
+            expect(answer).to.equal('pass');
+            done();
+          });
 
-        this.rl.emit('line', '');
-      });
+          ctx.rl.emit('line', '');
+        }));
 
-      it('should handle errors produced in async filters', function () {
+      it('should handle errors produced in async filters', () => {
         let called = 0;
-        const { rl } = this;
+        const { rl } = ctx;
 
-        this.fixture.filter = function () {
+        ctx.fixture.filter = function () {
           called++;
           const cb = this.async();
 
@@ -91,10 +94,10 @@ const tests = {
           return cb(new Error('fail'));
         };
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
+        const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         const promise = prompt.run();
 
-        this.rl.emit('line');
+        ctx.rl.emit('line');
         return promise;
       });
 
@@ -129,35 +132,34 @@ const tests = {
     });
   },
 
-  validate() {
+  validate(ctx) {
     describe('validate API', () => {
-      it('should reject input if boolean false is returned', function () {
+      it('should reject input if boolean false is returned', () => {
         let called = 0;
 
-        this.fixture.validate = () => {
+        ctx.fixture.validate = () => {
           called++;
           // Make sure returning false won't continue
           if (called === 2) {
             return true;
           }
 
-          this.rl.emit('line');
+          ctx.rl.emit('line');
           return false;
         };
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
+        const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         const promise = prompt.run();
 
-        this.rl.emit('line');
+        ctx.rl.emit('line');
         return promise;
       });
 
-      it('should reject input if a string is returned', function (done) {
-        const self = this;
+      it('should reject input if a string is returned', (done) => {
         let called = 0;
         const errorMessage = 'uh oh, error!';
 
-        this.fixture.validate = function () {
+        ctx.fixture.validate = function () {
           called++;
           // Make sure returning false won't continue
           if (called === 2) {
@@ -165,22 +167,21 @@ const tests = {
             return;
           }
 
-          self.rl.emit('line');
+          ctx.rl.emit('line');
           return errorMessage;
         };
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
+        const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         prompt.run();
 
-        this.rl.emit('line');
+        ctx.rl.emit('line');
       });
 
-      it('should reject input if a Promise is returned which rejects', function (done) {
-        const self = this;
+      it('should reject input if a Promise is returned which rejects', (done) => {
         let called = 0;
         const errorMessage = 'uh oh, error!';
 
-        this.fixture.validate = function () {
+        ctx.fixture.validate = function () {
           called++;
           // Make sure returning false won't continue
           if (called === 2) {
@@ -188,38 +189,37 @@ const tests = {
             return;
           }
 
-          self.rl.emit('line');
+          ctx.rl.emit('line');
           return Promise.reject(errorMessage);
         };
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
+        const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         prompt.run();
 
-        this.rl.emit('line');
+        ctx.rl.emit('line');
       });
 
-      it('should accept input if boolean true is returned', function () {
+      it('should accept input if boolean true is returned', () => {
         let called = 0;
 
-        this.fixture.validate = function () {
+        ctx.fixture.validate = function () {
           called++;
           return true;
         };
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
+        const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         const promise = prompt.run().then(() => {
           expect(called).to.equal(1);
         });
 
-        this.rl.emit('line');
+        ctx.rl.emit('line');
         return promise;
       });
 
-      it('should allow validate function to be asynchronous', function () {
-        const self = this;
+      it('should allow validate function to be asynchronous', () => {
         let called = 0;
 
-        this.fixture.validate = function () {
+        ctx.fixture.validate = function () {
           const done = this.async();
           setTimeout(() => {
             called++;
@@ -227,29 +227,29 @@ const tests = {
             if (called === 2) {
               done(null, true);
             } else {
-              self.rl.emit('line');
+              ctx.rl.emit('line');
             }
 
             done(false);
           }, 0);
         };
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
+        const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         const promise = prompt.run();
 
-        this.rl.emit('line');
+        ctx.rl.emit('line');
         return promise;
       });
 
-      it('should allow validate function to return a Promise', function () {
-        this.fixture.validate = function () {
+      it('should allow validate function to return a Promise', () => {
+        ctx.fixture.validate = function () {
           return Promise.resolve(true);
         };
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
+        const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         const promise = prompt.run();
 
-        this.rl.emit('line');
+        ctx.rl.emit('line');
         return promise;
       });
 
@@ -284,79 +284,81 @@ const tests = {
     });
   },
 
-  default() {
+  default(ctx) {
     describe('default API', () => {
-      it('should allow a default value', function (done) {
-        this.fixture.default = 'pass';
+      it('should allow a default value', () =>
+        new Promise((done) => {
+          ctx.fixture.default = 'pass';
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run().then((answer) => {
-          expect(this.rl.output.__raw__).to.contain('(pass)');
-          expect(answer).to.equal('pass');
-          done();
-        });
+          const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
+          prompt.run().then((answer) => {
+            expect(ctx.rl.output.__raw__).to.contain('(pass)');
+            expect(answer).to.equal('pass');
+            done();
+          });
 
-        this.rl.emit('line', '');
-      });
+          ctx.rl.emit('line', '');
+        }));
 
-      it('should allow a falsy default value', function (done) {
-        this.fixture.default = 0;
+      it('should allow a falsy default value', () =>
+        new Promise((done) => {
+          ctx.fixture.default = 0;
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
-        prompt.run().then((answer) => {
-          expect(this.rl.output.__raw__).to.contain('(0)');
-          expect(answer).to.equal(0);
-          done();
-        });
+          const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
+          prompt.run().then((answer) => {
+            expect(ctx.rl.output.__raw__).to.contain('(0)');
+            expect(answer).to.equal(0);
+            done();
+          });
 
-        this.rl.emit('line', '');
-      });
+          ctx.rl.emit('line', '');
+        }));
     });
   },
 
-  message() {
+  message(ctx) {
     describe('message API', () => {
-      it('should print message on screen', function () {
-        this.fixture.message = 'Foo bar bar foo bar';
+      it('should print message on screen', () => {
+        ctx.fixture.message = 'Foo bar bar foo bar';
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
+        const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         prompt.run();
 
-        expect(this.rl.output.__raw__).to.contain(this.fixture.message);
+        expect(ctx.rl.output.__raw__).to.contain(ctx.fixture.message);
       });
-      it('should default to name for message', function () {
-        this.fixture.name = 'testfoobarbarfoobar';
-        delete this.fixture.message;
+      it('should default to name for message', () => {
+        ctx.fixture.name = 'testfoobarbarfoobar';
+        delete ctx.fixture.message;
 
-        const prompt = new this.Prompt(this.fixture, this.rl);
+        const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         prompt.run();
 
-        expect(this.rl.output.__raw__).to.contain(this.fixture.name + ':');
+        expect(ctx.rl.output.__raw__).to.contain(ctx.fixture.name + ':');
       });
     });
   },
 
-  choices() {
+  choices(ctx) {
     describe('choices API', () => {
-      it('should print choices to screen', function () {
-        const prompt = new this.Prompt(this.fixture, this.rl);
+      it('should print choices to screen', () => {
+        const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         const { choices } = prompt.opt;
 
         prompt.run();
 
         choices.filter(inquirer.Separator.exclude).forEach((choice) => {
-          expect(this.rl.output.__raw__).to.contain(choice.name);
+          expect(ctx.rl.output.__raw__).to.contain(choice.name);
         });
       });
     });
   },
 
-  requiredValues() {
+  requiredValues(ctx) {
     describe('Missing value', () => {
-      it('`name` should throw', function () {
+      it('`name` should throw', () => {
         expect(() => {
-          delete this.fixture.name;
-          return new this.Prompt(this.fixture, this.rl);
+          delete ctx.fixture.name;
+          return new ctx.Prompt(ctx.fixture, ctx.rl);
         }).to.throw(/name/);
       });
     });
@@ -367,14 +369,16 @@ const tests = {
 describe('Prompt public APIs', () => {
   prompts.forEach((detail) => {
     describe('on ' + detail.name + ' prompt', () => {
-      beforeEach(function () {
-        this.fixture = { ...fixtures[detail.name] };
-        this.Prompt = inquirer.prompt.prompts[detail.name];
-        this.rl = new ReadlineStub();
+      const ctx = {};
+
+      beforeEach(() => {
+        ctx.fixture = { ...fixtures[detail.name] };
+        ctx.Prompt = inquirer.prompt.prompts[detail.name];
+        ctx.rl = new ReadlineStub();
       });
 
       detail.apis.forEach((apiName) => {
-        tests[apiName](detail.name);
+        tests[apiName](ctx);
       });
     });
   });

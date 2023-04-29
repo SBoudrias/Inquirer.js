@@ -1,3 +1,4 @@
+import { describe, it } from 'vitest';
 import { expect } from 'chai';
 
 import Choice from '../../../lib/objects/choice.js';

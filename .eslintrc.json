@@ -39,7 +39,7 @@
       }
     },
     {
-      "files": ["*.test.mts"],
+      "files": ["packages/inquirer/test/**", "*.test.mts"],
       "rules": {
         "n/no-extraneous-import": [
           "error",
@@ -47,12 +47,6 @@
             "allowModules": ["vitest"]
           }
         ]
-      }
-    },
-    {
-      "files": ["packages/inquirer/test/**"],
-      "env": {
-        "mocha": true
       }
     }
   ]

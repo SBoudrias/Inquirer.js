@@ -1,5 +1,5 @@
+import { beforeEach, describe, it } from 'vitest';
 import { expect } from 'chai';
-import ReadlineStub from '../../helpers/readline.js';
 import Paginator from '../../../lib/utils/paginator.js';
 
 const output = `\
@@ -41,85 +41,86 @@ const getPage = (paginator, index) => {
 };
 
 describe('paginator', () => {
-  beforeEach(function () {
-    this.rl = new ReadlineStub();
-    this.paginator = new Paginator();
+  let paginator;
+
+  beforeEach(() => {
+    paginator = new Paginator();
   });
 
-  it('does nothing if output is smaller than page size', function () {
-    expect(this.paginator.paginate(output, 0, endIndex + 1)).equal(output);
+  it('does nothing if output is smaller than page size', () => {
+    expect(paginator.paginate(output, 0, endIndex + 1)).equal(output);
   });
 
-  it('paginate returns slice of lines', function () {
-    expect(getPage(this.paginator, 0)).equal(`\
+  it('paginate returns slice of lines', () => {
+    expect(getPage(paginator, 0)).equal(`\
 a
 b
 c`);
   });
-  it('slice has offset after later pages are rendered', function () {
-    expect(getPage(this.paginator, 0)).equal(`\
+  it('slice has offset after later pages are rendered', () => {
+    expect(getPage(paginator, 0)).equal(`\
 a
 b
 c`);
-    expect(getPage(this.paginator, 1)).equal(`\
+    expect(getPage(paginator, 1)).equal(`\
 a
 b
 c`);
-    expect(getPage(this.paginator, 2)).equal(`\
+    expect(getPage(paginator, 2)).equal(`\
 b
 c
 d`);
   });
-  it('slice offset does not reset', function () {
-    expect(getPage(this.paginator, 2));
-    expect(getPage(this.paginator, 0)).equal(`\
+  it('slice offset does not reset', () => {
+    expect(getPage(paginator, 2));
+    expect(getPage(paginator, 0)).equal(`\
 z
 a
 b`);
   });
   describe('non infinite mode', () => {
-    beforeEach(function () {
-      this.paginator = new Paginator(undefined, { isInfinite: false });
+    beforeEach(() => {
+      paginator = new Paginator(undefined, { isInfinite: false });
     });
-    it('shows start for as long as possible', function () {
-      expect(getPage(this.paginator, 0)).equal(`\
+    it('shows start for as long as possible', () => {
+      expect(getPage(paginator, 0)).equal(`\
 a
 b
 c`);
-      expect(getPage(this.paginator, 1)).equal(`\
+      expect(getPage(paginator, 1)).equal(`\
 a
 b
 c`);
-      expect(getPage(this.paginator, 2)).equal(`\
+      expect(getPage(paginator, 2)).equal(`\
 a
 b
 c`);
-      expect(getPage(this.paginator, 3)).equal(`\
+      expect(getPage(paginator, 3)).equal(`\
 b
 c
 d`);
     });
-    it('slice offset does reset', function () {
-      getPage(this.paginator, 3);
-      expect(getPage(this.paginator, 0)).equal(`\
+    it('slice offset does reset', () => {
+      getPage(paginator, 3);
+      expect(getPage(paginator, 0)).equal(`\
 a
 b
 c`);
     });
-    it('aligns end to bottom', function () {
-      expect(getPage(this.paginator, endIndex - 3)).equal(`\
+    it('aligns end to bottom', () => {
+      expect(getPage(paginator, endIndex - 3)).equal(`\
 u
 v
 w`);
-      expect(getPage(this.paginator, endIndex - 2)).equal(`\
+      expect(getPage(paginator, endIndex - 2)).equal(`\
 v
 w
 x`);
-      expect(getPage(this.paginator, endIndex - 1)).equal(`\
+      expect(getPage(paginator, endIndex - 1)).equal(`\
 w
 x
 y`);
-      expect(getPage(this.paginator, endIndex)).equal(`\
+      expect(getPage(paginator, endIndex)).equal(`\
 x
 y
 z`);

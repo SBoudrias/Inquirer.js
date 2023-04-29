@@ -1,4 +1,5 @@
 import stripAnsi from 'strip-ansi';
+import { beforeEach, describe, it } from 'vitest';
 import { expect } from 'chai';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
@@ -18,60 +19,63 @@ function testMasking(rl, mask) {
 }
 
 describe('`password` prompt', () => {
-  beforeEach(function () {
-    this.fixture = { ...fixtures.password };
-    this.rl = new ReadlineStub();
+  let fixture;
+  let rl;
+
+  beforeEach(() => {
+    fixture = { ...fixtures.password };
+    rl = new ReadlineStub();
   });
 
-  it('should use raw value from the user without masking', function () {
-    const password = new Password(this.fixture, this.rl);
-    const promise = password.run().then(testMasking(this.rl, false));
+  it('should use raw value from the user without masking', () => {
+    const password = new Password(fixture, rl);
+    const promise = password.run().then(testMasking(rl, false));
 
-    this.rl.emit('line', 'Inquirer');
+    rl.emit('line', 'Inquirer');
     return promise;
   });
 
-  it('should mask the input with "*" if the `mask` option was provided by the user was `true`', function () {
-    this.fixture.mask = true;
-    const password = new Password(this.fixture, this.rl);
-    const promise = password.run().then(testMasking(this.rl, '********'));
+  it('should mask the input with "*" if the `mask` option was provided by the user was `true`', () => {
+    fixture.mask = true;
+    const password = new Password(fixture, rl);
+    const promise = password.run().then(testMasking(rl, '********'));
 
-    this.rl.emit('line', 'Inquirer');
+    rl.emit('line', 'Inquirer');
     return promise;
   });
 
-  it('should mask the input if a `mask` string was provided by the user', function () {
-    this.fixture.mask = '#';
-    const password = new Password(this.fixture, this.rl);
-    const promise = password.run().then(testMasking(this.rl, '########'));
+  it('should mask the input if a `mask` string was provided by the user', () => {
+    fixture.mask = '#';
+    const password = new Password(fixture, rl);
+    const promise = password.run().then(testMasking(rl, '########'));
 
-    this.rl.emit('line', 'Inquirer');
+    rl.emit('line', 'Inquirer');
     return promise;
   });
 
-  it('Preserves default', function () {
-    this.fixture.default = 'Inquirer';
-    const password = new Password(this.fixture, this.rl);
+  it('Preserves default', () => {
+    fixture.default = 'Inquirer';
+    const password = new Password(fixture, rl);
     const promise = password.run().then((answer) => expect(answer).to.equal('Inquirer'));
-    this.rl.emit('line', '');
+    rl.emit('line', '');
     return promise;
   });
 
-  it('Clears default on keypress', function () {
-    this.fixture.default = 'Inquirer';
-    const password = new Password(this.fixture, this.rl);
+  it('Clears default on keypress', () => {
+    fixture.default = 'Inquirer';
+    const password = new Password(fixture, rl);
     const promise = password.run().then((answer) => expect(answer).to.equal(''));
     password.onKeypress({ name: 'backspace' });
-    this.rl.emit('line', '');
+    rl.emit('line', '');
     return promise;
   });
 
   // See: https://github.com/SBoudrias/Inquirer.js/issues/1022
-  it('should not display input during async validation', function () {
+  it('should not display input during async validation', () => {
     let output = '';
     let renderCount = 0;
 
-    this.fixture.validate = () =>
+    fixture.validate = () =>
       new Promise((resolve) => {
         const id = setInterval(() => {
           // Make sure we render at least once.
@@ -82,7 +86,7 @@ describe('`password` prompt', () => {
         }, 10);
       });
 
-    const password = new Password(this.fixture, this.rl);
+    const password = new Password(fixture, rl);
     const input = 'wvAq82yVujm5S9pf';
 
     // Override screen.render to capture all output
@@ -102,7 +106,7 @@ describe('`password` prompt', () => {
       expect(answer).to.equal(input);
     });
 
-    this.rl.emit('line', input);
+    rl.emit('line', input);
 
     return promise;
   });

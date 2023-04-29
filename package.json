@@ -75,7 +75,7 @@
     "bootstrap": "lerna bootstrap --no-ci",
     "publish": "lerna run tsc && lerna publish",
     "pretest": "eslint . && lerna run tsc",
-    "test": "lerna exec npm test --scope inquirer && vitest --run"
+    "test": "vitest --run"
   },
   "repository": {
     "type": "git",
