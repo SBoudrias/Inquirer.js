@@ -30,11 +30,11 @@ jobs:
         run: yarn lerna run tsc
 
       - name: Eslint
-        run: yarn eslint . --ext .js --ext .ts
+        run: yarn eslint .
       - name: Test inquirer package (current version)
         run: yarn lerna exec npm test --scope inquirer
       - name: Test monorepo packages (new version)
-        run: yarn vitest --run
+        run: yarn vitest --run --coverage
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v3
