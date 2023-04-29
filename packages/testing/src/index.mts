@@ -3,8 +3,6 @@ import stripAnsi from 'strip-ansi';
 import { Stream } from 'node:stream';
 import type { Prompt } from '@inquirer/type';
 
-const logStore: Array<Parameters<typeof console.log>> = [];
-
 class BufferedStream extends Stream.Writable {
   #_chunks: Array<string> = [];
 
@@ -24,18 +22,6 @@ class BufferedStream extends Stream.Writable {
     const lastChunk = this.#_chunks[this.#_chunks.length - 1];
     return lastChunk ?? '';
   }
-}
-
-beforeEach(() => {
-  logStore.length = 0;
-});
-
-afterEach(() => {
-  logStore.forEach((...line) => console.log(...line));
-});
-
-export function log(...line: Parameters<typeof console.log>) {
-  logStore.push(line);
 }
 
 export async function render<TestedPrompt extends Prompt<any, any>>(

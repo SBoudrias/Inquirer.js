@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
 import input from './src/index.mjs';
 

@@ -34,7 +34,7 @@ jobs:
       - name: Test inquirer package (current version)
         run: yarn lerna exec npm test --scope inquirer
       - name: Test monorepo packages (new version)
-        run: yarn jest
+        run: yarn vitest --run
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v3

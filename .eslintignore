@@ -5,4 +5,3 @@ dist
 .nyc_output
 packages/*/node_modules
 packages/*/__snapshots__
-jest

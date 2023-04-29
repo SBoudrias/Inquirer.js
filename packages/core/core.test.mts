@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals';
+import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import {
   createPrompt,
@@ -14,7 +14,7 @@ import {
 
 describe('createPrompt()', () => {
   it('handle async function message', async () => {
-    const viewFunction = jest.fn(() => '');
+    const viewFunction = vi.fn(() => '');
     const prompt = createPrompt(viewFunction);
     const promise = Promise.resolve('Async message:');
     const renderingDone = render(prompt, { message: () => promise });
@@ -30,7 +30,7 @@ describe('createPrompt()', () => {
   });
 
   it('handle deferred message', async () => {
-    const viewFunction = jest.fn(() => '');
+    const viewFunction = vi.fn(() => '');
     const prompt = createPrompt(viewFunction);
     const promise = Promise.resolve('Async message:');
     const renderingDone = render(prompt, { message: promise });
@@ -75,8 +75,8 @@ describe('createPrompt()', () => {
   });
 
   it('useEffect: re-run only on change', async () => {
-    const effect = jest.fn();
-    const effectCleanup = jest.fn();
+    const effect = vi.fn();
+    const effectCleanup = vi.fn();
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       const [value, setValue] = useState('');
 
@@ -123,7 +123,7 @@ describe('createPrompt()', () => {
   });
 
   it('useEffect: re-run only on change', async () => {
-    const effect = jest.fn();
+    const effect = vi.fn();
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       const [value, setValue] = useState('');
       const ref = useRef({ foo: 'bar' });
