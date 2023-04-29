@@ -116,7 +116,7 @@ The [API documentation is over here](https://github.com/SBoudrias/Inquirer.js/tr
 
 # Advanced usage
 
-All inquirer prompts are a function taking 2 arguments. The first argument is the prompt configuration. The second is providing contextual or runtime configuration.
+All inquirer prompts are a function taking 2 arguments. The first argument is the prompt configuration (unique to each prompt). The second is providing contextual or runtime configuration.
 
 The context options are:
 
@@ -180,6 +180,15 @@ if (allowEmail) {
 # Community prompts
 
 If you created a cool prompt, [send us a PR adding it](https://github.com/SBoudrias/Inquirer.js/edit/master/README.md) to the list below!
+
+[**Interactive List Prompt**](https://github.com/pgibler/inquirer-interactive-list-prompt)<br/>
+Select a choice either with arrow keys + Enter or by pressing a key associated with a choice.
+
+```
+? Choose an option:
+>   Run command (D)
+    Quit (Q)
+```
 
 # License
 
