@@ -5,8 +5,7 @@
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "files": [
-    "lib",
-    "README.md"
+    "lib"
   ],
   "main": "lib/inquirer.js",
   "keywords": [
@@ -64,9 +63,7 @@
   },
   "scripts": {
     "test": "nyc mocha --es-module-specifier-resolution=node test/**/* -r ./test/before",
-    "posttest": "mkdir -p ../../coverage/ && nyc report --reporter=text-lcov > ../../coverage/nyc-report.lcov",
-    "prepublishOnly": "cp ../../README.md .",
-    "postpublish": "rm -f README.md"
+    "posttest": "mkdir -p ../../coverage/ && nyc report --reporter=text-lcov > ../../coverage/nyc-report.lcov"
   },
   "repository": {
     "type": "git",
