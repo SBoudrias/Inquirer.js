@@ -1,6 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs';
-import globby from 'globby';
+import { globby } from 'globby';
 import * as url from 'node:url';
 
 // Force execution from the root of the repo. By default, the cwd will be each packages.
