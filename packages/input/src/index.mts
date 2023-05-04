@@ -12,7 +12,7 @@ import chalk from 'chalk';
 
 type InputConfig = AsyncPromptConfig & {
   default?: string;
-  transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
+  transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string | Promise<string>;
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {
@@ -56,7 +56,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
   const message = chalk.bold(config.message);
   let formattedValue = value;
   if (typeof config.transformer === 'function') {
-    formattedValue = config.transformer(value, { isFinal: status === 'done' });
+    formattedValue = await config.transformer(value, { isFinal: status === 'done' });
   }
   if (status === 'done') {
     formattedValue = chalk.cyan(formattedValue);
