@@ -1,5 +1,5 @@
 import path from 'node:path';
-import fs from 'node:fs';
+import fs from 'node:fs/promises';
 import { globby } from 'globby';
 import * as url from 'node:url';
 
@@ -13,7 +13,11 @@ const paths: string[] = await globby([
   'packages/**/dist/cjs/**/*.mjs',
   '!**/node_modules',
 ]);
+
 paths.forEach(async (pathname: string) => {
+  const fileContent = await fs.readFile(pathname, 'utf-8');
+  await fs.writeFile(pathname, fileContent.replace(/\.mjs/g, '.js'));
+
   const newPath = path.format({
     ...path.parse(pathname),
     base: '',
@@ -21,5 +25,5 @@ paths.forEach(async (pathname: string) => {
   });
 
   console.log(`Renaming ${pathname} to ${newPath}...`);
-  await fs.promises.rename(pathname, newPath);
+  await fs.rename(pathname, newPath);
 });
