@@ -74,6 +74,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
     "publish": "lerna run tsc && lerna publish",
+    "prepare": "husky install",
     "pretest": "eslint . && lerna run tsc",
     "test": "vitest --run"
   },
@@ -81,19 +82,12 @@
     "type": "git",
     "url": "https://github.com/SBoudrias/Inquirer.js.git"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.json": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "*.m?[jt]sx?": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   }
 }
