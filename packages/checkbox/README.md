@@ -34,10 +34,10 @@ const answer = await checkbox({
 
 ## Options
 
-| Property | Type                                                                    | Required | Description                                                                                                                                                                              |
-| -------- | ----------------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| message  | `string`                                                                | yes      | The question to ask                                                                                                                                                                      |
-| choices  | `Array<{ value: string, name?: string, disabled?: boolean \| string }>` | yes      | List of the available choices. The `value` will be returned as the answer, and used as display if no `name` is defined. Choices who're `disabled` will be displayed, but not selectable. |
+| Property | Type                                                                                       | Required | Description                                                                                                                                                                              |
+| -------- | ------------------------------------------------------------------------------------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message  | `string`                                                                                   | yes      | The question to ask                                                                                                                                                                      |
+| choices  | `Array<{ value: string, name?: string, disabled?: boolean \| string, checked?: boolean }>` | yes      | List of the available choices. The `value` will be returned as the answer, and used as display if no `name` is defined. Choices who're `disabled` will be displayed, but not selectable. |
 
 # License
 

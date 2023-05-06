@@ -20,6 +20,7 @@ export type Choice<Value> = {
   name?: string;
   value: Value;
   disabled?: boolean | string;
+  checked?: boolean;
 };
 
 type Config<Value> = {
@@ -39,9 +40,9 @@ export default createPrompt(
     const paginator = useRef(new Paginator()).current;
 
     const [status, setStatus] = useState('pending');
-    const [choices, setChoices] = useState<Array<Choice<Value> & { checked?: boolean }>>([
-      ...config.choices,
-    ]);
+    const [choices, setChoices] = useState<Array<Choice<Value>>>(
+      config.choices.map((choice) => ({ ...choice }))
+    );
     const [cursorPosition, setCursorPosition] = useState(0);
     const [showHelpTip, setShowHelpTip] = useState(true);
 

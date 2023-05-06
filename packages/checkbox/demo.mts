@@ -21,9 +21,9 @@ import checkbox from './src/index.mjs';
   answer = await checkbox({
     message: 'Select your favorite letters',
     choices: [
-      { value: 'A' },
+      { value: 'A', checked: true },
       { value: 'B' },
-      { value: 'C' },
+      { value: 'C', checked: true },
       { value: 'D' },
       { value: 'E' },
       { value: 'F' },
