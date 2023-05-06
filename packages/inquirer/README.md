@@ -1,4 +1,3 @@
-
 <img width="75px" height="75px" align="right" alt="Inquirer Logo" src="https://raw.githubusercontent.com/SBoudrias/Inquirer.js/master/assets/inquirer_readme.svg?sanitize=true" title="Inquirer.js"/>
 
 # Inquirer.js
@@ -390,20 +389,15 @@ look at issues found on other command line - feel free to report any!
 <a name="issues"></a>
 
 - **nodemon** - Makes the arrow keys print gibrish on list prompts.
-Workaround: Add `{ stdin : false }` in the configuration file or pass `--no-stdin` in the CLI.
-Please refer to [this issue](https://github.com/SBoudrias/Inquirer.js/issues/844#issuecomment-736675867)
+  Workaround: Add `{ stdin : false }` in the configuration file or pass `--no-stdin` in the CLI.
+  Please refer to [this issue](https://github.com/SBoudrias/Inquirer.js/issues/844#issuecomment-736675867)
 
 - **grunt-exec** - Calling a node script that uses Inquirer from grunt-exec can cause the program to crash. To fix this, add to your grunt-exec config `stdio: 'inherit'`.
-Please refer to [this issue](https://github.com/jharding/grunt-exec/issues/85)
+  Please refer to [this issue](https://github.com/jharding/grunt-exec/issues/85)
 
 - **Windows network streams** - Running Inquirer together with network streams in Windows platform inside some terminals can result in process hang.
-Workaround: run inside another terminal.
-Please refer to [this issue](https://github.com/nodejs/node/issues/21771)
-
-
-
-
-
+  Workaround: run inside another terminal.
+  Please refer to [this issue](https://github.com/nodejs/node/issues/21771)
 
 ## News on the march (Release notes)
 
@@ -528,4 +522,3 @@ Turning any existing inquirer and its plugin prompts into prompts that can be in
 A "press any key to continue" prompt for Inquirer.js<br>
 <br>
 ![inquirer-press-to-continue](https://raw.githubusercontent.com/leonzalion/inquirer-press-to-continue/main/assets/demo.gif)
-

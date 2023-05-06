@@ -1,12 +1,8 @@
 {
   "extends": "../../tsconfig.json",
-  "include": [
-    "./src"
-  ],
+  "include": ["./src"],
   "compilerOptions": {
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "target": "es2022",
     "moduleResolution": "nodenext",
     "outDir": "dist/esm",
