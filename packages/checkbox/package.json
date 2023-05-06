@@ -59,9 +59,9 @@
   "dependencies": {
     "@inquirer/core": "^1.0.2",
     "@inquirer/type": "^1.0.1",
-    "ansi-escapes": "^6.2.0",
-    "chalk": "^5.2.0",
-    "figures": "^5.0.0"
+    "ansi-escapes": "^4.3.2",
+    "chalk": "^4.1.2",
+    "figures": "^3.2.0"
   },
   "scripts": {
     "tsc": "yarn run clean && yarn run tsc:esm && yarn run tsc:cjs",
