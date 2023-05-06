@@ -67,7 +67,12 @@
     "run-async": "^2.3.0",
     "string-width": "^5.1.2",
     "strip-ansi": "^7.0.1",
-    "wrap-ansi": "^8.1.0"
+    "wrap-ansi": "^8.1.0",
+    "ansi-escapes-cjs": "npm:ansi-escapes@^4.3.2",
+    "chalk-cjs": "npm:chalk@^4.1.2",
+    "string-width-cjs": "npm:string-width@^4.2.3",
+    "strip-ansi-cjs": "npm:strip-ansi@^6.0.1",
+    "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0"
   },
   "devDependencies": {
     "@inquirer/testing": "^1.0.1"
@@ -91,6 +96,38 @@
       "require": {
         "types": "./dist/cjs/types/index.d.mts",
         "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "imports": {
+    "#ansi-escapes": {
+      "node": {
+        "require": "ansi-escapes-cjs",
+        "default": "ansi-escapes"
+      }
+    },
+    "#chalk": {
+      "node": {
+        "require": "chalk-cjs",
+        "default": "chalk"
+      }
+    },
+    "#string-width": {
+      "node": {
+        "require": "string-width-cjs",
+        "default": "string-width"
+      }
+    },
+    "#strip-ansi": {
+      "node": {
+        "require": "strip-ansi-cjs",
+        "default": "strip-ansi"
+      }
+    },
+    "#wrap-ansi": {
+      "node": {
+        "require": "wrap-ansi-cjs",
+        "default": "wrap-ansi"
       }
     }
   }

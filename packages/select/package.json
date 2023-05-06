@@ -58,7 +58,10 @@
     "@inquirer/type": "^1.0.1",
     "ansi-escapes": "^6.2.0",
     "chalk": "^5.2.0",
-    "figures": "^5.0.0"
+    "figures": "^5.0.0",
+    "ansi-escapes-cjs": "npm:ansi-escapes@^4.3.2",
+    "chalk-cjs": "npm:chalk@^4.1.2",
+    "figures-cjs": "npm:figures@^3.2.0"
   },
   "scripts": {
     "tsc": "yarn run clean && yarn run tsc:esm && yarn run tsc:cjs",
@@ -82,6 +85,26 @@
       "require": {
         "types": "./dist/cjs/types/index.d.mts",
         "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "imports": {
+    "#ansi-escapes": {
+      "node": {
+        "require": "ansi-escapes-cjs",
+        "default": "ansi-escapes"
+      }
+    },
+    "#chalk": {
+      "node": {
+        "require": "chalk-cjs",
+        "default": "chalk"
+      }
+    },
+    "#figures": {
+      "node": {
+        "require": "figures-cjs",
+        "default": "figures"
       }
     }
   }

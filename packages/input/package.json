@@ -56,7 +56,8 @@
   "dependencies": {
     "@inquirer/core": "^1.0.2",
     "@inquirer/type": "^1.0.1",
-    "chalk": "^5.2.0"
+    "chalk": "^5.2.0",
+    "chalk-cjs": "npm:chalk@^4.1.2"
   },
   "devDependencies": {
     "@inquirer/testing": "^1.0.1"
@@ -83,6 +84,14 @@
       "require": {
         "types": "./dist/cjs/types/index.d.mts",
         "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "imports": {
+    "#chalk": {
+      "node": {
+        "require": "chalk-cjs",
+        "default": "chalk"
       }
     }
   }

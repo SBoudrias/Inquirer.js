@@ -57,7 +57,8 @@
     "@inquirer/core": "^1.0.2",
     "@inquirer/type": "^1.0.1",
     "chalk": "^5.2.0",
-    "external-editor": "^3.0.3"
+    "external-editor": "^3.0.3",
+    "chalk-cjs": "npm:chalk@^4.1.2"
   },
   "scripts": {
     "tsc": "yarn run clean && yarn run tsc:esm && yarn run tsc:cjs",
@@ -81,6 +82,14 @@
       "require": {
         "types": "./dist/cjs/types/index.d.mts",
         "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "imports": {
+    "#chalk": {
+      "node": {
+        "require": "chalk-cjs",
+        "default": "chalk"
       }
     }
   }
