@@ -8,7 +8,7 @@ import {
   AsyncPromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
-import chalk from 'chalk';
+import chalk from '#chalk';
 
 type InputConfig = AsyncPromptConfig & {
   default?: string;

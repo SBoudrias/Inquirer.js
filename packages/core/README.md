@@ -15,7 +15,7 @@ yarn add @inquirer/core
 # Usage
 
 ```ts
-import chalk from 'chalk';
+import chalk from '#chalk';
 import {
   createPrompt,
   useState,

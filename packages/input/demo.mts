@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalk from '#chalk';
 import input from './src/index.mjs';
 
 const hexRegEx = /([0-9]|[a-f])/gim;

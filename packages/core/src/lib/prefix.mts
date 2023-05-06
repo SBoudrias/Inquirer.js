@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalk from '#chalk';
 import spinners from 'cli-spinners';
 import { useState, useEffect } from '../index.mjs';
 

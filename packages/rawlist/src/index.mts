@@ -7,7 +7,7 @@ import {
   AsyncPromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
-import chalk from 'chalk';
+import chalk from '#chalk';
 
 const numberRegex = /[0-9]+/;
 

@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalk from '#chalk';
 import { editAsync } from 'external-editor';
 import {
   createPrompt,

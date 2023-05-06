@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalk from '#chalk';
 import {
   createPrompt,
   useState,

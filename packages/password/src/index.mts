@@ -1,6 +1,6 @@
 import type { Prompt } from '@inquirer/type';
 import input from '@inquirer/input';
-import chalk from 'chalk';
+import chalk from '#chalk';
 
 type PasswordConfig = Parameters<typeof input>[0] & {
   mask?: boolean | string;

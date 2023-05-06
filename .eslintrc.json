@@ -35,7 +35,9 @@
         "no-undef": "off",
         "no-unused-vars": "off",
         "n/no-missing-import": "off",
-        "@typescript-eslint/no-unused-vars": "error"
+        "@typescript-eslint/no-unused-vars": "error",
+        // Turned off due to import maps not being supported yet.
+        "n/no-extraneous-import": "off"
       }
     },
     {

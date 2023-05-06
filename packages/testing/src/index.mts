@@ -1,5 +1,5 @@
 import MuteStream from 'mute-stream';
-import stripAnsi from 'strip-ansi';
+import stripAnsi from '#strip-ansi';
 import { Stream } from 'node:stream';
 import type { Prompt } from '@inquirer/type';
 
