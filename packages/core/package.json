@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "engines": {
     "node": ">=14.18.0"
   },
@@ -57,7 +57,7 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/core/README.md",
   "dependencies": {
-    "@inquirer/type": "^1.0.1",
+    "@inquirer/type": "^1.0.2",
     "ansi-escapes": "^4.3.2",
     "chalk": "^4.1.2",
     "cli-spinners": "^2.8.0",
@@ -70,7 +70,7 @@
     "wrap-ansi": "^6.0.1"
   },
   "devDependencies": {
-    "@inquirer/testing": "^1.0.1"
+    "@inquirer/testing": "^1.0.2"
   },
   "scripts": {
     "tsc": "yarn run clean && yarn run tsc:esm && yarn run tsc:cjs",
