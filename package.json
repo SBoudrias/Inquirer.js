@@ -73,6 +73,7 @@
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
+    "ts-node": "node --no-warnings=ExperimentalWarning --loader=ts-node/esm",
     "publish": "lerna run tsc && lerna publish",
     "prepare": "husky install",
     "pretest": "eslint . && lerna run tsc",
