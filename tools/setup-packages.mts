@@ -19,6 +19,17 @@ function fileExists(filepath: string): Promise<boolean> {
 const rootPkg = await readJSONFile(path.join(__dirname, '../package.json'));
 const paths = await globby(['packages/**/package.json', '!**/node_modules']);
 
+const cjsFallbackVersions: Record<string, string> = {
+  chalk: '^4.1.2',
+  figures: '^3.2.0',
+  'cli-cursor': '^3.1.0',
+  'ansi-escapes': '^4.3.2',
+  'wrap-ansi': '^7.0.0',
+  'strip-ansi': '^6.0.1',
+  'string-width': '^4.2.3',
+  ora: '^5.4.1',
+};
+
 paths.forEach(async (pkgPath) => {
   const dir = path.dirname(pkgPath);
 
@@ -69,6 +80,26 @@ paths.forEach(async (pkgPath) => {
       'fix-ext':
         'node --no-warnings=ExperimentalWarning --loader ts-node/esm ../../tools/rename-ext.mts',
     };
+
+    // Declare imports who need to be dual versioned
+    pkg.imports = {};
+    for (const name of Object.keys(pkg.dependencies ?? {})) {
+      if (name in cjsFallbackVersions) {
+        const fallbackVersion = cjsFallbackVersions[name];
+        const fallbackName = `${name}-cjs`;
+        pkg.imports[`#${name}`] = {
+          node: {
+            require: fallbackName,
+            default: name,
+          },
+        };
+        pkg.dependencies[fallbackName] = `npm:${name}@${fallbackVersion}`;
+      }
+    }
+
+    if (Object.keys(pkg.imports).length === 0) {
+      delete pkg.imports;
+    }
 
     // Set CJS tsconfig
     const cjsTsconfig = {
