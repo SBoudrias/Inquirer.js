@@ -85,5 +85,6 @@
     "@inquirer/password": "^1.0.1",
     "@inquirer/rawlist": "^1.0.1",
     "@inquirer/select": "^1.0.1"
-  }
+  },
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/prompts/README.md"
 }
