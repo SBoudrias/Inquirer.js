@@ -63,7 +63,12 @@ export function useEffect(cb: () => void | (() => void), depArray: unknown[]): v
   if (hasChanged) {
     hooksEffect.push(() => {
       cleanupHook(_idx);
-      hooksCleanup[_idx] = cb();
+      const cleanFn = cb();
+      console.log('cleanFn', cleanFn);
+      if (cleanFn != null && typeof cleanFn !== 'function') {
+        throw new Error('useEffect return value must be a cleanup function or nothing.');
+      }
+      hooksCleanup[_idx] = cleanFn;
     });
   }
   hooks[_idx] = depArray;
@@ -132,26 +137,34 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     // TODO: we should display a loader while we get the default options.
     const resolvedConfig = await getPromptConfig(config);
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const done = (value: Value) => {
-        let len = hooksCleanup.length;
-        while (len--) {
-          cleanupHook(len);
-        }
-        if (context?.clearPromptOnDone) {
-          screen.clean();
-        } else {
-          screen.clearContent();
-        }
-        screen.done();
+        // Delay execution to let time to the hookCleanup functions to registers.
+        setImmediate(() => {
+          try {
+            let len = hooksCleanup.length;
+            while (len--) {
+              cleanupHook(len);
+            }
+          } catch (err) {
+            reject(err);
+          }
 
-        // Reset hooks state
-        index = 0;
-        hooks.length = 0;
-        sessionRl = undefined;
+          if (context?.clearPromptOnDone) {
+            screen.clean();
+          } else {
+            screen.clearContent();
+          }
+          screen.done();
 
-        // Finally we resolve our promise
-        resolve(value);
+          // Reset hooks state
+          index = 0;
+          hooks.length = 0;
+          sessionRl = undefined;
+
+          // Finally we resolve our promise
+          resolve(value);
+        });
       };
 
       const workLoop = () => {

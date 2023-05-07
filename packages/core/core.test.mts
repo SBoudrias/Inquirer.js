@@ -186,3 +186,68 @@ describe('createPrompt()', () => {
     await expect(answer).resolves.toEqual('done');
   });
 });
+
+describe('Error handling', () => {
+  it('surface errors in render functions', async () => {
+    const Prompt = () => {
+      throw new Error('Error in render function');
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer } = await render(prompt, { message: 'Question' });
+
+    await expect(answer).rejects.toThrowError('Error in render function');
+  });
+
+  it('surface errors in useEffect', async () => {
+    const Prompt = () => {
+      useEffect(() => {
+        throw new Error('Error in useEffect');
+      }, []);
+
+      return '';
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer } = await render(prompt, { message: 'Question' });
+
+    await expect(answer).rejects.toThrowError('Error in useEffect');
+  });
+
+  it('surface errors in useEffect cleanup functions', async () => {
+    const Prompt = (config: {}, done: (value: string) => void) => {
+      useEffect(() => {
+        done('done');
+
+        return () => {
+          throw new Error('Error in useEffect cleanup');
+        };
+      }, []);
+
+      return '';
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer } = await render(prompt, { message: 'Question' });
+
+    await expect(answer).rejects.toThrowError('Error in useEffect cleanup');
+  });
+
+  it.only('prevent returning promises from useEffect hook', async () => {
+    const Prompt = (config: {}, done: (value: string) => void) => {
+      // @ts-ignore: This is a test
+      useEffect(async () => {
+        done('done');
+      }, []);
+
+      return '';
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer } = await render(prompt, { message: 'Question' });
+
+    await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"useEffect return value must be a cleanup function or nothing."'
+    );
+  });
+});
