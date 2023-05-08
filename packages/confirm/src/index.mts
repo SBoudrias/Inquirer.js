@@ -22,17 +22,14 @@ export default createPrompt<boolean | string, ConfirmConfig>((config, done) => {
 
   useKeypress((key, rl) => {
     if (isEnterKey(key)) {
-      let output;
       const answer = value ? /^y(es)?/i.test(value) : config.default !== false;
       if (typeof config.transformer === 'function') {
-        output = config.transformer(answer);
-        setValue(output);
+        setValue(config.transformer(answer));
       } else {
-        output = answer;
         setValue(answer ? 'yes' : 'no');
       }
       setStatus('done');
-      done(output);
+      done(answer);
     } else {
       setValue(rl.line);
     }
