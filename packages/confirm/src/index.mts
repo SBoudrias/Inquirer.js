@@ -15,7 +15,7 @@ type ConfirmConfig = AsyncPromptConfig & {
   transformer?: (value: boolean) => string;
 };
 
-export default createPrompt<boolean | string, ConfirmConfig>((config, done) => {
+export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   const [status, setStatus] = useState('pending');
   const [value, setValue] = useState('');
   const prefix = usePrefix();
