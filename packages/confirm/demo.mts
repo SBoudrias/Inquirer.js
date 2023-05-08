@@ -16,6 +16,14 @@ import confirm from './src/index.mjs';
     })
   );
 
+  console.log(
+    'Answer:',
+    await confirm({
+      message: 'Confirm with your custom transformer function?',
+      transformer: (answer) => (answer ? '👍' : '👎'),
+    })
+  );
+
   console.log('This next prompt will be cleared on exit');
   console.log(
     'Cleared prompt answer:',

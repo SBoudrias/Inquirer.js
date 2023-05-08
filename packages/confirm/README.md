@@ -22,10 +22,11 @@ const answer = await confirm({ message: 'Enter your name' });
 
 ## Options
 
-| Property | Type      | Required | Description                    |
-| -------- | --------- | -------- | ------------------------------ |
-| message  | `string`  | yes      | The question to ask            |
-| default  | `boolean` | no       | Default answer (true or false) |
+| Property    | Type                  | Required | Description                                             |
+| ----------- | --------------------- | -------- | ------------------------------------------------------- |
+| message     | `string`              | yes      | The question to ask                                     |
+| default     | `boolean`             | no       | Default answer (true or false)                          |
+| transformer | `(boolean) => string` | no       | Transform the prompt printed message to a custom string |
 
 # License
 
