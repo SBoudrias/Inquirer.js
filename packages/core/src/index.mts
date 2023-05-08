@@ -64,7 +64,6 @@ export function useEffect(cb: () => void | (() => void), depArray: unknown[]): v
     hooksEffect.push(() => {
       cleanupHook(_idx);
       const cleanFn = cb();
-      console.log('cleanFn', cleanFn);
       if (cleanFn != null && typeof cleanFn !== 'function') {
         throw new Error('useEffect return value must be a cleanup function or nothing.');
       }
@@ -160,6 +159,8 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
           // Reset hooks state
           index = 0;
           hooks.length = 0;
+          hooksEffect.length = 0;
+          hooksCleanup.length = 0;
           sessionRl = undefined;
 
           // Finally we resolve our promise

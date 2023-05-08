@@ -233,7 +233,7 @@ describe('Error handling', () => {
     await expect(answer).rejects.toThrowError('Error in useEffect cleanup');
   });
 
-  it.only('prevent returning promises from useEffect hook', async () => {
+  it('prevent returning promises from useEffect hook', async () => {
     const Prompt = (config: {}, done: (value: string) => void) => {
       // @ts-ignore: This is a test
       useEffect(async () => {
