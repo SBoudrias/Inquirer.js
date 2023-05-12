@@ -1,4 +1,4 @@
-import select from './src/index.mjs';
+import select, { Separator } from './src/index.mjs';
 
 (async () => {
   let answer;
@@ -11,7 +11,9 @@ import select from './src/index.mjs';
         value: 'npm',
         description: 'npm is the most popular package manager',
       },
+      new Separator(),
       { name: 'yarn', value: 'yarn', description: 'yarn is an awesome package manager' },
+      new Separator(' = The Disabled = '),
       { name: 'jspm', value: 'jspm', disabled: true },
       {
         name: 'pnpm',

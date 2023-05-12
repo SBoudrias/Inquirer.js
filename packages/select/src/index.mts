@@ -9,27 +9,31 @@ import {
   isDownKey,
   isNumberKey,
   Paginator,
+  Separator,
   AsyncPromptConfig,
+  SeparatorType,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
 import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
 
+type Choice = (SeparatorType & {
+  value: string;
+  name?: string;
+  description?: string;
+  disabled?: boolean | string;
+})[];
+
 type SelectConfig = AsyncPromptConfig & {
-  choices: {
-    value: string;
-    name?: string;
-    description?: string;
-    disabled?: boolean | string;
-  }[];
+  choices: Choice;
   pageSize?: number;
 };
 
 export default createPrompt<string, SelectConfig>((config, done) => {
   const { choices } = config;
   const startIndex = Math.max(
-    choices.findIndex(({ disabled }) => !disabled),
+    choices.findIndex(({ disabled, type }) => !disabled && type !== 'separator'),
     0
   );
 
@@ -49,7 +53,11 @@ export default createPrompt<string, SelectConfig>((config, done) => {
       const offset = isUpKey(key) ? -1 : 1;
       let selectedOption;
 
-      while (!selectedOption || selectedOption.disabled) {
+      while (
+        !selectedOption ||
+        selectedOption.disabled ||
+        selectedOption.type === 'separator'
+      ) {
         newCursorPosition =
           (newCursorPosition + offset + choices.length) % choices.length;
         selectedOption = choices[newCursorPosition];
@@ -61,7 +69,11 @@ export default createPrompt<string, SelectConfig>((config, done) => {
       const newCursorPosition = Number(key.name) - 1;
 
       // Abort if the choice doesn't exists or if disabled
-      if (!choices[newCursorPosition] || choices[newCursorPosition]!.disabled) {
+      if (
+        !choices[newCursorPosition] ||
+        choices[newCursorPosition]!.disabled ||
+        choices[newCursorPosition]?.type === 'separator'
+      ) {
         return;
       }
 
@@ -81,12 +93,16 @@ export default createPrompt<string, SelectConfig>((config, done) => {
   }
 
   const allChoices = choices
-    .map(({ name, value, disabled }, index) => {
+    .map(({ name, value, disabled, type, separator }, index) => {
       const line = name || value;
       if (disabled) {
         return chalk.dim(
           `- ${line} ${typeof disabled === 'string' ? disabled : '(disabled)'}`
         );
+      }
+
+      if (type === 'separator') {
+        return ` ${separator}`;
       }
 
       if (index === cursorPosition) {
@@ -103,3 +119,5 @@ export default createPrompt<string, SelectConfig>((config, done) => {
 
   return `${prefix} ${message}\n${windowedChoices}${choiceDescription}${ansiEscapes.cursorHide}`;
 });
+
+export { Separator };

@@ -7,6 +7,7 @@ import { getPromptConfig } from './lib/options.mjs';
 export { usePrefix } from './lib/prefix.mjs';
 export * from './lib/key.mjs';
 export * from './lib/Paginator.mjs';
+export * from './lib/Separator.mjs';
 
 export type InquirerReadline = readline.ReadLine & {
   output: MuteStream;
@@ -106,6 +107,11 @@ export type AsyncPromptConfig = {
 export type ResolvedPromptConfig = {
   message: string;
   validate: (value: string) => boolean | string | Promise<string | boolean>;
+};
+
+export type SeparatorType = {
+  type?: string;
+  separator?: string;
 };
 
 export function createPrompt<Value, Config extends AsyncPromptConfig>(

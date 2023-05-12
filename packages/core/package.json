@@ -62,6 +62,7 @@
     "chalk": "^4.1.2",
     "cli-spinners": "^2.8.0",
     "cli-width": "^4.0.0",
+    "figures": "^3.2.0",
     "mute-stream": "^1.0.0",
     "run-async": "^2.3.0",
     "string-width": "^4.2.3",

@@ -15,7 +15,7 @@ yarn add @inquirer/select
 # Usage
 
 ```js
-import select from '@inquirer/select';
+import select, { Separator } from '@inquirer/select';
 
 const answer = await select({
   message: 'Select a package manager',
@@ -25,11 +25,13 @@ const answer = await select({
       value: 'npm',
       description: 'npm is the most popular package manager',
     },
+    new Separator(),
     {
       name: 'yarn',
       value: 'yarn',
       description: 'yarn is an awesome package manager',
     },
+    new Separator(' = The Disabled = '),
     {
       name: 'jspm',
       value: 'jspm',
@@ -46,11 +48,11 @@ const answer = await select({
 
 ## Options
 
-| Property | Type                                                                                          | Required | Description                                                                                                                                                                                                                                                                         |
-| -------- | --------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| message  | `string`                                                                                      | yes      | The question to ask                                                                                                                                                                                                                                                                 |
-| choices  | `Array<{ value: string, name?: string, description?: string, disabled?: boolean \| string }>` | yes      | List of the available choices. The `value` will be returned as the answer, and used as display if no `name` is defined. Choices who're `disabled` will be displayed, but not selectable. The `description` will be displayed under the prompt when the cursor land over the choice. |
-| pageSize | `number`                                                                                      | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                                                                                                         |
+| Property | Type                                                                                                       | Required | Description                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| -------- | ---------------------------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message  | `string`                                                                                                   | yes      | The question to ask                                                                                                                                                                                                                                                                                                                                                                                                               |
+| choices  | `Array<{ value: string, name?: string, description?: string, disabled?: boolean \| string } \| Separator>` | yes      | List of the available choices. The `value` will be returned as the answer, and used as display if no `name` is defined. Choices who're `disabled` will be displayed, but not selectable. The `description` will be displayed under the prompt when the cursor land over the choice. The `Separator` constructor takes a facultative `String` value that'll be use as the separator. If omitted, the separator will be `--------`. |
+| pageSize | `number`                                                                                                   | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                                                                                                                                                                                                                                                       |
 
 # License
 
