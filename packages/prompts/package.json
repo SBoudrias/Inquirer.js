@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/prompts",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Inquirer prompts, combined in a single package",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.mts",
@@ -77,15 +77,15 @@
     }
   },
   "dependencies": {
-    "@inquirer/checkbox": "^1.1.0",
-    "@inquirer/confirm": "^1.0.3",
-    "@inquirer/core": "^1.0.4",
-    "@inquirer/editor": "^1.0.3",
-    "@inquirer/expand": "^1.0.3",
-    "@inquirer/input": "^1.0.3",
-    "@inquirer/password": "^1.0.3",
-    "@inquirer/rawlist": "^1.0.3",
-    "@inquirer/select": "^1.0.3"
+    "@inquirer/checkbox": "^1.2.0",
+    "@inquirer/confirm": "^1.0.4",
+    "@inquirer/core": "^1.1.0",
+    "@inquirer/editor": "^1.0.4",
+    "@inquirer/expand": "^1.0.4",
+    "@inquirer/input": "^1.0.4",
+    "@inquirer/password": "^1.0.4",
+    "@inquirer/rawlist": "^1.0.4",
+    "@inquirer/select": "^1.1.0"
   },
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/prompts/README.md"
 }
