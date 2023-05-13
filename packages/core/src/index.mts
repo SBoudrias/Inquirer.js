@@ -19,6 +19,8 @@ export type KeypressEvent = {
   ctrl: boolean;
 };
 
+type NotFunction<T> = T extends Function ? never : T;
+
 const hooks: any[] = [];
 const hooksCleanup: any[] = [];
 const hooksEffect: Array<() => void> = [];
@@ -33,12 +35,18 @@ const cleanupHook = (index: number) => {
   }
 };
 
-export function useState<Value>(defaultValue: Value): [Value, (newValue: Value) => void] {
+export function useState<Value>(
+  defaultValue: NotFunction<Value> | (() => Value)
+): [Value, (newValue: Value) => void] {
   const _idx = index;
   index++;
 
   if (!(_idx in hooks)) {
-    hooks[_idx] = defaultValue;
+    if (typeof defaultValue === 'function') {
+      hooks[_idx] = (defaultValue as () => Value)();
+    } else {
+      hooks[_idx] = defaultValue;
+    }
   }
 
   return [
