@@ -11,9 +11,8 @@ import select, { Separator } from './src/index.mjs';
         value: 'npm',
         description: 'npm is the most popular package manager',
       },
-      new Separator(),
       { name: 'yarn', value: 'yarn', description: 'yarn is an awesome package manager' },
-      new Separator(' = The Disabled = '),
+      new Separator(),
       { name: 'jspm', value: 'jspm', disabled: true },
       {
         name: 'pnpm',
@@ -27,6 +26,7 @@ import select, { Separator } from './src/index.mjs';
   answer = await select({
     message: 'Select your favorite letter',
     choices: [
+      new Separator('== Alphabet (choices cycle as you scroll through) =='),
       { value: 'A' },
       { value: 'B' },
       { value: 'C' },

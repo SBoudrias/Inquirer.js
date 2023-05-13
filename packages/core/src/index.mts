@@ -109,11 +109,6 @@ export type ResolvedPromptConfig = {
   validate: (value: string) => boolean | string | Promise<string | boolean>;
 };
 
-export type SeparatorType = {
-  type?: string;
-  separator?: string;
-};
-
 export function createPrompt<Value, Config extends AsyncPromptConfig>(
   view: (
     config: Config & ResolvedPromptConfig,
