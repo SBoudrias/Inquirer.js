@@ -9,29 +9,37 @@ import {
   isDownKey,
   isNumberKey,
   Paginator,
+  Separator,
   AsyncPromptConfig,
+  SeparatorType,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
 import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
 
+type Choice = {
+  type?: undefined;
+  value: string;
+  name?: string;
+  description?: string;
+  disabled?: boolean | string;
+};
+
 type SelectConfig = AsyncPromptConfig & {
-  choices: {
-    value: string;
-    name?: string;
-    description?: string;
-    disabled?: boolean | string;
-  }[];
+  choices: Array<SeparatorType | Choice>;
   pageSize?: number;
 };
 
+function isSelectableChoice(
+  choice: undefined | SeparatorType | Choice
+): choice is Choice {
+  return choice != null && choice.type !== 'separator' && !choice.disabled;
+}
+
 export default createPrompt<string, SelectConfig>((config, done) => {
   const { choices } = config;
-  const startIndex = Math.max(
-    choices.findIndex(({ disabled }) => !disabled),
-    0
-  );
+  const startIndex = Math.max(choices.findIndex(isSelectableChoice), 0);
 
   const paginator = useRef(new Paginator()).current;
   const firstRender = useRef(true);
@@ -40,16 +48,19 @@ export default createPrompt<string, SelectConfig>((config, done) => {
   const [status, setStatus] = useState('pending');
   const [cursorPosition, setCursorPos] = useState(startIndex);
 
+  // Safe to assume the cursor position always point to a Choice.
+  const choice = choices[cursorPosition] as Choice;
+
   useKeypress((key) => {
     if (isEnterKey(key)) {
       setStatus('done');
-      done(choices[cursorPosition]!.value);
+      done(choice.value);
     } else if (isUpKey(key) || isDownKey(key)) {
       let newCursorPosition = cursorPosition;
       const offset = isUpKey(key) ? -1 : 1;
       let selectedOption;
 
-      while (!selectedOption || selectedOption.disabled) {
+      while (!isSelectableChoice(selectedOption)) {
         newCursorPosition =
           (newCursorPosition + offset + choices.length) % choices.length;
         selectedOption = choices[newCursorPosition];
@@ -61,7 +72,7 @@ export default createPrompt<string, SelectConfig>((config, done) => {
       const newCursorPosition = Number(key.name) - 1;
 
       // Abort if the choice doesn't exists or if disabled
-      if (!choices[newCursorPosition] || choices[newCursorPosition]!.disabled) {
+      if (!isSelectableChoice(choices[newCursorPosition])) {
         return;
       }
 
@@ -76,17 +87,20 @@ export default createPrompt<string, SelectConfig>((config, done) => {
   }
 
   if (status === 'done') {
-    const choice = choices[cursorPosition]!;
     return `${prefix} ${message} ${chalk.cyan(choice.name || choice.value)}`;
   }
 
   const allChoices = choices
-    .map(({ name, value, disabled }, index) => {
-      const line = name || value;
-      if (disabled) {
-        return chalk.dim(
-          `- ${line} ${typeof disabled === 'string' ? disabled : '(disabled)'}`
-        );
+    .map((choice, index): string => {
+      if (choice.type === 'separator') {
+        return ` ${choice.separator}`;
+      }
+
+      const line = choice.name || choice.value;
+      if (choice.disabled) {
+        const disabledLabel =
+          typeof choice.disabled === 'string' ? choice.disabled : '(disabled)';
+        return chalk.dim(`- ${line} ${disabledLabel}`);
       }
 
       if (index === cursorPosition) {
@@ -96,10 +110,11 @@ export default createPrompt<string, SelectConfig>((config, done) => {
       return `  ${line}`;
     })
     .join('\n');
-  const windowedChoices = paginator.paginate(allChoices, cursorPosition, config.pageSize);
 
-  const choice = choices[cursorPosition];
-  const choiceDescription = choice && choice.description ? `\n${choice.description}` : ``;
+  const windowedChoices = paginator.paginate(allChoices, cursorPosition, config.pageSize);
+  const choiceDescription = choice.description ? `\n${choice.description}` : ``;
 
   return `${prefix} ${message}\n${windowedChoices}${choiceDescription}${ansiEscapes.cursorHide}`;
 });
+
+export { Separator };

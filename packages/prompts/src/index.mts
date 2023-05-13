@@ -6,5 +6,6 @@ import input from '@inquirer/input';
 import password from '@inquirer/password';
 import rawlist from '@inquirer/rawlist';
 import select from '@inquirer/select';
+import { Separator } from '@inquirer/core';
 
-export { checkbox, confirm, editor, expand, input, password, rawlist, select };
+export { checkbox, confirm, editor, expand, input, password, rawlist, select, Separator };
