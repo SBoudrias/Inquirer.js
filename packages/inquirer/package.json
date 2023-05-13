@@ -75,7 +75,7 @@
     "lodash": "^4.17.21",
     "mute-stream": "1.0.0",
     "ora": "^5.4.1",
-    "run-async": "^2.4.0",
+    "run-async": "^3.0.0",
     "rxjs": "^7.8.1",
     "string-width": "^4.2.3",
     "strip-ansi": "^6.0.1",
