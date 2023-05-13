@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "name": "@inquirer/cjs-integration-tests",
+  "version": "0.0.0",
+  "devDependencies": {
+    "@inquirer/prompts": "workspace:*"
+  }
+}

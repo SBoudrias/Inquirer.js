@@ -66,7 +66,7 @@
     "mute-stream": "^1.0.0",
     "run-async": "^2.3.0",
     "string-width": "^4.2.3",
-    "strip-ansi": "^7.0.1",
+    "strip-ansi": "^6.0.1",
     "wrap-ansi": "^6.0.1"
   },
   "devDependencies": {

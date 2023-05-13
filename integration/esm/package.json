@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "type": "module",
+  "name": "@inquirer/esm-integration-tests",
+  "version": "0.0.0",
+  "devDependencies": {
+    "@inquirer/prompts": "workspace:*"
+  }
+}

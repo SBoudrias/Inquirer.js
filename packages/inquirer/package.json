@@ -78,7 +78,7 @@
     "run-async": "^2.4.0",
     "rxjs": "^7.8.1",
     "string-width": "^4.2.3",
-    "strip-ansi": "^7.0.1",
+    "strip-ansi": "^6.0.1",
     "through": "^2.3.6",
     "wrap-ansi": "^6.0.1"
   },

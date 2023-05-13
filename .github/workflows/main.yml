@@ -39,6 +39,8 @@ jobs:
           git diff --exit-code
       - name: Test packages
         run: yarn vitest --run --coverage
+      - name: Integration tests
+        run: yarn node --test integration/
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v3

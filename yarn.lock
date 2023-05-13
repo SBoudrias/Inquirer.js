@@ -418,6 +418,21 @@
   resolved "https://registry.yarnpkg.com/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
 
+"@inquirer/prompts@workspace:*":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@inquirer/prompts/-/prompts-1.1.2.tgz#3fb72a92a5028bb670b86b0d506bf5ad5b5541d6"
+  integrity sha512-PGW3g4wlOJx0OpXTjwOs/n4j/p+XOUn9GTMMLYdC26i/W+Jrw0P9HaYI8iEXr1OmImNZcRD6QQUIq8aW/5mgFw==
+  dependencies:
+    "@inquirer/checkbox" "^1.2.2"
+    "@inquirer/confirm" "^1.0.6"
+    "@inquirer/core" "^1.1.2"
+    "@inquirer/editor" "^1.0.6"
+    "@inquirer/expand" "^1.0.6"
+    "@inquirer/input" "^1.0.6"
+    "@inquirer/password" "^1.0.6"
+    "@inquirer/rawlist" "^1.0.6"
+    "@inquirer/select" "^1.1.2"
+
 "@isaacs/string-locale-compare@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@isaacs/string-locale-compare/-/string-locale-compare-1.1.0.tgz#291c227e93fd407a96ecd59879a35809120e432b"

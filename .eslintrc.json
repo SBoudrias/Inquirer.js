@@ -39,9 +39,24 @@
       }
     },
     {
-      "files": ["packages/inquirer/test/**", "*.test.mts"],
+      "files": ["*.cjs"],
+      "globals": {
+        "require": "readonly"
+      },
+      "parserOptions": {
+        "sourceType": "script"
+      }
+    },
+    {
+      "files": ["packages/inquirer/test/**", "packages/**/*.test.*"],
       "rules": {
         "n/no-extraneous-import": [
+          "error",
+          {
+            "allowModules": ["vitest"]
+          }
+        ],
+        "n/no-extraneous-require": [
           "error",
           {
             "allowModules": ["vitest"]

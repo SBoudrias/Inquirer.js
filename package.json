@@ -69,7 +69,8 @@
     "vitest": "^0.30.1"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "integration/*"
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
@@ -77,7 +78,7 @@
     "publish": "lerna run tsc && lerna publish",
     "prepare": "husky install",
     "pretest": "eslint . && lerna run tsc",
-    "test": "vitest --run"
+    "test": "vitest --run packages && node --test integration"
   },
   "repository": {
     "type": "git",
