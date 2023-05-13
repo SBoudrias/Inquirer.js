@@ -1,4 +1,4 @@
-import checkbox from './src/index.mjs';
+import checkbox, { Separator } from './src/index.mjs';
 
 (async () => {
   let answer;
@@ -8,6 +8,7 @@ import checkbox from './src/index.mjs';
     choices: [
       { name: 'npm', value: 'npm' },
       { name: 'yarn', value: 'yarn' },
+      new Separator(),
       { name: 'jspm', value: 'jspm', disabled: true },
       {
         name: 'pnpm',
@@ -21,6 +22,7 @@ import checkbox from './src/index.mjs';
   answer = await checkbox({
     message: 'Select your favorite letters',
     choices: [
+      new Separator('== Alphabet (choices cycle as you scroll through) =='),
       { value: 'A', checked: true },
       { value: 'B' },
       { value: 'C', checked: true },
