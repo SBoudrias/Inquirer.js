@@ -4,10 +4,7 @@ import { globby } from 'globby';
 
 // Because we're using .mts files, TS compiles to .mjs files disregarding the target. So here we
 // manually rename the common.js files to .js
-const paths: string[] = await globby([
-  'packages/**/dist/cjs/**/*.mjs',
-  '!**/node_modules',
-]);
+const paths: string[] = await globby(['dist/cjs/**/*.mjs', '!**/node_modules']);
 
 paths.forEach(async (pathname: string) => {
   const fileContent = await fs.readFile(pathname, 'utf-8');
