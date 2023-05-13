@@ -39,14 +39,20 @@ function isSelectableChoice(
 
 export default createPrompt<string, SelectConfig>((config, done) => {
   const { choices } = config;
-  const startIndex = Math.max(choices.findIndex(isSelectableChoice), 0);
 
   const paginator = useRef(new Paginator()).current;
   const firstRender = useRef(true);
 
   const prefix = usePrefix();
   const [status, setStatus] = useState('pending');
-  const [cursorPosition, setCursorPos] = useState(startIndex);
+  const [cursorPosition, setCursorPos] = useState(() => {
+    const startIndex = choices.findIndex(isSelectableChoice);
+    if (startIndex < 0) {
+      throw new Error('[select prompt] No selectable choices. All choices are disabled.');
+    }
+
+    return startIndex;
+  });
 
   // Safe to assume the cursor position always point to a Choice.
   const choice = choices[cursorPosition] as Choice;
