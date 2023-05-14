@@ -35,10 +35,10 @@ const answer = await checkbox({
 
 ## Options
 
-| Property | Type                                                                                     | Required    | Description         |
-| -------- | ---------------------------------------------------------------------------------------- | ----------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| message  | `string`                                                                                 | yes         | The question to ask |
-| choices  | `Array<{ value: string, name?: string, disabled?: boolean \| string, checked?: boolean } | Separator>` | yes                 | List of the available choices. The `value` will be returned as the answer, and used as display if no `name` is defined. Choices who're `disabled` will be displayed, but not selectable. |
+| Property | Type                                                                                                    | Required | Description                                                                                                                                                                              |
+| -------- | ------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message  | `string`                                                                                                | yes      | The question to ask                                                                                                                                                                      |
+| choices  | `Array<{ value: string, name?: string, disabled?: boolean \| string, checked?: boolean } \| Separator>` | yes      | List of the available choices. The `value` will be returned as the answer, and used as display if no `name` is defined. Choices who're `disabled` will be displayed, but not selectable. |
 
 The `Separator` object can be used to render non-selectable lines in the choice list. By default it'll render a line, but you can provide the text as argument (`new Separator('-- Dependencies --')`). This option is often used to add labels to groups within long list of options.
 
