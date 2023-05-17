@@ -74,7 +74,9 @@ export default class EditorPrompt extends Base {
   startExternalEditor() {
     // Pause Readline to prevent stdin and stdout from being modified while the editor is showing
     this.rl.pause();
-    editAsync(this.currentText, this.endExternalEditor.bind(this));
+    editAsync(this.currentText, this.endExternalEditor.bind(this), {
+      postfix: this.opt.postfix ?? '.txt',
+    });
   }
 
   endExternalEditor(error, result) {
