@@ -9,8 +9,10 @@ import {
   isDownKey,
   isUpKey,
   isEnterKey,
+  Separator,
   type KeypressEvent,
 } from './src/index.mjs';
+import stripAnsi from 'strip-ansi';
 
 describe('createPrompt()', () => {
   it('handle async function message', async () => {
@@ -249,5 +251,24 @@ describe('Error handling', () => {
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
       '"useEffect return value must be a cleanup function or nothing."'
     );
+  });
+});
+
+describe('Separator', () => {
+  it('detects separator class', () => {
+    const separator = new Separator();
+    expect(Separator.isSeparator(separator)).toEqual(true);
+  });
+
+  it('detects separator duck type', () => {
+    const separator = { type: 'separator', separator: '----' };
+    expect(Separator.isSeparator(separator)).toEqual(true);
+  });
+
+  it('renders separator', () => {
+    expect(stripAnsi(new Separator().separator)).toMatchInlineSnapshot(
+      '"──────────────"'
+    );
+    expect(new Separator('===').separator).toEqual('===');
   });
 });

@@ -11,7 +11,6 @@ import {
   Paginator,
   Separator,
   AsyncPromptConfig,
-  SeparatorType,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -27,14 +26,12 @@ type Choice = {
 };
 
 type SelectConfig = AsyncPromptConfig & {
-  choices: ReadonlyArray<Choice | SeparatorType>;
+  choices: ReadonlyArray<Choice | Separator>;
   pageSize?: number;
 };
 
-function isSelectableChoice(
-  choice: undefined | SeparatorType | Choice
-): choice is Choice {
-  return choice != null && choice.type !== 'separator' && !choice.disabled;
+function isSelectableChoice(choice: undefined | Separator | Choice): choice is Choice {
+  return choice != null && !Separator.isSeparator(choice) && !choice.disabled;
 }
 
 export default createPrompt<string, SelectConfig>((config, done) => {
@@ -98,7 +95,7 @@ export default createPrompt<string, SelectConfig>((config, done) => {
 
   const allChoices = choices
     .map((choice, index): string => {
-      if (choice.type === 'separator') {
+      if (Separator.isSeparator(choice)) {
         return ` ${choice.separator}`;
       }
 

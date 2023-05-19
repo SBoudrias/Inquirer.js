@@ -11,7 +11,6 @@ import {
   isEnterKey,
   Paginator,
   Separator,
-  SeparatorType,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -31,13 +30,13 @@ type Config<Value> = {
   pageSize?: number;
   instructions?: string | boolean;
   message: string;
-  choices: ReadonlyArray<Choice<Value> | SeparatorType>;
+  choices: ReadonlyArray<Choice<Value> | Separator>;
 };
 
 function isSelectableChoice<T>(
-  choice: undefined | SeparatorType | Choice<T>
+  choice: undefined | Separator | Choice<T>
 ): choice is Choice<T> {
-  return choice != null && choice.type !== 'separator' && !choice.disabled;
+  return choice != null && !Separator.isSeparator(choice) && !choice.disabled;
 }
 
 export default createPrompt(
@@ -49,7 +48,7 @@ export default createPrompt(
     const paginator = useRef(new Paginator()).current;
 
     const [status, setStatus] = useState('pending');
-    const [choices, setChoices] = useState<Array<SeparatorType | Choice<Value>>>(() =>
+    const [choices, setChoices] = useState<Array<Separator | Choice<Value>>>(() =>
       config.choices.map((choice) => ({ ...choice }))
     );
     const [cursorPosition, setCursorPosition] = useState(0);
@@ -151,7 +150,7 @@ export default createPrompt(
 
     const allChoices = choices
       .map((choice, index) => {
-        if (choice.type === 'separator') {
+        if (Separator.isSeparator(choice)) {
           return ` ${choice.separator}`;
         }
 

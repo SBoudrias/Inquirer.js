@@ -6,7 +6,6 @@ import {
   isEnterKey,
   AsyncPromptConfig,
   Separator,
-  SeparatorType,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -21,13 +20,11 @@ type Choice = {
 };
 
 type RawlistConfig = AsyncPromptConfig & {
-  choices: ReadonlyArray<Choice | SeparatorType>;
+  choices: ReadonlyArray<Choice | Separator>;
 };
 
-function isSelectableChoice(
-  choice: undefined | SeparatorType | Choice
-): choice is Choice {
-  return choice != null && choice.type !== 'separator';
+function isSelectableChoice(choice: undefined | Separator | Choice): choice is Choice {
+  return choice != null && !Separator.isSeparator(choice);
 }
 
 export default createPrompt<string, RawlistConfig>((config, done) => {
@@ -75,7 +72,7 @@ export default createPrompt<string, RawlistConfig>((config, done) => {
   let index = 0;
   const choicesStr = choices
     .map((choice) => {
-      if (choice.type === 'separator') {
+      if (Separator.isSeparator(choice)) {
         return ` ${choice.separator}`;
       }
 
