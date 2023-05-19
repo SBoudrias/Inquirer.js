@@ -19,15 +19,15 @@ import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
 
 type Choice = {
-  type?: undefined;
   value: string;
   name?: string;
   description?: string;
   disabled?: boolean | string;
+  type?: never;
 };
 
 type SelectConfig = AsyncPromptConfig & {
-  choices: Array<SeparatorType | Choice>;
+  choices: ReadonlyArray<Choice | SeparatorType>;
   pageSize?: number;
 };
 

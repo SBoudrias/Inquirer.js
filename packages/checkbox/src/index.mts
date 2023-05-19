@@ -19,11 +19,11 @@ import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
 
 export type Choice<Value> = {
-  type?: undefined;
   name?: string;
   value: Value;
   disabled?: boolean | string;
   checked?: boolean;
+  type?: never;
 };
 
 type Config<Value> = {
@@ -31,7 +31,7 @@ type Config<Value> = {
   pageSize?: number;
   instructions?: string | boolean;
   message: string;
-  choices: ReadonlyArray<SeparatorType | Choice<Value>>;
+  choices: ReadonlyArray<Choice<Value> | SeparatorType>;
 };
 
 function isSelectableChoice<T>(

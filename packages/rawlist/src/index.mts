@@ -5,15 +5,30 @@ import {
   usePrefix,
   isEnterKey,
   AsyncPromptConfig,
+  Separator,
+  SeparatorType,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
 
 const numberRegex = /[0-9]+/;
 
-type RawlistConfig = AsyncPromptConfig & {
-  choices: { value: string; name?: string; key?: string }[];
+type Choice = {
+  value: string;
+  name?: string;
+  key?: string;
+  type?: never;
 };
+
+type RawlistConfig = AsyncPromptConfig & {
+  choices: ReadonlyArray<Choice | SeparatorType>;
+};
+
+function isSelectableChoice(
+  choice: undefined | SeparatorType | Choice
+): choice is Choice {
+  return choice != null && choice.type !== 'separator';
+}
 
 export default createPrompt<string, RawlistConfig>((config, done) => {
   const { choices } = config;
@@ -27,13 +42,15 @@ export default createPrompt<string, RawlistConfig>((config, done) => {
       let selectedChoice;
       if (numberRegex.test(value)) {
         const answer = parseInt(value, 10) - 1;
-        selectedChoice = choices[answer];
+        selectedChoice = choices.filter(isSelectableChoice)[answer];
       } else {
         const answer = value.toLowerCase();
-        selectedChoice = choices.find(({ key }) => key === answer);
+        selectedChoice = choices.find(
+          (choice) => isSelectableChoice(choice) && choice.key === answer
+        );
       }
 
-      if (selectedChoice) {
+      if (isSelectableChoice(selectedChoice)) {
         const finalValue = selectedChoice.value || selectedChoice.name;
         setValue(finalValue!);
         setStatus('done');
@@ -55,12 +72,17 @@ export default createPrompt<string, RawlistConfig>((config, done) => {
     return `${prefix} ${message} ${chalk.cyan(value)}`;
   }
 
+  let index = 0;
   const choicesStr = choices
-    .map((choice, index) => {
-      const humanIndex = index + 1;
-      const line = `  ${choice.key || humanIndex}) ${choice.name || choice.value}`;
+    .map((choice) => {
+      if (choice.type === 'separator') {
+        return ` ${choice.separator}`;
+      }
 
-      if (choice.key === value.toLowerCase() || String(humanIndex) === value) {
+      index += 1;
+      const line = `  ${choice.key || index}) ${choice.name || choice.value}`;
+
+      if (choice.key === value.toLowerCase() || String(index) === value) {
         return chalk.cyan(line);
       }
 
@@ -78,3 +100,5 @@ export default createPrompt<string, RawlistConfig>((config, done) => {
     [choicesStr, error].filter(Boolean).join('\n'),
   ];
 });
+
+export { Separator };

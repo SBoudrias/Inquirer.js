@@ -1,4 +1,4 @@
-import rawlist from './src/index.mjs';
+import rawlist, { Separator } from './src/index.mjs';
 
 (async () => {
   let answer;
@@ -18,6 +18,7 @@ import rawlist from './src/index.mjs';
         name: 'Show diff',
         value: 'diff',
       },
+      new Separator(),
       {
         name: 'Abort',
         value: 'abort',
@@ -44,6 +45,7 @@ import rawlist from './src/index.mjs';
         name: 'Show diff',
         value: 'diff',
       },
+      new Separator(),
       {
         key: 'x',
         name: 'Abort',
