@@ -57,7 +57,7 @@
     "cmdify": "^0.0.4",
     "mockery": "^2.1.0",
     "nyc": "^15.0.0",
-    "sinon": "^15.0.4",
+    "sinon": "^15.1.0",
     "terminal-link": "^3.0.0"
   },
   "repository": {
