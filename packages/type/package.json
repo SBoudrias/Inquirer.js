@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "description": "Inquirer core TS types",
   "main": "./dist/cjs/index.js",
-  "typings": "./dist/cjs/types/index.d.mts",
+  "typings": "./dist/cjs/types/index.d.cts",
   "files": [
     "dist/**/*"
   ],
@@ -71,7 +71,7 @@
         "default": "./dist/esm/index.mjs"
       },
       "require": {
-        "types": "./dist/cjs/types/index.d.mts",
+        "types": "./dist/cjs/types/index.d.cts",
         "default": "./dist/cjs/index.js"
       }
     }
