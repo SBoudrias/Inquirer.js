@@ -69,7 +69,7 @@
     "clean": "rm -rf dist",
     "tsc:esm": "tsc -p ./tsconfig.json",
     "tsc:cjs": "tsc -p ./tsconfig.cjs.json && yarn run fix-ext",
-    "fix-ext": "yarn ts-node ../../tools/fix-ext.mts"
+    "fix-ext": "node --no-warnings=ExperimentalWarning --loader=ts-node/esm ../../tools/fix-ext.mts"
   },
   "exports": {
     ".": {
