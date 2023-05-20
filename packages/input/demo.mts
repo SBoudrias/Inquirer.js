@@ -10,6 +10,12 @@ const isHex = (value: string) =>
   let answer;
 
   answer = await input({
+    message: "What's your favorite food?",
+    default: 'Croissant',
+  });
+  console.log('Answer:', answer);
+
+  answer = await input({
     message: 'Enter an hex color?',
     transformer(value = '', { isFinal }: { isFinal: boolean }) {
       const color = chalk.hex(isHex(value) ? value : 'fff');
@@ -36,12 +42,6 @@ const isHex = (value: string) =>
       new Promise((resolve) => {
         setTimeout(() => resolve('(Slow message) Input any value:'), 3000);
       }),
-  });
-  console.log('Answer:', answer);
-
-  answer = await input({
-    message: "What's your favorite food?",
-    default: 'Croissant',
   });
   console.log('Answer:', answer);
 })();

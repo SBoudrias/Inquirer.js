@@ -17,7 +17,9 @@ type InputConfig = AsyncPromptConfig & {
 
 export default createPrompt<string, InputConfig>((config, done) => {
   const [status, setStatus] = useState<string>('pending');
-  const [defaultValue, setDefaultValue] = useState<string | undefined>(config.default);
+  const [defaultValue = '', setDefaultValue] = useState<string | undefined>(
+    config.default
+  );
   const [errorMsg, setError] = useState<string | undefined>(undefined);
   const [value, setValue] = useState<string>('');
 
@@ -31,7 +33,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
     }
 
     if (isEnterKey(key)) {
-      const answer = value || defaultValue || '';
+      const answer = value || defaultValue;
       setStatus('loading');
       const isValid = await config.validate(answer);
       if (isValid === true) {
@@ -47,6 +49,11 @@ export default createPrompt<string, InputConfig>((config, done) => {
       }
     } else if (isBackspaceKey(key) && !value) {
       setDefaultValue(undefined);
+    } else if (key.name === 'tab' && !value) {
+      setDefaultValue(undefined);
+      rl.clearLine(0); // Remove the tab character.
+      rl.write(defaultValue);
+      setValue(defaultValue);
     } else {
       setValue(rl.line);
       setError(undefined);

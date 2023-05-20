@@ -136,4 +136,21 @@ describe('input prompt', () => {
     await expect(answer).resolves.toEqual('');
     expect(getScreen()).toMatchInlineSnapshot(`"? What is your name"`);
   });
+
+  it('handle editing the default option', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'What is your name',
+      default: 'Mike',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name (Mike)"`);
+
+    events.keypress('tab');
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike"`);
+
+    events.type('y');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('Mikey');
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mikey"`);
+  });
 });

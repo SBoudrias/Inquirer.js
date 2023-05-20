@@ -12,6 +12,7 @@ export * from './lib/Separator.mjs';
 export type InquirerReadline = readline.ReadLine & {
   output: MuteStream;
   input: NodeJS.ReadableStream;
+  clearLine: (dir: 0 | 1 | -1) => void; // https://nodejs.org/api/readline.html#rlclearlinedir
 };
 
 export type KeypressEvent = {
