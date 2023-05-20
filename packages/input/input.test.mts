@@ -50,10 +50,11 @@ describe('input prompt', () => {
     events.keypress('enter');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Answer 2 === 
+      "? Answer 2 === 1
       > You must provide a valid value"
     `);
 
+    events.keypress('backspace');
     events.type('2');
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 2"`);
 
@@ -83,10 +84,11 @@ describe('input prompt', () => {
     events.keypress('enter');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Answer 2 === 
+      "? Answer 2 === 1
       > Answer must be 2"
     `);
 
+    events.keypress('backspace');
     events.type('2');
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 2"`);
 

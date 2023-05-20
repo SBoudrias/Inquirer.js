@@ -39,9 +39,9 @@ export default createPrompt<string, InputConfig>((config, done) => {
         setStatus('done');
         done(answer);
       } else {
-        // TODO: Can we keep the value after validation failure?
-        // `rl.line = value` works but it looses the cursor position.
-        setValue('');
+        // Reset the readline line value to the previous value. On line event, the value
+        // get cleared, forcing the user to re-enter the value instead of fixing it.
+        rl.write(value);
         setError(isValid || 'You must provide a valid value');
         setStatus('pending');
       }
