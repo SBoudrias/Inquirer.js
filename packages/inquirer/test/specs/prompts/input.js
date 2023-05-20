@@ -1,12 +1,9 @@
 import { describe, it, beforeEach } from 'vitest';
-import chai, { expect } from 'chai';
-import chaiString from 'chai-string';
+import { expect } from 'chai';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
 import Input from '../../../lib/prompts/input.js';
-
-chai.use(chaiString);
 
 describe('`input` prompt', () => {
   beforeEach(function () {

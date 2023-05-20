@@ -2,6 +2,5 @@
 node_modules
 coverage
 dist
-.nyc_output
 packages/*/node_modules
 packages/*/__snapshots__

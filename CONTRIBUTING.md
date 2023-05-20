@@ -26,7 +26,7 @@ To run everything:
 yarn test
 ```
 
-And during development, you might want to run vitest in watch mode for quicker interation:
+And during development, you might want to run vitest in watch mode for quicker iteration:
 
 ```sh
 yarn vitest
