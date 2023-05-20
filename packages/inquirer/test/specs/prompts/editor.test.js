@@ -1,5 +1,5 @@
 import { beforeEach, afterEach, describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import { createRequire } from 'node:module';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
@@ -35,7 +35,7 @@ describe('`editor` prompt', () => {
     rl.emit('line', '');
     const answer = await promise;
 
-    expect(answer).to.equal(answer);
+    expect(answer).toEqual(answer);
   });
 
   it('should open editor without waiting for the user to press enter', async () => {
@@ -43,6 +43,6 @@ describe('`editor` prompt', () => {
 
     const answer = await prompt.run();
 
-    expect(answer).to.equal(answer);
+    expect(answer).toEqual(answer);
   });
 });

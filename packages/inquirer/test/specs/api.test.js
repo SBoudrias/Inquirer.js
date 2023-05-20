@@ -3,7 +3,7 @@
  */
 
 import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import fixtures from '../helpers/fixtures.js';
 import ReadlineStub from '../helpers/readline.js';
 import inquirer from '../../lib/inquirer.js';
@@ -53,7 +53,7 @@ const tests = {
 
           const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
           prompt.run().then((answer) => {
-            expect(answer).to.equal('pass');
+            expect(answer).toEqual('pass');
             done();
           });
 
@@ -71,7 +71,7 @@ const tests = {
 
           const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
           prompt.run().then((answer) => {
-            expect(answer).to.equal('pass');
+            expect(answer).toEqual('pass');
             done();
           });
 
@@ -114,7 +114,7 @@ const tests = {
             name: 'q2',
             message: 'message',
             filter(input, answers) {
-              expect(answers.q1).to.equal(true);
+              expect(answers.q1).toEqual(true);
               return input;
             },
             default: false,
@@ -125,8 +125,8 @@ const tests = {
         autosubmit(promise.ui);
 
         return promise.then((answers) => {
-          expect(answers.q1).to.equal(true);
-          expect(answers.q2).to.equal(false);
+          expect(answers.q1).toEqual(true);
+          expect(answers.q2).toEqual(false);
         });
       });
     });
@@ -209,7 +209,7 @@ const tests = {
 
         const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         const promise = prompt.run().then(() => {
-          expect(called).to.equal(1);
+          expect(called).toEqual(1);
         });
 
         ctx.rl.emit('line');
@@ -266,7 +266,7 @@ const tests = {
             name: 'q2',
             message: 'message',
             validate(input, answers) {
-              expect(answers.q1).to.equal(true);
+              expect(answers.q1).toEqual(true);
               return true;
             },
             default: false,
@@ -277,8 +277,8 @@ const tests = {
         autosubmit(promise.ui);
 
         return promise.then((answers) => {
-          expect(answers.q1).to.equal(true);
-          expect(answers.q2).to.equal(false);
+          expect(answers.q1).toEqual(true);
+          expect(answers.q2).toEqual(false);
         });
       });
     });
@@ -292,8 +292,8 @@ const tests = {
 
           const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
           prompt.run().then((answer) => {
-            expect(ctx.rl.output.__raw__).to.contain('(pass)');
-            expect(answer).to.equal('pass');
+            expect(ctx.rl.output.__raw__).toContain('(pass)');
+            expect(answer).toEqual('pass');
             done();
           });
 
@@ -306,8 +306,8 @@ const tests = {
 
           const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
           prompt.run().then((answer) => {
-            expect(ctx.rl.output.__raw__).to.contain('(0)');
-            expect(answer).to.equal(0);
+            expect(ctx.rl.output.__raw__).toContain('(0)');
+            expect(answer).toEqual(0);
             done();
           });
 
@@ -324,7 +324,7 @@ const tests = {
         const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         prompt.run();
 
-        expect(ctx.rl.output.__raw__).to.contain(ctx.fixture.message);
+        expect(ctx.rl.output.__raw__).toContain(ctx.fixture.message);
       });
       it('should default to name for message', () => {
         ctx.fixture.name = 'testfoobarbarfoobar';
@@ -333,7 +333,7 @@ const tests = {
         const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
         prompt.run();
 
-        expect(ctx.rl.output.__raw__).to.contain(ctx.fixture.name + ':');
+        expect(ctx.rl.output.__raw__).toContain(ctx.fixture.name + ':');
       });
     });
   },
@@ -347,7 +347,7 @@ const tests = {
         prompt.run();
 
         choices.filter(inquirer.Separator.exclude).forEach((choice) => {
-          expect(ctx.rl.output.__raw__).to.contain(choice.name);
+          expect(ctx.rl.output.__raw__).toContain(choice.name);
         });
       });
     });
@@ -359,7 +359,7 @@ const tests = {
         expect(() => {
           delete ctx.fixture.name;
           return new ctx.Prompt(ctx.fixture, ctx.rl);
-        }).to.throw(/name/);
+        }).toThrow(/name/);
       });
     });
   },

@@ -1,5 +1,5 @@
 import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
@@ -19,8 +19,8 @@ describe('`confirm` prompt', () => {
   it('should default to true', () =>
     new Promise((done) => {
       confirm.run().then((answer) => {
-        expect(rl.output.__raw__).to.contain('Y/n');
-        expect(answer).to.equal(true);
+        expect(rl.output.__raw__).toContain('Y/n');
+        expect(answer).toEqual(true);
         done();
       });
 
@@ -33,8 +33,8 @@ describe('`confirm` prompt', () => {
       const falseConfirm = new Confirm(fixture, rl);
 
       falseConfirm.run().then((answer) => {
-        expect(rl.output.__raw__).to.contain('y/N');
-        expect(answer).to.equal(false);
+        expect(rl.output.__raw__).toContain('y/N');
+        expect(answer).toEqual(false);
         done();
       });
 
@@ -47,8 +47,8 @@ describe('`confirm` prompt', () => {
       const falseConfirm = new Confirm(fixture, rl);
 
       falseConfirm.run().then((answer) => {
-        expect(rl.output.__raw__).to.contain('Y/n');
-        expect(answer).to.equal(true);
+        expect(rl.output.__raw__).toContain('Y/n');
+        expect(answer).toEqual(true);
         done();
       });
 
@@ -58,7 +58,7 @@ describe('`confirm` prompt', () => {
   it("should parse 'Y' value to boolean true", () =>
     new Promise((done) => {
       confirm.run().then((answer) => {
-        expect(answer).to.equal(true);
+        expect(answer).toEqual(true);
         done();
       });
 
@@ -68,7 +68,7 @@ describe('`confirm` prompt', () => {
   it("should parse 'Yes' value to boolean true", () =>
     new Promise((done) => {
       confirm.run().then((answer) => {
-        expect(answer).to.equal(true);
+        expect(answer).toEqual(true);
         done();
       });
 
@@ -78,7 +78,7 @@ describe('`confirm` prompt', () => {
   it("should parse 'No' value to boolean false", () =>
     new Promise((done) => {
       confirm.run().then((answer) => {
-        expect(answer).to.equal(false);
+        expect(answer).toEqual(false);
         done();
       });
 
@@ -88,7 +88,7 @@ describe('`confirm` prompt', () => {
   it('should parse every other string value to boolean false', () =>
     new Promise((done) => {
       confirm.run().then((answer) => {
-        expect(answer).to.equal(false);
+        expect(answer).toEqual(false);
         done();
       });
 
@@ -102,7 +102,7 @@ describe('`confirm` prompt', () => {
       confirmOutput
         .run()
         .then((answer) => {
-          expect(answer).to.equal('👍');
+          expect(answer).toEqual('👍');
           done();
         })
         .catch((err) => console.log(err));

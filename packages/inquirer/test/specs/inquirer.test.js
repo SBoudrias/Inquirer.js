@@ -7,7 +7,7 @@ import os from 'node:os';
 import stream from 'node:stream';
 import tty from 'node:tty';
 import { beforeEach, afterEach, describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import sinon from 'sinon';
 import { Observable } from 'rxjs';
 
@@ -41,8 +41,8 @@ describe('inquirer.prompt', () => {
     rl1.emit('line');
 
     return promise.then(() => {
-      expect(rl1.close.calledOnce).to.equal(true);
-      expect(rl1.output.end.calledOnce).to.equal(true);
+      expect(rl1.close.calledOnce).toEqual(true);
+      expect(rl1.output.end.calledOnce).toEqual(true);
 
       const promise2 = prompt({
         type: 'confirm',
@@ -56,10 +56,10 @@ describe('inquirer.prompt', () => {
       rl2.emit('line');
 
       return promise2.then(() => {
-        expect(rl2.close.calledOnce).to.equal(true);
-        expect(rl2.output.end.calledOnce).to.equal(true);
+        expect(rl2.close.calledOnce).toEqual(true);
+        expect(rl2.output.end.calledOnce).toEqual(true);
 
-        expect(rl1).to.not.equal(rl2);
+        expect(rl1).not.toEqual(rl2);
       });
     });
   });
@@ -78,8 +78,8 @@ describe('inquirer.prompt', () => {
       sandbox.spy(rl1.output, 'end');
 
       promise.catch(() => {
-        expect(rl1.close.calledOnce).to.equal(true);
-        expect(rl1.output.end.calledOnce).to.equal(true);
+        expect(rl1.close.calledOnce).toEqual(true);
+        expect(rl1.output.end.calledOnce).toEqual(true);
         done();
       });
     }));
@@ -103,8 +103,8 @@ describe('inquirer.prompt', () => {
     autosubmit(promise.ui);
 
     return promise.then((answers) => {
-      expect(answers.q1).to.equal(true);
-      expect(answers.q2).to.equal(false);
+      expect(answers.q1).toEqual(true);
+      expect(answers.q2).toEqual(false);
     });
   });
 
@@ -124,8 +124,8 @@ describe('inquirer.prompt', () => {
     const promise = prompt(prompts);
     autosubmit(promise.ui);
     const { q1, q2 } = await promise;
-    expect(q1).to.equal(true);
-    expect(q2).to.equal('Foo');
+    expect(q1).toEqual(true);
+    expect(q2).toEqual('Foo');
   });
 
   it('should take a prompts array with nested names', async () => {
@@ -147,7 +147,7 @@ describe('inquirer.prompt', () => {
     autosubmit(promise.ui);
 
     return promise.then((answers) => {
-      expect(answers).to.deep.equal({
+      expect(answers).toEqual({
         foo: {
           bar: {
             q1: true,
@@ -170,18 +170,18 @@ describe('inquirer.prompt', () => {
 
     promise.ui.rl.emit('line');
     const answers = await promise;
-    expect(answers.q1).to.equal('bar');
+    expect(answers.q1).toEqual('bar');
   });
 
   it('should parse `message` if passed as a function', async () => {
     const stubMessage = 'foo';
     prompt.registerPrompt('stub', function (params) {
       this.run = sinon.stub().returns(Promise.resolve());
-      expect(params.message).to.equal(stubMessage);
+      expect(params.message).toEqual(stubMessage);
     });
 
     const msgFunc = function (answers) {
-      expect(answers.name1).to.equal('bar');
+      expect(answers.name1).toEqual('bar');
       return stubMessage;
     };
 
@@ -205,7 +205,7 @@ describe('inquirer.prompt', () => {
 
     await promise;
     // Ensure we're not overwriting original prompt values.
-    expect(prompts[1].message).to.equal(msgFunc);
+    expect(prompts[1].message).toEqual(msgFunc);
   });
 
   it('should run asynchronous `messageasync `', () =>
@@ -213,7 +213,7 @@ describe('inquirer.prompt', () => {
       const stubMessage = 'foo';
       prompt.registerPrompt('stub', function (params) {
         this.run = sinon.stub().returns(Promise.resolve());
-        expect(params.message).to.equal(stubMessage);
+        expect(params.message).toEqual(stubMessage);
         done();
       });
 
@@ -228,7 +228,7 @@ describe('inquirer.prompt', () => {
           type: 'stub',
           name: 'name',
           message(answers) {
-            expect(answers.name1).to.equal('bar');
+            expect(answers.name1).toEqual('bar');
             const goOn = this.async();
             setTimeout(() => {
               goOn(null, stubMessage);
@@ -246,7 +246,7 @@ describe('inquirer.prompt', () => {
       const stubDefault = 'foo';
       prompt.registerPrompt('stub', function (params) {
         this.run = sinon.stub().returns(Promise.resolve());
-        expect(params.default).to.equal(stubDefault);
+        expect(params.default).toEqual(stubDefault);
         done();
       });
 
@@ -262,7 +262,7 @@ describe('inquirer.prompt', () => {
           name: 'name',
           message: 'message',
           default(answers) {
-            expect(answers.name1).to.equal('bar');
+            expect(answers.name1).toEqual('bar');
             return stubDefault;
           },
         },
@@ -288,7 +288,7 @@ describe('inquirer.prompt', () => {
         message: 'message',
         default(answers) {
           goesInDefault = true;
-          expect(answers.name1).to.equal('bar');
+          expect(answers.name1).toEqual('bar');
           const goOn = this.async();
           setTimeout(() => {
             goOn(null, input2Default);
@@ -304,15 +304,15 @@ describe('inquirer.prompt', () => {
     promise.ui.rl.emit('line');
 
     const answers = await promise;
-    expect(goesInDefault).to.equal(true);
-    expect(answers.q2).to.equal(input2Default);
+    expect(goesInDefault).toEqual(true);
+    expect(answers.q2).toEqual(input2Default);
   });
 
   it('should pass previous answers to the prompt constructor', async () =>
     new Promise((done) => {
       prompt.registerPrompt('stub', function (params, rl, answers) {
         this.run = sinon.stub().returns(Promise.resolve());
-        expect(answers.name1).to.equal('bar');
+        expect(answers.name1).toEqual('bar');
         done();
       });
 
@@ -339,7 +339,7 @@ describe('inquirer.prompt', () => {
       const stubChoices = ['foo', 'bar'];
       prompt.registerPrompt('stub', function (params) {
         this.run = sinon.stub().returns(Promise.resolve());
-        expect(params.choices).to.equal(stubChoices);
+        expect(params.choices).toEqual(stubChoices);
         done();
       });
 
@@ -355,7 +355,7 @@ describe('inquirer.prompt', () => {
           name: 'name',
           message: 'message',
           choices(answers) {
-            expect(answers.name1).to.equal('bar');
+            expect(answers.name1).toEqual('bar');
             return stubChoices;
           },
         },
@@ -376,7 +376,7 @@ describe('inquirer.prompt', () => {
 
       const promise = prompt(config);
       promise.then((answers) => {
-        expect(answers.q1).to.equal('bar');
+        expect(answers.q1).toEqual('bar');
         done();
       });
 
@@ -418,7 +418,7 @@ describe('inquirer.prompt', () => {
   it('should expose the UI', async () =>
     new Promise((done) => {
       const promise = prompt([]);
-      expect(promise.ui.answers).to.be.an('object');
+      expect(promise.ui.answers).toBeTypeOf('object');
       done();
     }));
 
@@ -445,8 +445,8 @@ describe('inquirer.prompt', () => {
     promise.ui.rl.emit('line');
 
     return promise.then((answers) => {
-      expect(answers.q1).to.equal(true);
-      expect(answers.q2).to.equal(false);
+      expect(answers.q1).toEqual(true);
+      expect(answers.q2).toEqual(false);
     });
   });
 
@@ -464,8 +464,8 @@ describe('inquirer.prompt', () => {
     autosubmit(promise.ui);
 
     return promise.then((answers) => {
-      expect(answers.prefiled).to.equal(true);
-      expect(answers.q1).to.equal(true);
+      expect(answers.prefiled).toEqual(true);
+      expect(answers.q1).toEqual(true);
     });
   });
 
@@ -490,8 +490,8 @@ describe('inquirer.prompt', () => {
       promise.then(() => {
         const spyCall = filter.getCall(0);
 
-        expect(spyCall.args[0]).to.equal('foo');
-        expect(spyCall.args[1]).to.be.an('object');
+        expect(spyCall.args[0]).toEqual('foo');
+        expect(spyCall.args[1]).toBeTypeOf('object');
         done();
       });
     }));
@@ -508,8 +508,8 @@ describe('inquirer.prompt', () => {
           name: 'q2',
           message: 'message',
           when(answers) {
-            expect(answers).to.be.an('object');
-            expect(answers.q1).to.equal(true);
+            expect(answers).toBeTypeOf('object');
+            expect(answers.q1).toEqual(true);
           },
         },
       ];
@@ -544,8 +544,8 @@ describe('inquirer.prompt', () => {
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
-        expect(goesInWhen).to.equal(true);
-        expect(answers.q2).to.equal('bar-var');
+        expect(goesInWhen).toEqual(true);
+        expect(answers.q2).toEqual('bar-var');
       });
     });
 
@@ -569,7 +569,7 @@ describe('inquirer.prompt', () => {
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
-        expect(answers.q2).to.equal('bar-var');
+        expect(answers.q2).toEqual('bar-var');
       });
     });
 
@@ -602,10 +602,10 @@ describe('inquirer.prompt', () => {
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
-        expect(goesInWhen).to.equal(true);
-        expect(answers.q2).to.equal(undefined);
-        expect(answers.q3).to.equal('foo');
-        expect(answers.q1).to.equal(true);
+        expect(goesInWhen).toEqual(true);
+        expect(answers.q2).toEqual(undefined);
+        expect(answers.q3).toEqual('foo');
+        expect(answers.q1).toEqual(true);
       });
     });
 
@@ -634,9 +634,9 @@ describe('inquirer.prompt', () => {
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
-        expect(answers.q2).to.equal(undefined);
-        expect(answers.q3).to.equal('foo');
-        expect(answers.q1).to.equal(true);
+        expect(answers.q2).toEqual(undefined);
+        expect(answers.q3).toEqual('foo');
+        expect(answers.q1).toEqual(true);
       });
     });
 
@@ -670,8 +670,8 @@ describe('inquirer.prompt', () => {
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
-        expect(goesInWhen).to.equal(true);
-        expect(answers.q2).to.equal('foo-bar');
+        expect(goesInWhen).toEqual(true);
+        expect(answers.q2).toEqual('foo-bar');
       });
     });
 
@@ -691,7 +691,7 @@ describe('inquirer.prompt', () => {
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
-        expect(answers.q).to.equal('foo');
+        expect(answers.q).toEqual('foo');
       });
     });
 
@@ -717,7 +717,7 @@ describe('inquirer.prompt', () => {
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
-        expect(answers.prefiled).to.equal('prefiled');
+        expect(answers.prefiled).toEqual('prefiled');
       });
     });
 
@@ -743,7 +743,7 @@ describe('inquirer.prompt', () => {
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
-        expect(answers.prefiled.nested).to.equal('prefiled');
+        expect(answers.prefiled.nested).toEqual('prefiled');
       });
     });
 
@@ -763,7 +763,7 @@ describe('inquirer.prompt', () => {
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
-        expect(answers.prefiled).to.equal('newValue');
+        expect(answers.prefiled).toEqual('newValue');
       });
     });
 
@@ -783,7 +783,7 @@ describe('inquirer.prompt', () => {
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
-        expect(answers.prefiled.nested).to.equal('newValue');
+        expect(answers.prefiled.nested).toEqual('newValue');
       });
     });
   });
@@ -793,8 +793,8 @@ describe('inquirer.prompt', () => {
       new Promise((done) => {
         const questions = [{ type: 'foo', message: 'something' }];
         inquirer.registerPrompt('foo', function (question, rl, answers) {
-          expect(question).to.eql(questions[0]);
-          expect(answers).to.eql({});
+          expect(question).toEqual(questions[0]);
+          expect(answers).toEqual({});
           this.run = sinon.stub().returns(Promise.resolve());
           done();
         });
@@ -820,7 +820,7 @@ describe('inquirer.prompt', () => {
       const ConfirmPrompt = inquirer.prompt.prompts.confirm;
       inquirer.registerPrompt('confirm', () => {});
       inquirer.restoreDefaultPrompts();
-      expect(ConfirmPrompt).to.equal(inquirer.prompt.prompts.confirm);
+      expect(ConfirmPrompt).toEqual(inquirer.prompt.prompts.confirm);
     });
   });
 
@@ -846,7 +846,7 @@ describe('inquirer.prompt', () => {
 
     return promise.then((answers) => {
       process.stdout.getWindowSize = original;
-      expect(answers.q1).to.equal(true);
+      expect(answers.q1).toEqual(true);
     });
   });
 
@@ -878,10 +878,10 @@ describe('inquirer.prompt', () => {
       return promise
         .then(() => {
           // Failure
-          expect(true).to.equal(false);
+          expect(true).toEqual(false);
         })
         .catch((error) => {
-          expect(error.isTtyError).to.equal(true);
+          expect(error.isTtyError).toEqual(true);
         });
     });
 
@@ -909,7 +909,7 @@ describe('inquirer.prompt', () => {
           })
           .catch((error) => {
             console.log(error);
-            expect(error.isTtyError).to.equal(false);
+            expect(error.isTtyError).toEqual(false);
           });
       }));
 
@@ -937,7 +937,7 @@ describe('inquirer.prompt', () => {
           })
           .catch((error) => {
             console.log(error);
-            expect(error.isTtyError).to.equal(false);
+            expect(error.isTtyError).toEqual(false);
           });
       }));
 
@@ -973,7 +973,7 @@ describe('inquirer.prompt', () => {
           })
           .catch((error) => {
             console.log(error);
-            expect(error.isTtyError).to.equal(false);
+            expect(error.isTtyError).toEqual(false);
           });
       }));
 
@@ -996,10 +996,10 @@ describe('inquirer.prompt', () => {
       return promise
         .then(() => {
           // Failure
-          expect(true).to.equal(false);
+          expect(true).toEqual(false);
         })
         .catch((error) => {
-          expect(error.isTtyError).to.equal(true);
+          expect(error.isTtyError).toEqual(true);
         });
     });
 
@@ -1030,7 +1030,7 @@ describe('inquirer.prompt', () => {
       input.unref();
 
       return promise.then((answers) => {
-        expect(answers).to.deep.equal({ q1: 'foo' });
+        expect(answers).toEqual({ q1: 'foo' });
       });
     });
   });

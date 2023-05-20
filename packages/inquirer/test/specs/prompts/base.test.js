@@ -1,5 +1,5 @@
 import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 
 import Base from '../../../lib/prompts/base.js';
@@ -17,8 +17,8 @@ describe('`base` prompt (e.g. prompt helpers)', () => {
       name: 'name',
     };
     const base = new Base(question, rl);
-    expect(question).to.not.equal(base.opt);
-    expect(question.name).to.equal(base.opt.name);
-    expect(question.message).to.equal(base.opt.message);
+    expect(question).not.toEqual(base.opt);
+    expect(question.name).toEqual(base.opt.name);
+    expect(question.message).toEqual(base.opt.message);
   });
 });

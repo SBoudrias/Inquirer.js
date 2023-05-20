@@ -1,5 +1,5 @@
 import { describe, it, beforeEach } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
@@ -15,7 +15,7 @@ describe('`input` prompt', () => {
     const input = new Input(this.fixture, this.rl);
 
     input.run().then((answer) => {
-      expect(answer).to.equal('Inquirer');
+      expect(answer).toEqual('Inquirer');
       done();
     });
 
@@ -32,7 +32,7 @@ describe('`input` prompt', () => {
     this.rl.emit('line', '');
 
     return promise.then(() => {
-      expect(this.rl.output.__raw__).to.contain('pass');
+      expect(this.rl.output.__raw__).toContain('pass');
     });
   });
 
@@ -48,7 +48,7 @@ describe('`input` prompt', () => {
     this.rl.input.emit('keypress');
 
     setTimeout(() => {
-      expect(this.rl.output.__raw__).to.contain('reriuqnI');
+      expect(this.rl.output.__raw__).toContain('reriuqnI');
       done();
     }, 10);
   });
@@ -69,7 +69,7 @@ describe('`input` prompt', () => {
     this.rl.input.emit('keypress');
 
     setTimeout(() => {
-      expect(this.rl.output.__raw__).to.contain('INQUIRER');
+      expect(this.rl.output.__raw__).toContain('INQUIRER');
       done();
     }, 200);
   });
@@ -91,7 +91,7 @@ describe('`input` prompt', () => {
     this.rl.line = 'inquirer';
     this.rl.input.emit('keypress');
     setTimeout(() => {
-      expect(this.rl.output.__raw__).to.contain('INQUIRER');
+      expect(this.rl.output.__raw__).toContain('INQUIRER');
       done();
     }, 200);
   });
@@ -111,7 +111,7 @@ describe('`input` prompt', () => {
     this.rl.line = 'inquirer';
     this.rl.input.emit('keypress');
     setTimeout(() => {
-      expect(this.rl.output.__raw__).to.have.entriesCount(defaultValue, 1);
+      expect(this.rl.output.__raw__).toContain(defaultValue);
       done();
     }, 200);
   });

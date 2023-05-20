@@ -1,5 +1,5 @@
 import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 import sinon from 'sinon';
@@ -20,9 +20,8 @@ describe('`checkbox` prompt', () => {
   it('should return a single selected choice in an array', () =>
     new Promise((done) => {
       checkbox.run().then((answer) => {
-        expect(answer).to.be.an('array');
-        expect(answer.length).to.equal(1);
-        expect(answer[0]).to.equal('choice 1');
+        expect(answer.length).toEqual(1);
+        expect(answer[0]).toEqual('choice 1');
         done();
       });
       rl.input.emit('keypress', ' ', { name: 'space' });
@@ -32,10 +31,9 @@ describe('`checkbox` prompt', () => {
   it('should return multiples selected choices in an array', () =>
     new Promise((done) => {
       checkbox.run().then((answer) => {
-        expect(answer).to.be.an('array');
-        expect(answer.length).to.equal(2);
-        expect(answer[0]).to.equal('choice 1');
-        expect(answer[1]).to.equal('choice 2');
+        expect(answer.length).toEqual(2);
+        expect(answer[0]).toEqual('choice 1');
+        expect(answer[1]).toEqual('choice 2');
         done();
       });
       rl.input.emit('keypress', ' ', { name: 'space' });
@@ -53,8 +51,8 @@ describe('`checkbox` prompt', () => {
       ];
       checkbox = new Checkbox(fixture, rl);
       checkbox.run().then((answer) => {
-        expect(answer.length).to.equal(1);
-        expect(answer[0]).to.equal('1');
+        expect(answer.length).toEqual(1);
+        expect(answer[0]).toEqual('1');
         done();
       });
       rl.emit('line');
@@ -67,7 +65,7 @@ describe('`checkbox` prompt', () => {
       { name: '3', checked: false },
     ];
     fixture.validate = function (answer) {
-      expect(answer).to.eql(['1', '2']);
+      expect(answer).toEqual(['1', '2']);
       return true;
     };
 
@@ -83,9 +81,9 @@ describe('`checkbox` prompt', () => {
       fixture.default = ['1', '3'];
       checkbox = new Checkbox(fixture, rl);
       checkbox.run().then((answer) => {
-        expect(answer.length).to.equal(2);
-        expect(answer[0]).to.equal('1');
-        expect(answer[1]).to.equal('3');
+        expect(answer.length).toEqual(2);
+        expect(answer[0]).toEqual('1');
+        expect(answer[1]).toEqual('3');
         done();
       });
       rl.emit('line');
@@ -94,8 +92,8 @@ describe('`checkbox` prompt', () => {
   it('should toggle choice when hitting space', () =>
     new Promise((done) => {
       checkbox.run().then((answer) => {
-        expect(answer.length).to.equal(1);
-        expect(answer[0]).to.equal('choice 1');
+        expect(answer.length).toEqual(1);
+        expect(answer[0]).toEqual('choice 1');
         done();
       });
       rl.input.emit('keypress', ' ', { name: 'space' });
@@ -108,8 +106,8 @@ describe('`checkbox` prompt', () => {
   it('should allow for arrow navigation', () =>
     new Promise((done) => {
       checkbox.run().then((answer) => {
-        expect(answer.length).to.equal(1);
-        expect(answer[0]).to.equal('choice 2');
+        expect(answer.length).toEqual(1);
+        expect(answer[0]).toEqual('choice 2');
         done();
       });
 
@@ -124,8 +122,8 @@ describe('`checkbox` prompt', () => {
   it('should allow for vi-style navigation', () =>
     new Promise((done) => {
       checkbox.run().then((answer) => {
-        expect(answer.length).to.equal(1);
-        expect(answer[0]).to.equal('choice 2');
+        expect(answer.length).toEqual(1);
+        expect(answer[0]).toEqual('choice 2');
         done();
       });
 
@@ -140,8 +138,8 @@ describe('`checkbox` prompt', () => {
   it('should allow for emacs-style navigation', () =>
     new Promise((done) => {
       checkbox.run().then((answer) => {
-        expect(answer.length).to.equal(1);
-        expect(answer[0]).to.equal('choice 2');
+        expect(answer.length).toEqual(1);
+        expect(answer[0]).toEqual('choice 2');
         done();
       });
 
@@ -156,8 +154,8 @@ describe('`checkbox` prompt', () => {
   it('should allow 1-9 shortcut key', () =>
     new Promise((done) => {
       checkbox.run().then((answer) => {
-        expect(answer.length).to.equal(1);
-        expect(answer[0]).to.equal('choice 2');
+        expect(answer.length).toEqual(1);
+        expect(answer[0]).toEqual('choice 2');
         done();
       });
 
@@ -172,7 +170,7 @@ describe('`checkbox` prompt', () => {
     rl.emit('line');
 
     return promise.then((answer) => {
-      expect(answer.length).to.equal(3);
+      expect(answer.length).toEqual(3);
     });
   });
 
@@ -184,7 +182,7 @@ describe('`checkbox` prompt', () => {
     rl.emit('line');
 
     return promise.then((answer) => {
-      expect(answer.length).to.equal(0);
+      expect(answer.length).toEqual(0);
     });
   });
 
@@ -195,7 +193,7 @@ describe('`checkbox` prompt', () => {
     rl.emit('line');
 
     return promise.then((answer) => {
-      expect(answer.length).to.equal(3);
+      expect(answer.length).toEqual(3);
     });
   });
 
@@ -213,10 +211,10 @@ describe('`checkbox` prompt', () => {
         const realIndexPosition2 = spy.secondCall.args[1];
 
         // 'a\n\n': 0th index, but pagination at 2nd index position due to 2 extra newlines
-        expect(realIndexPosition1).to.equal(2);
+        expect(realIndexPosition1).toEqual(2);
         // 'b\n\n': 1st index, but pagination at 5th index position due to 4 extra newlines
-        expect(realIndexPosition2).to.equal(5);
-        expect(answer[0]).to.equal('b\n\n');
+        expect(realIndexPosition2).toEqual(5);
+        expect(answer[0]).toEqual('b\n\n');
         done();
       });
       rl.input.emit('keypress', '', { name: 'down' });
@@ -241,15 +239,15 @@ describe('`checkbox` prompt', () => {
       const promise = checkbox.run();
       rl.emit('line');
       return promise.then(() => {
-        expect(rl.output.__raw__).to.contain('- dis1 (Disabled)');
-        expect(rl.output.__raw__).to.contain('- dis2 (uh oh)');
+        expect(rl.output.__raw__).toContain('- dis1 (Disabled)');
+        expect(rl.output.__raw__).toContain('- dis2 (uh oh)');
       });
     });
 
     it('skip disabled choices', () =>
       new Promise((done) => {
         checkbox.run().then((answer) => {
-          expect(answer[0]).to.equal('choice 1');
+          expect(answer[0]).toEqual('choice 1');
           done();
         });
         rl.input.emit('keypress', null, { name: 'down' });
@@ -265,7 +263,7 @@ describe('`checkbox` prompt', () => {
         fixture.choices = [{ name: '1', checked: true, disabled: true }, { name: '2' }];
         checkbox = new Checkbox(fixture, rl);
         checkbox.run().then((answer) => {
-          expect(answer.length).to.equal(0);
+          expect(answer.length).toEqual(0);
           done();
         });
         rl.emit('line');
@@ -276,7 +274,7 @@ describe('`checkbox` prompt', () => {
         {
           name: 'dis1',
           disabled(answers) {
-            expect(answers.foo).to.equal('foo');
+            expect(answers.foo).toEqual('foo');
             return true;
           },
         },
@@ -286,7 +284,7 @@ describe('`checkbox` prompt', () => {
       rl.emit('line');
 
       promise.then(() => {
-        expect(rl.output.__raw__).to.contain('- dis1 (Disabled)');
+        expect(rl.output.__raw__).toContain('- dis1 (Disabled)');
       });
     });
   });
@@ -303,8 +301,8 @@ describe('`checkbox` prompt', () => {
         rl.emit('line');
 
         const answer = await promise;
-        expect(answer.length).to.equal(1);
-        expect(answer[0]).to.equal('choice 2');
+        expect(answer.length).toEqual(1);
+        expect(answer[0]).toEqual('choice 2');
       });
       it('loops to top when too far down', async () => {
         const promise = checkbox.run();
@@ -317,8 +315,8 @@ describe('`checkbox` prompt', () => {
         rl.emit('line');
 
         const answer = await promise;
-        expect(answer.length).to.equal(1);
-        expect(answer[0]).to.equal('choice 1');
+        expect(answer.length).toEqual(1);
+        expect(answer[0]).toEqual('choice 1');
       });
     });
 
@@ -336,8 +334,8 @@ describe('`checkbox` prompt', () => {
         rl.emit('line');
 
         const answer = await promise;
-        expect(answer.length).to.equal(1);
-        expect(answer[0]).to.equal('choice 1');
+        expect(answer.length).toEqual(1);
+        expect(answer[0]).toEqual('choice 1');
       });
       it('stays at bottom when too far down', async () => {
         const promise = checkbox.run();
@@ -350,8 +348,8 @@ describe('`checkbox` prompt', () => {
         rl.emit('line');
 
         const answer = await promise;
-        expect(answer.length).to.equal(1);
-        expect(answer[0]).to.equal('choice 3');
+        expect(answer.length).toEqual(1);
+        expect(answer[0]).toEqual('choice 3');
       });
     });
   });

@@ -1,5 +1,5 @@
 import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 import sinon from 'sinon';
@@ -20,7 +20,7 @@ describe('`list` prompt', () => {
   it('should default to first choice', () =>
     new Promise((done) => {
       list.run().then((answer) => {
-        expect(answer).to.equal('foo');
+        expect(answer).toEqual('foo');
         done();
       });
 
@@ -30,7 +30,7 @@ describe('`list` prompt', () => {
   it('should move selected cursor on keypress', () =>
     new Promise((done) => {
       list.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
 
@@ -41,7 +41,7 @@ describe('`list` prompt', () => {
   it('should allow for arrow navigation', () =>
     new Promise((done) => {
       list.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
 
@@ -54,7 +54,7 @@ describe('`list` prompt', () => {
   it('should allow for vi-style navigation', () =>
     new Promise((done) => {
       list.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
 
@@ -67,7 +67,7 @@ describe('`list` prompt', () => {
   it('should allow for emacs-style navigation', () =>
     new Promise((done) => {
       list.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
 
@@ -94,14 +94,14 @@ describe('`list` prompt', () => {
         const promise = list.run();
         pressKey('up', 2);
         const answer = await promise;
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
       });
 
       it('loops to top when too far down', async () => {
         const promise = list.run();
         pressKey('down', 3);
         const answer = await promise;
-        expect(answer).to.equal('foo');
+        expect(answer).toEqual('foo');
       });
     });
 
@@ -114,20 +114,20 @@ describe('`list` prompt', () => {
         const promise = list.run();
         pressKey('up', 2);
         const answer = await promise;
-        expect(answer).to.equal('foo');
+        expect(answer).toEqual('foo');
       });
 
       it('stays at bottom when too far down', async () => {
         const promise = list.run();
         pressKey('down', 3);
         const answer = await promise;
-        expect(answer).to.equal('bum');
+        expect(answer).toEqual('bum');
       });
     });
   });
 
   it('should require a choices array', () => {
-    expect(() => new List({ name: 'foo', message: 'bar' })).to.throw(/choices/);
+    expect(() => new List({ name: 'foo', message: 'bar' })).toThrow(/choices/);
   });
 
   it('should allow a numeric default', () =>
@@ -136,7 +136,7 @@ describe('`list` prompt', () => {
       const list = new List(fixture, rl);
 
       list.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
 
@@ -149,7 +149,7 @@ describe('`list` prompt', () => {
       const list = new List(fixture, rl);
 
       list.run().then((answer) => {
-        expect(answer).to.equal('bum');
+        expect(answer).toEqual('bum');
         done();
       });
 
@@ -163,7 +163,7 @@ describe('`list` prompt', () => {
       const list = new List(fixture, rl);
 
       list.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
 
@@ -176,7 +176,7 @@ describe('`list` prompt', () => {
       const list = new List(fixture, rl);
 
       list.run().then((answer) => {
-        expect(answer).to.equal('bum');
+        expect(answer).toEqual('bum');
         done();
       });
 
@@ -190,7 +190,7 @@ describe('`list` prompt', () => {
       const list = new List(fixture, rl);
 
       list.run().then((answer) => {
-        expect(answer).to.equal('foo');
+        expect(answer).toEqual('foo');
         done();
       });
 
@@ -203,7 +203,7 @@ describe('`list` prompt', () => {
       const list = new List(fixture, rl);
 
       list.run().then((answer) => {
-        expect(answer).to.equal('foo');
+        expect(answer).toEqual('foo');
         done();
       });
 
@@ -213,7 +213,7 @@ describe('`list` prompt', () => {
   it('should allow 1-9 shortcut key', () =>
     new Promise((done) => {
       list.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
 
@@ -235,10 +235,10 @@ describe('`list` prompt', () => {
         const realIndexPosition2 = spy.secondCall.args[1];
 
         // 'a\n\n': 0th index, but pagination at 2nd index position due to 2 extra newlines
-        expect(realIndexPosition1).to.equal(2);
+        expect(realIndexPosition1).toEqual(2);
         // 'b\n\n': 1st index, but pagination at 5th index position due to 4 extra newlines
-        expect(realIndexPosition2).to.equal(5);
-        expect(answer).to.equal('b\n\n');
+        expect(realIndexPosition2).toEqual(5);
+        expect(answer).toEqual('b\n\n');
         done();
       });
       rl.input.emit('keypress', '', { name: 'down' });
@@ -269,7 +269,7 @@ describe('`list` prompt', () => {
 
       list.run().then(() => {
         const spyCall = fixture.filter.getCall(0);
-        expect(spyCall.args[1]).to.equal(answers);
+        expect(spyCall.args[1]).toEqual(answers);
         done();
       });
 

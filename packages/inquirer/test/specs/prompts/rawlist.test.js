@@ -1,5 +1,5 @@
 import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
@@ -19,7 +19,7 @@ describe('`rawlist` prompt', () => {
   it('should default to first choice', () =>
     new Promise((done) => {
       rawlist.run().then((answer) => {
-        expect(answer).to.equal('foo');
+        expect(answer).toEqual('foo');
         done();
       });
 
@@ -29,7 +29,7 @@ describe('`rawlist` prompt', () => {
   it('should select given index', () =>
     new Promise((done) => {
       rawlist.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
 
@@ -52,7 +52,7 @@ describe('`rawlist` prompt', () => {
       return new Rawlist({ name: 'foo', message: 'bar' });
     };
 
-    expect(mkPrompt).to.throw(/choices/);
+    expect(mkPrompt).toThrow(/choices/);
   });
 
   it('should allow a default index', () =>
@@ -61,7 +61,7 @@ describe('`rawlist` prompt', () => {
       const list = new Rawlist(fixture, rl);
 
       list.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
 
@@ -74,7 +74,7 @@ describe('`rawlist` prompt', () => {
       const list = new Rawlist(fixture, rl);
 
       list.run().then((answer) => {
-        expect(answer).to.equal('foo');
+        expect(answer).toEqual('foo');
         done();
       });
 
@@ -87,7 +87,7 @@ describe('`rawlist` prompt', () => {
       const list = new Rawlist(fixture, rl);
 
       list.run().then((answer) => {
-        expect(answer).to.equal('bum');
+        expect(answer).toEqual('bum');
         done();
       });
 
@@ -100,7 +100,7 @@ describe('`rawlist` prompt', () => {
       const list = new Rawlist(fixture, rl);
 
       list.run().then((answer) => {
-        expect(answer).to.equal('foo');
+        expect(answer).toEqual('foo');
         done();
       });
 
@@ -110,7 +110,7 @@ describe('`rawlist` prompt', () => {
   it('should allow for arrow navigation', () =>
     new Promise((done) => {
       rawlist.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
 
@@ -125,7 +125,7 @@ describe('`rawlist` prompt', () => {
       rawlist
         .run()
         .then((answer) => {
-          expect(answer).to.equal('bar');
+          expect(answer).toEqual('bar');
           done();
         })
         .catch(done);
@@ -154,14 +154,14 @@ describe('`rawlist` prompt', () => {
         const promise = rawlist.run();
         pressKey('up', 2);
         const answer = await promise;
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
       });
 
       it('loops to top when too far down', async () => {
         const promise = rawlist.run();
         pressKey('down', 3);
         const answer = await promise;
-        expect(answer).to.equal('foo');
+        expect(answer).toEqual('foo');
       });
     });
 
@@ -174,14 +174,14 @@ describe('`rawlist` prompt', () => {
         const promise = rawlist.run();
         pressKey('up', 2);
         const answer = await promise;
-        expect(answer).to.equal('foo');
+        expect(answer).toEqual('foo');
       });
 
       it('stays at bottom when too far down', async () => {
         const promise = rawlist.run();
         pressKey('down', 3);
         const answer = await promise;
-        expect(answer).to.equal('bum');
+        expect(answer).toEqual('bum');
       });
     });
   });

@@ -1,6 +1,6 @@
 import stripAnsi from 'strip-ansi';
 import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
@@ -8,12 +8,12 @@ import Password from '../../../lib/prompts/password.js';
 
 function testMasking(rl, mask) {
   return function (answer) {
-    expect(answer).to.equal('Inquirer');
+    expect(answer).toEqual('Inquirer');
     const expectOutput = expect(stripAnsi(rl.output.__raw__));
     if (mask) {
-      expectOutput.to.contain(mask);
+      expectOutput.toContain(mask);
     } else {
-      expectOutput.to.not.contain('********');
+      expectOutput.not.toContain('********');
     }
   };
 }
@@ -56,7 +56,7 @@ describe('`password` prompt', () => {
   it('Preserves default', () => {
     fixture.default = 'Inquirer';
     const password = new Password(fixture, rl);
-    const promise = password.run().then((answer) => expect(answer).to.equal('Inquirer'));
+    const promise = password.run().then((answer) => expect(answer).toEqual('Inquirer'));
     rl.emit('line', '');
     return promise;
   });
@@ -64,7 +64,7 @@ describe('`password` prompt', () => {
   it('Clears default on keypress', () => {
     fixture.default = 'Inquirer';
     const password = new Password(fixture, rl);
-    const promise = password.run().then((answer) => expect(answer).to.equal(''));
+    const promise = password.run().then((answer) => expect(answer).toEqual(''));
     password.onKeypress({ name: 'backspace' });
     rl.emit('line', '');
     return promise;
@@ -102,8 +102,8 @@ describe('`password` prompt', () => {
     // password.getSpinningValue = (value) => value;
 
     const promise = password.run().then((answer) => {
-      expect(output).to.not.contain(input);
-      expect(answer).to.equal(input);
+      expect(output).not.toContain(input);
+      expect(answer).toEqual(input);
     });
 
     rl.emit('line', input);

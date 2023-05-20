@@ -1,5 +1,5 @@
 import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
@@ -21,7 +21,7 @@ describe('`number` prompt', () => {
   it('should parse the largest number', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).to.equal(Number.MAX_SAFE_INTEGER);
+        expect(answer).toEqual(Number.MAX_SAFE_INTEGER);
         done();
       });
 
@@ -31,7 +31,7 @@ describe('`number` prompt', () => {
   it('should parse the smallest number', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).to.equal(Number.MIN_SAFE_INTEGER);
+        expect(answer).toEqual(Number.MIN_SAFE_INTEGER);
         done();
       });
 
@@ -41,7 +41,7 @@ describe('`number` prompt', () => {
   it('should parse an integer', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).to.equal(42);
+        expect(answer).toEqual(42);
         done();
       });
 
@@ -51,7 +51,7 @@ describe('`number` prompt', () => {
   it('should parse a negative integer', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).to.equal(-363);
+        expect(answer).toEqual(-363);
         done();
       });
 
@@ -61,7 +61,7 @@ describe('`number` prompt', () => {
   it('should parse a positive float', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).to.be.closeTo(4353.43, ACCEPTABLE_ERROR);
+        expect(answer).toBeCloseTo(4353.43, ACCEPTABLE_ERROR);
         done();
       });
 
@@ -71,7 +71,7 @@ describe('`number` prompt', () => {
   it('should parse a negative float', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).to.be.closeTo(-4353.43, ACCEPTABLE_ERROR);
+        expect(answer).toBeCloseTo(-4353.43, ACCEPTABLE_ERROR);
         done();
       });
 
@@ -81,7 +81,7 @@ describe('`number` prompt', () => {
   it('should parse a float with no digits before the decimal', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).to.be.closeTo(0.01264, ACCEPTABLE_ERROR);
+        expect(answer).toBeCloseTo(0.01264, ACCEPTABLE_ERROR);
         done();
       });
 
@@ -91,7 +91,7 @@ describe('`number` prompt', () => {
   it('should parse a float with no digits after the decimal', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).to.be.closeTo(1234.0, ACCEPTABLE_ERROR);
+        expect(answer).toBeCloseTo(1234.0, ACCEPTABLE_ERROR);
         done();
       });
 
@@ -101,7 +101,7 @@ describe('`number` prompt', () => {
   it('should parse a float with exponents', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).to.be.closeTo(534e12, ACCEPTABLE_ERROR);
+        expect(answer).toBeCloseTo(534e12, ACCEPTABLE_ERROR);
         done();
       });
 
@@ -111,7 +111,7 @@ describe('`number` prompt', () => {
   it('should parse any other string as NaN', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).to.be.NaN; // eslint-disable-line no-unused-expressions
+        expect(answer).toBeNaN();
         done();
       });
 
@@ -121,7 +121,7 @@ describe('`number` prompt', () => {
   it('should parse the empty string as NaN', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).to.be.NaN; // eslint-disable-line no-unused-expressions
+        expect(answer).toBeNaN();
         done();
       });
 
@@ -132,7 +132,7 @@ describe('`number` prompt', () => {
     new Promise((done) => {
       number.opt.default = 11;
       number.run().then((answer) => {
-        expect(answer).to.equal(11);
+        expect(answer).toEqual(11);
         done();
       });
 

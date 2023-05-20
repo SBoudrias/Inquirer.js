@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import stripAnsi from 'strip-ansi';
 
 import Separator from '../../../lib/objects/separator.js';
@@ -8,30 +8,30 @@ import inquirer from '../../../lib/inquirer.js';
 describe('Separator constructor', () => {
   it('should set a default', () => {
     const sep = new Separator();
-    expect(stripAnsi(sep.toString())).to.equal('──────────────');
+    expect(stripAnsi(sep.toString())).toEqual('──────────────');
   });
 
   it('should set user input as separator', () => {
     const sep = new Separator('foo bar');
-    expect(stripAnsi(sep.toString())).to.equal('foo bar');
+    expect(stripAnsi(sep.toString())).toEqual('foo bar');
   });
 
   it('instances should be stringified when appended to a string', () => {
     const sep = new Separator('foo bar');
-    expect(stripAnsi(String(sep))).to.equal('foo bar');
+    expect(stripAnsi(String(sep))).toEqual('foo bar');
   });
 
   it('should be exposed on Inquirer object', () => {
-    expect(inquirer.Separator).to.equal(Separator);
+    expect(inquirer.Separator).toEqual(Separator);
   });
 
   it('should expose a helper function to check for separator', () => {
-    expect(Separator.exclude({})).to.equal(true);
-    expect(Separator.exclude(new Separator())).to.equal(false);
+    expect(Separator.exclude({})).toEqual(true);
+    expect(Separator.exclude(new Separator())).toEqual(false);
   });
 
   it("give the type 'separator' to its object", () => {
     const sep = new Separator();
-    expect(sep.type).to.equal('separator');
+    expect(sep.type).toEqual('separator');
   });
 });

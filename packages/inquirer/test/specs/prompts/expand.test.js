@@ -1,5 +1,5 @@
 import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'chai';
+import { expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
@@ -20,7 +20,7 @@ describe('`expand` prompt', () => {
     expect(() => {
       fixture.choices = ['a', 'a'];
       return new Expand(fixture, rl);
-    }).to.throw(/Format error/);
+    }).toThrow(/Format error/);
   });
 
   it('should throw if `key` is duplicate', () => {
@@ -30,7 +30,7 @@ describe('`expand` prompt', () => {
         { key: 'a', name: 'foo' },
       ];
       return new Expand(fixture, rl);
-    }).to.throw(/Duplicate key error/);
+    }).toThrow(/Duplicate key error/);
   });
 
   it('should throw if `key` is duplicate case insensitive', () => {
@@ -40,14 +40,14 @@ describe('`expand` prompt', () => {
         { key: 'A', name: 'foo' },
       ];
       return new Expand(fixture, rl);
-    }).to.throw(/Duplicate key error/);
+    }).toThrow(/Duplicate key error/);
   });
 
   it('should throw if `key` is `h`', () => {
     expect(() => {
       fixture.choices = [{ key: 'h', name: 'foo' }];
       return new Expand(fixture, rl);
-    }).to.throw(/Reserved key error/);
+    }).toThrow(/Reserved key error/);
   });
 
   it('should allow false as a value', () => {
@@ -55,7 +55,7 @@ describe('`expand` prompt', () => {
 
     rl.emit('line', 'd');
     return promise.then((answer) => {
-      expect(answer).to.equal(false);
+      expect(answer).toEqual(false);
     });
   });
 
@@ -69,8 +69,8 @@ describe('`expand` prompt', () => {
     rl.emit('line', 'b');
 
     return promise.then((answer) => {
-      expect(answer).to.equal('b value');
-      expect(rl.output.__raw__).to.match(/ShortB/);
+      expect(answer).toEqual('b value');
+      expect(rl.output.__raw__).toMatch(/ShortB/);
     });
   });
 
@@ -80,7 +80,7 @@ describe('`expand` prompt', () => {
       expand = new Expand(fixture, rl);
 
       expand.run().then((answer) => {
-        expect(answer).to.equal('chile');
+        expect(answer).toEqual('chile');
         done();
       });
       rl.emit('line');
@@ -92,7 +92,7 @@ describe('`expand` prompt', () => {
       expand = new Expand(fixture, rl);
 
       expand.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
       rl.emit('line');
@@ -101,7 +101,7 @@ describe('`expand` prompt', () => {
   it('should return the user input', () =>
     new Promise((done) => {
       expand.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
       rl.emit('line', 'b');
@@ -110,7 +110,7 @@ describe('`expand` prompt', () => {
   it('should strip the user input', () =>
     new Promise((done) => {
       expand.run().then((answer) => {
-        expect(answer).to.equal('bar');
+        expect(answer).toEqual('bar');
         done();
       });
       rl.emit('line', ' b ');
@@ -119,9 +119,9 @@ describe('`expand` prompt', () => {
   it('should have help option', () =>
     new Promise((done) => {
       expand.run().then((answer) => {
-        expect(rl.output.__raw__).to.match(/a\) acab/);
-        expect(rl.output.__raw__).to.match(/b\) bar/);
-        expect(answer).to.equal('chile');
+        expect(rl.output.__raw__).toMatch(/a\) acab/);
+        expect(rl.output.__raw__).toMatch(/b\) bar/);
+        expect(answer).toEqual('chile');
         done();
       });
       rl.emit('line', 'h');
@@ -143,7 +143,7 @@ describe('`expand` prompt', () => {
     expand = new Expand(fixture, rl);
 
     expand.run();
-    expect(rl.output.__raw__).to.contain('(aBcdh)');
+    expect(rl.output.__raw__).toContain('(aBcdh)');
   });
 
   it('should display and capitalize the default choice by name value', () => {
@@ -151,7 +151,7 @@ describe('`expand` prompt', () => {
     expand = new Expand(fixture, rl);
 
     expand.run();
-    expect(rl.output.__raw__).to.contain('(abCdh)');
+    expect(rl.output.__raw__).toContain('(abCdh)');
   });
 
   it('should display and capitalize the default choice H (Help) `key` if no string default matched', () => {
@@ -159,7 +159,7 @@ describe('`expand` prompt', () => {
     expand = new Expand(fixture, rl);
 
     expand.run();
-    expect(rl.output.__raw__).to.contain('(abcdH)');
+    expect(rl.output.__raw__).toContain('(abcdH)');
   });
 
   it('should display and capitalize the default choice H (Help) `key` if none provided', () => {
@@ -167,7 +167,7 @@ describe('`expand` prompt', () => {
     expand = new Expand(fixture, rl);
     expand.run();
 
-    expect(rl.output.__raw__).to.contain('(abcdH)');
+    expect(rl.output.__raw__).toContain('(abcdH)');
   });
 
   it("should 'autocomplete' the user input", () =>
@@ -177,7 +177,7 @@ describe('`expand` prompt', () => {
       rl.line = 'a';
       rl.emit('keypress');
       setTimeout(() => {
-        expect(rl.output.__raw__).to.contain('acab');
+        expect(rl.output.__raw__).toContain('acab');
         done();
       }, 10);
     }));
