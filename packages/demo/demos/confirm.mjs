@@ -1,6 +1,7 @@
-import confirm from './src/index.mjs';
+import * as url from 'node:url';
+import { confirm } from '@inquirer/prompts';
 
-(async () => {
+const demo = async () => {
   console.log(
     'Answer:',
     await confirm({
@@ -29,4 +30,13 @@ import confirm from './src/index.mjs';
     'Cleared prompt answer:',
     await confirm({ message: 'Confirm?' }, { clearPromptOnDone: true })
   );
-})();
+};
+
+if (import.meta.url.startsWith('file:')) {
+  const modulePath = url.fileURLToPath(import.meta.url);
+  if (process.argv[1] === modulePath) {
+    demo();
+  }
+}
+
+export default demo;

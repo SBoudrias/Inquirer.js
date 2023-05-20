@@ -1,17 +1,14 @@
-import select, { Separator } from './src/index.mjs';
+import * as url from 'node:url';
+import { checkbox, Separator } from '@inquirer/prompts';
 
-(async () => {
+const demo = async () => {
   let answer;
 
-  answer = await select({
+  answer = await checkbox({
     message: 'Select a package manager',
     choices: [
-      {
-        name: 'npm',
-        value: 'npm',
-        description: 'npm is the most popular package manager',
-      },
-      { name: 'yarn', value: 'yarn', description: 'yarn is an awesome package manager' },
+      { name: 'npm', value: 'npm' },
+      { name: 'yarn', value: 'yarn' },
       new Separator(),
       { name: 'jspm', value: 'jspm', disabled: true },
       {
@@ -23,13 +20,13 @@ import select, { Separator } from './src/index.mjs';
   });
   console.log('Answer:', answer);
 
-  answer = await select({
-    message: 'Select your favorite letter',
+  answer = await checkbox({
+    message: 'Select your favorite letters',
     choices: [
       new Separator('== Alphabet (choices cycle as you scroll through) =='),
-      { value: 'A' },
+      { value: 'A', checked: true },
       { value: 'B' },
-      { value: 'C' },
+      { value: 'C', checked: true },
       { value: 'D' },
       { value: 'E' },
       { value: 'F' },
@@ -41,7 +38,7 @@ import select, { Separator } from './src/index.mjs';
       { value: 'L' },
       { value: 'M' },
       { value: 'N' },
-      { value: 'O', description: 'Letter O, not number 0' },
+      { value: 'O' },
       { value: 'P' },
       { value: 'Q' },
       { value: 'R' },
@@ -56,4 +53,13 @@ import select, { Separator } from './src/index.mjs';
     ],
   });
   console.log('Answer:', answer);
-})();
+};
+
+if (import.meta.url.startsWith('file:')) {
+  const modulePath = url.fileURLToPath(import.meta.url);
+  if (process.argv[1] === modulePath) {
+    demo();
+  }
+}
+
+export default demo;

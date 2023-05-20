@@ -1,6 +1,7 @@
-import expand from './src/index.mjs';
+import * as url from 'node:url';
+import { expand } from '@inquirer/prompts';
 
-(async () => {
+const demo = async () => {
   let answer;
 
   answer = await expand({
@@ -85,4 +86,13 @@ import expand from './src/index.mjs';
     ],
   });
   console.log('Answer:', answer);
-})();
+};
+
+if (import.meta.url.startsWith('file:')) {
+  const modulePath = url.fileURLToPath(import.meta.url);
+  if (process.argv[1] === modulePath) {
+    demo();
+  }
+}
+
+export default demo;
