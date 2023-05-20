@@ -7,7 +7,6 @@ import os from 'node:os';
 import stream from 'node:stream';
 import tty from 'node:tty';
 import { vi, expect, beforeEach, afterEach, describe, it } from 'vitest';
-import sinon from 'sinon';
 import { Observable } from 'rxjs';
 
 import inquirer from '../../lib/inquirer.js';
@@ -16,15 +15,10 @@ import { autosubmit } from '../helpers/events.js';
 const ostype = os.type();
 
 describe('inquirer.prompt', () => {
-  const sandbox = sinon.createSandbox();
   let prompt;
 
   beforeEach(() => {
     prompt = inquirer.createPromptModule();
-  });
-
-  afterEach(() => {
-    sandbox.restore();
   });
 
   it("should close and create a new readline instances each time it's called", async () => {
@@ -35,13 +29,13 @@ describe('inquirer.prompt', () => {
     });
 
     const rl1 = promise.ui.rl;
-    sandbox.spy(rl1, 'close');
-    sandbox.spy(rl1.output, 'end');
+    vi.spyOn(rl1, 'close');
+    vi.spyOn(rl1.output, 'end');
     rl1.emit('line');
 
     return promise.then(() => {
-      expect(rl1.close.calledOnce).toEqual(true);
-      expect(rl1.output.end.calledOnce).toEqual(true);
+      expect(rl1.close).toHaveBeenCalledTimes(1);
+      expect(rl1.output.end).toHaveBeenCalledTimes(1);
 
       const promise2 = prompt({
         type: 'confirm',
@@ -50,13 +44,13 @@ describe('inquirer.prompt', () => {
       });
 
       const rl2 = promise2.ui.rl;
-      sandbox.spy(rl2, 'close');
-      sandbox.spy(rl2.output, 'end');
+      vi.spyOn(rl2, 'close');
+      vi.spyOn(rl2.output, 'end');
       rl2.emit('line');
 
       return promise2.then(() => {
-        expect(rl2.close.calledOnce).toEqual(true);
-        expect(rl2.output.end.calledOnce).toEqual(true);
+        expect(rl2.close).toHaveBeenCalledTimes(1);
+        expect(rl2.output.end).toHaveBeenCalledTimes(1);
 
         expect(rl1).not.toEqual(rl2);
       });
@@ -73,12 +67,12 @@ describe('inquirer.prompt', () => {
       });
 
       const rl1 = promise.ui.rl;
-      sandbox.spy(rl1, 'close');
-      sandbox.spy(rl1.output, 'end');
+      vi.spyOn(rl1, 'close');
+      vi.spyOn(rl1.output, 'end');
 
       promise.catch(() => {
-        expect(rl1.close.calledOnce).toEqual(true);
-        expect(rl1.output.end.calledOnce).toEqual(true);
+        expect(rl1.close).toHaveBeenCalledTimes(1);
+        expect(rl1.output.end).toHaveBeenCalledTimes(1);
         done();
       });
     }));
@@ -400,13 +394,13 @@ describe('inquirer.prompt', () => {
       ];
 
       const promise = prompt(prompts);
-      const spy = sinon.spy();
+      const spy = vi.fn();
       promise.ui.process.subscribe(
         spy,
         () => {},
         () => {
-          sinon.assert.calledWith(spy, { name: 'name1', answer: 'bar' });
-          sinon.assert.calledWith(spy, { name: 'name', answer: 'doe' });
+          expect(spy).toHaveBeenCalledWith({ name: 'name1', answer: 'bar' });
+          expect(spy).toHaveBeenCalledWith({ name: 'name', answer: 'doe' });
           done();
         }
       );

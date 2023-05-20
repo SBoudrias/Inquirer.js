@@ -1,8 +1,6 @@
-import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'vitest';
+import { vi, expect, beforeEach, describe, it } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
-import sinon from 'sinon';
 
 import Checkbox from '../../../lib/prompts/checkbox.js';
 
@@ -205,10 +203,10 @@ describe('`checkbox` prompt', () => {
         choices: ['a\n\n', 'b\n\n'],
       };
       const list = new Checkbox(multilineFixture, rl);
-      const spy = sinon.spy(list.paginator, 'paginate');
+      const spy = vi.spyOn(list.paginator, 'paginate');
       list.run().then((answer) => {
-        const realIndexPosition1 = spy.firstCall.args[1];
-        const realIndexPosition2 = spy.secondCall.args[1];
+        const realIndexPosition1 = spy.mock.calls[0][1];
+        const realIndexPosition2 = spy.mock.calls[1][1];
 
         // 'a\n\n': 0th index, but pagination at 2nd index position due to 2 extra newlines
         expect(realIndexPosition1).toEqual(2);

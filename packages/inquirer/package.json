@@ -51,7 +51,6 @@
     "node": ">=14.18.0"
   },
   "devDependencies": {
-    "sinon": "^15.1.0",
     "terminal-link": "^3.0.0"
   },
   "repository": {
