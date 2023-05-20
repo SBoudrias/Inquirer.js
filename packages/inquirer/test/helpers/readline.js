@@ -1,21 +1,21 @@
 import { EventEmitter } from 'node:events';
-import sinon from 'sinon';
+import { vi } from 'vitest';
 import util from 'node:util';
 
 const stub = {};
 
 Object.assign(stub, {
-  write: sinon.stub().returns(stub),
-  moveCursor: sinon.stub().returns(stub),
-  setPrompt: sinon.stub().returns(stub),
-  close: sinon.stub().returns(stub),
-  pause: sinon.stub().returns(stub),
-  resume: sinon.stub().returns(stub),
-  _getCursorPos: sinon.stub().returns({ cols: 0, rows: 0 }),
+  write: vi.fn(() => stub),
+  moveCursor: vi.fn(() => stub),
+  setPrompt: vi.fn(() => stub),
+  close: vi.fn(() => stub),
+  pause: vi.fn(() => stub),
+  resume: vi.fn(() => stub),
+  _getCursorPos: vi.fn(() => ({ cols: 0, rows: 0 })),
   output: {
-    end: sinon.stub(),
-    mute: sinon.stub(),
-    unmute: sinon.stub(),
+    end: vi.fn(),
+    mute: vi.fn(),
+    unmute: vi.fn(),
     __raw__: '',
     write(str) {
       this.__raw__ += str;

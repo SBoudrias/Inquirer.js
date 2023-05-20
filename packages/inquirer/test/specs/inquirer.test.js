@@ -6,8 +6,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import stream from 'node:stream';
 import tty from 'node:tty';
-import { beforeEach, afterEach, describe, it } from 'vitest';
-import { expect } from 'vitest';
+import { vi, expect, beforeEach, afterEach, describe, it } from 'vitest';
 import sinon from 'sinon';
 import { Observable } from 'rxjs';
 
@@ -176,7 +175,7 @@ describe('inquirer.prompt', () => {
   it('should parse `message` if passed as a function', async () => {
     const stubMessage = 'foo';
     prompt.registerPrompt('stub', function (params) {
-      this.run = sinon.stub().returns(Promise.resolve());
+      this.run = vi.fn(() => Promise.resolve());
       expect(params.message).toEqual(stubMessage);
     });
 
@@ -212,7 +211,7 @@ describe('inquirer.prompt', () => {
     new Promise((done) => {
       const stubMessage = 'foo';
       prompt.registerPrompt('stub', function (params) {
-        this.run = sinon.stub().returns(Promise.resolve());
+        this.run = vi.fn(() => Promise.resolve());
         expect(params.message).toEqual(stubMessage);
         done();
       });
@@ -245,7 +244,7 @@ describe('inquirer.prompt', () => {
     new Promise((done) => {
       const stubDefault = 'foo';
       prompt.registerPrompt('stub', function (params) {
-        this.run = sinon.stub().returns(Promise.resolve());
+        this.run = vi.fn(() => Promise.resolve());
         expect(params.default).toEqual(stubDefault);
         done();
       });
@@ -311,7 +310,7 @@ describe('inquirer.prompt', () => {
   it('should pass previous answers to the prompt constructor', async () =>
     new Promise((done) => {
       prompt.registerPrompt('stub', function (params, rl, answers) {
-        this.run = sinon.stub().returns(Promise.resolve());
+        this.run = vi.fn(() => Promise.resolve());
         expect(answers.name1).toEqual('bar');
         done();
       });
@@ -338,7 +337,7 @@ describe('inquirer.prompt', () => {
     new Promise((done) => {
       const stubChoices = ['foo', 'bar'];
       prompt.registerPrompt('stub', function (params) {
-        this.run = sinon.stub().returns(Promise.resolve());
+        this.run = vi.fn(() => Promise.resolve());
         expect(params.choices).toEqual(stubChoices);
         done();
       });
@@ -471,8 +470,7 @@ describe('inquirer.prompt', () => {
 
   it('should provide answers in filter callback for lists', async () =>
     new Promise((done) => {
-      const filter = sinon.stub();
-      filter.returns('foo');
+      const filter = vi.fn(() => 'foo');
 
       const prompts = [
         {
@@ -488,10 +486,10 @@ describe('inquirer.prompt', () => {
       const promise = prompt(prompts);
       promise.ui.rl.emit('line');
       promise.then(() => {
-        const spyCall = filter.getCall(0);
+        const spyCalls = filter.mock.calls[0];
 
-        expect(spyCall.args[0]).toEqual('foo');
-        expect(spyCall.args[1]).toBeTypeOf('object');
+        expect(spyCalls[0]).toEqual('foo');
+        expect(spyCalls[1]).toBeTypeOf('object');
         done();
       });
     }));
@@ -795,7 +793,7 @@ describe('inquirer.prompt', () => {
         inquirer.registerPrompt('foo', function (question, rl, answers) {
           expect(question).toEqual(questions[0]);
           expect(answers).toEqual({});
-          this.run = sinon.stub().returns(Promise.resolve());
+          this.run = vi.fn(() => Promise.resolve());
           done();
         });
 
@@ -806,7 +804,7 @@ describe('inquirer.prompt', () => {
       new Promise((done) => {
         const questions = [{ type: 'confirm', message: 'something' }];
         inquirer.registerPrompt('confirm', function () {
-          this.run = sinon.stub().returns(Promise.resolve());
+          this.run = vi.fn(() => Promise.resolve());
           done();
         });
 
