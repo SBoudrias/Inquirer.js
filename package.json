@@ -73,10 +73,9 @@
     "integration/*"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap --no-ci",
     "ts-node": "node --no-warnings=ExperimentalWarning --loader=ts-node/esm",
-    "publish": "lerna run tsc && lerna publish",
-    "prepare": "husky install",
+    "prepare": "husky install && lerna run tsc",
+    "setup": "yarn ts-node ./tools/setup-packages.mts && prettier --write .",
     "pretest": "eslint . && lerna run tsc",
     "test": "vitest --run packages && node --test integration"
   },

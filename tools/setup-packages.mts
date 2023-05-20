@@ -64,23 +64,9 @@ paths.forEach(async (pkgPath) => {
     pkg.scripts = {
       tsc: 'yarn run clean && yarn run tsc:esm && yarn run tsc:cjs',
       clean: 'rm -rf dist',
-      'tsc:esm': 'tsc -p ./tsconfig.esm.json',
+      'tsc:esm': 'tsc -p ./tsconfig.json',
       'tsc:cjs': 'tsc -p ./tsconfig.cjs.json && yarn run fix-ext',
-      'fix-ext':
-        'node --no-warnings=ExperimentalWarning --loader=ts-node/esm ../../tools/rename-ext.mts',
-    };
-
-    // Set CJS tsconfig
-    const cjsTsconfig = {
-      extends: '../../tsconfig.json',
-      include: ['./src'],
-      compilerOptions: {
-        lib: ['ES6'],
-        target: 'es6',
-        moduleResolution: 'node',
-        outDir: 'dist/cjs',
-        declarationDir: 'dist/cjs/types',
-      },
+      'fix-ext': 'yarn ts-node ../../tools/fix-ext.mts',
     };
 
     // Set ESM tsconfig
@@ -96,13 +82,26 @@ paths.forEach(async (pkgPath) => {
       },
     };
 
+    // Set CJS tsconfig
+    const cjsTsconfig = {
+      extends: './tsconfig.json',
+      include: ['./src'],
+      compilerOptions: {
+        lib: ['ES6'],
+        target: 'es6',
+        moduleResolution: 'node',
+        outDir: 'dist/cjs',
+        declarationDir: 'dist/cjs/types',
+      },
+    };
+
+    fs.promises.writeFile(
+      path.join(dir, 'tsconfig.json'),
+      JSON.stringify(esmTsconfig, null, 2) + '\n'
+    );
     fs.promises.writeFile(
       path.join(dir, 'tsconfig.cjs.json'),
       JSON.stringify(cjsTsconfig, null, 2) + '\n'
-    );
-    fs.promises.writeFile(
-      path.join(dir, 'tsconfig.esm.json'),
-      JSON.stringify(esmTsconfig, null, 2) + '\n'
     );
   }
 
