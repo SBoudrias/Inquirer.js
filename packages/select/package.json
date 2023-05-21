@@ -60,6 +60,9 @@
     "chalk": "^4.1.2",
     "figures": "^3.2.0"
   },
+  "devDependencies": {
+    "@inquirer/testing": "^1.0.5"
+  },
   "scripts": {
     "tsc": "yarn run clean && yarn run tsc:esm && yarn run tsc:cjs",
     "clean": "rm -rf dist",
