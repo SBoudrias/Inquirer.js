@@ -9,6 +9,12 @@ A collection of common interactive command line user interfaces.
 
 ![List prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/list.svg)
 
+Give it a try in your own terminal!
+
+```sh
+npx inquirer-demo --package=@inquirer/demo
+```
+
 # Installation
 
 ```sh
