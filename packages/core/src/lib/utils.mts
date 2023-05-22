@@ -12,4 +12,5 @@ export const breakLines = (content: string, width: number): string =>
     .split('\n')
     .map((line) => wrapAnsi(line, width, { trim: false, hard: true }).split('\n'))
     .flat()
+    .map((line) => line.trimEnd())
     .join('\n');
