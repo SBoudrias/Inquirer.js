@@ -12,7 +12,7 @@ A collection of common interactive command line user interfaces.
 Give it a try in your own terminal!
 
 ```sh
-npx @inquirer/demo
+npx @inquirer/demo@latest
 ```
 
 # Installation
