@@ -2,7 +2,6 @@ import cliWidth from 'cli-width';
 import stripAnsi from 'strip-ansi';
 import stringWidth from 'string-width';
 import ansiEscapes from 'ansi-escapes';
-import * as util from './readline.mjs';
 import { breakLines } from './utils.mjs';
 import { InquirerReadline } from '../index.mjs';
 
@@ -53,8 +52,7 @@ export default class ScreenManager {
       content += '\n';
     }
 
-    const fullContent = content + (bottomContent ? '\n' + bottomContent : '');
-    this.rl.output.write(fullContent);
+    let output = content + (bottomContent ? '\n' + bottomContent : '');
 
     /**
      * Re-adjust the cursor at the correct position.
@@ -67,24 +65,33 @@ export default class ScreenManager {
       promptLineUpDiff + (bottomContent ? height(bottomContent) : 0);
 
     // Return cursor to the input position (on top of the bottomContent)
-    util.up(this.rl, bottomContentHeight);
+    if (bottomContentHeight > 0) output += ansiEscapes.cursorUp(bottomContentHeight);
+
     // Move cursor at the start of the line, then return to the initial left offset.
-    util.left(this.rl, stringWidth(lastLine(fullContent)));
-    util.right(this.rl, cursorPos.cols);
+    const backward = stringWidth(lastLine(output));
+    if (backward > 0) output += ansiEscapes.cursorBackward(backward);
+    if (cursorPos.cols > 0) output += ansiEscapes.cursorForward(cursorPos.cols);
 
     /**
      * Set up state for next re-rendering
      */
     this.extraLinesUnderPrompt = bottomContentHeight;
-    this.height = height(fullContent);
+    this.height = height(output);
 
+    this.rl.output.write(output);
     this.rl.output.mute();
   }
 
   clean() {
     this.rl.output.unmute();
-    util.down(this.rl, this.extraLinesUnderPrompt);
-    util.clearLine(this.rl, this.height);
+    this.rl.output.write(
+      [
+        this.extraLinesUnderPrompt > 0
+          ? ansiEscapes.cursorDown(this.extraLinesUnderPrompt)
+          : '',
+        ansiEscapes.eraseLines(this.height),
+      ].join('')
+    );
 
     this.extraLinesUnderPrompt = 0;
     this.rl.output.mute();
@@ -93,8 +100,14 @@ export default class ScreenManager {
   clearContent() {
     this.rl.output.unmute();
     // Reset the cursor at the end of the previously displayed content
-    util.down(this.rl, this.extraLinesUnderPrompt);
-    this.rl.output.write('\n');
+    this.rl.output.write(
+      [
+        this.extraLinesUnderPrompt > 0
+          ? ansiEscapes.cursorDown(this.extraLinesUnderPrompt)
+          : '',
+        '\n',
+      ].join('')
+    );
     this.rl.output.mute();
   }
 

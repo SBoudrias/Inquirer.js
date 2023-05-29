@@ -151,7 +151,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
       rl.removeListener('SIGINT', onExit);
     };
 
-    // Handle cleanup on force exit. Main reason is so we restore the cursor if a prompt hid it.
+    // Handle cleanup on force exit. Main reason is so we restore the cursor if a prompt hide it.
     process.on('exit', onExit);
     rl.on('SIGINT', onExit);
 
