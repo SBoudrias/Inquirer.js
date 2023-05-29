@@ -5,9 +5,12 @@ import type { Prompt } from '@inquirer/type';
 
 class BufferedStream extends Stream.Writable {
   #_chunks: Array<string> = [];
+  #_rawChunks: Array<string> = [];
 
   override _write(chunk: Buffer, _encoding: string, callback: () => void) {
     const str = chunk.toString();
+
+    this.#_rawChunks.push(chunk.toString());
 
     // Stripping the ANSI codes here because Inquirer will push commands ANSI (like cursor move.)
     // This is probably fine since we don't care about those for testing; but this could become
@@ -18,8 +21,9 @@ class BufferedStream extends Stream.Writable {
     callback();
   }
 
-  getLastChunk(): string {
-    const lastChunk = this.#_chunks[this.#_chunks.length - 1];
+  getLastChunk({ raw }: { raw?: boolean }): string {
+    const chunks = raw ? this.#_rawChunks : this.#_chunks;
+    const lastChunk = chunks[chunks.length - 1];
     return lastChunk ?? '';
   }
 }
@@ -57,7 +61,7 @@ export async function render<TestedPrompt extends Prompt<any, any>>(
     input,
     events,
     getScreen({ raw }: { raw?: boolean } = {}): string {
-      const lastScreen = output.getLastChunk();
+      const lastScreen = output.getLastChunk({ raw });
       return raw ? lastScreen : stripAnsi(lastScreen).trim();
     },
   };
