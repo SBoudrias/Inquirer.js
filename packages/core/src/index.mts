@@ -139,6 +139,22 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     }) as InquirerReadline;
     const screen = new ScreenManager(rl);
 
+    const onExit = () => {
+      if (context?.clearPromptOnDone) {
+        screen.clean();
+      } else {
+        screen.clearContent();
+      }
+      screen.done();
+
+      process.removeListener('exit', onExit);
+      rl.removeListener('SIGINT', onExit);
+    };
+
+    // Handle cleanup on force exit. Main reason is so we restore the cursor if a prompt hid it.
+    process.on('exit', onExit);
+    rl.on('SIGINT', onExit);
+
     // Set our state before starting the prompt.
     hooks.length = 0;
     sessionRl = rl;
@@ -159,12 +175,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
             reject(err);
           }
 
-          if (context?.clearPromptOnDone) {
-            screen.clean();
-          } else {
-            screen.clearContent();
-          }
-          screen.done();
+          onExit();
 
           // Reset hooks state
           index = 0;
