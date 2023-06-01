@@ -75,6 +75,16 @@ describe('`confirm` prompt', () => {
       rl.emit('line', 'Yes');
     }));
 
+  it("should parse 'N' value to boolean false", () =>
+    new Promise((done) => {
+      confirm.run().then((answer) => {
+        expect(answer).toEqual(false);
+        done();
+      });
+
+      rl.emit('line', 'N');
+    }));
+
   it("should parse 'No' value to boolean false", () =>
     new Promise((done) => {
       confirm.run().then((answer) => {
@@ -85,9 +95,35 @@ describe('`confirm` prompt', () => {
       rl.emit('line', 'No');
     }));
 
-  it('should parse every other string value to boolean false', () =>
+  it('should parse every other string value to default (unset)', () =>
     new Promise((done) => {
       confirm.run().then((answer) => {
+        expect(answer).toEqual(true);
+        done();
+      });
+
+      rl.emit('line', 'bla bla foo');
+    }));
+
+  it('should parse every other string value to default (true)', () =>
+    new Promise((done) => {
+      fixture.default = true;
+      const trueConfirm = new Confirm(fixture, rl);
+
+      trueConfirm.run().then((answer) => {
+        expect(answer).toEqual(true);
+        done();
+      });
+
+      rl.emit('line', 'bla bla foo');
+    }));
+
+  it('should parse every other string value to default (false)', () =>
+    new Promise((done) => {
+      fixture.default = false;
+      const falseConfirm = new Confirm(fixture, rl);
+
+      falseConfirm.run().then((answer) => {
         expect(answer).toEqual(false);
         done();
       });
