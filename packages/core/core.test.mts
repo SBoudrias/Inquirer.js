@@ -17,13 +17,7 @@ import ansiEscapes from 'ansi-escapes';
 
 describe('createPrompt()', () => {
   it('handle async function message', async () => {
-    const viewFunction = vi.fn((config, done) => {
-      useEffect(() => {
-        done();
-      }, []);
-
-      return '';
-    });
+    const viewFunction = vi.fn(() => '');
     const prompt = createPrompt(viewFunction);
     const promise = Promise.resolve('Async message:');
     const renderingDone = render(prompt, { message: () => promise });
@@ -37,17 +31,12 @@ describe('createPrompt()', () => {
       expect.any(Function)
     );
 
-    await answer.catch(() => {});
+    answer.cancel();
+    await expect(answer).rejects.toBeInstanceOf(Error);
   });
 
   it('handle deferred message', async () => {
-    const viewFunction = vi.fn((config, done) => {
-      useEffect(() => {
-        done();
-      }, []);
-
-      return '';
-    });
+    const viewFunction = vi.fn(() => '');
     const prompt = createPrompt(viewFunction);
     const promise = Promise.resolve('Async message:');
     const renderingDone = render(prompt, { message: promise });
@@ -61,7 +50,8 @@ describe('createPrompt()', () => {
       expect.any(Function)
     );
 
-    await answer.catch(() => {});
+    answer.cancel();
+    await expect(answer).rejects.toBeInstanceOf(Error);
   });
 
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
@@ -203,6 +193,26 @@ describe('createPrompt()', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('done');
+  });
+
+  it('allow cancelling the prompt', async () => {
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done('done');
+        }
+      });
+
+      return config.message;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+
+    answer.cancel();
+    events.keypress('enter');
+
+    await expect(answer).rejects.toMatchInlineSnapshot('[Error: Prompt was canceled]');
   });
 });
 

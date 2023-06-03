@@ -1,5 +1,5 @@
 import readline from 'node:readline';
-import type { Prompt } from '@inquirer/type';
+import { CancelablePromise, type Prompt } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import ScreenManager from './lib/screen-manager.mjs';
 import { getPromptConfig } from './lib/options.mjs';
@@ -133,7 +133,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     done: (value: Value) => void
   ) => string | [string, string | undefined]
 ) {
-  const prompt: Prompt<Value, Config> = async (config, context) => {
+  const prompt: Prompt<Value, Config> = (config, context) => {
     // Set our state before starting the prompt.
     resetHookState();
 
@@ -151,11 +151,18 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     }) as InquirerReadline;
     const screen = new ScreenManager(sessionRl);
 
-    // TODO: we should display a loader while we get the default options.
-    const resolvedConfig = await getPromptConfig(config);
-
-    return new Promise((resolve, reject) => {
+    let cancel: () => void = () => {};
+    const answer = new CancelablePromise<Value>((resolve, reject) => {
       const onExit = () => {
+        try {
+          let len = hooksCleanup.length;
+          while (len--) {
+            cleanupHook(len);
+          }
+        } catch (err) {
+          reject(err);
+        }
+
         if (context?.clearPromptOnDone) {
           screen.clean();
         } else {
@@ -164,6 +171,12 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
         screen.done();
 
         process.removeListener('SIGINT', onForceExit);
+      };
+
+      cancel = () => {
+        onExit();
+
+        reject(new Error('Prompt was canceled'));
       };
 
       let shouldHandleExit = true;
@@ -181,15 +194,6 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
       const done = (value: Value) => {
         // Delay execution to let time to the hookCleanup functions to registers.
         setImmediate(() => {
-          try {
-            let len = hooksCleanup.length;
-            while (len--) {
-              cleanupHook(len);
-            }
-          } catch (err) {
-            reject(err);
-          }
-
           onExit();
 
           // Finally we resolve our promise
@@ -197,23 +201,31 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
         });
       };
 
-      const workLoop = () => {
+      const workLoop = (resolvedConfig: Config & ResolvedPromptConfig) => {
         index = 0;
         hooksEffect.length = 0;
-        handleChange = () => workLoop();
+        handleChange = () => workLoop(resolvedConfig);
 
-        const nextView = view(resolvedConfig, done);
-        for (const effect of hooksEffect) {
-          effect();
+        try {
+          const nextView = view(resolvedConfig, done);
+          for (const effect of hooksEffect) {
+            effect();
+          }
+
+          const [content, bottomContent] =
+            typeof nextView === 'string' ? [nextView] : nextView;
+          screen.render(content, bottomContent);
+        } catch (err) {
+          reject(err);
         }
-
-        const [content, bottomContent] =
-          typeof nextView === 'string' ? [nextView] : nextView;
-        screen.render(content, bottomContent);
       };
 
-      workLoop();
+      // TODO: we should display a loader while we get the default options.
+      getPromptConfig(config).then(workLoop, reject);
     });
+
+    answer.cancel = cancel;
+    return answer;
   };
 
   return prompt;

@@ -75,7 +75,7 @@ See more examples:
 
 ### `createPrompt(viewFn)`
 
-The `createPrompt` function returns an asynchronous function that returns a promise resolving to the valid answer a user submit. This prompt function takes the prompt configuration as its first argument (this is defined by each prompt), and the context options as a second argument.
+The `createPrompt` function returns an asynchronous function that returns a cancelable promise resolving to the valid answer a user submit. This prompt function takes the prompt configuration as its first argument (this is defined by each prompt), and the context options as a second argument.
 
 The prompt configuration is unique to each prompt. The context options are:
 
@@ -84,6 +84,8 @@ The prompt configuration is unique to each prompt. The context options are:
 | input             | `NodeJS.ReadableStream` | no       | The stdin stream (defaults to `process.stdin`)               |
 | output            | `NodeJS.WritableStream` | no       | The stdout stream (defaults to `process.stdout`)             |
 | clearPromptOnDone | `boolean`               | no       | If true, we'll clear the screen after the prompt is answered |
+
+The cancelable promise exposes a `cancel` method that'll exit the prompt and reject the promise.
 
 #### Typescript
 

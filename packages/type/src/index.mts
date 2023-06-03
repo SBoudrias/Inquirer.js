@@ -1,7 +1,14 @@
+export class CancelablePromise<T> extends Promise<T> {
+  public cancel: () => void = () => {};
+}
+
 export type Context = {
   input?: NodeJS.ReadableStream;
   output?: NodeJS.WritableStream;
   clearPromptOnDone?: boolean;
 };
 
-export type Prompt<Value, Config> = (config: Config, context?: Context) => Promise<Value>;
+export type Prompt<Value, Config> = (
+  config: Config,
+  context?: Context
+) => CancelablePromise<Value>;

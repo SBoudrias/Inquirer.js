@@ -151,6 +151,20 @@ const allowEmail = await confirm(
 );
 ```
 
+## Canceling prompt
+
+All prompt functions are returning a cancelable promise. This special promise type has a `cancel` method that'll cancel and cleanup the prompt.
+
+On calling `cancel`, the answer promise will become rejected.
+
+```js
+import { confirm } from '@inquirer/prompts';
+
+const answer = confirm(...); // note: for this you cannot use `await`
+
+answer.cancel();
+```
+
 # Recipes
 
 ## Get answers in an object
@@ -181,6 +195,23 @@ let email;
 if (allowEmail) {
   email = await input({ message: 'What is your email address' });
 }
+```
+
+## Get default value after timeout
+
+```js
+import { input } from '@inquirer/prompts';
+
+const answer = input(...);
+
+const defaultValue = new Promise(resolve => {
+	setTimeout(() => {
+		resolve(...);
+		answer.cancel();
+	}, 5000);
+});
+
+const answer = await Promise.race([defaultValue, answer])
 ```
 
 # Community prompts
