@@ -29,6 +29,15 @@ let index = 0;
 let handleChange = () => {};
 let sessionRl: InquirerReadline | void;
 
+const resetHookState = () => {
+  hooks.length = 0;
+  hooksCleanup.length = 0;
+  hooksEffect.length = 0;
+  index = 0;
+  handleChange = () => {};
+  sessionRl = undefined;
+};
+
 const cleanupHook = (index: number) => {
   const cleanFn = hooksCleanup[index];
   if (typeof cleanFn === 'function') {
@@ -125,6 +134,9 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
   ) => string | [string, string | undefined]
 ) {
   const prompt: Prompt<Value, Config> = async (config, context) => {
+    // Set our state before starting the prompt.
+    resetHookState();
+
     // Default `input` to stdin
     const input = context?.input ?? process.stdin;
 
@@ -132,16 +144,12 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     const output = new MuteStream();
     output.pipe(context?.output ?? process.stdout);
 
-    const rl = readline.createInterface({
+    sessionRl = readline.createInterface({
       terminal: true,
       input,
       output,
     }) as InquirerReadline;
-    const screen = new ScreenManager(rl);
-
-    // Set our state before starting the prompt.
-    hooks.length = 0;
-    sessionRl = rl;
+    const screen = new ScreenManager(sessionRl);
 
     // TODO: we should display a loader while we get the default options.
     const resolvedConfig = await getPromptConfig(config);
@@ -183,13 +191,6 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
           }
 
           onExit();
-
-          // Reset hooks state
-          index = 0;
-          hooks.length = 0;
-          hooksEffect.length = 0;
-          hooksCleanup.length = 0;
-          sessionRl = undefined;
 
           // Finally we resolve our promise
           resolve(value);
