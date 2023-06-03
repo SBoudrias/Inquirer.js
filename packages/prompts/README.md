@@ -214,6 +214,27 @@ const defaultValue = new Promise(resolve => {
 const answer = await Promise.race([defaultValue, answer])
 ```
 
+## Using as pre-commit/git hooks, or scripts
+
+By default scripts ran from tools like `husky`/`lint-staged` might not run inside an interactive shell. In non-interactive shell, Inquirer cannot run, and users cannot send keypress events to the process.
+
+For it to work, you must make sure you start a `tty` (or "interactive" input stream.)
+
+If those scripts are set within your `package.json`, you can define the stream like so:
+
+```json
+  "precommit": "my-script < /dev/tty"
+```
+
+Or if in a shell script file, you'll do it like so: (on Windows that's likely your only option)
+
+```sh
+#!/bin/sh
+exec < /dev/tty
+
+node my-script.js
+```
+
 # Community prompts
 
 If you created a cool prompt, [send us a PR adding it](https://github.com/SBoudrias/Inquirer.js/edit/master/README.md) to the list below!
