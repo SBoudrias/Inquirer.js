@@ -13,10 +13,17 @@ import {
   type KeypressEvent,
 } from './src/index.mjs';
 import stripAnsi from 'strip-ansi';
+import ansiEscapes from 'ansi-escapes';
 
 describe('createPrompt()', () => {
   it('handle async function message', async () => {
-    const viewFunction = vi.fn(() => '');
+    const viewFunction = vi.fn((config, done) => {
+      useEffect(() => {
+        done();
+      }, []);
+
+      return '';
+    });
     const prompt = createPrompt(viewFunction);
     const promise = Promise.resolve('Async message:');
     const renderingDone = render(prompt, { message: () => promise });
@@ -24,15 +31,23 @@ describe('createPrompt()', () => {
     // Initially, we leave a few ms for message to resolve
     expect(viewFunction).not.toHaveBeenCalled();
 
-    await renderingDone;
+    const { answer } = await renderingDone;
     expect(viewFunction).toHaveBeenLastCalledWith(
       expect.objectContaining({ message: 'Async message:' }),
       expect.any(Function)
     );
+
+    await answer.catch(() => {});
   });
 
   it('handle deferred message', async () => {
-    const viewFunction = vi.fn(() => '');
+    const viewFunction = vi.fn((config, done) => {
+      useEffect(() => {
+        done();
+      }, []);
+
+      return '';
+    });
     const prompt = createPrompt(viewFunction);
     const promise = Promise.resolve('Async message:');
     const renderingDone = render(prompt, { message: promise });
@@ -40,11 +55,13 @@ describe('createPrompt()', () => {
     // Initially, we leave a few ms for message to resolve
     expect(viewFunction).not.toHaveBeenCalled();
 
-    await renderingDone;
+    const { answer } = await renderingDone;
     expect(viewFunction).toHaveBeenLastCalledWith(
       expect.objectContaining({ message: 'Async message:' }),
       expect.any(Function)
     );
+
+    await answer.catch(() => {});
   });
 
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
@@ -251,6 +268,22 @@ describe('Error handling', () => {
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
       '"useEffect return value must be a cleanup function or nothing."'
     );
+  });
+
+  it('cleanup prompt on exit', async () => {
+    const Prompt = () => `Question ${ansiEscapes.cursorHide}`;
+
+    const prompt = createPrompt(Prompt);
+    const { answer, getScreen } = await render(prompt, { message: 'Question' });
+
+    process.emit('SIGINT');
+
+    await expect(answer).rejects.toMatchInlineSnapshot(
+      '[Error: User force closed the prompt with CTRL+C]'
+    );
+
+    const lastScreen = getScreen({ raw: true });
+    expect(lastScreen).toContain(ansiEscapes.cursorShow);
   });
 });
 
