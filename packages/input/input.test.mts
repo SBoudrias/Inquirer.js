@@ -96,6 +96,20 @@ describe('input prompt', () => {
     await expect(answer).resolves.toEqual('2');
   });
 
+  it('handle errors in validation gracefully', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'Answer 2 ===',
+      validate() {
+        return Promise.reject(new Error('Validation error'));
+      },
+    });
+
+    events.type('1');
+    events.keypress('enter');
+    await expect(answer).rejects.toThrowError('Validation error');
+    expect(getScreen()).toMatchInlineSnapshot();
+  });
+
   it('handle default option', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
