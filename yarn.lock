@@ -214,6 +214,32 @@
   resolved "https://registry.yarnpkg.com/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
 
+"@inquirer/confirm@^1.0.7":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@inquirer/confirm/-/confirm-1.0.11.tgz#0d525815a94b3a3a2a3c8c869cb27def46652a7e"
+  integrity sha512-UWYJ+0dN9rWw0czTPqqKRGLqHsLML9rrQlScn5oOVUtiL2WDTxs95JehP2axKsNkSBMxmFAdA7TdctJkZFJcxA==
+  dependencies:
+    "@inquirer/core" "^1.3.0"
+    "@inquirer/type" "^1.0.5"
+    chalk "^4.1.2"
+
+"@inquirer/core@^1.1.3", "@inquirer/core@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@inquirer/core/-/core-1.3.0.tgz#469427e51daa519f2b1332745a2222629c03c701"
+  integrity sha512-W7EA48gIMahFLiGW/zF+rgoineqTDK5IQizsOmwvbFfYgiQ8Asetut94THBmB3KnW0nrZL5UPHUK6QzcjEzaCw==
+  dependencies:
+    "@inquirer/type" "^1.0.5"
+    ansi-escapes "^4.3.2"
+    chalk "^4.1.2"
+    cli-spinners "^2.8.0"
+    cli-width "^4.0.0"
+    figures "^3.2.0"
+    mute-stream "^1.0.0"
+    run-async "^3.0.0"
+    string-width "^4.2.3"
+    strip-ansi "^6.0.1"
+    wrap-ansi "^6.0.1"
+
 "@inquirer/prompts@latest":
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@inquirer/prompts/-/prompts-1.1.4.tgz#290f846a88a6b82a4860c7394adfdc89b447888f"
