@@ -208,7 +208,7 @@ const answer = input(...);
 const defaultValue = setTimeout(5000).then(() => {
   answer.cancel();
   return 'default answer';
-})
+});
 
 const answer = await Promise.race([defaultValue, answer])
 ```
