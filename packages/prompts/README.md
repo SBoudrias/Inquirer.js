@@ -200,16 +200,15 @@ if (allowEmail) {
 ## Get default value after timeout
 
 ```js
+import { setTimeout } from 'node:timers/promises';
 import { input } from '@inquirer/prompts';
 
 const answer = input(...);
 
-const defaultValue = new Promise(resolve => {
-	setTimeout(() => {
-		resolve(...);
-		answer.cancel();
-	}, 5000);
-});
+const defaultValue = setTimeout(5000).then(() => {
+  answer.cancel();
+  return 'default answer';
+})
 
 const answer = await Promise.race([defaultValue, answer])
 ```
