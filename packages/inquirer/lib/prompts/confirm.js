@@ -15,12 +15,11 @@ export default class ConfirmPrompt extends Base {
 
     Object.assign(this.opt, {
       filter(input) {
-        let value = rawDefault;
         if (input != null && input !== '') {
-          value = /^y(es)?/i.test(input);
+          if (/^y(es)?/i.test(input)) return true;
+          if (/^n(o)?/i.test(input)) return false;
         }
-
-        return value;
+        return rawDefault;
       },
     });
 
