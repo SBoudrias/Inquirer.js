@@ -45,4 +45,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           file: ./coverage/clover.xml
-          gcov_ignore: ./**/*.test.mts
+          gcov_ignore: ./**/*.test.mts,./**/*.test.js
