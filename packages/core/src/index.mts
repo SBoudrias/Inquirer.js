@@ -70,7 +70,16 @@ export function useState<Value>(
   ];
 }
 
-export function useEffect(cb: () => void | (() => void), depArray: unknown[]): void {
+export function useEffect(
+  cb: (rl: InquirerReadline) => void | (() => void),
+  depArray: unknown[]
+): void {
+  const rl = sessionRl;
+
+  if (!rl) {
+    throw new Error('useEffect must be used within a prompt');
+  }
+
   const _idx = index;
   index++;
 
@@ -82,7 +91,7 @@ export function useEffect(cb: () => void | (() => void), depArray: unknown[]): v
   if (hasChanged) {
     hooksEffect.push(() => {
       cleanupHook(_idx);
-      const cleanFn = cb();
+      const cleanFn = cb(rl);
       if (cleanFn != null && typeof cleanFn !== 'function') {
         throw new Error('useEffect return value must be a cleanup function or nothing.');
       }

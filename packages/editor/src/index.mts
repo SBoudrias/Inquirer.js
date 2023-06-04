@@ -2,56 +2,70 @@ import chalk from 'chalk';
 import { editAsync } from 'external-editor';
 import {
   createPrompt,
+  useEffect,
   useState,
   useKeypress,
   usePrefix,
   isEnterKey,
-  AsyncPromptConfig,
+  type AsyncPromptConfig,
+  type InquirerReadline,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 
 type EditorConfig = AsyncPromptConfig & {
   default?: string;
   postfix?: string;
+  waitForUseInput?: boolean;
 };
 
 export default createPrompt<string, EditorConfig>((config, done) => {
+  const { waitForUseInput = true } = config;
   const [status, setStatus] = useState<string>('pending');
   const [value, setValue] = useState<string>(config.default || '');
   const [errorMsg, setError] = useState<string | undefined>(undefined);
 
-  useKeypress(async (key, rl) => {
+  function startEditor(rl: InquirerReadline) {
+    rl.pause();
+    editAsync(
+      value,
+      async (error, answer) => {
+        rl.resume();
+        if (error) {
+          setError(error.toString());
+        } else {
+          setStatus('loading');
+          const isValid = await config.validate(answer);
+          if (isValid === true) {
+            setError(undefined);
+            setStatus('done');
+            done(answer);
+          } else {
+            setValue(answer);
+            setError(isValid || 'You must provide a valid value');
+            setStatus('pending');
+          }
+        }
+      },
+      {
+        postfix: config.postfix || '.txt',
+      }
+    );
+  }
+
+  useEffect((rl) => {
+    if (!waitForUseInput) {
+      startEditor(rl);
+    }
+  }, []);
+
+  useKeypress((key, rl) => {
     // Ignore keypress while our prompt is doing other processing.
     if (status !== 'pending') {
       return;
     }
 
     if (isEnterKey(key)) {
-      rl.pause();
-      editAsync(
-        value,
-        async (error, answer) => {
-          rl.resume();
-          if (error) {
-            setError(error.toString());
-          } else {
-            setStatus('loading');
-            const isValid = await config.validate(answer);
-            if (isValid === true) {
-              setError(undefined);
-              setStatus('done');
-              done(answer);
-            } else {
-              setValue(answer);
-              setError(isValid || 'You must provide a valid value');
-              setStatus('pending');
-            }
-          }
-        },
-        {
-          postfix: config.postfix || '.txt',
-        }
-      );
+      startEditor(rl);
     }
   });
 
