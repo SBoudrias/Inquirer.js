@@ -216,6 +216,27 @@ describe('createPrompt()', () => {
   });
 });
 
+it('allow cancelling the prompt multiple times', async () => {
+  const Prompt = (config: { message: string }, done: (value: string) => void) => {
+    useKeypress((key: KeypressEvent) => {
+      if (isEnterKey(key)) {
+        done('done');
+      }
+    });
+
+    return config.message;
+  };
+
+  const prompt = createPrompt(Prompt);
+  const { answer, events } = await render(prompt, { message: 'Question' });
+
+  answer.cancel();
+  answer.cancel();
+  events.keypress('enter');
+
+  await expect(answer).rejects.toMatchInlineSnapshot('[Error: Prompt was canceled]');
+});
+
 describe('Error handling', () => {
   it('surface errors in render functions', async () => {
     const Prompt = () => {
