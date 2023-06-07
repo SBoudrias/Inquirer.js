@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/confirm",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Inquirer confirm prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.cts",
