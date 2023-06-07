@@ -17,7 +17,7 @@ yarn add @inquirer/confirm
 ```js
 import confirm from '@inquirer/confirm';
 
-const answer = await confirm({ message: 'Enter your name' });
+const answer = await confirm({ message: 'Continue?' });
 ```
 
 ## Options
