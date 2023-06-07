@@ -23,8 +23,8 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   useKeypress((key, rl) => {
     if (isEnterKey(key)) {
       let answer = config.default !== false;
-      if (/^(y|yes)?/i.test(value)) answer = true;
-      else if (/^(n|no)?/i.test(value)) answer = false;
+      if (/^(y|yes)/i.test(value)) answer = true;
+      else if (/^(n|no)/i.test(value)) answer = false;
       if (typeof config.transformer === 'function') {
         setValue(config.transformer(answer));
       } else {
