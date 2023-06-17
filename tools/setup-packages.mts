@@ -2,6 +2,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import * as url from 'node:url';
 import { globby } from 'globby';
+import prettier from 'prettier';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -21,6 +22,10 @@ const paths = await globby(['packages/**/package.json', '!**/node_modules']);
 
 paths.forEach(async (pkgPath) => {
   const dir = path.dirname(pkgPath);
+
+  const prettierJsonOption = await prettier.resolveConfig('tsconfig.json');
+  const formatJSON = (content: any) =>
+    prettier.format(JSON.stringify(content), { ...prettierJsonOption, parser: 'json' });
 
   // Set multi-module system builds exports
   const pkg = await readJSONFile(pkgPath);
@@ -96,14 +101,8 @@ paths.forEach(async (pkgPath) => {
       },
     };
 
-    fs.promises.writeFile(
-      path.join(dir, 'tsconfig.json'),
-      JSON.stringify(esmTsconfig, null, 2) + '\n'
-    );
-    fs.promises.writeFile(
-      path.join(dir, 'tsconfig.cjs.json'),
-      JSON.stringify(cjsTsconfig, null, 2) + '\n'
-    );
+    fs.promises.writeFile(path.join(dir, 'tsconfig.json'), formatJSON(esmTsconfig));
+    fs.promises.writeFile(path.join(dir, 'tsconfig.cjs.json'), formatJSON(cjsTsconfig));
   }
 
   fs.promises.writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');

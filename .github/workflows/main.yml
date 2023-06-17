@@ -33,7 +33,7 @@ jobs:
         run: yarn eslint .
       - name: Validate package setup
         run: |
-          yarn ts-node ./tools/setup-packages.mts
+          yarn setup
           yarn prettier --write .
           git diff --exit-code
       - name: Test packages
