@@ -16,6 +16,7 @@ type ConfirmConfig = AsyncPromptConfig & {
 };
 
 export default createPrompt<boolean, ConfirmConfig>((config, done) => {
+  const { transformer = (answer) => (answer ? 'yes' : 'no') } = config;
   const [status, setStatus] = useState('pending');
   const [value, setValue] = useState('');
   const prefix = usePrefix();
@@ -25,11 +26,8 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
       let answer = config.default !== false;
       if (/^(y|yes)/i.test(value)) answer = true;
       else if (/^(n|no)/i.test(value)) answer = false;
-      if (typeof config.transformer === 'function') {
-        setValue(config.transformer(answer));
-      } else {
-        setValue(answer ? 'yes' : 'no');
-      }
+
+      setValue(transformer(answer));
       setStatus('done');
       done(answer);
     } else {
