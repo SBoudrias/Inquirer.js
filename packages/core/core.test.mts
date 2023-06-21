@@ -195,6 +195,43 @@ describe('createPrompt()', () => {
     await expect(answer).resolves.toEqual('done');
   });
 
+  it('useState: re-render only on change', async () => {
+    const renderSpy = vi.fn();
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      renderSpy();
+
+      const [value, setValue] = useState('');
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(value);
+        } else if (isDownKey(key)) {
+          setValue('down');
+        } else if (isUpKey(key)) {
+          setValue('up');
+        }
+      });
+
+      return `${config.message} ${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+    expect(renderSpy).toHaveBeenCalledTimes(1);
+
+    events.keypress('down');
+    expect(renderSpy).toHaveBeenCalledTimes(2);
+
+    events.keypress('down');
+    expect(renderSpy).toHaveBeenCalledTimes(2);
+
+    events.keypress('up');
+    expect(renderSpy).toHaveBeenCalledTimes(3);
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual('up');
+  });
+
   it('allow cancelling the prompt', async () => {
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       useKeypress((key: KeypressEvent) => {

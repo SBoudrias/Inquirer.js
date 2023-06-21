@@ -62,10 +62,13 @@ export function useState<Value>(
   return [
     hooks[_idx],
     (newValue) => {
-      hooks[_idx] = newValue;
+      // Noop if the value is still the same.
+      if (hooks[_idx] !== newValue) {
+        hooks[_idx] = newValue;
 
-      // Trigger re-render
-      handleChange();
+        // Trigger re-render
+        handleChange();
+      }
     },
   ];
 }
