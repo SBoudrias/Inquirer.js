@@ -29,21 +29,21 @@ let index = 0;
 let handleChange = () => {};
 let sessionRl: InquirerReadline | void;
 
-const resetHookState = () => {
+function resetHookState() {
   hooks.length = 0;
   hooksCleanup.length = 0;
   hooksEffect.length = 0;
   index = 0;
   handleChange = () => {};
   sessionRl = undefined;
-};
+}
 
-const cleanupHook = (index: number) => {
+function cleanupHook(index: number) {
   const cleanFn = hooksCleanup[index];
   if (typeof cleanFn === 'function') {
     cleanFn();
   }
-};
+}
 
 function mergeStateUpdates<T extends (...args: any) => any>(
   fn: T
