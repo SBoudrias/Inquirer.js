@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/input",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Inquirer input text prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.cts",
@@ -54,7 +54,7 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/input/README.md",
   "dependencies": {
-    "@inquirer/core": "^2.1.0",
+    "@inquirer/core": "^2.2.0",
     "@inquirer/type": "^1.1.0",
     "chalk": "^4.1.2"
   },
