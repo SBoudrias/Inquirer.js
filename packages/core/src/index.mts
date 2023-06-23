@@ -45,6 +45,29 @@ const cleanupHook = (index: number) => {
   }
 };
 
+function mergeStateUpdates<T extends (...args: any) => any>(
+  fn: T
+): (...args: Parameters<T>) => ReturnType<T> {
+  const wrapped = (...args: any): ReturnType<T> => {
+    let shouldUpdate = false;
+    const oldHandleChange = handleChange;
+    handleChange = () => {
+      shouldUpdate = true;
+    };
+
+    const returnValue = fn(...args);
+
+    if (shouldUpdate) {
+      oldHandleChange();
+    }
+    handleChange = oldHandleChange;
+
+    return returnValue;
+  };
+
+  return wrapped;
+}
+
 export function useState<Value>(
   defaultValue: NotFunction<Value> | (() => Value)
 ): [Value, (newValue: Value) => void] {
@@ -92,14 +115,18 @@ export function useEffect(
     hasChanged = depArray.some((dep, i) => !Object.is(dep, oldDeps[i]));
   }
   if (hasChanged) {
-    hooksEffect.push(() => {
-      cleanupHook(_idx);
-      const cleanFn = cb(rl);
-      if (cleanFn != null && typeof cleanFn !== 'function') {
-        throw new Error('useEffect return value must be a cleanup function or nothing.');
-      }
-      hooksCleanup[_idx] = cleanFn;
-    });
+    hooksEffect.push(
+      mergeStateUpdates(() => {
+        cleanupHook(_idx);
+        const cleanFn = cb(rl);
+        if (cleanFn != null && typeof cleanFn !== 'function') {
+          throw new Error(
+            'useEffect return value must be a cleanup function or nothing.'
+          );
+        }
+        hooksCleanup[_idx] = cleanFn;
+      })
+    );
   }
   hooks[_idx] = depArray;
 }
@@ -114,9 +141,9 @@ export function useKeypress(
   }
 
   useEffect(() => {
-    const handler = (_input: string, event: KeypressEvent) => {
+    const handler = mergeStateUpdates((_input: string, event: KeypressEvent) => {
       userHandler(event, rl);
-    };
+    });
 
     rl.input.on('keypress', handler);
     return () => {

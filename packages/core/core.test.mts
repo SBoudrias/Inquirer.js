@@ -232,6 +232,67 @@ describe('createPrompt()', () => {
     await expect(answer).resolves.toEqual('up');
   });
 
+  it('useKeypress: only re-render once on state changes', async () => {
+    const renderSpy = vi.fn();
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      renderSpy();
+
+      const [value, setValue] = useState('value');
+      const [key, setKey] = useState('key');
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(value);
+        } else {
+          setValue('foo');
+          setKey('bar');
+        }
+      });
+
+      return `${config.message} ${key}:${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+    expect(renderSpy).toHaveBeenCalledTimes(1);
+
+    events.keypress('down');
+    expect(renderSpy).toHaveBeenCalledTimes(2);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('foo');
+  });
+
+  it('useEffect: only re-render once on state changes', async () => {
+    const renderSpy = vi.fn();
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      renderSpy();
+
+      const [value, setValue] = useState('value');
+      const [key, setKey] = useState('key');
+
+      useEffect(() => {
+        setValue('foo');
+        setKey('bar');
+      }, []);
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(value);
+        }
+      });
+
+      return `${config.message} ${key}:${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+    expect(renderSpy).toHaveBeenCalledTimes(2);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('foo');
+  });
+
   it('allow cancelling the prompt', async () => {
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       useKeypress((key: KeypressEvent) => {
