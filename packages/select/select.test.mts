@@ -214,6 +214,39 @@ describe('select prompt', () => {
     await expect(answer).resolves.toEqual('ham');
   });
 
+  it('allow customizing disabled label', async () => {
+    const { answer, getScreen } = await render(select, {
+      message: 'Select a topping',
+      choices: [
+        { name: 'Ham', value: 'ham' },
+        { name: 'Pineapple', value: 'pineapple', disabled: '*premium*' },
+      ],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping (Use arrow keys)
+      ❯ Ham
+      - Pineapple *premium*"
+    `);
+
+    answer.cancel();
+    await expect(answer).rejects.toBeInstanceOf(Error);
+  });
+
+  it('throws if all choices are disabled', async () => {
+    const { answer } = await render(select, {
+      message: 'Select a topping',
+      choices: [
+        { name: 'Ham', value: 'ham', disabled: true },
+        { name: 'Pineapple', value: 'pineapple', disabled: '*premium*' },
+      ],
+    });
+
+    await expect(answer).rejects.toMatchInlineSnapshot(
+      '[Error: [select prompt] No selectable choices. All choices are disabled.]'
+    );
+  });
+
   it('skip separator by arrow keys', async () => {
     const { answer, events, getScreen } = await render(select, {
       message: 'Select a topping',
@@ -274,5 +307,35 @@ describe('select prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Ham"');
 
     await expect(answer).resolves.toEqual('ham');
+  });
+
+  it('Allow adding description to choices', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a topping',
+      choices: [
+        { name: 'Ham', value: 'ham', description: 'Our classic toping' },
+        { name: 'Pineapple', value: 'pineapple', description: 'A Canadian delicacy' },
+      ],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping (Use arrow keys)
+      ❯ Ham
+        Pineapple
+      Our classic toping"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping
+        Ham
+      ❯ Pineapple
+      A Canadian delicacy"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Pineapple"');
+
+    await expect(answer).resolves.toEqual('pineapple');
   });
 });
