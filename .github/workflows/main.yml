@@ -22,17 +22,13 @@ jobs:
             package.json
             yarn.lock
 
-      - name: yarn install
+      - name: yarn install & tsc
         run: |
           node --version
           yarn install --immutable --immutable-cache --check-cache
         env:
           CI: true
           FORCE_COLOR: 1
-
-      # TS must run before we check dependencies since otherwise our exports map points to nothing.
-      - name: Typescript
-        run: yarn lerna run tsc
 
       - name: Eslint
         run: yarn eslint .
