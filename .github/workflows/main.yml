@@ -16,6 +16,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+          cache-dependency-path: |
+            **/package.json
+            package.json
+            yarn.lock
 
       - name: yarn install
         run: |
