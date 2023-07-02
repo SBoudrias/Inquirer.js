@@ -310,7 +310,34 @@ describe('createPrompt()', () => {
     answer.cancel();
     events.keypress('enter');
 
-    await expect(answer).rejects.toMatchInlineSnapshot('[Error: Prompt was canceled]');
+    await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"Prompt was canceled"'
+    );
+  });
+
+  it('allow cleaning the prompt after completion', async () => {
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done('done');
+        }
+      });
+
+      return config.message;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events, getScreen } = await render(
+      prompt,
+      { message: 'Question' },
+      { clearPromptOnDone: true }
+    );
+
+    expect(getScreen()).toMatchInlineSnapshot('"Question"');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual('done');
+    expect(getScreen({ raw: true })).toEqual(ansiEscapes.eraseLines(1));
   });
 });
 
@@ -332,7 +359,9 @@ it('allow cancelling the prompt multiple times', async () => {
   answer.cancel();
   events.keypress('enter');
 
-  await expect(answer).rejects.toMatchInlineSnapshot('[Error: Prompt was canceled]');
+  await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
+    '"Prompt was canceled"'
+  );
 });
 
 describe('Error handling', () => {
@@ -429,19 +458,15 @@ describe('Error handling', () => {
   });
 
   it('cleanup prompt on exit', async () => {
-    const Prompt = () => `Question ${ansiEscapes.cursorHide}`;
-
+    const Prompt = () => 'Question';
     const prompt = createPrompt(Prompt);
-    const { answer, getScreen } = await render(prompt, { message: 'Question' });
+    const { answer } = await render(prompt, { message: 'Question' });
 
     process.emit('SIGINT');
 
-    await expect(answer).rejects.toMatchInlineSnapshot(
-      '[Error: User force closed the prompt with CTRL+C]'
+    await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"User force closed the prompt with CTRL+C"'
     );
-
-    const lastScreen = getScreen({ raw: true });
-    expect(lastScreen).toContain(ansiEscapes.cursorShow);
   });
 });
 

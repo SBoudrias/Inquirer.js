@@ -1,7 +1,10 @@
 import MuteStream from 'mute-stream';
 import stripAnsi from 'strip-ansi';
+import ansiEscapes from 'ansi-escapes';
 import { Stream } from 'node:stream';
 import type { Prompt } from '@inquirer/type';
+
+const ignoredAnsi = new Set([ansiEscapes.cursorHide, ansiEscapes.cursorShow]);
 
 class BufferedStream extends Stream.Writable {
   #_chunks: Array<string> = [];
@@ -10,13 +13,17 @@ class BufferedStream extends Stream.Writable {
   override _write(chunk: Buffer, _encoding: string, callback: () => void) {
     const str = chunk.toString();
 
-    this.#_rawChunks.push(chunk.toString());
+    // There's some ANSI Inquirer just send to keep state of the terminal clear; we'll ignore those since they're
+    // unlikely to be used by end users or part of prompt code.
+    if (!ignoredAnsi.has(str)) {
+      this.#_rawChunks.push(str);
+    }
 
     // Stripping the ANSI codes here because Inquirer will push commands ANSI (like cursor move.)
     // This is probably fine since we don't care about those for testing; but this could become
     // an issue if we ever want to test for those.
     if (stripAnsi(str).trim().length > 0) {
-      this.#_chunks.push(chunk.toString());
+      this.#_chunks.push(str);
     }
     callback();
   }

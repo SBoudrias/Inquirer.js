@@ -242,8 +242,8 @@ describe('select prompt', () => {
       ],
     });
 
-    await expect(answer).rejects.toMatchInlineSnapshot(
-      '[Error: [select prompt] No selectable choices. All choices are disabled.]'
+    await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"[select prompt] No selectable choices. All choices are disabled."'
     );
   });
 
