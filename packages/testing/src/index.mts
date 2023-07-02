@@ -7,11 +7,14 @@ import type { Prompt } from '@inquirer/type';
 const ignoredAnsi = new Set([ansiEscapes.cursorHide, ansiEscapes.cursorShow]);
 
 class BufferedStream extends Stream.Writable {
+  #_fullOutput: string = '';
   #_chunks: Array<string> = [];
   #_rawChunks: Array<string> = [];
 
   override _write(chunk: Buffer, _encoding: string, callback: () => void) {
     const str = chunk.toString();
+
+    this.#_fullOutput += str;
 
     // There's some ANSI Inquirer just send to keep state of the terminal clear; we'll ignore those since they're
     // unlikely to be used by end users or part of prompt code.
@@ -32,6 +35,10 @@ class BufferedStream extends Stream.Writable {
     const chunks = raw ? this.#_rawChunks : this.#_chunks;
     const lastChunk = chunks[chunks.length - 1];
     return lastChunk ?? '';
+  }
+
+  getFullOutput(): string {
+    return this.#_fullOutput;
   }
 }
 
@@ -70,6 +77,9 @@ export async function render<TestedPrompt extends Prompt<any, any>>(
     getScreen({ raw }: { raw?: boolean } = {}): string {
       const lastScreen = output.getLastChunk({ raw });
       return raw ? lastScreen : stripAnsi(lastScreen).trim();
+    },
+    getFullOutput(): string {
+      return output.getFullOutput();
     },
   };
 }

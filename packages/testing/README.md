@@ -52,6 +52,7 @@ The core utility of `@inquirer/testing` is the `render()` function. This `render
 1. `answer` (`Promise`) This is the promise that'll be resolved once an answer is provided and valid.
 2. `getScreen` (`({ raw: boolean }) => string`) This function returns the state of what is printed on the command line screen at any given time. You can use its return value to validate your prompt is properly rendered. By default this function will strip the ANSI codes (used for colors.)
 3. `events` (`{ keypress: (name) => void, type: (string) => void }`) Is the utilities allowing you to interact with the prompt. Use it to trigger keypress events, or typing any input.
+4. `getFullOutput` (`() => string`) Return a raw dump of everything that got sent on the output stream.
 
 You can refer to [the `@inquirer/input` prompt test suite](https://github.com/SBoudrias/Inquirer.js/blob/master/packages/input/test.mts) as a practical example.
 

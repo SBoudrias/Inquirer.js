@@ -458,14 +458,20 @@ describe('Error handling', () => {
   });
 
   it('cleanup prompt on exit', async () => {
-    const Prompt = () => 'Question';
+    const Prompt = () => `Question ${ansiEscapes.cursorHide}`;
+
     const prompt = createPrompt(Prompt);
-    const { answer } = await render(prompt, { message: 'Question' });
+    const { answer, getFullOutput } = await render(prompt, { message: 'Question' });
 
     process.emit('SIGINT');
 
-    await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"User force closed the prompt with CTRL+C"'
+    await expect(answer).rejects.toMatchInlineSnapshot(
+      '[Error: User force closed the prompt with CTRL+C]'
+    );
+
+    const output = getFullOutput();
+    expect(output.lastIndexOf(ansiEscapes.cursorHide)).toBeLessThan(
+      output.lastIndexOf(ansiEscapes.cursorShow)
     );
   });
 });
