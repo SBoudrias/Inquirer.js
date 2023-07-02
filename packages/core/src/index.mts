@@ -173,8 +173,11 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
   ) => string | [string, string | undefined]
 ) {
   const prompt: Prompt<Value, Config> = (config, context) => {
-    // Set our state before starting the prompt.
-    resetHookState();
+    if (sessionRl) {
+      throw new Error(
+        'An inquirer prompt is already running.\nMake sure you await the result of the previous prompt before calling another prompt.'
+      );
+    }
 
     // Default `input` to stdin
     const input = context?.input ?? process.stdin;
@@ -209,6 +212,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
         }
         screen.done();
 
+        resetHookState();
         process.removeListener('SIGINT', onForceExit);
       };
 
@@ -255,12 +259,17 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
             typeof nextView === 'string' ? [nextView] : nextView;
           screen.render(content, bottomContent);
         } catch (err) {
+          onExit();
           reject(err);
         }
       };
 
       // TODO: we should display a loader while we get the default options.
       getPromptConfig(config).then(workLoop, reject);
+    });
+
+    answer.catch(() => {
+      resetHookState();
     });
 
     answer.cancel = cancel;
