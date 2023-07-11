@@ -34,7 +34,7 @@ export default class PromptUI extends Base {
     if (_.isPlainObject(questions)) {
       // It's either an object of questions or a single question
       questions = Object.values(questions).every(
-        (v) => _.isPlainObject(v) && v.name === undefined
+        (v) => _.isPlainObject(v) && v.name === undefined,
       )
         ? Object.entries(questions).map(([name, question]) => ({ name, ...question }))
         : [questions];
@@ -47,7 +47,7 @@ export default class PromptUI extends Base {
 
     this.process = obs.pipe(
       concatMap(this.processQuestion.bind(this)),
-      publish() // Creates a hot Observable. It prevents duplicating prompts.
+      publish(), // Creates a hot Observable. It prevents duplicating prompts.
     );
 
     this.process.connect();
@@ -57,7 +57,7 @@ export default class PromptUI extends Base {
         reduce((answers, answer) => {
           _.set(answers, answer.name, answer.answer);
           return answers;
-        }, this.answers)
+        }, this.answers),
       )
       .toPromise(Promise)
       .then(this.onCompletion.bind(this), this.onError.bind(this));
@@ -86,15 +86,15 @@ export default class PromptUI extends Base {
         concatMap(this.setDefaultType.bind(this)),
         concatMap(this.filterIfRunnable.bind(this)),
         concatMap(() =>
-          utils.fetchAsyncQuestionProperty(question, 'message', this.answers)
+          utils.fetchAsyncQuestionProperty(question, 'message', this.answers),
         ),
         concatMap(() =>
-          utils.fetchAsyncQuestionProperty(question, 'default', this.answers)
+          utils.fetchAsyncQuestionProperty(question, 'default', this.answers),
         ),
         concatMap(() =>
-          utils.fetchAsyncQuestionProperty(question, 'choices', this.answers)
+          utils.fetchAsyncQuestionProperty(question, 'choices', this.answers),
         ),
-        concatMap(this.fetchAnswer.bind(this))
+        concatMap(this.fetchAnswer.bind(this)),
       );
     });
   }
@@ -103,7 +103,7 @@ export default class PromptUI extends Base {
     const Prompt = this.prompts[question.type];
     this.activePrompt = new Prompt(question, this.rl, this.answers);
     return defer(() =>
-      from(this.activePrompt.run().then((answer) => ({ name: question.name, answer })))
+      from(this.activePrompt.run().then((answer) => ({ name: question.name, answer }))),
     );
   }
 
@@ -139,8 +139,8 @@ export default class PromptUI extends Base {
           if (shouldRun) {
             return question;
           }
-        })
-      ).pipe(filter((val) => val != null))
+        }),
+      ).pipe(filter((val) => val != null)),
     );
   }
 }

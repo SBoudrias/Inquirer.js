@@ -62,8 +62,8 @@ export default class ListPrompt extends Base {
         take(1),
         map(this.getCurrentValue.bind(this)),
         flatMap((value) =>
-          runAsync(self.opt.filter)(value, self.answers).catch((err) => err)
-        )
+          runAsync(self.opt.filter)(value, self.answers).catch((err) => err),
+        ),
       )
       .forEach(this.onSubmit.bind(this));
 
@@ -93,7 +93,7 @@ export default class ListPrompt extends Base {
     } else {
       const choicesStr = listRender(this.opt.choices, this.selected);
       const indexPosition = this.opt.choices.indexOf(
-        this.opt.choices.getChoice(this.selected)
+        this.opt.choices.getChoice(this.selected),
       );
       const realIndexPosition =
         this.opt.choices.reduce((acc, value, i) => {

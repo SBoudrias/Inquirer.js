@@ -44,7 +44,7 @@ export default class ScreenManager {
 
     this.spinnerId = setInterval(
       () => this.render(contentFunc(), bottomContentFunc(), true),
-      spinner.interval
+      spinner.interval,
     );
   }
 
@@ -160,7 +160,7 @@ export default class ScreenManager {
     // is not what we want.
     // re: hard: true; by default', `wrap-ansi` does soft wrapping
     return lines.map((line) =>
-      wrapAnsi(line, width, { trim: false, hard: true }).split('\n')
+      wrapAnsi(line, width, { trim: false, hard: true }).split('\n'),
     );
   }
 

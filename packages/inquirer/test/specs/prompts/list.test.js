@@ -250,7 +250,7 @@ describe('`list` prompt', () => {
         choices: [1, 2, 3],
         loop: false,
       },
-      rl
+      rl,
     );
     expect(list.paginator.isInfinite).equal(false);
   });

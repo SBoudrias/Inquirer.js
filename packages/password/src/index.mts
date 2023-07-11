@@ -9,7 +9,7 @@ type PasswordConfig = Parameters<typeof input>[0] & {
 const password: Prompt<string, PasswordConfig> = (config, context) => {
   if (config.transformer) {
     throw new Error(
-      'Inquirer password prompt do not support custom transformer function. Use the input prompt instead.'
+      'Inquirer password prompt do not support custom transformer function. Use the input prompt instead.',
     );
   }
 
@@ -29,7 +29,7 @@ const password: Prompt<string, PasswordConfig> = (config, context) => {
         return '';
       },
     },
-    context
+    context,
   );
 };
 

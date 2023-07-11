@@ -103,7 +103,7 @@ describe('`input` prompt', () => {
         ...this.fixture,
         default: defaultValue,
       },
-      this.rl
+      this.rl,
     );
 
     input.run();

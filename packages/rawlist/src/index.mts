@@ -24,7 +24,7 @@ type RawlistConfig<Value> = AsyncPromptConfig & {
 };
 
 function isSelectableChoice<T>(
-  choice: undefined | Separator | Choice<T>
+  choice: undefined | Separator | Choice<T>,
 ): choice is Choice<T> {
   return choice != null && !Separator.isSeparator(choice);
 }
@@ -46,7 +46,7 @@ export default createPrompt(
         } else {
           const answer = value.toLowerCase();
           selectedChoice = choices.find(
-            (choice) => isSelectableChoice(choice) && choice.key === answer
+            (choice) => isSelectableChoice(choice) && choice.key === answer,
           );
         }
 
@@ -98,7 +98,7 @@ export default createPrompt(
       `${prefix} ${message} ${value}`,
       [choicesStr, error].filter(Boolean).join('\n'),
     ];
-  }
+  },
 );
 
 export { Separator };

@@ -51,7 +51,7 @@ const confirm = createPrompt<boolean, { message: string; default?: boolean }>(
 
     const message = chalk.bold(config.message);
     return `${prefix} ${message}${defaultValue} ${formattedValue}`;
-  }
+  },
 );
 
 /**

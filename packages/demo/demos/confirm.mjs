@@ -6,7 +6,7 @@ const demo = async () => {
     'Answer:',
     await confirm({
       message: 'Confirm?',
-    })
+    }),
   );
 
   console.log(
@@ -14,7 +14,7 @@ const demo = async () => {
     await confirm({
       message: 'Confirm with default to no?',
       default: false,
-    })
+    }),
   );
 
   console.log(
@@ -22,13 +22,13 @@ const demo = async () => {
     await confirm({
       message: 'Confirm with your custom transformer function?',
       transformer: (answer) => (answer ? '👍' : '👎'),
-    })
+    }),
   );
 
   console.log('This next prompt will be cleared on exit');
   console.log(
     'Cleared prompt answer:',
-    await confirm({ message: 'Confirm?' }, { clearPromptOnDone: true })
+    await confirm({ message: 'Confirm?' }, { clearPromptOnDone: true }),
   );
 };
 

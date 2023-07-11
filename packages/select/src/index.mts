@@ -31,7 +31,7 @@ type SelectConfig<Value> = AsyncPromptConfig & {
 };
 
 function isSelectableChoice<T>(
-  choice: undefined | Separator | Choice<T>
+  choice: undefined | Separator | Choice<T>,
 ): choice is Choice<T> {
   return choice != null && !Separator.isSeparator(choice) && !choice.disabled;
 }
@@ -39,7 +39,7 @@ function isSelectableChoice<T>(
 export default createPrompt(
   <Value extends unknown>(
     config: SelectConfig<Value>,
-    done: (value: Value) => void
+    done: (value: Value) => void,
   ): string => {
     const { choices } = config;
 
@@ -52,7 +52,7 @@ export default createPrompt(
       const startIndex = choices.findIndex(isSelectableChoice);
       if (startIndex < 0) {
         throw new Error(
-          '[select prompt] No selectable choices. All choices are disabled.'
+          '[select prompt] No selectable choices. All choices are disabled.',
         );
       }
 
@@ -125,12 +125,12 @@ export default createPrompt(
     const windowedChoices = paginator.paginate(
       allChoices,
       cursorPosition,
-      config.pageSize
+      config.pageSize,
     );
     const choiceDescription = choice.description ? `\n${choice.description}` : ``;
 
     return `${prefix} ${message}\n${windowedChoices}${choiceDescription}${ansiEscapes.cursorHide}`;
-  }
+  },
 );
 
 export { Separator };

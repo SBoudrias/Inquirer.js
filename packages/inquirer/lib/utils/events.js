@@ -18,36 +18,36 @@ export default function (rl) {
     normalizedUpKey: keypress.pipe(
       filter(
         ({ key }) =>
-          key.name === 'up' || key.name === 'k' || (key.name === 'p' && key.ctrl)
+          key.name === 'up' || key.name === 'k' || (key.name === 'p' && key.ctrl),
       ),
-      share()
+      share(),
     ),
 
     normalizedDownKey: keypress.pipe(
       filter(
         ({ key }) =>
-          key.name === 'down' || key.name === 'j' || (key.name === 'n' && key.ctrl)
+          key.name === 'down' || key.name === 'j' || (key.name === 'n' && key.ctrl),
       ),
-      share()
+      share(),
     ),
 
     numberKey: keypress.pipe(
       filter((e) => e.value && '123456789'.indexOf(e.value) >= 0),
       map((e) => Number(e.value)),
-      share()
+      share(),
     ),
 
     spaceKey: keypress.pipe(
       filter(({ key }) => key && key.name === 'space'),
-      share()
+      share(),
     ),
     aKey: keypress.pipe(
       filter(({ key }) => key && key.name === 'a'),
-      share()
+      share(),
     ),
     iKey: keypress.pipe(
       filter(({ key }) => key && key.name === 'i'),
-      share()
+      share(),
     ),
   };
 }

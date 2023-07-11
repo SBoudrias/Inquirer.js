@@ -402,7 +402,7 @@ describe('inquirer.prompt', () => {
           expect(spy).toHaveBeenCalledWith({ name: 'name1', answer: 'bar' });
           expect(spy).toHaveBeenCalledWith({ name: 'name', answer: 'doe' });
           done();
-        }
+        },
       );
 
       autosubmit(promise.ui);

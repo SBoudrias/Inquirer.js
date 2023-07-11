@@ -32,7 +32,7 @@ const demo = async () => {
       new Promise((resolve) => {
         setTimeout(
           () => resolve(!Number.isNaN(Number(value)) || 'You must provide a number'),
-          3000
+          3000,
         );
       }),
   });

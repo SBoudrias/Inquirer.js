@@ -19,6 +19,6 @@ export const fetchAsyncQuestionProperty = function (question, prop, answers) {
     runAsync(question[prop])(answers).then((value) => {
       question[prop] = value;
       return question;
-    })
+    }),
   );
 };

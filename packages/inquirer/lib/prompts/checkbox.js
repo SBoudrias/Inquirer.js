@@ -48,7 +48,7 @@ export default class CheckboxPrompt extends Base {
     const events = observe(this.rl);
 
     const validation = this.handleSubmitEvents(
-      events.line.pipe(map(this.getCurrentValue.bind(this)))
+      events.line.pipe(map(this.getCurrentValue.bind(this))),
     );
     validation.success.forEach(this.onEnd.bind(this));
     validation.error.forEach(this.onError.bind(this));
@@ -105,7 +105,7 @@ export default class CheckboxPrompt extends Base {
     } else {
       const choicesStr = renderChoices(this.opt.choices, this.pointer);
       const indexPosition = this.opt.choices.indexOf(
-        this.opt.choices.getChoice(this.pointer)
+        this.opt.choices.getChoice(this.pointer),
       );
       const realIndexPosition =
         this.opt.choices.reduce((acc, value, i) => {
@@ -160,7 +160,7 @@ export default class CheckboxPrompt extends Base {
 
   getCurrentValue() {
     const choices = this.opt.choices.filter(
-      (choice) => Boolean(choice.checked) && !choice.disabled
+      (choice) => Boolean(choice.checked) && !choice.disabled,
     );
 
     this.selection = choices.map((choice) => choice.short);
@@ -193,7 +193,7 @@ export default class CheckboxPrompt extends Base {
 
   onAllKey() {
     const shouldBeChecked = Boolean(
-      this.opt.choices.find((choice) => choice.type !== 'separator' && !choice.checked)
+      this.opt.choices.find((choice) => choice.type !== 'separator' && !choice.checked),
     );
 
     this.opt.choices.forEach((choice) => {

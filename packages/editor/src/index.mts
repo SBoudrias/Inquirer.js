@@ -48,7 +48,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
       },
       {
         postfix: config.postfix || '.txt',
-      }
+      },
     );
   }
 

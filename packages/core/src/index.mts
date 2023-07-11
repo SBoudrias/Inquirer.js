@@ -46,7 +46,7 @@ function cleanupHook(index: number) {
 }
 
 function mergeStateUpdates<T extends (...args: any) => any>(
-  fn: T
+  fn: T,
 ): (...args: Parameters<T>) => ReturnType<T> {
   const wrapped = (...args: any): ReturnType<T> => {
     let shouldUpdate = false;
@@ -69,7 +69,7 @@ function mergeStateUpdates<T extends (...args: any) => any>(
 }
 
 export function useState<Value>(
-  defaultValue: NotFunction<Value> | (() => Value)
+  defaultValue: NotFunction<Value> | (() => Value),
 ): [Value, (newValue: Value) => void] {
   const _idx = index;
   index++;
@@ -98,7 +98,7 @@ export function useState<Value>(
 
 export function useEffect(
   cb: (rl: InquirerReadline) => void | (() => void),
-  depArray: unknown[]
+  depArray: unknown[],
 ): void {
   const rl = sessionRl;
 
@@ -121,18 +121,18 @@ export function useEffect(
         const cleanFn = cb(rl);
         if (cleanFn != null && typeof cleanFn !== 'function') {
           throw new Error(
-            'useEffect return value must be a cleanup function or nothing.'
+            'useEffect return value must be a cleanup function or nothing.',
           );
         }
         hooksCleanup[_idx] = cleanFn;
-      })
+      }),
     );
   }
   hooks[_idx] = depArray;
 }
 
 export function useKeypress(
-  userHandler: (event: KeypressEvent, rl: InquirerReadline) => void
+  userHandler: (event: KeypressEvent, rl: InquirerReadline) => void,
 ) {
   const rl = sessionRl;
 
@@ -169,13 +169,13 @@ export type ResolvedPromptConfig = {
 export function createPrompt<Value, Config extends AsyncPromptConfig>(
   view: (
     config: Config & ResolvedPromptConfig,
-    done: (value: Value) => void
-  ) => string | [string, string | undefined]
+    done: (value: Value) => void,
+  ) => string | [string, string | undefined],
 ) {
   const prompt: Prompt<Value, Config> = (config, context) => {
     if (sessionRl) {
       throw new Error(
-        'An inquirer prompt is already running.\nMake sure you await the result of the previous prompt before calling another prompt.'
+        'An inquirer prompt is already running.\nMake sure you await the result of the previous prompt before calling another prompt.',
       );
     }
 

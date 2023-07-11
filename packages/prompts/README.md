@@ -147,7 +147,7 @@ const allowEmail = await confirm(
       },
     }),
     clearPromptOnDone: true,
-  }
+  },
 );
 ```
 

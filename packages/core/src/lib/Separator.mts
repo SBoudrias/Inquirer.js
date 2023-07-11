@@ -17,7 +17,7 @@ export class Separator {
   }
 
   static isSeparator(
-    choice: undefined | Separator | Record<string, unknown>
+    choice: undefined | Separator | Record<string, unknown>,
   ): choice is Separator {
     return Boolean(choice && choice.type === 'separator');
   }

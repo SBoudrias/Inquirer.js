@@ -28,7 +28,7 @@ describe('createPrompt()', () => {
     const { answer } = await renderingDone;
     expect(viewFunction).toHaveBeenLastCalledWith(
       expect.objectContaining({ message: 'Async message:' }),
-      expect.any(Function)
+      expect.any(Function),
     );
 
     answer.cancel();
@@ -47,7 +47,7 @@ describe('createPrompt()', () => {
     const { answer } = await renderingDone;
     expect(viewFunction).toHaveBeenLastCalledWith(
       expect.objectContaining({ message: 'Async message:' }),
-      expect.any(Function)
+      expect.any(Function),
     );
 
     answer.cancel();
@@ -311,7 +311,7 @@ describe('createPrompt()', () => {
     events.keypress('enter');
 
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Prompt was canceled"'
+      '"Prompt was canceled"',
     );
   });
 
@@ -330,7 +330,7 @@ describe('createPrompt()', () => {
     const { answer, events, getScreen } = await render(
       prompt,
       { message: 'Question' },
-      { clearPromptOnDone: true }
+      { clearPromptOnDone: true },
     );
 
     expect(getScreen()).toMatchInlineSnapshot('"Question"');
@@ -360,7 +360,7 @@ it('allow cancelling the prompt multiple times', async () => {
   events.keypress('enter');
 
   await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-    '"Prompt was canceled"'
+    '"Prompt was canceled"',
   );
 });
 
@@ -441,7 +441,7 @@ describe('Error handling', () => {
     const { answer } = await render(prompt, { message: 'Question' });
 
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"useEffect return value must be a cleanup function or nothing."'
+      '"useEffect return value must be a cleanup function or nothing."',
     );
   });
 
@@ -466,12 +466,12 @@ describe('Error handling', () => {
     process.emit('SIGINT');
 
     await expect(answer).rejects.toMatchInlineSnapshot(
-      '[Error: User force closed the prompt with CTRL+C]'
+      '[Error: User force closed the prompt with CTRL+C]',
     );
 
     const output = getFullOutput();
     expect(output.lastIndexOf(ansiEscapes.cursorHide)).toBeLessThan(
-      output.lastIndexOf(ansiEscapes.cursorShow)
+      output.lastIndexOf(ansiEscapes.cursorShow),
     );
   });
 });
@@ -489,7 +489,7 @@ describe('Separator', () => {
 
   it('renders separator', () => {
     expect(stripAnsi(new Separator().separator)).toMatchInlineSnapshot(
-      '"──────────────"'
+      '"──────────────"',
     );
     expect(new Separator('===').separator).toEqual('===');
   });

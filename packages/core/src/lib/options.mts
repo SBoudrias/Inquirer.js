@@ -1,7 +1,7 @@
 import type { AsyncPromptConfig, ResolvedPromptConfig } from '../index.mjs';
 
 export async function getPromptConfig<In extends AsyncPromptConfig>(
-  option: In
+  option: In,
 ): Promise<In & ResolvedPromptConfig> {
   const message =
     typeof option.message === 'function' ? option.message() : option.message;

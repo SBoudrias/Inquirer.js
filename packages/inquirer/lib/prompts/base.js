@@ -63,7 +63,7 @@ export default class Prompt {
     return new Promise((resolve, reject) => {
       this._run(
         (value) => resolve(value),
-        (error) => reject(error)
+        (error) => reject(error),
       );
     });
   }
@@ -107,22 +107,22 @@ export default class Prompt {
             this.startSpinner(filteredValue, this.opt.validatingText);
             return validate(filteredValue, self.answers).then(
               (isValid) => ({ isValid, value: filteredValue }),
-              (err) => ({ isValid: err, value: filteredValue })
+              (err) => ({ isValid: err, value: filteredValue }),
             );
           },
-          (err) => ({ isValid: err })
+          (err) => ({ isValid: err }),
         );
       }),
-      share()
+      share(),
     );
 
     const success = validation.pipe(
       filter((state) => state.isValid === true),
-      take(1)
+      take(1),
     );
     const error = validation.pipe(
       filter((state) => state.isValid !== true),
-      takeUntil(success)
+      takeUntil(success),
     );
 
     return {

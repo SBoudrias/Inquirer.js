@@ -52,7 +52,7 @@ export default class ExpandPrompt extends Base {
     // Save user answer and update prompt to show selected option.
     const events = observe(this.rl);
     const validation = this.handleSubmitEvents(
-      events.line.pipe(map(this.getCurrentValue.bind(this)))
+      events.line.pipe(map(this.getCurrentValue.bind(this))),
     );
     validation.success.forEach(this.onSubmit.bind(this));
     validation.error.forEach(this.onError.bind(this));
@@ -201,20 +201,20 @@ export default class ExpandPrompt extends Base {
 
     if (formatError) {
       throw new Error(
-        'Format error: `key` param must be a single letter and is required.'
+        'Format error: `key` param must be a single letter and is required.',
       );
     }
 
     if (keymap.h) {
       throw new Error(
-        'Reserved key error: `key` param cannot be `h` - this value is reserved.'
+        'Reserved key error: `key` param cannot be `h` - this value is reserved.',
       );
     }
 
     if (errors.length) {
       throw new Error(
         'Duplicate key error: `key` param must be unique. Duplicates: ' +
-          [...new Set(errors)].join(',')
+          [...new Set(errors)].join(','),
       );
     }
   }

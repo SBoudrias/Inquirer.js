@@ -34,7 +34,7 @@ type Config<Value> = {
 };
 
 function isSelectableChoice<T>(
-  choice: undefined | Separator | Choice<T>
+  choice: undefined | Separator | Choice<T>,
 ): choice is Choice<T> {
   return choice != null && !Separator.isSeparator(choice) && !choice.disabled;
 }
@@ -42,14 +42,14 @@ function isSelectableChoice<T>(
 export default createPrompt(
   <Value extends unknown>(
     config: Config<Value>,
-    done: (value: Array<Value>) => void
+    done: (value: Array<Value>) => void,
   ): string => {
     const { prefix = usePrefix(), instructions } = config;
     const paginator = useRef(new Paginator()).current;
 
     const [status, setStatus] = useState('pending');
     const [choices, setChoices] = useState<Array<Separator | Choice<Value>>>(() =>
-      config.choices.map((choice) => ({ ...choice }))
+      config.choices.map((choice) => ({ ...choice })),
     );
     const [cursorPosition, setCursorPosition] = useState(0);
     const [showHelpTip, setShowHelpTip] = useState(true);
@@ -61,7 +61,7 @@ export default createPrompt(
         done(
           choices
             .filter((choice) => isSelectableChoice(choice) && choice.checked)
-            .map((choice) => (choice as Choice<Value>).value)
+            .map((choice) => (choice as Choice<Value>).value),
         );
       } else if (isUpKey(key) || isDownKey(key)) {
         const offset = isUpKey(key) ? -1 : 1;
@@ -83,22 +83,22 @@ export default createPrompt(
             }
 
             return choice;
-          })
+          }),
         );
       } else if (key.name === 'a') {
         const selectAll = Boolean(
-          choices.find((choice) => isSelectableChoice(choice) && !choice.checked)
+          choices.find((choice) => isSelectableChoice(choice) && !choice.checked),
         );
         setChoices(
           choices.map((choice) =>
-            isSelectableChoice(choice) ? { ...choice, checked: selectAll } : choice
-          )
+            isSelectableChoice(choice) ? { ...choice, checked: selectAll } : choice,
+          ),
         );
       } else if (key.name === 'i') {
         setChoices(
           choices.map((choice) =>
-            isSelectableChoice(choice) ? { ...choice, checked: !choice.checked } : choice
-          )
+            isSelectableChoice(choice) ? { ...choice, checked: !choice.checked } : choice,
+          ),
         );
       } else if (isNumberKey(key)) {
         // Adjust index to start at 1
@@ -117,7 +117,7 @@ export default createPrompt(
             }
 
             return choice;
-          })
+          }),
         );
       }
     });
@@ -128,7 +128,7 @@ export default createPrompt(
       const selection = choices
         .filter((choice) => isSelectableChoice(choice) && choice.checked)
         .map(
-          (choice) => (choice as Choice<Value>).name || (choice as Choice<Value>).value
+          (choice) => (choice as Choice<Value>).name || (choice as Choice<Value>).value,
         );
       return `${prefix} ${message} ${chalk.cyan(selection.join(', '))}`;
     }
@@ -175,10 +175,10 @@ export default createPrompt(
     const windowedChoices = paginator.paginate(
       allChoices,
       cursorPosition,
-      config.pageSize
+      config.pageSize,
     );
     return `${prefix} ${message}${helpTip}\n${windowedChoices}${ansiEscapes.cursorHide}`;
-  }
+  },
 );
 
 export { Separator };

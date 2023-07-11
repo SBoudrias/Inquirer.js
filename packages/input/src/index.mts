@@ -18,7 +18,7 @@ type InputConfig = AsyncPromptConfig & {
 export default createPrompt<string, InputConfig>((config, done) => {
   const [status, setStatus] = useState<string>('pending');
   const [defaultValue = '', setDefaultValue] = useState<string | undefined>(
-    config.default
+    config.default,
   );
   const [errorMsg, setError] = useState<string | undefined>(undefined);
   const [value, setValue] = useState<string>('');

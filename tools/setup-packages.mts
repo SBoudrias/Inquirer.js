@@ -13,7 +13,7 @@ function readJSONFile(filepath: string): Promise<any> {
 function fileExists(filepath: string): Promise<boolean> {
   return fs.promises.access(filepath).then(
     () => true,
-    () => false
+    () => false,
   );
 }
 

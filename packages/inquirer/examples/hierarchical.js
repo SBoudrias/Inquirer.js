@@ -21,7 +21,7 @@ function exitHouse() {
     if (answers.direction === 'Forward') {
       console.log('You find yourself in a forest');
       console.log(
-        'There is a wolf in front of you; a friendly looking dwarf to the right and an impasse to the left.'
+        'There is a wolf in front of you; a friendly looking dwarf to the right and an impasse to the left.',
       );
       encounter1();
     } else {
@@ -37,7 +37,7 @@ function encounter1() {
     if (direction === 'Forward') {
       console.log('You attempt to fight the wolf');
       console.log(
-        'Theres a stick and some stones lying around you could use as a weapon'
+        'Theres a stick and some stones lying around you could use as a weapon',
       );
       encounter2b();
     } else if (direction === 'Right') {

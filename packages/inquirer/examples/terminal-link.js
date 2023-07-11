@@ -22,7 +22,7 @@ inquirer
         'Micro which is truly and surely the ' +
           terminalLink(
             'very very very very very very smallest',
-            'https://www.google.com/search?q=very+very+very+very+very+very+very+very+very+very+long'
+            'https://www.google.com/search?q=very+very+very+very+very+very+very+very+very+very+long',
           ),
       ],
       filter(val) {

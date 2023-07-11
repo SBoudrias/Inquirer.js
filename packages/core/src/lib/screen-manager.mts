@@ -90,7 +90,7 @@ export default class ScreenManager {
           ? ansiEscapes.cursorDown(this.extraLinesUnderPrompt)
           : '',
         ansiEscapes.eraseLines(this.height),
-      ].join('')
+      ].join(''),
     );
 
     this.extraLinesUnderPrompt = 0;
@@ -106,7 +106,7 @@ export default class ScreenManager {
           ? ansiEscapes.cursorDown(this.extraLinesUnderPrompt)
           : '',
         '\n',
-      ].join('')
+      ].join(''),
     );
     this.rl.output.mute();
   }

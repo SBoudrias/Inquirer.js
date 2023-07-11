@@ -13,7 +13,7 @@ const demo = async () => {
 
         return true;
       },
-    })
+    }),
   );
 
   console.log(
@@ -22,7 +22,7 @@ const demo = async () => {
       message: 'Automatically opened editor',
       default: '# This prompt was automatically opened. You can write anything:\n\n',
       waitForUseInput: false,
-    })
+    }),
   );
 };
 

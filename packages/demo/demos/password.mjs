@@ -6,7 +6,7 @@ const demo = async () => {
     'Answer:',
     await password({
       message: 'Enter a silent password?',
-    })
+    }),
   );
 
   console.log(
@@ -14,7 +14,7 @@ const demo = async () => {
     await password({
       message: 'Enter a masked password?',
       mask: '*',
-    })
+    }),
   );
 };
 

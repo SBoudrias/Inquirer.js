@@ -10,5 +10,5 @@ export type Context = {
 
 export type Prompt<Value, Config> = (
   config: Config,
-  context?: Context
+  context?: Context,
 ) => CancelablePromise<Value>;
