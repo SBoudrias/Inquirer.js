@@ -400,7 +400,55 @@ describe('checkbox prompt', () => {
     await expect(answer).resolves.not.toContain(unselect);
   });
 
-  it('allow disabling help tip', async () => {});
+  it('allow disabling help tip', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      instructions: false,
+    });
 
-  it('allow customizing help tip', async () => {});
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+      ❯◯ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Move up and down to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number"');
+
+    await expect(answer).resolves.toEqual([]);
+  });
+
+  it('allow customizing help tip', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      instructions:
+        ' (Pulse <space> para seleccionar, <a> para alternar todos, <i> para invertir selección, y <enter> para continuar)',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Pulse <space> para seleccionar, <a> para alternar todos, <i>
+      para invertir selección, y <enter> para continuar)
+      ❯◯ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Move up and down to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number"');
+
+    await expect(answer).resolves.toEqual([]);
+  });
 });
