@@ -434,8 +434,8 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Pulse <space> para seleccionar, <a> para alternar todos,
-      <i> para invertir selección, y <enter> para continuar)
+      "? Select a number (Pulse <space> para seleccionar, <a> para alternar todos, <i>
+      para invertir selección, y <enter> para continuar)
       ❯◯ 1
        ◯ 2
        ◯ 3
