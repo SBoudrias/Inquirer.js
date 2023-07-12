@@ -407,7 +407,7 @@ describe('checkbox prompt', () => {
       instructions: false,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◯ 2
@@ -428,7 +428,7 @@ describe('checkbox prompt', () => {
         ' (Pulse <space> para seleccionar, <a> para alternar todos, <i> para invertir selección, y <enter> para continuar)',
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number (Pulse <space> para seleccionar, <a> para alternar todos, <i> para invertir selección, y <enter> para continuar)
       ❯◯ 1
        ◯ 2
