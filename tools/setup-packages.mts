@@ -56,7 +56,7 @@ paths.forEach(async (pkgPath) => {
           default: './dist/esm/index.mjs',
         },
         require: {
-          types: './dist/cjs/types/index.d.cts',
+          types: './dist/cjs/types/index.d.ts',
           default: './dist/cjs/index.js',
         },
       },

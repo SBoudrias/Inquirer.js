@@ -3,7 +3,7 @@
   "version": "2.3.0",
   "description": "Inquirer prompts, combined in a single package",
   "main": "./dist/cjs/index.js",
-  "typings": "./dist/cjs/types/index.d.cts",
+  "typings": "./dist/cjs/types/index.d.ts",
   "files": [
     "dist/**/*"
   ],
@@ -71,7 +71,7 @@
         "default": "./dist/esm/index.mjs"
       },
       "require": {
-        "types": "./dist/cjs/types/index.d.cts",
+        "types": "./dist/cjs/types/index.d.ts",
         "default": "./dist/cjs/index.js"
       }
     }
