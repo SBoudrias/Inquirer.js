@@ -58,6 +58,9 @@
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/core/README.md",
   "dependencies": {
     "@inquirer/type": "^1.1.0",
+    "@types/mute-stream": "^0.0.1",
+    "@types/node": "^20.4.1",
+    "@types/wrap-ansi": "^3.0.0",
     "ansi-escapes": "^4.3.2",
     "chalk": "^4.1.2",
     "cli-spinners": "^2.8.0",

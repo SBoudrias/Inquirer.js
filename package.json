@@ -47,10 +47,8 @@
   ],
   "devDependencies": {
     "@sindresorhus/tsconfig": "^3.0.1",
-    "@types/mute-stream": "^0.0.1",
     "@types/node": "^20.4.1",
     "@types/prettier": "^2.7.3",
-    "@types/wrap-ansi": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitest/coverage-v8": "^0.33.0",
