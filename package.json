@@ -47,7 +47,7 @@
   ],
   "devDependencies": {
     "@sindresorhus/tsconfig": "^3.0.1",
-    "@types/node": "^20.4.1",
+    "@types/node": "^20.4.2",
     "@types/prettier": "^2.7.3",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
