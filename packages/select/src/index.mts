@@ -2,13 +2,13 @@ import {
   createPrompt,
   useState,
   useKeypress,
-  useRef,
   usePrefix,
+  usePagination,
+  useRef,
   isEnterKey,
   isUpKey,
   isDownKey,
   isNumberKey,
-  Paginator,
   Separator,
   AsyncPromptConfig,
 } from '@inquirer/core';
@@ -42,8 +42,6 @@ export default createPrompt(
     done: (value: Value) => void,
   ): string => {
     const { choices } = config;
-
-    const paginator = useRef(new Paginator()).current;
     const firstRender = useRef(true);
 
     const prefix = usePrefix();
@@ -97,10 +95,6 @@ export default createPrompt(
       firstRender.current = false;
     }
 
-    if (status === 'done') {
-      return `${prefix} ${message} ${chalk.cyan(choice.name || choice.value)}`;
-    }
-
     const allChoices = choices
       .map((choice, index): string => {
         if (Separator.isSeparator(choice)) {
@@ -121,12 +115,15 @@ export default createPrompt(
         return `  ${line}`;
       })
       .join('\n');
+    const windowedChoices = usePagination(allChoices, {
+      active: cursorPosition,
+      pageSize: config.pageSize,
+    });
 
-    const windowedChoices = paginator.paginate(
-      allChoices,
-      cursorPosition,
-      config.pageSize,
-    );
+    if (status === 'done') {
+      return `${prefix} ${message} ${chalk.cyan(choice.name || choice.value)}`;
+    }
+
     const choiceDescription = choice.description ? `\n${choice.description}` : ``;
 
     return `${prefix} ${message}\n${windowedChoices}${choiceDescription}${ansiEscapes.cursorHide}`;

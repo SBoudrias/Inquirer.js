@@ -10,7 +10,9 @@ import wrapAnsi from 'wrap-ansi';
 export const breakLines = (content: string, width: number): string =>
   content
     .split('\n')
-    .map((line) => wrapAnsi(line, width, { trim: false, hard: true }).split('\n'))
-    .flat()
-    .map((line) => line.trimEnd())
+    .flatMap((line) =>
+      wrapAnsi(line, width, { trim: false, hard: true })
+        .split('\n')
+        .map((line) => line.trimEnd()),
+    )
     .join('\n');

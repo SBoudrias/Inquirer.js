@@ -1,15 +1,14 @@
 import {
   createPrompt,
   useState,
-  useRef,
   useKeypress,
   usePrefix,
+  usePagination,
   isUpKey,
   isDownKey,
   isSpaceKey,
   isNumberKey,
   isEnterKey,
-  Paginator,
   Separator,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
@@ -45,7 +44,6 @@ export default createPrompt(
     done: (value: Array<Value>) => void,
   ): string => {
     const { prefix = usePrefix(), instructions } = config;
-    const paginator = useRef(new Paginator()).current;
 
     const [status, setStatus] = useState('pending');
     const [choices, setChoices] = useState<Array<Separator | Choice<Value>>>(() =>
@@ -123,6 +121,33 @@ export default createPrompt(
     });
 
     const message = chalk.bold(config.message);
+    const allChoices = choices
+      .map((choice, index) => {
+        if (Separator.isSeparator(choice)) {
+          return ` ${choice.separator}`;
+        }
+
+        const line = choice.name || choice.value;
+        if (choice.disabled) {
+          const disabledLabel =
+            typeof choice.disabled === 'string' ? choice.disabled : '(disabled)';
+          return chalk.dim(`- ${line} ${disabledLabel}`);
+        }
+
+        const checkbox = choice.checked
+          ? chalk.green(figures.circleFilled)
+          : figures.circle;
+        if (index === cursorPosition) {
+          return chalk.cyan(`${figures.pointer}${checkbox} ${line}`);
+        }
+
+        return ` ${checkbox} ${line}`;
+      })
+      .join('\n');
+    const windowedChoices = usePagination(allChoices, {
+      active: cursorPosition,
+      pageSize: config.pageSize,
+    });
 
     if (status === 'done') {
       const selection = choices
@@ -148,35 +173,6 @@ export default createPrompt(
       }
     }
 
-    const allChoices = choices
-      .map((choice, index) => {
-        if (Separator.isSeparator(choice)) {
-          return ` ${choice.separator}`;
-        }
-
-        const line = choice.name || choice.value;
-        if (choice.disabled) {
-          const disabledLabel =
-            typeof choice.disabled === 'string' ? choice.disabled : '(disabled)';
-          return chalk.dim(`- ${line} ${disabledLabel}`);
-        }
-
-        const checkbox = choice.checked
-          ? chalk.green(figures.circleFilled)
-          : figures.circle;
-        if (index === cursorPosition) {
-          return chalk.cyan(`${figures.pointer}${checkbox} ${line}`);
-        }
-
-        return ` ${checkbox} ${line}`;
-      })
-      .join('\n');
-
-    const windowedChoices = paginator.paginate(
-      allChoices,
-      cursorPosition,
-      config.pageSize,
-    );
     return `${prefix} ${message}${helpTip}\n${windowedChoices}${ansiEscapes.cursorHide}`;
   },
 );
