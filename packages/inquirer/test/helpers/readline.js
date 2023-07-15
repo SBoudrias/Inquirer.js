@@ -26,7 +26,7 @@ Object.assign(stub, {
 const ReadlineStub = function () {
   this.line = '';
   this.input = new EventEmitter();
-  // eslint-disable-next-line
+  // eslint-disable-next-line prefer-rest-params
   EventEmitter.apply(this, arguments);
 };
 
