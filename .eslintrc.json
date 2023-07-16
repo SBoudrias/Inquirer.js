@@ -24,6 +24,7 @@
       }
     ],
     "prettier/prettier": "error",
+    "unicorn/no-abusive-eslint-disable": "error",
     "unicorn/prefer-module": "error",
     "unicorn/prefer-node-protocol": "error"
   },
