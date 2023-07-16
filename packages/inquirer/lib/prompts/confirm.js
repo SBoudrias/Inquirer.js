@@ -36,8 +36,9 @@ export default class ConfirmPrompt extends Base {
    * @return {this}
    */
 
-  _run(cb) {
+  _run(cb, errorCb) {
     this.done = cb;
+    this.error = errorCb;
 
     // Once user confirm (enter key)
     const events = observe(this.rl);
@@ -79,14 +80,18 @@ export default class ConfirmPrompt extends Base {
   onEnd(input) {
     this.status = 'answered';
 
-    let output = this.opt.filter(input);
-    if (this.opt.transformer) {
-      output = this.opt.transformer(output);
-    }
-    this.render(output);
+    try {
+      let output = this.opt.filter(input);
+      if (this.opt.transformer) {
+        output = this.opt.transformer(output);
+      }
+      this.render(output);
 
-    this.screen.done();
-    this.done(output);
+      this.screen.done();
+      this.done(output);
+    } catch (error) {
+      this.error(error);
+    }
   }
 
   /**

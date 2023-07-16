@@ -24,8 +24,9 @@ export default class PasswordPrompt extends Base {
    * @return {this}
    */
 
-  _run(cb) {
+  _run(cb, errorCb) {
     this.done = cb;
+    this.error = errorCb;
 
     const events = observe(this.rl);
 
@@ -102,11 +103,15 @@ export default class PasswordPrompt extends Base {
     this.status = 'answered';
     this.answer = state.value;
 
-    // Re-render prompt
-    this.render();
+    try {
+      // Re-render prompt
+      this.render();
 
-    this.screen.done();
-    this.done(state.value);
+      this.screen.done();
+      this.done(state.value);
+    } catch (error) {
+      this.error(error);
+    }
   }
 
   onError(state) {

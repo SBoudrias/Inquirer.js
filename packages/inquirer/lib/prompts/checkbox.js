@@ -42,8 +42,9 @@ export default class CheckboxPrompt extends Base {
    * @return {this}
    */
 
-  _run(cb) {
+  _run(cb, errorCb) {
     this.done = cb;
+    this.error = errorCb;
 
     const events = observe(this.rl);
 
@@ -146,12 +147,17 @@ export default class CheckboxPrompt extends Base {
   onEnd(state) {
     this.status = 'answered';
     this.dontShowHints = true;
-    // Rerender prompt (and clean subline error)
-    this.render();
 
-    this.screen.done();
-    cliCursor.show();
-    this.done(state.value);
+    try {
+      // Rerender prompt (and clean subline error)
+      this.render();
+
+      this.screen.done();
+      cliCursor.show();
+      this.done(state.value);
+    } catch (error) {
+      this.error(error);
+    }
   }
 
   onError(state) {

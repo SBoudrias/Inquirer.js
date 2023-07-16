@@ -14,8 +14,9 @@ export default class InputPrompt extends Base {
    * @return {this}
    */
 
-  _run(cb) {
+  _run(cb, errorCb) {
     this.done = cb;
+    this.error = errorCb;
 
     // Once user confirm (enter key)
     const events = observe(this.rl);
@@ -82,11 +83,15 @@ export default class InputPrompt extends Base {
     this.answer = state.value;
     this.status = 'answered';
 
-    // Re-render prompt
-    this.render();
+    try {
+      // Re-render prompt
+      this.render();
 
-    this.screen.done();
-    this.done(state.value);
+      this.screen.done();
+      this.done(state.value);
+    } catch (error) {
+      this.error(error);
+    }
   }
 
   onError({ value = '', isValid }) {

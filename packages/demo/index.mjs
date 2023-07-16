@@ -10,6 +10,7 @@ import inputDemo from './demos/input.mjs';
 import passwordDemo from './demos/password.mjs';
 import rawlistDemo from './demos/rawlist.mjs';
 import selectDemo from './demos/select.mjs';
+import transformerExceptionDemo from './demos/transformerException.mjs';
 
 const demos = {
   checkbox: checkboxDemo,
@@ -20,6 +21,7 @@ const demos = {
   password: passwordDemo,
   rawlist: rawlistDemo,
   select: selectDemo,
+  transformerExceptionDemo,
 };
 
 function askNextDemo() {

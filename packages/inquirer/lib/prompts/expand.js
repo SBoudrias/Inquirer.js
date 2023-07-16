@@ -46,8 +46,9 @@ export default class ExpandPrompt extends Base {
    * @return {this}
    */
 
-  _run(cb) {
+  _run(cb, errorCb) {
     this.done = cb;
+    this.error = errorCb;
 
     // Save user answer and update prompt to show selected option.
     const events = observe(this.rl);
