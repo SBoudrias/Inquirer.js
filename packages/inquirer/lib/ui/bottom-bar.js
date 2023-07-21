@@ -2,7 +2,6 @@
  * Sticky bottom bar user interface
  */
 
-import through from 'through';
 import Base from './baseUI.js';
 import * as rlUtils from '../utils/readline.js';
 
@@ -10,7 +9,6 @@ export default class BottomBar extends Base {
   constructor(opt = {}) {
     super(opt);
 
-    this.log = through(this.writeLog.bind(this));
     this.bottomBar = opt.bottomBar || '';
     this.render();
   }
