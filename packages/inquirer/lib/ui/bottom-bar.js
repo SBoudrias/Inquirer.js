@@ -2,7 +2,7 @@
  * Sticky bottom bar user interface
  */
 
-import through from 'through';
+import through from '@ljharb/through';
 import Base from './baseUI.js';
 import * as rlUtils from '../utils/readline.js';
 
