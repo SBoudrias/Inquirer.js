@@ -17,7 +17,7 @@ import chalk from 'chalk';
 import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
 
-type Choice<Value> = {
+export type Choice<Value> = {
   value: Value;
   name?: string;
   description?: string;
@@ -25,7 +25,7 @@ type Choice<Value> = {
   type?: never;
 };
 
-type SelectConfig<Value> = AsyncPromptConfig & {
+export type SelectConfig<Value> = AsyncPromptConfig & {
   choices: ReadonlyArray<Choice<Value> | Separator>;
   pageSize?: number;
 };
