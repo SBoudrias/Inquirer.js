@@ -1,5 +1,6 @@
 import assert from 'node:assert';
-import _ from 'lodash';
+import filter from 'lodash/filter.js';
+import map from 'lodash/map.js';
 
 import Separator from './separator.js';
 import Choice from './choice.js';
@@ -72,7 +73,7 @@ export default class Choices {
    * @return {Array}              Matching choices or empty array
    */
   where(whereClause) {
-    return _.filter(this.realChoices, whereClause);
+    return filter(this.realChoices, whereClause);
   }
 
   /**
@@ -81,7 +82,7 @@ export default class Choices {
    * @return {Array}               Selected properties
    */
   pluck(propertyName) {
-    return _.map(this.realChoices, propertyName);
+    return map(this.realChoices, propertyName);
   }
 
   // Expose usual Array methods
