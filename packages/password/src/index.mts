@@ -1,6 +1,7 @@
 import type { Prompt } from '@inquirer/type';
 import input from '@inquirer/input';
 import chalk from 'chalk';
+import ansiEscapes from 'ansi-escapes';
 
 type InputConfig = Parameters<typeof input>[0];
 type PasswordConfig = Omit<InputConfig, 'transformer' | 'default'> & {
@@ -24,7 +25,7 @@ const password: Prompt<string, PasswordConfig> = (config, context) => {
         }
 
         if (!isFinal) {
-          return chalk.dim('[input is masked]');
+          return `${chalk.dim('[input is masked]')}${ansiEscapes.cursorHide}`;
         }
 
         return '';
