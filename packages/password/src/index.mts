@@ -3,14 +3,11 @@ import input from '@inquirer/input';
 import chalk from 'chalk';
 
 type InputConfig = Parameters<typeof input>[0];
-type PasswordConfig = InputConfig & {
+type PasswordConfig = Omit<InputConfig, 'transformer' | 'default'> & {
   mask?: boolean | string;
 };
 
-const password: Prompt<string, Omit<PasswordConfig, 'transformer' | 'default'>> = (
-  config,
-  context,
-) => {
+const password: Prompt<string, PasswordConfig> = (config, context) => {
   if ('transformer' in config) {
     throw new Error(
       'Inquirer password prompt do not support custom transformer function. Use the input prompt instead.',
