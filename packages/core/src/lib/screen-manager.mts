@@ -1,6 +1,5 @@
 import cliWidth from 'cli-width';
 import stripAnsi from 'strip-ansi';
-import stringWidth from 'string-width';
 import ansiEscapes from 'ansi-escapes';
 import { breakLines } from './utils.mjs';
 import { InquirerReadline } from '../index.mjs';
@@ -39,7 +38,7 @@ export default class ScreenManager {
     this.rl.setPrompt(prompt);
 
     // SetPrompt will change cursor position, now we can get correct value
-    const cursorPos = (this.rl as any)._getCursorPos();
+    const cursorPos = this.rl.getCursorPos();
     const width = cliWidth({ defaultWidth: 80, output: this.rl.output });
 
     content = breakLines(content, width);
@@ -67,10 +66,8 @@ export default class ScreenManager {
     // Return cursor to the input position (on top of the bottomContent)
     if (bottomContentHeight > 0) output += ansiEscapes.cursorUp(bottomContentHeight);
 
-    // Move cursor at the start of the line, then return to the initial left offset.
-    const backward = stringWidth(lastLine(output));
-    if (backward > 0) output += ansiEscapes.cursorBackward(backward);
-    if (cursorPos.cols > 0) output += ansiEscapes.cursorForward(cursorPos.cols);
+    // Return cursor to the initial left offset.
+    output += ansiEscapes.cursorTo(cursorPos.cols);
 
     /**
      * Set up state for next re-rendering
