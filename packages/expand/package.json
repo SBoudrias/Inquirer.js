@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/expand",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Inquirer checkbox prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -54,7 +54,7 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/expand/README.md",
   "dependencies": {
-    "@inquirer/core": "^3.0.0",
+    "@inquirer/core": "^3.1.0",
     "@inquirer/type": "^1.1.1",
     "chalk": "^4.1.2",
     "figures": "^3.2.0"

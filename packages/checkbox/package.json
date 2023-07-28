@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/checkbox",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "engines": {
     "node": ">=14.18.0"
   },
@@ -57,7 +57,7 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/checkbox/README.md",
   "dependencies": {
-    "@inquirer/core": "^3.0.0",
+    "@inquirer/core": "^3.1.0",
     "@inquirer/type": "^1.1.1",
     "ansi-escapes": "^4.3.2",
     "chalk": "^4.1.2",
