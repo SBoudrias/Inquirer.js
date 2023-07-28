@@ -108,6 +108,7 @@ Those hooks are matching the React hooks API:
 And those are custom utilities from Inquirer:
 
 - `useKeypress`
+- `usePagination`
 - `usePrefix`
 
 ### Key utilities
@@ -121,17 +122,22 @@ Listening for keypress events inside an inquirer prompt is a very common pattern
 - `isDownKey()` - Note: this utility will handle vim and emacs keybindings (down, `j`, and `ctrl+n`)
 - `isNumberKey()` one of 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
 
-### `Paginator`
+### `usePagination`
 
-When looping through a long list of options (like in the `select` prompt), paginating the results appearing on the screen at once can be necessary. The `Paginator` utility is there to help this use case.
+When looping through a long list of options (like in the `select` prompt), paginating the results appearing on the screen at once can be necessary. The `usePagination` hook is the utility used within the `select` and `checkbox` prompt to cycle through the list of options.
 
 ```js
 export default createPrompt((config, done) => {
-  const paginator = useRef(new Paginator()).current;
+  const [cursorPosition, setCursorPosition] = useState(0);
 
-  const windowedChoices = paginator.paginate(allChoices, cursorPosition, config.pageSize);
+  const allChoices = config.choices.map((choice) => choice.name);
 
-  return '...';
+  const windowedChoices = usePagination(allChoices, {
+    active: cursorPosition,
+    pageSize: config.pageSize,
+  });
+
+  return `... ${windowedChoices}`;
 });
 ```
 
