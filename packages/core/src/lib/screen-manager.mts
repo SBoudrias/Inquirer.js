@@ -1,3 +1,4 @@
+import type { CursorPos } from 'node:readline';
 import cliWidth from 'cli-width';
 import stripAnsi from 'strip-ansi';
 import ansiEscapes from 'ansi-escapes';
@@ -11,9 +12,11 @@ export default class ScreenManager {
   // These variables are keeping information to allow correct prompt re-rendering
   private height: number = 0;
   private extraLinesUnderPrompt: number = 0;
+  private cursorPos: CursorPos;
 
   constructor(private readonly rl: InquirerReadline) {
     this.rl = rl;
+    this.cursorPos = rl.getCursorPos();
   }
 
   render(content: string, bottomContent: string = '') {
@@ -38,9 +41,9 @@ export default class ScreenManager {
     this.rl.setPrompt(prompt);
 
     // SetPrompt will change cursor position, now we can get correct value
-    const cursorPos = this.rl.getCursorPos();
-    const width = cliWidth({ defaultWidth: 80, output: this.rl.output });
+    this.cursorPos = this.rl.getCursorPos();
 
+    const width = cliWidth({ defaultWidth: 80, output: this.rl.output });
     content = breakLines(content, width);
     bottomContent = breakLines(bottomContent, width);
 
@@ -59,7 +62,8 @@ export default class ScreenManager {
 
     // We need to consider parts of the prompt under the cursor as part of the bottom
     // content in order to correctly cleanup and re-render.
-    const promptLineUpDiff = Math.floor(rawPromptLine.length / width) - cursorPos.rows;
+    const promptLineUpDiff =
+      Math.floor(rawPromptLine.length / width) - this.cursorPos.rows;
     const bottomContentHeight =
       promptLineUpDiff + (bottomContent ? height(bottomContent) : 0);
 
@@ -67,7 +71,7 @@ export default class ScreenManager {
     if (bottomContentHeight > 0) output += ansiEscapes.cursorUp(bottomContentHeight);
 
     // Return cursor to the initial left offset.
-    output += ansiEscapes.cursorTo(cursorPos.cols);
+    output += ansiEscapes.cursorTo(this.cursorPos.cols);
 
     /**
      * Set up state for next re-rendering
@@ -77,6 +81,16 @@ export default class ScreenManager {
 
     this.rl.output.write(output);
     this.rl.output.mute();
+  }
+
+  checkCursorPos() {
+    const cursorPos = this.rl.getCursorPos();
+    if (cursorPos.cols !== this.cursorPos.cols) {
+      this.rl.output.unmute();
+      this.rl.output.write(ansiEscapes.cursorTo(cursorPos.cols));
+      this.rl.output.mute();
+      this.cursorPos = cursorPos;
+    }
   }
 
   clean() {

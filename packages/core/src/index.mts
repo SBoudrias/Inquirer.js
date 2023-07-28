@@ -243,6 +243,10 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
 
     let cancel: () => void = () => {};
     const answer = new CancelablePromise<Value>((resolve, reject) => {
+      const checkCursorPos = () => {
+        screen.checkCursorPos();
+      };
+
       const onExit = () => {
         try {
           let len = hooksCleanup.length;
@@ -260,8 +264,9 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
         }
         screen.done();
 
-        resetHookState();
         process.removeListener('SIGINT', onForceExit);
+        sessionRl?.input.removeListener('keypress', checkCursorPos);
+        resetHookState();
       };
 
       cancel = () => {
@@ -313,7 +318,15 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
       };
 
       // TODO: we should display a loader while we get the default options.
-      getPromptConfig(config).then(workLoop, reject);
+      getPromptConfig(config).then((resolvedConfig) => {
+        workLoop(resolvedConfig);
+
+        // Re-renders only happen when the state change; but the readline cursor could change position
+        // and that also requires a re-render (and a manual one because we mute the streams).
+        // We set the listener after the initial workLoop to avoid a double render if render triggered
+        // by a state change sets the cursor to the right position.
+        sessionRl?.input.on('keypress', checkCursorPos);
+      }, reject);
     });
 
     answer.catch(() => {
