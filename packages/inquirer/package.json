@@ -32,7 +32,7 @@
   },
   "scripts": {
     "test": "nyc mocha test/**/* -r ./test/before",
-    "posttest": "nyc report --reporter=text-lcov > ../../coverage/nyc-report.lcov",
+    "posttest": "mkdir -p ../../coverage && nyc report --reporter=text-lcov > ../../coverage/nyc-report.lcov",
     "prepublishOnly": "cp ../../README.md .",
     "postpublish": "rm -f README.md"
   },
