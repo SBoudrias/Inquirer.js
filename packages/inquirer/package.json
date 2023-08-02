@@ -53,6 +53,6 @@
     "string-width": "^4.1.0",
     "strip-ansi": "^6.0.0",
     "through": "^2.3.6",
-    "wrap-ansi": "^7.0.0"
+    "wrap-ansi": "^6.0.1"
   }
 }
