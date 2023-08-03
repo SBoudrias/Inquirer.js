@@ -1,4 +1,4 @@
-import readline from 'node:readline';
+import { Readline, createInterface } from 'node:readline';
 import { CancelablePromise, type Prompt } from '@inquirer/type';
 import chalk from 'chalk';
 import cliWidth from 'cli-width';
@@ -11,7 +11,7 @@ export { usePrefix } from './lib/prefix.mjs';
 export * from './lib/key.mjs';
 export * from './lib/Separator.mjs';
 
-export type InquirerReadline = readline.ReadLine & {
+export type InquirerReadline = ReadLine & {
   output: MuteStream;
   input: NodeJS.ReadableStream;
   clearLine: (dir: 0 | 1 | -1) => void; // https://nodejs.org/api/readline.html#rlclearlinedir
@@ -234,7 +234,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     const output = new MuteStream();
     output.pipe(context?.output ?? process.stdout);
 
-    sessionRl = readline.createInterface({
+    sessionRl = createInterface({
       terminal: true,
       input,
       output,
