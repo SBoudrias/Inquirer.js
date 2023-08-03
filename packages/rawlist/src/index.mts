@@ -16,7 +16,6 @@ type Choice<Value> = {
   value: Value;
   name?: string;
   key?: string;
-  type?: never;
 };
 
 type RawlistConfig<Value> = AsyncPromptConfig & {
