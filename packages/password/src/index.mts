@@ -21,7 +21,8 @@ const password: Prompt<string, PasswordConfig> = (config, context) => {
       default: undefined,
       transformer(input: string, { isFinal }: { isFinal: boolean }) {
         if (config.mask) {
-          return String(config.mask).repeat(input.length);
+          const maskChar = typeof config.mask === 'string' ? config.mask : '*';
+          return maskChar.repeat(input.length);
         }
 
         if (!isFinal) {
