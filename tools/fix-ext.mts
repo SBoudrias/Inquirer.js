@@ -1,5 +1,5 @@
-import path from 'node:path';
-import fs from 'node:fs/promises';
+import * as path from 'node:path';
+import * as fs from 'node:fs/promises';
 import { globby } from 'globby';
 
 // Because we're using .mts files, TS compiles to .mjs files disregarding the target. So here we

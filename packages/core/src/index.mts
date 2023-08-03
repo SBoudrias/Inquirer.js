@@ -1,4 +1,4 @@
-import readline from 'node:readline';
+import * as readline from 'node:readline';
 import { CancelablePromise, type Prompt } from '@inquirer/type';
 import chalk from 'chalk';
 import cliWidth from 'cli-width';

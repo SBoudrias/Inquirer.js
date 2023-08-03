@@ -68,6 +68,9 @@
     "typescript": "^5.1.6",
     "vitest": "^0.34.1"
   },
+  "resolutions": {
+    "**/type-fest": "^4.1.0"
+  },
   "workspaces": [
     "packages/*",
     "integration/*"
