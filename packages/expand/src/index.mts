@@ -9,8 +9,13 @@ import {
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
 
+type ExpandChoice =
+  | { key: string; name: string }
+  | { key: string; value: string }
+  | { key: string; name: string; value: string };
+
 type ExpandConfig = AsyncPromptConfig & {
-  choices: { key: string; name: string; value?: string }[];
+  choices: ReadonlyArray<ExpandChoice>;
   default?: string;
   expanded?: boolean;
 };
@@ -20,6 +25,16 @@ const helpChoice = {
   name: 'Help, list all options',
   value: undefined,
 };
+
+function getChoiceKey(choice: ExpandChoice, key: 'name' | 'value'): string {
+  if (key === 'name') {
+    if ('name' in choice) return choice.name;
+    return choice.value;
+  }
+
+  if ('value' in choice) return choice.value;
+  return choice.name;
+}
 
 export default createPrompt<string, ExpandConfig>((config, done) => {
   const {
@@ -41,7 +56,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
       } else {
         const selectedChoice = choices.find(({ key }) => key === answer);
         if (selectedChoice) {
-          const finalValue = selectedChoice.value || selectedChoice.name;
+          const finalValue = getChoiceKey(selectedChoice, 'value');
           setValue(finalValue);
           setStatus('done');
           done(finalValue);
@@ -60,6 +75,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
   const message = chalk.bold(config.message);
 
   if (status === 'done') {
+    // TODO: `value` should be the display name instead of the raw value.
     return `${prefix} ${message} ${chalk.cyan(value)}`;
   }
 
@@ -83,7 +99,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
     shortChoices = '';
     longChoices = allChoices
       .map((choice) => {
-        const line = `  ${choice.key}) ${choice.name || choice.value}`;
+        const line = `  ${choice.key}) ${getChoiceKey(choice, 'name')}`;
         if (choice.key === value.toLowerCase()) {
           return chalk.cyan(line);
         }
@@ -96,7 +112,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
   let helpTip = '';
   const currentOption = allChoices.find(({ key }) => key === value.toLowerCase());
   if (currentOption) {
-    helpTip = `${chalk.cyan('>>')} ${currentOption.name || currentOption.value}`;
+    helpTip = `${chalk.cyan('>>')} ${getChoiceKey(currentOption, 'name')}`;
   }
 
   let error = '';
