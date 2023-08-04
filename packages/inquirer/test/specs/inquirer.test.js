@@ -786,7 +786,7 @@ describe('inquirer.prompt', () => {
           type: 'input',
           name: 'q1',
           message: 'message',
-          transformer: (x) => {
+          transformer(x) {
             if (x === 1) {
               throw new Error(expectedError);
             }
