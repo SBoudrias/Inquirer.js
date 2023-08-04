@@ -779,7 +779,7 @@ describe('inquirer.prompt', () => {
       });
     });
 
-    it('should not mask the original error thrown in the onEnd function', async () => {
+    it('should not mask the original error thrown in the onEnd function for transformer (input)', async () => {
       const expectedError = 'Foo';
       const prompts = [
         {
@@ -793,6 +793,37 @@ describe('inquirer.prompt', () => {
             return x;
           },
           default: 1,
+        },
+      ];
+
+      const promise = prompt(prompts);
+
+      promise.ui.rl.emit('line');
+
+      return promise
+        .then(() => {
+          // Failure
+          expect(true).toEqual(false);
+        })
+        .catch((error) => {
+          expect(error.message).toEqual(expectedError);
+        });
+    });
+
+    it('should not mask the original error thrown in the onEnd function for transformer (confirm)', async () => {
+      const expectedError = 'Foo';
+      const prompts = [
+        {
+          type: 'confirm',
+          name: 'q1',
+          message: 'message',
+          transformer(x) {
+            if (x === false) {
+              throw new Error(expectedError);
+            }
+            return x;
+          },
+          default: false,
         },
       ];
 
