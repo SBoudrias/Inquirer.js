@@ -6,7 +6,7 @@ import inquirer from '../lib/inquirer.js';
         type: 'input',
         message: 'Foo quotient',
         name: 'foo',
-        transformer: (x) => {
+        transformer(x) {
           if (x === 1) {
             throw new Error('failing because of the reason');
           }
