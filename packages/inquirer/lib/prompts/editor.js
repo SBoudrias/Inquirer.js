@@ -15,9 +15,8 @@ export default class EditorPrompt extends Base {
    * @return {this}
    */
 
-  _run(cb, errorCb) {
+  _run(cb) {
     this.done = cb;
-    this.error = errorCb;
 
     this.editorResult = new Subject();
 
@@ -90,18 +89,14 @@ export default class EditorPrompt extends Base {
   }
 
   onEnd(state) {
-    try {
-      this.editorResult.unsubscribe();
-      this.lineSubscription.unsubscribe();
-      this.answer = state.value;
-      this.status = 'answered';
-      // Re-render prompt
-      this.render();
-      this.screen.done();
-      this.done(this.answer);
-    } catch (error) {
-      this.error(error);
-    }
+    this.editorResult.unsubscribe();
+    this.lineSubscription.unsubscribe();
+    this.answer = state.value;
+    this.status = 'answered';
+    // Re-render prompt
+    this.render();
+    this.screen.done();
+    this.done(this.answer);
   }
 
   onError(state) {
