@@ -46,9 +46,8 @@ export default class ListPrompt extends Base {
    * @return {this}
    */
 
-  _run(cb, errorCb) {
+  _run(cb) {
     this.done = cb;
-    this.error = errorCb;
 
     const self = this;
 
