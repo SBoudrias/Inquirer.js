@@ -26,15 +26,15 @@ jobs:
           CI: true
           FORCE_COLOR: 1
 
-      - name: Typescript
-        run: yarn lerna run tsc
       - name: Eslint
         run: yarn eslint .
       - name: Validate package setup
         run: |
           yarn setup
           yarn prettier --write .
-          git diff --exit-code
+          git diff --exit-code -- . :^.yarn
+      - name: Typescript
+        run: yarn lerna run tsc
       - name: Test packages
         run: yarn vitest --run --coverage
       - name: Integration tests
