@@ -36,12 +36,14 @@
         "no-undef": "off",
         "no-unused-vars": "off",
         "n/no-missing-import": "off",
-        "n/no-missing-require": "off",
         "@typescript-eslint/no-unused-vars": "error"
       }
     },
     {
       "files": ["*.cjs"],
+      "rules": {
+        "n/no-missing-require": "off"
+      },
       "globals": {
         "require": "readonly"
       },
