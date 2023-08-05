@@ -11,18 +11,14 @@ jobs:
           - 18
           - 16
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-          cache-dependency-path: |
-            **/package.json
-            package.json
-            yarn.lock
 
-      - name: yarn install & tsc
+      - name: yarn install
         run: |
           node --version
           yarn install --immutable --immutable-cache --check-cache
@@ -30,6 +26,8 @@ jobs:
           CI: true
           FORCE_COLOR: 1
 
+      - name: Typescript
+        run: yarn lerna run tsc
       - name: Eslint
         run: yarn eslint .
       - name: Validate package setup

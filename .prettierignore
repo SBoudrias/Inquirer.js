@@ -2,4 +2,7 @@ yarn.lock
 .prettierignore
 .gitignore
 .eslintignore
+.yarn
 coverage
+*.gz
+*.zip
