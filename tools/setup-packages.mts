@@ -6,8 +6,12 @@ import prettier from 'prettier';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
+function readFile(filepath: string): Promise<string> {
+  return fs.promises.readFile(filepath, 'utf-8');
+}
+
 function readJSONFile(filepath: string): Promise<any> {
-  return fs.promises.readFile(filepath, 'utf-8').then(JSON.parse);
+  return readFile(filepath).then(JSON.parse);
 }
 
 function fileExists(filepath: string): Promise<boolean> {
@@ -15,6 +19,12 @@ function fileExists(filepath: string): Promise<boolean> {
     () => true,
     () => false,
   );
+}
+
+async function writeFile(filepath: string, content: string): Promise<any> {
+  if ((await fileExists(filepath)) && (await readFile(filepath)) !== content) {
+    await fs.promises.writeFile(filepath, content);
+  }
 }
 
 const rootPkg = await readJSONFile(path.join(__dirname, '../package.json'));
@@ -101,12 +111,9 @@ paths.forEach(async (pkgPath) => {
       },
     };
 
-    fs.promises.writeFile(path.join(dir, 'tsconfig.json'), await formatJSON(esmTsconfig));
-    fs.promises.writeFile(
-      path.join(dir, 'tsconfig.cjs.json'),
-      await formatJSON(cjsTsconfig),
-    );
+    writeFile(path.join(dir, 'tsconfig.json'), await formatJSON(esmTsconfig));
+    writeFile(path.join(dir, 'tsconfig.cjs.json'), await formatJSON(cjsTsconfig));
   }
 
-  fs.promises.writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+  writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
 });
