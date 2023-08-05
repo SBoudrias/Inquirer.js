@@ -12,6 +12,7 @@ export default defineConfig({
         'tools/**',
         'packages/inquirer/examples/**',
         'packages/demo/**',
+        '.yarn/**',
       ],
     },
   },
