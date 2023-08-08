@@ -1,11 +1,11 @@
-import * as path from 'node:path';
-import * as fs from 'node:fs/promises';
+import path from 'node:path';
+import fs from 'node:fs/promises';
 import { globby } from 'globby';
 
 // Because we're using .mts files, TS compiles to .mjs files disregarding the target. So here we
 // manually rename the common.js files and their imports to .js
-const mjsFiles: string[] = await globby(['dist/cjs/**/*.mjs', '!**/node_modules']);
-mjsFiles.forEach(async (pathname: string) => {
+const mjsFiles = await globby(['dist/cjs/**/*.mjs', '!**/node_modules']);
+mjsFiles.forEach(async (pathname) => {
   // 1. Rename imports
   const fileContent = await fs.readFile(pathname, 'utf-8');
   await fs.writeFile(
@@ -26,8 +26,8 @@ mjsFiles.forEach(async (pathname: string) => {
 
 // Similarly, we rename the .d.mts files to .d.ts. This is because Typescript `node16` target will
 // masquerade as ESM otherwise.
-const dmtsFiles: string[] = await globby(['dist/cjs/**/*.d.mts', '!**/node_modules']);
-dmtsFiles.forEach(async (pathname: string) => {
+const dmtsFiles = await globby(['dist/cjs/**/*.d.mts', '!**/node_modules']);
+dmtsFiles.forEach(async (pathname) => {
   // 1. Rename imports from `.mjs` to `.js`
   const fileContent = await fs.readFile(pathname, 'utf-8');
   await fs.writeFile(

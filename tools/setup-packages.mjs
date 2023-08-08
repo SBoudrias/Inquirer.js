@@ -1,27 +1,27 @@
-import * as path from 'node:path';
-import * as fs from 'node:fs';
-import * as url from 'node:url';
+import path from 'node:path';
+import fs from 'node:fs';
+import url from 'node:url';
 import { globby } from 'globby';
 import prettier from 'prettier';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-function readFile(filepath: string): Promise<string> {
+function readFile(filepath) {
   return fs.promises.readFile(filepath, 'utf-8');
 }
 
-function readJSONFile(filepath: string): Promise<any> {
+function readJSONFile(filepath) {
   return readFile(filepath).then(JSON.parse);
 }
 
-function fileExists(filepath: string): Promise<boolean> {
+function fileExists(filepath) {
   return fs.promises.access(filepath).then(
     () => true,
     () => false,
   );
 }
 
-async function writeFile(filepath: string, content: string): Promise<any> {
+async function writeFile(filepath, content) {
   if ((await fileExists(filepath)) && (await readFile(filepath)) !== content) {
     await fs.promises.writeFile(filepath, content);
   }
@@ -34,7 +34,7 @@ paths.forEach(async (pkgPath) => {
   const dir = path.dirname(pkgPath);
 
   const prettierJsonOption = await prettier.resolveConfig('tsconfig.json');
-  const formatJSON = (content: any) =>
+  const formatJSON = (content) =>
     prettier.format(JSON.stringify(content), { ...prettierJsonOption, parser: 'json' });
 
   // Set multi-module system builds exports
@@ -80,7 +80,7 @@ paths.forEach(async (pkgPath) => {
       tsc: 'yarn run clean && yarn run tsc:esm && yarn run tsc:cjs',
       clean: 'rm -rf dist',
       'tsc:esm': 'tsc -p ./tsconfig.json',
-      'tsc:cjs': 'tsc -p ./tsconfig.cjs.json && yarn run fix-ext',
+      'tsc:cjs': 'node ../../tools/fix-ext.mjs',
       'fix-ext':
         'node --no-warnings=ExperimentalWarning --loader=ts-node/esm ../../tools/fix-ext.mts',
     };
