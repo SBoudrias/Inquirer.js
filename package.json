@@ -49,6 +49,7 @@
   "devDependencies": {
     "@sindresorhus/tsconfig": "^3.0.1",
     "@types/node": "^20.4.8",
+    "@types/semver": "^7",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
     "@vitest/coverage-v8": "^0.34.1",
@@ -61,9 +62,11 @@
     "eslint-plugin-unicorn": "^48.0.1",
     "globby": "^13.2.2",
     "husky": "^8.0.3",
+    "latest-version": "^7.0.0",
     "lerna": "^7.1.4",
     "lint-staged": "^13.2.3",
     "prettier": "^3.0.1",
+    "semver": "^7.5.4",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6",
     "vitest": "^0.34.1"

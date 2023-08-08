@@ -8,6 +8,9 @@
     "lib"
   ],
   "main": "lib/inquirer.js",
+  "scripts": {
+    "prepublishOnly": "node ../../tools/validate-version.mjs"
+  },
   "keywords": [
     "answer",
     "answers",
