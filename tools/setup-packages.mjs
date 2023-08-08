@@ -1,5 +1,5 @@
 import path from 'node:path';
-import fs from 'node:fs';
+import fs from 'node:fs/promises';
 import url from 'node:url';
 import { globby } from 'globby';
 import prettier from 'prettier';
@@ -7,7 +7,7 @@ import prettier from 'prettier';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 function readFile(filepath) {
-  return fs.promises.readFile(filepath, 'utf-8');
+  return fs.readFile(filepath, 'utf-8');
 }
 
 function readJSONFile(filepath) {
@@ -15,7 +15,7 @@ function readJSONFile(filepath) {
 }
 
 function fileExists(filepath) {
-  return fs.promises.access(filepath).then(
+  return fs.access(filepath).then(
     () => true,
     () => false,
   );
@@ -23,7 +23,7 @@ function fileExists(filepath) {
 
 async function writeFile(filepath, content) {
   if ((await fileExists(filepath)) && (await readFile(filepath)) !== content) {
-    await fs.promises.writeFile(filepath, content);
+    await fs.writeFile(filepath, content);
   }
 }
 
