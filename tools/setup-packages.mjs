@@ -81,8 +81,6 @@ paths.forEach(async (pkgPath) => {
       clean: 'rm -rf dist',
       'tsc:esm': 'tsc -p ./tsconfig.json',
       'tsc:cjs': 'node ../../tools/fix-ext.mjs',
-      'fix-ext':
-        'node --no-warnings=ExperimentalWarning --loader=ts-node/esm ../../tools/fix-ext.mts',
     };
 
     // Set ESM tsconfig
