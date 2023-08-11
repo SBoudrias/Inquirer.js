@@ -73,10 +73,9 @@
     "integration/*"
   ],
   "scripts": {
-    "ts-node": "node --no-warnings=ExperimentalWarning --loader=ts-node/esm",
     "postinstall": "husky install",
     "prepare": "lerna run tsc",
-    "setup": "yarn ts-node ./tools/setup-packages.mts",
+    "setup": "node ./tools/setup-packages.mjs",
     "pretest": "eslint . && lerna run tsc",
     "test": "vitest --run packages && node --test integration"
   },

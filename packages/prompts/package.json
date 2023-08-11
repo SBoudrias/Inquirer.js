@@ -58,8 +58,7 @@
     "tsc": "yarn run clean && yarn run tsc:esm && yarn run tsc:cjs",
     "clean": "rm -rf dist",
     "tsc:esm": "tsc -p ./tsconfig.json",
-    "tsc:cjs": "tsc -p ./tsconfig.cjs.json && yarn run fix-ext",
-    "fix-ext": "node --no-warnings=ExperimentalWarning --loader=ts-node/esm ../../tools/fix-ext.mts"
+    "tsc:cjs": "tsc -p ./tsconfig.cjs.json && node ../../tools/fix-ext.mjs"
   },
   "engines": {
     "node": ">=14.18.0"
