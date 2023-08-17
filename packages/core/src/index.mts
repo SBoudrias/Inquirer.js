@@ -40,13 +40,6 @@ function resetHookState() {
   sessionRl = undefined;
 }
 
-function cleanupHook(index: number) {
-  const cleanFn = hooksCleanup[index];
-  if (typeof cleanFn === 'function') {
-    cleanFn();
-  }
-}
-
 function mergeStateUpdates<T extends (...args: any) => any>(
   fn: T,
 ): (...args: Parameters<T>) => ReturnType<T> {
@@ -69,6 +62,19 @@ function mergeStateUpdates<T extends (...args: any) => any>(
 
   return wrapped;
 }
+
+function cleanupHook(index: number) {
+  const cleanFn = hooksCleanup[index];
+  if (typeof cleanFn === 'function') {
+    cleanFn();
+  }
+}
+
+const runEffects = mergeStateUpdates(() => {
+  for (const effect of hooksEffect) {
+    effect();
+  }
+});
 
 export function useState<Value>(
   defaultValue: NotFunction<Value> | (() => Value),
@@ -117,18 +123,14 @@ export function useEffect(
     hasChanged = depArray.some((dep, i) => !Object.is(dep, oldDeps[i]));
   }
   if (hasChanged) {
-    hooksEffect.push(
-      mergeStateUpdates(() => {
-        cleanupHook(_idx);
-        const cleanFn = cb(rl);
-        if (cleanFn != null && typeof cleanFn !== 'function') {
-          throw new Error(
-            'useEffect return value must be a cleanup function or nothing.',
-          );
-        }
-        hooksCleanup[_idx] = cleanFn;
-      }),
-    );
+    hooksEffect.push(() => {
+      cleanupHook(_idx);
+      const cleanFn = cb(rl);
+      if (cleanFn != null && typeof cleanFn !== 'function') {
+        throw new Error('useEffect return value must be a cleanup function or nothing.');
+      }
+      hooksCleanup[_idx] = cleanFn;
+    });
   }
   hooks[_idx] = depArray;
 }
@@ -304,13 +306,12 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
 
         try {
           const nextView = view(resolvedConfig, done);
-          for (const effect of hooksEffect) {
-            effect();
-          }
 
           const [content, bottomContent] =
             typeof nextView === 'string' ? [nextView] : nextView;
           screen.render(content, bottomContent);
+
+          runEffects();
         } catch (err) {
           onExit();
           reject(err);

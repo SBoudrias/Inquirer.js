@@ -273,6 +273,9 @@ describe('createPrompt()', () => {
 
       useEffect(() => {
         setValue('foo');
+      }, []);
+
+      useEffect(() => {
         setKey('bar');
       }, []);
 
@@ -286,8 +289,10 @@ describe('createPrompt()', () => {
     };
 
     const prompt = createPrompt(Prompt);
-    const { answer, events } = await render(prompt, { message: 'Question' });
+    const { answer, events, getScreen } = await render(prompt, { message: 'Question' });
+
     expect(renderSpy).toHaveBeenCalledTimes(2);
+    expect(getScreen()).toMatchInlineSnapshot('"Question bar:foo"');
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('foo');
