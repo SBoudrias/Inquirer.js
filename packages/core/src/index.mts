@@ -135,6 +135,10 @@ export function useEffect(
   hooks[_idx] = depArray;
 }
 
+export function useRef<Value>(val: Value): { current: Value } {
+  return useState({ current: val })[0];
+}
+
 export function useKeypress(
   userHandler: (event: KeypressEvent, rl: InquirerReadline) => void,
 ) {
@@ -144,20 +148,19 @@ export function useKeypress(
     throw new Error('useKeypress must be used within a prompt');
   }
 
+  const signal = useRef(userHandler);
+  signal.current = userHandler;
+
   useEffect(() => {
     const handler = mergeStateUpdates((_input: string, event: KeypressEvent) => {
-      userHandler(event, rl);
+      signal.current(event, rl);
     });
 
     rl.input.on('keypress', handler);
     return () => {
       rl.input.removeListener('keypress', handler);
     };
-  }, [userHandler]);
-}
-
-export function useRef<Value>(val: Value): { current: Value } {
-  return useState({ current: val })[0];
+  }, []);
 }
 
 export function usePagination(
