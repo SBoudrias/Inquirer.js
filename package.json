@@ -84,7 +84,7 @@
     "url": "https://github.com/SBoudrias/Inquirer.js.git"
   },
   "lint-staged": {
-    "*": "prettier --write",
-    "*.m?[jt]sx?": "eslint --fix"
+    "*": "yarn prettier --write",
+    "*.m?[jt]sx?": "yarn eslint --fix"
   }
 }
