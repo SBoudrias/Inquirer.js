@@ -28,120 +28,128 @@ type NotFunction<T> = T extends Function ? never : T;
 type HookStore = {
   rl: InquirerReadline;
   hooks: any[];
-  hooksCleanup: any[];
+  hooksCleanup: Array<void | (() => void)>;
   hooksEffect: Array<() => void>;
   index: number;
   handleChange: () => void;
 };
 
 const hookStorage = new AsyncLocalStorage<HookStore>();
-function getStore() {
-  const store = hookStorage.getStore();
-  if (!store) {
-    throw new Error('[Inquirer] Hook functions can only be called from within a prompt');
-  }
-  return store;
-}
-function getNextPointer() {
-  const store = getStore();
-  const _idx = store.index;
-  store.index++;
 
-  return _idx;
-}
+const context = {
+  getStore() {
+    const store = hookStorage.getStore();
+    if (!store) {
+      throw new Error(
+        '[Inquirer] Hook functions can only be called from within a prompt',
+      );
+    }
+    return store;
+  },
+  withPointer<Value>(cb: (index: number, store: HookStore) => Value): Value {
+    const store = context.getStore();
+    const value = cb(store.index, store);
+    store.index++;
+    return value;
+  },
+  handleChange() {
+    const { handleChange } = context.getStore();
+    handleChange();
+  },
+  mergeStateUpdates<T extends (...args: any) => any>(
+    fn: T,
+  ): (...args: Parameters<T>) => ReturnType<T> {
+    const wrapped = (...args: any): ReturnType<T> => {
+      const store = context.getStore();
+      let shouldUpdate = false;
+      const oldHandleChange = store.handleChange;
+      store.handleChange = () => {
+        shouldUpdate = true;
+      };
 
-function mergeStateUpdates<T extends (...args: any) => any>(
-  fn: T,
-): (...args: Parameters<T>) => ReturnType<T> {
-  const wrapped = (...args: any): ReturnType<T> => {
-    const store = getStore();
-    let shouldUpdate = false;
-    const oldHandleChange = store.handleChange;
-    store.handleChange = () => {
-      shouldUpdate = true;
+      const returnValue = fn(...args);
+
+      if (shouldUpdate) {
+        oldHandleChange();
+      }
+      store.handleChange = oldHandleChange;
+
+      return returnValue;
     };
 
-    const returnValue = fn(...args);
+    return wrapped;
+  },
+};
 
-    if (shouldUpdate) {
-      oldHandleChange();
-    }
-    store.handleChange = oldHandleChange;
+const effectScheduler = {
+  queue(cb: (readline: InquirerReadline) => void) {
+    const store = context.getStore();
+    const { index } = store;
 
-    return returnValue;
-  };
+    store.hooksEffect.push(() => {
+      store.hooksCleanup[index]?.();
 
-  return wrapped;
-}
-
-function cleanupHook(index: number) {
-  const { hooksCleanup } = getStore();
-  const cleanFn = hooksCleanup[index];
-  if (typeof cleanFn === 'function') {
-    cleanFn();
-  }
-}
-
-const runEffects = mergeStateUpdates(() => {
-  const { hooksEffect } = getStore();
-  for (const effect of hooksEffect) {
-    effect();
-  }
-});
+      const cleanFn = cb(store.rl);
+      if (cleanFn != null && typeof cleanFn !== 'function') {
+        throw new Error('useEffect return value must be a cleanup function or nothing.');
+      }
+      store.hooksCleanup[index] = cleanFn;
+    });
+  },
+  run: context.mergeStateUpdates(() => {
+    const store = context.getStore();
+    store.hooksEffect.forEach((effect) => {
+      effect();
+    });
+    store.hooksEffect.length = 0;
+  }),
+};
 
 export function useState<Value>(
   defaultValue: NotFunction<Value> | (() => Value),
 ): [Value, (newValue: Value) => void] {
-  const store = getStore();
-  const _idx = getNextPointer();
-  const { hooks } = store;
+  return context.withPointer((pointer, store) => {
+    const { hooks } = store;
 
-  if (!(_idx in hooks)) {
-    if (typeof defaultValue === 'function') {
-      hooks[_idx] = (defaultValue as () => Value)();
-    } else {
-      hooks[_idx] = defaultValue;
-    }
-  }
-
-  return [
-    hooks[_idx],
-    (newValue) => {
-      // Noop if the value is still the same.
-      if (hooks[_idx] !== newValue) {
-        hooks[_idx] = newValue;
-
-        // Trigger re-render
-        store.handleChange();
+    if (!(pointer in hooks)) {
+      if (typeof defaultValue === 'function') {
+        hooks[pointer] = (defaultValue as () => Value)();
+      } else {
+        hooks[pointer] = defaultValue;
       }
-    },
-  ];
+    }
+
+    return [
+      hooks[pointer],
+      (newValue) => {
+        // Noop if the value is still the same.
+        if (hooks[pointer] !== newValue) {
+          hooks[pointer] = newValue;
+
+          // Trigger re-render
+          context.handleChange();
+        }
+      },
+    ];
+  });
 }
 
 export function useEffect(
   cb: (rl: InquirerReadline) => void | (() => void),
   depArray: unknown[],
 ): void {
-  const store = getStore();
-  const _idx = getNextPointer();
-  const { rl, hooks } = store;
+  return context.withPointer((pointer, store) => {
+    const { hooks } = store;
 
-  const oldDeps = hooks[_idx];
-  let hasChanged = true;
-  if (oldDeps) {
-    hasChanged = depArray.some((dep, i) => !Object.is(dep, oldDeps[i]));
-  }
-  if (hasChanged) {
-    store.hooksEffect.push(() => {
-      cleanupHook(_idx);
-      const cleanFn = cb(rl);
-      if (cleanFn != null && typeof cleanFn !== 'function') {
-        throw new Error('useEffect return value must be a cleanup function or nothing.');
-      }
-      store.hooksCleanup[_idx] = cleanFn;
-    });
-  }
-  hooks[_idx] = depArray;
+    const oldDeps = hooks[pointer];
+    const hasChanged =
+      !Array.isArray(oldDeps) || depArray.some((dep, i) => !Object.is(dep, oldDeps[i]));
+
+    if (hasChanged) {
+      effectScheduler.queue(cb);
+    }
+    hooks[pointer] = depArray;
+  });
 }
 
 export function useRef<Value>(val: Value): { current: Value } {
@@ -156,7 +164,7 @@ export function useKeypress(
 
   useEffect((rl) => {
     const handler = AsyncResource.bind(
-      mergeStateUpdates((_input: string, event: KeypressEvent) => {
+      context.mergeStateUpdates((_input: string, event: KeypressEvent) => {
         signal.current(event, rl);
       }),
     );
@@ -178,7 +186,7 @@ export function usePagination(
     pageSize?: number;
   },
 ) {
-  const { rl } = getStore();
+  const { rl } = context.getStore();
   const state = useRef({
     pointer: 0,
     lastIndex: 0,
@@ -259,8 +267,8 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
 
         const onExit = AsyncResource.bind(() => {
           try {
-            store.hooksCleanup.forEach((_, index) => {
-              cleanupHook(index);
+            store.hooksCleanup.forEach((cleanFn) => {
+              cleanFn?.();
             });
           } catch (err) {
             reject(err);
@@ -307,7 +315,6 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
 
         const workLoop = (resolvedConfig: Config & ResolvedPromptConfig) => {
           store.index = 0;
-          store.hooksEffect.length = 0;
           store.handleChange = () => workLoop(resolvedConfig);
 
           try {
@@ -317,7 +324,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
               typeof nextView === 'string' ? [nextView] : nextView;
             screen.render(content, bottomContent);
 
-            runEffects();
+            effectScheduler.run();
           } catch (err) {
             onExit();
             reject(err);
