@@ -1,4 +1,5 @@
 import * as readline from 'node:readline';
+import { AsyncLocalStorage, AsyncResource } from 'node:async_hooks';
 import { CancelablePromise, type Prompt } from '@inquirer/type';
 import chalk from 'chalk';
 import cliWidth from 'cli-width';
@@ -24,29 +25,39 @@ export type KeypressEvent = {
 
 type NotFunction<T> = T extends Function ? never : T;
 
-const hooks: any[] = [];
-const hooksCleanup: any[] = [];
-const hooksEffect: Array<() => void> = [];
-let index = 0;
-let handleChange = () => {};
-let sessionRl: InquirerReadline | void;
+type HookStore = {
+  rl: InquirerReadline;
+  hooks: any[];
+  hooksCleanup: any[];
+  hooksEffect: Array<() => void>;
+  index: number;
+  handleChange: () => void;
+};
 
-function resetHookState() {
-  hooks.length = 0;
-  hooksCleanup.length = 0;
-  hooksEffect.length = 0;
-  index = 0;
-  handleChange = () => {};
-  sessionRl = undefined;
+const hookStorage = new AsyncLocalStorage<HookStore>();
+function getStore() {
+  const store = hookStorage.getStore();
+  if (!store) {
+    throw new Error('[Inquirer] Hook functions can only be called from within a prompt');
+  }
+  return store;
+}
+function getNextPointer() {
+  const store = getStore();
+  const _idx = store.index;
+  store.index++;
+
+  return _idx;
 }
 
 function mergeStateUpdates<T extends (...args: any) => any>(
   fn: T,
 ): (...args: Parameters<T>) => ReturnType<T> {
   const wrapped = (...args: any): ReturnType<T> => {
+    const store = getStore();
     let shouldUpdate = false;
-    const oldHandleChange = handleChange;
-    handleChange = () => {
+    const oldHandleChange = store.handleChange;
+    store.handleChange = () => {
       shouldUpdate = true;
     };
 
@@ -55,7 +66,7 @@ function mergeStateUpdates<T extends (...args: any) => any>(
     if (shouldUpdate) {
       oldHandleChange();
     }
-    handleChange = oldHandleChange;
+    store.handleChange = oldHandleChange;
 
     return returnValue;
   };
@@ -64,6 +75,7 @@ function mergeStateUpdates<T extends (...args: any) => any>(
 }
 
 function cleanupHook(index: number) {
+  const { hooksCleanup } = getStore();
   const cleanFn = hooksCleanup[index];
   if (typeof cleanFn === 'function') {
     cleanFn();
@@ -71,6 +83,7 @@ function cleanupHook(index: number) {
 }
 
 const runEffects = mergeStateUpdates(() => {
+  const { hooksEffect } = getStore();
   for (const effect of hooksEffect) {
     effect();
   }
@@ -79,8 +92,9 @@ const runEffects = mergeStateUpdates(() => {
 export function useState<Value>(
   defaultValue: NotFunction<Value> | (() => Value),
 ): [Value, (newValue: Value) => void] {
-  const _idx = index;
-  index++;
+  const store = getStore();
+  const _idx = getNextPointer();
+  const { hooks } = store;
 
   if (!(_idx in hooks)) {
     if (typeof defaultValue === 'function') {
@@ -98,7 +112,7 @@ export function useState<Value>(
         hooks[_idx] = newValue;
 
         // Trigger re-render
-        handleChange();
+        store.handleChange();
       }
     },
   ];
@@ -108,14 +122,9 @@ export function useEffect(
   cb: (rl: InquirerReadline) => void | (() => void),
   depArray: unknown[],
 ): void {
-  const rl = sessionRl;
-
-  if (!rl) {
-    throw new Error('useEffect must be used within a prompt');
-  }
-
-  const _idx = index;
-  index++;
+  const store = getStore();
+  const _idx = getNextPointer();
+  const { rl, hooks } = store;
 
   const oldDeps = hooks[_idx];
   let hasChanged = true;
@@ -123,13 +132,13 @@ export function useEffect(
     hasChanged = depArray.some((dep, i) => !Object.is(dep, oldDeps[i]));
   }
   if (hasChanged) {
-    hooksEffect.push(() => {
+    store.hooksEffect.push(() => {
       cleanupHook(_idx);
       const cleanFn = cb(rl);
       if (cleanFn != null && typeof cleanFn !== 'function') {
         throw new Error('useEffect return value must be a cleanup function or nothing.');
       }
-      hooksCleanup[_idx] = cleanFn;
+      store.hooksCleanup[_idx] = cleanFn;
     });
   }
   hooks[_idx] = depArray;
@@ -142,19 +151,15 @@ export function useRef<Value>(val: Value): { current: Value } {
 export function useKeypress(
   userHandler: (event: KeypressEvent, rl: InquirerReadline) => void,
 ) {
-  const rl = sessionRl;
-
-  if (!rl) {
-    throw new Error('useKeypress must be used within a prompt');
-  }
-
   const signal = useRef(userHandler);
   signal.current = userHandler;
 
-  useEffect(() => {
-    const handler = mergeStateUpdates((_input: string, event: KeypressEvent) => {
-      signal.current(event, rl);
-    });
+  useEffect((rl) => {
+    const handler = AsyncResource.bind(
+      mergeStateUpdates((_input: string, event: KeypressEvent) => {
+        signal.current(event, rl);
+      }),
+    );
 
     rl.input.on('keypress', handler);
     return () => {
@@ -173,15 +178,11 @@ export function usePagination(
     pageSize?: number;
   },
 ) {
+  const { rl } = getStore();
   const state = useRef({
     pointer: 0,
     lastIndex: 0,
   });
-
-  const rl = sessionRl;
-  if (!rl) {
-    throw new Error('usePagination must be used within a prompt');
-  }
 
   const width = cliWidth({ defaultWidth: 80, output: rl.output });
   const lines = breakLines(output, width).split('\n');
@@ -226,12 +227,6 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
   ) => string | [string, string | undefined],
 ) {
   const prompt: Prompt<Value, Config> = (config, context) => {
-    if (sessionRl) {
-      throw new Error(
-        'An inquirer prompt is already running.\nMake sure you await the result of the previous prompt before calling another prompt.',
-      );
-    }
-
     // Default `input` to stdin
     const input = context?.input ?? process.stdin;
 
@@ -239,102 +234,107 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     const output = new MuteStream();
     output.pipe(context?.output ?? process.stdout);
 
-    sessionRl = readline.createInterface({
+    const rl = readline.createInterface({
       terminal: true,
       input,
       output,
     }) as InquirerReadline;
-    const screen = new ScreenManager(sessionRl);
+    const screen = new ScreenManager(rl);
+
+    const store: HookStore = {
+      rl,
+      hooks: [],
+      hooksCleanup: [],
+      hooksEffect: [],
+      index: 0,
+      handleChange() {},
+    };
 
     let cancel: () => void = () => {};
     const answer = new CancelablePromise<Value>((resolve, reject) => {
-      const checkCursorPos = () => {
-        screen.checkCursorPos();
-      };
+      hookStorage.run(store, () => {
+        const checkCursorPos = () => {
+          screen.checkCursorPos();
+        };
 
-      const onExit = () => {
-        try {
-          let len = hooksCleanup.length;
-          while (len--) {
-            cleanupHook(len);
+        const onExit = AsyncResource.bind(() => {
+          try {
+            store.hooksCleanup.forEach((_, index) => {
+              cleanupHook(index);
+            });
+          } catch (err) {
+            reject(err);
           }
-        } catch (err) {
-          reject(err);
-        }
 
-        if (context?.clearPromptOnDone) {
-          screen.clean();
-        } else {
-          screen.clearContent();
-        }
-        screen.done();
+          if (context?.clearPromptOnDone) {
+            screen.clean();
+          } else {
+            screen.clearContent();
+          }
+          screen.done();
 
-        process.removeListener('SIGINT', onForceExit);
-        sessionRl?.input.removeListener('keypress', checkCursorPos);
-        resetHookState();
-      };
-
-      cancel = () => {
-        onExit();
-
-        reject(new Error('Prompt was canceled'));
-      };
-
-      let shouldHandleExit = true;
-      const onForceExit = () => {
-        if (shouldHandleExit) {
-          shouldHandleExit = false;
-          onExit();
-          reject(new Error('User force closed the prompt with CTRL+C'));
-        }
-      };
-
-      // Handle cleanup on force exit. Main reason is so we restore the cursor if a prompt hide it.
-      process.on('SIGINT', onForceExit);
-
-      const done = (value: Value) => {
-        // Delay execution to let time to the hookCleanup functions to registers.
-        setImmediate(() => {
-          onExit();
-
-          // Finally we resolve our promise
-          resolve(value);
+          process.removeListener('SIGINT', onForceExit);
+          store.rl.input.removeListener('keypress', checkCursorPos);
         });
-      };
 
-      const workLoop = (resolvedConfig: Config & ResolvedPromptConfig) => {
-        index = 0;
-        hooksEffect.length = 0;
-        handleChange = () => workLoop(resolvedConfig);
-
-        try {
-          const nextView = view(resolvedConfig, done);
-
-          const [content, bottomContent] =
-            typeof nextView === 'string' ? [nextView] : nextView;
-          screen.render(content, bottomContent);
-
-          runEffects();
-        } catch (err) {
+        cancel = AsyncResource.bind(() => {
           onExit();
-          reject(err);
-        }
-      };
 
-      // TODO: we should display a loader while we get the default options.
-      getPromptConfig(config).then((resolvedConfig) => {
-        workLoop(resolvedConfig);
+          reject(new Error('Prompt was canceled'));
+        });
 
-        // Re-renders only happen when the state change; but the readline cursor could change position
-        // and that also requires a re-render (and a manual one because we mute the streams).
-        // We set the listener after the initial workLoop to avoid a double render if render triggered
-        // by a state change sets the cursor to the right position.
-        sessionRl?.input.on('keypress', checkCursorPos);
-      }, reject);
-    });
+        let shouldHandleExit = true;
+        const onForceExit = AsyncResource.bind(() => {
+          if (shouldHandleExit) {
+            shouldHandleExit = false;
+            onExit();
+            reject(new Error('User force closed the prompt with CTRL+C'));
+          }
+        });
 
-    answer.catch(() => {
-      resetHookState();
+        // Handle cleanup on force exit. Main reason is so we restore the cursor if a prompt hide it.
+        process.on('SIGINT', onForceExit);
+
+        const done = (value: Value) => {
+          // Delay execution to let time to the hookCleanup functions to registers.
+          setImmediate(() => {
+            onExit();
+
+            // Finally we resolve our promise
+            resolve(value);
+          });
+        };
+
+        const workLoop = (resolvedConfig: Config & ResolvedPromptConfig) => {
+          store.index = 0;
+          store.hooksEffect.length = 0;
+          store.handleChange = () => workLoop(resolvedConfig);
+
+          try {
+            const nextView = view(resolvedConfig, done);
+
+            const [content, bottomContent] =
+              typeof nextView === 'string' ? [nextView] : nextView;
+            screen.render(content, bottomContent);
+
+            runEffects();
+          } catch (err) {
+            onExit();
+            reject(err);
+          }
+        };
+
+        // TODO: we should display a loader while we get the default options.
+        getPromptConfig(config).then((resolvedConfig) => {
+          workLoop(resolvedConfig);
+
+          // Re-renders only happen when the state change; but the readline cursor could change position
+          // and that also requires a re-render (and a manual one because we mute the streams).
+          // We set the listener after the initial workLoop to avoid a double render if render triggered
+          // by a state change sets the cursor to the right position.
+          store.rl.input.on('keypress', checkCursorPos);
+        }, reject);
+      });
     });
 
     answer.cancel = cancel;

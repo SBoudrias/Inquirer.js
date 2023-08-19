@@ -381,23 +381,6 @@ describe('Error handling', () => {
     await expect(answer).rejects.toThrowError('Error in render function');
   });
 
-  it('Prevent trying to run 2 prompts at once.', async () => {
-    const Prompt = () => '';
-    const prompt = createPrompt(Prompt);
-
-    const firstPrompt = render(prompt, { message: 'Question' });
-    const secondPrompt = render(prompt, { message: 'Question' });
-
-    await expect(secondPrompt).rejects.toThrowErrorMatchingInlineSnapshot(`
-      "An inquirer prompt is already running.
-      Make sure you await the result of the previous prompt before calling another prompt."
-    `);
-    const { answer } = await firstPrompt;
-    answer.cancel();
-
-    await expect(answer).rejects.toThrowError('Prompt was canceled');
-  });
-
   it('surface errors in useEffect', async () => {
     const Prompt = () => {
       useEffect(() => {
@@ -453,13 +436,17 @@ describe('Error handling', () => {
   it('useEffect throws outside prompt', async () => {
     expect(() => {
       useEffect(() => {}, []);
-    }).toThrowErrorMatchingInlineSnapshot('"useEffect must be used within a prompt"');
+    }).toThrowErrorMatchingInlineSnapshot(
+      '"[Inquirer] Hook functions can only be called from within a prompt"',
+    );
   });
 
   it('useKeypress throws outside prompt', async () => {
     expect(() => {
       useKeypress(() => {});
-    }).toThrowErrorMatchingInlineSnapshot('"useKeypress must be used within a prompt"');
+    }).toThrowErrorMatchingInlineSnapshot(
+      '"[Inquirer] Hook functions can only be called from within a prompt"',
+    );
   });
 
   it('cleanup prompt on exit', async () => {
