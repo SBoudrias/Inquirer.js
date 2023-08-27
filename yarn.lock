@@ -293,12 +293,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@inquirer/checkbox@^1.3.8, @inquirer/checkbox@workspace:packages/checkbox":
+"@inquirer/checkbox@^1.3.9, @inquirer/checkbox@workspace:packages/checkbox":
   version: 0.0.0-use.local
   resolution: "@inquirer/checkbox@workspace:packages/checkbox"
   dependencies:
-    "@inquirer/core": ^3.1.2
-    "@inquirer/testing": ^2.1.3
+    "@inquirer/core": ^4.0.0
+    "@inquirer/testing": ^2.1.4
     "@inquirer/type": ^1.1.2
     ansi-escapes: ^4.3.2
     chalk: ^4.1.2
@@ -314,22 +314,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/confirm@^2.0.9, @inquirer/confirm@workspace:packages/confirm":
+"@inquirer/confirm@^2.0.10, @inquirer/confirm@workspace:packages/confirm":
   version: 0.0.0-use.local
   resolution: "@inquirer/confirm@workspace:packages/confirm"
   dependencies:
-    "@inquirer/core": ^3.1.2
-    "@inquirer/testing": ^2.1.3
+    "@inquirer/core": ^4.0.0
+    "@inquirer/testing": ^2.1.4
     "@inquirer/type": ^1.1.2
     chalk: ^4.1.2
   languageName: unknown
   linkType: soft
 
-"@inquirer/core@^3.1.2, @inquirer/core@workspace:packages/core":
+"@inquirer/core@^4.0.0, @inquirer/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@inquirer/core@workspace:packages/core"
   dependencies:
-    "@inquirer/testing": ^2.1.3
+    "@inquirer/testing": ^2.1.4
     "@inquirer/type": ^1.1.2
     "@types/mute-stream": ^0.0.1
     "@types/node": ^20.5.6
@@ -350,18 +350,18 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@inquirer/demo@workspace:packages/demo"
   dependencies:
-    "@inquirer/prompts": ^3.0.3
+    "@inquirer/prompts": ^3.0.4
     chalk: ^4.1.2
   bin:
     inquirer-demo: index.mjs
   languageName: unknown
   linkType: soft
 
-"@inquirer/editor@^1.2.7, @inquirer/editor@workspace:packages/editor":
+"@inquirer/editor@^1.2.8, @inquirer/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@inquirer/editor@workspace:packages/editor"
   dependencies:
-    "@inquirer/core": ^3.1.2
+    "@inquirer/core": ^4.0.0
     "@inquirer/type": ^1.1.2
     chalk: ^4.1.2
     external-editor: ^3.1.0
@@ -376,74 +376,74 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/expand@^1.1.8, @inquirer/expand@workspace:packages/expand":
+"@inquirer/expand@^1.1.9, @inquirer/expand@workspace:packages/expand":
   version: 0.0.0-use.local
   resolution: "@inquirer/expand@workspace:packages/expand"
   dependencies:
-    "@inquirer/core": ^3.1.2
-    "@inquirer/testing": ^2.1.3
+    "@inquirer/core": ^4.0.0
+    "@inquirer/testing": ^2.1.4
     "@inquirer/type": ^1.1.2
     chalk: ^4.1.2
     figures: ^3.2.0
   languageName: unknown
   linkType: soft
 
-"@inquirer/input@^1.2.8, @inquirer/input@workspace:packages/input":
+"@inquirer/input@^1.2.9, @inquirer/input@workspace:packages/input":
   version: 0.0.0-use.local
   resolution: "@inquirer/input@workspace:packages/input"
   dependencies:
-    "@inquirer/core": ^3.1.2
-    "@inquirer/testing": ^2.1.3
+    "@inquirer/core": ^4.0.0
+    "@inquirer/testing": ^2.1.4
     "@inquirer/type": ^1.1.2
     chalk: ^4.1.2
   languageName: unknown
   linkType: soft
 
-"@inquirer/password@^1.1.8, @inquirer/password@workspace:packages/password":
+"@inquirer/password@^1.1.9, @inquirer/password@workspace:packages/password":
   version: 0.0.0-use.local
   resolution: "@inquirer/password@workspace:packages/password"
   dependencies:
-    "@inquirer/input": ^1.2.8
-    "@inquirer/testing": ^2.1.3
+    "@inquirer/input": ^1.2.9
+    "@inquirer/testing": ^2.1.4
     "@inquirer/type": ^1.1.2
     ansi-escapes: ^4.3.2
     chalk: ^4.1.2
   languageName: unknown
   linkType: soft
 
-"@inquirer/prompts@^3.0.3, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
+"@inquirer/prompts@^3.0.4, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
   version: 0.0.0-use.local
   resolution: "@inquirer/prompts@workspace:packages/prompts"
   dependencies:
-    "@inquirer/checkbox": ^1.3.8
-    "@inquirer/confirm": ^2.0.9
-    "@inquirer/core": ^3.1.2
-    "@inquirer/editor": ^1.2.7
-    "@inquirer/expand": ^1.1.8
-    "@inquirer/input": ^1.2.8
-    "@inquirer/password": ^1.1.8
-    "@inquirer/rawlist": ^1.2.8
-    "@inquirer/select": ^1.2.8
+    "@inquirer/checkbox": ^1.3.9
+    "@inquirer/confirm": ^2.0.10
+    "@inquirer/core": ^4.0.0
+    "@inquirer/editor": ^1.2.8
+    "@inquirer/expand": ^1.1.9
+    "@inquirer/input": ^1.2.9
+    "@inquirer/password": ^1.1.9
+    "@inquirer/rawlist": ^1.2.9
+    "@inquirer/select": ^1.2.9
   languageName: unknown
   linkType: soft
 
-"@inquirer/rawlist@^1.2.8, @inquirer/rawlist@workspace:packages/rawlist":
+"@inquirer/rawlist@^1.2.9, @inquirer/rawlist@workspace:packages/rawlist":
   version: 0.0.0-use.local
   resolution: "@inquirer/rawlist@workspace:packages/rawlist"
   dependencies:
-    "@inquirer/core": ^3.1.2
-    "@inquirer/testing": ^2.1.3
+    "@inquirer/core": ^4.0.0
+    "@inquirer/testing": ^2.1.4
     "@inquirer/type": ^1.1.2
     chalk: ^4.1.2
   languageName: unknown
   linkType: soft
 
-"@inquirer/select@^1.2.8, @inquirer/select@workspace:packages/select":
+"@inquirer/select@^1.2.9, @inquirer/select@workspace:packages/select":
   version: 0.0.0-use.local
   resolution: "@inquirer/select@workspace:packages/select"
   dependencies:
-    "@inquirer/core": ^3.1.2
-    "@inquirer/testing": ^2.1.3
+    "@inquirer/core": ^4.0.0
+    "@inquirer/testing": ^2.1.4
     "@inquirer/type": ^1.1.2
     ansi-escapes: ^4.3.2
     chalk: ^4.1.2
@@ -451,7 +451,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/testing@^2.1.3, @inquirer/testing@workspace:packages/testing":
+"@inquirer/testing@^2.1.4, @inquirer/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@inquirer/testing@workspace:packages/testing"
   dependencies:
