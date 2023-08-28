@@ -193,25 +193,21 @@ export function usePagination(
 
   const width = cliWidth({ defaultWidth: 80, output: rl.output });
   const lines = breakLines(output, width).split('\n');
+  const state = useRef({
+    position: 0,
+    lastActive: 0,
+  });
+  const { lastActive, position } = state.current;
 
-  const [lastActive, setLastActive] = useState(active);
-  useEffect(() => {
-    setLastActive(active);
-  }, [active, setLastActive]);
+  state.current.position = (loop ? infinite : finite)({
+    active: { current: active, previous: lastActive },
+    total: lines.length,
+    pageSize,
+  })(position);
+  state.current.lastActive = active;
 
-  const [position, setPosition] = useState(0);
-  useEffect(() => {
-    setPosition(
-      (loop ? infinite : finite)({
-        active: { current: active, previous: lastActive },
-        total: lines.length,
-        pageSize,
-      })(position),
-    );
-  }, [loop, active, pageSize, setPosition, position, lastActive, lines.length]);
-
-  // Rotate lines such that the active index is at the specified position
-  return rotate(active - position)(lines)
+  // Rotate lines such that the active index is at the current position
+  return rotate(active - state.current.position)(lines)
     .slice(0, pageSize)
     .concat(
       lines.length <= pageSize
