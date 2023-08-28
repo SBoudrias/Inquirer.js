@@ -38,7 +38,7 @@ export const infinite: PositionReducer =
   ({ active, total, pageSize }) =>
   (pointer) =>
     total <= pageSize
-      ? finite({ active, total, pageSize })(pointer)
+      ? active.current
       : /**
        * Move the position only when the user moves down, and when the
        * navigation fits within a single page
