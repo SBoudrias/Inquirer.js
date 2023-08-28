@@ -135,6 +135,7 @@ export default createPrompt((config, done) => {
   const windowedChoices = usePagination(allChoices, {
     active: cursorPosition,
     pageSize: config.pageSize,
+    loop: config.loop,
   });
 
   return `... ${windowedChoices}`;
