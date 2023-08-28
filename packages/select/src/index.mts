@@ -28,6 +28,7 @@ type Choice<Value> = {
 type SelectConfig<Value> = AsyncPromptConfig & {
   choices: ReadonlyArray<Choice<Value> | Separator>;
   pageSize?: number;
+  loop?: boolean;
 };
 
 function isSelectableChoice<T>(
@@ -118,6 +119,7 @@ export default createPrompt(
     const windowedChoices = usePagination(allChoices, {
       active: cursorPosition,
       pageSize: config.pageSize,
+      loop: config.loop,
     });
 
     if (status === 'done') {

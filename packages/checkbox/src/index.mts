@@ -30,6 +30,7 @@ type Config<Value> = {
   instructions?: string | boolean;
   message: string;
   choices: ReadonlyArray<Choice<Value> | Separator>;
+  loop?: boolean;
 };
 
 function isSelectableChoice<T>(
@@ -147,6 +148,7 @@ export default createPrompt(
     const windowedChoices = usePagination(allChoices, {
       active: cursorPosition,
       pageSize: config.pageSize,
+      loop: config.loop,
     });
 
     if (status === 'done') {
