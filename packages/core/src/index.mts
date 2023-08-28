@@ -6,7 +6,8 @@ import cliWidth from 'cli-width';
 import MuteStream from 'mute-stream';
 import ScreenManager from './lib/screen-manager.mjs';
 import { getPromptConfig } from './lib/options.mjs';
-import { breakLines } from './lib/utils.mjs';
+import { breakLines, rotate } from './lib/utils.mjs';
+import { finite, infinite } from './lib/position.mjs';
 
 export { usePrefix } from './lib/prefix.mjs';
 export * from './lib/key.mjs';
@@ -181,41 +182,43 @@ export function usePagination(
   {
     active,
     pageSize = 7,
+    loop = true,
   }: {
     active: number;
     pageSize?: number;
+    loop?: boolean;
   },
 ) {
   const { rl } = context.getStore();
-  const state = useRef({
-    pointer: 0,
-    lastIndex: 0,
-  });
 
   const width = cliWidth({ defaultWidth: 80, output: rl.output });
   const lines = breakLines(output, width).split('\n');
 
-  // Make sure there's enough lines to paginate
-  if (lines.length <= pageSize) {
-    return output;
-  }
+  const [lastActive, setLastActive] = useState(active);
+  useEffect(() => {
+    setLastActive(active);
+  }, [active, setLastActive]);
 
-  const middleOfList = Math.floor(pageSize / 2);
+  const [position, setPosition] = useState(0);
+  useEffect(() => {
+    setPosition(
+      (loop ? infinite : finite)({
+        active: { current: active, previous: lastActive },
+        total: lines.length,
+        pageSize,
+      })(position),
+    );
+  }, [loop, active, pageSize, setPosition, position, lastActive, lines.length]);
 
-  // Move the pointer only when the user go down and limit it to the middle of the list
-  const { pointer: prevPointer, lastIndex } = state.current;
-  if (prevPointer < middleOfList && lastIndex < active && active - lastIndex < pageSize) {
-    state.current.pointer = Math.min(middleOfList, prevPointer + active - lastIndex);
-  }
-
-  state.current.lastIndex = active;
-
-  // Duplicate the lines so it give an infinite list look
-  const infinite = [lines, lines, lines].flat();
-  const topIndex = Math.max(0, active + lines.length - state.current.pointer);
-
-  const section = infinite.splice(topIndex, pageSize).join('\n');
-  return section + '\n' + chalk.dim('(Move up and down to reveal more choices)');
+  // Rotate lines such that the active index is at the specified position
+  return rotate(active - position)(lines)
+    .slice(0, pageSize)
+    .concat(
+      lines.length <= pageSize
+        ? []
+        : [chalk.dim('(Move up and down to reveal more choices)')],
+    )
+    .join('\n');
 }
 
 export type AsyncPromptConfig = {
