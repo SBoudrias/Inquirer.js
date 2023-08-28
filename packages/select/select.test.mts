@@ -152,6 +152,34 @@ describe('select prompt', () => {
     await expect(answer).resolves.toEqual(11);
   });
 
+  it('stays at top if not looping', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      pageSize: 2,
+      loop: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Use arrow keys)
+      ❯ 1
+        2
+      (Move up and down to reveal more choices)"
+    `);
+
+    events.keypress('up');
+    events.keypress('up');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+      ❯ 1
+        2
+      (Move up and down to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(11);
+  });
+
   it('skip disabled options by arrow keys', async () => {
     const { answer, events, getScreen } = await render(select, {
       message: 'Select a topping',
