@@ -16,3 +16,18 @@ export const breakLines = (content: string, width: number): string =>
         .map((line) => line.trimEnd()),
     )
     .join('\n');
+
+/**
+ * Creates a 0-based index out of an integer, wrapping around if necessary.
+ */
+const index = (max: number) => (value: number) => ((value % max) + max) % max;
+
+/**
+ * Rotates an array of items by an integer number of positions.
+ */
+export const rotate =
+  (count: number) =>
+  <T,>(items: T[]): T[] => {
+    const offset = index(items.length)(count);
+    return items.slice(offset).concat(items.slice(0, offset));
+  };
