@@ -16,6 +16,13 @@
     "default-param-last": "off",
     "padding-line-between-statements": "off",
     "no-eq-null": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "name": "lodash",
+        "message": "Do not import the whole of 'lodash'. Import the needed function instead e.g `import map from 'lodash/map.js'`"
+      }
+    ],
     "eqeqeq": [
       "error",
       "always",
