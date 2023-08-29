@@ -1,17 +1,14 @@
 import * as readline from 'node:readline';
 import { AsyncLocalStorage, AsyncResource } from 'node:async_hooks';
 import { CancelablePromise, type Prompt } from '@inquirer/type';
-import chalk from 'chalk';
-import cliWidth from 'cli-width';
 import MuteStream from 'mute-stream';
 import ScreenManager from './lib/screen-manager.mjs';
 import { getPromptConfig } from './lib/options.mjs';
-import { breakLines, rotate } from './lib/utils.mjs';
-import { finite, infinite } from './lib/position.mjs';
 
 export { usePrefix } from './lib/prefix.mjs';
 export * from './lib/key.mjs';
 export * from './lib/Separator.mjs';
+export * from './lib/pagination.mjs';
 
 export type InquirerReadline = readline.ReadLine & {
   output: MuteStream;
@@ -37,7 +34,7 @@ type HookStore = {
 
 const hookStorage = new AsyncLocalStorage<HookStore>();
 
-const context = {
+export const context = {
   getStore() {
     const store = hookStorage.getStore();
     if (!store) {
@@ -175,46 +172,6 @@ export function useKeypress(
       rl.input.removeListener('keypress', handler);
     };
   }, []);
-}
-
-export function usePagination(
-  output: string,
-  {
-    active,
-    pageSize = 7,
-    loop = true,
-  }: {
-    active: number;
-    pageSize?: number;
-    loop?: boolean;
-  },
-) {
-  const { rl } = context.getStore();
-
-  const width = cliWidth({ defaultWidth: 80, output: rl.output });
-  const lines = breakLines(output, width).split('\n');
-  const state = useRef({
-    position: 0,
-    lastActive: 0,
-  });
-  const { lastActive, position } = state.current;
-
-  state.current.position = (loop ? infinite : finite)({
-    active: { current: active, previous: lastActive },
-    total: lines.length,
-    pageSize,
-  })(position);
-  state.current.lastActive = active;
-
-  // Rotate lines such that the active index is at the current position
-  return rotate(active - state.current.position)(lines)
-    .slice(0, pageSize)
-    .concat(
-      lines.length <= pageSize
-        ? []
-        : [chalk.dim('(Move up and down to reveal more choices)')],
-    )
-    .join('\n');
 }
 
 export type AsyncPromptConfig = {
