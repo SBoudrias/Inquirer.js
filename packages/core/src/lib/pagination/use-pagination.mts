@@ -1,32 +1,16 @@
 import chalk from 'chalk';
-import { context, useState, useRef, useKeypress, isUpKey, isDownKey } from '../index.mjs';
+import {
+  context,
+  useState,
+  useRef,
+  useKeypress,
+  isUpKey,
+  isDownKey,
+} from '../../index.mjs';
 import cliWidth from 'cli-width';
-import { breakLines, rotate } from './utils.mjs';
+import { breakLines, rotate } from '../utils.mjs';
 import { finite, infinite } from './position.mjs';
-
-type F<A extends any[], B> = (...args: A) => B;
-type UnaryF<T, R> = F<[T], R>;
-type Action<T> = UnaryF<T, void>;
-
-export type Paged<T> = {
-  item: T;
-  active: number;
-  index: number;
-};
-
-type Options<T> = {
-  items: readonly T[];
-  selectable: UnaryF<Paged<T>, boolean>;
-  render: UnaryF<Paged<T>, string>;
-  pageSize?: number;
-  loop?: boolean;
-};
-
-type Page = {
-  contents: string;
-  active: number;
-  setActive: Action<number>;
-};
+import { Pagination, Page } from './types.mjs';
 
 export function usePagination<T>({
   items,
@@ -34,7 +18,7 @@ export function usePagination<T>({
   render,
   pageSize = 7,
   loop = true,
-}: Options<T>): Page {
+}: Pagination<T>): Page {
   const { rl } = context.getStore();
   const state = useRef({
     position: 0,

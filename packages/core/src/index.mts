@@ -8,7 +8,7 @@ import { getPromptConfig } from './lib/options.mjs';
 export { usePrefix } from './lib/prefix.mjs';
 export * from './lib/key.mjs';
 export * from './lib/Separator.mjs';
-export * from './lib/pagination.mjs';
+export * from './lib/pagination/index.mjs';
 
 export type InquirerReadline = readline.ReadLine & {
   output: MuteStream;
