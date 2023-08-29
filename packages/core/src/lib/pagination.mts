@@ -73,7 +73,7 @@ export function usePagination<T>({
     .concat(
       lines.length <= pageSize
         ? []
-        : [chalk.dim('(Move up and down to reveal more choices)')],
+        : [chalk.dim('(Use arrow keys to reveal more choices)')],
     )
     .join('\n');
   return { contents, active, setActive };

@@ -34,7 +34,7 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('down');
@@ -50,7 +50,7 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -76,7 +76,7 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('up');
@@ -90,7 +90,7 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -116,7 +116,7 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     numberedChoices.forEach(() => events.keypress('down'));
@@ -131,7 +131,7 @@ describe('checkbox prompt', () => {
        ◯ 10
        ◯ 11
       ❯◉ 12
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -157,7 +157,7 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -178,7 +178,7 @@ describe('checkbox prompt', () => {
       selection, and <enter> to proceed)
       ❯◯ 1
        ◯ 2
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -205,7 +205,7 @@ describe('checkbox prompt', () => {
        ◯ 8
        ◯ 9
        ◯ 10
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -224,7 +224,7 @@ describe('checkbox prompt', () => {
       selection, and <enter> to proceed)
       ❯◯ 1
        ◯ 2
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('up');
@@ -235,7 +235,7 @@ describe('checkbox prompt', () => {
       "? Select a number
       ❯◉ 11
        ◉ 12
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -391,7 +391,7 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('a');
@@ -405,7 +405,7 @@ describe('checkbox prompt', () => {
        ◉ 5
        ◉ 6
        ◉ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('a');
@@ -419,7 +419,7 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('a');
@@ -444,7 +444,7 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('a');
@@ -473,7 +473,7 @@ describe('checkbox prompt', () => {
        ◯ 9
        ◯ 10
        ◯ 11
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('i');
@@ -497,7 +497,7 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -524,7 +524,7 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
