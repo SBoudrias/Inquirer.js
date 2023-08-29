@@ -6,27 +6,15 @@ import {
   usePagination,
   useRef,
   isEnterKey,
-  isUpKey,
-  isDownKey,
   isNumberKey,
   Separator,
   AsyncPromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
-import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
 import { render } from './render.mjs';
-import { selectable } from './selectable.mjs';
-import { Item } from './item.type.mjs';
-
-type Choice<Value> = {
-  value: Value;
-  name?: string;
-  description?: string;
-  disabled?: boolean | string;
-  type?: never;
-};
+import { Choice, Item, selectable } from './choice.mjs';
 
 type SelectConfig<Value> = AsyncPromptConfig & {
   choices: ReadonlyArray<Choice<Value> | Separator>;
@@ -34,19 +22,13 @@ type SelectConfig<Value> = AsyncPromptConfig & {
   loop?: boolean;
 };
 
-function isSelectableChoice<T>(
-  choice: undefined | Separator | Choice<T>,
-): choice is Choice<T> {
-  return choice != null && !Separator.isSeparator(choice) && !choice.disabled;
-}
-
 export default createPrompt(
   <Value extends unknown>(
     config: SelectConfig<Value>,
     done: (value: Value) => void,
   ): string => {
     const { choices } = config;
-    if (!choices.some(isSelectableChoice)) {
+    if (!choices.some(selectable)) {
       throw new Error('[select prompt] No selectable choices. All choices are disabled.');
     }
     const firstRender = useRef(true);
@@ -70,7 +52,7 @@ export default createPrompt(
         const position = Number(key.name) - 1;
 
         // Abort if the choice doesn't exists or if disabled
-        if (!isSelectableChoice(choices[position])) {
+        if (choices[position] == null || !selectable(choices[position])) {
           return;
         }
 
