@@ -1,6 +1,6 @@
 import { Paged, Separator } from '@inquirer/core';
-import { dim, cyan } from 'chalk';
-import { pointer } from 'figures';
+import chalk from 'chalk';
+import figures from 'figures';
 import { Item } from './choice.mjs';
 
 export const render = <Value,>({ item, index, active }: Paged<Item<Value>>) => {
@@ -12,10 +12,10 @@ export const render = <Value,>({ item, index, active }: Paged<Item<Value>>) => {
   if (item.disabled) {
     const disabledLabel =
       typeof item.disabled === 'string' ? item.disabled : '(disabled)';
-    return dim(`- ${line} ${disabledLabel}`);
+    return chalk.dim(`- ${line} ${disabledLabel}`);
   }
 
-  const color = index === active ? cyan : (x: string) => x;
-  const prefix = index === active ? pointer : ` `;
+  const color = index === active ? chalk.cyan : (x: string) => x;
+  const prefix = index === active ? figures.pointer : ` `;
   return color(`${prefix} ${line}`);
 };
