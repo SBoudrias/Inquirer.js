@@ -2,7 +2,7 @@ import { Paged, Separator } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import { dim, green, cyan } from 'chalk';
 import { circle, circleFilled, pointer } from 'figures';
-import { Item } from './item.type.mjs';
+import type { Item } from './choice.mjs';
 
 export const render = <Value,>({ item, index, active }: Paged<Item<Value>>) => {
   if (Separator.isSeparator(item)) {

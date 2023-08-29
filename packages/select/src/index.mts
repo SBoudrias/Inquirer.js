@@ -52,7 +52,7 @@ export default createPrompt(
         const position = Number(key.name) - 1;
 
         // Abort if the choice doesn't exists or if disabled
-        if (choices[position] == null || !selectable(choices[position])) {
+        if (choices[position] == null || !selectable(choices[position]!)) {
           return;
         }
 

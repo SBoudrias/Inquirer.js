@@ -19,4 +19,4 @@ export const check =
     selectable(item) ? { ...item, checked } : item;
 
 export const toggle = <Value,>(item: Item<Value>): Item<Value> =>
-  check(!item.checked)(item);
+  selectable(item) ? { ...item, checked: !item.checked } : item;
