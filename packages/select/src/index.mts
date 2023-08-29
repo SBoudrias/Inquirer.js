@@ -16,6 +16,9 @@ import type {} from '@inquirer/type';
 import chalk from 'chalk';
 import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
+import { render } from './render.mjs';
+import { selectable } from './selectable.mjs';
+import { Item } from './item.type.mjs';
 
 type Choice<Value> = {
   value: Value;
@@ -43,50 +46,35 @@ export default createPrompt(
     done: (value: Value) => void,
   ): string => {
     const { choices } = config;
+    if (!choices.some(isSelectableChoice)) {
+      throw new Error('[select prompt] No selectable choices. All choices are disabled.');
+    }
     const firstRender = useRef(true);
 
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
-    const [cursorPosition, setCursorPos] = useState(() => {
-      const startIndex = choices.findIndex(isSelectableChoice);
-      if (startIndex < 0) {
-        throw new Error(
-          '[select prompt] No selectable choices. All choices are disabled.',
-        );
-      }
-
-      return startIndex;
+    const { contents, active, setActive } = usePagination<Item<Value>>({
+      items: choices,
+      render,
+      selectable: ({ item }) => selectable(item),
+      pageSize: config.pageSize,
+      loop: config.loop,
     });
-
-    // Safe to assume the cursor position always point to a Choice.
-    const choice = choices[cursorPosition] as Choice<Value>;
-
+    const choice = choices[active] as Choice<Value>;
     useKeypress((key) => {
       if (isEnterKey(key)) {
         setStatus('done');
         done(choice.value);
-      } else if (isUpKey(key) || isDownKey(key)) {
-        let newCursorPosition = cursorPosition;
-        const offset = isUpKey(key) ? -1 : 1;
-        let selectedOption;
-
-        while (!isSelectableChoice(selectedOption)) {
-          newCursorPosition =
-            (newCursorPosition + offset + choices.length) % choices.length;
-          selectedOption = choices[newCursorPosition];
-        }
-
-        setCursorPos(newCursorPosition);
       } else if (isNumberKey(key)) {
         // Adjust index to start at 1
-        const newCursorPosition = Number(key.name) - 1;
+        const position = Number(key.name) - 1;
 
         // Abort if the choice doesn't exists or if disabled
-        if (!isSelectableChoice(choices[newCursorPosition])) {
+        if (!isSelectableChoice(choices[position])) {
           return;
         }
 
-        setCursorPos(newCursorPosition);
+        setActive(position);
       }
     });
 
@@ -96,39 +84,13 @@ export default createPrompt(
       firstRender.current = false;
     }
 
-    const allChoices = choices
-      .map((choice, index): string => {
-        if (Separator.isSeparator(choice)) {
-          return ` ${choice.separator}`;
-        }
-
-        const line = choice.name || choice.value;
-        if (choice.disabled) {
-          const disabledLabel =
-            typeof choice.disabled === 'string' ? choice.disabled : '(disabled)';
-          return chalk.dim(`- ${line} ${disabledLabel}`);
-        }
-
-        if (index === cursorPosition) {
-          return chalk.cyan(`${figures.pointer} ${line}`);
-        }
-
-        return `  ${line}`;
-      })
-      .join('\n');
-    const windowedChoices = usePagination(allChoices, {
-      active: cursorPosition,
-      pageSize: config.pageSize,
-      loop: config.loop,
-    });
-
     if (status === 'done') {
       return `${prefix} ${message} ${chalk.cyan(choice.name || choice.value)}`;
     }
 
     const choiceDescription = choice.description ? `\n${choice.description}` : ``;
 
-    return `${prefix} ${message}\n${windowedChoices}${choiceDescription}${ansiEscapes.cursorHide}`;
+    return `${prefix} ${message}\n${contents}${choiceDescription}${ansiEscapes.cursorHide}`;
   },
 );
 

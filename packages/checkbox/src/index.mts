@@ -4,6 +4,7 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
+  Paged,
   isUpKey,
   isDownKey,
   isSpaceKey,
@@ -15,14 +16,9 @@ import type {} from '@inquirer/type';
 import chalk from 'chalk';
 import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
-
-export type Choice<Value> = {
-  name?: string;
-  value: Value;
-  disabled?: boolean | string;
-  checked?: boolean;
-  type?: never;
-};
+import { Choice, render } from './render.mjs';
+import { selectable } from './selectable.mjs';
+import { Item } from './item.type.mjs';
 
 type Config<Value> = {
   prefix?: string;
@@ -50,11 +46,17 @@ export default createPrompt(
     const [choices, setChoices] = useState<Array<Separator | Choice<Value>>>(() =>
       config.choices.map((choice) => ({ ...choice })),
     );
-    const [cursorPosition, setCursorPosition] = useState(0);
     const [showHelpTip, setShowHelpTip] = useState(true);
+    const message = chalk.bold(config.message);
+    const { contents, active, setActive } = usePagination<Item<Value>>({
+      items: choices,
+      render,
+      selectable: ({ item }) => selectable(item),
+      pageSize: config.pageSize,
+      loop: config.loop,
+    });
 
     useKeypress((key) => {
-      let newCursorPosition = cursorPosition;
       if (isEnterKey(key)) {
         setStatus('done');
         done(
@@ -62,22 +64,11 @@ export default createPrompt(
             .filter((choice) => isSelectableChoice(choice) && choice.checked)
             .map((choice) => (choice as Choice<Value>).value),
         );
-      } else if (isUpKey(key) || isDownKey(key)) {
-        const offset = isUpKey(key) ? -1 : 1;
-        let selectedOption;
-
-        while (!isSelectableChoice(selectedOption)) {
-          newCursorPosition =
-            (newCursorPosition + offset + choices.length) % choices.length;
-          selectedOption = choices[newCursorPosition];
-        }
-
-        setCursorPosition(newCursorPosition);
       } else if (isSpaceKey(key)) {
         setShowHelpTip(false);
         setChoices(
           choices.map((choice, i) => {
-            if (i === cursorPosition && isSelectableChoice(choice)) {
+            if (i === active && isSelectableChoice(choice)) {
               return { ...choice, checked: !choice.checked };
             }
 
@@ -108,7 +99,7 @@ export default createPrompt(
           return;
         }
 
-        setCursorPosition(position);
+        setActive(position);
         setChoices(
           choices.map((choice, i) => {
             if (i === position && isSelectableChoice(choice)) {
@@ -119,36 +110,6 @@ export default createPrompt(
           }),
         );
       }
-    });
-
-    const message = chalk.bold(config.message);
-    const allChoices = choices
-      .map((choice, index) => {
-        if (Separator.isSeparator(choice)) {
-          return ` ${choice.separator}`;
-        }
-
-        const line = choice.name || choice.value;
-        if (choice.disabled) {
-          const disabledLabel =
-            typeof choice.disabled === 'string' ? choice.disabled : '(disabled)';
-          return chalk.dim(`- ${line} ${disabledLabel}`);
-        }
-
-        const checkbox = choice.checked
-          ? chalk.green(figures.circleFilled)
-          : figures.circle;
-        if (index === cursorPosition) {
-          return chalk.cyan(`${figures.pointer}${checkbox} ${line}`);
-        }
-
-        return ` ${checkbox} ${line}`;
-      })
-      .join('\n');
-    const windowedChoices = usePagination(allChoices, {
-      active: cursorPosition,
-      pageSize: config.pageSize,
-      loop: config.loop,
     });
 
     if (status === 'done') {
@@ -175,7 +136,7 @@ export default createPrompt(
       }
     }
 
-    return `${prefix} ${message}${helpTip}\n${windowedChoices}${ansiEscapes.cursorHide}`;
+    return `${prefix} ${message}${helpTip}\n${contents}${ansiEscapes.cursorHide}`;
   },
 );
 
