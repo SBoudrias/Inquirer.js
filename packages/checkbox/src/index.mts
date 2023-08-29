@@ -4,9 +4,6 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
-  Paged,
-  isUpKey,
-  isDownKey,
   isSpaceKey,
   isNumberKey,
   isEnterKey,
@@ -14,11 +11,9 @@ import {
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
-import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
-import { Choice, render } from './render.mjs';
-import { selectable } from './selectable.mjs';
-import { Item } from './item.type.mjs';
+import { render } from './render.mjs';
+import { selectable, Item, Choice, toggle, check } from './choice.mjs';
 
 type Config<Value> = {
   prefix?: string;
@@ -28,12 +23,6 @@ type Config<Value> = {
   choices: ReadonlyArray<Choice<Value> | Separator>;
   loop?: boolean;
 };
-
-function isSelectableChoice<T>(
-  choice: undefined | Separator | Choice<T>,
-): choice is Choice<T> {
-  return choice != null && !Separator.isSeparator(choice) && !choice.disabled;
-}
 
 export default createPrompt(
   <Value extends unknown>(
@@ -61,60 +50,38 @@ export default createPrompt(
         setStatus('done');
         done(
           choices
-            .filter((choice) => isSelectableChoice(choice) && choice.checked)
+            .filter((choice) => selectable(choice) && choice.checked)
             .map((choice) => (choice as Choice<Value>).value),
         );
       } else if (isSpaceKey(key)) {
         setShowHelpTip(false);
-        setChoices(
-          choices.map((choice, i) => {
-            if (i === active && isSelectableChoice(choice)) {
-              return { ...choice, checked: !choice.checked };
-            }
-
-            return choice;
-          }),
-        );
+        setChoices(choices.map((choice, i) => (i === active ? toggle(choice) : choice)));
       } else if (key.name === 'a') {
         const selectAll = Boolean(
-          choices.find((choice) => isSelectableChoice(choice) && !choice.checked),
+          choices.find((choice) => selectable(choice) && !choice.checked),
         );
-        setChoices(
-          choices.map((choice) =>
-            isSelectableChoice(choice) ? { ...choice, checked: selectAll } : choice,
-          ),
-        );
+        setChoices(choices.map(check(selectAll)));
       } else if (key.name === 'i') {
-        setChoices(
-          choices.map((choice) =>
-            isSelectableChoice(choice) ? { ...choice, checked: !choice.checked } : choice,
-          ),
-        );
+        setChoices(choices.map(toggle));
       } else if (isNumberKey(key)) {
         // Adjust index to start at 1
         const position = Number(key.name) - 1;
 
         // Abort if the choice doesn't exists or if disabled
-        if (!isSelectableChoice(choices[position])) {
+        if (choices[position] == null || !selectable(choices[position])) {
           return;
         }
 
         setActive(position);
         setChoices(
-          choices.map((choice, i) => {
-            if (i === position && isSelectableChoice(choice)) {
-              return { ...choice, checked: !choice.checked };
-            }
-
-            return choice;
-          }),
+          choices.map((choice, i) => (i === position ? toggle(choice) : choice)),
         );
       }
     });
 
     if (status === 'done') {
       const selection = choices
-        .filter((choice) => isSelectableChoice(choice) && choice.checked)
+        .filter((choice) => selectable(choice) && choice.checked)
         .map(
           (choice) => (choice as Choice<Value>).name || (choice as Choice<Value>).value,
         );
