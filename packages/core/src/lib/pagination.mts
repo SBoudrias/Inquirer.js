@@ -60,11 +60,14 @@ export function usePagination<T>({
   const width = cliWidth({ defaultWidth: 80, output: rl.output });
   const output = items.map((item, index) => render({ item, index, active })).join('\n');
   const lines = breakLines(output, width).split('\n');
-  state.current.position = (loop ? infinite : finite)({
-    active: { current: active, previous: state.current.lastActive },
-    total: lines.length,
-    pageSize,
-  })(state.current.position);
+  state.current.position = (loop ? infinite : finite)(
+    {
+      active: { current: active, previous: state.current.lastActive },
+      total: lines.length,
+      pageSize,
+    },
+    state.current.position,
+  );
   state.current.lastActive = active;
 
   // Rotate lines such that the active index is at the current position
