@@ -53,7 +53,6 @@ export function usePagination<T>({
       while (!selectable({ item: items[next]!, index: next, active })) {
         next = (next + items.length + offset) % items.length;
       }
-      if (next === active) return;
       setActive(next);
     }
   });
