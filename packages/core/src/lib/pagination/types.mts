@@ -4,7 +4,7 @@ type Action<T> = UnaryF<T, void>;
 
 export type Paged<T> = {
   item: T;
-  active: number;
+  active?: boolean;
   index: number;
 };
 

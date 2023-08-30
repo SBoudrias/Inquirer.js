@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import figures from 'figures';
 import type { Item } from './choice.mjs';
 
-export const render = <Value,>({ item, index, active }: Paged<Item<Value>>) => {
+export const render = <Value,>({ item, active }: Paged<Item<Value>>) => {
   if (Separator.isSeparator(item)) {
     return ` ${item.separator}`;
   }
@@ -17,7 +17,7 @@ export const render = <Value,>({ item, index, active }: Paged<Item<Value>>) => {
   }
 
   const checkbox = item.checked ? chalk.green(figures.circleFilled) : figures.circle;
-  const color = index === active ? chalk.cyan : (x: string) => x;
-  const prefix = index === active ? figures.pointer : ' ';
+  const color = active ? chalk.cyan : (x: string) => x;
+  const prefix = active ? figures.pointer : ' ';
   return color(`${prefix}${checkbox} ${line}`);
 };
