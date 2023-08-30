@@ -1,4 +1,5 @@
 import { useKeypress, isUpKey, isDownKey, isNumberKey } from '../../index.mjs';
+import { index } from '../utils.mjs';
 import { Navigable } from './types.mjs';
 
 export const useNavigation = <T,>({
@@ -17,10 +18,10 @@ export const useNavigation = <T,>({
       return;
     if (isUpKey(key) || isDownKey(key)) {
       const offset = isUpKey(key) ? -1 : 1;
-      let next = (active + items.length + offset) % items.length;
-      while (!selectable(items[next]!)) {
-        next = (next + items.length + offset) % items.length;
-      }
+      let next = active;
+      do {
+        next = index(items.length)(next + offset);
+      } while (!selectable(items[next]!));
       setActive(next);
       return;
     }
