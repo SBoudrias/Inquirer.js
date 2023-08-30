@@ -1,16 +1,26 @@
 import chalk from 'chalk';
-import { useState, useRef, useKeypress, isUpKey, isDownKey } from '../../index.mjs';
+import {
+  useState,
+  useRef,
+  useKeypress,
+  isUpKey,
+  isDownKey,
+  context,
+} from '../../index.mjs';
 import { finite, infinite } from './position.mjs';
 import { Pagination, Page } from './types.mjs';
-import { useWindow } from './use-window.mjs';
+import { lines } from './lines.mjs';
+import cliWidth from 'cli-width';
 
-export function usePagination<T>({
+export const usePagination = <T,>({
   items,
   selectable,
   render,
   pageSize = 7,
   loop = true,
-}: Pagination<T>): Page {
+}: Pagination<T>): Page => {
+  const { rl } = context.getStore();
+  const width = cliWidth({ defaultWidth: 80, output: rl.output });
   const state = useRef({
     position: 0,
     lastActive: 0,
@@ -42,7 +52,7 @@ export function usePagination<T>({
   state.current.position = position;
   state.current.lastActive = active;
 
-  const contents = useWindow({ items, render, active, position, pageSize })
+  const contents = lines({ items, width, render, active, position, pageSize })
     .concat(
       items.length <= pageSize
         ? []
@@ -50,4 +60,4 @@ export function usePagination<T>({
     )
     .join('\n');
   return { contents, active, setActive };
-}
+};

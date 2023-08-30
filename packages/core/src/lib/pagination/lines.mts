@@ -1,25 +1,23 @@
-import { context } from '../../index.mjs';
-import cliWidth from 'cli-width';
 import { rotate, splitLines } from '../utils.mjs';
 import { Paged } from './types.mjs';
 
-type Windowed<T> = {
+type Inputs<T> = {
   items: readonly T[];
+  width: number;
   render: (paged: Paged<T>) => string;
   active: number;
   position: number;
   pageSize: number;
 };
 
-export function useWindow<T>({
+export const lines = <T,>({
   items,
+  width,
   render,
   active,
   position,
   pageSize,
-}: Windowed<T>): string[] {
-  const { rl } = context.getStore();
-  const width = cliWidth({ defaultWidth: 80, output: rl.output });
+}: Inputs<T>): string[] => {
   const split = splitLines(width);
 
   const indexed = items.map((item, index) => ({ item, index }));
@@ -36,4 +34,4 @@ export function useWindow<T>({
 
   const lines = previous.concat(current).concat(rest);
   return rotate(previous.length - position)(lines).slice(0, pageSize);
-}
+};
