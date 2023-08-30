@@ -27,7 +27,7 @@ const index = (max: number) => (value: number) => ((value % max) + max) % max;
  */
 export const rotate =
   (count: number) =>
-  <T,>(items: T[]): T[] => {
+  <T,>(items: readonly T[]): readonly T[] => {
     const offset = index(items.length)(count);
     return items.slice(offset).concat(items.slice(0, offset));
   };
