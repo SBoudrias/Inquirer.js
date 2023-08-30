@@ -5,7 +5,7 @@ import { Selectable } from './types.mjs';
 type SpeedDialOptions<T> = Pick<Activatable<number>, 'setActive'> & Selectable<T>;
 
 /**
- * Allows quickly selecting an item from 1-9 by pressing a number key.
+ * Allows quickly selecting items from 1-9 by pressing a number key.
  */
 export const useSpeedDial = <T,>({
   items,
@@ -13,11 +13,9 @@ export const useSpeedDial = <T,>({
   setActive,
 }: SpeedDialOptions<T>) => {
   useKeypress((key) => {
-    if (isNumberKey(key)) {
-      const index = Number(key.name) - 1;
-      if (items[index] != null && selectable(items[index]!)) {
-        setActive(index);
-      }
-    }
+    if (!isNumberKey(key)) return;
+    const index = Number(key.name) - 1;
+    if (items[index] == null || !selectable(items[index]!)) return;
+    setActive(index);
   });
 };
