@@ -9,6 +9,9 @@ type ScrollOptions<T> = Selectable<T> &
     loop?: boolean;
   };
 
+/**
+ * Allows scrolling through a list of items with an active cursor
+ */
 export const useScroll = <T,>({
   items,
   selectable,
