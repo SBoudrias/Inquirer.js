@@ -21,7 +21,7 @@ export const useScroll = <T,>({
 }: ScrollOptions<T>) => {
   useKeypress((key) => {
     if (!loop && active === 0 && isUpKey(key)) return;
-    if (active === items.length - 1 && isDownKey(key)) return;
+    if (!loop && active === items.length - 1 && isDownKey(key)) return;
     if (isUpKey(key) || isDownKey(key)) {
       const offset = isUpKey(key) ? -1 : 1;
       let next = active;
