@@ -10,6 +10,12 @@ type Inputs<T> = {
   pageSize: number;
 };
 
+/**
+ * Renders a page of items as lines that fit within the given width ensuring
+ * that the number of lines is not greater than the page size, and the active
+ * item renders at the provided position.
+ * @returns The rendered lines
+ */
 export const lines = <T,>({
   items,
   width,
