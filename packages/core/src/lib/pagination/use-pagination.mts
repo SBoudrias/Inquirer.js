@@ -1,12 +1,5 @@
 import chalk from 'chalk';
-import {
-  useState,
-  useRef,
-  useKeypress,
-  isUpKey,
-  isDownKey,
-  context,
-} from '../../index.mjs';
+import { useState, useRef, context } from '../../index.mjs';
 import { finite, infinite } from './position.mjs';
 import { Pagination, Page } from './types.mjs';
 import { lines } from './lines.mjs';

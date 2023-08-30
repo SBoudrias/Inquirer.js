@@ -6,7 +6,6 @@ import {
   usePagination,
   useRef,
   isEnterKey,
-  isNumberKey,
   Separator,
   AsyncPromptConfig,
 } from '@inquirer/core';
