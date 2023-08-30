@@ -10,7 +10,7 @@ export type Paged<T> = {
 
 export type Pagination<T> = {
   items: readonly T[];
-  selectable: UnaryF<Paged<T>, boolean>;
+  selectable: UnaryF<T, boolean>;
   render: UnaryF<Paged<T>, string>;
   pageSize?: number;
   loop?: boolean;

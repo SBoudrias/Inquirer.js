@@ -40,7 +40,7 @@ export default createPrompt(
     const { contents, active, setActive } = usePagination<Item<Value>>({
       items: choices,
       render,
-      selectable: ({ item }) => selectable(item),
+      selectable,
       pageSize: config.pageSize,
       loop: config.loop,
     });

@@ -34,7 +34,7 @@ export function usePagination<T>({
     if (isUpKey(key) || isDownKey(key)) {
       const offset = isUpKey(key) ? -1 : 1;
       let next = (active + items.length + offset) % items.length;
-      while (!selectable({ item: items[next]!, index: next, active })) {
+      while (!selectable(items[next]!)) {
         next = (next + items.length + offset) % items.length;
       }
       setActive(next);
