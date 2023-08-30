@@ -37,7 +37,7 @@ export default createPrompt(
     );
     const [showHelpTip, setShowHelpTip] = useState(true);
     const message = chalk.bold(config.message);
-    const { contents, active, setActive } = usePagination<Item<Value>>({
+    const { contents, active } = usePagination<Item<Value>>({
       items: choices,
       render,
       selectable,
@@ -66,13 +66,7 @@ export default createPrompt(
       } else if (isNumberKey(key)) {
         // Adjust index to start at 1
         const position = Number(key.name) - 1;
-
-        // Abort if the choice doesn't exists or if disabled
-        if (choices[position] == null || !selectable(choices[position]!)) {
-          return;
-        }
-
-        setActive(position);
+        // Toggle when speed dialled
         setChoices(
           choices.map((choice, i) => (i === position ? toggle(choice) : choice)),
         );

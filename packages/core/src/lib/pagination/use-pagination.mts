@@ -11,6 +11,7 @@ import { finite, infinite } from './position.mjs';
 import { Pagination, Page } from './types.mjs';
 import { lines } from './lines.mjs';
 import cliWidth from 'cli-width';
+import { useNavigation } from './use-navigation.mjs';
 
 export const usePagination = <T,>({
   items,
@@ -18,6 +19,7 @@ export const usePagination = <T,>({
   render,
   pageSize = 7,
   loop = true,
+  speedDial = true,
 }: Pagination<T>): Page => {
   const { rl } = context.getStore();
   const width = cliWidth({ defaultWidth: 80, output: rl.output });
@@ -26,21 +28,7 @@ export const usePagination = <T,>({
     lastActive: 0,
   });
   const [active, setActive] = useState(0);
-  useKeypress((key) => {
-    if (
-      !loop &&
-      ((active === 0 && isUpKey(key)) || (active === items.length - 1 && isDownKey(key)))
-    )
-      return;
-    if (isUpKey(key) || isDownKey(key)) {
-      const offset = isUpKey(key) ? -1 : 1;
-      let next = (active + items.length + offset) % items.length;
-      while (!selectable(items[next]!)) {
-        next = (next + items.length + offset) % items.length;
-      }
-      setActive(next);
-    }
-  });
+  useNavigation({ items, selectable, pageSize, active, setActive, loop, speedDial });
   const position = (loop ? infinite : finite)(
     {
       active: { current: active, previous: state.current.lastActive },
