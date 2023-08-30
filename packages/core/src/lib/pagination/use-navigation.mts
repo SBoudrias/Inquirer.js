@@ -26,13 +26,10 @@ export const useNavigation = <T,>({
       return;
     }
     if (speedDial && isNumberKey(key)) {
-      // Adjust index to start at 1
-      const position = Number(key.name) - 1;
-      // Abort if the choice doesn't exists or if disabled
-      if (items[position] == null || !selectable(items[position]!)) {
-        return;
+      const index = Number(key.name) - 1;
+      if (items[index] != null && selectable(items[index]!)) {
+        setActive(index);
       }
-      setActive(position);
     }
   });
 };
