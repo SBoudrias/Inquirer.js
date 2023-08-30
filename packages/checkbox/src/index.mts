@@ -4,6 +4,8 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
+  useScroll,
+  useSpeedDial,
   isSpaceKey,
   isNumberKey,
   isEnterKey,
@@ -29,52 +31,51 @@ export default createPrompt(
     config: Config<Value>,
     done: (value: Array<Value>) => void,
   ): string => {
-    const { prefix = usePrefix(), instructions } = config;
+    const { prefix = usePrefix(), instructions, pageSize, loop, choices } = config;
 
     const [status, setStatus] = useState('pending');
-    const [choices, setChoices] = useState<Array<Separator | Choice<Value>>>(() =>
-      config.choices.map((choice) => ({ ...choice })),
+    const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
+      choices.map((choice) => ({ ...choice })),
     );
     const [showHelpTip, setShowHelpTip] = useState(true);
     const message = chalk.bold(config.message);
-    const { contents, active } = usePagination<Item<Value>>({
-      items: choices,
+    const { contents, active, setActive } = usePagination<Item<Value>>({
+      items,
       render,
-      selectable,
-      pageSize: config.pageSize,
-      loop: config.loop,
+      pageSize,
+      loop,
     });
+    useSpeedDial({ items, selectable, setActive });
+    useScroll({ items, selectable, active, setActive, loop });
 
     useKeypress((key) => {
       if (isEnterKey(key)) {
         setStatus('done');
         done(
-          choices
+          items
             .filter((choice) => selectable(choice) && choice.checked)
             .map((choice) => (choice as Choice<Value>).value),
         );
       } else if (isSpaceKey(key)) {
         setShowHelpTip(false);
-        setChoices(choices.map((choice, i) => (i === active ? toggle(choice) : choice)));
+        setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
       } else if (key.name === 'a') {
         const selectAll = Boolean(
-          choices.find((choice) => selectable(choice) && !choice.checked),
+          items.find((choice) => selectable(choice) && !choice.checked),
         );
-        setChoices(choices.map(check(selectAll)));
+        setItems(items.map(check(selectAll)));
       } else if (key.name === 'i') {
-        setChoices(choices.map(toggle));
+        setItems(items.map(toggle));
       } else if (isNumberKey(key)) {
         // Adjust index to start at 1
         const position = Number(key.name) - 1;
         // Toggle when speed dialled
-        setChoices(
-          choices.map((choice, i) => (i === position ? toggle(choice) : choice)),
-        );
+        setItems(items.map((choice, i) => (i === position ? toggle(choice) : choice)));
       }
     });
 
     if (status === 'done') {
-      const selection = choices
+      const selection = items
         .filter((choice) => selectable(choice) && choice.checked)
         .map(
           (choice) => (choice as Choice<Value>).name || (choice as Choice<Value>).value,

@@ -1,38 +1,21 @@
-type F<A extends any[], B> = (...args: A) => B;
-type UnaryF<T, R> = F<[T], R>;
-type Action<T> = UnaryF<T, void>;
+import { Activatable, HasSeveralOrdered, UnaryF } from '../types.mjs';
 
+/** Represents an item that's part of a page */
 export type Paged<T> = {
   item: T;
-  active?: boolean;
   index: number;
+  active?: boolean;
 };
 
-export type PageOptions = {
-  pageSize: number;
-  /** Allows wrapping on either sides of the list on navigation. */
-  loop: boolean;
-  /** Allows quickly navigating to items 1-9 by pressing the number keys. */
-  speedDial: boolean;
+export type Options<T> = HasSeveralOrdered<T> & {
+  /** A function that renders an item as part of a page */
+  render: UnaryF<Paged<T>, string>;
+  /** The size of the page. `7` if unspecified. */
+  pageSize?: number;
+  /** Allows creating an infinitely looping list. `true` if unspecified. */
+  loop?: boolean;
 };
 
-export type Activatable = {
-  active: number;
-  setActive: Action<number>;
-};
-
-export type Selectable<T> = {
-  items: readonly T[];
-  selectable: UnaryF<T, boolean>;
-};
-
-export type Navigable<T> = PageOptions & Selectable<T> & Activatable;
-
-export type Pagination<T> = Partial<PageOptions> &
-  Selectable<T> & {
-    render: UnaryF<Paged<T>, string>;
-  };
-
-export type Page = Activatable & {
+export type Page = Activatable<number> & {
   contents: string;
 };

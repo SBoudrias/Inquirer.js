@@ -1,19 +1,16 @@
 import chalk from 'chalk';
 import { useState, useRef, context } from '../../index.mjs';
 import { finite, infinite } from './position.mjs';
-import { Pagination, Page } from './types.mjs';
+import { Options, Page } from './types.mjs';
 import { lines } from './lines.mjs';
 import cliWidth from 'cli-width';
-import { useNavigation } from './use-navigation.mjs';
 
 export const usePagination = <T,>({
   items,
-  selectable,
   render,
   pageSize = 7,
   loop = true,
-  speedDial = true,
-}: Pagination<T>): Page => {
+}: Options<T>): Page => {
   const { rl } = context.getStore();
   const width = cliWidth({ defaultWidth: 80, output: rl.output });
   const state = useRef({
@@ -21,7 +18,6 @@ export const usePagination = <T,>({
     lastActive: 0,
   });
   const [active, setActive] = useState(0);
-  useNavigation({ items, selectable, pageSize, active, setActive, loop, speedDial });
   const position = (loop ? infinite : finite)(
     {
       active: { current: active, previous: state.current.lastActive },

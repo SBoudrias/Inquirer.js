@@ -4,6 +4,8 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
+  useScroll,
+  useSpeedDial,
   useRef,
   isEnterKey,
   Separator,
@@ -26,22 +28,25 @@ export default createPrompt(
     config: SelectConfig<Value>,
     done: (value: Value) => void,
   ): string => {
-    const { choices } = config;
-    if (!choices.some(selectable)) {
+    const { choices: items, loop, pageSize } = config;
+    if (!items.some(selectable)) {
       throw new Error('[select prompt] No selectable choices. All choices are disabled.');
     }
     const firstRender = useRef(true);
 
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
-    const { contents, active } = usePagination<Item<Value>>({
-      items: choices,
+    const { contents, active, setActive } = usePagination<Item<Value>>({
+      items,
       render,
-      selectable,
-      pageSize: config.pageSize,
-      loop: config.loop,
+      pageSize,
+      loop,
     });
-    const choice = choices[active] as Choice<Value>;
+    useSpeedDial({ items, selectable, setActive });
+    useScroll({ items, selectable, active, setActive, loop });
+
+    const choice = items[active] as Choice<Value>;
+
     useKeypress((key) => {
       if (isEnterKey(key)) {
         setStatus('done');
