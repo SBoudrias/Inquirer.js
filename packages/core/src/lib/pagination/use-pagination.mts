@@ -8,7 +8,7 @@ import {
   isDownKey,
 } from '../../index.mjs';
 import cliWidth from 'cli-width';
-import { breakLines, rotate } from '../utils.mjs';
+import { rotate, splitLines } from '../utils.mjs';
 import { finite, infinite } from './position.mjs';
 import { Pagination, Page } from './types.mjs';
 
@@ -25,6 +25,7 @@ export function usePagination<T>({
     lastActive: 0,
   });
   const [active, setActive] = useState(0);
+  const indexed = items.map((item, index) => ({ item, index }));
   useKeypress((key) => {
     if (
       !loop &&
@@ -41,23 +42,34 @@ export function usePagination<T>({
     }
   });
   const width = cliWidth({ defaultWidth: 80, output: rl.output });
-  const output = items.map((item, index) => render({ item, index, active })).join('\n');
-  const lines = breakLines(output, width).split('\n');
+  const split = splitLines(width);
   state.current.position = (loop ? infinite : finite)(
     {
       active: { current: active, previous: state.current.lastActive },
-      total: lines.length,
+      total: items.length,
       pageSize,
     },
     state.current.position,
   );
   state.current.lastActive = active;
 
-  // Rotate lines such that the active index is at the current position
-  const contents = rotate(active - state.current.position)(lines)
+  const slice = rotate(active - state.current.position)(indexed).slice(0, pageSize);
+  const previous = slice
+    .filter((_, i) => i < state.current.position)
+    .map((x) => render({ ...x, active }))
+    .flatMap(split);
+  const current = split(render({ ...slice[state.current.position]!, active }));
+  const rest = slice
+    .filter((_, i) => i > state.current.position)
+    .map((x) => render({ ...x, active }))
+    .flatMap(split);
+
+  const lines = previous.concat(current).concat(rest);
+
+  const contents = rotate(previous.length - state.current.position)(lines)
     .slice(0, pageSize)
     .concat(
-      lines.length <= pageSize
+      items.length <= pageSize
         ? []
         : [chalk.dim('(Use arrow keys to reveal more choices)')],
     )
