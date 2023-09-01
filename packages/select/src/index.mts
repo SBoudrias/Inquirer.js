@@ -29,9 +29,6 @@ export default createPrompt(
     done: (value: Value) => void,
   ): string => {
     const { choices: items, loop, pageSize } = config;
-    if (!items.some(selectable)) {
-      throw new Error('[select prompt] No selectable choices. All choices are disabled.');
-    }
     const firstRender = useRef(true);
 
     const prefix = usePrefix();
@@ -56,8 +53,11 @@ export default createPrompt(
 
     let message: string = chalk.bold(config.message);
     if (firstRender.current) {
-      message += chalk.dim(' (Use arrow keys)');
       firstRender.current = false;
+      message += chalk.dim(' (Use arrow keys)');
+      const selected = items.findIndex(selectable);
+      if (selected < 0) throw new Error('[select prompt] No selectable choices.');
+      setActive(selected);
     }
 
     if (status === 'done') {

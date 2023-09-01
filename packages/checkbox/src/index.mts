@@ -16,6 +16,7 @@ import chalk from 'chalk';
 import ansiEscapes from 'ansi-escapes';
 import { render } from './render.mjs';
 import { selectable, Item, Choice, toggle, check } from './choice.mjs';
+import { useRef } from '@inquirer/core';
 
 type Config<Value> = {
   prefix?: string;
@@ -32,7 +33,7 @@ export default createPrompt(
     done: (value: Array<Value>) => void,
   ): string => {
     const { prefix = usePrefix(), instructions, pageSize, loop, choices } = config;
-
+    const firstRender = useRef(true);
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
       choices.map((choice) => ({ ...choice })),
@@ -45,6 +46,12 @@ export default createPrompt(
       pageSize,
       loop,
     });
+    if (firstRender.current) {
+      firstRender.current = false;
+      const selected = items.findIndex(selectable);
+      if (selected < 0) throw new Error(`[checkbox prompt] Nothing selectable`);
+      setActive(selected);
+    }
     useSpeedDial({ items, selectable, setActive });
     useScroll({ items, selectable, active, setActive, loop });
 
