@@ -10,21 +10,18 @@ jobs:
           - 20
           - 18
           - 16
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
 
       - name: yarn install
-        run: |
-          node --version
-          yarn install --immutable --immutable-cache --check-cache
-        env:
-          CI: true
-          FORCE_COLOR: 1
+        run: yarn install --immutable --immutable-cache
 
       - name: Eslint
         run: yarn eslint .
@@ -34,7 +31,7 @@ jobs:
           yarn prettier --write .
           git diff --exit-code -- . :^.yarn
       - name: Typescript
-        run: yarn lerna run tsc
+        run: yarn turbo tsc
       - name: Test packages
         run: yarn vitest --run --coverage
       - name: Integration tests

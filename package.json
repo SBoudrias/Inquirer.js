@@ -65,6 +65,7 @@
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
+    "turbo": "^1.10.13",
     "typescript": "^5.1.6",
     "vitest": "^0.34.3"
   },
@@ -74,9 +75,9 @@
   ],
   "scripts": {
     "postinstall": "husky install",
-    "prepare": "lerna run tsc",
+    "prepare": "turbo tsc",
     "setup": "node ./tools/setup-packages.mjs",
-    "pretest": "eslint . && lerna run tsc",
+    "pretest": "eslint . && turbo tsc",
     "test": "vitest --run packages && node --test integration"
   },
   "repository": {

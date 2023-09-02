@@ -77,10 +77,10 @@ paths.forEach(async (pkgPath) => {
     pkg.files = ['dist/**/*'];
 
     pkg.scripts = {
-      tsc: 'yarn run clean && yarn run tsc:esm && yarn run tsc:cjs',
-      clean: 'rm -rf dist',
-      'tsc:esm': 'tsc -p ./tsconfig.json',
-      'tsc:cjs': 'tsc -p ./tsconfig.cjs.json && node ../../tools/fix-ext.mjs',
+      tsc: 'yarn run tsc:esm && yarn run tsc:cjs',
+      'tsc:esm': 'rm -rf dist/esm && tsc -p ./tsconfig.json',
+      'tsc:cjs':
+        'rm -rf dist/cjs && tsc -p ./tsconfig.cjs.json && node ../../tools/fix-ext.mjs',
     };
 
     // Set ESM tsconfig
