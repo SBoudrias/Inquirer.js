@@ -221,7 +221,7 @@ export function usePagination(
   const topIndex = Math.max(0, active + lines.length - state.current.pointer);
 
   const section = infinite.splice(topIndex, pageSize).join('\n');
-  return section + '\n' + chalk.dim('(Move up and down to reveal more choices)');
+  return section + '\n' + chalk.dim('(Use arrow keys to reveal more choices)');
 }
 
 export type AsyncPromptConfig = {

@@ -33,7 +33,7 @@ describe('select prompt', () => {
         5
         6
         7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('down');
@@ -47,7 +47,7 @@ describe('select prompt', () => {
         5
         6
         7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -72,7 +72,7 @@ describe('select prompt', () => {
         5
         6
         7
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -92,7 +92,7 @@ describe('select prompt', () => {
       "? Select a number (Use arrow keys)
       ❯ 1
         2
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -118,7 +118,7 @@ describe('select prompt', () => {
         8
         9
         10
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
@@ -136,7 +136,7 @@ describe('select prompt', () => {
       "? Select a number (Use arrow keys)
       ❯ 1
         2
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('up');
@@ -145,7 +145,7 @@ describe('select prompt', () => {
       "? Select a number
       ❯ 11
         12
-      (Move up and down to reveal more choices)"
+      (Use arrow keys to reveal more choices)"
     `);
 
     events.keypress('enter');
