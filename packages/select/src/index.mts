@@ -58,12 +58,12 @@ export default createPrompt(
     });
 
     // Safe to assume the cursor position always point to a Choice.
-    const choice = choices[cursorPosition] as Choice<Value>;
+    const selectedChoice = choices[cursorPosition] as Choice<Value>;
 
     useKeypress((key) => {
       if (isEnterKey(key)) {
         setStatus('done');
-        done(choice.value);
+        done(selectedChoice.value);
       } else if (isUpKey(key) || isDownKey(key)) {
         let newCursorPosition = cursorPosition;
         const offset = isUpKey(key) ? -1 : 1;
@@ -121,10 +121,14 @@ export default createPrompt(
     });
 
     if (status === 'done') {
-      return `${prefix} ${message} ${chalk.cyan(choice.name || choice.value)}`;
+      return `${prefix} ${message} ${chalk.cyan(
+        selectedChoice.name || selectedChoice.value,
+      )}`;
     }
 
-    const choiceDescription = choice.description ? `\n${choice.description}` : ``;
+    const choiceDescription = selectedChoice.description
+      ? `\n${selectedChoice.description}`
+      : ``;
 
     return `${prefix} ${message}\n${windowedChoices}${choiceDescription}${ansiEscapes.cursorHide}`;
   },

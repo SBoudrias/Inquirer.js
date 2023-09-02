@@ -19,10 +19,10 @@ const password: Prompt<string, PasswordConfig> = (config, context) => {
     {
       ...config, // Make sure we do not display the default password
       default: undefined,
-      transformer(input: string, { isFinal }: { isFinal: boolean }) {
+      transformer(str: string, { isFinal }: { isFinal: boolean }) {
         if (config.mask) {
           const maskChar = typeof config.mask === 'string' ? config.mask : '*';
-          return maskChar.repeat(input.length);
+          return maskChar.repeat(str.length);
         }
 
         if (!isFinal) {

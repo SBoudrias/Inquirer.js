@@ -36,7 +36,7 @@ type HookStore = {
 
 const hookStorage = new AsyncLocalStorage<HookStore>();
 
-const context = {
+const api = {
   getStore() {
     const store = hookStorage.getStore();
     if (!store) {
@@ -47,20 +47,20 @@ const context = {
     return store;
   },
   withPointer<Value>(cb: (index: number, store: HookStore) => Value): Value {
-    const store = context.getStore();
+    const store = api.getStore();
     const value = cb(store.index, store);
     store.index++;
     return value;
   },
   handleChange() {
-    const { handleChange } = context.getStore();
+    const { handleChange } = api.getStore();
     handleChange();
   },
   mergeStateUpdates<T extends (...args: any) => any>(
     fn: T,
   ): (...args: Parameters<T>) => ReturnType<T> {
     const wrapped = (...args: any): ReturnType<T> => {
-      const store = context.getStore();
+      const store = api.getStore();
       let shouldUpdate = false;
       const oldHandleChange = store.handleChange;
       store.handleChange = () => {
@@ -79,11 +79,17 @@ const context = {
 
     return wrapped;
   },
+  write(content: string) {
+    const { rl } = api.getStore();
+    rl.output.unmute();
+    rl.output.write(content);
+    rl.output.mute();
+  },
 };
 
 const effectScheduler = {
   queue(cb: (readline: InquirerReadline) => void) {
-    const store = context.getStore();
+    const store = api.getStore();
     const { index } = store;
 
     store.hooksEffect.push(() => {
@@ -96,8 +102,8 @@ const effectScheduler = {
       store.hooksCleanup[index] = cleanFn;
     });
   },
-  run: context.mergeStateUpdates(() => {
-    const store = context.getStore();
+  run: api.mergeStateUpdates(() => {
+    const store = api.getStore();
     store.hooksEffect.forEach((effect) => {
       effect();
     });
@@ -108,7 +114,7 @@ const effectScheduler = {
 export function useState<Value>(
   defaultValue: NotFunction<Value> | (() => Value),
 ): [Value, (newValue: Value) => void] {
-  return context.withPointer((pointer, store) => {
+  return api.withPointer((pointer, store) => {
     const { hooks } = store;
 
     if (!(pointer in hooks)) {
@@ -127,7 +133,7 @@ export function useState<Value>(
           hooks[pointer] = newValue;
 
           // Trigger re-render
-          context.handleChange();
+          api.handleChange();
         }
       },
     ];
@@ -138,7 +144,7 @@ export function useEffect(
   cb: (rl: InquirerReadline) => void | (() => void),
   depArray: unknown[],
 ): void {
-  return context.withPointer((pointer, store) => {
+  return api.withPointer((pointer, store) => {
     const { hooks } = store;
 
     const oldDeps = hooks[pointer];
@@ -164,7 +170,7 @@ export function useKeypress(
 
   useEffect((rl) => {
     const handler = AsyncResource.bind(
-      context.mergeStateUpdates((_input: string, event: KeypressEvent) => {
+      api.mergeStateUpdates((_input: string, event: KeypressEvent) => {
         signal.current(event, rl);
       }),
     );
@@ -186,7 +192,7 @@ export function usePagination(
     pageSize?: number;
   },
 ) {
-  const { rl } = context.getStore();
+  const { rl } = api.getStore();
   const state = useRef({
     pointer: 0,
     lastIndex: 0,

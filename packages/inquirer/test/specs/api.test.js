@@ -61,7 +61,7 @@ const tests = {
         }));
 
       it('should allow filter function to be asynchronous', () =>
-        new Promise((done) => {
+        new Promise((resolve) => {
           ctx.fixture.filter = function () {
             const done = this.async();
             setTimeout(() => {
@@ -72,7 +72,7 @@ const tests = {
           const prompt = new ctx.Prompt(ctx.fixture, ctx.rl);
           prompt.run().then((answer) => {
             expect(answer).toEqual('pass');
-            done();
+            resolve();
           });
 
           ctx.rl.emit('line', '');

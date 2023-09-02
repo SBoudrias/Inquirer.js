@@ -240,8 +240,8 @@ describe('createPrompt()', () => {
       const [value, setValue] = useState('value');
       const [key, setKey] = useState('key');
 
-      useKeypress((key: KeypressEvent) => {
-        if (isEnterKey(key)) {
+      useKeypress((event: KeypressEvent) => {
+        if (isEnterKey(event)) {
           done(value);
         } else {
           setValue('foo');
@@ -279,8 +279,8 @@ describe('createPrompt()', () => {
         setKey('bar');
       }, []);
 
-      useKeypress((key: KeypressEvent) => {
-        if (isEnterKey(key)) {
+      useKeypress((event: KeypressEvent) => {
+        if (isEnterKey(event)) {
           done(value);
         }
       });

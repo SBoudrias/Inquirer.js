@@ -39,7 +39,7 @@ describe('input prompt', () => {
   it('handle synchronous validation', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'Answer 2 ===',
-      validate: (answer) => answer === '2',
+      validate: (value) => value === '2',
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 ==="`);
@@ -65,9 +65,9 @@ describe('input prompt', () => {
   it('handle asynchronous validation', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'Answer 2 ===',
-      validate(answer) {
+      validate(value) {
         return new Promise((resolve) => {
-          if (answer === '2') {
+          if (value === '2') {
             resolve(true);
           } else {
             resolve('Answer must be 2');

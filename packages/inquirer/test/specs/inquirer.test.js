@@ -452,8 +452,7 @@ describe('inquirer.prompt', () => {
       },
     ];
 
-    const answers = { prefiled: true };
-    const promise = prompt(prompts, answers);
+    const promise = prompt(prompts, { prefiled: true });
     autosubmit(promise.ui);
 
     return promise.then((answers) => {
@@ -704,8 +703,7 @@ describe('inquirer.prompt', () => {
         },
       ];
 
-      const answers = { prefiled: 'prefiled' };
-      const promise = prompt(prompts, answers);
+      const promise = prompt(prompts, { prefiled: 'prefiled' });
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
@@ -730,8 +728,7 @@ describe('inquirer.prompt', () => {
         },
       ];
 
-      const answers = { prefiled: { nested: 'prefiled' } };
-      const promise = prompt(prompts, answers);
+      const promise = prompt(prompts, { prefiled: { nested: 'prefiled' } });
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
@@ -750,8 +747,7 @@ describe('inquirer.prompt', () => {
         },
       ];
 
-      const answers = { prefiled: 'prefiled' };
-      const promise = prompt(prompts, answers);
+      const promise = prompt(prompts, { prefiled: 'prefiled' });
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
@@ -770,8 +766,7 @@ describe('inquirer.prompt', () => {
         },
       ];
 
-      const answers = { prefiled: { nested: 'prefiled' } };
-      const promise = prompt(prompts, answers);
+      const promise = prompt(prompts, { prefiled: { nested: 'prefiled' } });
       autosubmit(promise.ui);
 
       return promise.then((answers) => {
@@ -907,7 +902,7 @@ describe('inquirer.prompt', () => {
 
     it("Don't throw an exception when run in non-tty and skipTTYChecks is trueasync ", () =>
       new Promise((done) => {
-        const prompt = inquirer.createPromptModule({ skipTTYChecks: true });
+        const localPrompt = inquirer.createPromptModule({ skipTTYChecks: true });
         const prompts = [
           {
             type: 'confirm',
@@ -921,7 +916,7 @@ describe('inquirer.prompt', () => {
           },
         ];
 
-        const promise = prompt(prompts);
+        const promise = localPrompt(prompts);
         autosubmit(promise.ui);
         promise
           .then(() => {
