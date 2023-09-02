@@ -271,7 +271,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
           screen.checkCursorPos();
         };
 
-        const onExit = AsyncResource.bind(() => {
+        const onExit = () => {
           try {
             store.hooksCleanup.forEach((cleanFn) => {
               cleanFn?.();
@@ -289,22 +289,22 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
 
           process.removeListener('SIGINT', onForceExit);
           store.rl.input.removeListener('keypress', checkCursorPos);
-        });
+        };
 
-        cancel = AsyncResource.bind(() => {
+        cancel = () => {
           onExit();
 
           reject(new Error('Prompt was canceled'));
-        });
+        };
 
         let shouldHandleExit = true;
-        const onForceExit = AsyncResource.bind(() => {
+        const onForceExit = () => {
           if (shouldHandleExit) {
             shouldHandleExit = false;
             onExit();
             reject(new Error('User force closed the prompt with CTRL+C'));
           }
-        });
+        };
 
         // Handle cleanup on force exit. Main reason is so we restore the cursor if a prompt hide it.
         process.on('SIGINT', onForceExit);
