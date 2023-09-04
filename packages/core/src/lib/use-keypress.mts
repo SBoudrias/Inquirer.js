@@ -1,13 +1,9 @@
 import { AsyncResource } from 'node:async_hooks';
-import type { InquirerReadline } from './read-line.type.mjs';
+import { type InquirerReadline } from './read-line.type.mjs';
+import { type KeypressEvent } from './key.mjs';
 import { useRef } from './use-ref.mjs';
 import { useEffect } from './use-effect.mjs';
 import { hookEngine } from './hook-engine.mjs';
-
-export type KeypressEvent = {
-  name: string;
-  ctrl: boolean;
-};
 
 export function useKeypress(
   userHandler: (event: KeypressEvent, rl: InquirerReadline) => void,
