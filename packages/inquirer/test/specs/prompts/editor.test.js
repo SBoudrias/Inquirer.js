@@ -10,7 +10,7 @@ const defaultVisual = process.env.VISUAL;
 
 const require = createRequire(import.meta.url);
 const writeBin = require.resolve('../../bin/write.js');
-const answer = 'testing';
+const expectedAnswer = 'testing';
 
 describe('`editor` prompt', () => {
   let fixture;
@@ -18,7 +18,7 @@ describe('`editor` prompt', () => {
 
   beforeEach(() => {
     // Writes the word "testing" to the file
-    process.env.VISUAL = `node ${writeBin} ${answer}`;
+    process.env.VISUAL = `node ${writeBin} ${expectedAnswer}`;
 
     fixture = { ...fixtures.editor };
     rl = new ReadlineStub();
@@ -35,7 +35,7 @@ describe('`editor` prompt', () => {
     rl.emit('line', '');
     const answer = await promise;
 
-    expect(answer).toEqual(answer);
+    expect(answer).toEqual(expectedAnswer);
   });
 
   it('should open editor without waiting for the user to press enter', async () => {
@@ -43,6 +43,6 @@ describe('`editor` prompt', () => {
 
     const answer = await prompt.run();
 
-    expect(answer).toEqual(answer);
+    expect(answer).toEqual(expectedAnswer);
   });
 });

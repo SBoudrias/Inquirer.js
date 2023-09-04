@@ -1,6 +1,7 @@
-import { useKeypress, isNumberKey } from '../../index.mjs';
-import { Activatable } from '../types.mjs';
-import { Selectable } from './types.mjs';
+import { isNumberKey } from '../key.mjs';
+import type { Activatable } from '../types.mjs';
+import { useKeypress } from '../use-keypress.mjs';
+import type { Selectable } from './types.mjs';
 
 type SpeedDialOptions<T> = Pick<Activatable<number>, 'setActive'> & Selectable<T>;
 

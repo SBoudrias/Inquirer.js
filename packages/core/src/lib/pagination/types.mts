@@ -1,4 +1,4 @@
-import { Activatable, HasSeveralOrdered, UnaryF } from '../types.mjs';
+import type { Activatable, HasSeveralOrdered, UnaryF } from '../types.mjs';
 
 /** Represents an item that's part of a page */
 export type Paged<T> = {

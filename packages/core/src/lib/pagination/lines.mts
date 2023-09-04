@@ -38,6 +38,6 @@ export const lines = <T,>({
     .map(render)
     .flatMap(split);
 
-  const lines = previous.concat(current).concat(rest);
-  return rotate(previous.length - position)(lines).slice(0, pageSize);
+  const output = previous.concat(current).concat(rest);
+  return rotate(previous.length - position)(output).slice(0, pageSize);
 };

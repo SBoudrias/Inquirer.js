@@ -7,16 +7,18 @@ import List from '../../../lib/prompts/list.js';
 describe('`list` prompt', () => {
   let fixture;
   let rl;
-  let list;
+  // let list;
 
   beforeEach(() => {
     fixture = { ...fixtures.list };
     rl = new ReadlineStub();
-    list = new List(fixture, rl);
+    // list = new List(fixture, rl);
   });
 
   it('should default to first choice', () =>
     new Promise((done) => {
+      const list = new List(fixture, rl);
+
       list.run().then((answer) => {
         expect(answer).toEqual('foo');
         done();
@@ -27,6 +29,8 @@ describe('`list` prompt', () => {
 
   it('should move selected cursor on keypress', () =>
     new Promise((done) => {
+      const list = new List(fixture, rl);
+
       list.run().then((answer) => {
         expect(answer).toEqual('bar');
         done();
@@ -38,6 +42,8 @@ describe('`list` prompt', () => {
 
   it('should allow for arrow navigation', () =>
     new Promise((done) => {
+      const list = new List(fixture, rl);
+
       list.run().then((answer) => {
         expect(answer).toEqual('bar');
         done();
@@ -51,6 +57,8 @@ describe('`list` prompt', () => {
 
   it('should allow for vi-style navigation', () =>
     new Promise((done) => {
+      const list = new List(fixture, rl);
+
       list.run().then((answer) => {
         expect(answer).toEqual('bar');
         done();
@@ -64,6 +72,8 @@ describe('`list` prompt', () => {
 
   it('should allow for emacs-style navigation', () =>
     new Promise((done) => {
+      const list = new List(fixture, rl);
+
       list.run().then((answer) => {
         expect(answer).toEqual('bar');
         done();
@@ -89,6 +99,7 @@ describe('`list` prompt', () => {
 
     describe('when loop undefined / true', () => {
       it('loops to bottom when too far up', async () => {
+        const list = new List(fixture, rl);
         const promise = list.run();
         pressKey('up', 2);
         const answer = await promise;
@@ -96,6 +107,7 @@ describe('`list` prompt', () => {
       });
 
       it('loops to top when too far down', async () => {
+        const list = new List(fixture, rl);
         const promise = list.run();
         pressKey('down', 3);
         const answer = await promise;
@@ -104,11 +116,8 @@ describe('`list` prompt', () => {
     });
 
     describe('when loop: false', () => {
-      beforeEach(() => {
-        list = new List(Object.assign(fixture, { loop: false }), rl);
-      });
-
       it('stays at top when too far up', async () => {
+        const list = new List(Object.assign(fixture, { loop: false }), rl);
         const promise = list.run();
         pressKey('up', 2);
         const answer = await promise;
@@ -116,6 +125,7 @@ describe('`list` prompt', () => {
       });
 
       it('stays at bottom when too far down', async () => {
+        const list = new List(Object.assign(fixture, { loop: false }), rl);
         const promise = list.run();
         pressKey('down', 3);
         const answer = await promise;
@@ -210,6 +220,7 @@ describe('`list` prompt', () => {
 
   it('should allow 1-9 shortcut key', () =>
     new Promise((done) => {
+      const list = new List(fixture, rl);
       list.run().then((answer) => {
         expect(answer).toEqual('bar');
         done();

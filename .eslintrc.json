@@ -16,6 +16,14 @@
     "default-param-last": "off",
     "padding-line-between-statements": "off",
     "no-eq-null": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "name": "lodash",
+        "message": "Do not import the whole of 'lodash'. Import the needed function instead e.g `import map from 'lodash/map.js'`"
+      }
+    ],
+    "no-shadow": "error",
     "eqeqeq": [
       "error",
       "always",
@@ -34,8 +42,10 @@
       "rules": {
         // Disabled per typescript-eslint recommendation: https://github.com/typescript-eslint/typescript-eslint/blob/e26e43ffba96f6d46198b22f1c8dd5c814db2652/docs/getting-started/linting/FAQ.md#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
         "no-undef": "off",
-        "no-unused-vars": "off",
         "n/no-missing-import": "off",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": "error",
+        "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "error"
       }
     },

@@ -41,7 +41,7 @@ yarn eslint . --fix`
 ## Type checking
 
 ```sh
-yarn lerna run tsc
+yarn turbo tsc
 ```
 
 ## Publishing new versions

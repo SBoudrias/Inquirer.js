@@ -54,9 +54,9 @@ export default class PromptUI extends Base {
 
     return this.process
       .pipe(
-        reduce((answers, answer) => {
-          _.set(answers, answer.name, answer.answer);
-          return answers;
+        reduce((answersObj, answer) => {
+          _.set(answersObj, answer.name, answer.answer);
+          return answersObj;
         }, this.answers),
       )
       .toPromise(Promise)

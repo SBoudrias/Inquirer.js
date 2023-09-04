@@ -42,12 +42,12 @@ export default createPrompt(
     useSpeedDial({ items, selectable, setActive });
     useScroll({ items, selectable, active, setActive, loop });
 
-    const choice = items[active] as Choice<Value>;
+    const selectedChoice = items[active] as Choice<Value>;
 
     useKeypress((key) => {
       if (isEnterKey(key)) {
         setStatus('done');
-        done(choice.value);
+        done(selectedChoice.value);
       }
     });
 
@@ -61,10 +61,14 @@ export default createPrompt(
     }
 
     if (status === 'done') {
-      return `${prefix} ${message} ${chalk.cyan(choice.name || choice.value)}`;
+      return `${prefix} ${message} ${chalk.cyan(
+        selectedChoice.name || selectedChoice.value,
+      )}`;
     }
 
-    const choiceDescription = choice.description ? `\n${choice.description}` : ``;
+    const choiceDescription = selectedChoice.description
+      ? `\n${selectedChoice.description}`
+      : ``;
 
     return `${prefix} ${message}\n${contents}${choiceDescription}${ansiEscapes.cursorHide}`;
   },

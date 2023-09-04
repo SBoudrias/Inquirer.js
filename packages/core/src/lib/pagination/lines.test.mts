@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { lines } from './lines.mjs';
-import { Paged } from './types.mjs';
+import type { Paged } from './types.mjs';
 
 describe('pagination', () => {
   describe('lines', () => {
@@ -15,13 +15,13 @@ describe('pagination', () => {
 
     const renderLines =
       (count: number) =>
-      ({ index, item: { value }, active }: Paged<Item>): string =>
+      ({ index, item: { value }, active: cursor }: Paged<Item>): string =>
         new Array(count)
           .fill(0)
           .map(
             (_, i) =>
               `${
-                i === 0 ? `${active ? '>' : ' '} ${(index + 1).toString()}.` : '    '
+                i === 0 ? `${cursor ? '>' : ' '} ${(index + 1).toString()}.` : '    '
               }${value} line ${i + 1}`,
           )
           .join('\n');

@@ -48,8 +48,8 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
   const [errorMsg, setError] = useState<string | undefined>(undefined);
   const prefix = usePrefix();
 
-  useKeypress((key, rl) => {
-    if (isEnterKey(key)) {
+  useKeypress((event, rl) => {
+    if (isEnterKey(event)) {
       const answer = (value || defaultKey).toLowerCase();
       if (answer === 'h' && !expanded) {
         setExpanded(true);

@@ -11,7 +11,7 @@ export const splitLines =
     content.split('\n').flatMap((line) =>
       wrapAnsi(line, width, { trim: false, hard: true })
         .split('\n')
-        .map((line) => line.trimEnd()),
+        .map((str) => str.trimEnd()),
     );
 
 /**

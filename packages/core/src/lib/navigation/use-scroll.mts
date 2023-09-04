@@ -1,5 +1,6 @@
-import { useKeypress, isUpKey, isDownKey } from '../../index.mjs';
+import { isUpKey, isDownKey } from '../key.mjs';
 import { Activatable } from '../types.mjs';
+import { useKeypress } from '../use-keypress.mjs';
 import { index } from '../utils.mjs';
 import { Selectable } from './types.mjs';
 
