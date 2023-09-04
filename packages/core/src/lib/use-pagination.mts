@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import cliWidth from 'cli-width';
 import { breakLines } from './utils.mjs';
-import { hookEngine } from './hook-engine.mjs';
+import { readline } from './hook-engine.mjs';
 import { useRef } from './use-ref.mjs';
 
 export function usePagination(
@@ -14,7 +14,7 @@ export function usePagination(
     pageSize?: number;
   },
 ) {
-  const { rl } = hookEngine.getStore();
+  const rl = readline();
   const state = useRef({
     pointer: 0,
     lastIndex: 0,
