@@ -4,9 +4,9 @@
 
 import chalk from 'chalk';
 import { editAsync } from 'external-editor';
-import Base from './base.js';
-import observe from '../utils/events.js';
 import { Subject } from 'rxjs';
+import observe from '../utils/events.js';
+import Base from './base.js';
 
 export default class EditorPrompt extends Base {
   /**

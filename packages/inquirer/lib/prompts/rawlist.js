@@ -4,11 +4,11 @@
 
 import chalk from 'chalk';
 import { map, takeUntil } from 'rxjs';
-import Base from './base.js';
 import Separator from '../objects/separator.js';
 import observe from '../utils/events.js';
 import Paginator from '../utils/paginator.js';
 import incrementListIndex from '../utils/incrementListIndex.js';
+import Base from './base.js';
 
 export default class RawListPrompt extends Base {
   constructor(questions, rl, answers) {

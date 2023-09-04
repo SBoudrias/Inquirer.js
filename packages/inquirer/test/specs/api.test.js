@@ -2,8 +2,7 @@
  * Test Prompt public APIs
  */
 
-import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'vitest';
+import { beforeEach, describe, it, expect } from 'vitest';
 import fixtures from '../helpers/fixtures.js';
 import ReadlineStub from '../helpers/readline.js';
 import inquirer from '../../lib/inquirer.js';

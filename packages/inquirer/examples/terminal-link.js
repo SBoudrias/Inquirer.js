@@ -4,8 +4,8 @@
  * For screenshots of the expected behavior, see https://github.com/SBoudrias/Inquirer.js/pull/1106
  */
 
-import inquirer from '../lib/inquirer.js';
 import terminalLink from 'terminal-link';
+import inquirer from '../lib/inquirer.js';
 
 inquirer
   .prompt([

@@ -1,5 +1,5 @@
-import inquirer from '../lib/inquirer.js';
 import { from } from 'rxjs';
+import inquirer from '../lib/inquirer.js';
 
 const questions = [
   {

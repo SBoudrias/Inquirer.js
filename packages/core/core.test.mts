@@ -1,5 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
+import stripAnsi from 'strip-ansi';
+import ansiEscapes from 'ansi-escapes';
 import {
   createPrompt,
   useEffect,
@@ -12,8 +14,6 @@ import {
   Separator,
   type KeypressEvent,
 } from './src/index.mjs';
-import stripAnsi from 'strip-ansi';
-import ansiEscapes from 'ansi-escapes';
 
 describe('createPrompt()', () => {
   it('handle async function message', async () => {

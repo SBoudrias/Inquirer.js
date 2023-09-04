@@ -1,5 +1,4 @@
-import { fromEvent } from 'rxjs';
-import { filter, map, share, takeUntil } from 'rxjs';
+import { fromEvent, filter, map, share, takeUntil } from 'rxjs';
 
 function normalizeKeypressEvents(value, key) {
   return { value, key: key || {} };
