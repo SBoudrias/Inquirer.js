@@ -12,6 +12,12 @@ export type HookStore = {
 
 const hookStorage = new AsyncLocalStorage<HookStore>();
 
+type Pointer = {
+  get(): any;
+  set(value: any): void;
+  initialized: boolean;
+};
+
 export const api = {
   // Utility proxy for the underlying run call.
   run(...args: Parameters<typeof hookStorage.run>) {
@@ -27,11 +33,24 @@ export const api = {
     }
     return store;
   },
-  withPointer<Value>(cb: (index: number, store: HookStore) => Value): Value {
+  withPointer<Value>(cb: (pointer: Pointer) => Value): Value {
     const store = api.getStore();
-    const value = cb(store.index, store);
+
+    const { index } = store;
+    const pointer: Pointer = {
+      get() {
+        return store.hooks[index];
+      },
+      set(value: any) {
+        store.hooks[index] = value;
+      },
+      initialized: index in store.hooks,
+    };
+
+    const returnValue = cb(pointer);
+
     store.index++;
-    return value;
+    return returnValue;
   },
   handleChange() {
     const { handleChange } = api.getStore();
