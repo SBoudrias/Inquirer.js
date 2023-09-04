@@ -1,30 +1,28 @@
-import { api } from './hook-api.mjs';
+import { withPointer, handleChange } from './hook-engine.mjs';
 
 type NotFunction<T> = T extends Function ? never : T;
 
 export function useState<Value>(
   defaultValue: NotFunction<Value> | (() => Value),
 ): [Value, (newValue: Value) => void] {
-  return api.withPointer((pointer, store) => {
-    const { hooks } = store;
-
-    if (!(pointer in hooks)) {
+  return withPointer((pointer) => {
+    if (!pointer.initialized) {
       if (typeof defaultValue === 'function') {
-        hooks[pointer] = (defaultValue as () => Value)();
+        pointer.set((defaultValue as () => Value)());
       } else {
-        hooks[pointer] = defaultValue;
+        pointer.set(defaultValue);
       }
     }
 
     return [
-      hooks[pointer],
+      pointer.get(),
       (newValue) => {
         // Noop if the value is still the same.
-        if (hooks[pointer] !== newValue) {
-          hooks[pointer] = newValue;
+        if (pointer.get() !== newValue) {
+          pointer.set(newValue);
 
           // Trigger re-render
-          api.handleChange();
+          handleChange();
         }
       },
     ];

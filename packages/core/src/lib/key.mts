@@ -1,4 +1,4 @@
-type KeypressEvent = {
+export type KeypressEvent = {
   name: string;
   ctrl: boolean;
 };

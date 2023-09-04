@@ -1,5 +1,4 @@
-import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'vitest';
+import { beforeEach, describe, it, expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 
 import Base from '../../../lib/prompts/base.js';

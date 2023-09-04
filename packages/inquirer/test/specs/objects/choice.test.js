@@ -1,5 +1,4 @@
-import { describe, it } from 'vitest';
-import { expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 import Choice from '../../../lib/objects/choice.js';
 import Separator from '../../../lib/objects/separator.js';

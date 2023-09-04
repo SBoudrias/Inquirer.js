@@ -7,8 +7,7 @@ const _ = {
   set,
   get,
 };
-import { defer, empty, from, of } from 'rxjs';
-import { concatMap, filter, publish, reduce } from 'rxjs';
+import { defer, empty, from, of, concatMap, filter, publish, reduce } from 'rxjs';
 import runAsync from 'run-async';
 import * as utils from '../utils/utils.js';
 import Base from './baseUI.js';
