@@ -1,11 +1,11 @@
 import chalk from 'chalk';
-import { finite, infinite } from './position.mjs';
-import { Options, Page } from './types.mjs';
-import { lines } from './lines.mjs';
 import cliWidth from 'cli-width';
 import { api } from '../hook-api.mjs';
 import { useRef } from '../use-ref.mjs';
 import { useState } from '../use-state.mjs';
+import { lines } from './lines.mjs';
+import { Options, Page } from './types.mjs';
+import { finite, infinite } from './position.mjs';
 
 export const usePagination = <T,>({
   items,

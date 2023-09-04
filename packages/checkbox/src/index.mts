@@ -10,13 +10,13 @@ import {
   isNumberKey,
   isEnterKey,
   Separator,
+  useRef,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
 import ansiEscapes from 'ansi-escapes';
 import { render } from './render.mjs';
 import { selectable, Item, Choice, toggle, check } from './choice.mjs';
-import { useRef } from '@inquirer/core';
 
 type Config<Value> = {
   prefix?: string;
