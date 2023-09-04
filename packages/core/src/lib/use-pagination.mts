@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import cliWidth from 'cli-width';
 import { breakLines } from './utils.mjs';
-import { api } from './api.mjs';
+import { api } from './hook-api.mjs';
 import { useRef } from './use-ref.mjs';
 
 export function usePagination(

@@ -2,7 +2,7 @@ import { AsyncResource } from 'node:async_hooks';
 import type { InquirerReadline } from './read-line.type.mjs';
 import { useRef } from './use-ref.mjs';
 import { useEffect } from './use-effect.mjs';
-import { api } from './api.mjs';
+import { api } from './hook-api.mjs';
 
 export type KeypressEvent = {
   name: string;

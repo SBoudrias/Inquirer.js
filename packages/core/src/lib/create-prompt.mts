@@ -2,11 +2,32 @@ import * as readline from 'node:readline';
 import { CancelablePromise, type Prompt } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import ScreenManager from './screen-manager.mjs';
-import { getPromptConfig } from './options.mjs';
 import type { InquirerReadline } from './read-line.type.mjs';
-import { type HookStore, hookStorage } from './hook-store.mjs';
-import { effectScheduler } from './effect-scheduler.mjs';
-import type { AsyncPromptConfig, ResolvedPromptConfig } from './config.types.mjs';
+import { api, effectScheduler, type HookStore } from './hook-api.mjs';
+
+export type AsyncPromptConfig = {
+  message: string | Promise<string> | (() => Promise<string>);
+  validate?: (value: string) => boolean | string | Promise<string | boolean>;
+};
+
+type ResolvedPromptConfig = {
+  message: string;
+  validate: (value: string) => boolean | string | Promise<string | boolean>;
+};
+
+// Take an AsyncPromptConfig and resolves all it's values.
+async function getPromptConfig<Config extends AsyncPromptConfig>(
+  config: Config,
+): Promise<Config & ResolvedPromptConfig> {
+  const message =
+    typeof config.message === 'function' ? config.message() : config.message;
+
+  return {
+    validate: () => true,
+    ...config,
+    message: await message,
+  };
+}
 
 export function createPrompt<Value, Config extends AsyncPromptConfig>(
   view: (
@@ -40,7 +61,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
 
     let cancel: () => void = () => {};
     const answer = new CancelablePromise<Value>((resolve, reject) => {
-      hookStorage.run(store, () => {
+      api.run(store, () => {
         const checkCursorPos = () => {
           screen.checkCursorPos();
         };

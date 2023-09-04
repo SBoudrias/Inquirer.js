@@ -1,4 +1,4 @@
-import { api } from './api.mjs';
+import { api } from './hook-api.mjs';
 
 type NotFunction<T> = T extends Function ? never : T;
 

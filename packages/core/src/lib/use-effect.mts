@@ -1,5 +1,4 @@
-import { api } from './api.mjs';
-import { effectScheduler } from './effect-scheduler.mjs';
+import { api, effectScheduler } from './hook-api.mjs';
 import type { InquirerReadline } from './read-line.type.mjs';
 
 export function useEffect(
