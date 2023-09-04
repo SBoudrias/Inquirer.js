@@ -48,9 +48,9 @@
   ],
   "devDependencies": {
     "@sindresorhus/tsconfig": "^4.0.0",
-    "@types/node": "^20.5.8",
-    "@typescript-eslint/eslint-plugin": "^6.5.0",
-    "@typescript-eslint/parser": "^6.5.0",
+    "@types/node": "^20.5.9",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
     "@vitest/coverage-v8": "^0.34.3",
     "@vitest/ui": "^0.34.3",
     "eslint": "^8.48.0",
