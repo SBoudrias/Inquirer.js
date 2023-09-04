@@ -1,11 +1,11 @@
-import { api, effectScheduler } from './hook-api.mjs';
+import { hookEngine, effectScheduler } from './hook-engine.mjs';
 import type { InquirerReadline } from './read-line.type.mjs';
 
 export function useEffect(
   cb: (rl: InquirerReadline) => void | (() => void),
   depArray: unknown[],
 ): void {
-  api.withPointer((pointer) => {
+  hookEngine.withPointer((pointer) => {
     const oldDeps = pointer.get();
     const hasChanged =
       !Array.isArray(oldDeps) || depArray.some((dep, i) => !Object.is(dep, oldDeps[i]));

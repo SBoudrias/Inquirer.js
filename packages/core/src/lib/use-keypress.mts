@@ -2,7 +2,7 @@ import { AsyncResource } from 'node:async_hooks';
 import type { InquirerReadline } from './read-line.type.mjs';
 import { useRef } from './use-ref.mjs';
 import { useEffect } from './use-effect.mjs';
-import { api } from './hook-api.mjs';
+import { hookEngine } from './hook-engine.mjs';
 
 export type KeypressEvent = {
   name: string;
@@ -17,7 +17,7 @@ export function useKeypress(
 
   useEffect((rl) => {
     const handler = AsyncResource.bind(
-      api.mergeStateUpdates((_input: string, event: KeypressEvent) => {
+      hookEngine.mergeStateUpdates((_input: string, event: KeypressEvent) => {
         signal.current(event, rl);
       }),
     );

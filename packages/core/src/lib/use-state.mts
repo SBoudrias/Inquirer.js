@@ -1,11 +1,11 @@
-import { api } from './hook-api.mjs';
+import { hookEngine } from './hook-engine.mjs';
 
 type NotFunction<T> = T extends Function ? never : T;
 
 export function useState<Value>(
   defaultValue: NotFunction<Value> | (() => Value),
 ): [Value, (newValue: Value) => void] {
-  return api.withPointer((pointer) => {
+  return hookEngine.withPointer((pointer) => {
     if (!pointer.initialized) {
       if (typeof defaultValue === 'function') {
         pointer.set((defaultValue as () => Value)());
@@ -22,7 +22,7 @@ export function useState<Value>(
           pointer.set(newValue);
 
           // Trigger re-render
-          api.handleChange();
+          hookEngine.handleChange();
         }
       },
     ];

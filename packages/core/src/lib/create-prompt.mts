@@ -3,7 +3,7 @@ import { CancelablePromise, type Prompt } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import ScreenManager from './screen-manager.mjs';
 import type { InquirerReadline } from './read-line.type.mjs';
-import { api, effectScheduler, type HookStore } from './hook-api.mjs';
+import { hookEngine, effectScheduler } from './hook-engine.mjs';
 
 export type AsyncPromptConfig = {
   message: string | Promise<string> | (() => Promise<string>);
@@ -50,18 +50,9 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     }) as InquirerReadline;
     const screen = new ScreenManager(rl);
 
-    const store: HookStore = {
-      rl,
-      hooks: [],
-      hooksCleanup: [],
-      hooksEffect: [],
-      index: 0,
-      handleChange() {},
-    };
-
     let cancel: () => void = () => {};
     const answer = new CancelablePromise<Value>((resolve, reject) => {
-      api.run(store, () => {
+      hookEngine.run(rl, (store) => {
         const checkCursorPos = () => {
           screen.checkCursorPos();
         };
