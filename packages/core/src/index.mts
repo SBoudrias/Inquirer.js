@@ -2,6 +2,7 @@ export { usePrefix } from './lib/prefix.mjs';
 export * from './lib/key.mjs';
 export * from './lib/Separator.mjs';
 export * from './lib/read-line.type.mjs';
+export * from './lib/config.types.mjs';
 export * from './lib/use-state.mjs';
 export * from './lib/use-effect.mjs';
 export * from './lib/use-ref.mjs';

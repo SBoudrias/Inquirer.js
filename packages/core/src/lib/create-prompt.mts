@@ -6,16 +6,7 @@ import { getPromptConfig } from './options.mjs';
 import type { InquirerReadline } from './read-line.type.mjs';
 import { type HookStore, hookStorage } from './hook-store.mjs';
 import { effectScheduler } from './effect-scheduler.mjs';
-
-export type AsyncPromptConfig = {
-  message: string | Promise<string> | (() => Promise<string>);
-  validate?: (value: string) => boolean | string | Promise<string | boolean>;
-};
-
-export type ResolvedPromptConfig = {
-  message: string;
-  validate: (value: string) => boolean | string | Promise<string | boolean>;
-};
+import type { AsyncPromptConfig, ResolvedPromptConfig } from './config.types.mjs';
 
 export function createPrompt<Value, Config extends AsyncPromptConfig>(
   view: (
