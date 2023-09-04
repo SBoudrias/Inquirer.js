@@ -3,10 +3,14 @@ import { Layout } from './types.mjs';
 
 type Inputs<T> = {
   items: readonly T[];
+  /** The width of a rendered line in characters. */
   width: number;
   render: (layout: Layout<T>) => string;
+  /** The index of the active item in the list of items. */
   active: number;
+  /** The position on the page at which to render the active item. */
   position: number;
+  /** The number of lines to render per page. */
   pageSize: number;
 };
 
