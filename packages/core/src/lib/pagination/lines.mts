@@ -26,13 +26,19 @@ export const lines = <T,>({
 }: Inputs<T>): string[] => {
   const split = splitLines(width);
 
-  const indexed = items.map((item, index) => ({ item, index, active: index === active }));
-  const picked = rotate(active - position)(indexed).slice(0, pageSize);
+  const layouts = items.map<Layout<T>>((item, index) => ({
+    item,
+    index,
+    active: index === active,
+  }));
+  const picked = rotate(active - position)(layouts).slice(0, pageSize);
   const previous = picked.slice(0, position).map(render).flatMap(split);
   const current = split(render({ ...picked[position]! }));
-  const next = position + 1;
-  const rest = picked.slice(next).map(render).flatMap(split);
+  const next = picked
+    .slice(position + 1)
+    .map(render)
+    .flatMap(split);
 
-  const page = previous.concat(current).concat(rest);
+  const page = previous.concat(current).concat(next);
   return rotate(previous.length - position)(page).slice(0, pageSize);
 };
