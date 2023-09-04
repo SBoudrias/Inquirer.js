@@ -17,7 +17,8 @@ type Inputs<T> = {
 /**
  * Renders a page of items as lines that fit within the given width ensuring
  * that the number of lines is not greater than the page size, and the active
- * item renders at the provided position.
+ * item renders at the provided position, while prioritizing that as many lines
+ * of the active item get rendered as possible.
  * @returns The rendered lines
  */
 export const lines = <T,>({
