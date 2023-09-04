@@ -7,10 +7,10 @@ import figures from 'figures';
 import cliCursor from 'cli-cursor';
 import runAsync from 'run-async';
 import { flatMap, map, take, takeUntil } from 'rxjs';
-import Base from './base.js';
 import observe from '../utils/events.js';
 import Paginator from '../utils/paginator.js';
 import incrementListIndex from '../utils/incrementListIndex.js';
+import Base from './base.js';
 
 export default class ListPrompt extends Base {
   constructor(questions, rl, answers) {

@@ -1,9 +1,9 @@
-import * as util from './readline.js';
 import cliWidth from 'cli-width';
 import wrapAnsi from 'wrap-ansi';
 import stripAnsi from 'strip-ansi';
 import stringWidth from 'string-width';
 import ora from 'ora';
+import * as util from './readline.js';
 
 function height(content) {
   return content.split('\n').length;

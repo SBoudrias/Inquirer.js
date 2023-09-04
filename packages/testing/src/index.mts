@@ -1,7 +1,7 @@
+import { Stream } from 'node:stream';
 import MuteStream from 'mute-stream';
 import stripAnsi from 'strip-ansi';
 import ansiEscapes from 'ansi-escapes';
-import { Stream } from 'node:stream';
 import type { Prompt } from '@inquirer/type';
 
 const ignoredAnsi = new Set([ansiEscapes.cursorHide, ansiEscapes.cursorShow]);

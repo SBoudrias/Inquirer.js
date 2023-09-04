@@ -4,8 +4,8 @@
 
 import chalk from 'chalk';
 import { map, takeUntil } from 'rxjs';
-import Base from './base.js';
 import observe from '../utils/events.js';
+import Base from './base.js';
 
 function mask(input, maskChar) {
   input = String(input);

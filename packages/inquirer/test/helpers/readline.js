@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events';
-import { vi } from 'vitest';
 import util from 'node:util';
+import { vi } from 'vitest';
 
 const stub = {};
 

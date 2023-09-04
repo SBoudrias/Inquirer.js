@@ -1,5 +1,4 @@
-import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'vitest';
+import { beforeEach, describe, it, expect } from 'vitest';
 import Paginator from '../../../lib/utils/paginator.js';
 
 const output = `\

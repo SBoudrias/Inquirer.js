@@ -1,5 +1,4 @@
-import { describe, it } from 'vitest';
-import { expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import stripAnsi from 'strip-ansi';
 
 import Separator from '../../../lib/objects/separator.js';

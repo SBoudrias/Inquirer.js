@@ -2,7 +2,7 @@
   "root": true,
   "extends": ["xo", "prettier", "plugin:n/recommended-module"],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "unicorn", "prettier"],
+  "plugins": ["@typescript-eslint", "unicorn", "prettier", "import"],
   "env": {
     "node": true,
     "es2022": true
@@ -31,6 +31,8 @@
         "null": "ignore"
       }
     ],
+    "import/no-duplicates": "error",
+    "import/order": "error",
     "prettier/prettier": "error",
     "unicorn/no-abusive-eslint-disable": "error",
     "unicorn/prefer-module": "error",

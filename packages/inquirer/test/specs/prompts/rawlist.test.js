@@ -1,8 +1,6 @@
-import { beforeEach, describe, it } from 'vitest';
-import { expect } from 'vitest';
+import { beforeEach, describe, it, expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
-
 import Rawlist from '../../../lib/prompts/rawlist.js';
 
 describe('`rawlist` prompt', () => {
