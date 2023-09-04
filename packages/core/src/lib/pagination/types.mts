@@ -4,7 +4,7 @@ import type { Activatable, HasSeveralOrdered, UnaryF } from '../types.mjs';
 export type Layout<T> = {
   item: T;
   index: number;
-  active?: boolean;
+  active: boolean;
 };
 
 export type Options<T> = HasSeveralOrdered<T> & {
