@@ -21,7 +21,7 @@ export const lines = <T,>({
   width,
   render,
   active,
-  position,
+  position: requested,
   pageSize,
 }: Inputs<T>): string[] => {
   const split = splitLines(width);
@@ -31,14 +31,18 @@ export const lines = <T,>({
     index,
     active: index === active,
   }));
-  const picked = rotate(active - position)(layouts).slice(0, pageSize);
-  const previous = picked.slice(0, position).map(render).flatMap(split);
-  const current = split(render({ ...picked[position]! }));
+  const picked = rotate(active - requested)(layouts).slice(0, pageSize);
+  const previous = picked.slice(0, requested).map(render).flatMap(split);
+  const current = split(render({ ...picked[requested]! }));
   const next = picked
-    .slice(position + 1)
+    .slice(requested + 1)
     .map(render)
     .flatMap(split);
 
   const page = previous.concat(current).concat(next);
+  const position =
+    requested + current.length <= pageSize
+      ? requested
+      : Math.max(0, pageSize - current.length);
   return rotate(previous.length - position)(page).slice(0, pageSize);
 };
