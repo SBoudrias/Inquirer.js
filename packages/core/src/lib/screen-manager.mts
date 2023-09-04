@@ -3,7 +3,7 @@ import cliWidth from 'cli-width';
 import stripAnsi from 'strip-ansi';
 import ansiEscapes from 'ansi-escapes';
 import { breakLines } from './utils.mjs';
-import { InquirerReadline } from '../index.mjs';
+import type { InquirerReadline } from './read-line.type.mjs';
 
 const height = (content: string): number => content.split('\n').length;
 const lastLine = (content: string): string => content.split('\n').pop() ?? '';
