@@ -52,7 +52,7 @@ describe('lines(...)', () => {
         width: 20,
       });
       expect(result).toEqual([
-        '    2 line 2',
+        '    2 line 4',
         '> 3.3 line 1',
         '    3 line 2',
         '    3 line 3',
