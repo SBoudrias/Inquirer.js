@@ -1,10 +1,10 @@
 import { rotate, splitLines } from '../utils.mjs';
-import { Paged } from './types.mjs';
+import { Layout } from './types.mjs';
 
 type Inputs<T> = {
   items: readonly T[];
   width: number;
-  render: (paged: Paged<T>) => string;
+  render: (layout: Layout<T>) => string;
   active: number;
   position: number;
   pageSize: number;

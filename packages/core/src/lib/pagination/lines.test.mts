@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { lines } from './lines.mjs';
-import type { Paged } from './types.mjs';
+import type { Layout } from './types.mjs';
 
 describe('lines(...)', () => {
   const items = [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }];
 
   const renderLines =
     (count: number) =>
-    ({ index, item: { value }, active: cursor }: Paged<{ value: number }>): string =>
+    ({ index, item: { value }, active: cursor }: Layout<{ value: number }>): string =>
       new Array(count)
         .fill(0)
         .map((_, i) => {

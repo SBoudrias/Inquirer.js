@@ -1,9 +1,9 @@
-import { Paged, Separator } from '@inquirer/core';
+import { type Layout, Separator } from '@inquirer/core';
 import chalk from 'chalk';
 import figures from 'figures';
 import { Item } from './choice.mjs';
 
-export const render = <Value,>({ item, active }: Paged<Item<Value>>) => {
+export const render = <Value,>({ item, active }: Layout<Item<Value>>) => {
   if (Separator.isSeparator(item)) {
     return ` ${item.separator}`;
   }

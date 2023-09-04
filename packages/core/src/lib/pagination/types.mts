@@ -1,7 +1,7 @@
 import type { Activatable, HasSeveralOrdered, UnaryF } from '../types.mjs';
 
-/** Represents an item that's part of a page */
-export type Paged<T> = {
+/** Represents an item that's part of a layout, about to be rendered */
+export type Layout<T> = {
   item: T;
   index: number;
   active?: boolean;
@@ -9,7 +9,7 @@ export type Paged<T> = {
 
 export type Options<T> = HasSeveralOrdered<T> & {
   /** A function that renders an item as part of a page */
-  render: UnaryF<Paged<T>, string>;
+  render: UnaryF<Layout<T>, string>;
   /** The size of the page. `7` if unspecified. */
   pageSize?: number;
   /** Allows creating an infinitely looping list. `true` if unspecified. */
