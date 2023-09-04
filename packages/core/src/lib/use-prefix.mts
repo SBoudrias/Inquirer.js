@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import spinners from 'cli-spinners';
-import { useState, useEffect } from '../index.mjs';
+import { useState } from './use-state.mjs';
+import { useEffect } from './use-effect.mjs';
 
 const spinner = spinners.dots;
 
