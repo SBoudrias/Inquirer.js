@@ -42,8 +42,7 @@ export const lines = <T,>({
   const page = new Array(pageSize);
 
   // Render the active item to decide the position
-  if (!(requested in layoutsInPage)) throw new Error('Invalid position');
-  const activeLines = split(render(layoutsInPage[requested]));
+  const activeLines = split(render(layoutsInPage[requested]!));
   const position =
     requested + activeLines.length <= pageSize
       ? requested
@@ -58,7 +57,7 @@ export const lines = <T,>({
   let lineNumber = position + activeLines.length;
   let layoutIndex = requested + 1;
   while (lineNumber < pageSize && layoutIndex < layoutsInPage.length) {
-    for (const line of split(render(layoutsInPage[layoutIndex]))) {
+    for (const line of split(render(layoutsInPage[layoutIndex]!))) {
       page[lineNumber++] = line;
       if (lineNumber >= pageSize) break;
     }
@@ -69,7 +68,7 @@ export const lines = <T,>({
   lineNumber = position - 1;
   layoutIndex = requested - 1;
   while (lineNumber >= 0 && layoutIndex >= 0) {
-    for (const line of split(render(layoutsInPage[layoutIndex])).reverse()) {
+    for (const line of split(render(layoutsInPage[layoutIndex]!)).reverse()) {
       page[lineNumber--] = line;
       if (lineNumber < 0) break;
     }
