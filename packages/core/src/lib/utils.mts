@@ -1,20 +1,6 @@
 import wrapAnsi from 'wrap-ansi';
 
 /**
- * Split a string into lines at specific width, in addition to line breaks. This
- * function is ANSI code friendly and it'll ignore invisible codes during width
- * calculation.
- */
-export const splitLines =
-  (width: number) =>
-  (content: string): string[] =>
-    content.split('\n').flatMap((line) =>
-      wrapAnsi(line, width, { trim: false, hard: true })
-        .split('\n')
-        .map((str) => str.trimEnd()),
-    );
-
-/**
  * Force line returns at specific width. This function is ANSI code friendly and it'll
  * ignore invisible codes during width calculation.
  * @param {string} content
@@ -22,7 +8,14 @@ export const splitLines =
  * @return {string}
  */
 export const breakLines = (content: string, width: number): string =>
-  splitLines(width)(content).join('\n');
+  content
+    .split('\n')
+    .flatMap((line) =>
+      wrapAnsi(line, width, { trim: false, hard: true })
+        .split('\n')
+        .map((str) => str.trimEnd()),
+    )
+    .join('\n');
 
 /**
  * Creates a 0-based index out of an integer, wrapping around if necessary.

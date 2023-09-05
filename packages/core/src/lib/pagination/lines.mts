@@ -1,4 +1,4 @@
-import { rotate, splitLines } from '../utils.mjs';
+import { breakLines, rotate } from '../utils.mjs';
 import { Layout } from './types.mjs';
 
 type Inputs<T> = {
@@ -29,7 +29,7 @@ export const lines = <T,>({
   position: requested,
   pageSize,
 }: Inputs<T>): string[] => {
-  const split = splitLines(width);
+  const split = (content: string) => breakLines(content, width).split('\n');
 
   const layouts = items.map<Layout<T>>((item, index) => ({
     item,
