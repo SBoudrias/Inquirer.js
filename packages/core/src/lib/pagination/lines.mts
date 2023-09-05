@@ -36,18 +36,44 @@ export const lines = <T,>({
     index,
     active: index === active,
   }));
-  const picked = rotate(active - requested)(layouts).slice(0, pageSize);
-  const previous = picked.slice(0, requested).map(render).flatMap(split);
-  const current = split(render({ ...picked[requested]! }));
-  const next = picked
-    .slice(requested + 1)
-    .map(render)
-    .flatMap(split);
+  const layoutsInPage = rotate(active - requested)(layouts).slice(0, pageSize);
 
-  const page = previous.concat(current).concat(next);
+  // Create a blank array of lines for the page
+  const page = new Array(pageSize);
+
+  // Render the active item to decide the position
+  const activeLines = split(render(layoutsInPage[requested]));
   const position =
-    requested + current.length <= pageSize
+    requested + activeLines.length <= pageSize
       ? requested
-      : Math.max(0, pageSize - current.length);
-  return rotate(previous.length - position)(page).slice(0, pageSize);
+      : Math.max(0, pageSize - activeLines.length);
+
+  // Render the lines of the active item into the page
+  activeLines
+    .slice(0, pageSize)
+    .forEach((line, index) => (page[position + index] = line));
+
+  // Fill the next lines
+  let lineNumber = position + activeLines.length;
+  let layoutIndex = requested + 1;
+  while (lineNumber < pageSize && layoutIndex < layoutsInPage.length) {
+    for (const line of split(render(layoutsInPage[layoutIndex]))) {
+      page[lineNumber++] = line;
+      if (lineNumber >= pageSize) break;
+    }
+    layoutIndex++;
+  }
+
+  // Fill the previous lines
+  lineNumber = position - 1;
+  layoutIndex = requested - 1;
+  while (lineNumber >= 0 && layoutIndex >= 0) {
+    for (const line of split(render(layoutsInPage[layoutIndex])).reverse()) {
+      page[lineNumber--] = line;
+      if (lineNumber < 0) break;
+    }
+    layoutIndex--;
+  }
+
+  return page.slice(0, pageSize).filter((line) => typeof line === 'string');
 };
