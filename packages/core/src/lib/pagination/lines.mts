@@ -42,6 +42,7 @@ export const lines = <T,>({
   const page = new Array(pageSize);
 
   // Render the active item to decide the position
+  if (!(requested in layoutsInPage)) throw new Error('Invalid position');
   const activeLines = split(render(layoutsInPage[requested]));
   const position =
     requested + activeLines.length <= pageSize
