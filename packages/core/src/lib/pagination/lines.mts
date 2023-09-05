@@ -49,9 +49,9 @@ export const lines = <T,>({
       : Math.max(0, pageSize - activeLines.length);
 
   // Render the lines of the active item into the page
-  activeLines
-    .slice(0, pageSize)
-    .forEach((line, index) => (page[position + index] = line));
+  activeLines.slice(0, pageSize).forEach((line, index) => {
+    page[position + index] = line;
+  });
 
   // Fill the next lines
   let lineNumber = position + activeLines.length;
