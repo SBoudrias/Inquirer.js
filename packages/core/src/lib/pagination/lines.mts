@@ -75,5 +75,5 @@ export const lines = <T,>({
     layoutIndex--;
   }
 
-  return page.slice(0, pageSize).filter((line) => typeof line === 'string');
+  return page.filter((line) => typeof line === 'string');
 };
