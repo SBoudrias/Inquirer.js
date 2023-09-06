@@ -30,19 +30,19 @@ export const lines = <T,>({
   pageSize,
 }: Inputs<T>): string[] => {
   const split = (content: string) => breakLines(content, width).split('\n');
-
   const layouts = items.map<Layout<T>>((item, index) => ({
     item,
     index,
     active: index === active,
   }));
   const layoutsInPage = rotate(active - requested)(layouts).slice(0, pageSize);
+  const getLines = (index: number) => split(render(layoutsInPage[index]!));
 
   // Create a blank array of lines for the page
   const page = new Array(pageSize);
 
   // Render the active item to decide the position
-  const activeLines = split(render(layoutsInPage[requested]!));
+  const activeLines = getLines(requested);
   const position =
     requested + activeLines.length <= pageSize
       ? requested
@@ -57,7 +57,7 @@ export const lines = <T,>({
   let lineNumber = position + activeLines.length;
   let layoutIndex = requested + 1;
   while (lineNumber < pageSize && layoutIndex < layoutsInPage.length) {
-    for (const line of split(render(layoutsInPage[layoutIndex]!))) {
+    for (const line of getLines(layoutIndex)) {
       page[lineNumber++] = line;
       if (lineNumber >= pageSize) break;
     }
@@ -68,7 +68,7 @@ export const lines = <T,>({
   lineNumber = position - 1;
   layoutIndex = requested - 1;
   while (lineNumber >= 0 && layoutIndex >= 0) {
-    for (const line of split(render(layoutsInPage[layoutIndex]!)).reverse()) {
+    for (const line of getLines(layoutIndex).reverse()) {
       page[lineNumber--] = line;
       if (lineNumber < 0) break;
     }
