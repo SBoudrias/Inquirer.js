@@ -42,14 +42,14 @@ export const lines = <T,>({
   const page = new Array(pageSize);
 
   // Render the active item to decide the position
-  const activeLines = getLines(requested);
+  const activeLines = getLines(requested).slice(0, pageSize);
   const position =
     requested + activeLines.length <= pageSize
       ? requested
-      : Math.max(0, pageSize - activeLines.length);
+      : pageSize - activeLines.length;
 
   // Render the lines of the active item into the page
-  activeLines.slice(0, pageSize).forEach((line, index) => {
+  activeLines.forEach((line, index) => {
     page[position + index] = line;
   });
 
