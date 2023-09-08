@@ -67,7 +67,7 @@
     "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
     "turbo": "^1.10.13",
-    "typescript": "^5.1.6",
+    "typescript": "^5.2.2",
     "vitest": "^0.34.3"
   },
   "workspaces": [
