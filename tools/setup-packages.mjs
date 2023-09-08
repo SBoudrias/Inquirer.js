@@ -90,6 +90,7 @@ paths.forEach(async (pkgPath) => {
       compilerOptions: {
         lib: ['ESNext'],
         target: 'es2022',
+        module: 'NodeNext',
         moduleResolution: 'nodenext',
         outDir: 'dist/esm',
         declarationDir: 'dist/esm/types',
@@ -103,7 +104,8 @@ paths.forEach(async (pkgPath) => {
       compilerOptions: {
         lib: ['ES6'],
         target: 'es6',
-        moduleResolution: 'node',
+        module: 'commonjs',
+        moduleResolution: 'node10',
         outDir: 'dist/cjs',
         declarationDir: 'dist/cjs/types',
       },
