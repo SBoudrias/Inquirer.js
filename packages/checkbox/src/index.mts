@@ -94,20 +94,20 @@ export default createPrompt(
     useKeypress((key) => {
       if (!loop && active === 0 && isUpKey(key)) return;
       if (!loop && active === items.length - 1 && isDownKey(key)) return;
-      if (isUpKey(key) || isDownKey(key)) {
-        const offset = isUpKey(key) ? -1 : 1;
-        let next = active;
-        do {
-          next = index(items.length, next + offset);
-        } while (!selectable(items[next]!));
-        setActive(next);
-      } else if (isEnterKey(key)) {
+      if (isEnterKey(key)) {
         setStatus('done');
         done(
           items
             .filter((choice) => selectable(choice) && choice.checked)
             .map((choice) => (choice as Choice<Value>).value),
         );
+      } else if (isUpKey(key) || isDownKey(key)) {
+        const offset = isUpKey(key) ? -1 : 1;
+        let next = active;
+        do {
+          next = index(items.length, next + offset);
+        } while (!selectable(items[next]!));
+        setActive(next);
       } else if (isSpaceKey(key)) {
         setShowHelpTip(false);
         setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
