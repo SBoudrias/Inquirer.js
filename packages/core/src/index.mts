@@ -9,3 +9,4 @@ export * from './lib/pagination/index.mjs';
 export { createPrompt, type AsyncPromptConfig } from './lib/create-prompt.mjs';
 export { Separator } from './lib/Separator.mjs';
 export { type InquirerReadline } from './lib/read-line.type.mjs';
+export { index } from './lib/utils.mjs';

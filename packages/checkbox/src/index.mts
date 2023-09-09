@@ -4,14 +4,15 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
-  useScroll,
   useSpeedDial,
   isSpaceKey,
   isNumberKey,
   isEnterKey,
   type Layout,
   Separator,
-  useRef,
+  isUpKey,
+  isDownKey,
+  index,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -71,7 +72,7 @@ export default createPrompt(
     config: Config<Value>,
     done: (value: Array<Value>) => void,
   ): string => {
-    const { prefix = usePrefix(), instructions, pageSize, loop, choices } = config;
+    const { prefix = usePrefix(), instructions, pageSize, loop = true, choices } = config;
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
       choices.map((choice) => ({ ...choice })),
@@ -91,9 +92,19 @@ export default createPrompt(
       loop,
     });
     useSpeedDial({ items, selectable, setActive });
-    useScroll({ items, selectable, active, setActive, loop });
 
     useKeypress((key) => {
+      if (!loop && active === 0 && isUpKey(key)) return;
+      if (!loop && active === items.length - 1 && isDownKey(key)) return;
+      if (isUpKey(key) || isDownKey(key)) {
+        const offset = isUpKey(key) ? -1 : 1;
+        let next = active;
+        do {
+          next = index(items.length, next + offset);
+        } while (!selectable(items[next]!));
+        setActive(next);
+        return;
+      }
       if (isEnterKey(key)) {
         setStatus('done');
         done(

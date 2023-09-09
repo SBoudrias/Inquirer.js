@@ -4,13 +4,15 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
-  useScroll,
   useSpeedDial,
   useRef,
   isEnterKey,
   type Layout,
   Separator,
   AsyncPromptConfig,
+  isUpKey,
+  isDownKey,
+  index,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -58,7 +60,7 @@ export default createPrompt(
     config: SelectConfig<Value>,
     done: (value: Value) => void,
   ): string => {
-    const { choices: items, loop, pageSize } = config;
+    const { choices: items, loop = true, pageSize } = config;
     const firstRender = useRef(true);
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
@@ -75,11 +77,22 @@ export default createPrompt(
       loop,
     });
     useSpeedDial({ items, selectable, setActive });
-    useScroll({ items, selectable, active, setActive, loop });
 
+    // Safe to assume the cursor position always point to a Choice.
     const selectedChoice = items[active] as Choice<Value>;
 
     useKeypress((key) => {
+      if (!loop && active === 0 && isUpKey(key)) return;
+      if (!loop && active === items.length - 1 && isDownKey(key)) return;
+      if (isUpKey(key) || isDownKey(key)) {
+        const offset = isUpKey(key) ? -1 : 1;
+        let next = active;
+        do {
+          next = index(items.length, next + offset);
+        } while (!selectable(items[next]!));
+        setActive(next);
+        return;
+      }
       if (isEnterKey(key)) {
         setStatus('done');
         done(selectedChoice.value);
