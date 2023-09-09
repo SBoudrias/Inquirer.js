@@ -6,18 +6,18 @@ import {
   usePagination,
   useRef,
   isEnterKey,
-  type Layout,
-  Separator,
-  AsyncPromptConfig,
   isUpKey,
   isDownKey,
-  index,
   isNumberKey,
+  Separator,
+  AsyncPromptConfig,
+  type Layout,
+  index,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
-import ansiEscapes from 'ansi-escapes';
 import figures from 'figures';
+import ansiEscapes from 'ansi-escapes';
 
 export type Choice<Value> = {
   value: Value;

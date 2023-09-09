@@ -4,13 +4,13 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
+  isUpKey,
+  isDownKey,
   isSpaceKey,
   isNumberKey,
   isEnterKey,
-  type Layout,
   Separator,
-  isUpKey,
-  isDownKey,
+  type Layout,
   index,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
