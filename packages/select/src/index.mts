@@ -69,13 +69,6 @@ export default createPrompt(
       if (selected < 0) throw new Error('[select prompt] No selectable choices.');
       return selected;
     });
-    const contents = usePagination<Item<Value>>({
-      items,
-      active,
-      render,
-      pageSize,
-      loop,
-    });
 
     // Safe to assume the cursor position always point to a Choice.
     const selectedChoice = items[active] as Choice<Value>;
@@ -107,6 +100,14 @@ export default createPrompt(
       message += chalk.dim(' (Use arrow keys)');
     }
 
+    const page = usePagination<Item<Value>>({
+      items,
+      active,
+      render,
+      pageSize,
+      loop,
+    });
+
     if (status === 'done') {
       return `${prefix} ${message} ${chalk.cyan(
         selectedChoice.name || selectedChoice.value,
@@ -117,7 +118,7 @@ export default createPrompt(
       ? `\n${selectedChoice.description}`
       : ``;
 
-    return `${prefix} ${message}\n${contents}${choiceDescription}${ansiEscapes.cursorHide}`;
+    return `${prefix} ${message}\n${page}${choiceDescription}${ansiEscapes.cursorHide}`;
   },
 );
 

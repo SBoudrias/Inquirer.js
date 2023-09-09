@@ -83,13 +83,6 @@ export default createPrompt(
     });
     const [showHelpTip, setShowHelpTip] = useState(true);
     const message = chalk.bold(config.message);
-    const contents = usePagination<Item<Value>>({
-      items,
-      active,
-      render,
-      pageSize,
-      loop,
-    });
 
     useKeypress((key) => {
       if (isEnterKey(key)) {
@@ -128,6 +121,14 @@ export default createPrompt(
       }
     });
 
+    const page = usePagination<Item<Value>>({
+      items,
+      active,
+      render,
+      pageSize,
+      loop,
+    });
+
     if (status === 'done') {
       const selection = items
         .filter((choice) => selectable(choice) && choice.checked)
@@ -152,7 +153,7 @@ export default createPrompt(
       }
     }
 
-    return `${prefix} ${message}${helpTip}\n${contents}${ansiEscapes.cursorHide}`;
+    return `${prefix} ${message}${helpTip}\n${page}${ansiEscapes.cursorHide}`;
   },
 );
 
