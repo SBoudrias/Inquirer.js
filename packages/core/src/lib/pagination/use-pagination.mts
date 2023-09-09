@@ -5,13 +5,7 @@ import { useRef } from '../use-ref.mjs';
 import { useState } from '../use-state.mjs';
 import { lines } from './lines.mjs';
 import { finite, infinite } from './position.mjs';
-
-/** Represents an item that's part of a layout, about to be rendered */
-export type Layout<T> = {
-  item: T;
-  index: number;
-  active: boolean;
-};
+import { type Layout } from './layout.type.mjs';
 
 export type Options<T> = {
   items: readonly T[];

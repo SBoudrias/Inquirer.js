@@ -1,5 +1,5 @@
 import { breakLines, rotate } from '../utils.mjs';
-import { Layout } from './types.mjs';
+import { type Layout } from './layout.type.mjs';
 
 type Inputs<T> = {
   items: readonly T[];

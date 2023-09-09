@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { lines } from './lines.mjs';
-import type { Layout } from './types.mjs';
+import { type Layout } from './layout.type.mjs';
 
 describe('lines(...)', () => {
   const items = [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }];
