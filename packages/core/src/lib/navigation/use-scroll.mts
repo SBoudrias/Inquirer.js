@@ -1,14 +1,17 @@
 import { isUpKey, isDownKey } from '../key.mjs';
-import { Activatable } from '../types.mjs';
 import { useKeypress } from '../use-keypress.mjs';
 import { index } from '../utils.mjs';
-import { Selectable } from './types.mjs';
 
-type ScrollOptions<T> = Selectable<T> &
-  Activatable<number> & {
-    /** Allows wrapping on either sides of the list on navigation. True by default. */
-    loop?: boolean;
-  };
+type ScrollOptions<T> = {
+  items: readonly T[];
+  active: number;
+  /** Sets the index of the active item. */
+  setActive: (active: number) => void;
+  /** Returns whether an item can be selected. */
+  selectable: (item: T) => boolean;
+  /** Allows wrapping on either sides of the list on navigation. True by default. */
+  loop?: boolean;
+};
 
 /**
  * Allows scrolling through a list of items with an active cursor

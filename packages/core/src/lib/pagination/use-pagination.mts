@@ -4,8 +4,31 @@ import { readline } from '../hook-engine.mjs';
 import { useRef } from '../use-ref.mjs';
 import { useState } from '../use-state.mjs';
 import { lines } from './lines.mjs';
-import { Options, Page } from './types.mjs';
 import { finite, infinite } from './position.mjs';
+
+/** Represents an item that's part of a layout, about to be rendered */
+export type Layout<T> = {
+  item: T;
+  index: number;
+  active: boolean;
+};
+
+export type Options<T> = {
+  items: readonly T[];
+  /** Renders an item as part of a page. */
+  render: (layout: Layout<T>) => string;
+  /** The size of the page. `7` if unspecified. */
+  pageSize?: number;
+  /** Allows creating an infinitely looping list. `true` if unspecified. */
+  loop?: boolean;
+};
+
+export type Page = {
+  contents: string;
+  active: number;
+  /** Sets the index of the active item. */
+  setActive: (active: number) => void;
+};
 
 export const usePagination = <T,>({
   items,

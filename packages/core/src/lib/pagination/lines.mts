@@ -5,6 +5,7 @@ type Inputs<T> = {
   items: readonly T[];
   /** The width of a rendered line in characters. */
   width: number;
+  /** Renders an item as part of a page. */
   render: (layout: Layout<T>) => string;
   /** The index of the active item in the list of items. */
   active: number;
