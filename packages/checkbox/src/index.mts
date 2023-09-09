@@ -18,7 +18,7 @@ import chalk from 'chalk';
 import ansiEscapes from 'ansi-escapes';
 import figures from 'figures';
 
-type Choice<Value> = {
+export type Choice<Value> = {
   name?: string;
   value: Value;
   disabled?: boolean | string;
