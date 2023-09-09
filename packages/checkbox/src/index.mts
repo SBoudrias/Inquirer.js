@@ -15,8 +15,8 @@ import {
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
-import ansiEscapes from 'ansi-escapes';
 import figures from 'figures';
+import ansiEscapes from 'ansi-escapes';
 
 export type Choice<Value> = {
   name?: string;
