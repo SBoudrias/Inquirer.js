@@ -1,20 +1,24 @@
 import * as readline from 'node:readline';
-import { CancelablePromise, type Prompt } from '@inquirer/type';
+import { CancelablePromise, type Prompt, type Prettify } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import { onExit as onSignalExit } from 'signal-exit';
 import ScreenManager from './screen-manager.mjs';
 import type { InquirerReadline } from './read-line.type.mjs';
 import { withHooks, effectScheduler } from './hook-engine.mjs';
 
+// @deprecated Prefer using `PromptConfig<{ ... }>` instead
 export type AsyncPromptConfig = {
   message: string | Promise<string> | (() => Promise<string>);
-  validate?: (value: string) => boolean | string | Promise<string | boolean>;
 };
 
-type ResolvedPromptConfig = {
-  message: string;
-  validate: (value: string) => boolean | string | Promise<string | boolean>;
-};
+export type PromptConfig<Config> = Prettify<AsyncPromptConfig & Config>;
+
+type ResolvedPromptConfig = { message: string };
+
+type ViewFunction<Value, Config> = (
+  config: Prettify<Config & ResolvedPromptConfig>,
+  done: (value: Value) => void,
+) => string | [string, string | undefined];
 
 // Take an AsyncPromptConfig and resolves all it's values.
 async function getPromptConfig<Config extends AsyncPromptConfig>(
@@ -24,17 +28,13 @@ async function getPromptConfig<Config extends AsyncPromptConfig>(
     typeof config.message === 'function' ? config.message() : config.message;
 
   return {
-    validate: () => true,
     ...config,
     message: await message,
   };
 }
 
 export function createPrompt<Value, Config extends AsyncPromptConfig>(
-  view: (
-    config: Config & ResolvedPromptConfig,
-    done: (value: Value) => void,
-  ) => string | [string, string | undefined],
+  view: ViewFunction<Value, Config>,
 ) {
   const prompt: Prompt<Value, Config> = (config, context) => {
     // Default `input` to stdin

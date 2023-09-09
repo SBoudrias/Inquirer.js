@@ -5,6 +5,10 @@ export { useEffect } from './lib/use-effect.mjs';
 export { useRef } from './lib/use-ref.mjs';
 export { useKeypress } from './lib/use-keypress.mjs';
 export { usePagination } from './lib/use-pagination.mjs';
-export { createPrompt, type AsyncPromptConfig } from './lib/create-prompt.mjs';
+export {
+  createPrompt,
+  type PromptConfig,
+  type AsyncPromptConfig,
+} from './lib/create-prompt.mjs';
 export { Separator } from './lib/Separator.mjs';
 export { type InquirerReadline } from './lib/read-line.type.mjs';

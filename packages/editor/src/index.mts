@@ -7,19 +7,20 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
-  type AsyncPromptConfig,
+  type PromptConfig,
   type InquirerReadline,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 
-type EditorConfig = AsyncPromptConfig & {
+type EditorConfig = PromptConfig<{
   default?: string;
   postfix?: string;
   waitForUseInput?: boolean;
-};
+  validate?: (value: string) => boolean | string | Promise<string | boolean>;
+}>;
 
 export default createPrompt<string, EditorConfig>((config, done) => {
-  const { waitForUseInput = true } = config;
+  const { waitForUseInput = true, validate = () => true } = config;
   const [status, setStatus] = useState<string>('pending');
   const [value, setValue] = useState<string>(config.default || '');
   const [errorMsg, setError] = useState<string | undefined>(undefined);
@@ -34,7 +35,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
           setError(error.toString());
         } else {
           setStatus('loading');
-          const isValid = await config.validate(answer);
+          const isValid = await validate(answer);
           if (isValid === true) {
             setError(undefined);
             setStatus('done');

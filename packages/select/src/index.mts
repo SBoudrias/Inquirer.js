@@ -10,7 +10,7 @@ import {
   isDownKey,
   isNumberKey,
   Separator,
-  AsyncPromptConfig,
+  type PromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -25,10 +25,10 @@ type Choice<Value> = {
   type?: never;
 };
 
-type SelectConfig<Value> = AsyncPromptConfig & {
+type SelectConfig<Value> = PromptConfig<{
   choices: ReadonlyArray<Choice<Value> | Separator>;
   pageSize?: number;
-};
+}>;
 
 function isSelectableChoice<T>(
   choice: undefined | Separator | Choice<T>,
@@ -89,7 +89,7 @@ export default createPrompt(
       }
     });
 
-    let message: string = chalk.bold(config.message);
+    let message = chalk.bold(config.message);
     if (firstRender.current) {
       message += chalk.dim(' (Use arrow keys)');
       firstRender.current = false;

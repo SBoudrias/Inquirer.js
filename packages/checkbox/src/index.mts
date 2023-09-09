@@ -10,6 +10,7 @@ import {
   isNumberKey,
   isEnterKey,
   Separator,
+  type PromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -24,13 +25,12 @@ export type Choice<Value> = {
   type?: never;
 };
 
-type Config<Value> = {
+type Config<Value> = PromptConfig<{
   prefix?: string;
   pageSize?: number;
   instructions?: string | boolean;
-  message: string;
   choices: ReadonlyArray<Choice<Value> | Separator>;
-};
+}>;
 
 function isSelectableChoice<T>(
   choice: undefined | Separator | Choice<T>,
@@ -39,10 +39,7 @@ function isSelectableChoice<T>(
 }
 
 export default createPrompt(
-  <Value extends unknown>(
-    config: Config<Value>,
-    done: (value: Array<Value>) => void,
-  ): string => {
+  <Value extends unknown>(config: Config<Value>, done: (value: Array<Value>) => void) => {
     const { prefix = usePrefix(), instructions } = config;
 
     const [status, setStatus] = useState('pending');

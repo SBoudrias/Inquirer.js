@@ -5,17 +5,19 @@ import {
   usePrefix,
   isEnterKey,
   isBackspaceKey,
-  AsyncPromptConfig,
+  type PromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
 
-type InputConfig = AsyncPromptConfig & {
+type InputConfig = PromptConfig<{
   default?: string;
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
-};
+  validate?: (value: string) => boolean | string | Promise<string | boolean>;
+}>;
 
 export default createPrompt<string, InputConfig>((config, done) => {
+  const { validate = () => true } = config;
   const [status, setStatus] = useState<string>('pending');
   const [defaultValue = '', setDefaultValue] = useState<string | undefined>(
     config.default,
@@ -35,7 +37,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
     if (isEnterKey(key)) {
       const answer = value || defaultValue;
       setStatus('loading');
-      const isValid = await config.validate(answer);
+      const isValid = await validate(answer);
       if (isValid === true) {
         setValue(answer);
         setStatus('done');
