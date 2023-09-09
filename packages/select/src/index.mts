@@ -81,12 +81,12 @@ export default createPrompt(
     const selectedChoice = items[active] as Choice<Value>;
 
     useKeypress((key) => {
-      if (!loop && active === 0 && isUpKey(key)) return;
-      if (!loop && active === items.length - 1 && isDownKey(key)) return;
       if (isEnterKey(key)) {
         setStatus('done');
         done(selectedChoice.value);
       } else if (isUpKey(key) || isDownKey(key)) {
+        if (!loop && active === 0 && isUpKey(key)) return;
+        if (!loop && active === items.length - 1 && isDownKey(key)) return;
         const offset = isUpKey(key) ? -1 : 1;
         let next = active;
         do {
