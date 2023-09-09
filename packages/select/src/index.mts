@@ -83,7 +83,10 @@ export default createPrompt(
     useKeypress((key) => {
       if (!loop && active === 0 && isUpKey(key)) return;
       if (!loop && active === items.length - 1 && isDownKey(key)) return;
-      if (isUpKey(key) || isDownKey(key)) {
+      if (isEnterKey(key)) {
+        setStatus('done');
+        done(selectedChoice.value);
+      } else if (isUpKey(key) || isDownKey(key)) {
         const offset = isUpKey(key) ? -1 : 1;
         let next = active;
         do {
@@ -95,9 +98,6 @@ export default createPrompt(
         const item = items[position];
         if (item == null || !selectable(item)) return;
         setActive(position);
-      } else if (isEnterKey(key)) {
-        setStatus('done');
-        done(selectedChoice.value);
       }
     });
 
