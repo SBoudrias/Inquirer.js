@@ -35,7 +35,7 @@ export const lines = <T,>({
     index,
     active: index === active,
   }));
-  const layoutsInPage = rotate(active - requested)(layouts).slice(0, pageSize);
+  const layoutsInPage = rotate(active - requested, layouts).slice(0, pageSize);
   const getLines = (index: number) => split(render(layoutsInPage[index]!));
 
   // Create a blank array of lines for the page

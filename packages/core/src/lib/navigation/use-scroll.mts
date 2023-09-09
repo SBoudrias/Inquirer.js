@@ -27,7 +27,7 @@ export const useScroll = <T,>({
       const offset = isUpKey(key) ? -1 : 1;
       let next = active;
       do {
-        next = index(items.length)(next + offset);
+        next = index(items.length, next + offset);
       } while (!selectable(items[next]!));
       setActive(next);
     }
