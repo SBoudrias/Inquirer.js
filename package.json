@@ -48,12 +48,12 @@
   ],
   "devDependencies": {
     "@sindresorhus/tsconfig": "^4.0.0",
-    "@types/node": "^20.5.9",
+    "@types/node": "^20.6.0",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
-    "@vitest/coverage-v8": "^0.34.3",
-    "@vitest/ui": "^0.34.3",
-    "eslint": "^8.48.0",
+    "@vitest/coverage-v8": "^0.34.4",
+    "@vitest/ui": "^0.34.4",
+    "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-xo": "^0.43.1",
     "eslint-plugin-import": "^2.28.1",
@@ -68,7 +68,7 @@
     "ts-node": "^10.9.1",
     "turbo": "^1.10.13",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.3"
+    "vitest": "^0.34.4"
   },
   "workspaces": [
     "packages/*",
