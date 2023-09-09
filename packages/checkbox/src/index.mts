@@ -4,7 +4,6 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
-  useSpeedDial,
   isSpaceKey,
   isNumberKey,
   isEnterKey,
@@ -91,7 +90,6 @@ export default createPrompt(
       pageSize,
       loop,
     });
-    useSpeedDial({ items, selectable, setActive });
 
     useKeypress((key) => {
       if (!loop && active === 0 && isUpKey(key)) return;
@@ -103,9 +101,7 @@ export default createPrompt(
           next = index(items.length, next + offset);
         } while (!selectable(items[next]!));
         setActive(next);
-        return;
-      }
-      if (isEnterKey(key)) {
+      } else if (isEnterKey(key)) {
         setStatus('done');
         done(
           items
@@ -125,7 +121,9 @@ export default createPrompt(
       } else if (isNumberKey(key)) {
         // Adjust index to start at 1
         const position = Number(key.name) - 1;
-        // Toggle when speed dialled
+        const item = items[position];
+        if (item == null || !selectable(item)) return;
+        setActive(position);
         setItems(items.map((choice, i) => (i === position ? toggle(choice) : choice)));
       }
     });

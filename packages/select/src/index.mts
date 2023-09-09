@@ -4,7 +4,6 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
-  useSpeedDial,
   useRef,
   isEnterKey,
   type Layout,
@@ -13,6 +12,7 @@ import {
   isUpKey,
   isDownKey,
   index,
+  isNumberKey,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -76,7 +76,6 @@ export default createPrompt(
       pageSize,
       loop,
     });
-    useSpeedDial({ items, selectable, setActive });
 
     // Safe to assume the cursor position always point to a Choice.
     const selectedChoice = items[active] as Choice<Value>;
@@ -91,9 +90,12 @@ export default createPrompt(
           next = index(items.length, next + offset);
         } while (!selectable(items[next]!));
         setActive(next);
-        return;
-      }
-      if (isEnterKey(key)) {
+      } else if (isNumberKey(key)) {
+        const position = Number(key.name) - 1;
+        const item = items[position];
+        if (item == null || !selectable(item)) return;
+        setActive(position);
+      } else if (isEnterKey(key)) {
         setStatus('done');
         done(selectedChoice.value);
       }

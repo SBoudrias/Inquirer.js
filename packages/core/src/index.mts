@@ -4,7 +4,6 @@ export { useState } from './lib/use-state.mjs';
 export { useEffect } from './lib/use-effect.mjs';
 export { useRef } from './lib/use-ref.mjs';
 export { useKeypress } from './lib/use-keypress.mjs';
-export * from './lib/navigation/index.mjs';
 export * from './lib/pagination/index.mjs';
 export { createPrompt, type AsyncPromptConfig } from './lib/create-prompt.mjs';
 export { Separator } from './lib/Separator.mjs';
