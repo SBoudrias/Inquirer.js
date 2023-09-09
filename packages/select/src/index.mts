@@ -8,14 +8,44 @@ import {
   useSpeedDial,
   useRef,
   isEnterKey,
+  type Layout,
   Separator,
   AsyncPromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
 import ansiEscapes from 'ansi-escapes';
-import { render } from './render.mjs';
-import { Choice, Item, selectable } from './choice.mjs';
+import figures from 'figures';
+
+type Choice<Value> = {
+  value: Value;
+  name?: string;
+  description?: string;
+  disabled?: boolean | string;
+  type?: never;
+};
+
+type Item<Value> = Separator | Choice<Value>;
+
+const selectable = <Value,>(item: Item<Value>): item is Choice<Value> =>
+  !Separator.isSeparator(item) && !item.disabled;
+
+const render = <Value,>({ item, active }: Layout<Item<Value>>) => {
+  if (Separator.isSeparator(item)) {
+    return ` ${item.separator}`;
+  }
+
+  const line = item.name || item.value;
+  if (item.disabled) {
+    const disabledLabel =
+      typeof item.disabled === 'string' ? item.disabled : '(disabled)';
+    return chalk.dim(`- ${line} ${disabledLabel}`);
+  }
+
+  const color = active ? chalk.cyan : (x: string) => x;
+  const prefix = active ? figures.pointer : ` `;
+  return color(`${prefix} ${line}`);
+};
 
 type SelectConfig<Value> = AsyncPromptConfig & {
   choices: ReadonlyArray<Choice<Value> | Separator>;

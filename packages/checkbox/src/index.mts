@@ -9,14 +9,53 @@ import {
   isSpaceKey,
   isNumberKey,
   isEnterKey,
+  type Layout,
   Separator,
   useRef,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
 import ansiEscapes from 'ansi-escapes';
-import { render } from './render.mjs';
-import { selectable, Item, Choice, toggle, check } from './choice.mjs';
+import figures from 'figures';
+
+type Choice<Value> = {
+  name?: string;
+  value: Value;
+  disabled?: boolean | string;
+  checked?: boolean;
+  type?: never;
+};
+
+type Item<Value> = Separator | Choice<Value>;
+
+const selectable = <Value,>(item: Item<Value>): item is Choice<Value> =>
+  !Separator.isSeparator(item) && !item.disabled;
+
+const check =
+  (checked: boolean) =>
+  <Value,>(item: Item<Value>): Item<Value> =>
+    selectable(item) ? { ...item, checked } : item;
+
+const toggle = <Value,>(item: Item<Value>): Item<Value> =>
+  selectable(item) ? { ...item, checked: !item.checked } : item;
+
+const render = <Value,>({ item, active }: Layout<Item<Value>>) => {
+  if (Separator.isSeparator(item)) {
+    return ` ${item.separator}`;
+  }
+
+  const line = item.name || item.value;
+  if (item.disabled) {
+    const disabledLabel =
+      typeof item.disabled === 'string' ? item.disabled : '(disabled)';
+    return chalk.dim(`- ${line} ${disabledLabel}`);
+  }
+
+  const checkbox = item.checked ? chalk.green(figures.circleFilled) : figures.circle;
+  const color = active ? chalk.cyan : (x: string) => x;
+  const prefix = active ? figures.pointer : ' ';
+  return color(`${prefix}${checkbox} ${line}`);
+};
 
 type Config<Value> = {
   prefix?: string;
