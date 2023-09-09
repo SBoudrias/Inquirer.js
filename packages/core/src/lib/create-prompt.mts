@@ -53,11 +53,11 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     let cancel: () => void = () => {};
     const answer = new CancelablePromise<Value>((resolve, reject) => {
       withHooks(rl, (store) => {
-        const checkCursorPos = () => {
+        function checkCursorPos() {
           screen.checkCursorPos();
-        };
+        }
 
-        const onExit = () => {
+        function onExit() {
           try {
             store.hooksCleanup.forEach((cleanFn) => {
               cleanFn?.();
@@ -75,27 +75,26 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
 
           process.removeListener('SIGINT', onForceExit);
           store.rl.input.removeListener('keypress', checkCursorPos);
-        };
+        }
 
         cancel = () => {
           onExit();
-
           reject(new Error('Prompt was canceled'));
         };
 
         let shouldHandleExit = true;
-        const onForceExit = () => {
+        function onForceExit() {
           if (shouldHandleExit) {
             shouldHandleExit = false;
             onExit();
             reject(new Error('User force closed the prompt with CTRL+C'));
           }
-        };
+        }
 
         // Handle cleanup on force exit. Main reason is so we restore the cursor if a prompt hide it.
         process.on('SIGINT', onForceExit);
 
-        const done = (value: Value) => {
+        function done(value: Value) {
           // Delay execution to let time to the hookCleanup functions to registers.
           setImmediate(() => {
             onExit();
@@ -103,9 +102,9 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
             // Finally we resolve our promise
             resolve(value);
           });
-        };
+        }
 
-        const workLoop = (resolvedConfig: Config & ResolvedPromptConfig) => {
+        function workLoop(resolvedConfig: Config & ResolvedPromptConfig) {
           store.index = 0;
           store.handleChange = () => workLoop(resolvedConfig);
 
@@ -121,7 +120,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
             onExit();
             reject(err);
           }
-        };
+        }
 
         // TODO: we should display a loader while we get the default options.
         getPromptConfig(config).then((resolvedConfig) => {
