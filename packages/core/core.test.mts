@@ -306,17 +306,26 @@ describe('createPrompt()', () => {
         }
       });
 
-      return config.message;
+      return `${config.message} ${ansiEscapes.cursorHide}`;
     };
 
     const prompt = createPrompt(Prompt);
-    const { answer, events } = await render(prompt, { message: 'Question' });
+    const { answer, events, getFullOutput } = await render(prompt, {
+      message: 'Question',
+    });
 
     answer.cancel();
     events.keypress('enter');
 
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
       '"Prompt was canceled"',
+    );
+
+    const output = getFullOutput();
+    expect(output).toContain(ansiEscapes.cursorHide);
+    expect(output).toContain(ansiEscapes.cursorShow);
+    expect(output.lastIndexOf(ansiEscapes.cursorHide)).toBeLessThan(
+      output.lastIndexOf(ansiEscapes.cursorShow),
     );
   });
 
@@ -446,24 +455,6 @@ describe('Error handling', () => {
       useKeypress(() => {});
     }).toThrowErrorMatchingInlineSnapshot(
       '"[Inquirer] Hook functions can only be called from within a prompt"',
-    );
-  });
-
-  it('cleanup prompt on exit', async () => {
-    const Prompt = () => `Question ${ansiEscapes.cursorHide}`;
-
-    const prompt = createPrompt(Prompt);
-    const { answer, getFullOutput } = await render(prompt, { message: 'Question' });
-
-    process.emit('SIGINT');
-
-    await expect(answer).rejects.toMatchInlineSnapshot(
-      '[Error: User force closed the prompt with CTRL+C]',
-    );
-
-    const output = getFullOutput();
-    expect(output.lastIndexOf(ansiEscapes.cursorHide)).toBeLessThan(
-      output.lastIndexOf(ansiEscapes.cursorShow),
     );
   });
 });

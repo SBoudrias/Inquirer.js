@@ -1,6 +1,7 @@
 import * as readline from 'node:readline';
 import { CancelablePromise, type Prompt } from '@inquirer/type';
 import MuteStream from 'mute-stream';
+import { onExit as onSignalExit } from 'signal-exit';
 import ScreenManager from './screen-manager.mjs';
 import type { InquirerReadline } from './read-line.type.mjs';
 import { withHooks, effectScheduler } from './hook-engine.mjs';
@@ -57,6 +58,11 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
           screen.checkCursorPos();
         }
 
+        const removeExitListener = onSignalExit((code, signal) => {
+          onExit();
+          reject(new Error(`User force closed the prompt with ${code} ${signal}`));
+        });
+
         function onExit() {
           try {
             store.hooksCleanup.forEach((cleanFn) => {
@@ -73,7 +79,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
           }
           screen.done();
 
-          process.removeListener('SIGINT', onForceExit);
+          removeExitListener();
           store.rl.input.removeListener('keypress', checkCursorPos);
         }
 
@@ -81,18 +87,6 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
           onExit();
           reject(new Error('Prompt was canceled'));
         };
-
-        let shouldHandleExit = true;
-        function onForceExit() {
-          if (shouldHandleExit) {
-            shouldHandleExit = false;
-            onExit();
-            reject(new Error('User force closed the prompt with CTRL+C'));
-          }
-        }
-
-        // Handle cleanup on force exit. Main reason is so we restore the cursor if a prompt hide it.
-        process.on('SIGINT', onForceExit);
 
         function done(value: Value) {
           // Delay execution to let time to the hookCleanup functions to registers.
