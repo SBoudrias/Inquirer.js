@@ -60,11 +60,16 @@ export default createPrompt(
   ): string => {
     const { choices: items, loop, pageSize } = config;
     const firstRender = useRef(true);
-
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
-    const { contents, active, setActive } = usePagination<Item<Value>>({
+    const [active, setActive] = useState<number>(() => {
+      const selected = items.findIndex(selectable);
+      if (selected < 0) throw new Error('[select prompt] No selectable choices.');
+      return selected;
+    });
+    const contents = usePagination<Item<Value>>({
       items,
+      active,
       render,
       pageSize,
       loop,
@@ -85,9 +90,6 @@ export default createPrompt(
     if (firstRender.current) {
       firstRender.current = false;
       message += chalk.dim(' (Use arrow keys)');
-      const selected = items.findIndex(selectable);
-      if (selected < 0) throw new Error('[select prompt] No selectable choices.');
-      setActive(selected);
     }
 
     if (status === 'done') {

@@ -72,25 +72,24 @@ export default createPrompt(
     done: (value: Array<Value>) => void,
   ): string => {
     const { prefix = usePrefix(), instructions, pageSize, loop, choices } = config;
-    const firstRender = useRef(true);
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
       choices.map((choice) => ({ ...choice })),
     );
+    const [active, setActive] = useState<number>(() => {
+      const selected = items.findIndex(selectable);
+      if (selected < 0) throw new Error(`[checkbox prompt] Nothing selectable`);
+      return selected;
+    });
     const [showHelpTip, setShowHelpTip] = useState(true);
     const message = chalk.bold(config.message);
-    const { contents, active, setActive } = usePagination<Item<Value>>({
+    const contents = usePagination<Item<Value>>({
       items,
+      active,
       render,
       pageSize,
       loop,
     });
-    if (firstRender.current) {
-      firstRender.current = false;
-      const selected = items.findIndex(selectable);
-      if (selected < 0) throw new Error(`[checkbox prompt] Nothing selectable`);
-      setActive(selected);
-    }
     useSpeedDial({ items, selectable, setActive });
     useScroll({ items, selectable, active, setActive, loop });
 
