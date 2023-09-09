@@ -21,25 +21,23 @@ type PositionReducer = (info: PageInfo, pointer: number) => number;
  */
 export const finite: PositionReducer = ({ pageSize, total, active }) => {
   const middle = Math.floor(pageSize / 2);
-  return total <= pageSize || active.current < middle
-    ? active.current
-    : active.current >= total - middle
-    ? active.current + pageSize - total
-    : middle;
+  if (total <= pageSize || active.current < middle) return active.current;
+  if (active.current >= total - middle) return active.current + pageSize - total;
+  return middle;
 };
 
 /**
  * Creates the next position for the active item considering an infinitely
  * looping list of items to be rendered on the page.
  */
-export const infinite: PositionReducer = ({ active, total, pageSize }, pointer) =>
-  total <= pageSize
-    ? active.current
-    : /**
-     * Move the position only when the user moves down, and when the
-     * navigation fits within a single page
-     */
-    active.previous < active.current && active.current - active.previous < pageSize
-    ? // Limit it to the middle of the list
-      Math.min(Math.floor(pageSize / 2), pointer + active.current - active.previous)
-    : pointer;
+export const infinite: PositionReducer = ({ active, total, pageSize }, pointer) => {
+  if (total <= pageSize) return active.current;
+  /**
+   * Move the position only when the user moves down, and when the
+   * navigation fits within a single page
+   */
+  if (active.previous < active.current && active.current - active.previous < pageSize)
+    // Limit it to the middle of the list
+    return Math.min(Math.floor(pageSize / 2), pointer + active.current - active.previous);
+  return pointer;
+};
