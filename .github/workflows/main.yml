@@ -21,7 +21,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: yarn install
-        run: yarn install --immutable
+        run: yarn install --immutable --immutable-cache
 
       - name: Eslint
         run: yarn eslint .
