@@ -532,4 +532,15 @@ describe('checkbox prompt', () => {
 
     await expect(answer).resolves.toEqual([]);
   });
+
+  it('throws if all choices are disabled', async () => {
+    const { answer } = await render(checkbox, {
+      message: 'Select a number',
+      choices: numberedChoices.map((choice) => ({ ...choice, disabled: true })),
+    });
+
+    await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"[checkbox prompt] No selectable choices. All choices are disabled."',
+    );
+  });
 });

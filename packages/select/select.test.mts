@@ -299,7 +299,7 @@ describe('select prompt', () => {
     });
 
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"[select prompt] No selectable choices."',
+      '"[select prompt] No selectable choices. All choices are disabled."',
     );
   });
 

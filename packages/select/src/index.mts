@@ -25,12 +25,19 @@ export type Choice<Value> = {
   type?: never;
 };
 
+type SelectConfig<Value> = PromptConfig<{
+  choices: ReadonlyArray<Choice<Value> | Separator>;
+  pageSize?: number;
+  loop?: boolean;
+}>;
+
 type Item<Value> = Separator | Choice<Value>;
 
-const selectable = <Value,>(item: Item<Value>): item is Choice<Value> =>
-  !Separator.isSeparator(item) && !item.disabled;
+function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
+  return !Separator.isSeparator(item) && !item.disabled;
+}
 
-const render = <Value,>({ item, active }: { item: Item<Value>; active: boolean }) => {
+function renderItem<Value>({ item, active }: { item: Item<Value>; active: boolean }) {
   if (Separator.isSeparator(item)) {
     return ` ${item.separator}`;
   }
@@ -45,13 +52,7 @@ const render = <Value,>({ item, active }: { item: Item<Value>; active: boolean }
   const color = active ? chalk.cyan : (x: string) => x;
   const prefix = active ? figures.pointer : ` `;
   return color(`${prefix} ${line}`);
-};
-
-type SelectConfig<Value> = PromptConfig<{
-  choices: ReadonlyArray<Choice<Value> | Separator>;
-  pageSize?: number;
-  loop?: boolean;
-}>;
+}
 
 export default createPrompt(
   <Value extends unknown>(
@@ -63,8 +64,11 @@ export default createPrompt(
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
     const [active, setActive] = useState<number>(() => {
-      const selected = items.findIndex(selectable);
-      if (selected < 0) throw new Error('[select prompt] No selectable choices.');
+      const selected = items.findIndex(isSelectable);
+      if (selected < 0)
+        throw new Error(
+          '[select prompt] No selectable choices. All choices are disabled.',
+        );
       return selected;
     });
 
@@ -81,13 +85,13 @@ export default createPrompt(
         const offset = isUpKey(key) ? -1 : 1;
         let next = active;
         do {
-          next = (((next + offset) % items.length) + items.length) % items.length;
-        } while (!selectable(items[next]!));
+          next = (next + offset + items.length) % items.length;
+        } while (!isSelectable(items[next]!));
         setActive(next);
       } else if (isNumberKey(key)) {
         const position = Number(key.name) - 1;
         const item = items[position];
-        if (item == null || !selectable(item)) return;
+        if (item == null || !isSelectable(item)) return;
         setActive(position);
       }
     });
@@ -101,7 +105,7 @@ export default createPrompt(
     const page = usePagination<Item<Value>>({
       items,
       active,
-      render,
+      render: renderItem,
       pageSize,
       loop,
     });
