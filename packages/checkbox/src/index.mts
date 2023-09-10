@@ -10,7 +10,6 @@ import {
   isNumberKey,
   isEnterKey,
   Separator,
-  type Layout,
   index,
   type PromptConfig,
 } from '@inquirer/core';
@@ -40,7 +39,7 @@ const check =
 const toggle = <Value,>(item: Item<Value>): Item<Value> =>
   selectable(item) ? { ...item, checked: !item.checked } : item;
 
-const render = <Value,>({ item, active }: Layout<Item<Value>>) => {
+const render = <Value,>({ item, active }: { item: Item<Value>; active: boolean }) => {
   if (Separator.isSeparator(item)) {
     return ` ${item.separator}`;
   }
