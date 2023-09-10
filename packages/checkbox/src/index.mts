@@ -25,6 +25,37 @@ export type Choice<Value> = {
   type?: never;
 };
 
+type Item<Value> = Separator | Choice<Value>;
+
+const selectable = <Value,>(item: Item<Value>): item is Choice<Value> =>
+  !Separator.isSeparator(item) && !item.disabled;
+
+const check =
+  (checked: boolean) =>
+  <Value,>(item: Item<Value>): Item<Value> =>
+    selectable(item) ? { ...item, checked } : item;
+
+const toggle = <Value,>(item: Item<Value>): Item<Value> =>
+  selectable(item) ? { ...item, checked: !item.checked } : item;
+
+const render = <Value,>({ item, active }: { item: Item<Value>; active: boolean }) => {
+  if (Separator.isSeparator(item)) {
+    return ` ${item.separator}`;
+  }
+
+  const line = item.name || item.value;
+  if (item.disabled) {
+    const disabledLabel =
+      typeof item.disabled === 'string' ? item.disabled : '(disabled)';
+    return chalk.dim(`- ${line} ${disabledLabel}`);
+  }
+
+  const checkbox = item.checked ? chalk.green(figures.circleFilled) : figures.circle;
+  const color = active ? chalk.cyan : (x: string) => x;
+  const prefix = active ? figures.pointer : ' ';
+  return color(`${prefix}${checkbox} ${line}`);
+};
+
 type Config<Value> = PromptConfig<{
   prefix?: string;
   pageSize?: number;
@@ -32,123 +63,69 @@ type Config<Value> = PromptConfig<{
   choices: ReadonlyArray<Choice<Value> | Separator>;
 }>;
 
-function isSelectableChoice<T>(
-  choice: undefined | Separator | Choice<T>,
-): choice is Choice<T> {
-  return choice != null && !Separator.isSeparator(choice) && !choice.disabled;
-}
-
 export default createPrompt(
   <Value extends unknown>(config: Config<Value>, done: (value: Array<Value>) => void) => {
-    const { prefix = usePrefix(), instructions } = config;
-
+    const { prefix = usePrefix(), instructions, pageSize, choices } = config;
     const [status, setStatus] = useState('pending');
-    const [choices, setChoices] = useState<Array<Separator | Choice<Value>>>(() =>
-      config.choices.map((choice) => ({ ...choice })),
+    const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
+      choices.map((choice) => ({ ...choice })),
     );
-    const [cursorPosition, setCursorPosition] = useState(0);
+    const [active, setActive] = useState<number>(() => {
+      const selected = items.findIndex(selectable);
+      if (selected < 0) throw new Error(`[checkbox prompt] Nothing selectable`);
+      return selected;
+    });
     const [showHelpTip, setShowHelpTip] = useState(true);
 
     useKeypress((key) => {
-      let newCursorPosition = cursorPosition;
       if (isEnterKey(key)) {
         setStatus('done');
         done(
-          choices
-            .filter((choice) => isSelectableChoice(choice) && choice.checked)
+          items
+            .filter((choice) => selectable(choice) && choice.checked)
             .map((choice) => (choice as Choice<Value>).value),
         );
       } else if (isUpKey(key) || isDownKey(key)) {
         const offset = isUpKey(key) ? -1 : 1;
-        let selectedOption;
-
-        while (!isSelectableChoice(selectedOption)) {
-          newCursorPosition =
-            (newCursorPosition + offset + choices.length) % choices.length;
-          selectedOption = choices[newCursorPosition];
-        }
-
-        setCursorPosition(newCursorPosition);
+        let next = active;
+        do {
+          next = (((next + offset) % items.length) + items.length) % items.length;
+        } while (!selectable(items[next]!));
+        setActive(next);
       } else if (isSpaceKey(key)) {
         setShowHelpTip(false);
-        setChoices(
-          choices.map((choice, i) => {
-            if (i === cursorPosition && isSelectableChoice(choice)) {
-              return { ...choice, checked: !choice.checked };
-            }
-
-            return choice;
-          }),
-        );
+        setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
       } else if (key.name === 'a') {
         const selectAll = Boolean(
-          choices.find((choice) => isSelectableChoice(choice) && !choice.checked),
+          items.find((choice) => selectable(choice) && !choice.checked),
         );
-        setChoices(
-          choices.map((choice) =>
-            isSelectableChoice(choice) ? { ...choice, checked: selectAll } : choice,
-          ),
-        );
+        setItems(items.map(check(selectAll)));
       } else if (key.name === 'i') {
-        setChoices(
-          choices.map((choice) =>
-            isSelectableChoice(choice) ? { ...choice, checked: !choice.checked } : choice,
-          ),
-        );
+        setItems(items.map(toggle));
       } else if (isNumberKey(key)) {
         // Adjust index to start at 1
         const position = Number(key.name) - 1;
-
-        // Abort if the choice doesn't exists or if disabled
-        if (!isSelectableChoice(choices[position])) {
-          return;
-        }
-
-        setCursorPosition(position);
-        setChoices(
-          choices.map((choice, i) => {
-            if (i === position && isSelectableChoice(choice)) {
-              return { ...choice, checked: !choice.checked };
-            }
-
-            return choice;
-          }),
-        );
+        const item = items[position];
+        if (item == null || !selectable(item)) return;
+        setActive(position);
+        setItems(items.map((choice, i) => (i === position ? toggle(choice) : choice)));
       }
     });
 
     const message = chalk.bold(config.message);
-    const allChoices = choices
-      .map((choice, index) => {
-        if (Separator.isSeparator(choice)) {
-          return ` ${choice.separator}`;
-        }
 
-        const line = choice.name || choice.value;
-        if (choice.disabled) {
-          const disabledLabel =
-            typeof choice.disabled === 'string' ? choice.disabled : '(disabled)';
-          return chalk.dim(`- ${line} ${disabledLabel}`);
-        }
-
-        const checkbox = choice.checked
-          ? chalk.green(figures.circleFilled)
-          : figures.circle;
-        if (index === cursorPosition) {
-          return chalk.cyan(`${figures.pointer}${checkbox} ${line}`);
-        }
-
-        return ` ${checkbox} ${line}`;
-      })
+    const lines = items
+      .map((item, index) => render({ item, active: index === active }))
       .join('\n');
-    const windowedChoices = usePagination(allChoices, {
-      active: cursorPosition,
-      pageSize: config.pageSize,
+
+    const page = usePagination(lines, {
+      active,
+      pageSize,
     });
 
     if (status === 'done') {
-      const selection = choices
-        .filter((choice) => isSelectableChoice(choice) && choice.checked)
+      const selection = items
+        .filter((choice) => selectable(choice) && choice.checked)
         .map(
           (choice) => (choice as Choice<Value>).name || (choice as Choice<Value>).value,
         );
@@ -170,7 +147,7 @@ export default createPrompt(
       }
     }
 
-    return `${prefix} ${message}${helpTip}\n${windowedChoices}${ansiEscapes.cursorHide}`;
+    return `${prefix} ${message}${helpTip}\n${page}${ansiEscapes.cursorHide}`;
   },
 );
 
