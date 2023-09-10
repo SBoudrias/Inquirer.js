@@ -81,7 +81,7 @@ export default createPrompt(
         const offset = isUpKey(key) ? -1 : 1;
         let next = active;
         do {
-          next = (((next + offset) % items.length) + items.length) % items.length;
+          next = (next + offset + items.length) % items.length;
         } while (!selectable(items[next]!));
         setActive(next);
       } else if (isNumberKey(key)) {
