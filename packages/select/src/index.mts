@@ -27,10 +27,11 @@ type Choice<Value> = {
 
 type Item<Value> = Separator | Choice<Value>;
 
-const selectable = <Value,>(item: Item<Value>): item is Choice<Value> =>
-  !Separator.isSeparator(item) && !item.disabled;
+function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
+  return !Separator.isSeparator(item) && !item.disabled;
+}
 
-const render = <Value,>({ item, active }: { item: Item<Value>; active: boolean }) => {
+function renderItem<Value>({ item, active }: { item: Item<Value>; active: boolean }) {
   if (Separator.isSeparator(item)) {
     return ` ${item.separator}`;
   }
@@ -45,7 +46,7 @@ const render = <Value,>({ item, active }: { item: Item<Value>; active: boolean }
   const color = active ? chalk.cyan : (x: string) => x;
   const prefix = active ? figures.pointer : ` `;
   return color(`${prefix} ${line}`);
-};
+}
 
 type SelectConfig<Value> = PromptConfig<{
   choices: ReadonlyArray<Choice<Value> | Separator>;
@@ -62,7 +63,7 @@ export default createPrompt(
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
     const [active, setActive] = useState<number>(() => {
-      const selected = items.findIndex(selectable);
+      const selected = items.findIndex(isSelectable);
       if (selected < 0)
         throw new Error(
           '[select prompt] No selectable choices. All choices are disabled.',
@@ -82,12 +83,12 @@ export default createPrompt(
         let next = active;
         do {
           next = (next + offset + items.length) % items.length;
-        } while (!selectable(items[next]!));
+        } while (!isSelectable(items[next]!));
         setActive(next);
       } else if (isNumberKey(key)) {
         const position = Number(key.name) - 1;
         const item = items[position];
-        if (item == null || !selectable(item)) return;
+        if (item == null || !isSelectable(item)) return;
         setActive(position);
       }
     });
@@ -99,7 +100,7 @@ export default createPrompt(
     }
 
     const lines = items
-      .map((item, index) => render({ item, active: index === active }))
+      .map((item, index) => renderItem({ item, active: index === active }))
       .join('\n');
 
     const page = usePagination(lines, {
