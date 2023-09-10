@@ -25,9 +25,14 @@ type Choice<Value> = {
   type?: never;
 };
 
+type SelectConfig<Value> = PromptConfig<{
+  choices: ReadonlyArray<Choice<Value> | Separator>;
+  pageSize?: number;
+}>;
+
 type Item<Value> = Separator | Choice<Value>;
 
-function isSelectableChoice<Value>(item: Item<Value>): item is Choice<Value> {
+function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
   return !Separator.isSeparator(item) && !item.disabled;
 }
 
@@ -48,11 +53,6 @@ function renderItem<Value>({ item, active }: { item: Item<Value>; active: boolea
   return color(`${prefix} ${line}`);
 }
 
-type SelectConfig<Value> = PromptConfig<{
-  choices: ReadonlyArray<Choice<Value> | Separator>;
-  pageSize?: number;
-}>;
-
 export default createPrompt(
   <Value extends unknown>(
     config: SelectConfig<Value>,
@@ -63,7 +63,7 @@ export default createPrompt(
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
     const [active, setActive] = useState<number>(() => {
-      const selected = items.findIndex(isSelectableChoice);
+      const selected = items.findIndex(isSelectable);
       if (selected < 0)
         throw new Error(
           '[select prompt] No selectable choices. All choices are disabled.',
@@ -83,12 +83,12 @@ export default createPrompt(
         let next = active;
         do {
           next = (next + offset + items.length) % items.length;
-        } while (!isSelectableChoice(items[next]!));
+        } while (!isSelectable(items[next]!));
         setActive(next);
       } else if (isNumberKey(key)) {
         const position = Number(key.name) - 1;
         const item = items[position];
-        if (item == null || !isSelectableChoice(item)) return;
+        if (item == null || !isSelectable(item)) return;
         setActive(position);
       }
     });
