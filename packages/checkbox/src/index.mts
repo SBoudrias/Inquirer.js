@@ -79,7 +79,10 @@ export default createPrompt(
     );
     const [active, setActive] = useState<number>(() => {
       const selected = items.findIndex(isSelectable);
-      if (selected < 0) throw new Error(`[checkbox prompt] Nothing selectable`);
+      if (selected < 0)
+        throw new Error(
+          '[checkbox prompt] No selectable choices. All choices are disabled.',
+        );
       return selected;
     });
     const [showHelpTip, setShowHelpTip] = useState(true);
