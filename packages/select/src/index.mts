@@ -30,10 +30,27 @@ type SelectConfig<Value> = PromptConfig<{
   pageSize?: number;
 }>;
 
-function isSelectableChoice<T>(
-  choice: undefined | Separator | Choice<T>,
-): choice is Choice<T> {
-  return choice != null && !Separator.isSeparator(choice) && !choice.disabled;
+type Item<Value> = Separator | Choice<Value>;
+
+function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
+  return !Separator.isSeparator(item) && !item.disabled;
+}
+
+function renderItem<Value>({ item, active }: { item: Item<Value>; active: boolean }) {
+  if (Separator.isSeparator(item)) {
+    return ` ${item.separator}`;
+  }
+
+  const line = item.name || item.value;
+  if (item.disabled) {
+    const disabledLabel =
+      typeof item.disabled === 'string' ? item.disabled : '(disabled)';
+    return chalk.dim(`- ${line} ${disabledLabel}`);
+  }
+
+  const color = active ? chalk.cyan : (x: string) => x;
+  const prefix = active ? figures.pointer : ` `;
+  return color(`${prefix} ${line}`);
 }
 
 export default createPrompt(
@@ -41,83 +58,54 @@ export default createPrompt(
     config: SelectConfig<Value>,
     done: (value: Value) => void,
   ): string => {
-    const { choices } = config;
+    const { choices: items, pageSize } = config;
     const firstRender = useRef(true);
-
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
-    const [cursorPosition, setCursorPos] = useState(() => {
-      const startIndex = choices.findIndex(isSelectableChoice);
-      if (startIndex < 0) {
+    const [active, setActive] = useState<number>(() => {
+      const selected = items.findIndex(isSelectable);
+      if (selected < 0)
         throw new Error(
           '[select prompt] No selectable choices. All choices are disabled.',
         );
-      }
-
-      return startIndex;
+      return selected;
     });
 
     // Safe to assume the cursor position always point to a Choice.
-    const selectedChoice = choices[cursorPosition] as Choice<Value>;
+    const selectedChoice = items[active] as Choice<Value>;
 
     useKeypress((key) => {
       if (isEnterKey(key)) {
         setStatus('done');
         done(selectedChoice.value);
       } else if (isUpKey(key) || isDownKey(key)) {
-        let newCursorPosition = cursorPosition;
         const offset = isUpKey(key) ? -1 : 1;
-        let selectedOption;
-
-        while (!isSelectableChoice(selectedOption)) {
-          newCursorPosition =
-            (newCursorPosition + offset + choices.length) % choices.length;
-          selectedOption = choices[newCursorPosition];
-        }
-
-        setCursorPos(newCursorPosition);
+        let next = active;
+        do {
+          next = (next + offset + items.length) % items.length;
+        } while (!isSelectable(items[next]!));
+        setActive(next);
       } else if (isNumberKey(key)) {
-        // Adjust index to start at 1
-        const newCursorPosition = Number(key.name) - 1;
-
-        // Abort if the choice doesn't exists or if disabled
-        if (!isSelectableChoice(choices[newCursorPosition])) {
-          return;
-        }
-
-        setCursorPos(newCursorPosition);
+        const position = Number(key.name) - 1;
+        const item = items[position];
+        if (item == null || !isSelectable(item)) return;
+        setActive(position);
       }
     });
 
     let message = chalk.bold(config.message);
     if (firstRender.current) {
-      message += chalk.dim(' (Use arrow keys)');
       firstRender.current = false;
+      message += chalk.dim(' (Use arrow keys)');
     }
 
-    const allChoices = choices
-      .map((choice, index): string => {
-        if (Separator.isSeparator(choice)) {
-          return ` ${choice.separator}`;
-        }
-
-        const line = choice.name || choice.value;
-        if (choice.disabled) {
-          const disabledLabel =
-            typeof choice.disabled === 'string' ? choice.disabled : '(disabled)';
-          return chalk.dim(`- ${line} ${disabledLabel}`);
-        }
-
-        if (index === cursorPosition) {
-          return chalk.cyan(`${figures.pointer} ${line}`);
-        }
-
-        return `  ${line}`;
-      })
+    const lines = items
+      .map((item, index) => renderItem({ item, active: index === active }))
       .join('\n');
-    const windowedChoices = usePagination(allChoices, {
-      active: cursorPosition,
-      pageSize: config.pageSize,
+
+    const page = usePagination(lines, {
+      active,
+      pageSize,
     });
 
     if (status === 'done') {
@@ -130,7 +118,7 @@ export default createPrompt(
       ? `\n${selectedChoice.description}`
       : ``;
 
-    return `${prefix} ${message}\n${windowedChoices}${choiceDescription}${ansiEscapes.cursorHide}`;
+    return `${prefix} ${message}\n${page}${choiceDescription}${ansiEscapes.cursorHide}`;
   },
 );
 
