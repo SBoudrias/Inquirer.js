@@ -10,7 +10,6 @@ import {
   isNumberKey,
   isEnterKey,
   Separator,
-  index,
   type PromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
@@ -94,7 +93,7 @@ export default createPrompt(
         const offset = isUpKey(key) ? -1 : 1;
         let next = active;
         do {
-          next = index(items.length, next + offset);
+          next = (((next + offset) % items.length) + items.length) % items.length;
         } while (!selectable(items[next]!));
         setActive(next);
       } else if (isSpaceKey(key)) {
