@@ -25,20 +25,34 @@ export type Choice<Value> = {
   type?: never;
 };
 
+type Config<Value> = PromptConfig<{
+  prefix?: string;
+  pageSize?: number;
+  instructions?: string | boolean;
+  choices: ReadonlyArray<Choice<Value> | Separator>;
+}>;
+
 type Item<Value> = Separator | Choice<Value>;
 
-const selectable = <Value,>(item: Item<Value>): item is Choice<Value> =>
-  !Separator.isSeparator(item) && !item.disabled;
+function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
+  return !Separator.isSeparator(item) && !item.disabled;
+}
 
-const check =
-  (checked: boolean) =>
-  <Value,>(item: Item<Value>): Item<Value> =>
-    selectable(item) ? { ...item, checked } : item;
+function isChecked<Value>(item: Item<Value>): item is Choice<Value> {
+  return isSelectable(item) && Boolean(item.checked);
+}
 
-const toggle = <Value,>(item: Item<Value>): Item<Value> =>
-  selectable(item) ? { ...item, checked: !item.checked } : item;
+function toggle<Value>(item: Item<Value>): Item<Value> {
+  return isSelectable(item) ? { ...item, checked: !item.checked } : item;
+}
 
-const render = <Value,>({ item, active }: { item: Item<Value>; active: boolean }) => {
+function check(checked: boolean) {
+  return function <Value>(item: Item<Value>): Item<Value> {
+    return isSelectable(item) ? { ...item, checked } : item;
+  };
+}
+
+function renderItem<Value>({ item, isActive }: { item: Item<Value>; isActive: boolean }) {
   if (Separator.isSeparator(item)) {
     return ` ${item.separator}`;
   }
@@ -51,17 +65,10 @@ const render = <Value,>({ item, active }: { item: Item<Value>; active: boolean }
   }
 
   const checkbox = item.checked ? chalk.green(figures.circleFilled) : figures.circle;
-  const color = active ? chalk.cyan : (x: string) => x;
-  const prefix = active ? figures.pointer : ' ';
+  const color = isActive ? chalk.cyan : (x: string) => x;
+  const prefix = isActive ? figures.pointer : ' ';
   return color(`${prefix}${checkbox} ${line}`);
-};
-
-type Config<Value> = PromptConfig<{
-  prefix?: string;
-  pageSize?: number;
-  instructions?: string | boolean;
-  choices: ReadonlyArray<Choice<Value> | Separator>;
-}>;
+}
 
 export default createPrompt(
   <Value extends unknown>(config: Config<Value>, done: (value: Array<Value>) => void) => {
@@ -71,7 +78,7 @@ export default createPrompt(
       choices.map((choice) => ({ ...choice })),
     );
     const [active, setActive] = useState<number>(() => {
-      const selected = items.findIndex(selectable);
+      const selected = items.findIndex(isSelectable);
       if (selected < 0) throw new Error(`[checkbox prompt] Nothing selectable`);
       return selected;
     });
@@ -80,24 +87,20 @@ export default createPrompt(
     useKeypress((key) => {
       if (isEnterKey(key)) {
         setStatus('done');
-        done(
-          items
-            .filter((choice) => selectable(choice) && choice.checked)
-            .map((choice) => (choice as Choice<Value>).value),
-        );
+        done(items.filter(isChecked).map((choice) => choice.value));
       } else if (isUpKey(key) || isDownKey(key)) {
         const offset = isUpKey(key) ? -1 : 1;
         let next = active;
         do {
           next = (((next + offset) % items.length) + items.length) % items.length;
-        } while (!selectable(items[next]!));
+        } while (!isSelectable(items[next]!));
         setActive(next);
       } else if (isSpaceKey(key)) {
         setShowHelpTip(false);
         setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
       } else if (key.name === 'a') {
         const selectAll = Boolean(
-          items.find((choice) => selectable(choice) && !choice.checked),
+          items.find((choice) => isSelectable(choice) && !choice.checked),
         );
         setItems(items.map(check(selectAll)));
       } else if (key.name === 'i') {
@@ -106,7 +109,7 @@ export default createPrompt(
         // Adjust index to start at 1
         const position = Number(key.name) - 1;
         const item = items[position];
-        if (item == null || !selectable(item)) return;
+        if (item == null || !isSelectable(item)) return;
         setActive(position);
         setItems(items.map((choice, i) => (i === position ? toggle(choice) : choice)));
       }
@@ -115,7 +118,7 @@ export default createPrompt(
     const message = chalk.bold(config.message);
 
     const lines = items
-      .map((item, index) => render({ item, active: index === active }))
+      .map((item, index) => renderItem({ item, isActive: index === active }))
       .join('\n');
 
     const page = usePagination(lines, {
@@ -125,10 +128,8 @@ export default createPrompt(
 
     if (status === 'done') {
       const selection = items
-        .filter((choice) => selectable(choice) && choice.checked)
-        .map(
-          (choice) => (choice as Choice<Value>).name || (choice as Choice<Value>).value,
-        );
+        .filter(isChecked)
+        .map((choice) => choice.name || choice.value);
       return `${prefix} ${message} ${chalk.cyan(selection.join(', '))}`;
     }
 
