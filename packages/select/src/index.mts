@@ -27,7 +27,7 @@ type Choice<Value> = {
 
 type Item<Value> = Separator | Choice<Value>;
 
-function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
+function isSelectableChoice<Value>(item: Item<Value>): item is Choice<Value> {
   return !Separator.isSeparator(item) && !item.disabled;
 }
 
@@ -63,7 +63,7 @@ export default createPrompt(
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
     const [active, setActive] = useState<number>(() => {
-      const selected = items.findIndex(isSelectable);
+      const selected = items.findIndex(isSelectableChoice);
       if (selected < 0)
         throw new Error(
           '[select prompt] No selectable choices. All choices are disabled.',
@@ -83,12 +83,12 @@ export default createPrompt(
         let next = active;
         do {
           next = (next + offset + items.length) % items.length;
-        } while (!isSelectable(items[next]!));
+        } while (!isSelectableChoice(items[next]!));
         setActive(next);
       } else if (isNumberKey(key)) {
         const position = Number(key.name) - 1;
         const item = items[position];
-        if (item == null || !isSelectable(item)) return;
+        if (item == null || !isSelectableChoice(item)) return;
         setActive(position);
       }
     });
