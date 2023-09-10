@@ -4,8 +4,8 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
-  AsyncPromptConfig,
   Separator,
+  type PromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -18,9 +18,9 @@ type Choice<Value> = {
   key?: string;
 };
 
-type RawlistConfig<Value> = AsyncPromptConfig & {
+type RawlistConfig<Value> = PromptConfig<{
   choices: ReadonlyArray<Choice<Value> | Separator>;
-};
+}>;
 
 function isSelectableChoice<T>(
   choice: undefined | Separator | Choice<T>,

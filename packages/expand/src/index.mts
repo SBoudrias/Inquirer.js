@@ -4,7 +4,7 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
-  AsyncPromptConfig,
+  type PromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -14,11 +14,11 @@ type ExpandChoice =
   | { key: string; value: string }
   | { key: string; name: string; value: string };
 
-type ExpandConfig = AsyncPromptConfig & {
+type ExpandConfig = PromptConfig<{
   choices: ReadonlyArray<ExpandChoice>;
   default?: string;
   expanded?: boolean;
-};
+}>;
 
 const helpChoice = {
   key: 'h',

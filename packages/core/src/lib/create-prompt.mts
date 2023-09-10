@@ -1,19 +1,24 @@
 import * as readline from 'node:readline';
-import { CancelablePromise, type Prompt } from '@inquirer/type';
+import { CancelablePromise, type Prompt, type Prettify } from '@inquirer/type';
 import MuteStream from 'mute-stream';
+import { onExit as onSignalExit } from 'signal-exit';
 import ScreenManager from './screen-manager.mjs';
 import type { InquirerReadline } from './read-line.type.mjs';
 import { withHooks, effectScheduler } from './hook-engine.mjs';
 
+// @deprecated Prefer using `PromptConfig<{ ... }>` instead
 export type AsyncPromptConfig = {
   message: string | Promise<string> | (() => Promise<string>);
-  validate?: (value: string) => boolean | string | Promise<string | boolean>;
 };
 
-type ResolvedPromptConfig = {
-  message: string;
-  validate: (value: string) => boolean | string | Promise<string | boolean>;
-};
+export type PromptConfig<Config> = Prettify<AsyncPromptConfig & Config>;
+
+type ResolvedPromptConfig = { message: string };
+
+type ViewFunction<Value, Config> = (
+  config: Prettify<Config & ResolvedPromptConfig>,
+  done: (value: Value) => void,
+) => string | [string, string | undefined];
 
 // Take an AsyncPromptConfig and resolves all it's values.
 async function getPromptConfig<Config extends AsyncPromptConfig>(
@@ -23,17 +28,13 @@ async function getPromptConfig<Config extends AsyncPromptConfig>(
     typeof config.message === 'function' ? config.message() : config.message;
 
   return {
-    validate: () => true,
     ...config,
     message: await message,
   };
 }
 
 export function createPrompt<Value, Config extends AsyncPromptConfig>(
-  view: (
-    config: Config & ResolvedPromptConfig,
-    done: (value: Value) => void,
-  ) => string | [string, string | undefined],
+  view: ViewFunction<Value, Config>,
 ) {
   const prompt: Prompt<Value, Config> = (config, context) => {
     // Default `input` to stdin
@@ -53,11 +54,16 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
     let cancel: () => void = () => {};
     const answer = new CancelablePromise<Value>((resolve, reject) => {
       withHooks(rl, (store) => {
-        const checkCursorPos = () => {
+        function checkCursorPos() {
           screen.checkCursorPos();
-        };
+        }
 
-        const onExit = () => {
+        const removeExitListener = onSignalExit((code, signal) => {
+          onExit();
+          reject(new Error(`User force closed the prompt with ${code} ${signal}`));
+        });
+
+        function onExit() {
           try {
             store.hooksCleanup.forEach((cleanFn) => {
               cleanFn?.();
@@ -73,29 +79,16 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
           }
           screen.done();
 
-          process.removeListener('SIGINT', onForceExit);
+          removeExitListener();
           store.rl.input.removeListener('keypress', checkCursorPos);
-        };
+        }
 
         cancel = () => {
           onExit();
-
           reject(new Error('Prompt was canceled'));
         };
 
-        let shouldHandleExit = true;
-        const onForceExit = () => {
-          if (shouldHandleExit) {
-            shouldHandleExit = false;
-            onExit();
-            reject(new Error('User force closed the prompt with CTRL+C'));
-          }
-        };
-
-        // Handle cleanup on force exit. Main reason is so we restore the cursor if a prompt hide it.
-        process.on('SIGINT', onForceExit);
-
-        const done = (value: Value) => {
+        function done(value: Value) {
           // Delay execution to let time to the hookCleanup functions to registers.
           setImmediate(() => {
             onExit();
@@ -103,9 +96,9 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
             // Finally we resolve our promise
             resolve(value);
           });
-        };
+        }
 
-        const workLoop = (resolvedConfig: Config & ResolvedPromptConfig) => {
+        function workLoop(resolvedConfig: Config & ResolvedPromptConfig) {
           store.index = 0;
           store.handleChange = () => workLoop(resolvedConfig);
 
@@ -121,7 +114,7 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
             onExit();
             reject(err);
           }
-        };
+        }
 
         // TODO: we should display a loader while we get the default options.
         getPromptConfig(config).then((resolvedConfig) => {

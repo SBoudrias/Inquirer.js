@@ -10,9 +10,9 @@ import {
   isDownKey,
   isNumberKey,
   Separator,
-  AsyncPromptConfig,
   type Layout,
   index,
+  type PromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -49,11 +49,11 @@ const render = <Value,>({ item, active }: Layout<Item<Value>>) => {
   return color(`${prefix} ${line}`);
 };
 
-type SelectConfig<Value> = AsyncPromptConfig & {
+type SelectConfig<Value> = PromptConfig<{
   choices: ReadonlyArray<Choice<Value> | Separator>;
   pageSize?: number;
   loop?: boolean;
-};
+}>;
 
 export default createPrompt(
   <Value extends unknown>(
@@ -94,7 +94,7 @@ export default createPrompt(
       }
     });
 
-    let message: string = chalk.bold(config.message);
+    let message = chalk.bold(config.message);
     if (firstRender.current) {
       firstRender.current = false;
       message += chalk.dim(' (Use arrow keys)');

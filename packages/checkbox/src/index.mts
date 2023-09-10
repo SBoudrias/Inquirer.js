@@ -12,6 +12,7 @@ import {
   Separator,
   type Layout,
   index,
+  type PromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -57,20 +58,16 @@ const render = <Value,>({ item, active }: Layout<Item<Value>>) => {
   return color(`${prefix}${checkbox} ${line}`);
 };
 
-type Config<Value> = {
+type Config<Value> = PromptConfig<{
   prefix?: string;
   pageSize?: number;
   instructions?: string | boolean;
-  message: string;
   choices: ReadonlyArray<Choice<Value> | Separator>;
   loop?: boolean;
-};
+}>;
 
 export default createPrompt(
-  <Value extends unknown>(
-    config: Config<Value>,
-    done: (value: Array<Value>) => void,
-  ): string => {
+  <Value extends unknown>(config: Config<Value>, done: (value: Array<Value>) => void) => {
     const { prefix = usePrefix(), instructions, pageSize, loop = true, choices } = config;
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(

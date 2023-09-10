@@ -1,5 +1,6 @@
 yarn.lock
 .prettierignore
+.gitattributes
 .gitignore
 .eslintignore
 .yarn

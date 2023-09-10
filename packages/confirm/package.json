@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/confirm",
-  "version": "2.0.10",
+  "version": "2.0.11",
   "description": "Inquirer confirm prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -54,12 +54,12 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/confirm/README.md",
   "dependencies": {
-    "@inquirer/core": "^4.0.0",
-    "@inquirer/type": "^1.1.2",
+    "@inquirer/core": "^4.1.0",
+    "@inquirer/type": "^1.1.3",
     "chalk": "^4.1.2"
   },
   "devDependencies": {
-    "@inquirer/testing": "^2.1.4"
+    "@inquirer/testing": "^2.1.5"
   },
   "scripts": {
     "tsc": "yarn run tsc:esm && yarn run tsc:cjs",
