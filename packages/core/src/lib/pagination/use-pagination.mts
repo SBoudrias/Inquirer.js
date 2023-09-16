@@ -6,25 +6,25 @@ import { lines } from './lines.mjs';
 import { finite, infinite } from './position.mjs';
 import { type Layout } from './layout.type.mjs';
 
-export type Options<T> = {
+type Options<T> = {
   items: readonly T[];
   /** The index of the active item. */
   active: number;
-  /** Renders an item as part of a page. */
-  render: (layout: Layout<T>) => string;
+  /** RenderItems an item as part of a page. */
+  renderItem: (layout: Layout<T>) => string;
   /** The size of the page. `7` if unspecified. */
   pageSize?: number;
   /** Allows creating an infinitely looping list. `true` if unspecified. */
   loop?: boolean;
 };
 
-export const usePagination = <T,>({
+export function usePagination<T>({
   items,
   active,
-  render,
+  renderItem,
   pageSize = 7,
   loop = true,
-}: Options<T>): string => {
+}: Options<T>): string {
   const rl = readline();
   const width = cliWidth({ defaultWidth: 80, output: rl.output });
   const state = useRef({
@@ -42,11 +42,11 @@ export const usePagination = <T,>({
   state.current.position = position;
   state.current.lastActive = active;
 
-  return lines({ items, width, render, active, position, pageSize })
+  return lines({ items, width, renderItem, active, position, pageSize })
     .concat(
       items.length <= pageSize
         ? []
         : [chalk.dim('(Use arrow keys to reveal more choices)')],
     )
     .join('\n');
-};
+}

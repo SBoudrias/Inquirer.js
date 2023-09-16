@@ -126,7 +126,7 @@ export default createPrompt(
     const page = usePagination<Item<Value>>({
       items,
       active,
-      render: renderItem,
+      renderItem,
       pageSize,
       loop,
     });

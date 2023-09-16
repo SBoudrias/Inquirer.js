@@ -1,12 +1,12 @@
 import { breakLines, rotate } from '../utils.mjs';
 import { type Layout } from './layout.type.mjs';
 
-type Inputs<T> = {
+type Options<T> = {
   items: readonly T[];
   /** The width of a rendered line in characters. */
   width: number;
   /** Renders an item as part of a page. */
-  render: (layout: Layout<T>) => string;
+  renderItem: (layout: Layout<T>) => string;
   /** The index of the active item in the list of items. */
   active: number;
   /** The position on the page at which to render the active item. */
@@ -22,14 +22,14 @@ type Inputs<T> = {
  * of the active item get rendered as possible.
  * @returns The rendered lines
  */
-export const lines = <T,>({
+export function lines<T>({
   items,
   width,
-  render,
+  renderItem,
   active,
   position: requested,
   pageSize,
-}: Inputs<T>): string[] => {
+}: Options<T>): string[] {
   const split = (content: string) => breakLines(content, width).split('\n');
   const layouts = items.map<Layout<T>>((item, index) => ({
     item,
@@ -37,7 +37,7 @@ export const lines = <T,>({
     isActive: index === active,
   }));
   const layoutsInPage = rotate(active - requested, layouts).slice(0, pageSize);
-  const getLines = (index: number) => split(render(layoutsInPage[index]!));
+  const getLines = (index: number) => split(renderItem(layoutsInPage[index]!));
 
   // Create a blank array of lines for the page
   const page = new Array(pageSize);
@@ -77,4 +77,4 @@ export const lines = <T,>({
   }
 
   return page.filter((line) => typeof line === 'string');
-};
+}
