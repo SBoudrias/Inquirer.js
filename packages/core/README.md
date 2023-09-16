@@ -124,7 +124,7 @@ Listening for keypress events inside an inquirer prompt is a very common pattern
 
 ### `usePagination`
 
-When looping through a long list of options (like in the `select` prompt), paginating the results appearing on the screen at once can be necessary. The `usePagination` hook is the utility used within the `select` and `checkbox` prompt to cycle through the list of options.
+When looping through a long list of options (like in the `select` prompt), paginating the results appearing on the screen at once can be necessary. The `usePagination` hook is the utility used within the `select` and `checkbox` prompts to cycle through the list of options.
 
 Pagination works by taking in the list of options and returning a subset of the rendered items that fit within the page. The hook takes in a few options. It needs a list of options (`items`), and a `pageSize` which is the number of lines to be rendered. The `active` index is the index of the currently selected/selectable item. The `loop` option is a boolean that indicates if the list should loop around when reaching the end: this is the default behavior. The pagination hook renders items only as necessary, so it takes a function that can render an item at an index, including an `active` state, called `renderItem`.
 
