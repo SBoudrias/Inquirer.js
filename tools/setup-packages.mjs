@@ -87,6 +87,7 @@ paths.forEach(async (pkgPath) => {
     const esmTsconfig = {
       extends: '../../tsconfig.json',
       include: ['./src'],
+      exclude: ['**/*.test.mts'],
       compilerOptions: {
         lib: ['ESNext'],
         target: 'es2022',
@@ -100,7 +101,6 @@ paths.forEach(async (pkgPath) => {
     // Set CJS tsconfig
     const cjsTsconfig = {
       extends: './tsconfig.json',
-      include: ['./src'],
       compilerOptions: {
         lib: ['ES6'],
         target: 'es6',

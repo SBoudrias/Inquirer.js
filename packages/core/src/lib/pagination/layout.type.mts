@@ -2,5 +2,5 @@
 export type Layout<T> = {
   item: T;
   index: number;
-  active: boolean;
+  isActive: boolean;
 };

@@ -17,7 +17,7 @@ import chalk from 'chalk';
 import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
 
-export type Choice<Value> = {
+type Choice<Value> = {
   name?: string;
   value: Value;
   disabled?: boolean | string;
@@ -53,7 +53,7 @@ function check(checked: boolean) {
   };
 }
 
-function renderItem<Value>({ item, active }: { item: Item<Value>; active: boolean }) {
+function renderItem<Value>({ item, isActive }: { item: Item<Value>; isActive: boolean }) {
   if (Separator.isSeparator(item)) {
     return ` ${item.separator}`;
   }
@@ -66,8 +66,8 @@ function renderItem<Value>({ item, active }: { item: Item<Value>; active: boolea
   }
 
   const checkbox = item.checked ? chalk.green(figures.circleFilled) : figures.circle;
-  const color = active ? chalk.cyan : (x: string) => x;
-  const prefix = active ? figures.pointer : ' ';
+  const color = isActive ? chalk.cyan : (x: string) => x;
+  const prefix = isActive ? figures.pointer : ' ';
   return color(`${prefix}${checkbox} ${line}`);
 }
 

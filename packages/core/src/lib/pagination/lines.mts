@@ -34,7 +34,7 @@ export const lines = <T,>({
   const layouts = items.map<Layout<T>>((item, index) => ({
     item,
     index,
-    active: index === active,
+    isActive: index === active,
   }));
   const layoutsInPage = rotate(active - requested, layouts).slice(0, pageSize);
   const getLines = (index: number) => split(render(layoutsInPage[index]!));
