@@ -17,7 +17,7 @@ import chalk from 'chalk';
 import figures from 'figures';
 import ansiEscapes from 'ansi-escapes';
 
-export type Choice<Value> = {
+type Choice<Value> = {
   value: Value;
   name?: string;
   description?: string;
