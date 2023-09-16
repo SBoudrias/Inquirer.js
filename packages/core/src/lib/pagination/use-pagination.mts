@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import cliWidth from 'cli-width';
+import { type Prettify } from '@inquirer/type';
 import { readline } from '../hook-engine.mjs';
 import { useRef } from '../use-ref.mjs';
 import { lines } from './lines.mjs';
@@ -11,7 +12,7 @@ type Options<T> = {
   /** The index of the active item. */
   active: number;
   /** Renders an item as part of a page. */
-  renderItem: (layout: Layout<T>) => string;
+  renderItem: (layout: Prettify<Layout<T>>) => string;
   /** The size of the page. `7` if unspecified. */
   pageSize?: number;
   /** Allows creating an infinitely looping list. `true` if unspecified. */

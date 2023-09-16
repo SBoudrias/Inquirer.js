@@ -1,3 +1,4 @@
+import { type Prettify } from '@inquirer/type';
 import { breakLines, rotate } from '../utils.mjs';
 import { type Layout } from './layout.type.mjs';
 
@@ -6,7 +7,7 @@ type Options<T> = {
   /** The width of a rendered line in characters. */
   width: number;
   /** Renders an item as part of a page. */
-  renderItem: (layout: Layout<T>) => string;
+  renderItem: (layout: Prettify<Layout<T>>) => string;
   /** The index of the active item in the list of items. */
   active: number;
   /** The position on the page at which to render the active item. */
