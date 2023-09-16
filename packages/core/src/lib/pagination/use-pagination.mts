@@ -10,7 +10,7 @@ type Options<T> = {
   items: readonly T[];
   /** The index of the active item. */
   active: number;
-  /** RenderItems an item as part of a page. */
+  /** Renders an item as part of a page. */
   renderItem: (layout: Layout<T>) => string;
   /** The size of the page. `7` if unspecified. */
   pageSize?: number;
