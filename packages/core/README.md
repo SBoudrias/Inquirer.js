@@ -126,19 +126,23 @@ Listening for keypress events inside an inquirer prompt is a very common pattern
 
 When looping through a long list of options (like in the `select` prompt), paginating the results appearing on the screen at once can be necessary. The `usePagination` hook is the utility used within the `select` and `checkbox` prompt to cycle through the list of options.
 
+Pagination works by taking in the list of options and returning a subset of the rendered items that fit within the page. The hook takes in a few options. It needs a list of options (`items`), and a `pageSize` which is the number of lines to be rendered. The `active` index is the index of the currently selected/selectable item. The `loop` option is a boolean that indicates if the list should loop around when reaching the end: this is the default behavior. The pagination hook renders items only as necessary, so it takes a function that can render an item at an index, including an `active` state, called `renderItem`.
+
 ```js
 export default createPrompt((config, done) => {
-  const [cursorPosition, setCursorPosition] = useState(0);
+  const [active, setActive] = useState(0);
 
   const allChoices = config.choices.map((choice) => choice.name);
 
-  const windowedChoices = usePagination(allChoices, {
-    active: cursorPosition,
+  const page = usePagination({
+    items: allChoices,
+    active: active,
+    renderItem: ({ item, index, isActive }) => `${isActive ? ">" : " "}${index}. ${item.toString()}`
     pageSize: config.pageSize,
     loop: config.loop,
   });
 
-  return `... ${windowedChoices}`;
+  return `... ${page}`;
 });
 ```
 
