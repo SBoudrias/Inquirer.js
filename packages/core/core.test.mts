@@ -83,6 +83,33 @@ describe('createPrompt()', () => {
     await expect(answer).resolves.toEqual('up');
   });
 
+  it('useEffect: works with setting state at once with objects', async () => {
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      const [value, setValue] = useState([1, 2]);
+
+      useEffect(() => {
+        setValue([1, 3]);
+      }, []);
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(String(value));
+        }
+      });
+
+      return String(value);
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+    events.keypress('enter');
+
+    // awaiting it instead of using await expect(answer).resolves.toEqual('1,3')
+    // as this produces a better error message.
+    const resolvedAnswer = await answer;
+    expect(resolvedAnswer).toEqual('1,3');
+  });
+
   it('useEffect: re-run only on change', async () => {
     const effect = vi.fn();
     const effectCleanup = vi.fn();
