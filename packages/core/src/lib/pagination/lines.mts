@@ -1,8 +1,42 @@
 import { type Prettify } from '@inquirer/type';
-import { breakLines, rotate } from '../utils.mjs';
-import { type Layout } from './layout.type.mjs';
+import { breakLines } from '../utils.mjs';
 
-type Options<T> = {
+/** Represents an item that's part of a layout, about to be rendered */
+export type Layout<T> = {
+  item: T;
+  index: number;
+  isActive: boolean;
+};
+
+function split(content: string, width: number) {
+  return breakLines(content, width).split('\n');
+}
+
+/**
+ * Rotates an array of items by an integer number of positions.
+ * @param {number} count The number of positions to rotate by
+ * @param {T[]} items The items to rotate
+ */
+function rotate<T>(count: number, items: readonly T[]): readonly T[] {
+  const max = items.length;
+  const offset = ((count % max) + max) % max;
+  return items.slice(offset).concat(items.slice(0, offset));
+}
+
+/**
+ * Renders a page of items as lines that fit within the given width ensuring
+ * that the number of lines is not greater than the page size, and the active
+ * item renders at the provided position, while prioritizing that as many lines
+ * of the active item get rendered as possible.
+ */
+export function lines<T>({
+  items,
+  width,
+  renderItem,
+  active,
+  position: requested,
+  pageSize,
+}: {
   items: readonly T[];
   /** The width of a rendered line in characters. */
   width: number;
@@ -14,68 +48,47 @@ type Options<T> = {
   position: number;
   /** The number of lines to render per page. */
   pageSize: number;
-};
-
-/**
- * Renders a page of items as lines that fit within the given width ensuring
- * that the number of lines is not greater than the page size, and the active
- * item renders at the provided position, while prioritizing that as many lines
- * of the active item get rendered as possible.
- * @returns The rendered lines
- */
-export function lines<T>({
-  items,
-  width,
-  renderItem,
-  active,
-  position: requested,
-  pageSize,
-}: Options<T>): string[] {
-  const split = (content: string) => breakLines(content, width).split('\n');
+}): string[] {
   const layouts = items.map<Layout<T>>((item, index) => ({
     item,
     index,
     isActive: index === active,
   }));
   const layoutsInPage = rotate(active - requested, layouts).slice(0, pageSize);
-  const getLines = (index: number) => split(renderItem(layoutsInPage[index]!));
+  const renderItemAt = (index: number) => split(renderItem(layoutsInPage[index]!), width);
 
   // Create a blank array of lines for the page
-  const page = new Array(pageSize);
+  const pageBuffer = new Array(pageSize);
 
   // Render the active item to decide the position
-  const activeLines = getLines(requested).slice(0, pageSize);
+  const activeItem = renderItemAt(requested).slice(0, pageSize);
   const position =
-    requested + activeLines.length <= pageSize
-      ? requested
-      : pageSize - activeLines.length;
+    requested + activeItem.length <= pageSize ? requested : pageSize - activeItem.length;
 
-  // Render the lines of the active item into the page
-  activeLines.forEach((line, index) => {
-    page[position + index] = line;
-  });
+  // Add the lines of the active item into the page
+  pageBuffer.splice(position, activeItem.length, ...activeItem);
 
-  // Fill the next lines
-  let lineNumber = position + activeLines.length;
-  let layoutIndex = requested + 1;
-  while (lineNumber < pageSize && layoutIndex < layoutsInPage.length) {
-    for (const line of getLines(layoutIndex)) {
-      page[lineNumber++] = line;
-      if (lineNumber >= pageSize) break;
+  // Fill the page under the active item
+  let bufferPointer = position + activeItem.length;
+  let layoutPointer = requested + 1;
+  while (bufferPointer < pageSize && layoutPointer < layoutsInPage.length) {
+    for (const line of renderItemAt(layoutPointer)) {
+      pageBuffer[bufferPointer++] = line;
+      if (bufferPointer >= pageSize) break;
     }
-    layoutIndex++;
+    layoutPointer++;
   }
 
-  // Fill the previous lines
-  lineNumber = position - 1;
-  layoutIndex = requested - 1;
-  while (lineNumber >= 0 && layoutIndex >= 0) {
-    for (const line of getLines(layoutIndex).reverse()) {
-      page[lineNumber--] = line;
-      if (lineNumber < 0) break;
+  // Fill the page over the active item
+  bufferPointer = position - 1;
+  layoutPointer = requested - 1;
+  while (bufferPointer >= 0 && layoutPointer >= 0) {
+    for (const line of renderItemAt(layoutPointer).reverse()) {
+      pageBuffer[bufferPointer--] = line;
+      if (bufferPointer < 0) break;
     }
-    layoutIndex--;
+    layoutPointer--;
   }
 
-  return page.filter((line) => typeof line === 'string');
+  return pageBuffer.filter((line) => typeof line === 'string');
 }

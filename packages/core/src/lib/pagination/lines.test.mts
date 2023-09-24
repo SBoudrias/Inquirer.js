@@ -1,26 +1,35 @@
 import { describe, it, expect } from 'vitest';
 import { lines } from './lines.mjs';
 
+function renderResult(result) {
+  return `\n${result.join('\n')}\n`;
+}
+
 describe('lines(...)', () => {
   const items = [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }];
 
   const renderLines =
-    (count: number) =>
+    (itemHeight: number) =>
     ({
-      index,
       item: { value },
       isActive,
+      index,
     }: {
       item: { value: number };
       isActive: boolean;
       index: number;
     }): string =>
-      new Array(count)
+      new Array(itemHeight)
         .fill(0)
         .map((_, i) => {
-          const pointer = isActive ? '>' : ' ';
-          const prefix = i === 0 ? `${pointer} ${(index + 1).toString()}.` : '    ';
-          return `${prefix}${value} line ${i + 1}`;
+          if (i === 0) {
+            const pointer = isActive ? '>' : ' ';
+            const prefix = itemHeight === 1 ? '' : '┌';
+            return `${pointer} ${prefix} value:${value} index:${index + 1}`;
+          }
+
+          const prefix = i === itemHeight - 1 ? '└' : '├';
+          return `  ${prefix} value:${value}`;
         })
         .join('\n');
 
@@ -36,13 +45,15 @@ describe('lines(...)', () => {
         renderItem,
         width: 20,
       });
-      expect(result).toEqual([
-        '    2 line 2',
-        '    2 line 3',
-        '> 3.3 line 1',
-        '    3 line 2',
-        '    3 line 3',
-      ]);
+      expect(renderResult(result)).toMatchInlineSnapshot(`
+        "
+          ├ value:2
+          └ value:2
+        > ┌ value:3 index:3
+          ├ value:3
+          └ value:3
+        "
+      `);
     });
   });
 
@@ -58,13 +69,15 @@ describe('lines(...)', () => {
         renderItem,
         width: 20,
       });
-      expect(result).toEqual([
-        '    2 line 4',
-        '> 3.3 line 1',
-        '    3 line 2',
-        '    3 line 3',
-        '    3 line 4',
-      ]);
+      expect(renderResult(result)).toMatchInlineSnapshot(`
+        "
+          └ value:2
+        > ┌ value:3 index:3
+          ├ value:3
+          ├ value:3
+          └ value:3
+        "
+      `);
     });
   });
 
@@ -80,13 +93,15 @@ describe('lines(...)', () => {
         renderItem,
         width: 20,
       });
-      expect(result).toEqual([
-        '> 3.3 line 1',
-        '    3 line 2',
-        '    3 line 3',
-        '    3 line 4',
-        '    3 line 5',
-      ]);
+      expect(renderResult(result)).toMatchInlineSnapshot(`
+        "
+        > ┌ value:3 index:3
+          ├ value:3
+          ├ value:3
+          ├ value:3
+          └ value:3
+        "
+      `);
     });
   });
 
@@ -102,13 +117,35 @@ describe('lines(...)', () => {
         renderItem,
         width: 20,
       });
-      expect(result).toEqual([
-        '> 3.3 line 1',
-        '    3 line 2',
-        '    3 line 3',
-        '    3 line 4',
-        '    3 line 5',
-      ]);
+      expect(renderResult(result)).toMatchInlineSnapshot(`
+        "
+        > ┌ value:3 index:3
+          ├ value:3
+          ├ value:3
+          ├ value:3
+          ├ value:3
+        "
+      `);
+    });
+
+    it('should scroll through the option', () => {
+      const result = lines({
+        items,
+        active: 2,
+        pageSize: 5,
+        position: 2,
+        renderItem,
+        width: 20,
+      });
+      expect(renderResult(result)).toMatchInlineSnapshot(`
+        "
+        > ┌ value:3 index:3
+          ├ value:3
+          ├ value:3
+          ├ value:3
+          ├ value:3
+        "
+      `);
     });
   });
 });
