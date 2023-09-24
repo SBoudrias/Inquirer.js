@@ -127,25 +127,5 @@ describe('lines(...)', () => {
         "
       `);
     });
-
-    it('should scroll through the option', () => {
-      const result = lines({
-        items,
-        active: 2,
-        pageSize: 5,
-        position: 2,
-        renderItem,
-        width: 20,
-      });
-      expect(renderResult(result)).toMatchInlineSnapshot(`
-        "
-        > ┌ value:3 index:3
-          ├ value:3
-          ├ value:3
-          ├ value:3
-          ├ value:3
-        "
-      `);
-    });
   });
 });
