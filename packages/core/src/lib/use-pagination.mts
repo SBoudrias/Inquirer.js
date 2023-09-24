@@ -1,7 +1,5 @@
 import chalk from 'chalk';
-import cliWidth from 'cli-width';
-import { breakLines } from './utils.mjs';
-import { readline } from './hook-engine.mjs';
+import { breakLines, readlineWidth } from './utils.mjs';
 import { useRef } from './use-ref.mjs';
 
 export function usePagination(
@@ -14,13 +12,12 @@ export function usePagination(
     pageSize?: number;
   },
 ) {
-  const rl = readline();
   const state = useRef({
     pointer: 0,
     lastIndex: 0,
   });
 
-  const width = cliWidth({ defaultWidth: 80, output: rl.output });
+  const width = readlineWidth();
   const lines = breakLines(output, width).split('\n');
 
   // Make sure there's enough lines to paginate

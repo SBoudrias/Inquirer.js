@@ -1,8 +1,7 @@
 import type { CursorPos } from 'node:readline';
-import cliWidth from 'cli-width';
 import stripAnsi from 'strip-ansi';
 import ansiEscapes from 'ansi-escapes';
-import { breakLines } from './utils.mjs';
+import { breakLines, readlineWidth } from './utils.mjs';
 import type { InquirerReadline } from './read-line.type.mjs';
 
 const height = (content: string): number => content.split('\n').length;
@@ -43,7 +42,7 @@ export default class ScreenManager {
     // SetPrompt will change cursor position, now we can get correct value
     this.cursorPos = this.rl.getCursorPos();
 
-    const width = cliWidth({ defaultWidth: 80, output: this.rl.output });
+    const width = readlineWidth();
     content = breakLines(content, width);
     bottomContent = breakLines(bottomContent, width);
 
