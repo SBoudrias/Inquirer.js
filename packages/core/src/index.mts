@@ -4,7 +4,7 @@ export { useState } from './lib/use-state.mjs';
 export { useEffect } from './lib/use-effect.mjs';
 export { useRef } from './lib/use-ref.mjs';
 export { useKeypress } from './lib/use-keypress.mjs';
-export { usePagination } from './lib/pagination/index.mjs';
+export { usePagination } from './lib/pagination/use-pagination.mjs';
 export {
   createPrompt,
   type PromptConfig,
