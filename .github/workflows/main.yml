@@ -1,7 +1,28 @@
-name: Node
+name: CI
 on: [push, pull_request]
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 jobs:
-  build:
+  Linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'yarn'
+      - run: yarn install --immutable --immutable-cache
+      - name: Eslint
+        run: yarn eslint .
+      - name: Validate package setup
+        run: |
+          yarn setup
+          yarn prettier --write .
+          git diff --exit-code -- . :^.yarn
+
+  Unit:
+    name: Unit Tests
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -10,34 +31,35 @@ jobs:
           - 20
           - 18
           - 16
-    env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: yarn install
-        run: yarn install --immutable --immutable-cache
-
-      - name: Eslint
-        run: yarn eslint .
-      - name: Validate package setup
-        run: |
-          yarn setup
-          yarn prettier --write .
-          git diff --exit-code -- . :^.yarn
-      - name: Typescript
-        run: yarn turbo tsc
+          cache: 'yarn'
+      - run: yarn install --immutable --immutable-cache
       - name: Test packages
         run: yarn vitest --run --coverage
+      - uses: codecov/codecov-action@v3
+
+  Integration:
+    name: Typescript & Integration Tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version:
+          - 20
+          - 18
+          - 16
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - run: yarn install --immutable --immutable-cache
+      - name: Typescript
+        run: yarn turbo tsc
       - name: Integration tests
         run: yarn node --test integration/
-
-      - name: Upload code coverage
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./coverage/clover.xml
