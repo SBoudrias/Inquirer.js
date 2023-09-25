@@ -121,7 +121,9 @@ export const effectScheduler = {
       store.hooksEffect.forEach((effect) => {
         effect();
       });
+      // Warning: Clean the hooks before exiting the `withUpdates` block.
+      // Failure to do so means an updates would hit the same effects again.
+      store.hooksEffect.length = 0;
     })();
-    store.hooksEffect.length = 0;
   },
 };
