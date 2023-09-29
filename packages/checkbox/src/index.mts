@@ -78,14 +78,19 @@ export default createPrompt(
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
       choices.map((choice) => ({ ...choice })),
     );
-    const [active, setActive] = useState<number>(() => {
-      const selected = items.findIndex(isSelectable);
-      if (selected < 0)
+    const [options] = useState(() => {
+      const selected = items
+        .map((x, i) => [x, i] as const)
+        .filter(([x]) => isSelectable(x));
+      if (selected.length === 0)
         throw new Error(
           '[checkbox prompt] No selectable choices. All choices are disabled.',
         );
       return selected;
     });
+    const first = options.at(0)![1];
+    const last = options.at(-1)![1];
+    const [active, setActive] = useState(first);
     const [showHelpTip, setShowHelpTip] = useState(true);
 
     useKeypress((key) => {
@@ -93,8 +98,8 @@ export default createPrompt(
         setStatus('done');
         done(items.filter(isChecked).map((choice) => choice.value));
       } else if (isUpKey(key) || isDownKey(key)) {
-        if (!loop && active === 0 && isUpKey(key)) return;
-        if (!loop && active === items.length - 1 && isDownKey(key)) return;
+        if (!loop && active === first && isUpKey(key)) return;
+        if (!loop && active === last && isDownKey(key)) return;
         const offset = isUpKey(key) ? -1 : 1;
         let next = active;
         do {
