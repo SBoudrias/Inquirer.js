@@ -67,7 +67,7 @@ export default createPrompt(
 
     const bounds = useMemo(() => {
       const first = items.findIndex(isSelectable);
-      const last = items.findLastIndex(isSelectable);
+      const last = items.length - 1 - [...items].reverse().findIndex(isSelectable);
       if (first < 0)
         throw new Error(
           '[select prompt] No selectable choices. All choices are disabled.',
