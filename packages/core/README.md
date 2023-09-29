@@ -104,6 +104,7 @@ Those hooks are matching the React hooks API:
 - `useState`
 - `useRef`
 - `useEffect`
+- `useMemo`
 
 And those are custom utilities from Inquirer:
 
