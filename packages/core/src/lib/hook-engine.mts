@@ -12,12 +12,6 @@ type HookStore = {
 
 const hookStorage = new AsyncLocalStorage<HookStore>();
 
-type Pointer = {
-  get(): any;
-  set(value: any): void;
-  initialized: boolean;
-};
-
 function createStore(rl: InquirerReadline) {
   const store: HookStore = {
     rl,
@@ -76,11 +70,24 @@ export function withUpdates<T extends (...args: any) => any>(
   return AsyncResource.bind(wrapped);
 }
 
-export function withPointer<Value>(cb: (pointer: Pointer) => Value): Value {
+type SetPointer<Value> = {
+  get(): Value;
+  set(value: Value): void;
+  initialized: true;
+};
+type UnsetPointer<Value> = {
+  get(): void;
+  set(value: Value): void;
+  initialized: false;
+};
+type Pointer<Value> = SetPointer<Value> | UnsetPointer<Value>;
+export function withPointer<Value, ReturnValue>(
+  cb: (pointer: Pointer<Value>) => ReturnValue,
+): ReturnValue {
   const store = getStore();
 
   const { index } = store;
-  const pointer: Pointer = {
+  const pointer: Pointer<Value> = {
     get() {
       return store.hooks[index];
     },
@@ -121,7 +128,9 @@ export const effectScheduler = {
       store.hooksEffect.forEach((effect) => {
         effect();
       });
+      // Warning: Clean the hooks before exiting the `withUpdates` block.
+      // Failure to do so means an updates would hit the same effects again.
+      store.hooksEffect.length = 0;
     })();
-    store.hooksEffect.length = 0;
   },
 };

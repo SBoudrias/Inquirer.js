@@ -8,9 +8,11 @@ import {
   useKeypress,
   useState,
   useRef,
+  useMemo,
   isDownKey,
   isUpKey,
   isEnterKey,
+  isSpaceKey,
   Separator,
   type KeypressEvent,
 } from './src/index.mjs';
@@ -81,6 +83,33 @@ describe('createPrompt()', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('up');
+  });
+
+  it('useEffect: works with setting state at once with objects', async () => {
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      const [value, setValue] = useState([1, 2]);
+
+      useEffect(() => {
+        setValue([1, 3]);
+      }, []);
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(String(value));
+        }
+      });
+
+      return String(value);
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+    events.keypress('enter');
+
+    // awaiting it instead of using await expect(answer).resolves.toEqual('1,3')
+    // as this produces a better error message.
+    const resolvedAnswer = await answer;
+    expect(resolvedAnswer).toEqual('1,3');
   });
 
   it('useEffect: re-run only on change', async () => {
@@ -296,6 +325,76 @@ describe('createPrompt()', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('foo');
+  });
+
+  it('useMemo: can memoize processing heavy tasks', async () => {
+    const renderSpy = vi.fn();
+    const memoSpy = vi.fn();
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      renderSpy();
+      const [lastKeypress, setLastKeypress] = useState('');
+      const [index, setIndex] = useState(0);
+
+      const displayKeypress = useMemo(() => {
+        memoSpy();
+
+        if (!lastKeypress) {
+          return "You haven't pressed any key yet";
+        }
+        return `Last pressed: ${lastKeypress}`;
+      }, [lastKeypress]);
+
+      useKeypress((event: KeypressEvent) => {
+        if (isEnterKey(event)) {
+          done(lastKeypress);
+          return;
+        }
+
+        // Space will just trigger a re-render
+        if (isSpaceKey(event)) {
+          setIndex(index + 1);
+          return;
+        }
+
+        setLastKeypress(event.name);
+      });
+
+      return `${config.message} ${displayKeypress}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events, getScreen } = await render(prompt, { message: 'Question' });
+
+    expect(memoSpy).toHaveBeenCalledTimes(1);
+    expect(renderSpy).toHaveBeenCalledTimes(1);
+    expect(getScreen()).toMatchInlineSnapshot(
+      '"Question You haven\'t pressed any key yet"',
+    );
+
+    events.keypress('a');
+    expect(memoSpy).toHaveBeenCalledTimes(2);
+    expect(renderSpy).toHaveBeenCalledTimes(2);
+    expect(getScreen()).toMatchInlineSnapshot('"Question Last pressed: a"');
+
+    events.keypress('a');
+    expect(memoSpy).toHaveBeenCalledTimes(2);
+    expect(renderSpy).toHaveBeenCalledTimes(2);
+
+    events.keypress('b');
+    expect(memoSpy).toHaveBeenCalledTimes(3);
+    expect(renderSpy).toHaveBeenCalledTimes(3);
+    expect(getScreen()).toMatchInlineSnapshot('"Question Last pressed: b"');
+
+    events.keypress('space');
+    expect(memoSpy).toHaveBeenCalledTimes(3);
+    expect(renderSpy).toHaveBeenCalledTimes(4);
+    events.keypress('space');
+    expect(memoSpy).toHaveBeenCalledTimes(3);
+    expect(renderSpy).toHaveBeenCalledTimes(5);
+    expect(getScreen()).toMatchInlineSnapshot('"Question Last pressed: b"');
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('b');
   });
 
   it('allow cancelling the prompt', async () => {
