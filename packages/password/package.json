@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/password",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "engines": {
     "node": ">=14.18.0"
   },
@@ -57,13 +57,13 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/password/README.md",
   "dependencies": {
-    "@inquirer/input": "^1.2.12",
+    "@inquirer/input": "^1.2.13",
     "@inquirer/type": "^1.1.5",
     "ansi-escapes": "^4.3.2",
     "chalk": "^4.1.2"
   },
   "devDependencies": {
-    "@inquirer/testing": "^2.1.7"
+    "@inquirer/testing": "^2.1.8"
   },
   "scripts": {
     "tsc": "yarn run tsc:esm && yarn run tsc:cjs",

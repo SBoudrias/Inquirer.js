@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/core",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "engines": {
     "node": ">=14.18.0"
   },
@@ -73,7 +73,7 @@
     "wrap-ansi": "^6.2.0"
   },
   "devDependencies": {
-    "@inquirer/testing": "^2.1.7"
+    "@inquirer/testing": "^2.1.8"
   },
   "scripts": {
     "tsc": "yarn run tsc:esm && yarn run tsc:cjs",
