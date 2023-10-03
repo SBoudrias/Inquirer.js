@@ -5,6 +5,7 @@ import {
   usePrefix,
   usePagination,
   useRef,
+  useMemo,
   isEnterKey,
   isUpKey,
   isDownKey,
@@ -28,6 +29,7 @@ type Choice<Value> = {
 type SelectConfig<Value> = PromptConfig<{
   choices: ReadonlyArray<Choice<Value> | Separator>;
   pageSize?: number;
+  loop?: boolean;
 }>;
 
 type Item<Value> = Separator | Choice<Value>;
@@ -58,18 +60,23 @@ export default createPrompt(
     config: SelectConfig<Value>,
     done: (value: Value) => void,
   ): string => {
-    const { choices: items, pageSize } = config;
+    const { choices: items, loop = true, pageSize } = config;
     const firstRender = useRef(true);
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
-    const [active, setActive] = useState<number>(() => {
-      const selected = items.findIndex(isSelectable);
-      if (selected < 0)
+
+    const bounds = useMemo(() => {
+      const first = items.findIndex(isSelectable);
+      // TODO: Replace with `findLastIndex` when it's available.
+      const last = items.length - 1 - [...items].reverse().findIndex(isSelectable);
+      if (first < 0)
         throw new Error(
           '[select prompt] No selectable choices. All choices are disabled.',
         );
-      return selected;
-    });
+      return { first, last };
+    }, [items]);
+
+    const [active, setActive] = useState(bounds.first);
 
     // Safe to assume the cursor position always point to a Choice.
     const selectedChoice = items[active] as Choice<Value>;
@@ -79,6 +86,8 @@ export default createPrompt(
         setStatus('done');
         done(selectedChoice.value);
       } else if (isUpKey(key) || isDownKey(key)) {
+        if (!loop && active === bounds.first && isUpKey(key)) return;
+        if (!loop && active === bounds.last && isDownKey(key)) return;
         const offset = isUpKey(key) ? -1 : 1;
         let next = active;
         do {
@@ -99,13 +108,12 @@ export default createPrompt(
       message += chalk.dim(' (Use arrow keys)');
     }
 
-    const lines = items
-      .map((item, index) => renderItem({ item, isActive: index === active }))
-      .join('\n');
-
-    const page = usePagination(lines, {
+    const page = usePagination<Item<Value>>({
+      items,
       active,
+      renderItem,
       pageSize,
+      loop,
     });
 
     if (status === 'done') {

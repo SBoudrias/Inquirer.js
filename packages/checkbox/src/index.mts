@@ -4,6 +4,7 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
+  useMemo,
   isUpKey,
   isDownKey,
   isSpaceKey,
@@ -30,6 +31,7 @@ type Config<Value> = PromptConfig<{
   pageSize?: number;
   instructions?: string | boolean;
   choices: ReadonlyArray<Choice<Value> | Separator>;
+  loop?: boolean;
 }>;
 
 type Item<Value> = Separator | Choice<Value>;
@@ -72,19 +74,27 @@ function renderItem<Value>({ item, isActive }: { item: Item<Value>; isActive: bo
 
 export default createPrompt(
   <Value extends unknown>(config: Config<Value>, done: (value: Array<Value>) => void) => {
-    const { prefix = usePrefix(), instructions, pageSize, choices } = config;
+    const { prefix = usePrefix(), instructions, pageSize, loop = true, choices } = config;
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
       choices.map((choice) => ({ ...choice })),
     );
-    const [active, setActive] = useState<number>(() => {
-      const selected = items.findIndex(isSelectable);
-      if (selected < 0)
+
+    const bounds = useMemo(() => {
+      const first = items.findIndex(isSelectable);
+      // TODO: Replace with `findLastIndex` when it's available.
+      const last = items.length - 1 - [...items].reverse().findIndex(isSelectable);
+
+      if (first < 0) {
         throw new Error(
           '[checkbox prompt] No selectable choices. All choices are disabled.',
         );
-      return selected;
-    });
+      }
+
+      return { first, last };
+    }, [items]);
+
+    const [active, setActive] = useState(bounds.first);
     const [showHelpTip, setShowHelpTip] = useState(true);
 
     useKeypress((key) => {
@@ -92,6 +102,8 @@ export default createPrompt(
         setStatus('done');
         done(items.filter(isChecked).map((choice) => choice.value));
       } else if (isUpKey(key) || isDownKey(key)) {
+        if (!loop && active === bounds.first && isUpKey(key)) return;
+        if (!loop && active === bounds.last && isDownKey(key)) return;
         const offset = isUpKey(key) ? -1 : 1;
         let next = active;
         do {
@@ -120,13 +132,12 @@ export default createPrompt(
 
     const message = chalk.bold(config.message);
 
-    const lines = items
-      .map((item, index) => renderItem({ item, isActive: index === active }))
-      .join('\n');
-
-    const page = usePagination(lines, {
+    const page = usePagination<Item<Value>>({
+      items,
       active,
+      renderItem,
       pageSize,
+      loop,
     });
 
     if (status === 'done') {

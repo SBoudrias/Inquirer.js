@@ -5,7 +5,7 @@ export { useEffect } from './lib/use-effect.mjs';
 export { useMemo } from './lib/use-memo.mjs';
 export { useRef } from './lib/use-ref.mjs';
 export { useKeypress } from './lib/use-keypress.mjs';
-export { usePagination } from './lib/use-pagination.mjs';
+export { usePagination } from './lib/pagination/use-pagination.mjs';
 export {
   createPrompt,
   type PromptConfig,

@@ -59,6 +59,168 @@ describe('checkbox prompt', () => {
     await expect(answer).resolves.toEqual([2, 3]);
   });
 
+  it('does not scroll up beyond first item when not looping', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      loop: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
+      selection, and <enter> to proceed)
+      ❯◯ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('up');
+    events.keypress('space');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+      ❯◉ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1"');
+
+    await expect(answer).resolves.toEqual([1]);
+  });
+
+  it('does not scroll up beyond first selectable item when not looping', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: [new Separator(), ...numberedChoices],
+      loop: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
+      selection, and <enter> to proceed)
+       ──────────────
+      ❯◯ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('up');
+    events.keypress('space');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+       ──────────────
+      ❯◉ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1"');
+
+    await expect(answer).resolves.toEqual([1]);
+  });
+
+  it('does not scroll down beyond last option when not looping', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      loop: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
+      selection, and <enter> to proceed)
+      ❯◯ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    numberedChoices.forEach(() => events.keypress('down'));
+    events.keypress('down');
+    events.keypress('space');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+       ◯ 6
+       ◯ 7
+       ◯ 8
+       ◯ 9
+       ◯ 10
+       ◯ 11
+      ❯◉ 12
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 12"');
+
+    await expect(answer).resolves.toEqual([12]);
+  });
+
+  it('does not scroll down beyond last selectable option when not looping', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: [...numberedChoices, new Separator()],
+      loop: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
+      selection, and <enter> to proceed)
+      ❯◯ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    numberedChoices.forEach(() => events.keypress('down'));
+    events.keypress('down');
+    events.keypress('space');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+       ◯ 7
+       ◯ 8
+       ◯ 9
+       ◯ 10
+       ◯ 11
+      ❯◉ 12
+       ──────────────
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 12"');
+
+    await expect(answer).resolves.toEqual([12]);
+  });
+
   it('use number key to select an option', async () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a number',

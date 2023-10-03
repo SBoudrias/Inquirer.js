@@ -152,6 +152,120 @@ describe('select prompt', () => {
     await expect(answer).resolves.toEqual(11);
   });
 
+  it('does not scroll up beyond first item when not looping', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      pageSize: 2,
+      loop: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Use arrow keys)
+      ❯ 1
+        2
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('up');
+    events.keypress('up');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Use arrow keys)
+      ❯ 1
+        2
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(1);
+  });
+
+  it('does not scroll up beyond first selectable item when not looping', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a number',
+      choices: [new Separator(), ...numberedChoices],
+      pageSize: 2,
+      loop: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Use arrow keys)
+       ──────────────
+      ❯ 1
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('up');
+    events.keypress('up');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Use arrow keys)
+       ──────────────
+      ❯ 1
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(1);
+  });
+
+  it('does not scroll down beyond last item when not looping', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      pageSize: 2,
+      loop: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Use arrow keys)
+      ❯ 1
+        2
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    numberedChoices.forEach(() => events.keypress('down'));
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        11
+      ❯ 12
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(numberedChoices.length);
+  });
+
+  it('does not scroll down beyond last selectable item when not looping', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a number',
+      choices: [...numberedChoices, new Separator()],
+      pageSize: 3,
+      loop: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Use arrow keys)
+      ❯ 1
+        2
+        3
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    numberedChoices.forEach(() => events.keypress('down'));
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        11
+      ❯ 12
+       ──────────────
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(numberedChoices.length);
+  });
+
   it('skip disabled options by arrow keys', async () => {
     const { answer, events, getScreen } = await render(select, {
       message: 'Select a topping',
