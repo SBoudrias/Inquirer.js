@@ -170,10 +170,10 @@ A question object is a `hash` containing question related values:
       if (typeof input !== 'number') {
         // Pass the return value in the done callback
         done('You need to provide a number');
-        return;
+      } else {
+        // Pass the return value in the done callback
+        done(null, true);
       }
-      // Pass the return value in the done callback
-      done(null, true);
     }, 3000);
   }
 }

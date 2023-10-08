@@ -347,16 +347,12 @@ describe('createPrompt()', () => {
       useKeypress((event: KeypressEvent) => {
         if (isEnterKey(event)) {
           done(lastKeypress);
-          return;
-        }
-
-        // Space will just trigger a re-render
-        if (isSpaceKey(event)) {
+        } else if (isSpaceKey(event)) {
+          // Space will just trigger a re-render
           setIndex(index + 1);
-          return;
+        } else {
+          setLastKeypress(event.name);
         }
-
-        setLastKeypress(event.name);
       });
 
       return `${config.message} ${displayKeypress}`;
