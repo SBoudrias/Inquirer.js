@@ -96,9 +96,14 @@ export default createPrompt(
 
     const [active, setActive] = useState(bounds.first);
     const [showHelpTip, setShowHelpTip] = useState(true);
+    const [showValidationMessage, setShowValidationMessage] = useState(false);
 
     useKeypress((key) => {
       if (isEnterKey(key)) {
+        if (items.filter(isChecked).length === 0) {
+          setShowValidationMessage(true);
+          return;
+        }
         setStatus('done');
         done(items.filter(isChecked).map((choice) => choice.value));
       } else if (isUpKey(key) || isDownKey(key)) {
@@ -111,6 +116,7 @@ export default createPrompt(
         } while (!isSelectable(items[next]!));
         setActive(next);
       } else if (isSpaceKey(key)) {
+        setShowValidationMessage(false);
         setShowHelpTip(false);
         setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
       } else if (key.name === 'a') {
@@ -162,7 +168,12 @@ export default createPrompt(
       }
     }
 
-    return `${prefix} ${message}${helpTip}\n${page}${ansiEscapes.cursorHide}`;
+    let validationMessage = '';
+    if (showValidationMessage) {
+      validationMessage = `${chalk.red('!')} You need to select at least one choice`;
+    }
+
+    return `${prefix} ${message}${helpTip}\n${page}\n${validationMessage}${ansiEscapes.cursorHide}`;
   },
 );
 
