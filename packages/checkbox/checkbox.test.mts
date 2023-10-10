@@ -624,4 +624,43 @@ describe('checkbox prompt', () => {
       '"[checkbox prompt] No selectable choices. All choices are disabled."',
     );
   });
+
+  it('shows validation message if user did not select any choice', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      required: true,
+    });
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
+      selection, and <enter> to proceed)
+      ❯◯ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Use arrow keys to reveal more choices)
+      > At least one choice must be selected"
+    `);
+
+    events.keypress('space');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+      ❯◉ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual([1]);
+  });
 });

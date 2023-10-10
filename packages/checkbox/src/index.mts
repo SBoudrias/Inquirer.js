@@ -32,6 +32,7 @@ type Config<Value> = PromptConfig<{
   instructions?: string | boolean;
   choices: ReadonlyArray<Choice<Value> | Separator>;
   loop?: boolean;
+  required?: string | boolean;
 }>;
 
 type Item<Value> = Separator | Choice<Value>;
@@ -74,7 +75,14 @@ function renderItem<Value>({ item, isActive }: { item: Item<Value>; isActive: bo
 
 export default createPrompt(
   <Value extends unknown>(config: Config<Value>, done: (value: Array<Value>) => void) => {
-    const { prefix = usePrefix(), instructions, pageSize, loop = true, choices } = config;
+    const {
+      prefix = usePrefix(),
+      instructions,
+      pageSize,
+      loop = true,
+      choices,
+      required,
+    } = config;
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
       choices.map((choice) => ({ ...choice })),
@@ -96,16 +104,16 @@ export default createPrompt(
 
     const [active, setActive] = useState(bounds.first);
     const [showHelpTip, setShowHelpTip] = useState(true);
-    const [showValidationMessage, setShowValidationMessage] = useState(false);
+    const [errorMsg, setError] = useState<string | undefined>(undefined);
 
     useKeypress((key) => {
       if (isEnterKey(key)) {
-        if (items.filter(isChecked).length === 0) {
-          setShowValidationMessage(true);
-          return;
+        if (required && items.filter(isChecked).length === 0) {
+          setError('At least one choice must be selected');
+        } else {
+          setStatus('done');
+          done(items.filter(isChecked).map((choice) => choice.value));
         }
-        setStatus('done');
-        done(items.filter(isChecked).map((choice) => choice.value));
       } else if (isUpKey(key) || isDownKey(key)) {
         if (!loop && active === bounds.first && isUpKey(key)) return;
         if (!loop && active === bounds.last && isDownKey(key)) return;
@@ -116,7 +124,7 @@ export default createPrompt(
         } while (!isSelectable(items[next]!));
         setActive(next);
       } else if (isSpaceKey(key)) {
-        setShowValidationMessage(false);
+        setError(undefined);
         setShowHelpTip(false);
         setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
       } else if (key.name === 'a') {
@@ -168,12 +176,12 @@ export default createPrompt(
       }
     }
 
-    let validationMessage = '';
-    if (showValidationMessage) {
-      validationMessage = `${chalk.red('!')} You need to select at least one choice`;
+    let error = '';
+    if (errorMsg) {
+      error = chalk.red(`> ${errorMsg}`);
     }
 
-    return `${prefix} ${message}${helpTip}\n${page}\n${validationMessage}${ansiEscapes.cursorHide}`;
+    return `${prefix} ${message}${helpTip}\n${page}\n${error}${ansiEscapes.cursorHide}`;
   },
 );
 
