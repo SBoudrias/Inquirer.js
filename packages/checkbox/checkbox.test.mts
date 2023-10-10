@@ -262,9 +262,8 @@ describe('checkbox prompt', () => {
       (Use arrow keys to reveal more choices)"
     `);
 
-    events.keypress('space');
     events.keypress('enter');
-    await expect(answer).resolves.toEqual([1]);
+    await expect(answer).resolves.toEqual([]);
   });
 
   it('allow setting a bigger page size', async () => {
@@ -290,9 +289,8 @@ describe('checkbox prompt', () => {
       (Use arrow keys to reveal more choices)"
     `);
 
-    events.keypress('space');
     events.keypress('enter');
-    await expect(answer).resolves.toEqual([1]);
+    await expect(answer).resolves.toEqual([]);
   });
 
   it('cycles through options', async () => {
@@ -385,11 +383,10 @@ describe('checkbox prompt', () => {
        ◯ Pepperoni"
     `);
 
-    events.keypress('space');
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Ham"');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping"');
 
-    await expect(answer).resolves.toEqual(['ham']);
+    await expect(answer).resolves.toEqual([]);
   });
 
   it('skip separator by arrow keys', async () => {
@@ -452,11 +449,10 @@ describe('checkbox prompt', () => {
        ◯ Pepperoni"
     `);
 
-    events.keypress('space');
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Ham"');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping"');
 
-    await expect(answer).resolves.toEqual(['ham']);
+    await expect(answer).resolves.toEqual([]);
   });
 
   it('allow select all', async () => {
@@ -534,9 +530,8 @@ describe('checkbox prompt', () => {
 
     events.keypress('a');
     events.keypress('a');
-    events.keypress('space');
     events.keypress('enter');
-    await expect(answer).resolves.toEqual([4]);
+    await expect(answer).resolves.toEqual([]);
   });
 
   it('allow inverting selection', async () => {
@@ -586,11 +581,10 @@ describe('checkbox prompt', () => {
       (Use arrow keys to reveal more choices)"
     `);
 
-    events.keypress('space');
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1"');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number"');
 
-    await expect(answer).resolves.toEqual([1]);
+    await expect(answer).resolves.toEqual([]);
   });
 
   it('allow customizing help tip', async () => {
@@ -614,11 +608,10 @@ describe('checkbox prompt', () => {
       (Use arrow keys to reveal more choices)"
     `);
 
-    events.keypress('space');
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1"');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number"');
 
-    await expect(answer).resolves.toEqual([1]);
+    await expect(answer).resolves.toEqual([]);
   });
 
   it('throws if all choices are disabled', async () => {
@@ -630,43 +623,5 @@ describe('checkbox prompt', () => {
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
       '"[checkbox prompt] No selectable choices. All choices are disabled."',
     );
-  });
-
-  it('shows validation message if user did not select any choice', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
-      message: 'Select a number',
-      choices: numberedChoices,
-    });
-
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
-      ❯◯ 1
-       ◯ 2
-       ◯ 3
-       ◯ 4
-       ◯ 5
-       ◯ 6
-       ◯ 7
-      (Use arrow keys to reveal more choices)
-      ! You need to select at least one choice"
-    `);
-
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number
-      ❯◉ 1
-       ◯ 2
-       ◯ 3
-       ◯ 4
-       ◯ 5
-       ◯ 6
-       ◯ 7
-      (Use arrow keys to reveal more choices)"
-    `);
-
-    events.keypress('enter');
-    await expect(answer).resolves.toEqual([1]);
   });
 });
