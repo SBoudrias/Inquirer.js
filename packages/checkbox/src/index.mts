@@ -32,7 +32,7 @@ type Config<Value> = PromptConfig<{
   instructions?: string | boolean;
   choices: ReadonlyArray<Choice<Value> | Separator>;
   loop?: boolean;
-  required?: string | boolean;
+  required?: boolean;
 }>;
 
 type Item<Value> = Separator | Choice<Value>;
