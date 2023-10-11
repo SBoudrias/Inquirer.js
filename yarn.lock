@@ -654,7 +654,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ljharb/through@npm:^2.3.9":
+"@ljharb/through@npm:2.3.9":
   version: 2.3.9
   resolution: "@ljharb/through@npm:2.3.9"
   checksum: a47ffed12ef4b08d07458db8bff5f7a13a7030fddf7dbfa947a765581a634d42ee90f7b8c249315aad122c21ad061e97a74f65aef3c03d2c09291d11312f0bfb
@@ -4370,7 +4370,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inquirer@workspace:packages/inquirer"
   dependencies:
-    "@ljharb/through": ^2.3.9
+    "@ljharb/through": 2.3.9
     ansi-escapes: ^4.3.2
     chalk: ^5.3.0
     cli-cursor: ^3.1.0
