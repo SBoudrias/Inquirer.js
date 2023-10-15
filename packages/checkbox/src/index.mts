@@ -108,7 +108,7 @@ export default createPrompt(
 
     useKeypress((key) => {
       if (isEnterKey(key)) {
-        if (required && items.filter(isChecked).length === 0) {
+        if (required && !items.some(isChecked)) {
           setError('At least one choice must be selected');
         } else {
           setStatus('done');
