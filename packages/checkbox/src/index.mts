@@ -32,6 +32,7 @@ type Config<Value> = PromptConfig<{
   instructions?: string | boolean;
   choices: ReadonlyArray<Choice<Value> | Separator>;
   loop?: boolean;
+  required?: boolean;
 }>;
 
 type Item<Value> = Separator | Choice<Value>;
@@ -74,7 +75,14 @@ function renderItem<Value>({ item, isActive }: { item: Item<Value>; isActive: bo
 
 export default createPrompt(
   <Value extends unknown>(config: Config<Value>, done: (value: Array<Value>) => void) => {
-    const { prefix = usePrefix(), instructions, pageSize, loop = true, choices } = config;
+    const {
+      prefix = usePrefix(),
+      instructions,
+      pageSize,
+      loop = true,
+      choices,
+      required,
+    } = config;
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
       choices.map((choice) => ({ ...choice })),
@@ -96,11 +104,16 @@ export default createPrompt(
 
     const [active, setActive] = useState(bounds.first);
     const [showHelpTip, setShowHelpTip] = useState(true);
+    const [errorMsg, setError] = useState<string | undefined>(undefined);
 
     useKeypress((key) => {
       if (isEnterKey(key)) {
-        setStatus('done');
-        done(items.filter(isChecked).map((choice) => choice.value));
+        if (required && !items.some(isChecked)) {
+          setError('At least one choice must be selected');
+        } else {
+          setStatus('done');
+          done(items.filter(isChecked).map((choice) => choice.value));
+        }
       } else if (isUpKey(key) || isDownKey(key)) {
         if (
           loop ||
@@ -115,6 +128,7 @@ export default createPrompt(
           setActive(next);
         }
       } else if (isSpaceKey(key)) {
+        setError(undefined);
         setShowHelpTip(false);
         setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
       } else if (key.name === 'a') {
@@ -167,7 +181,12 @@ export default createPrompt(
       }
     }
 
-    return `${prefix} ${message}${helpTip}\n${page}${ansiEscapes.cursorHide}`;
+    let error = '';
+    if (errorMsg) {
+      error = chalk.red(`> ${errorMsg}`);
+    }
+
+    return `${prefix} ${message}${helpTip}\n${page}\n${error}${ansiEscapes.cursorHide}`;
   },
 );
 
