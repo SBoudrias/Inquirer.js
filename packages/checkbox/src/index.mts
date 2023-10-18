@@ -33,6 +33,8 @@ type Config<Value> = PromptConfig<{
   choices: ReadonlyArray<Choice<Value> | Separator>;
   loop?: boolean;
   required?: boolean;
+  minChoices?: number;
+  maxChoices?: number;
 }>;
 
 type Item<Value> = Separator | Choice<Value>;
@@ -82,6 +84,8 @@ export default createPrompt(
       loop = true,
       choices,
       required,
+      minChoices,
+      maxChoices,
     } = config;
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
@@ -108,8 +112,13 @@ export default createPrompt(
 
     useKeypress((key) => {
       if (isEnterKey(key)) {
-        if (required && items.filter(isChecked).length === 0) {
-          setError('At least one choice must be selected');
+        const selectedChoices = items.filter(isChecked).length;
+        if ((required || (minChoices && minChoices === 1)) && selectedChoices === 0) {
+          setError('At least 1 choice must be selected');
+        } else if (minChoices && selectedChoices < minChoices) {
+          setError(`At least ${minChoices} choices must be selected`);
+        } else if (maxChoices && selectedChoices > maxChoices) {
+          setError(`At most ${maxChoices} choices must be selected`);
         } else {
           setStatus('done');
           done(items.filter(isChecked).map((choice) => choice.value));
