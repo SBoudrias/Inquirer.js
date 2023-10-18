@@ -644,7 +644,7 @@ describe('checkbox prompt', () => {
        ◯ 6
        ◯ 7
       (Use arrow keys to reveal more choices)
-      > At least 1 choice must be selected"
+      > At least one choice must be selected"
     `);
 
     events.keypress('space');

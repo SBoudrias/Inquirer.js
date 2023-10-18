@@ -114,7 +114,7 @@ export default createPrompt(
       if (isEnterKey(key)) {
         const selectedChoices = items.filter(isChecked).length;
         if ((required || (minChoices && minChoices === 1)) && selectedChoices === 0) {
-          setError('At least 1 choice must be selected');
+          setError('At least one choice must be selected');
         } else if (minChoices && selectedChoices < minChoices) {
           setError(`At least ${minChoices} choices must be selected`);
         } else if (maxChoices && selectedChoices > maxChoices) {
