@@ -86,19 +86,24 @@ export default createPrompt(
         setStatus('done');
         done(selectedChoice.value);
       } else if (isUpKey(key) || isDownKey(key)) {
-        if (!loop && active === bounds.first && isUpKey(key)) return;
-        if (!loop && active === bounds.last && isDownKey(key)) return;
-        const offset = isUpKey(key) ? -1 : 1;
-        let next = active;
-        do {
-          next = (next + offset + items.length) % items.length;
-        } while (!isSelectable(items[next]!));
-        setActive(next);
+        if (
+          loop ||
+          (isUpKey(key) && active !== bounds.first) ||
+          (isDownKey(key) && active !== bounds.last)
+        ) {
+          const offset = isUpKey(key) ? -1 : 1;
+          let next = active;
+          do {
+            next = (next + offset + items.length) % items.length;
+          } while (!isSelectable(items[next]!));
+          setActive(next);
+        }
       } else if (isNumberKey(key)) {
         const position = Number(key.name) - 1;
         const item = items[position];
-        if (item == null || !isSelectable(item)) return;
-        setActive(position);
+        if (item != null && isSelectable(item)) {
+          setActive(position);
+        }
       }
     });
 

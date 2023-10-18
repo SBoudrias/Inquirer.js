@@ -170,10 +170,10 @@ A question object is a `hash` containing question related values:
       if (typeof input !== 'number') {
         // Pass the return value in the done callback
         done('You need to provide a number');
-        return;
+      } else {
+        // Pass the return value in the done callback
+        done(null, true);
       }
-      // Pass the return value in the done callback
-      done(null, true);
     }, 3000);
   }
 }
@@ -436,7 +436,7 @@ Licensed under the MIT license.
 [**autocomplete**](https://github.com/mokkabonna/inquirer-autocomplete-prompt)<br>
 Presents a list of options as the user types, compatible with other packages such as fuzzy (for search)<br>
 <br>
-![autocomplete prompt](https://github.com/mokkabonna/inquirer-autocomplete-prompt/raw/master/inquirer.gif)
+![autocomplete prompt](https://raw.githubusercontent.com/mokkabonna/inquirer-autocomplete-prompt/master/packages/inquirer-autocomplete-prompt/inquirer.gif)
 
 [**checkbox-plus**](https://github.com/faressoft/inquirer-checkbox-plus-prompt)<br>
 Checkbox list with autocomplete and other additions<br>
