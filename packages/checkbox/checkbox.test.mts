@@ -644,7 +644,7 @@ describe('checkbox prompt', () => {
        ◯ 6
        ◯ 7
       (Use arrow keys to reveal more choices)
-      > At least one choice must be selected"
+      > At least 1 choice must be selected"
     `);
 
     events.keypress('space');
@@ -662,5 +662,89 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
+  });
+
+  it('shows validation message if not enough choices are selected ', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      minChoices: 2,
+    });
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
+      selection, and <enter> to proceed)
+      ❯◯ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Use arrow keys to reveal more choices)
+      > At least 2 choices must be selected"
+    `);
+
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('space');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+       ◉ 1
+      ❯◉ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual([1, 2]);
+  });
+
+  it('shows validation message if too many choices are selected ', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      maxChoices: 2,
+    });
+
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+       ◉ 1
+       ◉ 2
+      ❯◉ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Use arrow keys to reveal more choices)
+      > At most 2 choices must be selected"
+    `);
+
+    events.keypress('space');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+       ◉ 1
+       ◉ 2
+      ❯◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual([1, 2]);
   });
 });
