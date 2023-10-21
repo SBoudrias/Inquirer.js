@@ -5,7 +5,6 @@ import {
   usePrefix,
   isEnterKey,
   Separator,
-  type PromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
@@ -18,9 +17,10 @@ type Choice<Value> = {
   key?: string;
 };
 
-type RawlistConfig<Value> = PromptConfig<{
+type RawlistConfig<Value> = {
+  message: string;
   choices: ReadonlyArray<Choice<Value> | Separator>;
-}>;
+};
 
 function isSelectableChoice<T>(
   choice: undefined | Separator | Choice<T>,

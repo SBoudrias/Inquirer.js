@@ -18,44 +18,6 @@ import {
 } from './src/index.mjs';
 
 describe('createPrompt()', () => {
-  it('handle async function message', async () => {
-    const viewFunction = vi.fn(() => '');
-    const prompt = createPrompt(viewFunction);
-    const promise = Promise.resolve('Async message:');
-    const renderingDone = render(prompt, { message: () => promise });
-
-    // Initially, we leave a few ms for message to resolve
-    expect(viewFunction).not.toHaveBeenCalled();
-
-    const { answer } = await renderingDone;
-    expect(viewFunction).toHaveBeenLastCalledWith(
-      expect.objectContaining({ message: 'Async message:' }),
-      expect.any(Function),
-    );
-
-    answer.cancel();
-    await expect(answer).rejects.toBeInstanceOf(Error);
-  });
-
-  it('handle deferred message', async () => {
-    const viewFunction = vi.fn(() => '');
-    const prompt = createPrompt(viewFunction);
-    const promise = Promise.resolve('Async message:');
-    const renderingDone = render(prompt, { message: promise });
-
-    // Initially, we leave a few ms for message to resolve
-    expect(viewFunction).not.toHaveBeenCalled();
-
-    const { answer } = await renderingDone;
-    expect(viewFunction).toHaveBeenLastCalledWith(
-      expect.objectContaining({ message: 'Async message:' }),
-      expect.any(Function),
-    );
-
-    answer.cancel();
-    await expect(answer).rejects.toBeInstanceOf(Error);
-  });
-
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       const [value, setValue] = useState('');

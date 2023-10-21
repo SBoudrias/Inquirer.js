@@ -5,16 +5,16 @@ import {
   usePrefix,
   isEnterKey,
   isBackspaceKey,
-  type PromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 import chalk from 'chalk';
 
-type InputConfig = PromptConfig<{
+type InputConfig = {
+  message: string;
   default?: string;
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
-}>;
+};
 
 export default createPrompt<string, InputConfig>((config, done) => {
   const { validate = () => true } = config;

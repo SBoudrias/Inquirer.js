@@ -234,6 +234,16 @@ exec < /dev/tty
 node my-script.js
 ```
 
+## Wait for config
+
+Maybe some question configuration require to await a value.
+
+```js
+import { confirm } from '@inquirer/prompts';
+
+const answer = await confirm({ message: await getMessage() });
+```
+
 # Community prompts
 
 If you created a cool prompt, [send us a PR adding it](https://github.com/SBoudrias/Inquirer.js/edit/master/README.md) to the list below!
