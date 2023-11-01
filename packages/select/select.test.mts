@@ -471,5 +471,8 @@ describe('select prompt', () => {
           7
         (Use arrow keys to reveal more choices)"
       `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(4);
   });
 });
