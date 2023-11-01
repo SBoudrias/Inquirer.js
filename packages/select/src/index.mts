@@ -30,6 +30,7 @@ type SelectConfig<Value> = PromptConfig<{
   choices: ReadonlyArray<Choice<Value> | Separator>;
   pageSize?: number;
   loop?: boolean;
+  default?: Value;
 }>;
 
 type Item<Value> = Separator | Choice<Value>;
@@ -60,7 +61,7 @@ export default createPrompt(
     config: SelectConfig<Value>,
     done: (value: Value) => void,
   ): string => {
-    const { choices: items, loop = true, pageSize } = config;
+    const { choices: items, loop = true, pageSize, default: _default } = config;
     const firstRender = useRef(true);
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
@@ -76,7 +77,17 @@ export default createPrompt(
       return { first, last };
     }, [items]);
 
-    const [active, setActive] = useState(bounds.first);
+    const defaultItemIndex = useMemo(() => {
+      if (!_default) return -1;
+      return items.findIndex(
+        (item) =>
+          !Separator.isSeparator(item) && isSelectable(item) && item.value === _default,
+      );
+    }, [_default, items]);
+
+    const [active, setActive] = useState(
+      defaultItemIndex === -1 ? bounds.first : defaultItemIndex,
+    );
 
     // Safe to assume the cursor position always point to a Choice.
     const selectedChoice = items[active] as Choice<Value>;
