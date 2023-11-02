@@ -54,6 +54,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a number 2, 3"');
 
     await expect(answer).resolves.toEqual([2, 3]);
@@ -94,6 +95,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1"');
 
     await expect(answer).resolves.toEqual([1]);
@@ -134,6 +136,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1"');
 
     await expect(answer).resolves.toEqual([1]);
@@ -175,6 +178,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a number 12"');
 
     await expect(answer).resolves.toEqual([12]);
@@ -216,6 +220,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a number 12"');
 
     await expect(answer).resolves.toEqual([12]);
@@ -242,6 +247,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a number 4"');
 
     await expect(answer).resolves.toEqual([4]);
@@ -351,6 +357,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Pepperoni"');
 
     await expect(answer).resolves.toEqual(['pepperoni']);
@@ -384,6 +391,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a topping"');
 
     await expect(answer).resolves.toEqual([]);
@@ -417,6 +425,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Pepperoni"');
 
     await expect(answer).resolves.toEqual(['pepperoni']);
@@ -450,6 +459,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a topping"');
 
     await expect(answer).resolves.toEqual([]);
@@ -582,6 +592,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a number"');
 
     await expect(answer).resolves.toEqual([]);
@@ -609,6 +620,7 @@ describe('checkbox prompt', () => {
     `);
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot('"? Select a number"');
 
     await expect(answer).resolves.toEqual([]);
@@ -633,6 +645,7 @@ describe('checkbox prompt', () => {
     });
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
       selection, and <enter> to proceed)
@@ -664,14 +677,20 @@ describe('checkbox prompt', () => {
     await expect(answer).resolves.toEqual([1]);
   });
 
-  it('shows validation message if not enough choices are selected ', async () => {
+  it('uses custom validation', async () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a number',
       choices: numberedChoices,
-      minChoices: 2,
+      validate: (items: any) => {
+        if (items.filter((item: any) => item.checked).length === 1) {
+          return true;
+        }
+        return 'Please select only one choice';
+      },
     });
 
     events.keypress('enter');
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
       selection, and <enter> to proceed)
@@ -683,68 +702,11 @@ describe('checkbox prompt', () => {
        ◯ 6
        ◯ 7
       (Use arrow keys to reveal more choices)
-      > At least 2 choices must be selected"
+      > Please select only one choice"
     `);
 
-    events.keypress('space');
-    events.keypress('down');
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number
-       ◉ 1
-      ❯◉ 2
-       ◯ 3
-       ◯ 4
-       ◯ 5
-       ◯ 6
-       ◯ 7
-      (Use arrow keys to reveal more choices)"
-    `);
-
-    events.keypress('enter');
-    await expect(answer).resolves.toEqual([1, 2]);
-  });
-
-  it('shows validation message if too many choices are selected ', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
-      message: 'Select a number',
-      choices: numberedChoices,
-      maxChoices: 2,
-    });
-
-    events.keypress('space');
-    events.keypress('down');
-    events.keypress('space');
-    events.keypress('down');
     events.keypress('space');
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number
-       ◉ 1
-       ◉ 2
-      ❯◉ 3
-       ◯ 4
-       ◯ 5
-       ◯ 6
-       ◯ 7
-      (Use arrow keys to reveal more choices)
-      > At most 2 choices must be selected"
-    `);
-
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number
-       ◉ 1
-       ◉ 2
-      ❯◯ 3
-       ◯ 4
-       ◯ 5
-       ◯ 6
-       ◯ 7
-      (Use arrow keys to reveal more choices)"
-    `);
-
-    events.keypress('enter');
-    await expect(answer).resolves.toEqual([1, 2]);
+    await expect(answer).resolves.toEqual([1]);
   });
 });

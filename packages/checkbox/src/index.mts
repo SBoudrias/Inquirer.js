@@ -33,8 +33,9 @@ type Config<Value> = PromptConfig<{
   choices: ReadonlyArray<Choice<Value> | Separator>;
   loop?: boolean;
   required?: boolean;
-  minChoices?: number;
-  maxChoices?: number;
+  validate?: (
+    items: ReadonlyArray<Item<Value>>,
+  ) => boolean | string | Promise<string | boolean>;
 }>;
 
 type Item<Value> = Separator | Choice<Value>;
@@ -84,8 +85,7 @@ export default createPrompt(
       loop = true,
       choices,
       required,
-      minChoices,
-      maxChoices,
+      validate = () => true,
     } = config;
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
@@ -110,18 +110,16 @@ export default createPrompt(
     const [showHelpTip, setShowHelpTip] = useState(true);
     const [errorMsg, setError] = useState<string | undefined>(undefined);
 
-    useKeypress((key) => {
+    useKeypress(async (key) => {
       if (isEnterKey(key)) {
-        const selectedChoices = items.filter(isChecked).length;
-        if ((required || (minChoices && minChoices === 1)) && selectedChoices === 0) {
+        const isValid = await validate(items);
+        if (required && !items.some(isChecked)) {
           setError('At least one choice must be selected');
-        } else if (minChoices && selectedChoices < minChoices) {
-          setError(`At least ${minChoices} choices must be selected`);
-        } else if (maxChoices && selectedChoices > maxChoices) {
-          setError(`At most ${maxChoices} choices must be selected`);
-        } else {
+        } else if (isValid === true) {
           setStatus('done');
           done(items.filter(isChecked).map((choice) => choice.value));
+        } else {
+          setError(isValid || 'You must select a valid value');
         }
       } else if (isUpKey(key) || isDownKey(key)) {
         if (
