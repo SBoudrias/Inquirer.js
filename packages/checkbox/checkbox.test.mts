@@ -681,7 +681,7 @@ describe('checkbox prompt', () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a number',
       choices: numberedChoices,
-      validate: (items: any) => {
+      validate(items: any) {
         if (items.filter((item: any) => item.checked).length === 1) {
           return true;
         }
