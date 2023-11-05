@@ -30,6 +30,7 @@ type SelectConfig<Value> = PromptConfig<{
   choices: ReadonlyArray<Choice<Value> | Separator>;
   pageSize?: number;
   loop?: boolean;
+  default?: Value;
 }>;
 
 type Item<Value> = Separator | Choice<Value>;
@@ -76,7 +77,16 @@ export default createPrompt(
       return { first, last };
     }, [items]);
 
-    const [active, setActive] = useState(bounds.first);
+    const defaultItemIndex = useMemo(() => {
+      if (!('default' in config)) return -1;
+      return items.findIndex(
+        (item) => isSelectable(item) && item.value === config.default,
+      );
+    }, [config.default, items]);
+
+    const [active, setActive] = useState(
+      defaultItemIndex === -1 ? bounds.first : defaultItemIndex,
+    );
 
     // Safe to assume the cursor position always point to a Choice.
     const selectedChoice = items[active] as Choice<Value>;

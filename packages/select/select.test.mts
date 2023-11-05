@@ -452,4 +452,27 @@ describe('select prompt', () => {
 
     await expect(answer).resolves.toEqual('pineapple');
   });
+
+  it('Allows setting a default value', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      default: numberedChoices[3].value,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number (Use arrow keys)
+          1
+          2
+          3
+        ❯ 4
+          5
+          6
+          7
+        (Use arrow keys to reveal more choices)"
+      `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(4);
+  });
 });
