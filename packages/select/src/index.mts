@@ -61,7 +61,7 @@ export default createPrompt(
     config: SelectConfig<Value>,
     done: (value: Value) => void,
   ): string => {
-    const { choices: items, loop = true, pageSize, default: _default } = config;
+    const { choices: items, loop = true, pageSize } = config;
     const firstRender = useRef(true);
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
@@ -78,12 +78,11 @@ export default createPrompt(
     }, [items]);
 
     const defaultItemIndex = useMemo(() => {
-      if (!_default) return -1;
+      if (!('default' in config)) return -1;
       return items.findIndex(
-        (item) =>
-          !Separator.isSeparator(item) && isSelectable(item) && item.value === _default,
+        (item) => isSelectable(item) && item.value === config.default,
       );
-    }, [_default, items]);
+    }, [config.default, items]);
 
     const [active, setActive] = useState(
       defaultItemIndex === -1 ? bounds.first : defaultItemIndex,
