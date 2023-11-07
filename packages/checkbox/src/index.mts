@@ -112,12 +112,13 @@ export default createPrompt(
 
     useKeypress(async (key) => {
       if (isEnterKey(key)) {
-        const isValid = await validate(items);
+        const selection = items.filter(isChecked);
+        const isValid = await validate([...selection]);
         if (required && !items.some(isChecked)) {
           setError('At least one choice must be selected');
         } else if (isValid === true) {
           setStatus('done');
-          done(items.filter(isChecked).map((choice) => choice.value));
+          done(selection.map((choice) => choice.value));
         } else {
           setError(isValid || 'You must select a valid value');
         }

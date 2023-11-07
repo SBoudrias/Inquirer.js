@@ -658,10 +658,10 @@ describe('checkbox prompt', () => {
       message: 'Select a number',
       choices: numberedChoices,
       validate(items: any) {
-        if (items.filter((item: any) => item.checked).length === 1) {
-          return true;
+        if (items.length !== 1) {
+          return 'Please select only one choice';
         }
-        return 'Please select only one choice';
+        return true;
       },
     });
 
