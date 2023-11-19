@@ -85,4 +85,80 @@ describe('password prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual('12345678');
   });
+
+  it('handle show password: false', async () => {
+    const { answer, events, getScreen } = await render(password, {
+      message: 'Enter your password',
+      mask: true,
+      allowShowPassword: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot('"? Enter your password"');
+
+    events.type('J');
+    expect(getScreen()).toMatchInlineSnapshot('"? Enter your password *"');
+
+    events.type('ohn');
+    expect(getScreen()).toMatchInlineSnapshot('"? Enter your password ****"');
+
+    events.keypress({
+      name: '`',
+      ctrl: true,
+    });
+    expect(getScreen()).toMatchInlineSnapshot('"? Enter your password ****"');
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('John');
+    expect(getScreen()).toMatchInlineSnapshot('"? Enter your password ****"');
+  });
+
+  it('handle show password: true', async () => {
+    const { answer, events, getScreen } = await render(password, {
+      message: 'Enter your password',
+      mask: true,
+      allowShowPassword: true,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(
+      '"? Enter your password (CTRL+Space to show/hide the password)"',
+    );
+
+    events.type('J');
+    expect(getScreen()).toMatchInlineSnapshot(
+      '"? Enter your password (CTRL+Space to show/hide the password) *"',
+    );
+
+    events.type('ohn');
+    expect(getScreen()).toMatchInlineSnapshot(
+      '"? Enter your password (CTRL+Space to show/hide the password) ****"',
+    );
+
+    events.keypress({
+      name: '`',
+      ctrl: true,
+    });
+    expect(getScreen()).toMatchInlineSnapshot(
+      '"? Enter your password (CTRL+Space to show/hide the password) John"',
+    );
+
+    events.keypress({
+      name: '`',
+      ctrl: true,
+    });
+    expect(getScreen()).toMatchInlineSnapshot(
+      '"? Enter your password (CTRL+Space to show/hide the password) ****"',
+    );
+
+    events.keypress({
+      name: '`',
+      ctrl: true,
+    });
+    expect(getScreen()).toMatchInlineSnapshot(
+      '"? Enter your password (CTRL+Space to show/hide the password) John"',
+    );
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('John');
+    expect(getScreen()).toMatchInlineSnapshot('"? Enter your password ****"');
+  });
 });
