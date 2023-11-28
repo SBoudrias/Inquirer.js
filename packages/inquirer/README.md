@@ -513,6 +513,11 @@ A table-like prompt for Inquirer.<br>
 <br>
 ![inquirer-table-prompt](https://raw.githubusercontent.com/eduardoboucas/inquirer-table-prompt/master/screen-capture.gif)
 
+[**inquirer-table-input**](https://github.com/edelciomolina/inquirer-table-input)<br>
+A table editing prompt for Inquirer.<br>
+<br>
+![inquirer-table-prompt](https://raw.githubusercontent.com/edelciomolina/inquirer-table-input/master/screen-capture.gif)
+
 [**inquirer-interrupted-prompt**](https://github.com/lnquy065/inquirer-interrupted-prompt)<br>
 Turning any existing inquirer and its plugin prompts into prompts that can be interrupted with a custom key.<br>
 <br>
