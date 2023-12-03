@@ -59,8 +59,21 @@ export async function render<TestedPrompt extends Prompt<any, any>>(
   await Promise.resolve();
 
   const events = {
-    keypress(name: string) {
-      input.emit('keypress', null, { name });
+    keypress(
+      key:
+        | string
+        | {
+            name?: string | undefined;
+            ctrl?: boolean | undefined;
+            meta?: boolean | undefined;
+            shift?: boolean | undefined;
+          },
+    ) {
+      if (typeof key === 'string') {
+        input.emit('keypress', null, { name: key });
+      } else {
+        input.emit('keypress', null, key);
+      }
     },
     type(text: string) {
       input.write(text);
