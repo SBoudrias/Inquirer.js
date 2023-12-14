@@ -413,7 +413,7 @@ describe('createPrompt()', () => {
     events.keypress('enter');
 
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Prompt was canceled"',
+      `[Error: Prompt was canceled]`,
     );
 
     const output = getFullOutput();
@@ -469,7 +469,7 @@ it('allow cancelling the prompt multiple times', async () => {
   events.keypress('enter');
 
   await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-    '"Prompt was canceled"',
+    `[Error: Prompt was canceled]`,
   );
 });
 
@@ -533,7 +533,7 @@ describe('Error handling', () => {
     const { answer } = await render(prompt, { message: 'Question' });
 
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"useEffect return value must be a cleanup function or nothing."',
+      `[Error: useEffect return value must be a cleanup function or nothing.]`,
     );
   });
 
@@ -541,7 +541,7 @@ describe('Error handling', () => {
     expect(() => {
       useEffect(() => {}, []);
     }).toThrowErrorMatchingInlineSnapshot(
-      '"[Inquirer] Hook functions can only be called from within a prompt"',
+      `[Error: [Inquirer] Hook functions can only be called from within a prompt]`,
     );
   });
 
@@ -549,7 +549,7 @@ describe('Error handling', () => {
     expect(() => {
       useKeypress(() => {});
     }).toThrowErrorMatchingInlineSnapshot(
-      '"[Inquirer] Hook functions can only be called from within a prompt"',
+      `[Error: [Inquirer] Hook functions can only be called from within a prompt]`,
     );
   });
 });

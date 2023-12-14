@@ -228,7 +228,7 @@ describe('expand prompt', () => {
     events.keypress('enter');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? (yadxH) 4
-      > \\"4\\" isn't an available option"
+      > "4" isn't an available option"
     `);
 
     answer.cancel();

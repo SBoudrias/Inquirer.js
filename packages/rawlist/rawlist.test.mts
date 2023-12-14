@@ -118,7 +118,7 @@ describe('rawlist prompt', () => {
         3) 3
         4) 4
         5) 5
-      > \\"A\\" isn't an available option"
+      > "A" isn't an available option"
     `);
 
     answer.cancel();
