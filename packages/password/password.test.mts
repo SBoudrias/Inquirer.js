@@ -68,7 +68,7 @@ describe('password prompt', () => {
         transformer: () => '',
       } as any);
     }).toThrowErrorMatchingInlineSnapshot(
-      '"Inquirer password prompt do not support custom transformer function. Use the input prompt instead."',
+      `[Error: Inquirer password prompt do not support custom transformer function. Use the input prompt instead.]`,
     );
   });
 });

@@ -609,7 +609,7 @@ describe('checkbox prompt', () => {
     });
 
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"[checkbox prompt] No selectable choices. All choices are disabled."',
+      `[Error: [checkbox prompt] No selectable choices. All choices are disabled.]`,
     );
   });
 
