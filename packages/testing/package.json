@@ -62,7 +62,7 @@
   "dependencies": {
     "@inquirer/type": "^1.1.5",
     "@types/mute-stream": "^0.0.4",
-    "@types/node": "^20.10.4",
+    "@types/node": "^20.10.7",
     "ansi-escapes": "^4.3.2",
     "mute-stream": "^1.0.0",
     "strip-ansi": "^6.0.1"
