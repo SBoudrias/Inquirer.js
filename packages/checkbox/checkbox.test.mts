@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import checkbox, { Separator, Config } from './src/index.mjs';
 import { Prompt } from '@inquirer/type';
+import checkbox, { Separator, Config } from './src/index.mjs';
 
 const numberedChoices = [
   { value: 1 },

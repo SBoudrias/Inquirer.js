@@ -91,8 +91,8 @@ export default createPrompt(
       required,
       validate = () => true,
       // We always provide a value for choices. It is only typed as optional to give the user as much flexibility as possible
-      renderChoices = (choices) =>
-        choices!.map((choice) => choice.name || choice.value).join(', '),
+      renderChoices = (selectedChoices) =>
+        selectedChoices!.map((choice) => choice.name || choice.value).join(', '),
     } = config;
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
