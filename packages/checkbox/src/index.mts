@@ -26,7 +26,7 @@ type Choice<Value> = {
   type?: never;
 };
 
-type Config<Value> = PromptConfig<{
+export type Config<Value> = PromptConfig<{
   prefix?: string;
   pageSize?: number;
   instructions?: string | boolean;
@@ -36,6 +36,10 @@ type Config<Value> = PromptConfig<{
   validate?: (
     items: ReadonlyArray<Item<Value>>,
   ) => boolean | string | Promise<string | boolean>;
+  renderChoices?: (
+    selected: ReadonlyArray<Choice<Value>>,
+    choices: ReadonlyArray<Choice<Value> | Separator>,
+  ) => string;
 }>;
 
 type Item<Value> = Separator | Choice<Value>;
@@ -86,6 +90,9 @@ export default createPrompt(
       choices,
       required,
       validate = () => true,
+      // We always provide a value for choices. It is only typed as optional to give the user as much flexibility as possible
+      renderChoices = (choices) =>
+        choices!.map((choice) => choice.name || choice.value).join(', '),
     } = config;
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
@@ -168,10 +175,9 @@ export default createPrompt(
     });
 
     if (status === 'done') {
-      const selection = items
-        .filter(isChecked)
-        .map((choice) => choice.name || choice.value);
-      return `${prefix} ${message} ${chalk.cyan(selection.join(', '))}`;
+      const selectedChoices = items.filter(isChecked);
+
+      return `${prefix} ${message} ${chalk.cyan(renderChoices(selectedChoices, items))}`;
     }
 
     let helpTip = '';

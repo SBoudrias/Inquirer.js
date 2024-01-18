@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import checkbox, { Separator } from './src/index.mjs';
+import checkbox, { Separator, Config } from './src/index.mjs';
+import { Prompt } from '@inquirer/type';
 
 const numberedChoices = [
   { value: 1 },
@@ -654,16 +655,19 @@ describe('checkbox prompt', () => {
   });
 
   it('uses custom validation', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
-      message: 'Select a number',
-      choices: numberedChoices,
-      validate(items: any) {
-        if (items.length !== 1) {
-          return 'Please select only one choice';
-        }
-        return true;
+    const { answer, events, getScreen } = await render<Prompt<any, Config<number>>>(
+      checkbox,
+      {
+        message: 'Select a number',
+        choices: numberedChoices,
+        validate(items) {
+          if (items.length !== 1) {
+            return 'Please select only one choice';
+          }
+          return true;
+        },
       },
-    });
+    );
 
     events.keypress('enter');
     await Promise.resolve();
@@ -684,5 +688,71 @@ describe('checkbox prompt', () => {
     events.keypress('space');
     events.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
+  });
+
+  it('uses the default renderChoices function', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: numberedChoices,
+    });
+
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual([1, 3, 4]);
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1, 3, 4"');
+  });
+
+  it('uses the given renderChoices function - using only the selected choices', async () => {
+    const { answer, events, getScreen } = await render<Prompt<any, Config<number>>>(
+      checkbox,
+      {
+        message: 'Select a number',
+        choices: numberedChoices,
+        renderChoices: (selected) =>
+          selected.map((choice) => choice.value * 2).join(', '),
+      },
+    );
+
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual([1, 3, 4]);
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 2, 6, 8"');
+  });
+
+  it('uses the given renderChoices function - using selected and all choices', async () => {
+    const { answer, events, getScreen } = await render<Prompt<any, Config<number>>>(
+      checkbox,
+      {
+        message: 'Select a number',
+        choices: numberedChoices,
+        renderChoices: (selected, choices) =>
+          ` ---> Selected ${selected.length} out of ${
+            choices.filter((choice) => choice.type !== 'separator').length
+          } options.`,
+      },
+    );
+
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual([1, 3]);
+    expect(getScreen()).toMatchInlineSnapshot(
+      '"? Select a number  ---> Selected 2 out of 12 options."',
+    );
   });
 });
