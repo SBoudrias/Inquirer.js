@@ -60,15 +60,29 @@ describe('password prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"? Enter your password %%%%"');
   });
 
-  it('errors when receiving a transformer function', async () => {
-    expect(() => {
-      password({
-        message: 'Enter your password',
-        mask: true,
-        transformer: () => '',
-      } as any);
-    }).toThrowErrorMatchingInlineSnapshot(
-      `[Error: Inquirer password prompt do not support custom transformer function. Use the input prompt instead.]`,
-    );
+  it('handle synchronous validation', async () => {
+    const { answer, events, getScreen } = await render(password, {
+      message: 'Enter your password',
+      mask: true,
+      validate: (value) => value.length >= 8,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter your password"`);
+
+    events.type('1');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter your password *"`);
+
+    events.keypress('enter');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Enter your password *
+      > You must provide a valid value"
+    `);
+
+    events.type('2345678');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter your password ********"`);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('12345678');
   });
 });

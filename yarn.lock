@@ -456,7 +456,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@inquirer/password@workspace:packages/password"
   dependencies:
-    "@inquirer/input": ^1.2.14
+    "@inquirer/core": ^5.1.1
     "@inquirer/testing": ^2.1.9
     "@inquirer/type": ^1.1.5
     ansi-escapes: ^4.3.2
