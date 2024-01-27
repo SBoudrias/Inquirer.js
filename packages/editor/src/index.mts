@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import { editAsync } from 'external-editor';
 import {
   createPrompt,
@@ -7,9 +6,11 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
+  makeTheme,
   type InquirerReadline,
+  type Theme,
 } from '@inquirer/core';
-import type {} from '@inquirer/type';
+import type { PartialDeep } from '@inquirer/type';
 
 type EditorConfig = {
   message: string;
@@ -17,13 +18,19 @@ type EditorConfig = {
   postfix?: string;
   waitForUseInput?: boolean;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
+  theme?: PartialDeep<Theme>;
 };
 
 export default createPrompt<string, EditorConfig>((config, done) => {
   const { waitForUseInput = true, validate = () => true } = config;
+  const theme = makeTheme(config.theme);
+
   const [status, setStatus] = useState<string>('pending');
   const [value, setValue] = useState<string>(config.default || '');
   const [errorMsg, setError] = useState<string | undefined>(undefined);
+
+  const isLoading = status === 'loading';
+  const prefix = usePrefix({ isLoading, theme });
 
   function startEditor(rl: InquirerReadline) {
     rl.pause();
@@ -70,21 +77,18 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     }
   });
 
-  const isLoading = status === 'loading';
-  const prefix = usePrefix(isLoading);
-
-  const message = chalk.bold(config.message);
-
-  let helpTip;
+  const message = theme.style.message(config.message);
+  let helpTip = '';
   if (status === 'loading') {
-    helpTip = chalk.dim('Received');
+    helpTip = theme.style.help('Received');
   } else if (status === 'pending') {
-    helpTip = chalk.dim('Press <enter> to launch your preferred editor.');
+    const enterKey = theme.style.key('enter');
+    helpTip = theme.style.help(`Press ${enterKey} to launch your preferred editor.`);
   }
 
   let error = '';
   if (errorMsg) {
-    error = chalk.red(`> ${errorMsg}`);
+    error = theme.style.error(errorMsg);
   }
 
   return [[prefix, message, helpTip].filter(Boolean).join(' '), error];

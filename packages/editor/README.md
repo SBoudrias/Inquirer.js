@@ -29,6 +29,27 @@ const answer = await editor({
 | validate        | `string => boolean \| string \| Promise<string \| boolean>` | no                     | On submit, validate the content. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash.                                  |
 | postfix         | `string`                                                    | no (default to `.txt`) | The postfix of the file being edited. Adding this will add color highlighting to the file content in most editors.                                                                                                                     |
 | waitForUseInput | `boolean`                                                   | no (default to `true`) | Open the editor automatically without waiting for the user to press enter. Note that this mean the user will not see the question! So make sure you have a default value that provide guidance if it's unclear what input is expected. |
+| theme           | [See Theming](#Theming)                                     | no                     | Customize look of the prompt.                                                                                                                                                                                                          |
+
+## Theming
+
+You can theme a prompt by passing a `theme` object option. The theme object only need to includes the keys you wish to modify, we'll fallback on the defaults for the rest.
+
+```ts
+type Theme = {
+  prefix: string;
+  spinner: {
+    interval: number;
+    frames: string[];
+  };
+  style: {
+    message: (text: string) => string;
+    error: (text: string) => string;
+    help: (text: string) => string;
+    key: (text: string) => string;
+  };
+};
+```
 
 # License
 
