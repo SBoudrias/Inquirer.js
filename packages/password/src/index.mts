@@ -51,13 +51,14 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
   });
 
   const message = chalk.bold(config.message);
-  let formattedValue = '';
 
+  let formattedValue = '';
+  let helpTip;
   if (config.mask) {
     const maskChar = typeof config.mask === 'string' ? config.mask : '*';
     formattedValue = maskChar.repeat(value.length);
   } else if (status !== 'done') {
-    formattedValue = `${chalk.dim('[input is masked]')}${ansiEscapes.cursorHide}`;
+    helpTip = `${chalk.dim('[input is masked]')}${ansiEscapes.cursorHide}`;
   }
 
   if (status === 'done') {
@@ -69,5 +70,5 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     error = chalk.red(`> ${errorMsg}`);
   }
 
-  return [`${prefix} ${message} ${formattedValue}`, error];
+  return [[prefix, message, formattedValue, helpTip].filter(Boolean).join(' '), error];
 });
