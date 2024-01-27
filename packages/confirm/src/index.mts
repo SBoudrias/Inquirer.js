@@ -5,14 +5,14 @@ import {
   useKeypress,
   isEnterKey,
   usePrefix,
-  type PromptConfig,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 
-type ConfirmConfig = PromptConfig<{
+type ConfirmConfig = {
+  message: string;
   default?: boolean;
   transformer?: (value: boolean) => string;
-}>;
+};
 
 export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   const { transformer = (answer) => (answer ? 'yes' : 'no') } = config;

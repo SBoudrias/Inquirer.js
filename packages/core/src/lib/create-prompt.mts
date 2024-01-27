@@ -6,36 +6,12 @@ import ScreenManager from './screen-manager.mjs';
 import type { InquirerReadline } from './read-line.type.mjs';
 import { withHooks, effectScheduler } from './hook-engine.mjs';
 
-// @deprecated Prefer using `PromptConfig<{ ... }>` instead
-export type AsyncPromptConfig = {
-  message: string | Promise<string> | (() => Promise<string>);
-};
-
-export type PromptConfig<Config> = Prettify<AsyncPromptConfig & Config>;
-
-type ResolvedPromptConfig = { message: string };
-
 type ViewFunction<Value, Config> = (
-  config: Prettify<Config & ResolvedPromptConfig>,
+  config: Prettify<Config>,
   done: (value: Value) => void,
 ) => string | [string, string | undefined];
 
-// Take an AsyncPromptConfig and resolves all it's values.
-async function getPromptConfig<Config extends AsyncPromptConfig>(
-  config: Config,
-): Promise<Config & ResolvedPromptConfig> {
-  const message =
-    typeof config.message === 'function' ? config.message() : config.message;
-
-  return {
-    ...config,
-    message: await message,
-  };
-}
-
-export function createPrompt<Value, Config extends AsyncPromptConfig>(
-  view: ViewFunction<Value, Config>,
-) {
+export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
   const prompt: Prompt<Value, Config> = (config, context) => {
     // Default `input` to stdin
     const input = context?.input ?? process.stdin;
@@ -98,12 +74,12 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
           });
         }
 
-        function workLoop(resolvedConfig: Config & ResolvedPromptConfig) {
+        function workLoop(resolvedConfig: Config) {
           store.index = 0;
           store.handleChange = () => workLoop(resolvedConfig);
 
           try {
-            const nextView = view(resolvedConfig, done);
+            const nextView = view(config, done);
 
             const [content, bottomContent] =
               typeof nextView === 'string' ? [nextView] : nextView;
@@ -116,16 +92,13 @@ export function createPrompt<Value, Config extends AsyncPromptConfig>(
           }
         }
 
-        // TODO: we should display a loader while we get the default options.
-        getPromptConfig(config).then((resolvedConfig) => {
-          workLoop(resolvedConfig);
+        workLoop(config);
 
-          // Re-renders only happen when the state change; but the readline cursor could change position
-          // and that also requires a re-render (and a manual one because we mute the streams).
-          // We set the listener after the initial workLoop to avoid a double render if render triggered
-          // by a state change sets the cursor to the right position.
-          store.rl.input.on('keypress', checkCursorPos);
-        }, reject);
+        // Re-renders only happen when the state change; but the readline cursor could change position
+        // and that also requires a re-render (and a manual one because we mute the streams).
+        // We set the listener after the initial workLoop to avoid a double render if render triggered
+        // by a state change sets the cursor to the right position.
+        store.rl.input.on('keypress', checkCursorPos);
       });
     });
 

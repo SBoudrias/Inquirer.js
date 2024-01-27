@@ -7,17 +7,17 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
-  type PromptConfig,
   type InquirerReadline,
 } from '@inquirer/core';
 import type {} from '@inquirer/type';
 
-type EditorConfig = PromptConfig<{
+type EditorConfig = {
+  message: string;
   default?: string;
   postfix?: string;
   waitForUseInput?: boolean;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
-}>;
+};
 
 export default createPrompt<string, EditorConfig>((config, done) => {
   const { waitForUseInput = true, validate = () => true } = config;

@@ -4,15 +4,15 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
-  type PromptConfig,
 } from '@inquirer/core';
 import chalk from 'chalk';
 import ansiEscapes from 'ansi-escapes';
 
-type PasswordConfig = PromptConfig<{
+type PasswordConfig = {
+  message: string;
   mask?: boolean | string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
-}>;
+};
 
 export default createPrompt<string, PasswordConfig>((config, done) => {
   const { validate = () => true } = config;
