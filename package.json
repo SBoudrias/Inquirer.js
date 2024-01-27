@@ -79,7 +79,7 @@
     "prepare": "turbo tsc",
     "setup": "node ./tools/setup-packages.mjs",
     "pretest": "eslint . && turbo tsc",
-    "test": "vitest --run packages && node --test integration"
+    "test": "vitest --run packages && node --test integration/**/*.test.*"
   },
   "repository": {
     "type": "git",
