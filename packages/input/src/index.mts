@@ -66,14 +66,13 @@ export default createPrompt<string, InputConfig>((config, done) => {
   let formattedValue = value;
   if (typeof config.transformer === 'function') {
     formattedValue = config.transformer(value, { isFinal: status === 'done' });
-  }
-  if (status === 'done') {
-    formattedValue = chalk.cyan(formattedValue);
+  } else if (status === 'done') {
+    formattedValue = chalk.cyan(value);
   }
 
-  let defaultStr = '';
+  let defaultStr;
   if (defaultValue && status !== 'done' && !value) {
-    defaultStr = chalk.dim(` (${defaultValue})`);
+    defaultStr = chalk.dim(`(${defaultValue})`);
   }
 
   let error = '';
@@ -81,5 +80,5 @@ export default createPrompt<string, InputConfig>((config, done) => {
     error = chalk.red(`> ${errorMsg}`);
   }
 
-  return [`${prefix} ${message}${defaultStr} ${formattedValue}`, error];
+  return [[prefix, message, defaultStr, formattedValue].filter(Boolean).join(' '), error];
 });
