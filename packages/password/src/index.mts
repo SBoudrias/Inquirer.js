@@ -12,13 +12,15 @@ import ansiEscapes from 'ansi-escapes';
 type PasswordConfig = PromptConfig<{
   mask?: boolean | string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
+  allowShowPassword?: boolean;
 }>;
 
 export default createPrompt<string, PasswordConfig>((config, done) => {
-  const { validate = () => true } = config;
+  const { validate = () => true, allowShowPassword } = config;
   const [status, setStatus] = useState<string>('pending');
   const [errorMsg, setError] = useState<string | undefined>(undefined);
   const [value, setValue] = useState<string>('');
+  const [isMasked, setIsMasked] = useState<boolean>(true);
 
   const isLoading = status === 'loading';
   const prefix = usePrefix(isLoading);
@@ -44,6 +46,12 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
         setError(isValid || 'You must provide a valid value');
         setStatus('pending');
       }
+    } else if (allowShowPassword && key.ctrl === true && key.name === '`') {
+      // CTRL + Space
+      // I only tried on Linux, but the combination on Linux was reported like that
+      //   key.crtl = true
+      //   key.name = '`'
+      setIsMasked(!isMasked);
     } else {
       setValue(rl.line);
       setError(undefined);
@@ -60,6 +68,10 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     formattedValue = `${chalk.dim('[input is masked]')}${ansiEscapes.cursorHide}`;
   }
 
+  if (!isMasked && status !== 'done') {
+    formattedValue = value;
+  }
+
   if (status === 'done') {
     formattedValue = chalk.cyan(formattedValue);
   }
@@ -69,5 +81,12 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     error = chalk.red(`> ${errorMsg}`);
   }
 
-  return [`${prefix} ${message} ${formattedValue}`, error];
+  return [
+    `${prefix} ${message}${
+      allowShowPassword && status !== 'done'
+        ? chalk.dim(' (CTRL+Space to show/hide the password)')
+        : ''
+    } ${formattedValue}`,
+    error,
+  ];
 });
