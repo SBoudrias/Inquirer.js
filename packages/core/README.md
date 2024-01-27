@@ -28,7 +28,7 @@ const confirm = createPrompt<boolean, { message: string; default?: boolean }>(
   (config, done) => {
     const [status, setStatus] = useState('pending');
     const [value, setValue] = useState('');
-    const prefix = usePrefix();
+    const prefix = usePrefix({});
 
     useKeypress((key, rl) => {
       if (isEnterKey(key)) {
@@ -141,10 +141,80 @@ export default createPrompt((config, done) => {
     renderItem: ({ item, index, isActive }) => `${isActive ? ">" : " "}${index}. ${item.toString()}`
     pageSize: config.pageSize,
     loop: config.loop,
+    theme, config.theme,
   });
 
   return `... ${page}`;
 });
+```
+
+### Theming
+
+Theming utilities will allow you to expose customization of the prompt style. Inquirer also has a few standard theme values shared across all the official prompts.
+
+To allow standard customization:
+
+```ts
+import { createPrompt, usePrefix, makeTheme, type Theme } from '@inquirer/core';
+import type { PartialDeep } from '@inquirer/type';
+
+type PromptConfig = {
+  theme?: PartialDeep<Theme>;
+};
+
+export default createPrompt<string, PromptConfig>((config, done) => {
+  const theme = makeTheme(config.theme);
+
+  const prefix = usePrefix({ isLoading, theme });
+
+  return `${prefix} ${theme.style.highlight('hello')}`;
+});
+```
+
+To setup a custom theme:
+
+```ts
+import { createPrompt, makeTheme, type Theme } from '@inquirer/core';
+import type { PartialDeep } from '@inquirer/type';
+
+type PromptTheme = {};
+
+const promptTheme: PromptTheme = {
+  icon: '!',
+};
+
+type PromptConfig = {
+  theme?: PartialDeep<Theme<PromptTheme>>;
+};
+
+export default createPrompt<string, PromptConfig>((config, done) => {
+  const theme = makeTheme(promptTheme, config.theme);
+
+  const prefix = usePrefix({ isLoading, theme });
+
+  return `${prefix} ${theme.icon}`;
+});
+```
+
+The [default theme keys cover](https://github.com/SBoudrias/Inquirer.js/blob/theme/packages/core/src/lib/theme.mts):
+
+```ts
+type DefaultTheme = {
+  prefix: string;
+  spinner: {
+    interval: number;
+    frames: string[];
+  };
+  style: {
+    answer: (text: string) => string;
+    message: (text: string) => string;
+    error: (text: string) => string;
+    defaultAnswer: (text: string) => string;
+    help: (text: string) => string;
+    highlight: (text: string) => string;
+    key: (text: string) => string;
+  };
+};
 ```
 
 # License
