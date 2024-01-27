@@ -81,7 +81,7 @@ export default createPrompt(
     const {
       prefix = usePrefix(),
       instructions,
-      pageSize,
+      pageSize = 7,
       loop = true,
       choices,
       required,

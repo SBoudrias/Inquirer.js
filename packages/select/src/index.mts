@@ -61,7 +61,7 @@ export default createPrompt(
     config: SelectConfig<Value>,
     done: (value: Value) => void,
   ): string => {
-    const { choices: items, loop = true, pageSize } = config;
+    const { choices: items, loop = true, pageSize = 7 } = config;
     const firstRender = useRef(true);
     const prefix = usePrefix();
     const [status, setStatus] = useState('pending');
@@ -117,10 +117,12 @@ export default createPrompt(
       }
     });
 
-    let message = chalk.bold(config.message);
-    if (firstRender.current) {
+    const message = chalk.bold(config.message);
+
+    let helpTip;
+    if (firstRender.current && items.length <= pageSize) {
       firstRender.current = false;
-      message += chalk.dim(' (Use arrow keys)');
+      helpTip = chalk.dim('(Use arrow keys)');
     }
 
     const page = usePagination<Item<Value>>({
@@ -141,7 +143,7 @@ export default createPrompt(
       ? `\n${selectedChoice.description}`
       : ``;
 
-    return `${prefix} ${message}\n${page}${choiceDescription}${ansiEscapes.cursorHide}`;
+    return `${[prefix, message, helpTip].filter(Boolean).join(' ')}\n${page}${choiceDescription}${ansiEscapes.cursorHide}`;
   },
 );
 

@@ -25,7 +25,7 @@ describe('select prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Use arrow keys)
+      "? Select a number
       ❯ 1
         2
         3
@@ -54,6 +54,25 @@ describe('select prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"? Select a number 3"');
 
     await expect(answer).resolves.toEqual(3);
+  });
+
+  it('allow selecting the first option', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a number',
+      choices: numberedChoices.slice(0, 3),
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Use arrow keys)
+      ❯ 1
+        2
+        3"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(1);
+
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1"');
   });
 
   it('use number key to select an option', async () => {
@@ -89,7 +108,7 @@ describe('select prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Use arrow keys)
+      "? Select a number
       ❯ 1
         2
       (Use arrow keys to reveal more choices)"
@@ -107,7 +126,7 @@ describe('select prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Use arrow keys)
+      "? Select a number
       ❯ 1
         2
         3
@@ -133,7 +152,7 @@ describe('select prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Use arrow keys)
+      "? Select a number
       ❯ 1
         2
       (Use arrow keys to reveal more choices)"
@@ -161,7 +180,7 @@ describe('select prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Use arrow keys)
+      "? Select a number
       ❯ 1
         2
       (Use arrow keys to reveal more choices)"
@@ -170,7 +189,7 @@ describe('select prompt', () => {
     events.keypress('up');
     events.keypress('up');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Use arrow keys)
+      "? Select a number
       ❯ 1
         2
       (Use arrow keys to reveal more choices)"
@@ -189,7 +208,7 @@ describe('select prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Use arrow keys)
+      "? Select a number
        ──────────────
       ❯ 1
       (Use arrow keys to reveal more choices)"
@@ -198,7 +217,7 @@ describe('select prompt', () => {
     events.keypress('up');
     events.keypress('up');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Use arrow keys)
+      "? Select a number
        ──────────────
       ❯ 1
       (Use arrow keys to reveal more choices)"
@@ -217,7 +236,7 @@ describe('select prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Use arrow keys)
+      "? Select a number
       ❯ 1
         2
       (Use arrow keys to reveal more choices)"
@@ -245,7 +264,7 @@ describe('select prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Use arrow keys)
+      "? Select a number
       ❯ 1
         2
         3
@@ -461,16 +480,16 @@ describe('select prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number (Use arrow keys)
-          1
-          2
-          3
-        ❯ 4
-          5
-          6
-          7
-        (Use arrow keys to reveal more choices)"
-      `);
+      "? Select a number
+        1
+        2
+        3
+      ❯ 4
+        5
+        6
+        7
+      (Use arrow keys to reveal more choices)"
+    `);
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual(4);
