@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/rawlist",
-  "version": "1.2.14",
+  "version": "1.2.15",
   "description": "Inquirer rawlist prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -54,12 +54,12 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/rawlist/README.md",
   "dependencies": {
-    "@inquirer/core": "^5.1.1",
-    "@inquirer/type": "^1.1.5",
+    "@inquirer/core": "^5.1.2",
+    "@inquirer/type": "^1.1.6",
     "chalk": "^4.1.2"
   },
   "devDependencies": {
-    "@inquirer/testing": "^2.1.9"
+    "@inquirer/testing": "^2.1.10"
   },
   "scripts": {
     "tsc": "yarn run tsc:esm && yarn run tsc:cjs",

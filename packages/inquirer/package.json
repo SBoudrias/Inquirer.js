@@ -1,7 +1,7 @@
 {
   "name": "inquirer",
   "type": "module",
-  "version": "9.2.12",
+  "version": "9.2.13",
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "files": [
