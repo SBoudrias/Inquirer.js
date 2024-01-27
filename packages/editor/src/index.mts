@@ -73,11 +73,13 @@ export default createPrompt<string, EditorConfig>((config, done) => {
   const isLoading = status === 'loading';
   const prefix = usePrefix(isLoading);
 
-  let message = chalk.bold(config.message);
+  const message = chalk.bold(config.message);
+
+  let helpTip;
   if (status === 'loading') {
-    message += chalk.dim(' Received');
+    helpTip = chalk.dim('Received');
   } else if (status === 'pending') {
-    message += chalk.dim(' Press <enter> to launch your preferred editor.');
+    helpTip = chalk.dim('Press <enter> to launch your preferred editor.');
   }
 
   let error = '';
@@ -85,5 +87,5 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     error = chalk.red(`> ${errorMsg}`);
   }
 
-  return [`${prefix} ${message}`, error];
+  return [[prefix, message, helpTip].filter(Boolean).join(' '), error];
 });
