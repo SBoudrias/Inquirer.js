@@ -1,9 +1,10 @@
-yarn.lock
-.prettierignore
+.eslintignore
 .gitattributes
 .gitignore
-.eslintignore
+.husky
+.prettierignore
 .yarn
-coverage
 *.gz
 *.zip
+coverage
+yarn.lock
