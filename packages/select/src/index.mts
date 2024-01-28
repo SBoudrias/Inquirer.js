@@ -30,7 +30,7 @@ type SelectConfig<Value> = PromptConfig<{
   choices: ReadonlyArray<Choice<Value> | Separator>;
   pageSize?: number;
   loop?: boolean;
-  default?: Value;
+  default?: unknown;
 }>;
 
 type Item<Value> = Separator | Choice<Value>;
@@ -57,10 +57,7 @@ function renderItem<Value>({ item, isActive }: { item: Item<Value>; isActive: bo
 }
 
 export default createPrompt(
-  <Value extends unknown>(
-    config: SelectConfig<Value>,
-    done: (value: Value) => void,
-  ): string => {
+  <Value,>(config: SelectConfig<Value>, done: (value: Value) => void): string => {
     const { choices: items, loop = true, pageSize = 7 } = config;
     const firstRender = useRef(true);
     const prefix = usePrefix();
