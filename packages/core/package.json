@@ -2,7 +2,7 @@
   "name": "@inquirer/core",
   "version": "6.0.0",
   "engines": {
-    "node": ">=14.18.0"
+    "node": ">=18"
   },
   "description": "Core Inquirer prompt API",
   "main": "./dist/cjs/index.js",

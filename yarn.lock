@@ -1280,10 +1280,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sindresorhus/tsconfig@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@sindresorhus/tsconfig@npm:4.0.0"
-  checksum: 9fc6791810b92e4339c4587879aac181f006edb7851e000f20d4f2ad1b9bdf68cfff81378f0550dc3517f37b40162c0961577a7b59d1148597b28c0ed1e69116
+"@sindresorhus/tsconfig@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@sindresorhus/tsconfig@npm:5.0.0"
+  checksum: a5373d27028bb9ed69de1558e643dc5178645e7c87a5b31145a63efa0c0eae7492e00281d1a43b5ea38f61567d629d9aa8ed44044ff252bdf50bd79e232876d3
   languageName: node
   linkType: hard
 
@@ -7713,7 +7713,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@sindresorhus/tsconfig": ^4.0.0
+    "@sindresorhus/tsconfig": ^5.0.0
     "@types/node": ^20.11.10
     "@typescript-eslint/eslint-plugin": ^6.19.1
     "@typescript-eslint/parser": ^6.19.1

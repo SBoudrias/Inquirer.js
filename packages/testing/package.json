@@ -2,7 +2,7 @@
   "name": "@inquirer/testing",
   "version": "2.1.10",
   "engines": {
-    "node": ">=14.18.0"
+    "node": ">=18"
   },
   "description": "Inquirer testing utilities",
   "main": "./dist/cjs/index.js",

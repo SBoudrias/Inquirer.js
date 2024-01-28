@@ -68,7 +68,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=14.18.0"
+    "node": ">=18"
   },
   "exports": {
     ".": {

@@ -30,7 +30,6 @@ jobs:
         node-version:
           - 20
           - 18
-          - 16
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -51,7 +50,6 @@ jobs:
         node-version:
           - 20
           - 18
-          - 16
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
