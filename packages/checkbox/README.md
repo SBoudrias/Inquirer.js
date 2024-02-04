@@ -43,8 +43,38 @@ const answer = await checkbox({
 | loop     | `boolean`                                                                                               | no       | Defaults to `true`. When set to `false`, the cursor will be constrained to the top and bottom of the choice list without looping.                                                                     |
 | required | `boolean`                                                                                               | no       | When set to `true`, ensures at least one choice must be selected.                                                                                                                                     |
 | validate | `string\[\] => boolean \| string \| Promise<string \| boolean>`                                         | no       | On submit, validate the choices. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
+| theme    | [See Theming](#Theming)                                                                                 | no       | Customize look of the prompt.                                                                                                                                                                         |
 
 The `Separator` object can be used to render non-selectable lines in the choice list. By default it'll render a line, but you can provide the text as argument (`new Separator('-- Dependencies --')`). This option is often used to add labels to groups within long list of options.
+
+## Theming
+
+You can theme a prompt by passing a `theme` object option. The theme object only need to includes the keys you wish to modify, we'll fallback on the defaults for the rest.
+
+```ts
+type Theme = {
+  prefix: string;
+  spinner: {
+    interval: number;
+    frames: string[];
+  };
+  style: {
+    answer: (text: string) => string;
+    message: (text: string) => string;
+    error: (text: string) => string;
+    defaultAnswer: (text: string) => string;
+    help: (text: string) => string;
+    highlight: (text: string) => string;
+    key: (text: string) => string;
+    disabledChoice: (text: string) => string;
+  };
+  icon: {
+    checked: string;
+    unchecked: string;
+    cursor: string;
+  };
+};
+```
 
 # License
 

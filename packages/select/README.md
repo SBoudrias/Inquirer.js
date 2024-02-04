@@ -54,8 +54,34 @@ const answer = await select({
 | default  | `string`                                                                                                   | no       | Defines in front of which item the cursor will initially appear. When omitted, the cursor will appear on the first selectable item.                                                                                                                                                 |
 | pageSize | `number`                                                                                                   | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                                                                                                         |
 | loop     | `boolean`                                                                                                  | no       | Defaults to `true`. When set to `false`, the cursor will be constrained to the top and bottom of the choice list without looping.                                                                                                                                                   |
+| theme    | [See Theming](#Theming)                                                                                    | no       | Customize look of the prompt.                                                                                                                                                                                                                                                       |
 
 The `Separator` object can be used to render non-selectable lines in the choice list. By default it'll render a line, but you can provide the text as argument (`new Separator('-- Dependencies --')`). This option is often used to add labels to groups within long list of options.
+
+## Theming
+
+You can theme a prompt by passing a `theme` object option. The theme object only need to includes the keys you wish to modify, we'll fallback on the defaults for the rest.
+
+```ts
+type Theme = {
+  prefix: string;
+  spinner: {
+    interval: number;
+    frames: string[];
+  };
+  style: {
+    answer: (text: string) => string;
+    message: (text: string) => string;
+    error: (text: string) => string;
+    help: (text: string) => string;
+    highlight: (text: string) => string;
+    disabled: (text: string) => string;
+  };
+  icon: {
+    cursor: string;
+  };
+};
+```
 
 # License
 

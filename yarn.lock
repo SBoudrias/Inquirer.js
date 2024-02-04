@@ -373,7 +373,6 @@ __metadata:
     "@inquirer/core": ^6.0.0
     "@inquirer/testing": ^2.1.10
     "@inquirer/type": ^1.1.6
-    chalk: ^4.1.2
   languageName: unknown
   linkType: soft
 
@@ -416,7 +415,6 @@ __metadata:
   dependencies:
     "@inquirer/core": ^6.0.0
     "@inquirer/type": ^1.1.6
-    chalk: ^4.1.2
     external-editor: ^3.1.0
   languageName: unknown
   linkType: soft
@@ -448,7 +446,6 @@ __metadata:
     "@inquirer/core": ^6.0.0
     "@inquirer/testing": ^2.1.10
     "@inquirer/type": ^1.1.6
-    chalk: ^4.1.2
   languageName: unknown
   linkType: soft
 
@@ -460,7 +457,6 @@ __metadata:
     "@inquirer/testing": ^2.1.10
     "@inquirer/type": ^1.1.6
     ansi-escapes: ^4.3.2
-    chalk: ^4.1.2
   languageName: unknown
   linkType: soft
 
