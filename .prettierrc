@@ -1,5 +1,13 @@
 {
   "endOfLine": "auto",
   "singleQuote": true,
-  "printWidth": 90
+  "printWidth": 90,
+  "overrides": [
+    {
+      "files": ["tsconfig.json"],
+      "options": {
+        "trailingComma": "none"
+      }
+    }
+  ]
 }

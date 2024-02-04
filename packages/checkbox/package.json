@@ -2,7 +2,7 @@
   "name": "@inquirer/checkbox",
   "version": "1.5.2",
   "engines": {
-    "node": ">=14.18.0"
+    "node": ">=18"
   },
   "description": "Inquirer checkbox prompt",
   "main": "./dist/cjs/index.js",

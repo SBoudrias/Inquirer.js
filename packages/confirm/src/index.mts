@@ -1,24 +1,27 @@
-import chalk from 'chalk';
 import {
   createPrompt,
   useState,
   useKeypress,
   isEnterKey,
   usePrefix,
-  type PromptConfig,
+  makeTheme,
+  type Theme,
 } from '@inquirer/core';
-import type {} from '@inquirer/type';
+import type { PartialDeep } from '@inquirer/type';
 
-type ConfirmConfig = PromptConfig<{
+type ConfirmConfig = {
+  message: string;
   default?: boolean;
   transformer?: (value: boolean) => string;
-}>;
+  theme?: PartialDeep<Theme>;
+};
 
 export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   const { transformer = (answer) => (answer ? 'yes' : 'no') } = config;
   const [status, setStatus] = useState('pending');
   const [value, setValue] = useState('');
-  const prefix = usePrefix();
+  const theme = makeTheme(config.theme);
+  const prefix = usePrefix({ theme });
 
   useKeypress((key, rl) => {
     if (isEnterKey(key)) {
@@ -37,11 +40,13 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   let formattedValue = value;
   let defaultValue = '';
   if (status === 'done') {
-    formattedValue = chalk.cyan(value);
+    formattedValue = theme.style.answer(value);
   } else {
-    defaultValue = chalk.dim(config.default === false ? ' (y/N)' : ' (Y/n)');
+    defaultValue = ` ${theme.style.defaultAnswer(
+      config.default === false ? 'y/N' : 'Y/n',
+    )}`;
   }
 
-  const message = chalk.bold(config.message);
+  const message = theme.style.message(config.message);
   return `${prefix} ${message}${defaultValue} ${formattedValue}`;
 });

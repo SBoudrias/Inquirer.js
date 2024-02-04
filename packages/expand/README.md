@@ -54,6 +54,28 @@ const answer = await expand({
 | choices  | `Array<{ key: string, name: string, value?: string }>` | yes      | Array of the different allowed choices. The `h`/help option is always provided by default |
 | default  | `string`                                               | no       | Default choices to be selected. (value must be one of the choices `key`)                  |
 | expanded | `boolean`                                              | no       | Expand the choices by default                                                             |
+| theme    | [See Theming](#Theming)                                | no       | Customize look of the prompt.                                                             |
+
+## Theming
+
+You can theme a prompt by passing a `theme` object option. The theme object only need to includes the keys you wish to modify, we'll fallback on the defaults for the rest.
+
+```ts
+type Theme = {
+  prefix: string;
+  spinner: {
+    interval: number;
+    frames: string[];
+  };
+  style: {
+    answer: (text: string) => string;
+    message: (text: string) => string;
+    error: (text: string) => string;
+    defaultAnswer: (text: string) => string;
+    highlight: (text: string) => string;
+  };
+};
+```
 
 # License
 

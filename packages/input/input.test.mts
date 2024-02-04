@@ -153,4 +153,38 @@ describe('input prompt', () => {
     await expect(answer).resolves.toEqual('Mikey');
     expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mikey"`);
   });
+
+  it('is theme-able', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'Answer must be: 2',
+      validate: (value) => value === '2',
+      theme: {
+        prefix: 'Q:',
+        style: {
+          message: (text) => `${text} ===`,
+          error: (text) => `!! ${text} !!`,
+          answer: (text) => `_${text}_`,
+        },
+      },
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"Q: Answer must be: 2 ==="`);
+
+    events.type('1');
+    expect(getScreen()).toMatchInlineSnapshot(`"Q: Answer must be: 2 === 1"`);
+
+    events.keypress('enter');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "Q: Answer must be: 2 === 1
+      !! You must provide a valid value !!"
+    `);
+
+    events.keypress('backspace');
+    events.type('2');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('2');
+
+    expect(getScreen()).toMatchInlineSnapshot(`"Q: Answer must be: 2 === _2_"`);
+  });
 });

@@ -33,6 +33,27 @@ const answer = await rawlist({
 | -------- | ------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | message  | `string`                                                | yes      | The question to ask                                                                                                                                                                                                      |
 | choices  | `Array<{ value: string, name?: string, key?: string }>` | yes      | List of the available choices. The `value` will be returned as the answer, and used as display if no `name` is defined. By default, choices will be selected by index. This can be customized by using the `key` option. |
+| theme    | [See Theming](#Theming)                                 | no       | Customize look of the prompt.                                                                                                                                                                                            |
+
+## Theming
+
+You can theme a prompt by passing a `theme` object option. The theme object only need to includes the keys you wish to modify, we'll fallback on the defaults for the rest.
+
+```ts
+type Theme = {
+  prefix: string;
+  spinner: {
+    interval: number;
+    frames: string[];
+  };
+  style: {
+    answer: (text: string) => string;
+    message: (text: string) => string;
+    error: (text: string) => string;
+    highlight: (text: string) => string;
+  };
+};
+```
 
 # License
 

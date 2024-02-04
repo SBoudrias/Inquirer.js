@@ -4,24 +4,29 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
-  type PromptConfig,
+  makeTheme,
+  type Theme,
 } from '@inquirer/core';
-import chalk from 'chalk';
 import ansiEscapes from 'ansi-escapes';
+import type { PartialDeep } from '@inquirer/type';
 
-type PasswordConfig = PromptConfig<{
+type PasswordConfig = {
+  message: string;
   mask?: boolean | string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
-}>;
+  theme?: PartialDeep<Theme>;
+};
 
 export default createPrompt<string, PasswordConfig>((config, done) => {
   const { validate = () => true } = config;
+  const theme = makeTheme(config.theme);
+
   const [status, setStatus] = useState<string>('pending');
   const [errorMsg, setError] = useState<string | undefined>(undefined);
   const [value, setValue] = useState<string>('');
 
   const isLoading = status === 'loading';
-  const prefix = usePrefix(isLoading);
+  const prefix = usePrefix({ isLoading, theme });
 
   useKeypress(async (key, rl) => {
     // Ignore keypress while our prompt is doing other processing.
@@ -50,7 +55,7 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     }
   });
 
-  const message = chalk.bold(config.message);
+  const message = theme.style.message(config.message);
 
   let formattedValue = '';
   let helpTip;
@@ -58,16 +63,16 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     const maskChar = typeof config.mask === 'string' ? config.mask : '*';
     formattedValue = maskChar.repeat(value.length);
   } else if (status !== 'done') {
-    helpTip = `${chalk.dim('[input is masked]')}${ansiEscapes.cursorHide}`;
+    helpTip = `${theme.style.help('[input is masked]')}${ansiEscapes.cursorHide}`;
   }
 
   if (status === 'done') {
-    formattedValue = chalk.cyan(formattedValue);
+    formattedValue = theme.style.answer(formattedValue);
   }
 
   let error = '';
   if (errorMsg) {
-    error = chalk.red(`> ${errorMsg}`);
+    error = theme.style.error(errorMsg);
   }
 
   return [[prefix, message, formattedValue, helpTip].filter(Boolean).join(' '), error];

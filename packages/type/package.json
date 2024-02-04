@@ -60,7 +60,7 @@
     "tsc:cjs": "rm -rf dist/cjs && tsc -p ./tsconfig.cjs.json && node ../../tools/fix-ext.mjs"
   },
   "engines": {
-    "node": ">=14.18.0"
+    "node": ">=18"
   },
   "exports": {
     ".": {

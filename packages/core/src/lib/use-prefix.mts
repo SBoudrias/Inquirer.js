@@ -1,12 +1,17 @@
-import chalk from 'chalk';
-import spinners from 'cli-spinners';
 import { useState } from './use-state.mjs';
 import { useEffect } from './use-effect.mjs';
+import { makeTheme } from './make-theme.mjs';
+import { type Theme } from './theme.mjs';
 
-const spinner = spinners.dots;
-
-export function usePrefix(isLoading: boolean = false): string {
+export function usePrefix({
+  isLoading = false,
+  theme,
+}: {
+  isLoading?: boolean;
+  theme?: Theme;
+}): string {
   const [tick, setTick] = useState(0);
+  const { prefix, spinner } = makeTheme(theme);
 
   useEffect((): void | (() => unknown) => {
     if (isLoading) {
@@ -20,8 +25,8 @@ export function usePrefix(isLoading: boolean = false): string {
 
   if (isLoading) {
     const frame = tick % spinner.frames.length;
-    return chalk.yellow(spinner.frames[frame]);
+    return spinner.frames[frame]!;
   }
 
-  return chalk.green('?');
+  return prefix;
 }

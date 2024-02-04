@@ -5,19 +5,22 @@ import {
   usePrefix,
   isEnterKey,
   isBackspaceKey,
-  type PromptConfig,
+  makeTheme,
+  type Theme,
 } from '@inquirer/core';
-import type {} from '@inquirer/type';
-import chalk from 'chalk';
+import type { PartialDeep } from '@inquirer/type';
 
-type InputConfig = PromptConfig<{
+type InputConfig = {
+  message: string;
   default?: string;
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
-}>;
+  theme?: PartialDeep<Theme>;
+};
 
 export default createPrompt<string, InputConfig>((config, done) => {
   const { validate = () => true } = config;
+  const theme = makeTheme(config.theme);
   const [status, setStatus] = useState<string>('pending');
   const [defaultValue = '', setDefaultValue] = useState<string | undefined>(
     config.default,
@@ -26,7 +29,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
   const [value, setValue] = useState<string>('');
 
   const isLoading = status === 'loading';
-  const prefix = usePrefix(isLoading);
+  const prefix = usePrefix({ isLoading, theme });
 
   useKeypress(async (key, rl) => {
     // Ignore keypress while our prompt is doing other processing.
@@ -62,22 +65,22 @@ export default createPrompt<string, InputConfig>((config, done) => {
     }
   });
 
-  const message = chalk.bold(config.message);
+  const message = theme.style.message(config.message);
   let formattedValue = value;
   if (typeof config.transformer === 'function') {
     formattedValue = config.transformer(value, { isFinal: status === 'done' });
   } else if (status === 'done') {
-    formattedValue = chalk.cyan(value);
+    formattedValue = theme.style.answer(value);
   }
 
   let defaultStr;
   if (defaultValue && status !== 'done' && !value) {
-    defaultStr = chalk.dim(`(${defaultValue})`);
+    defaultStr = theme.style.defaultAnswer(defaultValue);
   }
 
   let error = '';
   if (errorMsg) {
-    error = chalk.red(`> ${errorMsg}`);
+    error = theme.style.error(errorMsg);
   }
 
   return [[prefix, message, defaultStr, formattedValue].filter(Boolean).join(' '), error];

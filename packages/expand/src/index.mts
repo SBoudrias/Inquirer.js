@@ -4,9 +4,10 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
-  type PromptConfig,
+  makeTheme,
+  type Theme,
 } from '@inquirer/core';
-import type {} from '@inquirer/type';
+import type { PartialDeep } from '@inquirer/type';
 import chalk from 'chalk';
 
 type ExpandChoice =
@@ -14,11 +15,13 @@ type ExpandChoice =
   | { key: string; value: string }
   | { key: string; name: string; value: string };
 
-type ExpandConfig = PromptConfig<{
+type ExpandConfig = {
+  message: string;
   choices: ReadonlyArray<ExpandChoice>;
   default?: string;
   expanded?: boolean;
-}>;
+  theme?: PartialDeep<Theme>;
+};
 
 const helpChoice = {
   key: 'h',
@@ -46,7 +49,8 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
   const [value, setValue] = useState<string>('');
   const [expanded, setExpanded] = useState<boolean>(defaultExpandState);
   const [errorMsg, setError] = useState<string | undefined>(undefined);
-  const prefix = usePrefix();
+  const theme = makeTheme(config.theme);
+  const prefix = usePrefix({ theme });
 
   useKeypress((event, rl) => {
     if (isEnterKey(event)) {
@@ -72,11 +76,11 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
     }
   });
 
-  const message = chalk.bold(config.message);
+  const message = theme.style.message(config.message);
 
   if (status === 'done') {
     // TODO: `value` should be the display name instead of the raw value.
-    return `${prefix} ${message} ${chalk.cyan(value)}`;
+    return `${prefix} ${message} ${theme.style.answer(value)}`;
   }
 
   const allChoices = expanded ? choices : [...choices, helpChoice];
@@ -92,7 +96,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
       return choice.key;
     })
     .join('');
-  shortChoices = chalk.dim(` (${shortChoices})`);
+  shortChoices = ` ${theme.style.defaultAnswer(shortChoices)}`;
 
   // Expanded display style
   if (expanded) {
@@ -101,7 +105,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
       .map((choice) => {
         const line = `  ${choice.key}) ${getChoiceKey(choice, 'name')}`;
         if (choice.key === value.toLowerCase()) {
-          return chalk.cyan(line);
+          return theme.style.highlight(line);
         }
 
         return line;
@@ -117,7 +121,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
 
   let error = '';
   if (errorMsg) {
-    error = chalk.red(`> ${errorMsg}`);
+    error = theme.style.error(errorMsg);
   }
 
   return [

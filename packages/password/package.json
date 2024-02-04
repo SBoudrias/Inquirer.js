@@ -2,7 +2,7 @@
   "name": "@inquirer/password",
   "version": "1.1.16",
   "engines": {
-    "node": ">=14.18.0"
+    "node": ">=18"
   },
   "description": "Inquirer password prompt",
   "main": "./dist/cjs/index.js",
@@ -59,8 +59,7 @@
   "dependencies": {
     "@inquirer/core": "^6.0.0",
     "@inquirer/type": "^1.1.6",
-    "ansi-escapes": "^4.3.2",
-    "chalk": "^4.1.2"
+    "ansi-escapes": "^4.3.2"
   },
   "devDependencies": {
     "@inquirer/testing": "^2.1.10"

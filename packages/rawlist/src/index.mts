@@ -5,9 +5,10 @@ import {
   usePrefix,
   isEnterKey,
   Separator,
-  type PromptConfig,
+  makeTheme,
+  type Theme,
 } from '@inquirer/core';
-import type {} from '@inquirer/type';
+import type { PartialDeep } from '@inquirer/type';
 import chalk from 'chalk';
 
 const numberRegex = /[0-9]+/;
@@ -18,9 +19,11 @@ type Choice<Value> = {
   key?: string;
 };
 
-type RawlistConfig<Value> = PromptConfig<{
+type RawlistConfig<Value> = {
+  message: string;
   choices: ReadonlyArray<Choice<Value> | Separator>;
-}>;
+  theme?: PartialDeep<Theme>;
+};
 
 function isSelectableChoice<T>(
   choice: undefined | Separator | Choice<T>,
@@ -34,7 +37,8 @@ export default createPrompt(
     const [status, setStatus] = useState<string>('pending');
     const [value, setValue] = useState<string>('');
     const [errorMsg, setError] = useState<string | undefined>(undefined);
-    const prefix = usePrefix();
+    const theme = makeTheme(config.theme);
+    const prefix = usePrefix({ theme });
 
     useKeypress((key, rl) => {
       if (isEnterKey(key)) {
@@ -64,10 +68,10 @@ export default createPrompt(
       }
     });
 
-    const message = chalk.bold(config.message);
+    const message = theme.style.message(config.message);
 
     if (status === 'done') {
-      return `${prefix} ${message} ${chalk.cyan(value)}`;
+      return `${prefix} ${message} ${theme.style.answer(value)}`;
     }
 
     let index = 0;
@@ -81,7 +85,7 @@ export default createPrompt(
         const line = `  ${choice.key || index}) ${choice.name || choice.value}`;
 
         if (choice.key === value.toLowerCase() || String(index) === value) {
-          return chalk.cyan(line);
+          return theme.style.highlight(line);
         }
 
         return line;
@@ -90,7 +94,7 @@ export default createPrompt(
 
     let error = '';
     if (errorMsg) {
-      error = chalk.red(`> ${errorMsg}`);
+      error = theme.style.error(errorMsg);
     }
 
     return [

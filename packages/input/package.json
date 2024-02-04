@@ -55,8 +55,7 @@
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/input/README.md",
   "dependencies": {
     "@inquirer/core": "^6.0.0",
-    "@inquirer/type": "^1.1.6",
-    "chalk": "^4.1.2"
+    "@inquirer/type": "^1.1.6"
   },
   "devDependencies": {
     "@inquirer/testing": "^2.1.10"
@@ -70,7 +69,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=14.18.0"
+    "node": ">=18"
   },
   "exports": {
     ".": {
