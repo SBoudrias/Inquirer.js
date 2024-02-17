@@ -685,4 +685,64 @@ describe('checkbox prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
   });
+
+  it('renderSelectedChoices', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select your favourite number.',
+      choices: numberedChoices,
+      theme: {
+        style: {
+          renderSelectedChoices(selected: { value: number }[]) {
+            if (selected.length > 1) {
+              return `You have selected ${selected[0].value} and ${selected.length - 1} more.`;
+            }
+            return `You have selected ${selected
+              .slice(0, 1)
+              .map((c) => c.value)
+              .join(', ')}.`;
+          },
+        },
+      },
+    });
+
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('enter');
+
+    await answer;
+    expect(getScreen()).toMatchInlineSnapshot(
+      '"? Select your favourite number. You have selected 1 and 2 more."',
+    );
+  });
+
+  it('renderSelectedChoices - using allChoices parameter', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select your favourite number.',
+      choices: numberedChoices,
+      theme: {
+        style: {
+          renderSelectedChoices(
+            selected: { value: number }[],
+            all: ({ value: number } | Separator)[],
+          ) {
+            return `You have selected ${selected.length} out of ${all.length} options.`;
+          },
+        },
+      },
+    });
+
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('enter');
+
+    await answer;
+    expect(getScreen()).toMatchInlineSnapshot(
+      '"? Select your favourite number. You have selected 2 out of 12 options."',
+    );
+  });
 });

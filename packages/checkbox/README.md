@@ -67,6 +67,10 @@ type Theme = {
     highlight: (text: string) => string;
     key: (text: string) => string;
     disabledChoice: (text: string) => string;
+    renderSelectedChoices: <T>(
+      selectedChoices: ReadonlyArray<Choice<T>>,
+      allChoices: ReadonlyArray<Choice<T> | Separator>,
+    ) => string;
   };
   icon: {
     checked: string;
