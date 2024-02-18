@@ -200,8 +200,9 @@ export default createPrompt(
 
     if (status === 'done') {
       const selection = items.filter(isChecked);
+      const answer = theme.style.answer(theme.style.renderSelectedChoices(selection, items));
 
-      return `${prefix} ${message} ${theme.style.answer(theme.style.renderSelectedChoices(selection, items))}`;
+      return `${prefix} ${message} ${answer}`;
     }
 
     let helpTip = '';
