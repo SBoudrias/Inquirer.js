@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/prompts",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Inquirer prompts, combined in a single package",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -75,7 +75,7 @@
     }
   },
   "dependencies": {
-    "@inquirer/checkbox": "^2.0.0",
+    "@inquirer/checkbox": "^2.1.0",
     "@inquirer/confirm": "^3.0.0",
     "@inquirer/core": "^7.0.0",
     "@inquirer/editor": "^2.0.0",

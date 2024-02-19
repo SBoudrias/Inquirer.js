@@ -345,7 +345,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@inquirer/checkbox@^2.0.0, @inquirer/checkbox@workspace:packages/checkbox":
+"@inquirer/checkbox@^2.1.0, @inquirer/checkbox@workspace:packages/checkbox":
   version: 0.0.0-use.local
   resolution: "@inquirer/checkbox@workspace:packages/checkbox"
   dependencies:
@@ -402,7 +402,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@inquirer/demo@workspace:packages/demo"
   dependencies:
-    "@inquirer/prompts": ^4.0.0
+    "@inquirer/prompts": ^4.1.0
     chalk: ^4.1.2
   bin:
     inquirer-demo: index.mjs
@@ -460,11 +460,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/prompts@^4.0.0, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
+"@inquirer/prompts@^4.1.0, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
   version: 0.0.0-use.local
   resolution: "@inquirer/prompts@workspace:packages/prompts"
   dependencies:
-    "@inquirer/checkbox": ^2.0.0
+    "@inquirer/checkbox": ^2.1.0
     "@inquirer/confirm": ^3.0.0
     "@inquirer/core": ^7.0.0
     "@inquirer/editor": ^2.0.0
