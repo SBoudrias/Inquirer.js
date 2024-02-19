@@ -97,9 +97,7 @@ export default class ExpandPrompt extends Base {
   }
 
   getCurrentValue(input) {
-    if (!input) {
-      input = this.rawDefault;
-    }
+    input ||= this.rawDefault;
 
     const selected = this.opt.choices.where({ key: input.toLowerCase().trim() })[0];
     if (!selected) {

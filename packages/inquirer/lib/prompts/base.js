@@ -41,9 +41,7 @@ export default class Prompt {
     }
 
     // Set default message if no message defined
-    if (!this.opt.message) {
-      this.opt.message = this.opt.name + ':';
-    }
+    this.opt.message ||= this.opt.name + ':';
 
     // Normalize choices
     if (Array.isArray(this.opt.choices)) {

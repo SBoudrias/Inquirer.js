@@ -78,9 +78,7 @@ export default class ScreenManager {
     const width = this.normalizedCliWidth();
 
     content = this.forceLineReturn(content, width);
-    if (bottomContent) {
-      bottomContent = this.forceLineReturn(bottomContent, width);
-    }
+    bottomContent &&= this.forceLineReturn(bottomContent, width);
 
     // Manually insert an extra line if we're at the end of the line.
     // This prevent the cursor from appearing at the beginning of the

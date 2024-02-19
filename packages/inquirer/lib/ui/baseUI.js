@@ -9,9 +9,7 @@ export default class UI {
   constructor(opt) {
     // Instantiate the Readline interface
     // @Note: Don't reassign if already present (allow test to override the Stream)
-    if (!this.rl) {
-      this.rl = readline.createInterface(setupReadlineOptions(opt));
-    }
+    this.rl ||= readline.createInterface(setupReadlineOptions(opt));
 
     this.rl.resume();
 

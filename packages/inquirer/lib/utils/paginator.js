@@ -17,7 +17,7 @@ export default class Paginator {
   }
 
   paginate(output, active, pageSize) {
-    pageSize = pageSize || 7;
+    pageSize ||= 7;
     let lines = output.split('\n');
 
     if (this.screen) {
