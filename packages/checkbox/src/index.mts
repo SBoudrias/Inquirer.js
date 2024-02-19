@@ -27,6 +27,10 @@ type CheckboxTheme = {
   };
   style: {
     disabledChoice: (text: string) => string;
+    renderSelectedChoices: <T>(
+      selectedChoices: ReadonlyArray<Choice<T>>,
+      allChoices: ReadonlyArray<Choice<T> | Separator>,
+    ) => string;
   };
 };
 
@@ -38,6 +42,8 @@ const checkboxTheme: CheckboxTheme = {
   },
   style: {
     disabledChoice: (text: string) => chalk.dim(`- ${text}`),
+    renderSelectedChoices: (selectedChoices) =>
+      selectedChoices.map((choice) => choice.name || choice.value).join(', '),
   },
 };
 
@@ -193,10 +199,12 @@ export default createPrompt(
     });
 
     if (status === 'done') {
-      const selection = items
-        .filter(isChecked)
-        .map((choice) => choice.name || choice.value);
-      return `${prefix} ${message} ${theme.style.answer(selection.join(', '))}`;
+      const selection = items.filter(isChecked);
+      const answer = theme.style.answer(
+        theme.style.renderSelectedChoices(selection, items),
+      );
+
+      return `${prefix} ${message} ${answer}`;
     }
 
     let helpTip = '';
