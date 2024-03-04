@@ -28,7 +28,11 @@ async function writeFile(filepath, content) {
 }
 
 const rootPkg = await readJSONFile(path.join(__dirname, '../package.json'));
-const paths = await globby(['packages/**/package.json', '!**/node_modules']);
+const paths = await globby([
+  'packages/**/package.json',
+  'canary/**/package.json',
+  '!**/node_modules',
+]);
 
 paths.forEach(async (pkgPath) => {
   const dir = path.dirname(pkgPath);

@@ -64,3 +64,17 @@ jobs:
         run: yarn turbo tsc
       - name: Integration tests
         run: yarn node --test integration/
+
+  TypesTest:
+    name: Typing validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+      - run: yarn install --immutable --immutable-cache
+      - name: Typescript
+        run: yarn tsc --project tsconfig.test.json
