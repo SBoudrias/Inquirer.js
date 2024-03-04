@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import select, { Separator } from './src/index.mjs';
 
@@ -493,5 +493,69 @@ describe('select prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual(4);
+  });
+
+  it('searches through the choice list', async () => {
+    vi.useFakeTimers();
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a number',
+      choices: [
+        { name: 'Canada', value: 'CA' },
+        { name: 'China', value: 'ZH' },
+        { name: 'United States', value: 'US' },
+      ],
+    });
+
+    // Uppercase search
+    events.type('UNIT');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        Canada
+        China
+      ❯ United States"
+    `);
+
+    vi.advanceTimersByTime(700);
+
+    // Lowercase search
+    events.type('c');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+      ❯ Canada
+        China
+        United States"
+    `);
+
+    vi.advanceTimersByTime(400);
+    events.type('h');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        Canada
+      ❯ China
+        United States"
+    `);
+
+    vi.advanceTimersByTime(400);
+    // Search didn't restart yet. So we search for `chu`; no match.
+    events.type('u');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        Canada
+      ❯ China
+        United States"
+    `);
+
+    events.keypress('backspace');
+    events.type('u');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        Canada
+        China
+      ❯ United States"
+    `);
+
+    events.keypress('enter');
+    vi.runAllTimers();
+    await expect(answer).resolves.toEqual('US');
   });
 });
