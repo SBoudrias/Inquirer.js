@@ -154,6 +154,29 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mikey"`);
   });
 
+  it('handle editing the answer (properly tracks cursor position)', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'What is your name',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name"`);
+
+    events.type('Mkey');
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mkey"`);
+
+    events.keypress('backspace');
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mke"`);
+
+    events.keypress('left');
+    events.keypress('left');
+    events.type('i');
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike"`);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('Mike');
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike"`);
+  });
+
   it('is theme-able', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'Answer must be: 2',

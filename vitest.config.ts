@@ -13,6 +13,7 @@ export default defineConfig({
         'packages/inquirer/examples/**',
         'packages/demo/**',
         '.yarn/**',
+        '**/*.type.mts',
       ],
     },
   },
