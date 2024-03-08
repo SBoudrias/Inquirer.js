@@ -6,6 +6,7 @@ import {
   usePagination,
   useRef,
   useMemo,
+  isBackspaceKey,
   isEnterKey,
   isUpKey,
   isDownKey,
@@ -59,6 +60,7 @@ export default createPrompt(
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
     const prefix = usePrefix({ theme });
     const [status, setStatus] = useState('pending');
+    const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const bounds = useMemo(() => {
       const first = items.findIndex(isSelectable);
@@ -85,11 +87,14 @@ export default createPrompt(
     // Safe to assume the cursor position always point to a Choice.
     const selectedChoice = items[active] as Choice<Value>;
 
-    useKeypress((key) => {
+    useKeypress((key, rl) => {
+      clearTimeout(searchTimeoutRef.current);
+
       if (isEnterKey(key)) {
         setStatus('done');
         done(selectedChoice.value);
       } else if (isUpKey(key) || isDownKey(key)) {
+        rl.clearLine(0);
         if (
           loop ||
           (isUpKey(key) && active !== bounds.first) ||
@@ -103,11 +108,32 @@ export default createPrompt(
           setActive(next);
         }
       } else if (isNumberKey(key)) {
+        rl.clearLine(0);
         const position = Number(key.name) - 1;
         const item = items[position];
         if (item != null && isSelectable(item)) {
           setActive(position);
         }
+      } else if (isBackspaceKey(key)) {
+        rl.clearLine(0);
+      } else {
+        // Default to search
+        const searchTerm = rl.line.toLowerCase();
+        const matchIndex = items.findIndex((item) => {
+          if (Separator.isSeparator(item) || !isSelectable(item)) return false;
+
+          return String(item.name || item.value)
+            .toLowerCase()
+            .startsWith(searchTerm);
+        });
+
+        if (matchIndex >= 0) {
+          setActive(matchIndex);
+        }
+
+        searchTimeoutRef.current = setTimeout(() => {
+          rl.clearLine(0);
+        }, 700);
       }
     });
 
