@@ -2,8 +2,12 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "tsc": {
-      "outputs": ["dist/**"],
-      "dependsOn": ["^tsc"]
+      "dependsOn": ["^tsc"],
+      "outputs": ["dist/**"]
+    },
+    "attw": {
+      "dependsOn": ["tsc"],
+      "outputs": []
     }
   }
 }
