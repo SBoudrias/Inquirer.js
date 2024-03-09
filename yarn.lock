@@ -389,6 +389,7 @@ __metadata:
   resolution: "@inquirer/editor@workspace:packages/editor"
   dependencies:
     "@inquirer/core": "npm:^7.0.1"
+    "@inquirer/testing": "npm:^2.1.12"
     "@inquirer/type": "npm:^1.2.0"
     external-editor: "npm:^3.1.0"
   languageName: unknown
