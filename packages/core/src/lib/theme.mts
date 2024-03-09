@@ -25,7 +25,7 @@ export const defaultTheme: DefaultTheme = {
   prefix: chalk.green('?'),
   spinner: {
     interval: spinners.dots.interval,
-    frames: spinners.dots.frames.map(chalk.yellow),
+    frames: spinners.dots.frames.map((frame) => chalk.yellow(frame)),
   },
   style: {
     answer: chalk.cyan,
