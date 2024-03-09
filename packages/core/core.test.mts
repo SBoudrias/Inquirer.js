@@ -17,7 +17,6 @@ import {
   isEnterKey,
   isSpaceKey,
   Separator,
-  makeTheme,
   type KeypressEvent,
 } from './src/index.mjs';
 
