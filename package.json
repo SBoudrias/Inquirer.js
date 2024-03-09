@@ -47,6 +47,7 @@
     "zsh"
   ],
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.15.1",
     "@sindresorhus/tsconfig": "^5.0.0",
     "@types/node": "^20.11.25",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
@@ -78,7 +79,7 @@
     "integration/*"
   ],
   "scripts": {
-    "prepare": "husky && turbo tsc",
+    "prepare": "husky && turbo tsc attw",
     "setup": "node ./tools/setup-packages.mjs",
     "pretest": "eslint . && turbo tsc",
     "test": "vitest --run packages && node --test integration/**/*.test.*"
