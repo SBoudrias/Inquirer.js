@@ -1,7 +1,9 @@
+import { AsyncResource } from 'node:async_hooks';
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import stripAnsi from 'strip-ansi';
 import ansiEscapes from 'ansi-escapes';
+import spinners from 'cli-spinners';
 import {
   createPrompt,
   useEffect,
@@ -9,11 +11,13 @@ import {
   useState,
   useRef,
   useMemo,
+  usePrefix,
   isDownKey,
   isUpKey,
   isEnterKey,
   isSpaceKey,
   Separator,
+  makeTheme,
   type KeypressEvent,
 } from './src/index.mjs';
 
@@ -353,6 +357,55 @@ describe('createPrompt()', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('b');
+  });
+
+  it.only('usePrefix() renders loader and prefix', async () => {
+    vi.useFakeTimers();
+    const { interval } = spinners.dots;
+    const totalDuration = interval * spinners.dots.frames.length;
+
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      const [status, setStatus] = useState('loading');
+      const prefix = usePrefix({ isLoading: status === 'loading' });
+
+      useEffect(() => {
+        setTimeout(
+          AsyncResource.bind(() => {
+            setStatus('idle');
+          }),
+          totalDuration,
+        );
+      }, []);
+
+      useKeypress((event: KeypressEvent) => {
+        if (isEnterKey(event)) {
+          done('');
+        }
+      });
+
+      return `${prefix} ${config.message}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events, getScreen } = await render(prompt, { message: 'Question' });
+    expect(getScreen()).toMatchInlineSnapshot(`"⠋ Question"`);
+
+    vi.advanceTimersByTime(interval);
+    expect(getScreen()).toMatchInlineSnapshot(`"⠙ Question"`);
+
+    vi.advanceTimersByTime(interval);
+    expect(getScreen()).toMatchInlineSnapshot(`"⠹ Question"`);
+
+    vi.advanceTimersByTime(interval);
+    expect(getScreen()).toMatchInlineSnapshot(`"⠸ Question"`);
+
+    vi.advanceTimersByTime(totalDuration);
+    expect(getScreen()).toMatchInlineSnapshot(`"? Question"`);
+
+    vi.useRealTimers();
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('');
   });
 
   it('allow cancelling the prompt', async () => {

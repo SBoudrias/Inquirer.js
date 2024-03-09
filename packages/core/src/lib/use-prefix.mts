@@ -1,3 +1,4 @@
+import { AsyncResource } from 'node:async_hooks';
 import { useState } from './use-state.mjs';
 import { useEffect } from './use-effect.mjs';
 import { makeTheme } from './make-theme.mjs';
@@ -15,9 +16,12 @@ export function usePrefix({
 
   useEffect((): void | (() => unknown) => {
     if (isLoading) {
-      const timeout = setTimeout(() => {
-        setTick(tick + 1);
-      }, spinner.interval);
+      const timeout = setTimeout(
+        AsyncResource.bind(() => {
+          setTick(tick + 1);
+        }),
+        spinner.interval,
+      );
 
       return () => clearTimeout(timeout);
     }
