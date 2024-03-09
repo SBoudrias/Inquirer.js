@@ -11,6 +11,7 @@ import {
   isSpaceKey,
   isNumberKey,
   isEnterKey,
+  ValidationError,
   Separator,
   type Theme,
 } from '@inquirer/core';
@@ -112,7 +113,7 @@ export default createPrompt(
       const last = items.length - 1 - [...items].reverse().findIndex(isSelectable);
 
       if (first < 0) {
-        throw new Error(
+        throw new ValidationError(
           '[checkbox prompt] No selectable choices. All choices are disabled.',
         );
       }

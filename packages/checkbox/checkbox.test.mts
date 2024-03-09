@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
+import { ValidationError } from '@inquirer/core';
 import checkbox, { Separator } from './src/index.mjs';
 
 const numberedChoices = [
@@ -611,6 +612,7 @@ describe('checkbox prompt', () => {
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: [checkbox prompt] No selectable choices. All choices are disabled.]`,
     );
+    await expect(answer).rejects.toBeInstanceOf(ValidationError);
   });
 
   it('shows validation message if user did not select any choice', async () => {

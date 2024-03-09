@@ -1,4 +1,5 @@
 export * from './lib/key.mjs';
+export * from './lib/errors.mjs';
 export { usePrefix } from './lib/use-prefix.mjs';
 export { useState } from './lib/use-state.mjs';
 export { useEffect } from './lib/use-effect.mjs';

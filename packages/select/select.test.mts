@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
+import { ValidationError } from '@inquirer/core';
 import select, { Separator } from './src/index.mjs';
 
 const numberedChoices = [
@@ -378,6 +379,7 @@ describe('select prompt', () => {
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: [select prompt] No selectable choices. All choices are disabled.]`,
     );
+    await expect(answer).rejects.toBeInstanceOf(ValidationError);
   });
 
   it('skip separator by arrow keys', async () => {

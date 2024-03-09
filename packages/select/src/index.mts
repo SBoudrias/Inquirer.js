@@ -12,6 +12,7 @@ import {
   isDownKey,
   isNumberKey,
   Separator,
+  ValidationError,
   makeTheme,
   type Theme,
 } from '@inquirer/core';
@@ -67,7 +68,7 @@ export default createPrompt(
       // TODO: Replace with `findLastIndex` when it's available.
       const last = items.length - 1 - [...items].reverse().findIndex(isSelectable);
       if (first < 0)
-        throw new Error(
+        throw new ValidationError(
           '[select prompt] No selectable choices. All choices are disabled.',
         );
       return { first, last };

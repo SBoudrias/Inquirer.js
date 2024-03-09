@@ -5,6 +5,7 @@ import { onExit as onSignalExit } from 'signal-exit';
 import ScreenManager from './screen-manager.mjs';
 import type { InquirerReadline } from './read-line.type.mjs';
 import { withHooks, effectScheduler } from './hook-engine.mjs';
+import { CancelPromptError, ExitPromptError } from './errors.mjs';
 
 type ViewFunction<Value, Config> = (
   config: Prettify<Config>,
@@ -36,7 +37,9 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
         const removeExitListener = onSignalExit((code, signal) => {
           onExit();
-          reject(new Error(`User force closed the prompt with ${code} ${signal}`));
+          reject(
+            new ExitPromptError(`User force closed the prompt with ${code} ${signal}`),
+          );
         });
 
         function onExit() {
@@ -61,7 +64,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
         cancel = () => {
           onExit();
-          reject(new Error('Prompt was canceled'));
+          reject(new CancelPromptError());
         };
 
         function done(value: Value) {
