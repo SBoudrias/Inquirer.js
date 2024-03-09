@@ -358,7 +358,7 @@ describe('createPrompt()', () => {
     await expect(answer).resolves.toEqual('b');
   });
 
-  it.only('usePrefix() renders loader and prefix', async () => {
+  it('usePrefix() renders loader and prefix', async () => {
     vi.useFakeTimers();
     const { interval } = spinners.dots;
     const totalDuration = interval * spinners.dots.frames.length;
