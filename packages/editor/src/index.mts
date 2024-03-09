@@ -1,3 +1,4 @@
+import { AsyncResource } from 'node:async_hooks';
 import { editAsync } from 'external-editor';
 import {
   createPrompt,
@@ -36,7 +37,8 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     rl.pause();
     editAsync(
       value,
-      async (error, answer) => {
+      // Note: The bind call isn't strictly required. But we need it for our mocks to work as expected.
+      AsyncResource.bind(async (error, answer) => {
         rl.resume();
         if (error) {
           setError(error.toString());
@@ -53,7 +55,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
             setStatus('pending');
           }
         }
-      },
+      }),
       {
         postfix: config.postfix || '.txt',
       },
