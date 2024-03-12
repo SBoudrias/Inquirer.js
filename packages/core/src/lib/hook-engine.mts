@@ -1,5 +1,6 @@
 import { AsyncLocalStorage, AsyncResource } from 'node:async_hooks';
 import type { InquirerReadline } from './read-line.type.mjs';
+import { HookError, ValidationError } from './errors.mjs';
 
 type HookStore = {
   rl: InquirerReadline;
@@ -36,7 +37,9 @@ export function withHooks(rl: InquirerReadline, cb: (store: HookStore) => void) 
 function getStore() {
   const store = hookStorage.getStore();
   if (!store) {
-    throw new Error('[Inquirer] Hook functions can only be called from within a prompt');
+    throw new HookError(
+      '[Inquirer] Hook functions can only be called from within a prompt',
+    );
   }
   return store;
 }
@@ -117,7 +120,9 @@ export const effectScheduler = {
 
       const cleanFn = cb(readline());
       if (cleanFn != null && typeof cleanFn !== 'function') {
-        throw new Error('useEffect return value must be a cleanup function or nothing.');
+        throw new ValidationError(
+          'useEffect return value must be a cleanup function or nothing.',
+        );
       }
       store.hooksCleanup[index] = cleanFn;
     });

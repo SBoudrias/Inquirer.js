@@ -17,6 +17,9 @@ import {
   isEnterKey,
   isSpaceKey,
   Separator,
+  CancelPromptError,
+  ValidationError,
+  HookError,
   type KeypressEvent,
 } from './src/index.mjs';
 
@@ -426,9 +429,7 @@ describe('createPrompt()', () => {
     answer.cancel();
     events.keypress('enter');
 
-    await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Prompt was canceled]`,
-    );
+    await expect(answer).rejects.toThrow(CancelPromptError);
 
     const output = getFullOutput();
     expect(output).toContain(ansiEscapes.cursorHide);
@@ -482,9 +483,7 @@ it('allow cancelling the prompt multiple times', async () => {
   answer.cancel();
   events.keypress('enter');
 
-  await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-    `[Error: Prompt was canceled]`,
-  );
+  await expect(answer).rejects.toThrow(CancelPromptError);
 });
 
 describe('Error handling', () => {
@@ -549,6 +548,7 @@ describe('Error handling', () => {
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: useEffect return value must be a cleanup function or nothing.]`,
     );
+    await expect(answer).rejects.toBeInstanceOf(ValidationError);
   });
 
   it('useEffect throws outside prompt', async () => {
@@ -557,6 +557,9 @@ describe('Error handling', () => {
     }).toThrowErrorMatchingInlineSnapshot(
       `[Error: [Inquirer] Hook functions can only be called from within a prompt]`,
     );
+    expect(() => {
+      useEffect(() => {}, []);
+    }).toThrow(HookError);
   });
 
   it('useKeypress throws outside prompt', async () => {
@@ -565,6 +568,9 @@ describe('Error handling', () => {
     }).toThrowErrorMatchingInlineSnapshot(
       `[Error: [Inquirer] Hook functions can only be called from within a prompt]`,
     );
+    expect(() => {
+      useKeypress(() => {});
+    }).toThrow(HookError);
   });
 });
 
