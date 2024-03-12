@@ -6,7 +6,7 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "yarn@4.1.0+sha256.81a00df816059803e6b5148acf03ce313cad36b7f6e5af6efa040a15981a6ffb",
+  "packageManager": "yarn@4.1.1",
   "keywords": [
     "answer",
     "answers",
@@ -49,9 +49,9 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.15.1",
     "@sindresorhus/tsconfig": "^5.0.0",
-    "@types/node": "^20.11.25",
-    "@typescript-eslint/eslint-plugin": "^7.1.1",
-    "@typescript-eslint/parser": "^7.1.1",
+    "@types/node": "^20.11.26",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
     "@vitest/coverage-v8": "^1.3.1",
     "@vitest/ui": "^1.3.1",
     "eslint": "^8.57.0",
