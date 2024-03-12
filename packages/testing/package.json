@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/testing",
-  "version": "2.1.12",
+  "version": "2.1.13",
   "engines": {
     "node": ">=18"
   },
@@ -60,7 +60,7 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/testing/README.md",
   "dependencies": {
-    "@inquirer/type": "^1.2.0",
+    "@inquirer/type": "^1.2.1",
     "@types/mute-stream": "^0.0.4",
     "@types/node": "^20.11.26",
     "ansi-escapes": "^4.3.2",
