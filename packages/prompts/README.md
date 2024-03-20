@@ -203,14 +203,21 @@ if (allowEmail) {
 import { setTimeout } from 'node:timers/promises';
 import { input } from '@inquirer/prompts';
 
+const ac = new AbortController();
+const {signal} = ac;
 const answer = input(...);
 
-const defaultValue = setTimeout(5000).then(() => {
-  answer.cancel();
-  return 'default answer';
-});
+setTimeout(5000, 'timeout', {signal})
+  .catch(() => {})
+  .then(() => {
+    answer.cancel();
+    return defaultValue;
+  })
 
-const answer = await Promise.race([defaultValue, answer])
+return answer.then((value) => {
+  ac.abort()
+  return value
+})
 ```
 
 ## Using as pre-commit/git hooks, or scripts
