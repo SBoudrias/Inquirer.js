@@ -205,18 +205,20 @@ import { input } from '@inquirer/prompts';
 
 const ac = new AbortController();
 const {signal} = ac;
-const answer = input(...);
+const prompt = input(...);
+
+let answer;
 
 setTimeout(5000, 'timeout', {signal})
   .catch(() => {})
   .then(() => {
-    answer.cancel();
-    return defaultValue;
+    prompt.cancel();
+    answer = defaultValue;
   })
 
-return answer.then((value) => {
+await prompt.then((value) => {
   ac.abort()
-  return value
+  answer = value
 })
 ```
 
