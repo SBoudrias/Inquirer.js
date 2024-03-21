@@ -12,7 +12,7 @@ async function demo() {
     .finally(() => {
       ac.abort();
     })
-    // Silencing the cancelation error.
+    // Silencing the cancellation error.
     .catch(() => {});
 
   const defaultValue = setTimeout(5000, 'timeout', { signal: ac.signal }).then(() => {

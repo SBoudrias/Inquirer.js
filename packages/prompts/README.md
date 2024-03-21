@@ -204,22 +204,23 @@ import { setTimeout } from 'node:timers/promises';
 import { input } from '@inquirer/prompts';
 
 const ac = new AbortController();
-const {signal} = ac;
-const prompt = input(...);
+const prompt = input({
+  message: 'Enter a value (timing out in 5 seconds)',
+});
 
-let answer;
-
-setTimeout(5000, 'timeout', {signal})
-  .catch(() => {})
-  .then(() => {
-    prompt.cancel();
-    answer = defaultValue;
+prompt
+  .finally(() => {
+    ac.abort();
   })
+  // Silencing the cancellation error.
+  .catch(() => {});
 
-await prompt.then((value) => {
-  ac.abort()
-  answer = value
-})
+const defaultValue = setTimeout(5000, 'timeout', { signal: ac.signal }).then(() => {
+  prompt.cancel();
+  return 'Timed out!';
+});
+
+const answer = await Promise.race([defaultValue, prompt]);
 ```
 
 ## Using as pre-commit/git hooks, or scripts
