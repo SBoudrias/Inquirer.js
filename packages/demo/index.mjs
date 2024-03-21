@@ -10,6 +10,7 @@ import inputDemo from './demos/input.mjs';
 import passwordDemo from './demos/password.mjs';
 import rawlistDemo from './demos/rawlist.mjs';
 import selectDemo from './demos/select.mjs';
+import timeoutDemo from './demos/timeout.mjs';
 
 const demos = {
   checkbox: checkboxDemo,
@@ -20,10 +21,11 @@ const demos = {
   password: passwordDemo,
   rawlist: rawlistDemo,
   select: selectDemo,
+  timeout: timeoutDemo,
 };
 
-function askNextDemo() {
-  return select({
+async function askNextDemo() {
+  let selectedDemo = await select({
     message: 'Which prompt demo do you want to run?',
     choices: [
       { name: 'Input', value: 'input' },
@@ -34,9 +36,26 @@ function askNextDemo() {
       { name: 'Expand', value: 'expand' },
       { name: 'Rawlist', value: 'rawlist' },
       { name: 'Editor', value: 'editor' },
+      { name: 'Advanced demos', value: 'advanced' },
       { name: "Exit (I'm done)", value: 'exit' },
     ],
   });
+
+  if (selectedDemo === 'advanced') {
+    selectedDemo = await select({
+      message: 'Which demo do you want to run?',
+      choices: [
+        { name: 'Default value after timeout', value: 'timeout' },
+        { name: 'Go back', value: 'back' },
+      ],
+    });
+  }
+
+  if (selectedDemo === 'back') {
+    return askNextDemo();
+  }
+
+  return selectedDemo;
 }
 
 (async () => {
