@@ -1,10 +1,7 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import url from 'node:url';
 import { globby } from 'globby';
 import prettier from 'prettier';
-
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 function readFile(filepath) {
   return fs.readFile(filepath, 'utf-8');
@@ -27,7 +24,7 @@ async function writeFile(filepath, content) {
   }
 }
 
-const rootPkg = await readJSONFile(path.join(__dirname, '../package.json'));
+const rootPkg = await readJSONFile(path.join(import.meta.dirname, '../package.json'));
 const paths = await globby(['packages/**/package.json', '!**/node_modules']);
 
 paths.forEach(async (pkgPath) => {
