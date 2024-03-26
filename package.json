@@ -50,8 +50,8 @@
     "@arethetypeswrong/cli": "^0.15.2",
     "@sindresorhus/tsconfig": "^5.0.0",
     "@types/node": "^20.11.30",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
     "@vitest/coverage-v8": "^1.4.0",
     "@vitest/ui": "^1.4.0",
     "eslint": "^8.57.0",
@@ -67,8 +67,8 @@
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
-    "turbo": "^1.12.5",
-    "typescript": "^5.4.2",
+    "turbo": "^1.13.0",
+    "typescript": "^5.4.3",
     "vitest": "^1.4.0"
   },
   "resolutions": {
