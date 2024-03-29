@@ -37,14 +37,6 @@ const demo = async () => {
       }),
   });
   console.log('Answer:', answer);
-
-  answer = await input({
-    message: () =>
-      new Promise((resolve) => {
-        setTimeout(() => resolve('(Slow message) Input any value:'), 3000);
-      }),
-  });
-  console.log('Answer:', answer);
 };
 
 if (import.meta.url.startsWith('file:')) {
