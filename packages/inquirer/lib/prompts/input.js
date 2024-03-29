@@ -72,7 +72,7 @@ export default class InputPrompt extends Base {
 
   filterInput(input) {
     if (!input) {
-      return this.opt.default == null ? '' : this.opt.default;
+      return this.opt.default === null ? '' : this.opt.default;
     }
 
     return input;
