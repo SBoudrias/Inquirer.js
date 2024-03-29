@@ -83,5 +83,10 @@ export default createPrompt<string, InputConfig>((config, done) => {
     error = theme.style.error(errorMsg);
   }
 
-  return [[prefix, message, defaultStr, formattedValue].filter(Boolean).join(' '), error];
+  return [
+    [prefix, message, defaultStr, formattedValue]
+      .filter((v) => v !== undefined)
+      .join(' '),
+    error,
+  ];
 });
