@@ -19,9 +19,6 @@ export default class ScreenManager {
   }
 
   render(content: string, bottomContent: string = '') {
-    this.clean();
-
-    this.rl.output.unmute();
     /**
      * Write message to screen and setPrompt to control backspace
      */
@@ -71,6 +68,9 @@ export default class ScreenManager {
 
     // Return cursor to the initial left offset.
     output += ansiEscapes.cursorTo(this.cursorPos.cols);
+
+    this.clean();
+    this.rl.output.unmute();
 
     /**
      * Set up state for next re-rendering
