@@ -4,6 +4,7 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
+  useRef,
   useMemo,
   makeTheme,
   isUpKey,
@@ -33,6 +34,7 @@ type CheckboxTheme = {
       allChoices: ReadonlyArray<Choice<T> | Separator>,
     ) => string;
   };
+  helpMode: 'always' | 'never' | 'auto';
 };
 
 const checkboxTheme: CheckboxTheme = {
@@ -46,6 +48,7 @@ const checkboxTheme: CheckboxTheme = {
     renderSelectedChoices: (selectedChoices) =>
       selectedChoices.map((choice) => choice.name || choice.value).join(', '),
   },
+  helpMode: 'auto',
 };
 
 type Choice<Value> = {
@@ -102,6 +105,7 @@ export default createPrompt(
     } = config;
     const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme);
     const prefix = usePrefix({ theme });
+    const firstRender = useRef(true);
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
       choices.map((choice) => ({ ...choice })),
@@ -195,7 +199,6 @@ export default createPrompt(
       },
       pageSize,
       loop,
-      theme,
     });
 
     if (status === 'done') {
@@ -207,10 +210,16 @@ export default createPrompt(
       return `${prefix} ${message} ${answer}`;
     }
 
-    let helpTip = '';
-    if (showHelpTip && (instructions === undefined || instructions)) {
+    let helpTipTop = '';
+    let helpTipBottom = '';
+    if (
+      theme.helpMode === 'always' ||
+      (theme.helpMode === 'auto' &&
+        showHelpTip &&
+        (instructions === undefined || instructions))
+    ) {
       if (typeof instructions === 'string') {
-        helpTip = instructions;
+        helpTipTop = instructions;
       } else {
         const keys = [
           `${theme.style.key('space')} to select`,
@@ -218,16 +227,25 @@ export default createPrompt(
           `${theme.style.key('i')} to invert selection`,
           `and ${theme.style.key('enter')} to proceed`,
         ];
-        helpTip = ` (Press ${keys.join(', ')})`;
+        helpTipTop = ` (Press ${keys.join(', ')})`;
+      }
+
+      if (
+        items.length > pageSize &&
+        (theme.helpMode === 'always' ||
+          (theme.helpMode === 'auto' && firstRender.current))
+      ) {
+        helpTipBottom = `\n${theme.style.help('(Use arrow keys to reveal more choices)')}`;
+        firstRender.current = false;
       }
     }
 
     let error = '';
     if (errorMsg) {
-      error = theme.style.error(errorMsg);
+      error = `\n${theme.style.error(errorMsg)}`;
     }
 
-    return `${prefix} ${message}${helpTip}\n${page}\n${error}${ansiEscapes.cursorHide}`;
+    return `${prefix} ${message}${helpTipTop}\n${page}${helpTipBottom}${error}${ansiEscapes.cursorHide}`;
   },
 );
 

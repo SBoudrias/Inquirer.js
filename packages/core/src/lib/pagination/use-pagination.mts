@@ -1,7 +1,6 @@
 import type { Prettify } from '@inquirer/type';
 import { useRef } from '../use-ref.mjs';
 import { readlineWidth } from '../utils.mjs';
-import { makeTheme } from '../make-theme.mjs';
 import { type Theme } from '../theme.mjs';
 import { lines, type Layout } from './lines.mjs';
 import { finite, infinite } from './position.mjs';
@@ -12,7 +11,6 @@ export function usePagination<T>({
   renderItem,
   pageSize,
   loop = true,
-  theme: defaultTheme,
 }: {
   items: readonly T[];
   /** The index of the active item. */
@@ -26,7 +24,6 @@ export function usePagination<T>({
   theme?: Theme;
 }): string {
   const state = useRef({ position: 0, lastActive: 0 });
-  const theme = makeTheme(defaultTheme);
 
   const position = loop
     ? infinite({
@@ -45,7 +42,7 @@ export function usePagination<T>({
   state.current.position = position;
   state.current.lastActive = active;
 
-  const visibleLines = lines({
+  return lines({
     items,
     width: readlineWidth(),
     renderItem,
@@ -53,10 +50,4 @@ export function usePagination<T>({
     position,
     pageSize,
   }).join('\n');
-
-  if (items.length > pageSize) {
-    return `${visibleLines}\n${theme.style.help('(Use arrow keys to reveal more choices)')}`;
-  }
-
-  return visibleLines;
 }

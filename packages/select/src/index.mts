@@ -24,11 +24,13 @@ import ansiEscapes from 'ansi-escapes';
 type SelectTheme = {
   icon: { cursor: string };
   style: { disabled: (text: string) => string };
+  helpMode: 'always' | 'never' | 'auto';
 };
 
 const selectTheme: SelectTheme = {
   icon: { cursor: figures.pointer },
   style: { disabled: (text: string) => chalk.dim(`- ${text}`) },
+  helpMode: 'auto',
 };
 
 type Choice<Value> = {
@@ -142,10 +144,19 @@ export default createPrompt(
 
     const message = theme.style.message(config.message);
 
-    let helpTip;
-    if (firstRender.current && items.length <= pageSize) {
+    let helpTipTop = '';
+    let helpTipBottom = '';
+    if (
+      theme.helpMode === 'always' ||
+      (theme.helpMode === 'auto' && firstRender.current)
+    ) {
       firstRender.current = false;
-      helpTip = theme.style.help('(Use arrow keys)');
+
+      if (items.length > pageSize) {
+        helpTipBottom = `\n${theme.style.help('(Use arrow keys to reveal more choices)')}`;
+      } else {
+        helpTipTop = theme.style.help('(Use arrow keys)');
+      }
     }
 
     const page = usePagination<Item<Value>>({
@@ -169,7 +180,6 @@ export default createPrompt(
       },
       pageSize,
       loop,
-      theme,
     });
 
     if (status === 'done') {
@@ -184,7 +194,7 @@ export default createPrompt(
       ? `\n${selectedChoice.description}`
       : ``;
 
-    return `${[prefix, message, helpTip].filter(Boolean).join(' ')}\n${page}${choiceDescription}${ansiEscapes.cursorHide}`;
+    return `${[prefix, message, helpTipTop].filter(Boolean).join(' ')}\n${page}${choiceDescription}${helpTipBottom}${ansiEscapes.cursorHide}`;
   },
 );
 

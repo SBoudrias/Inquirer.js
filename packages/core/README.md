@@ -141,7 +141,6 @@ export default createPrompt((config, done) => {
     renderItem: ({ item, index, isActive }) => `${isActive ? ">" : " "}${index}. ${item.toString()}`
     pageSize: config.pageSize,
     loop: config.loop,
-    theme, config.theme,
   });
 
   return `... ${page}`;

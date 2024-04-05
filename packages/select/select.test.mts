@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render } from '@inquirer/testing';
 import { ValidationError } from '@inquirer/core';
 import select, { Separator } from './src/index.mjs';
@@ -17,6 +17,10 @@ const numberedChoices = [
   { value: 11 },
   { value: 12 },
 ];
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 describe('select prompt', () => {
   it('use arrow keys to select an option', async () => {
@@ -47,8 +51,7 @@ describe('select prompt', () => {
         4
         5
         6
-        7
-      (Use arrow keys to reveal more choices)"
+        7"
     `);
 
     events.keypress('enter');
@@ -91,8 +94,7 @@ describe('select prompt', () => {
       ❯ 4
         5
         6
-        7
-      (Use arrow keys to reveal more choices)"
+        7"
     `);
 
     events.keypress('enter');
@@ -164,8 +166,7 @@ describe('select prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 11
-        12
-      (Use arrow keys to reveal more choices)"
+        12"
     `);
 
     events.keypress('enter');
@@ -248,8 +249,7 @@ describe('select prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         11
-      ❯ 12
-      (Use arrow keys to reveal more choices)"
+      ❯ 12"
     `);
 
     events.keypress('enter');
@@ -278,8 +278,7 @@ describe('select prompt', () => {
       "? Select a number
         11
       ❯ 12
-       ──────────────
-      (Use arrow keys to reveal more choices)"
+       ──────────────"
     `);
 
     events.keypress('enter');
@@ -559,5 +558,123 @@ describe('select prompt', () => {
     events.keypress('enter');
     vi.runAllTimers();
     await expect(answer).resolves.toEqual('US');
+  });
+
+  describe('theme: helpMode', () => {
+    const scrollTip = '(Use arrow keys to reveal more choices)';
+
+    it('helpMode: auto', async () => {
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        theme: { helpMode: 'auto' },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        ❯ 1
+          2
+          3
+          4
+          5
+          6
+          7
+        (Use arrow keys to reveal more choices)"
+      `);
+      expect(getScreen()).toContain(scrollTip);
+
+      events.keypress('down');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+          1
+        ❯ 2
+          3
+          4
+          5
+          6
+          7"
+      `);
+      expect(getScreen()).not.toContain(scrollTip);
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(2);
+      expect(getScreen()).toMatchInlineSnapshot('"? Select a number 2"');
+    });
+
+    it('helpMode: always', async () => {
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        theme: { helpMode: 'always' },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        ❯ 1
+          2
+          3
+          4
+          5
+          6
+          7
+        (Use arrow keys to reveal more choices)"
+      `);
+      expect(getScreen()).toContain(scrollTip);
+
+      events.keypress('down');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+          1
+        ❯ 2
+          3
+          4
+          5
+          6
+          7
+        (Use arrow keys to reveal more choices)"
+      `);
+      expect(getScreen()).toContain(scrollTip);
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(2);
+      expect(getScreen()).toMatchInlineSnapshot('"? Select a number 2"');
+    });
+
+    it('helpMode: never', async () => {
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        theme: { helpMode: 'never' },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        ❯ 1
+          2
+          3
+          4
+          5
+          6
+          7"
+      `);
+      expect(getScreen()).not.toContain(scrollTip);
+
+      events.keypress('down');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+          1
+        ❯ 2
+          3
+          4
+          5
+          6
+          7"
+      `);
+      expect(getScreen()).not.toContain(scrollTip);
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(2);
+      expect(getScreen()).toMatchInlineSnapshot('"? Select a number 2"');
+    });
   });
 });
