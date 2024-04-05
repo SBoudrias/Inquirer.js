@@ -29,9 +29,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@arethetypeswrong/cli@npm:^0.15.2":
-  version: 0.15.2
-  resolution: "@arethetypeswrong/cli@npm:0.15.2"
+"@arethetypeswrong/cli@npm:^0.15.3":
+  version: 0.15.3
+  resolution: "@arethetypeswrong/cli@npm:0.15.3"
   dependencies:
     "@arethetypeswrong/core": "npm:0.15.1"
     chalk: "npm:^4.1.2"
@@ -42,7 +42,7 @@ __metadata:
     semver: "npm:^7.5.4"
   bin:
     attw: dist/index.js
-  checksum: 10/c0a7088a6766555f74dd2872691598cafb4930b00ae82fa6b5eb8014fc1aa31272dda77eaf39f0fe1a7df3197fac99cd0acfb5e2f4412315b6776a868eaa1850
+  checksum: 10/d64eea5c946669a24cd93007b03546b1422b9fa26e298589add461fc818a9aa1fddd2f0d3a7ed3a5f302f6c047ba574782bf4b04f7b087f1a370540e5dbfbb90
   languageName: node
   linkType: hard
 
@@ -7573,7 +7573,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@arethetypeswrong/cli": "npm:^0.15.2"
+    "@arethetypeswrong/cli": "npm:^0.15.3"
     "@sindresorhus/tsconfig": "npm:^5.0.0"
     "@types/node": "npm:^20.12.4"
     "@typescript-eslint/eslint-plugin": "npm:^7.5.0"
