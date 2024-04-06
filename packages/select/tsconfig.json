@@ -3,7 +3,7 @@
   "include": ["./src"],
   "exclude": ["**/*.test.mts"],
   "compilerOptions": {
-    "lib": ["ESNext"],
+    "lib": ["es2023"],
     "target": "es2022",
     "module": "NodeNext",
     "moduleResolution": "nodenext",
