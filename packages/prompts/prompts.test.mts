@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { Expect, Equal } from '@inquirer/type';
 import {
   checkbox,
   confirm,
@@ -22,3 +23,13 @@ describe('@inquirer/prompts', () => {
     expect(select).toBeTypeOf('function');
   });
 });
+
+/**
+ * Type assertions to validate the interfaces.
+ */
+Expect<
+  Equal<
+    Parameters<typeof checkbox>[0]['theme']['helpMode'],
+    Parameters<typeof select>[0]['theme']['helpMode']
+  >
+>;
