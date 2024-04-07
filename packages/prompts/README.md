@@ -267,6 +267,16 @@ Select a choice either with arrow keys + Enter or by pressing a key associated w
     Quit (Q)
 ```
 
+[**Action Select Prompt**](https://github.com/zenithlight/inquirer-action-select)<br/>
+Choose an item from a list and choose an action to take by pressing a key. 
+
+```
+? Choose a file Open <O> Edit <E> Delete <X>
+❯ image.png
+  audio.mp3
+  code.py
+```
+
 # License
 
 Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
