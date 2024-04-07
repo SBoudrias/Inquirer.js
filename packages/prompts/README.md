@@ -268,7 +268,7 @@ Select a choice either with arrow keys + Enter or by pressing a key associated w
 ```
 
 [**Action Select Prompt**](https://github.com/zenithlight/inquirer-action-select)<br/>
-Choose an item from a list and choose an action to take by pressing a key. 
+Choose an item from a list and choose an action to take by pressing a key.
 
 ```
 ? Choose a file Open <O> Edit <E> Delete <X>
