@@ -60,7 +60,7 @@
     "@inquirer/figures": "^1.0.0",
     "@inquirer/type": "^1.2.2",
     "@types/mute-stream": "^0.0.4",
-    "@types/node": "^20.12.4",
+    "@types/node": "^20.12.7",
     "@types/wrap-ansi": "^3.0.0",
     "ansi-escapes": "^4.3.2",
     "chalk": "^4.1.2",
