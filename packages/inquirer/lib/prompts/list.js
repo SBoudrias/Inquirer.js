@@ -3,7 +3,7 @@
  */
 
 import chalk from 'chalk';
-import figures from 'figures';
+import figures from '@inquirer/figures';
 import cliCursor from 'cli-cursor';
 import runAsync from 'run-async';
 import { flatMap, map, take, takeUntil } from 'rxjs';
