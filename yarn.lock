@@ -504,6 +504,7 @@ __metadata:
     "@inquirer/password": "npm:^2.1.3"
     "@inquirer/rawlist": "npm:^2.1.3"
     "@inquirer/select": "npm:^2.2.3"
+    "@inquirer/type": "npm:^1.2.1"
   languageName: unknown
   linkType: soft
 
@@ -544,7 +545,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/type@npm:^1.2.2, @inquirer/type@workspace:packages/type":
+"@inquirer/type@npm:^1.2.1, @inquirer/type@npm:^1.2.2, @inquirer/type@workspace:packages/type":
   version: 0.0.0-use.local
   resolution: "@inquirer/type@workspace:packages/type"
   languageName: unknown

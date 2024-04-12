@@ -77,8 +77,15 @@ type Theme = {
     unchecked: string;
     cursor: string;
   };
+  helpMode: 'always' | 'never' | 'auto';
 };
 ```
+
+### `theme.helpMode`
+
+- `auto` (default): Hide the help tips after an interaction occurs. The scroll tip will hide after any interactions, the selection tip will hide as soon as a first selection is done.
+- `always`: The help tips will always show and never hide.
+- `never`: The help tips will never show.
 
 # License
 

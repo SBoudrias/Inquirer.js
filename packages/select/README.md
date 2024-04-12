@@ -80,8 +80,15 @@ type Theme = {
   icon: {
     cursor: string;
   };
+  helpMode: 'always' | 'never' | 'auto';
 };
 ```
+
+### `theme.helpMode`
+
+- `auto` (default): Hide the help tips after an interaction occurs.
+- `always`: The help tips will always show and never hide.
+- `never`: The help tips will never show.
 
 # License
 
