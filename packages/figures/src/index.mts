@@ -5,6 +5,9 @@ import process from 'node:process';
 
 // Ported from is-unicode-supported
 function isUnicodeSupported() {
+  if (process.env['INQUIRER_TEST_FALLBACK_SUPPORT']) {
+    return false;
+  }
   if (process.platform !== 'win32') {
     return process.env['TERM'] !== 'linux'; // Linux console (kernel)
   }
