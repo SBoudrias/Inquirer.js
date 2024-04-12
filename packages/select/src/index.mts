@@ -18,7 +18,7 @@ import {
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 import chalk from 'chalk';
-import figures from 'figures';
+import figures from '@inquirer/figures';
 import ansiEscapes from 'ansi-escapes';
 
 type SelectTheme = {

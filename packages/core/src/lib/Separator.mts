@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import figures from 'figures';
+import figures from '@inquirer/figures';
 
 /**
  * Separator object

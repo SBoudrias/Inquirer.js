@@ -1,10 +1,7 @@
 {
-  "name": "@inquirer/checkbox",
-  "version": "2.2.2",
-  "engines": {
-    "node": ">=18"
-  },
-  "description": "Inquirer checkbox prompt",
+  "name": "@inquirer/figures",
+  "version": "0.0.0",
+  "description": "Vendored version of figures, for CJS compatibility",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
   "files": [
@@ -51,29 +48,20 @@
     "ui",
     "yeoman",
     "yo",
-    "zsh"
+    "zsh",
+    "types",
+    "typescript"
   ],
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "license": "MIT",
-  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/checkbox/README.md",
-  "dependencies": {
-    "@inquirer/core": "^7.1.2",
-    "@inquirer/figures": "0.0.0",
-    "@inquirer/type": "^1.2.1",
-    "ansi-escapes": "^4.3.2",
-    "chalk": "^4.1.2"
-  },
-  "devDependencies": {
-    "@inquirer/testing": "^2.1.15"
-  },
   "scripts": {
     "tsc": "yarn run tsc:esm && yarn run tsc:cjs",
     "tsc:esm": "rm -rf dist/esm && tsc -p ./tsconfig.json",
     "tsc:cjs": "rm -rf dist/cjs && tsc -p ./tsconfig.cjs.json && node ../../tools/fix-ext.mjs",
     "attw": "attw --pack"
   },
-  "publishConfig": {
-    "access": "public"
+  "engines": {
+    "node": ">=18"
   },
   "exports": {
     ".": {
