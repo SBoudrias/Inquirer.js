@@ -15,6 +15,12 @@
     "capitalized-comments": "off",
     "default-param-last": "off",
     "padding-line-between-statements": "off",
+    "n/no-missing-import": [
+      "error",
+      {
+        "allowModules": ["@inquirer/figures"]
+      }
+    ],
     "no-eq-null": "off",
     "no-restricted-imports": [
       "error",
