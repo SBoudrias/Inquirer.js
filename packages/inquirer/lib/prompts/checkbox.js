@@ -4,7 +4,7 @@
 
 import chalk from 'chalk';
 import cliCursor from 'cli-cursor';
-import figures from 'figures';
+import figures from '@inquirer/figures';
 import { map, takeUntil } from 'rxjs';
 import observe from '../utils/events.js';
 import Paginator from '../utils/paginator.js';
