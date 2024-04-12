@@ -377,7 +377,7 @@ __metadata:
   resolution: "@inquirer/checkbox@workspace:packages/checkbox"
   dependencies:
     "@inquirer/core": "npm:^7.1.2"
-    "@inquirer/figures": "npm:0.0.0"
+    "@inquirer/figures": "npm:^0.0.0"
     "@inquirer/testing": "npm:^2.1.15"
     "@inquirer/type": "npm:^1.2.1"
     ansi-escapes: "npm:^4.3.2"
@@ -407,7 +407,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@inquirer/core@workspace:packages/core"
   dependencies:
-    "@inquirer/figures": "npm:0.0.0"
+    "@inquirer/figures": "npm:^0.0.0"
     "@inquirer/testing": "npm:^2.1.15"
     "@inquirer/type": "npm:^1.2.1"
     "@types/mute-stream": "npm:^0.0.4"
@@ -465,7 +465,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/figures@npm:0.0.0, @inquirer/figures@npm:^0.0.0, @inquirer/figures@workspace:packages/figures":
+"@inquirer/figures@npm:^0.0.0, @inquirer/figures@workspace:packages/figures":
   version: 0.0.0-use.local
   resolution: "@inquirer/figures@workspace:packages/figures"
   languageName: unknown
@@ -524,7 +524,7 @@ __metadata:
   resolution: "@inquirer/select@workspace:packages/select"
   dependencies:
     "@inquirer/core": "npm:^7.1.2"
-    "@inquirer/figures": "npm:0.0.0"
+    "@inquirer/figures": "npm:^0.0.0"
     "@inquirer/testing": "npm:^2.1.15"
     "@inquirer/type": "npm:^1.2.1"
     ansi-escapes: "npm:^4.3.2"
