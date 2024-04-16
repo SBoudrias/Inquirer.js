@@ -9,6 +9,7 @@ import {
   password,
   rawlist,
   select,
+  Separator,
 } from './src/index.mjs';
 
 describe('@inquirer/prompts', () => {
@@ -21,6 +22,7 @@ describe('@inquirer/prompts', () => {
     expect(password).toBeTypeOf('function');
     expect(rawlist).toBeTypeOf('function');
     expect(select).toBeTypeOf('function');
+    expect(Separator).toBeTypeOf('function');
   });
 });
 
