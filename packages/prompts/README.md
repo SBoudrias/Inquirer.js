@@ -284,13 +284,13 @@ Select multiple answer from a table display.
 Choose between choices? (Press <space> to select, <Up and Down> to move rows,
 <Left and Right> to move columns)
 
-┌──────────┬────────┬────────┐
-│ 1-2 of 2 │ Yes?   │ No?    |
-├──────────┼────────┼────────┤
+┌──────────┬───────┬───────┐
+│ 1-2 of 2 │ Yes?  │ No?   |
+├──────────┼───────┼───────┤
 │ Choice 1 │ [ ◯ ] │   ◯   |
-├──────────┼────────┼────────┤
+├──────────┼───────┼───────┤
 │ Choice 2 │   ◯   │   ◯   |
-└──────────┴────────┴────────┘
+└──────────┴───────┴───────┘
 
 ```
 
