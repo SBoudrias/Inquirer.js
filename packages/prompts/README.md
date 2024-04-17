@@ -277,6 +277,23 @@ Choose an item from a list and choose an action to take by pressing a key.
   code.py
 ```
 
+[**Table Multiple Prompt**](https://github.com/Bartheleway/inquirer-table-multiple)<br/>
+Select multiple answer from a table display.
+
+```sh
+Choose between choices? (Press <space> to select, <Up and Down> to move rows,
+<Left and Right> to move columns)
+
+┌──────────┬───────┬───────┐
+│ 1-2 of 2 │ Yes?  │ No?   |
+├──────────┼───────┼───────┤
+│ Choice 1 │ [ ◯ ] │   ◯   |
+├──────────┼───────┼───────┤
+│ Choice 2 │   ◯   │   ◯   |
+└──────────┴───────┴───────┘
+
+```
+
 # License
 
 Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
