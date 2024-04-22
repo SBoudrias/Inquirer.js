@@ -293,6 +293,14 @@ Choose between choices? (Press <space> to select, <Up and Down> to move rows,
 └──────────┴───────┴───────┘
 
 ```
+[**Toggle Prompt**](https://github.com/skarahoda/inquirer-toggle)<br/>
+Confirm with a toggle. Select a choice with arrow keys + Enter.
+
+```
+? Do you want to continue? no / yes
+```
+
+
 
 # License
 
