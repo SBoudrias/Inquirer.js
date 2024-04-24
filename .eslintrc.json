@@ -11,6 +11,14 @@
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
+  "ignorePatterns": [
+    ".git",
+    "node_modules",
+    "coverage",
+    "dist",
+    "packages/*/node_modules",
+    "packages/*/__snapshots__"
+  ],
   "rules": {
     "capitalized-comments": "off",
     "default-param-last": "off",
