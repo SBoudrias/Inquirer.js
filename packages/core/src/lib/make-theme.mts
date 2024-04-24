@@ -1,7 +1,7 @@
 import type { Prettify, PartialDeep } from '@inquirer/type';
 import { defaultTheme, type Theme } from './theme.mjs';
 
-export function makeTheme<SpecificTheme extends {}>(
+export function makeTheme<SpecificTheme extends object>(
   ...themes: ReadonlyArray<undefined | PartialDeep<Theme<SpecificTheme>>>
 ): Prettify<Theme<SpecificTheme>> {
   return Object.assign({}, defaultTheme, ...themes, {

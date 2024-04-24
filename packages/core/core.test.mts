@@ -514,7 +514,7 @@ describe('Error handling', () => {
   });
 
   it('surface errors in useEffect cleanup functions', async () => {
-    const Prompt = (config: {}, done: (value: string) => void) => {
+    const Prompt = (config: object, done: (value: string) => void) => {
       useEffect(() => {
         done('done');
 
@@ -533,8 +533,8 @@ describe('Error handling', () => {
   });
 
   it('prevent returning promises from useEffect hook', async () => {
-    const Prompt = (config: {}, done: (value: string) => void) => {
-      // @ts-ignore: This is a test
+    const Prompt = (config: object, done: (value: string) => void) => {
+      // @ts-expect-error: Testing an invalid behavior.
       useEffect(async () => {
         done('done');
       }, []);

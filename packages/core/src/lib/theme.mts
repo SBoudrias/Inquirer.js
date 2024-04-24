@@ -19,7 +19,7 @@ type DefaultTheme = {
   };
 };
 
-export type Theme<Extension extends {} = {}> = Prettify<Extension & DefaultTheme>;
+export type Theme<Extension extends object = object> = Prettify<Extension & DefaultTheme>;
 
 export const defaultTheme: DefaultTheme = {
   prefix: chalk.green('?'),

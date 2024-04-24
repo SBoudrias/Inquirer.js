@@ -94,16 +94,15 @@ export default class Prompt {
    * @return {Object}        Object containing two observables: `success` and `error`
    */
   handleSubmitEvents(submit) {
-    const self = this;
     const validate = runAsync(this.opt.validate);
     const asyncFilter = runAsync(this.opt.filter);
     const validation = submit.pipe(
       flatMap((value) => {
         this.startSpinner(value, this.opt.filteringText);
-        return asyncFilter(value, self.answers).then(
+        return asyncFilter(value, this.answers).then(
           (filteredValue) => {
             this.startSpinner(filteredValue, this.opt.validatingText);
-            return validate(filteredValue, self.answers).then(
+            return validate(filteredValue, this.answers).then(
               (isValid) => ({ isValid, value: filteredValue }),
               (err) => ({ isValid: err, value: filteredValue }),
             );

@@ -32,7 +32,7 @@ function isSelectableChoice<T>(
 }
 
 export default createPrompt(
-  <Value extends unknown>(config: RawlistConfig<Value>, done: (value: Value) => void) => {
+  <Value,>(config: RawlistConfig<Value>, done: (value: Value) => void) => {
     const { choices } = config;
     const [status, setStatus] = useState<string>('pending');
     const [value, setValue] = useState<string>('');

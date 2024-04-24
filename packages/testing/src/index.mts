@@ -42,7 +42,7 @@ class BufferedStream extends Stream.Writable {
   }
 }
 
-export async function render<TestedPrompt extends Prompt<any, any>>(
+export async function render<TestedPrompt extends Prompt<unknown, unknown>>(
   prompt: TestedPrompt,
   props: Parameters<TestedPrompt>[0],
   options?: Parameters<TestedPrompt>[1],

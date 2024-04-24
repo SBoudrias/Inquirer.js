@@ -644,7 +644,7 @@ describe('checkbox prompt', () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a number',
       choices: numberedChoices,
-      validate(items: any) {
+      validate(items: ReadonlyArray<unknown>) {
         if (items.length !== 1) {
           return 'Please select only one choice';
         }

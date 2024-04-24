@@ -49,8 +49,6 @@ export default class ListPrompt extends Base {
   _run(cb) {
     this.done = cb;
 
-    const self = this;
-
     const events = observe(this.rl);
     events.normalizedUpKey.pipe(takeUntil(events.line)).forEach(this.onUpKey.bind(this));
     events.normalizedDownKey
@@ -62,7 +60,7 @@ export default class ListPrompt extends Base {
         take(1),
         map(this.getCurrentValue.bind(this)),
         flatMap((value) =>
-          runAsync(self.opt.filter)(value, self.answers).catch((err) => err),
+          runAsync(this.opt.filter)(value, this.answers).catch((err) => err),
         ),
       )
       .forEach(this.onSubmit.bind(this));

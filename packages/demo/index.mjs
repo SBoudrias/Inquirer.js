@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable no-await-in-loop */
 
 import { select } from '@inquirer/prompts';
 import checkboxDemo from './demos/checkbox.mjs';
