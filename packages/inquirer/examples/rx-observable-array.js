@@ -36,10 +36,10 @@ const observable = from(questions);
 
 inquirer.prompt(observable).ui.process.subscribe(
   (ans) => {
-    console.log('Answer is: ', ans);
+    console.log('Answer is:', ans);
   },
   (err) => {
-    console.log('Error: ', err);
+    console.log('Error:', err);
   },
   () => {
     console.log('Completed');

@@ -4,7 +4,7 @@ import { globby } from 'globby';
 import prettier from 'prettier';
 
 function readFile(filepath) {
-  return fs.readFile(filepath, 'utf-8');
+  return fs.readFile(filepath, 'utf8');
 }
 
 function readJSONFile(filepath) {
@@ -44,7 +44,7 @@ paths.forEach(async (pkgPath) => {
   pkg.author = rootPkg.author;
   pkg.license = rootPkg.license;
   pkg.repository = rootPkg.repository;
-  pkg.keywords = Array.from(new Set([...rootPkg.keywords, ...(pkg.keywords ?? [])]));
+  pkg.keywords = [...new Set([...rootPkg.keywords, ...(pkg.keywords ?? [])])];
 
   if (hasReadme) {
     const repoPath = dir.split('/').slice(-2).join('/');

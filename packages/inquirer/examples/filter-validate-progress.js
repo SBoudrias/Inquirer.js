@@ -4,8 +4,6 @@
 
 import inquirer from '../lib/inquirer.js';
 
-/* eslint-disable no-promise-executor-return */
-
 const questions = [
   {
     type: 'input',

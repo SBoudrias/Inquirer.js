@@ -60,7 +60,7 @@ export default class ListPrompt extends Base {
         take(1),
         map(this.getCurrentValue.bind(this)),
         flatMap((value) =>
-          runAsync(this.opt.filter)(value, this.answers).catch((err) => err),
+          runAsync(this.opt.filter)(value, this.answers).catch((error) => error),
         ),
       )
       .forEach(this.onSubmit.bind(this));

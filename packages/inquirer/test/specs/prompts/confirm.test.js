@@ -140,7 +140,7 @@ describe('`confirm` prompt', () => {
           expect(answer).toEqual('👍');
           done();
         })
-        .catch((err) => console.log(err));
+        .catch((error) => console.log(error));
 
       rl.emit('line', 'y');
     }));

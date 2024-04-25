@@ -104,4 +104,4 @@ export default createPrompt(
   },
 );
 
-export { Separator };
+export { Separator } from '@inquirer/core';

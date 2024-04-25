@@ -222,14 +222,16 @@ describe('`checkbox` prompt', () => {
 
   describe('with disabled choices', () => {
     beforeEach(() => {
-      fixture.choices.push({
-        name: 'dis1',
-        disabled: true,
-      });
-      fixture.choices.push({
-        name: 'dis2',
-        disabled: 'uh oh',
-      });
+      fixture.choices.push(
+        {
+          name: 'dis1',
+          disabled: true,
+        },
+        {
+          name: 'dis2',
+          disabled: 'uh oh',
+        },
+      );
       checkbox = new Checkbox(fixture, rl);
     });
 

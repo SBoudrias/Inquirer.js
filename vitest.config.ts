@@ -22,7 +22,7 @@ export default defineConfig({
       {
         // Resolve @inquirer/* packages to their source code
         find: /@inquirer\/(.*)/,
-        replacement: fileURLToPath(new URL('./packages/$1/src', import.meta.url)),
+        replacement: fileURLToPath(new URL('packages/$1/src', import.meta.url)),
       },
     ],
   },

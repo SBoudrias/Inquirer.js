@@ -1,10 +1,9 @@
-import checkbox, { Separator } from '@inquirer/checkbox';
-import confirm from '@inquirer/confirm';
-import editor from '@inquirer/editor';
-import expand from '@inquirer/expand';
-import input from '@inquirer/input';
-import password from '@inquirer/password';
-import rawlist from '@inquirer/rawlist';
-import select from '@inquirer/select';
+export { default as checkbox, Separator } from '@inquirer/checkbox';
+export { default as editor } from '@inquirer/editor';
+export { default as confirm } from '@inquirer/confirm';
+export { default as input } from '@inquirer/input';
+export { default as expand } from '@inquirer/expand';
+export { default as rawlist } from '@inquirer/rawlist';
+export { default as password } from '@inquirer/password';
 
-export { checkbox, confirm, editor, expand, input, password, rawlist, select, Separator };
+export { default as select } from '@inquirer/select';

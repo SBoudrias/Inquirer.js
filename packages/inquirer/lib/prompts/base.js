@@ -104,10 +104,10 @@ export default class Prompt {
             this.startSpinner(filteredValue, this.opt.validatingText);
             return validate(filteredValue, this.answers).then(
               (isValid) => ({ isValid, value: filteredValue }),
-              (err) => ({ isValid: err, value: filteredValue }),
+              (error_) => ({ isValid: error_, value: filteredValue }),
             );
           },
-          (err) => ({ isValid: err }),
+          (error_) => ({ isValid: error_ }),
         );
       }),
       share(),
