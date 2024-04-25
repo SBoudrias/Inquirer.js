@@ -30,6 +30,7 @@
       }
     ],
     "no-eq-null": "off",
+    "no-redeclare": "off",
     "no-restricted-imports": [
       "error",
       {

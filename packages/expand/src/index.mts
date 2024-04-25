@@ -48,7 +48,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
   const [status, setStatus] = useState<string>('pending');
   const [value, setValue] = useState<string>('');
   const [expanded, setExpanded] = useState<boolean>(defaultExpandState);
-  const [errorMsg, setError] = useState<string | undefined>(undefined);
+  const [errorMsg, setError] = useState<string>();
   const theme = makeTheme(config.theme);
   const prefix = usePrefix({ theme });
 
