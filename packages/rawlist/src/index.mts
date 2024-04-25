@@ -36,7 +36,7 @@ export default createPrompt(
     const { choices } = config;
     const [status, setStatus] = useState<string>('pending');
     const [value, setValue] = useState<string>('');
-    const [errorMsg, setError] = useState<string | undefined>(undefined);
+    const [errorMsg, setError] = useState<string>();
     const theme = makeTheme(config.theme);
     const prefix = usePrefix({ theme });
 

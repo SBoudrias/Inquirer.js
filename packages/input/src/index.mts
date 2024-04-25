@@ -22,10 +22,8 @@ export default createPrompt<string, InputConfig>((config, done) => {
   const { validate = () => true } = config;
   const theme = makeTheme(config.theme);
   const [status, setStatus] = useState<string>('pending');
-  const [defaultValue = '', setDefaultValue] = useState<string | undefined>(
-    config.default,
-  );
-  const [errorMsg, setError] = useState<string | undefined>(undefined);
+  const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
+  const [errorMsg, setError] = useState<string>();
   const [value, setValue] = useState<string>('');
 
   const isLoading = status === 'loading';

@@ -28,7 +28,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
 
   const [status, setStatus] = useState<string>('pending');
   const [value, setValue] = useState<string>(config.default || '');
-  const [errorMsg, setError] = useState<string | undefined>(undefined);
+  const [errorMsg, setError] = useState<string>();
 
   const isLoading = status === 'loading';
   const prefix = usePrefix({ isLoading, theme });

@@ -22,7 +22,7 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
   const theme = makeTheme(config.theme);
 
   const [status, setStatus] = useState<string>('pending');
-  const [errorMsg, setError] = useState<string | undefined>(undefined);
+  const [errorMsg, setError] = useState<string>();
   const [value, setValue] = useState<string>('');
 
   const isLoading = status === 'loading';

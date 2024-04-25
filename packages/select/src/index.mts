@@ -63,7 +63,7 @@ export default createPrompt(
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
     const prefix = usePrefix({ theme });
     const [status, setStatus] = useState('pending');
-    const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
     const bounds = useMemo(() => {
       const first = items.findIndex(isSelectable);

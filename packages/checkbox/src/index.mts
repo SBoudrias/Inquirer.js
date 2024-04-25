@@ -126,7 +126,7 @@ export default createPrompt(
 
     const [active, setActive] = useState(bounds.first);
     const [showHelpTip, setShowHelpTip] = useState(true);
-    const [errorMsg, setError] = useState<string | undefined>(undefined);
+    const [errorMsg, setError] = useState<string>();
 
     useKeypress(async (key) => {
       if (isEnterKey(key)) {
