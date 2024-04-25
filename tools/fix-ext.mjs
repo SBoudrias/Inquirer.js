@@ -7,10 +7,10 @@ import { globby } from 'globby';
 const mjsFiles = await globby(['dist/cjs/**/*.mjs', '!**/node_modules']);
 mjsFiles.forEach(async (pathname) => {
   // 1. Rename imports
-  const fileContent = await fs.readFile(pathname, 'utf-8');
+  const fileContent = await fs.readFile(pathname, 'utf8');
   await fs.writeFile(
     pathname,
-    fileContent.replaceAll(/require\(['"]([^'"]*)\.mjs['"]\)/g, "require('$1.js')"),
+    fileContent.replaceAll(/require\(["']([^"']*)\.mjs["']\)/g, "require('$1.js')"),
   );
 
   // 2. Rename files
@@ -29,7 +29,7 @@ mjsFiles.forEach(async (pathname) => {
 const dmtsFiles = await globby(['dist/cjs/**/*.d.mts', '!**/node_modules']);
 dmtsFiles.forEach(async (pathname) => {
   // 1. Rename imports from `.mjs` to `.js`
-  const fileContent = await fs.readFile(pathname, 'utf-8');
+  const fileContent = await fs.readFile(pathname, 'utf8');
   await fs.writeFile(
     pathname,
     fileContent.replaceAll(/from '([^']*)\.mjs'/g, "from '$1.js'"),

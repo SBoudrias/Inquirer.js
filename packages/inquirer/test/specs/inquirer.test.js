@@ -14,6 +14,10 @@ import { autosubmit } from '../helpers/events.js';
 
 const ostype = os.type();
 
+function throwFunc(step) {
+  throw new Error(`askAnswered Error ${step}`);
+}
+
 describe('inquirer.prompt', () => {
   let prompt;
 
@@ -687,9 +691,6 @@ describe('inquirer.prompt', () => {
     });
 
     it('should not run prompt if answer exists for question', async () => {
-      const throwFunc = function (step) {
-        throw new Error(`askAnswered Error ${step}`);
-      };
       const prompts = [
         {
           type: 'input',
@@ -712,9 +713,6 @@ describe('inquirer.prompt', () => {
     });
 
     it('should not run prompt if nested answer exists for question', async () => {
-      const throwFunc = function (step) {
-        throw new Error(`askAnswered Error ${step}`);
-      };
       const prompts = [
         {
           type: 'input',

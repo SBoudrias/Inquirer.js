@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import util from 'node:util';
+import { inherits } from 'node:util';
 import { vi } from 'vitest';
 
 const stub = {};
@@ -27,10 +27,10 @@ const ReadlineStub = function () {
   this.line = '';
   this.input = new EventEmitter();
 
-  EventEmitter.apply(this, arguments);
+  Reflect.apply(EventEmitter, this, arguments);
 };
 
-util.inherits(ReadlineStub, EventEmitter);
+inherits(ReadlineStub, EventEmitter);
 Object.assign(ReadlineStub.prototype, stub);
 
 export default ReadlineStub;

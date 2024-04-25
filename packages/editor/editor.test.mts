@@ -75,12 +75,15 @@ describe('editor prompt', () => {
       message: 'Add a description',
       validate(value) {
         switch (value) {
-          case '1':
+          case '1': {
             return true;
-          case '2':
+          }
+          case '2': {
             return '"2" is not an allowed value';
-          default:
+          }
+          default: {
             return false;
+          }
         }
       },
     });

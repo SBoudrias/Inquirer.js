@@ -2,7 +2,7 @@ import * as url from 'node:url';
 import chalk from 'chalk';
 import { input } from '@inquirer/prompts';
 
-const hexRegEx = /([0-9]|[a-f])/gim;
+const hexRegEx = /(\d|[a-f])/gim;
 const isHex = (value) =>
   (value.match(hexRegEx) || []).length === value.length &&
   (value.length === 3 || value.length === 6);

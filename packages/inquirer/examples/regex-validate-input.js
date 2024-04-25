@@ -14,7 +14,7 @@ const questions = [
         return true;
       }
 
-      throw Error('Please provide a valid API key secret.');
+      throw new Error('Please provide a valid API key secret.');
     },
   },
 ];

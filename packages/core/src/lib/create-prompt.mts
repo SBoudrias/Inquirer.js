@@ -47,8 +47,8 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
             store.hooksCleanup.forEach((cleanFn) => {
               cleanFn?.();
             });
-          } catch (err) {
-            reject(err);
+          } catch (error) {
+            reject(error);
           }
 
           if (context?.clearPromptOnDone) {
@@ -89,9 +89,9 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
             screen.render(content, bottomContent);
 
             effectScheduler.run();
-          } catch (err) {
+          } catch (error) {
             onExit();
-            reject(err);
+            reject(error);
           }
         }
 

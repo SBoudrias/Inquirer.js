@@ -4,7 +4,7 @@ function normalizeKeypressEvents(value, key) {
   return { value, key: key || {} };
 }
 
-export default function (rl) {
+export default function observe(rl) {
   const keypress = fromEvent(rl.input, 'keypress', normalizeKeypressEvents)
     .pipe(takeUntil(fromEvent(rl, 'close')))
     // Ignore `enter` key. On the readline, we only care about the `line` event.

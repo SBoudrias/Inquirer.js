@@ -17,23 +17,28 @@ export default tseslint.config(
       'packages/*/__snapshots__/**',
     ],
   },
+  eslint.configs.recommended,
+  nodePlugin.configs['flat/recommended-module'],
+  eslintPluginUnicorn.configs['flat/recommended'],
   {
     languageOptions: {
       globals: {
         ...globals.nodeBuiltin,
       },
     },
-    plugins: {
-      unicorn: eslintPluginUnicorn,
-    },
     rules: {
-      'unicorn/no-abusive-eslint-disable': 'error',
-      'unicorn/prefer-module': 'error',
-      'unicorn/prefer-node-protocol': 'error',
+      'unicorn/consistent-function-scoping': 'off',
+      'unicorn/filename-case': 'off',
+      'unicorn/no-array-callback-reference': 'off',
+      'unicorn/no-array-for-each': 'off',
+      'unicorn/no-array-reduce': 'off',
+      'unicorn/no-null': 'off',
+      'unicorn/no-process-exit': 'off',
+      'unicorn/prefer-event-target': 'off',
+      'unicorn/prefer-top-level-await': 'off',
+      'unicorn/prevent-abbreviations': 'off',
     },
   },
-  eslint.configs.recommended,
-  nodePlugin.configs['flat/recommended-module'],
   {
     files: ['**/*.mts', '**/*.ts'],
     extends: [...tseslint.configs.recommended],
