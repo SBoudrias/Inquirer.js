@@ -33,7 +33,7 @@ const endIndex = output.split('\n').length - 1;
 const getPage = (paginator, index) => {
   const lines = paginator.paginate(output, index, pageSize).split('\n');
   const lastLine = lines.pop();
-  if (!lastLine.match(/Move up and down/)) {
+  if (!/Move up and down/.test(lastLine)) {
     lines.push(lastLine);
   }
   return lines.join('\n');

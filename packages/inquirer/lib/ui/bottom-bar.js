@@ -68,7 +68,7 @@ export default class BottomBar extends Base {
    */
 
   enforceLF(str) {
-    return str.match(/[\r\n]$/) ? str : str + '\n';
+    return /[\n\r]$/.test(str) ? str : str + '\n';
   }
 
   /**

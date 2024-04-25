@@ -49,9 +49,11 @@
     "import/no-duplicates": "error",
     "import/order": "error",
     "prettier/prettier": "error",
+    "unicorn/better-regex": "error",
     "unicorn/no-abusive-eslint-disable": "error",
     "unicorn/prefer-module": "error",
     "unicorn/prefer-node-protocol": "error",
+    "unicorn/prefer-regexp-test": "error",
     "unicorn/prefer-string-replace-all": "error"
   },
   "overrides": [

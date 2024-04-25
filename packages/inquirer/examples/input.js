@@ -5,7 +5,7 @@
 import chalk from 'chalk';
 import inquirer from '../lib/inquirer.js';
 
-const hexRegEx = /([0-9]|[a-f])/gim;
+const hexRegEx = /(\d|[a-f])/gim;
 const isHex = (value) =>
   (value.match(hexRegEx) || []).length === value.length &&
   (value.length === 3 || value.length === 6);
@@ -43,7 +43,7 @@ const questions = [
     message: "What's your phone number",
     validate(value) {
       const pass = value.match(
-        /^([01]{1})?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?){1}(?:\d+)?)?$/i,
+        /^([01])?[\s.-]?\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?)(?:\d+)?)?$/i,
       );
       if (pass) {
         return true;

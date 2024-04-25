@@ -11,7 +11,7 @@ import {
 import type { PartialDeep } from '@inquirer/type';
 import chalk from 'chalk';
 
-const numberRegex = /[0-9]+/;
+const numberRegex = /\d+/;
 
 type Choice<Value> = {
   value: Value;
