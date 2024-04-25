@@ -20,11 +20,11 @@ export default class CheckboxPrompt extends Base {
     }
 
     if (Array.isArray(this.opt.default)) {
-      this.opt.choices.forEach(function (choice) {
-        if (this.opt.default.indexOf(choice.value) >= 0) {
+      for (const choice of this.opt.choices) {
+        if (this.opt.default.includes(choice.value)) {
           choice.checked = true;
         }
-      }, this);
+      }
     }
 
     this.pointer = 0;
@@ -192,8 +192,8 @@ export default class CheckboxPrompt extends Base {
   }
 
   onAllKey() {
-    const shouldBeChecked = Boolean(
-      this.opt.choices.find((choice) => choice.type !== 'separator' && !choice.checked),
+    const shouldBeChecked = this.opt.choices.some(
+      (choice) => choice.type !== 'separator' && !choice.checked,
     );
 
     this.opt.choices.forEach((choice) => {

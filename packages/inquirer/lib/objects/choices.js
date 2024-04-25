@@ -47,6 +47,15 @@ export default class Choices {
     });
   }
 
+  [Symbol.iterator]() {
+    const data = this.choices;
+    let index = -1;
+
+    return {
+      next: () => ({ value: data[++index], done: !(index in data) }),
+    };
+  }
+
   /**
    * Get a valid choice from the collection
    * @param  {Number} selector  The selected choice index
@@ -104,6 +113,10 @@ export default class Choices {
 
   find(func) {
     return this.choices.find(func);
+  }
+
+  some(func) {
+    return this.choices.some(func);
   }
 
   push(...args) {
