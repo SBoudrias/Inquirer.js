@@ -158,9 +158,7 @@ export default createPrompt(
         setShowHelpTip(false);
         setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
       } else if (key.name === 'a') {
-        const selectAll = Boolean(
-          items.find((choice) => isSelectable(choice) && !choice.checked),
-        );
+        const selectAll = items.some((choice) => isSelectable(choice) && !choice.checked);
         setItems(items.map(check(selectAll)));
       } else if (key.name === 'i') {
         setItems(items.map(toggle));
