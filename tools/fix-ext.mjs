@@ -10,7 +10,7 @@ mjsFiles.forEach(async (pathname) => {
   const fileContent = await fs.readFile(pathname, 'utf-8');
   await fs.writeFile(
     pathname,
-    fileContent.replace(/require\(['"]([^'"]*)\.mjs['"]\)/g, "require('$1.js')"),
+    fileContent.replaceAll(/require\(['"]([^'"]*)\.mjs['"]\)/g, "require('$1.js')"),
   );
 
   // 2. Rename files
@@ -32,7 +32,7 @@ dmtsFiles.forEach(async (pathname) => {
   const fileContent = await fs.readFile(pathname, 'utf-8');
   await fs.writeFile(
     pathname,
-    fileContent.replace(/from '([^']*)\.mjs'/g, "from '$1.js'"),
+    fileContent.replaceAll(/from '([^']*)\.mjs'/g, "from '$1.js'"),
   );
 
   // 2. Rename files

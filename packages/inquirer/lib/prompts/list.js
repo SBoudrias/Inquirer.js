@@ -199,5 +199,5 @@ function listRender(choices, pointer) {
     output += line + ' \n';
   });
 
-  return output.replace(/\n$/, '');
+  return output.replaceAll(/\n$/g, '');
 }

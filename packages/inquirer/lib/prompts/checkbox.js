@@ -258,7 +258,7 @@ function renderChoices(choices, pointer) {
     output += '\n';
   });
 
-  return output.replace(/\n$/, '');
+  return output.replaceAll(/\n$/g, '');
 }
 
 /**
