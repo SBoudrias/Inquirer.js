@@ -58,7 +58,7 @@ export function lines<T>({
   const renderItemAt = (index: number) => split(renderItem(layoutsInPage[index]!), width);
 
   // Create a blank array of lines for the page
-  const pageBuffer = Array.from({ length: pageSize });
+  const pageBuffer: string[] = Array.from({ length: pageSize });
 
   // Render the active item to decide the position
   const activeItem = renderItemAt(requested).slice(0, pageSize);
