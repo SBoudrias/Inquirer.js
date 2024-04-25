@@ -44,7 +44,7 @@ export default createPrompt(
       if (isEnterKey(key)) {
         let selectedChoice;
         if (numberRegex.test(value)) {
-          const answer = parseInt(value, 10) - 1;
+          const answer = Number.parseInt(value, 10) - 1;
           selectedChoice = choices.filter(isSelectableChoice)[answer];
         } else {
           const answer = value.toLowerCase();

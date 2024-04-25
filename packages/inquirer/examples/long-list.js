@@ -4,7 +4,9 @@
 
 import inquirer from '../lib/inquirer.js';
 
-const choices = Array.apply(0, new Array(26)).map((x, y) => String.fromCharCode(y + 65));
+const choices = Array.apply(0, Array.from({ length: 26 })).map((x, y) =>
+  String.fromCharCode(y + 65),
+);
 choices.push('Multiline option 1\n  super cool feature \n  more lines');
 choices.push('Multiline option 2\n  super cool feature \n  more lines');
 choices.push('Multiline option 3\n  super cool feature \n  more lines');

@@ -209,7 +209,7 @@ export default class ExpandPrompt extends Base {
       );
     }
 
-    if (errors.length) {
+    if (errors.length > 0) {
       throw new Error(
         'Duplicate key error: `key` param must be unique. Duplicates: ' +
           [...new Set(errors)].join(','),

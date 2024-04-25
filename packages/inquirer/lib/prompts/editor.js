@@ -54,11 +54,10 @@ export default class EditorPrompt extends Base {
     let bottomContent = '';
     let message = this.getQuestion();
 
-    if (this.status === 'answered') {
-      message += chalk.dim('Received');
-    } else {
-      message += chalk.dim('Press <enter> to launch your preferred editor.');
-    }
+    message +=
+      this.status === 'answered'
+        ? chalk.dim('Received')
+        : chalk.dim('Press <enter> to launch your preferred editor.');
 
     if (error) {
       bottomContent = chalk.red('>> ') + error;

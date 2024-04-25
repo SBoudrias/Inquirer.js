@@ -14,7 +14,7 @@ function mask(input, maskChar) {
     return '';
   }
 
-  return new Array(input.length + 1).join(maskChar);
+  return Array.from({ length: input.length + 1 }).join(maskChar);
 }
 
 export default class PasswordPrompt extends Base {
@@ -55,11 +55,10 @@ export default class PasswordPrompt extends Base {
     let message = this.getQuestion();
     let bottomContent = '';
 
-    if (this.status === 'answered') {
-      message += this.getMaskedValue(this.answer);
-    } else {
-      message += this.getMaskedValue(this.rl.line || '');
-    }
+    message +=
+      this.status === 'answered'
+        ? this.getMaskedValue(this.answer)
+        : this.getMaskedValue(this.rl.line || '');
 
     if (error) {
       bottomContent = '\n' + chalk.red('>> ') + error;

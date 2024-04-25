@@ -19,7 +19,7 @@ describe('lines(...)', () => {
       isActive: boolean;
       index: number;
     }): string =>
-      new Array(itemHeight)
+      Array.from({ length: itemHeight })
         .fill(0)
         .map((_, i) => {
           if (i === 0) {

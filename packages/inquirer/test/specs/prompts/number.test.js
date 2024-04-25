@@ -80,7 +80,7 @@ describe('`number` prompt', () => {
   it('should parse a float with no digits before the decimal', () =>
     new Promise((done) => {
       number.run().then((answer) => {
-        expect(answer).toBeCloseTo(0.01264, ACCEPTABLE_ERROR);
+        expect(answer).toBeCloseTo(0.012_64, ACCEPTABLE_ERROR);
         done();
       });
 

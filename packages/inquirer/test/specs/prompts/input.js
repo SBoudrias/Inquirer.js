@@ -36,7 +36,7 @@ describe('`input` prompt', () => {
 
   it('should apply the provided transform to the value', function (done) {
     this.fixture.transformer = function (value) {
-      return value.split('').reverse().join('');
+      return [...value].reverse().join('');
     };
 
     const prompt = new Input(this.fixture, this.rl);

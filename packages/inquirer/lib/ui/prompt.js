@@ -23,11 +23,7 @@ export default class PromptUI extends Base {
 
   run(questions, answers) {
     // Keep global reference to the answers
-    if (_.isPlainObject(answers)) {
-      this.answers = { ...answers };
-    } else {
-      this.answers = {};
-    }
+    this.answers = _.isPlainObject(answers) ? { ...answers } : {};
 
     // Make sure questions is an array.
     if (_.isPlainObject(questions)) {

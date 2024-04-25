@@ -11,7 +11,7 @@ import figures from '@inquirer/figures';
 export default class Separator {
   constructor(line) {
     this.type = 'separator';
-    this.line = chalk.dim(line || new Array(15).join(figures.line));
+    this.line = chalk.dim(line || Array.from({ length: 15 }).join(figures.line));
   }
 
   /**

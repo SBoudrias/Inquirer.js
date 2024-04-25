@@ -248,11 +248,8 @@ function renderChoices(choices, pointer) {
       })`;
     } else {
       const line = getCheckbox(choice.checked) + ' ' + choice.name;
-      if (i - separatorOffset === pointer) {
-        output += chalk.cyan(figures.pointer + line);
-      } else {
-        output += ' ' + line;
-      }
+      output +=
+        i - separatorOffset === pointer ? chalk.cyan(figures.pointer + line) : ' ' + line;
     }
 
     output += '\n';

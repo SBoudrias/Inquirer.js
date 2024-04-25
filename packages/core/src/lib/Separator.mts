@@ -7,7 +7,7 @@ import figures from '@inquirer/figures';
  */
 
 export class Separator {
-  readonly separator = chalk.dim(new Array(15).join(figures.line));
+  readonly separator = chalk.dim(Array.from({ length: 15 }).join(figures.line));
   readonly type = 'separator';
 
   constructor(separator?: string) {

@@ -33,7 +33,7 @@ class BufferedStream extends Stream.Writable {
 
   getLastChunk({ raw }: { raw?: boolean }): string {
     const chunks = raw ? this.#_rawChunks : this.#_chunks;
-    const lastChunk = chunks[chunks.length - 1];
+    const lastChunk = chunks.at(-1);
     return lastChunk ?? '';
   }
 

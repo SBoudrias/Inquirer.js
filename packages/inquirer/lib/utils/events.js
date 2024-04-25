@@ -31,7 +31,7 @@ export default function (rl) {
     ),
 
     numberKey: keypress.pipe(
-      filter((e) => e.value && '123456789'.indexOf(e.value) >= 0),
+      filter((e) => e.value && '123456789'.includes(e.value)),
       map((e) => Number(e.value)),
       share(),
     ),

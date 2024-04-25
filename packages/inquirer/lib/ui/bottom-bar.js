@@ -80,7 +80,7 @@ export default class BottomBar extends Base {
     this.height = msgLines.length;
 
     // Write message to screen and setPrompt to control backspace
-    this.rl.setPrompt(msgLines[msgLines.length - 1]);
+    this.rl.setPrompt(msgLines.at(-1));
 
     if (this.rl.output.rows === 0 && this.rl.output.columns === 0) {
       /* When it's a tty through serial port there's no terminal info and the render will malfunction,

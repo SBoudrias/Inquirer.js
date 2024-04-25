@@ -166,11 +166,10 @@ export default class Prompt {
       this.status !== 'answered'
     ) {
       // If default password is supplied, hide it
-      if (this.opt.type === 'password') {
-        message += chalk.italic.dim('[hidden] ');
-      } else {
-        message += chalk.dim('(' + this.opt.default + ') ');
-      }
+      message +=
+        this.opt.type === 'password'
+          ? chalk.italic.dim('[hidden] ')
+          : chalk.dim('(' + this.opt.default + ') ');
     }
 
     return message;

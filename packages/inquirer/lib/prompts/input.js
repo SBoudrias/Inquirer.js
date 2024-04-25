@@ -47,11 +47,7 @@ export default class InputPrompt extends Base {
     const { transformer } = this.opt;
     const isFinal = this.status === 'answered';
 
-    if (isFinal) {
-      appendContent = this.answer;
-    } else {
-      appendContent = this.rl.line;
-    }
+    appendContent = isFinal ? this.answer : this.rl.line;
 
     if (transformer) {
       message += transformer(appendContent, this.answers, { isFinal });

@@ -20,7 +20,7 @@ function split(content: string, width: number) {
 function rotate<T>(count: number, items: readonly T[]): readonly T[] {
   const max = items.length;
   const offset = ((count % max) + max) % max;
-  return items.slice(offset).concat(items.slice(0, offset));
+  return [...items.slice(offset), ...items.slice(0, offset)];
 }
 
 /**
@@ -58,7 +58,7 @@ export function lines<T>({
   const renderItemAt = (index: number) => split(renderItem(layoutsInPage[index]!), width);
 
   // Create a blank array of lines for the page
-  const pageBuffer = new Array(pageSize);
+  const pageBuffer = Array.from({ length: pageSize });
 
   // Render the active item to decide the position
   const activeItem = renderItemAt(requested).slice(0, pageSize);

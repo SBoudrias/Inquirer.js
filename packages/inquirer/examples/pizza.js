@@ -44,7 +44,7 @@ const questions = [
     name: 'quantity',
     message: 'How many do you need?',
     validate(value) {
-      const valid = !isNaN(parseFloat(value));
+      const valid = !Number.isNaN(Number.parseFloat(value));
       return valid || 'Please enter a number';
     },
     filter: Number,

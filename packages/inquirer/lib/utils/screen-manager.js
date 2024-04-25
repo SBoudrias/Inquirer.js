@@ -67,7 +67,7 @@ export default class ScreenManager {
     // rl.line (mainly because of the password prompt), so just rely on it's
     // length.
     let prompt = rawPromptLine;
-    if (this.rl.line.length) {
+    if (this.rl.line.length > 0) {
       prompt = prompt.slice(0, -this.rl.line.length);
     }
 

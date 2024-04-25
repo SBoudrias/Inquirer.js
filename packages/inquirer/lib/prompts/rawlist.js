@@ -150,17 +150,13 @@ export default class RawListPrompt extends Base {
     let index;
 
     if (this.lastKey === 'arrow') {
-      index = this.hiddenLine.length ? Number(this.hiddenLine) - 1 : 0;
+      index = this.hiddenLine.length > 0 ? Number(this.hiddenLine) - 1 : 0;
     } else {
-      index = this.rl.line.length ? Number(this.rl.line) - 1 : 0;
+      index = this.rl.line.length > 0 ? Number(this.rl.line) - 1 : 0;
     }
     this.lastKey = '';
 
-    if (this.opt.choices.getChoice(index)) {
-      this.selected = index;
-    } else {
-      this.selected = undefined;
-    }
+    this.selected = this.opt.choices.getChoice(index) ? index : undefined;
     this.render();
   }
 

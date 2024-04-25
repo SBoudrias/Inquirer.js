@@ -26,10 +26,7 @@ export default class Choice {
       });
     }
 
-    if (typeof val.disabled === 'function') {
-      this.disabled = val.disabled(answers);
-    } else {
-      this.disabled = val.disabled;
-    }
+    this.disabled =
+      typeof val.disabled === 'function' ? val.disabled(answers) : val.disabled;
   }
 }
