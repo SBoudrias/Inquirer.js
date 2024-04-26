@@ -301,6 +301,16 @@ Confirm with a toggle. Select a choice with arrow keys + Enter.
 ? Do you want to continue? no / yes
 ```
 
+[**Sortable Checkbox Prompt**](https://github.com/th0r/inquirer-sortable-checkbox)<br/>
+The same as built-in checkbox prompt, but also allowing to reorder choices using ctrl+up/down.
+
+```
+? Which PRs and in what order would you like to merge? (Press <space> to select, <a> to toggle all, <i> to invert selection, <ctrl+up> to move item up, <ctrl+down> to move item down, and <enter> to proceed)
+❯ ◯ PR 1
+  ◯ PR 2
+  ◯ PR 3
+```
+
 # License
 
 Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
