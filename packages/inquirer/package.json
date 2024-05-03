@@ -73,7 +73,7 @@
     "rxjs": "^7.8.1",
     "string-width": "^4.2.3",
     "strip-ansi": "^6.0.1",
-    "wrap-ansi": "^6.2.0"
+    "wrap-ansi": "^9.0.0"
   },
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/inquirer/README.md"
 }
