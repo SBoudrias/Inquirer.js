@@ -311,6 +311,22 @@ The same as built-in checkbox prompt, but also allowing to reorder choices using
   ◯ PR 3
 ```
 
+[**Multi Select Prompt**](https://github.com/jeffwcx/inquirer-select-pro)
+
+An inquirer select that supports multiple selections and filtering/searching.
+
+```
+? Choose your OS, IDE, PL, etc. (Press <tab> to select/deselect, <backspace> to remove selected
+option, <enter> to select option)
+>>  vue
+>[ ] vue
+ [ ] vuejs
+ [ ] fuelphp
+ [ ] venv
+ [ ] vercel
+ (Use arrow keys to reveal more options)
+```
+
 # License
 
 Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
