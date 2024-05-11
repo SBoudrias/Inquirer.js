@@ -672,6 +672,59 @@ describe('checkbox prompt', () => {
     await expect(answer).resolves.toEqual([1]);
   });
 
+  describe('theme: icon', () => {
+    it('checked/unchecked', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        theme: {
+          icon: {
+            checked: '√',
+            unchecked: 'x',
+          },
+        },
+      });
+      events.keypress('space');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        ❯√ 1
+         x 2
+         x 3
+         x 4
+         x 5
+         x 6
+         x 7"
+      `);
+      events.keypress('enter');
+      await answer;
+    });
+
+    it('cursor', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        theme: {
+          icon: {
+            cursor: '>',
+          },
+        },
+      });
+      events.keypress('space');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        >◉ 1
+         ◯ 2
+         ◯ 3
+         ◯ 4
+         ◯ 5
+         ◯ 6
+         ◯ 7"
+      `);
+      events.keypress('enter');
+      await answer;
+    });
+  });
+
   describe('theme: style.renderSelectedChoices', () => {
     it('renderSelectedChoices', async () => {
       const { answer, events, getScreen } = await render(checkbox, {
