@@ -103,9 +103,7 @@ export default createPrompt(
       required,
       validate = () => true,
     } = config;
-    const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme, {
-      icon: Object.assign({}, checkboxTheme.icon, config.theme?.icon),
-    });
+    const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme);
     const prefix = usePrefix({ theme });
     const firstRender = useRef(true);
     const [status, setStatus] = useState('pending');
