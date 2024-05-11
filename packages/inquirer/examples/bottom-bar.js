@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import BottomBar from '../lib/ui/bottom-bar.js';
 
-const loader = ['/ Installing', '| Installing', '\\ Installing', '- Installing'];
+const loader = ['/ Installing', '| Installing', String.raw`\ Installing`, '- Installing'];
 let i = 4;
 const ui = new BottomBar({ bottomBar: loader[i % 4] });
 
