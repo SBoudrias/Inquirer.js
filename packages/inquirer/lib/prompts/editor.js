@@ -26,10 +26,6 @@ export default class EditorPrompt extends Base {
     const waitUserInput =
       this.opt.waitUserInput === undefined ? true : this.opt.waitUserInput;
 
-    if (!waitUserInput) {
-      this.startExternalEditor();
-    }
-
     // Trigger Validation when editor closes
     const validation = this.handleSubmitEvents(this.editorResult);
     validation.success.forEach(this.onEnd.bind(this));
@@ -40,7 +36,11 @@ export default class EditorPrompt extends Base {
     this.opt.default = null;
 
     // Init
-    this.render();
+    if (waitUserInput) {
+      this.render();
+    } else {
+      this.startExternalEditor();
+    }
 
     return this;
   }

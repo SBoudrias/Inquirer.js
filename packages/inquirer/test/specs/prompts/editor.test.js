@@ -9,15 +9,17 @@ const defaultVisual = process.env.VISUAL;
 
 const require = createRequire(import.meta.url);
 const writeBin = require.resolve('../../bin/write.js');
-const expectedAnswer = 'testing';
 
-describe('`editor` prompt', () => {
+describe.each([
+  { message: 'testing', expectedAnswer: 'testing' },
+  { message: '', expectedAnswer: fixtures.editor.default },
+])('`editor` prompt', ({ message, expectedAnswer }) => {
   let fixture;
   let rl;
 
   beforeEach(() => {
-    // Writes the word "testing" to the file
-    process.env.VISUAL = `node ${writeBin} ${expectedAnswer}`;
+    // If supplied, overwrites the file with message
+    process.env.VISUAL = `node ${writeBin} ${message}`;
 
     fixture = { ...fixtures.editor };
     rl = new ReadlineStub();
