@@ -18,6 +18,13 @@ const questions = [
     },
     waitUserInput: true,
   },
+  {
+    type: 'editor',
+    name: 'edition',
+    message: 'Edit the following content.',
+    default: 'Hello, World!',
+    waitUserInput: false,
+  },
 ];
 
 inquirer.prompt(questions).then((answers) => {
