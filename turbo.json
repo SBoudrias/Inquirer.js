@@ -8,6 +8,10 @@
     "attw": {
       "dependsOn": ["tsc"],
       "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
     }
   }
 }
