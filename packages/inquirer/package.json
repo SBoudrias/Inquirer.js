@@ -1,7 +1,7 @@
 {
   "name": "inquirer",
   "type": "module",
-  "version": "9.2.22",
+  "version": "9.2.23",
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "files": [
@@ -59,7 +59,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@inquirer/figures": "^1.0.2",
+    "@inquirer/figures": "^1.0.3",
     "@ljharb/through": "^2.3.13",
     "ansi-escapes": "^4.3.2",
     "chalk": "^5.3.0",

@@ -403,14 +403,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@inquirer/checkbox@npm:^2.3.4, @inquirer/checkbox@workspace:packages/checkbox":
+"@inquirer/checkbox@npm:^2.3.5, @inquirer/checkbox@workspace:packages/checkbox":
   version: 0.0.0-use.local
   resolution: "@inquirer/checkbox@workspace:packages/checkbox"
   dependencies:
-    "@inquirer/core": "npm:^8.2.1"
-    "@inquirer/figures": "npm:^1.0.2"
-    "@inquirer/testing": "npm:^2.1.20"
-    "@inquirer/type": "npm:^1.3.2"
+    "@inquirer/core": "npm:^8.2.2"
+    "@inquirer/figures": "npm:^1.0.3"
+    "@inquirer/testing": "npm:^2.1.21"
+    "@inquirer/type": "npm:^1.3.3"
     ansi-escapes: "npm:^4.3.2"
     chalk: "npm:^4.1.2"
   languageName: unknown
@@ -424,23 +424,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/confirm@npm:^3.1.8, @inquirer/confirm@workspace:packages/confirm":
+"@inquirer/confirm@npm:^3.1.9, @inquirer/confirm@workspace:packages/confirm":
   version: 0.0.0-use.local
   resolution: "@inquirer/confirm@workspace:packages/confirm"
   dependencies:
-    "@inquirer/core": "npm:^8.2.1"
-    "@inquirer/testing": "npm:^2.1.20"
-    "@inquirer/type": "npm:^1.3.2"
+    "@inquirer/core": "npm:^8.2.2"
+    "@inquirer/testing": "npm:^2.1.21"
+    "@inquirer/type": "npm:^1.3.3"
   languageName: unknown
   linkType: soft
 
-"@inquirer/core@npm:^8.2.1, @inquirer/core@workspace:packages/core":
+"@inquirer/core@npm:^8.2.2, @inquirer/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@inquirer/core@workspace:packages/core"
   dependencies:
-    "@inquirer/figures": "npm:^1.0.2"
-    "@inquirer/testing": "npm:^2.1.20"
-    "@inquirer/type": "npm:^1.3.2"
+    "@inquirer/figures": "npm:^1.0.3"
+    "@inquirer/testing": "npm:^2.1.21"
+    "@inquirer/type": "npm:^1.3.3"
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^20.12.13"
     "@types/wrap-ansi": "npm:^3.0.0"
@@ -459,20 +459,20 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@inquirer/demo@workspace:packages/demo"
   dependencies:
-    "@inquirer/prompts": "npm:^5.0.4"
+    "@inquirer/prompts": "npm:^5.0.5"
     chalk: "npm:^4.1.2"
   bin:
     inquirer-demo: index.mjs
   languageName: unknown
   linkType: soft
 
-"@inquirer/editor@npm:^2.1.8, @inquirer/editor@workspace:packages/editor":
+"@inquirer/editor@npm:^2.1.9, @inquirer/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@inquirer/editor@workspace:packages/editor"
   dependencies:
-    "@inquirer/core": "npm:^8.2.1"
-    "@inquirer/testing": "npm:^2.1.20"
-    "@inquirer/type": "npm:^1.3.2"
+    "@inquirer/core": "npm:^8.2.2"
+    "@inquirer/testing": "npm:^2.1.21"
+    "@inquirer/type": "npm:^1.3.3"
     external-editor: "npm:^3.1.0"
   languageName: unknown
   linkType: soft
@@ -485,89 +485,89 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/expand@npm:^2.1.8, @inquirer/expand@workspace:packages/expand":
+"@inquirer/expand@npm:^2.1.9, @inquirer/expand@workspace:packages/expand":
   version: 0.0.0-use.local
   resolution: "@inquirer/expand@workspace:packages/expand"
   dependencies:
-    "@inquirer/core": "npm:^8.2.1"
-    "@inquirer/testing": "npm:^2.1.20"
-    "@inquirer/type": "npm:^1.3.2"
+    "@inquirer/core": "npm:^8.2.2"
+    "@inquirer/testing": "npm:^2.1.21"
+    "@inquirer/type": "npm:^1.3.3"
     chalk: "npm:^4.1.2"
   languageName: unknown
   linkType: soft
 
-"@inquirer/figures@npm:^1.0.2, @inquirer/figures@workspace:packages/figures":
+"@inquirer/figures@npm:^1.0.3, @inquirer/figures@workspace:packages/figures":
   version: 0.0.0-use.local
   resolution: "@inquirer/figures@workspace:packages/figures"
   languageName: unknown
   linkType: soft
 
-"@inquirer/input@npm:^2.1.8, @inquirer/input@workspace:packages/input":
+"@inquirer/input@npm:^2.1.9, @inquirer/input@workspace:packages/input":
   version: 0.0.0-use.local
   resolution: "@inquirer/input@workspace:packages/input"
   dependencies:
-    "@inquirer/core": "npm:^8.2.1"
-    "@inquirer/testing": "npm:^2.1.20"
-    "@inquirer/type": "npm:^1.3.2"
+    "@inquirer/core": "npm:^8.2.2"
+    "@inquirer/testing": "npm:^2.1.21"
+    "@inquirer/type": "npm:^1.3.3"
   languageName: unknown
   linkType: soft
 
-"@inquirer/password@npm:^2.1.8, @inquirer/password@workspace:packages/password":
+"@inquirer/password@npm:^2.1.9, @inquirer/password@workspace:packages/password":
   version: 0.0.0-use.local
   resolution: "@inquirer/password@workspace:packages/password"
   dependencies:
-    "@inquirer/core": "npm:^8.2.1"
-    "@inquirer/testing": "npm:^2.1.20"
-    "@inquirer/type": "npm:^1.3.2"
+    "@inquirer/core": "npm:^8.2.2"
+    "@inquirer/testing": "npm:^2.1.21"
+    "@inquirer/type": "npm:^1.3.3"
     ansi-escapes: "npm:^4.3.2"
   languageName: unknown
   linkType: soft
 
-"@inquirer/prompts@npm:^5.0.4, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
+"@inquirer/prompts@npm:^5.0.5, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
   version: 0.0.0-use.local
   resolution: "@inquirer/prompts@workspace:packages/prompts"
   dependencies:
-    "@inquirer/checkbox": "npm:^2.3.4"
-    "@inquirer/confirm": "npm:^3.1.8"
-    "@inquirer/editor": "npm:^2.1.8"
-    "@inquirer/expand": "npm:^2.1.8"
-    "@inquirer/input": "npm:^2.1.8"
-    "@inquirer/password": "npm:^2.1.8"
-    "@inquirer/rawlist": "npm:^2.1.8"
-    "@inquirer/select": "npm:^2.3.4"
-    "@inquirer/type": "npm:^1.3.2"
+    "@inquirer/checkbox": "npm:^2.3.5"
+    "@inquirer/confirm": "npm:^3.1.9"
+    "@inquirer/editor": "npm:^2.1.9"
+    "@inquirer/expand": "npm:^2.1.9"
+    "@inquirer/input": "npm:^2.1.9"
+    "@inquirer/password": "npm:^2.1.9"
+    "@inquirer/rawlist": "npm:^2.1.9"
+    "@inquirer/select": "npm:^2.3.5"
+    "@inquirer/type": "npm:^1.3.3"
   languageName: unknown
   linkType: soft
 
-"@inquirer/rawlist@npm:^2.1.8, @inquirer/rawlist@workspace:packages/rawlist":
+"@inquirer/rawlist@npm:^2.1.9, @inquirer/rawlist@workspace:packages/rawlist":
   version: 0.0.0-use.local
   resolution: "@inquirer/rawlist@workspace:packages/rawlist"
   dependencies:
-    "@inquirer/core": "npm:^8.2.1"
-    "@inquirer/testing": "npm:^2.1.20"
-    "@inquirer/type": "npm:^1.3.2"
+    "@inquirer/core": "npm:^8.2.2"
+    "@inquirer/testing": "npm:^2.1.21"
+    "@inquirer/type": "npm:^1.3.3"
     chalk: "npm:^4.1.2"
   languageName: unknown
   linkType: soft
 
-"@inquirer/select@npm:^2.3.4, @inquirer/select@workspace:packages/select":
+"@inquirer/select@npm:^2.3.5, @inquirer/select@workspace:packages/select":
   version: 0.0.0-use.local
   resolution: "@inquirer/select@workspace:packages/select"
   dependencies:
-    "@inquirer/core": "npm:^8.2.1"
-    "@inquirer/figures": "npm:^1.0.2"
-    "@inquirer/testing": "npm:^2.1.20"
-    "@inquirer/type": "npm:^1.3.2"
+    "@inquirer/core": "npm:^8.2.2"
+    "@inquirer/figures": "npm:^1.0.3"
+    "@inquirer/testing": "npm:^2.1.21"
+    "@inquirer/type": "npm:^1.3.3"
     ansi-escapes: "npm:^4.3.2"
     chalk: "npm:^4.1.2"
   languageName: unknown
   linkType: soft
 
-"@inquirer/testing@npm:^2.1.20, @inquirer/testing@workspace:packages/testing":
+"@inquirer/testing@npm:^2.1.21, @inquirer/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@inquirer/testing@workspace:packages/testing"
   dependencies:
-    "@inquirer/type": "npm:^1.3.2"
+    "@inquirer/type": "npm:^1.3.3"
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^20.12.13"
     ansi-escapes: "npm:^4.3.2"
@@ -576,7 +576,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/type@npm:^1.3.2, @inquirer/type@workspace:packages/type":
+"@inquirer/type@npm:^1.3.3, @inquirer/type@workspace:packages/type":
   version: 0.0.0-use.local
   resolution: "@inquirer/type@workspace:packages/type"
   languageName: unknown
@@ -4379,7 +4379,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inquirer@workspace:packages/inquirer"
   dependencies:
-    "@inquirer/figures": "npm:^1.0.2"
+    "@inquirer/figures": "npm:^1.0.3"
     "@ljharb/through": "npm:^2.3.13"
     ansi-escapes: "npm:^4.3.2"
     chalk: "npm:^5.3.0"
