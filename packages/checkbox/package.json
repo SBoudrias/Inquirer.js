@@ -87,5 +87,6 @@
         "default": "./dist/cjs/index.js"
       }
     }
-  }
+  },
+  "sideEffects": false
 }

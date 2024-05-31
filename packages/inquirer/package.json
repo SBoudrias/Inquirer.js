@@ -75,5 +75,6 @@
     "strip-ansi": "^6.0.1",
     "wrap-ansi": "^6.2.0"
   },
-  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/inquirer/README.md"
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/inquirer/README.md",
+  "sideEffects": false
 }

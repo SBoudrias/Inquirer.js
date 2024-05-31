@@ -51,6 +51,10 @@ paths.forEach(async (pkgPath) => {
     pkg.homepage = `https://github.com/SBoudrias/Inquirer.js/blob/master/${repoPath}/README.md`;
   }
 
+  if (!('sideEffects' in pkg)) {
+    pkg.sideEffects = false;
+  }
+
   if (isTS) {
     delete pkg.type;
     pkg.scripts = pkg.scripts ?? {};
