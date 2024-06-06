@@ -75,5 +75,5 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     error = theme.style.error(errorMsg);
   }
 
-  return [[prefix, message, formattedValue, helpTip].filter(Boolean).join(' '), error];
+  return [[prefix, message, config.mask ? formattedValue : helpTip].join(' '), error];
 });
