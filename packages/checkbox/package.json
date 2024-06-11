@@ -60,7 +60,7 @@
     "@inquirer/core": "^8.2.2",
     "@inquirer/figures": "^1.0.3",
     "@inquirer/type": "^1.3.3",
-    "ansi-escapes": "^4.3.2",
+    "ansi-escapes": "^7.0.0",
     "chalk": "^4.1.2"
   },
   "devDependencies": {

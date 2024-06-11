@@ -59,7 +59,7 @@
   "dependencies": {
     "@inquirer/core": "^8.2.2",
     "@inquirer/type": "^1.3.3",
-    "ansi-escapes": "^4.3.2"
+    "ansi-escapes": "^7.0.0"
   },
   "devDependencies": {
     "@inquirer/testing": "^2.1.21"

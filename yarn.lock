@@ -411,7 +411,7 @@ __metadata:
     "@inquirer/figures": "npm:^1.0.3"
     "@inquirer/testing": "npm:^2.1.21"
     "@inquirer/type": "npm:^1.3.3"
-    ansi-escapes: "npm:^4.3.2"
+    ansi-escapes: "npm:^7.0.0"
     chalk: "npm:^4.1.2"
   languageName: unknown
   linkType: soft
@@ -444,7 +444,7 @@ __metadata:
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^20.14.2"
     "@types/wrap-ansi": "npm:^3.0.0"
-    ansi-escapes: "npm:^4.3.2"
+    ansi-escapes: "npm:^7.0.0"
     chalk: "npm:^4.1.2"
     cli-spinners: "npm:^2.9.2"
     cli-width: "npm:^4.1.0"
@@ -519,7 +519,7 @@ __metadata:
     "@inquirer/core": "npm:^8.2.2"
     "@inquirer/testing": "npm:^2.1.21"
     "@inquirer/type": "npm:^1.3.3"
-    ansi-escapes: "npm:^4.3.2"
+    ansi-escapes: "npm:^7.0.0"
   languageName: unknown
   linkType: soft
 
@@ -587,7 +587,7 @@ __metadata:
     "@inquirer/figures": "npm:^1.0.3"
     "@inquirer/testing": "npm:^2.1.21"
     "@inquirer/type": "npm:^1.3.3"
-    ansi-escapes: "npm:^4.3.2"
+    ansi-escapes: "npm:^7.0.0"
     chalk: "npm:^4.1.2"
   languageName: unknown
   linkType: soft
@@ -599,7 +599,7 @@ __metadata:
     "@inquirer/type": "npm:^1.3.3"
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^20.14.2"
-    ansi-escapes: "npm:^4.3.2"
+    ansi-escapes: "npm:^7.0.0"
     mute-stream: "npm:^1.0.0"
     strip-ansi: "npm:^6.0.1"
   languageName: unknown
@@ -1852,7 +1852,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-escapes@npm:^4.2.1, ansi-escapes@npm:^4.3.2":
+"ansi-escapes@npm:^4.2.1":
   version: 4.3.2
   resolution: "ansi-escapes@npm:4.3.2"
   dependencies:
@@ -1876,6 +1876,15 @@ __metadata:
   dependencies:
     type-fest: "npm:^3.0.0"
   checksum: 10/442f91b04650b35bc4815f47c20412d69ddbba5d4bf22f72ec03be352fca2de6819c7e3f4dfd17816ee4e0c6c965fe85e6f1b3f09683996a8d12fd366afd924e
+  languageName: node
+  linkType: hard
+
+"ansi-escapes@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "ansi-escapes@npm:7.0.0"
+  dependencies:
+    environment: "npm:^1.0.0"
+  checksum: 10/2d0e2345087bd7ae6bf122b9cc05ee35560d40dcc061146edcdc02bc2d7c7c50143cd12a22e69a0b5c0f62b948b7bc9a4539ee888b80f5bd33cdfd82d01a70ab
   languageName: node
   linkType: hard
 
@@ -3045,6 +3054,13 @@ __metadata:
   bin:
     envinfo: dist/cli.js
   checksum: 10/e7a2d71c7dfe398a4ffda0e844e242d2183ef2627f98e74e4cd71edd2af691c8707a2b34aacef92538c27b3daf9a360d32202f33c0a9f27f767c4e1c6ba8b522
+  languageName: node
+  linkType: hard
+
+"environment@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "environment@npm:1.1.0"
+  checksum: 10/dd3c1b9825e7f71f1e72b03c2344799ac73f2e9ef81b78ea8b373e55db021786c6b9f3858ea43a436a2c4611052670ec0afe85bc029c384cc71165feee2f4ba6
   languageName: node
   linkType: hard
 
@@ -4392,7 +4408,7 @@ __metadata:
   dependencies:
     "@inquirer/figures": "npm:^1.0.3"
     "@ljharb/through": "npm:^2.3.13"
-    ansi-escapes: "npm:^4.3.2"
+    ansi-escapes: "npm:^7.0.0"
     chalk: "npm:^5.3.0"
     cli-cursor: "npm:^3.1.0"
     cli-width: "npm:^4.1.0"
