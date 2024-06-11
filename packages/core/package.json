@@ -69,7 +69,7 @@
     "mute-stream": "^1.0.0",
     "signal-exit": "^4.1.0",
     "strip-ansi": "^6.0.1",
-    "wrap-ansi": "^6.2.0"
+    "wrap-ansi": "^9.0.0"
   },
   "devDependencies": {
     "@inquirer/testing": "^2.1.21"
