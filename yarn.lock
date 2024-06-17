@@ -422,7 +422,7 @@ __metadata:
     "@types/wrap-ansi": "npm:^3.0.0"
     ansi-escapes: "npm:^4.3.2"
     chalk: "npm:^4.1.2"
-    cli-spinners: "npm:^2.9.2"
+    cli-spinners: "npm:^3.0.0"
     cli-width: "npm:^4.1.0"
     mute-stream: "npm:^1.0.0"
     signal-exit: "npm:^4.1.0"
@@ -2369,10 +2369,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cli-spinners@npm:^2.5.0, cli-spinners@npm:^2.9.2":
+"cli-spinners@npm:^2.5.0":
   version: 2.9.2
   resolution: "cli-spinners@npm:2.9.2"
   checksum: 10/a0a863f442df35ed7294424f5491fa1756bd8d2e4ff0c8736531d886cec0ece4d85e8663b77a5afaf1d296e3cbbebff92e2e99f52bbea89b667cbe789b994794
+  languageName: node
+  linkType: hard
+
+"cli-spinners@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "cli-spinners@npm:3.0.0"
+  checksum: 10/c8e31d3bc3d7a1995f4c5c49ae7378a458782d504021995cdc7f9f22cb217d2df64329e4579185f05fd26d1efd52de3fe3f14257d5d573b6952b333d790aa99f
   languageName: node
   linkType: hard
 
