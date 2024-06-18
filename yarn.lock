@@ -3928,9 +3928,9 @@ __metadata:
   linkType: hard
 
 "globals@npm:^15.0.0, globals@npm:^15.4.0":
-  version: 15.5.0
-  resolution: "globals@npm:15.5.0"
-  checksum: 10/c73267492c9c16e43a981977c72da03b190723a04a9703f738a8855b33906d8ddf7f393adca3e239a3d6a9ee595734bed436bb5102fcfb42206f5e7f4c5377cd
+  version: 15.6.0
+  resolution: "globals@npm:15.6.0"
+  checksum: 10/9b522b1eff444acaf331b0da7f072d5ef75b1cde02d89b3656039252f01b6bcda7a9ea42128e8644117c0ede9116249b1bcf830458b7dbe19fafd4de916a3dc0
   languageName: node
   linkType: hard
 
