@@ -16,16 +16,23 @@ export function usePrefix({
 
   useEffect((): void | (() => unknown) => {
     if (isLoading) {
+      let tickInterval: NodeJS.Timeout | undefined;
       let inc = -1;
-      const interval = setInterval(
-        AsyncResource.bind(() => {
-          inc = inc + 1;
-          setTick(inc % spinner.frames.length);
-        }),
-        spinner.interval,
-      );
+      // Delay displaying spinner by 300ms, to avoid flickering
+      const delayTimeout = setTimeout(() => {
+        tickInterval = setInterval(
+          AsyncResource.bind(() => {
+            inc = inc + 1;
+            setTick(inc % spinner.frames.length);
+          }),
+          spinner.interval,
+        );
+      }, 300);
 
-      return () => clearInterval(interval);
+      return () => {
+        clearTimeout(delayTimeout);
+        clearInterval(tickInterval);
+      };
     }
   }, [isLoading]);
 
