@@ -11,6 +11,7 @@ export function usePrefix({
   isLoading?: boolean;
   theme?: Theme;
 }): string {
+  const [showLoader, setShowLoader] = useState(false);
   const [tick, setTick] = useState(0);
   const { prefix, spinner } = makeTheme(theme);
 
@@ -19,7 +20,9 @@ export function usePrefix({
       let tickInterval: NodeJS.Timeout | undefined;
       let inc = -1;
       // Delay displaying spinner by 300ms, to avoid flickering
-      const delayTimeout = setTimeout(() => {
+      const delayTimeout = setTimeout(AsyncResource.bind(() => {
+        setShowLoader(true);
+
         tickInterval = setInterval(
           AsyncResource.bind(() => {
             inc = inc + 1;
@@ -27,16 +30,18 @@ export function usePrefix({
           }),
           spinner.interval,
         );
-      }, 300);
+      }), 300);
 
       return () => {
         clearTimeout(delayTimeout);
         clearInterval(tickInterval);
       };
+    } else {
+      setShowLoader(false);
     }
   }, [isLoading]);
 
-  if (isLoading) {
+  if (showLoader) {
     return spinner.frames[tick]!;
   }
 

@@ -363,6 +363,7 @@ describe('createPrompt()', () => {
 
   it('usePrefix() renders loader and prefix', async () => {
     vi.useFakeTimers();
+    const delay = 300;
     const { interval } = spinners.dots;
     const totalDuration = interval * spinners.dots.frames.length;
 
@@ -390,6 +391,9 @@ describe('createPrompt()', () => {
 
     const prompt = createPrompt(Prompt);
     const { answer, events, getScreen } = await render(prompt, { message: 'Question' });
+    expect(getScreen()).toMatchInlineSnapshot(`"? Question"`);
+
+    vi.advanceTimersByTime(delay + interval);
     expect(getScreen()).toMatchInlineSnapshot(`"⠋ Question"`);
 
     vi.advanceTimersByTime(interval);
