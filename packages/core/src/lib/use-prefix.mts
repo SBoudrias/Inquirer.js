@@ -20,17 +20,20 @@ export function usePrefix({
       let tickInterval: NodeJS.Timeout | undefined;
       let inc = -1;
       // Delay displaying spinner by 300ms, to avoid flickering
-      const delayTimeout = setTimeout(AsyncResource.bind(() => {
-        setShowLoader(true);
+      const delayTimeout = setTimeout(
+        AsyncResource.bind(() => {
+          setShowLoader(true);
 
-        tickInterval = setInterval(
-          AsyncResource.bind(() => {
-            inc = inc + 1;
-            setTick(inc % spinner.frames.length);
-          }),
-          spinner.interval,
-        );
-      }), 300);
+          tickInterval = setInterval(
+            AsyncResource.bind(() => {
+              inc = inc + 1;
+              setTick(inc % spinner.frames.length);
+            }),
+            spinner.interval,
+          );
+        }),
+        300,
+      );
 
       return () => {
         clearTimeout(delayTimeout);
