@@ -10,6 +10,7 @@ import passwordDemo from './demos/password.mjs';
 import rawlistDemo from './demos/rawlist.mjs';
 import selectDemo from './demos/select.mjs';
 import timeoutDemo from './demos/timeout.mjs';
+import loaderDemo from './demos/loader.mjs';
 
 const demos = {
   checkbox: checkboxDemo,
@@ -21,6 +22,7 @@ const demos = {
   rawlist: rawlistDemo,
   select: selectDemo,
   timeout: timeoutDemo,
+  loader: loaderDemo,
 };
 
 async function askNextDemo() {
@@ -45,6 +47,7 @@ async function askNextDemo() {
       message: 'Which demo do you want to run?',
       choices: [
         { name: 'Default value after timeout', value: 'timeout' },
+        { name: 'Loader', value: 'loader' },
         { name: 'Go back', value: 'back' },
       ],
     });

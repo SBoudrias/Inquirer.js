@@ -62,6 +62,7 @@
   "homepage": "https://github.com/SBoudrias/Inquirer.js",
   "dependencies": {
     "@inquirer/prompts": "^5.0.5",
+    "@inquirer/core": "^8.2.2",
     "chalk": "^4.1.2"
   },
   "publishConfig": {
