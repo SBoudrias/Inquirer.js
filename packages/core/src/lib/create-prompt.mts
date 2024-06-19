@@ -77,9 +77,8 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           });
         }
 
-        function workLoop(resolvedConfig: Config) {
+        function workLoop() {
           store.index = 0;
-          store.handleChange = () => workLoop(resolvedConfig);
 
           try {
             const nextView = view(config, done);
@@ -95,7 +94,8 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           }
         }
 
-        workLoop(config);
+        store.handleChange = () => workLoop();
+        workLoop();
 
         // Re-renders only happen when the state change; but the readline cursor could change position
         // and that also requires a re-render (and a manual one because we mute the streams).
