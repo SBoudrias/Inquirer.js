@@ -16,20 +16,21 @@ export function usePrefix({
 
   useEffect((): void | (() => unknown) => {
     if (isLoading) {
-      const timeout = setTimeout(
+      let inc = -1;
+      const interval = setInterval(
         AsyncResource.bind(() => {
-          setTick(tick + 1);
+          inc = inc + 1;
+          setTick(inc % spinner.frames.length);
         }),
         spinner.interval,
       );
 
-      return () => clearTimeout(timeout);
+      return () => clearInterval(interval);
     }
-  }, [isLoading, tick]);
+  }, [isLoading]);
 
   if (isLoading) {
-    const frame = tick % spinner.frames.length;
-    return spinner.frames[frame]!;
+    return spinner.frames[tick]!;
   }
 
   return prefix;
