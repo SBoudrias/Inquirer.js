@@ -3,7 +3,7 @@ import type { InquirerReadline } from './read-line.type.mjs';
 
 export function useEffect(
   cb: (rl: InquirerReadline) => void | (() => void),
-  depArray: unknown[],
+  depArray: ReadonlyArray<unknown>,
 ): void {
   withPointer((pointer) => {
     const oldDeps = pointer.get();

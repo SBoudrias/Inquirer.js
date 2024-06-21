@@ -17,7 +17,7 @@ function split(content: string, width: number) {
  * @param {number} count The number of positions to rotate by
  * @param {T[]} items The items to rotate
  */
-function rotate<T>(count: number, items: readonly T[]): readonly T[] {
+function rotate<T>(count: number, items: ReadonlyArray<T>): T[] {
   const max = items.length;
   const offset = ((count % max) + max) % max;
   return [...items.slice(offset), ...items.slice(0, offset)];
@@ -37,7 +37,7 @@ export function lines<T>({
   position: requested,
   pageSize,
 }: {
-  items: readonly T[];
+  items: ReadonlyArray<T>;
   /** The width of a rendered line in characters. */
   width: number;
   /** Renders an item as part of a page. */
