@@ -51,7 +51,7 @@
     "@arethetypeswrong/cli": "^0.15.3",
     "@eslint/js": "^9.5.0",
     "@sindresorhus/tsconfig": "^5.0.0",
-    "@types/node": "^20.14.6",
+    "@types/node": "^20.14.7",
     "@vitest/coverage-v8": "^1.6.0",
     "@vitest/ui": "^1.6.0",
     "eslint": "^9.5.0",
@@ -67,7 +67,7 @@
     "prettier": "^3.3.2",
     "ts-node": "^10.9.2",
     "turbo": "^2.0.4",
-    "typescript": "^5.4.5",
+    "typescript": "^5.5.2",
     "typescript-eslint": "^7.13.1",
     "vitest": "^1.6.0"
   },
