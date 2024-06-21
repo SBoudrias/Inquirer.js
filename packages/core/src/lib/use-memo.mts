@@ -2,10 +2,13 @@ import { withPointer } from './hook-engine.mjs';
 
 type PointerValue<Value> = {
   value: Value;
-  dependencies: unknown[];
+  dependencies: ReadonlyArray<unknown>;
 };
 
-export function useMemo<Value>(fn: () => Value, dependencies: unknown[]): Value {
+export function useMemo<Value>(
+  fn: () => Value,
+  dependencies: ReadonlyArray<unknown>,
+): Value {
   return withPointer<PointerValue<Value>, Value>((pointer) => {
     const prev = pointer.get();
     if (

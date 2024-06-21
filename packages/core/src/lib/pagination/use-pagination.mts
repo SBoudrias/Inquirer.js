@@ -12,7 +12,7 @@ export function usePagination<T>({
   pageSize,
   loop = true,
 }: {
-  items: readonly T[];
+  items: ReadonlyArray<T>;
   /** The index of the active item. */
   active: number;
   /** Renders an item as part of a page. */
