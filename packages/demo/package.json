@@ -63,7 +63,7 @@
   "dependencies": {
     "@inquirer/core": "^8.2.3",
     "@inquirer/prompts": "^5.0.6",
-    "chalk": "^4.1.2"
+    "chalk": "^5.3.0"
   },
   "publishConfig": {
     "access": "public"
