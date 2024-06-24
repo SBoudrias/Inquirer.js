@@ -60,7 +60,6 @@
   "license": "MIT",
   "dependencies": {
     "@inquirer/figures": "^1.0.3",
-    "@ljharb/through": "^2.3.13",
     "ansi-escapes": "^4.3.2",
     "chalk": "^5.3.0",
     "cli-cursor": "^3.1.0",
@@ -73,6 +72,7 @@
     "rxjs": "^7.8.1",
     "string-width": "^4.2.3",
     "strip-ansi": "^6.0.1",
+    "through": "^2.3.6",
     "wrap-ansi": "^6.2.0"
   },
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/inquirer/README.md",
