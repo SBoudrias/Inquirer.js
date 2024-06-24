@@ -2,7 +2,7 @@
  * `list` type prompt
  */
 
-import chalk from 'chalk';
+import pc from 'picocolors';
 import cliCursor from 'cli-cursor';
 import figures from '@inquirer/figures';
 import { map, takeUntil } from 'rxjs';
@@ -89,19 +89,19 @@ export default class CheckboxPrompt extends Base {
     if (!this.dontShowHints) {
       message +=
         '(Press ' +
-        chalk.cyan.bold('<space>') +
+        pc.cyan(pc.bold('<space>')) +
         ' to select, ' +
-        chalk.cyan.bold('<a>') +
+        pc.cyan(pc.bold('<a>')) +
         ' to toggle all, ' +
-        chalk.cyan.bold('<i>') +
+        pc.cyan(pc.bold('<i>')) +
         ' to invert selection, and ' +
-        chalk.cyan.bold('<enter>') +
+        pc.cyan(pc.bold('<enter>')) +
         ' to proceed)';
     }
 
     // Render choices or answer depending on the state
     if (this.status === 'answered') {
-      message += chalk.cyan(this.selection.join(', '));
+      message += pc.cyan(this.selection.join(', '));
     } else {
       const choicesStr = renderChoices(this.opt.choices, this.pointer);
       const indexPosition = this.opt.choices.indexOf(
@@ -133,7 +133,7 @@ export default class CheckboxPrompt extends Base {
     }
 
     if (error) {
-      bottomContent = chalk.red('>> ') + error;
+      bottomContent = pc.red('>> ') + error;
     }
 
     this.screen.render(message, bottomContent);
@@ -249,7 +249,7 @@ function renderChoices(choices, pointer) {
     } else {
       const line = getCheckbox(choice.checked) + ' ' + choice.name;
       output +=
-        i - separatorOffset === pointer ? chalk.cyan(figures.pointer + line) : ' ' + line;
+        i - separatorOffset === pointer ? pc.cyan(figures.pointer + line) : ' ' + line;
     }
 
     output += '\n';
@@ -265,5 +265,5 @@ function renderChoices(choices, pointer) {
  */
 
 function getCheckbox(checked) {
-  return checked ? chalk.green(figures.radioOn) : figures.radioOff;
+  return checked ? pc.green(figures.radioOn) : figures.radioOff;
 }

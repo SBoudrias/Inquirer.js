@@ -1,6 +1,5 @@
 import assert from 'node:assert';
-import filter from 'lodash/filter.js';
-import map from 'lodash/map.js';
+import filter from 'lodash.filter';
 
 import Separator from './separator.js';
 import Choice from './choice.js';
@@ -91,7 +90,7 @@ export default class Choices {
    * @return {Array}               Selected properties
    */
   pluck(propertyName) {
-    return map(this.realChoices, propertyName);
+    return this.realChoices.map((choice) => choice[propertyName]);
   }
 
   // Expose usual Array methods

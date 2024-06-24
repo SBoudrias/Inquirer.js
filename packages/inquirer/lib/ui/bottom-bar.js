@@ -2,7 +2,7 @@
  * Sticky bottom bar user interface
  */
 
-import through from '@ljharb/through';
+import { Writable } from 'node:stream';
 import * as rlUtils from '../utils/readline.js';
 import Base from './baseUI.js';
 
@@ -10,7 +10,13 @@ export default class BottomBar extends Base {
   constructor(opt = {}) {
     super(opt);
 
-    this.log = through(this.writeLog.bind(this));
+    this.log = new Writable({
+      write: (chunk, encoding, cb) => {
+        this.writeLog(chunk);
+        cb();
+      },
+    });
+
     this.bottomBar = opt.bottomBar || '';
     this.render();
   }
