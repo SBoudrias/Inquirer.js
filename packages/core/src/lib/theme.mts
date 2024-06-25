@@ -1,4 +1,4 @@
-import picocolors from 'picocolors';
+import pc from 'picocolors';
 import spinners from 'cli-spinners';
 import type { Prettify } from '@inquirer/type';
 
@@ -22,18 +22,18 @@ type DefaultTheme = {
 export type Theme<Extension extends object = object> = Prettify<Extension & DefaultTheme>;
 
 export const defaultTheme: DefaultTheme = {
-  prefix: picocolors.green('?'),
+  prefix: pc.green('?'),
   spinner: {
     interval: spinners.dots.interval,
-    frames: spinners.dots.frames.map((frame) => picocolors.yellow(frame)),
+    frames: spinners.dots.frames.map((frame) => pc.yellow(frame)),
   },
   style: {
-    answer: picocolors.cyan,
-    message: picocolors.bold,
-    error: (text) => picocolors.red(`> ${text}`),
-    defaultAnswer: (text) => picocolors.dim(`(${text})`),
-    help: picocolors.dim,
-    highlight: picocolors.cyan,
-    key: (text: string) => picocolors.cyan(picocolors.bold(`<${text}>`)),
+    answer: pc.cyan,
+    message: pc.bold,
+    error: (text) => pc.red(`> ${text}`),
+    defaultAnswer: (text) => pc.dim(`(${text})`),
+    help: pc.dim,
+    highlight: pc.cyan,
+    key: (text: string) => pc.cyan(pc.bold(`<${text}>`)),
   },
 };
