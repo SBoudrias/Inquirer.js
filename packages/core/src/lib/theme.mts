@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import picocolors from 'picocolors';
 import spinners from 'cli-spinners';
 import type { Prettify } from '@inquirer/type';
 
@@ -22,18 +22,18 @@ type DefaultTheme = {
 export type Theme<Extension extends object = object> = Prettify<Extension & DefaultTheme>;
 
 export const defaultTheme: DefaultTheme = {
-  prefix: chalk.green('?'),
+  prefix: picocolors.green('?'),
   spinner: {
     interval: spinners.dots.interval,
-    frames: spinners.dots.frames.map((frame) => chalk.yellow(frame)),
+    frames: spinners.dots.frames.map((frame) => picocolors.yellow(frame)),
   },
   style: {
-    answer: chalk.cyan,
-    message: chalk.bold,
-    error: (text) => chalk.red(`> ${text}`),
-    defaultAnswer: (text) => chalk.dim(`(${text})`),
-    help: chalk.dim,
-    highlight: chalk.cyan,
-    key: (text: string) => chalk.cyan.bold(`<${text}>`),
+    answer: picocolors.cyan,
+    message: picocolors.bold,
+    error: (text) => picocolors.red(`> ${text}`),
+    defaultAnswer: (text) => picocolors.dim(`(${text})`),
+    help: picocolors.dim,
+    highlight: picocolors.cyan,
+    key: (text: string) => picocolors.cyan(picocolors.bold(`<${text}>`)),
   },
 };

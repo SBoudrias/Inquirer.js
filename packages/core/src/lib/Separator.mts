@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import picocolors from 'picocolors';
 import figures from '@inquirer/figures';
 
 /**
@@ -7,7 +7,7 @@ import figures from '@inquirer/figures';
  */
 
 export class Separator {
-  readonly separator = chalk.dim(Array.from({ length: 15 }).join(figures.line));
+  readonly separator = picocolors.dim(Array.from({ length: 15 }).join(figures.line));
   readonly type = 'separator';
 
   constructor(separator?: string) {

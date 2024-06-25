@@ -2,13 +2,7 @@
  * Input prompt example
  */
 
-import chalk from 'chalk';
 import inquirer from '../lib/inquirer.js';
-
-const hexRegEx = /(\d|[a-f])/gim;
-const isHex = (value) =>
-  (value.match(hexRegEx) || []).length === value.length &&
-  (value.length === 3 || value.length === 6);
 
 const questions = [
   {
@@ -29,12 +23,11 @@ const questions = [
     name: 'fav_color',
     message: "What's your favorite color",
     transformer(color, answers, flags) {
-      const text = chalk.hex(isHex(color) ? color : 'fff')(color);
       if (flags.isFinal) {
-        return text + '!';
+        return color + '!';
       }
 
-      return text;
+      return color;
     },
   },
   {

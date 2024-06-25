@@ -2,7 +2,7 @@
  * `password` type prompt
  */
 
-import chalk from 'chalk';
+import pc from 'picocolors';
 import { map, takeUntil } from 'rxjs';
 import observe from '../utils/events.js';
 import Base from './base.js';
@@ -61,7 +61,7 @@ export default class PasswordPrompt extends Base {
         : this.getMaskedValue(this.rl.line || '');
 
     if (error) {
-      bottomContent = '\n' + chalk.red('>> ') + error;
+      bottomContent = '\n' + pc.red('>> ') + error;
     }
 
     this.screen.render(message, bottomContent);
@@ -70,12 +70,12 @@ export default class PasswordPrompt extends Base {
   getMaskedValue(value) {
     if (this.status === 'answered') {
       return this.opt.mask
-        ? chalk.cyan(mask(value, this.opt.mask))
-        : chalk.italic.dim('[hidden]');
+        ? pc.cyan(mask(value, this.opt.mask))
+        : pc.italic(pc.dim('[hidden]'));
     }
     return this.opt.mask
       ? mask(value, this.opt.mask)
-      : chalk.italic.dim('[input is hidden] ');
+      : pc.italic(pc.dim('[input is hidden] '));
   }
 
   /**
