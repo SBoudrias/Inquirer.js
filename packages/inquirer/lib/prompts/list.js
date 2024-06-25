@@ -2,9 +2,9 @@
  * `list` type prompt
  */
 
+import ansiEscapes from 'ansi-escapes';
 import chalk from 'chalk';
 import figures from '@inquirer/figures';
-import cliCursor from 'cli-cursor';
 import runAsync from 'run-async';
 import { flatMap, map, take, takeUntil } from 'rxjs';
 import observe from '../utils/events.js';
@@ -66,7 +66,6 @@ export default class ListPrompt extends Base {
       .forEach(this.onSubmit.bind(this));
 
     // Init the prompt
-    cliCursor.hide();
     this.render();
 
     return this;
@@ -118,6 +117,7 @@ export default class ListPrompt extends Base {
         '\n' + this.paginator.paginate(choicesStr, realIndexPosition, this.opt.pageSize);
     }
 
+    message += ansiEscapes.cursorHide;
     this.firstRender = false;
 
     this.screen.render(message);
@@ -134,7 +134,6 @@ export default class ListPrompt extends Base {
     this.render();
 
     this.screen.done();
-    cliCursor.show();
     this.done(value);
   }
 

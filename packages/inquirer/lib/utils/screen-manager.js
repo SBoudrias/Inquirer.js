@@ -1,3 +1,4 @@
+import ansiEscapes from 'ansi-escapes';
 import cliWidth from 'cli-width';
 import wrapAnsi from 'wrap-ansi';
 import stripAnsi from 'strip-ansi';
@@ -131,7 +132,7 @@ export default class ScreenManager {
   done() {
     this.rl.setPrompt('');
     this.rl.output.unmute();
-    this.rl.output.write('\n');
+    this.rl.output.write(`\n${ansiEscapes.cursorShow}`);
   }
 
   releaseCursor() {
