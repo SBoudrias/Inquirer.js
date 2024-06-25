@@ -2,8 +2,8 @@
  * `list` type prompt
  */
 
+import ansiEscapes from 'ansi-escapes';
 import chalk from 'chalk';
-import cliCursor from 'cli-cursor';
 import figures from '@inquirer/figures';
 import { map, takeUntil } from 'rxjs';
 import observe from '../utils/events.js';
@@ -69,7 +69,6 @@ export default class CheckboxPrompt extends Base {
     events.iKey.pipe(takeUntil(validation.success)).forEach(this.onInverseKey.bind(this));
 
     // Init the prompt
-    cliCursor.hide();
     this.render();
     this.firstRender = false;
 
@@ -136,6 +135,8 @@ export default class CheckboxPrompt extends Base {
       bottomContent = chalk.red('>> ') + error;
     }
 
+    message += ansiEscapes.cursorHide;
+
     this.screen.render(message, bottomContent);
   }
 
@@ -150,7 +151,6 @@ export default class CheckboxPrompt extends Base {
     this.render();
 
     this.screen.done();
-    cliCursor.show();
     this.done(state.value);
   }
 
