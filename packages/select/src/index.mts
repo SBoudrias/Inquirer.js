@@ -55,6 +55,23 @@ type Item<Value> = Separator | Choice<Value>;
 function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
   return !Separator.isSeparator(item) && !item.disabled;
 }
+function findLastIndex(array, callback) {
+    for (let i = array.length - 1; i >= 0; i--) {
+        if (callback(array[i], i, array)) {
+            return i;
+        }
+    }
+    return -1;
+}
+function customFindLastIndex(items, fn) {
+    let index: Number
+    if (items.findLastIndex) {
+        index = items.findLastIndex(fn)
+    } else {
+        index = findLastIndex(items, fn);
+    }
+    return index
+}
 
 export default createPrompt(
   <Value,>(config: SelectConfig<Value>, done: (value: Value) => void): string => {
@@ -67,7 +84,7 @@ export default createPrompt(
 
     const bounds = useMemo(() => {
       const first = items.findIndex(isSelectable);
-      const last = items.findLastIndex(isSelectable);
+      const last = customFindLastIndex(items, isSelectable);
 
       if (first < 0) {
         throw new ValidationError(
