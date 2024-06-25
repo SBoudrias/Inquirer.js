@@ -2,7 +2,7 @@
  * `rawlist` type prompt
  */
 
-import chalk from 'chalk';
+import pc from 'picocolors';
 import { map, takeUntil } from 'rxjs';
 import Separator from '../objects/separator.js';
 import observe from '../utils/events.js';
@@ -93,7 +93,7 @@ export default class RawListPrompt extends Base {
     let bottomContent = '';
 
     if (this.status === 'answered') {
-      message += chalk.cyan(this.opt.choices.getChoice(this.selected).short);
+      message += pc.cyan(this.opt.choices.getChoice(this.selected).short);
     } else {
       const choicesStr = renderChoices(this.opt.choices, this.selected);
       message +=
@@ -103,7 +103,7 @@ export default class RawListPrompt extends Base {
     message += this.rl.line;
 
     if (error) {
-      bottomContent = '\n' + chalk.red('>> ') + error;
+      bottomContent = '\n' + pc.red('>> ') + error;
     }
 
     this.screen.render(message, bottomContent);
@@ -211,7 +211,7 @@ function renderChoices(choices, pointer) {
     const index = i - separatorOffset;
     let display = index + 1 + ') ' + choice.name;
     if (index === pointer) {
-      display = chalk.cyan(display);
+      display = pc.cyan(display);
     }
 
     output += display;

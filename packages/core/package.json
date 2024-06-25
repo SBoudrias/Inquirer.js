@@ -63,10 +63,10 @@
     "@types/node": "^20.14.7",
     "@types/wrap-ansi": "^3.0.0",
     "ansi-escapes": "^4.3.2",
-    "chalk": "^4.1.2",
     "cli-spinners": "^2.9.2",
     "cli-width": "^4.1.0",
     "mute-stream": "^1.0.0",
+    "picocolors": "^1.0.1",
     "signal-exit": "^4.1.0",
     "strip-ansi": "^6.0.1",
     "wrap-ansi": "^6.2.0"

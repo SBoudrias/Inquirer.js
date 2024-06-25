@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import pc from 'picocolors';
 import figures from '@inquirer/figures';
 
 /**
@@ -11,7 +11,7 @@ import figures from '@inquirer/figures';
 export default class Separator {
   constructor(line) {
     this.type = 'separator';
-    this.line = chalk.dim(line || Array.from({ length: 15 }).join(figures.line));
+    this.line = pc.dim(line || Array.from({ length: 15 }).join(figures.line));
   }
 
   /**

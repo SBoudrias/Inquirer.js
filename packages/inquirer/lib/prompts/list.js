@@ -3,7 +3,7 @@
  */
 
 import ansiEscapes from 'ansi-escapes';
-import chalk from 'chalk';
+import pc from 'picocolors';
 import figures from '@inquirer/figures';
 import runAsync from 'run-async';
 import { flatMap, map, take, takeUntil } from 'rxjs';
@@ -81,12 +81,12 @@ export default class ListPrompt extends Base {
     let message = this.getQuestion();
 
     if (this.firstRender) {
-      message += chalk.dim('(Use arrow keys)');
+      message += pc.dim('(Use arrow keys)');
     }
 
     // Render choices or answer depending on the state
     if (this.status === 'answered') {
-      message += chalk.cyan(this.opt.choices.getChoice(this.selected).short);
+      message += pc.cyan(this.opt.choices.getChoice(this.selected).short);
     } else {
       const choicesStr = listRender(this.opt.choices, this.selected);
       const indexPosition = this.opt.choices.indexOf(
@@ -192,7 +192,7 @@ function listRender(choices, pointer) {
     const isSelected = i - separatorOffset === pointer;
     let line = (isSelected ? figures.pointer + ' ' : '  ') + choice.name;
     if (isSelected) {
-      line = chalk.cyan(line);
+      line = pc.cyan(line);
     }
 
     output += line + ' \n';

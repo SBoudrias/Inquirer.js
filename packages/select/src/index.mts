@@ -17,7 +17,7 @@ import {
   type Theme,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
-import chalk from 'chalk';
+import pc from 'picocolors';
 import figures from '@inquirer/figures';
 import ansiEscapes from 'ansi-escapes';
 
@@ -29,7 +29,7 @@ type SelectTheme = {
 
 const selectTheme: SelectTheme = {
   icon: { cursor: figures.pointer },
-  style: { disabled: (text: string) => chalk.dim(`- ${text}`) },
+  style: { disabled: (text: string) => pc.dim(`- ${text}`) },
   helpMode: 'auto',
 };
 
