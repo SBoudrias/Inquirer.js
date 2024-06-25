@@ -1,6 +1,6 @@
-import isPlainObject from 'lodash/isPlainObject.js';
-import get from 'lodash/get.js';
-import set from 'lodash/set.js';
+import isPlainObject from 'lodash.isplainobject';
+import get from 'lodash.get';
+import set from 'lodash.set';
 
 const _ = {
   isPlainObject,
