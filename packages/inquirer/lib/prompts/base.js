@@ -4,7 +4,7 @@
  */
 import pc from 'picocolors';
 import runAsync from 'run-async';
-import { filter, flatMap, share, take, takeUntil } from 'rxjs';
+import { filter, mergeMap, share, take, takeUntil } from 'rxjs';
 import Choices from '../objects/choices.js';
 import ScreenManager from '../utils/screen-manager.js';
 
@@ -91,7 +91,7 @@ export default class Prompt {
     const validate = runAsync(this.opt.validate);
     const asyncFilter = runAsync(this.opt.filter);
     const validation = submit.pipe(
-      flatMap((value) => {
+      mergeMap((value) => {
         this.startSpinner(value, this.opt.filteringText);
         return asyncFilter(value, this.answers).then(
           (filteredValue) => {

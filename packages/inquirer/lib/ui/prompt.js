@@ -7,7 +7,7 @@ const _ = {
 };
 import {
   defer,
-  empty,
+  EMPTY,
   from,
   of,
   concatMap,
@@ -134,11 +134,11 @@ export default class PromptUI extends Base {
       question.askAnswered !== true &&
       _.get(this.answers, question.name) !== undefined
     ) {
-      return empty();
+      return EMPTY;
     }
 
     if (question.when === false) {
-      return empty();
+      return EMPTY;
     }
 
     if (typeof question.when !== 'function') {

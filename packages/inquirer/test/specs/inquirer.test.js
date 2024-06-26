@@ -420,20 +420,20 @@ describe('inquirer.prompt', () => {
     }));
 
   it('takes an Observable as question', async () => {
-    const prompts = Observable.create((obs) => {
-      obs.next({
+    const prompts = new Observable((subscriber) => {
+      subscriber.next({
         type: 'confirm',
         name: 'q1',
         message: 'message',
       });
       setTimeout(() => {
-        obs.next({
+        subscriber.next({
           type: 'confirm',
           name: 'q2',
           message: 'message',
           default: false,
         });
-        obs.complete();
+        subscriber.complete();
         promise.ui.rl.emit('line');
       }, 30);
     });

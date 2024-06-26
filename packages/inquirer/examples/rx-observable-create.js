@@ -1,14 +1,14 @@
 import { Observable } from 'rxjs';
 import inquirer from '../lib/inquirer.js';
 
-const observe = Observable.create((obs) => {
-  obs.next({
+const observe = new Observable((subscriber) => {
+  subscriber.next({
     type: 'input',
     name: 'first_name',
     message: "What's your first name",
   });
 
-  obs.next({
+  subscriber.next({
     type: 'input',
     name: 'last_name',
     message: "What's your last name",
@@ -17,7 +17,7 @@ const observe = Observable.create((obs) => {
     },
   });
 
-  obs.next({
+  subscriber.next({
     type: 'input',
     name: 'phone',
     message: "What's your phone number",
@@ -32,7 +32,7 @@ const observe = Observable.create((obs) => {
       return 'Please enter a valid phone number';
     },
   });
-  obs.complete();
+  subscriber.complete();
 });
 
 inquirer.prompt(observe).then((answers) => {
