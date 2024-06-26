@@ -4250,7 +4250,6 @@ __metadata:
     cli-width: "npm:^4.1.0"
     external-editor: "npm:^3.1.0"
     lodash.get: "npm:^4.4.2"
-    lodash.isplainobject: "npm:^4.0.6"
     lodash.set: "npm:^4.3.2"
     mute-stream: "npm:1.0.0"
     ora: "npm:^5.4.1"
@@ -4985,13 +4984,6 @@ __metadata:
   version: 4.4.0
   resolution: "lodash.ismatch@npm:4.4.0"
   checksum: 10/946a7176cdf4048f7b624378defda00dc0d01a2dad9933c54dad11fbecc253716df4210fbbfcd7d042e6fdb7603463cfe48e0ef576e20bf60d43f7deb1a2fe04
-  languageName: node
-  linkType: hard
-
-"lodash.isplainobject@npm:^4.0.6":
-  version: 4.0.6
-  resolution: "lodash.isplainobject@npm:4.0.6"
-  checksum: 10/29c6351f281e0d9a1d58f1a4c8f4400924b4c79f18dfc4613624d7d54784df07efaff97c1ff2659f3e085ecf4fff493300adc4837553104cef2634110b0d5337
   languageName: node
   linkType: hard
 
