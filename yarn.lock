@@ -4249,7 +4249,6 @@ __metadata:
     ansi-escapes: "npm:^4.3.2"
     cli-width: "npm:^4.1.0"
     external-editor: "npm:^3.1.0"
-    lodash.filter: "npm:^4.6.0"
     lodash.get: "npm:^4.4.2"
     lodash.isplainobject: "npm:^4.0.6"
     lodash.set: "npm:^4.3.2"
@@ -4972,13 +4971,6 @@ __metadata:
   dependencies:
     p-locate: "npm:^5.0.0"
   checksum: 10/72eb661788a0368c099a184c59d2fee760b3831c9c1c33955e8a19ae4a21b4116e53fa736dc086cdeb9fce9f7cc508f2f92d2d3aae516f133e16a2bb59a39f5a
-  languageName: node
-  linkType: hard
-
-"lodash.filter@npm:^4.6.0":
-  version: 4.6.0
-  resolution: "lodash.filter@npm:4.6.0"
-  checksum: 10/a95c363b6cad0025b1f74a5125d2b156251f9da2ff3d94385524e7622e4c1e4d499dd4c2b4dbc201de6e4c1f753b5af01d7c7696b6062bfb47af15ff4ba8d823
   languageName: node
   linkType: hard
 
