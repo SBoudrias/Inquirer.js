@@ -1,6 +1,4 @@
 import assert from 'node:assert';
-import filter from 'lodash/filter.js';
-import map from 'lodash/map.js';
 
 import Separator from './separator.js';
 import Choice from './choice.js';
@@ -78,11 +76,19 @@ export default class Choices {
 
   /**
    * Match the valid choices against a where clause
-   * @param  {Object} whereClause Lodash `where` clause
+   * @param  {Function|Object} whereClause filter function or key-value object to match against
    * @return {Array}              Matching choices or empty array
    */
   where(whereClause) {
-    return filter(this.realChoices, whereClause);
+    let filterFn;
+    if (typeof whereClause === 'function') {
+      filterFn = whereClause;
+    } else {
+      const [key, value] = Object.entries(whereClause)[0];
+      filterFn = (choice) => choice[key] === value;
+    }
+
+    return this.realChoices.filter(filterFn);
   }
 
   /**
@@ -91,7 +97,7 @@ export default class Choices {
    * @return {Array}               Selected properties
    */
   pluck(propertyName) {
-    return map(this.realChoices, propertyName);
+    return this.realChoices.map((choice) => choice[propertyName]);
   }
 
   // Expose usual Array methods

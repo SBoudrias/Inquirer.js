@@ -4249,7 +4249,8 @@ __metadata:
     ansi-escapes: "npm:^4.3.2"
     cli-width: "npm:^4.1.0"
     external-editor: "npm:^3.1.0"
-    lodash: "npm:^4.17.21"
+    lodash.get: "npm:^4.4.2"
+    lodash.set: "npm:^4.3.2"
     mute-stream: "npm:1.0.0"
     ora: "npm:^5.4.1"
     picocolors: "npm:^1.0.1"
@@ -4972,6 +4973,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.get@npm:^4.4.2":
+  version: 4.4.2
+  resolution: "lodash.get@npm:4.4.2"
+  checksum: 10/2a4925f6e89bc2c010a77a802d1ba357e17ed1ea03c2ddf6a146429f2856a216663e694a6aa3549a318cbbba3fd8b7decb392db457e6ac0b83dc745ed0a17380
+  languageName: node
+  linkType: hard
+
 "lodash.ismatch@npm:^4.4.0":
   version: 4.4.0
   resolution: "lodash.ismatch@npm:4.4.0"
@@ -4983,6 +4991,13 @@ __metadata:
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: 10/d0ea2dd0097e6201be083865d50c3fb54fbfbdb247d9cc5950e086c991f448b7ab0cdab0d57eacccb43473d3f2acd21e134db39f22dac2d6c9ba6bf26978e3d6
+  languageName: node
+  linkType: hard
+
+"lodash.set@npm:^4.3.2":
+  version: 4.3.2
+  resolution: "lodash.set@npm:4.3.2"
+  checksum: 10/f0968109bca5625c8ce1f1beab758634484443604d3950477e46d8d2631562e5ceae4465b9ce8a393fd47f5a411329f9bacf956c7c95530af1290db1a20343ba
   languageName: node
   linkType: hard
 

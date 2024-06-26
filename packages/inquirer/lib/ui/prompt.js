@@ -1,13 +1,21 @@
-import isPlainObject from 'lodash/isPlainObject.js';
-import get from 'lodash/get.js';
-import set from 'lodash/set.js';
+import get from 'lodash.get';
+import set from 'lodash.set';
 
 const _ = {
-  isPlainObject,
   set,
   get,
 };
-import { defer, empty, from, of, concatMap, filter, publish, reduce } from 'rxjs';
+import {
+  defer,
+  empty,
+  from,
+  of,
+  concatMap,
+  filter,
+  publish,
+  reduce,
+  isObservable,
+} from 'rxjs';
 import runAsync from 'run-async';
 import * as utils from '../utils/utils.js';
 import Base from './baseUI.js';
@@ -23,22 +31,32 @@ export default class PromptUI extends Base {
 
   run(questions, answers) {
     // Keep global reference to the answers
-    this.answers = _.isPlainObject(answers) ? { ...answers } : {};
+    this.answers = typeof answers === 'object' ? { ...answers } : {};
 
-    // Make sure questions is an array.
-    if (_.isPlainObject(questions)) {
-      // It's either an object of questions or a single question
-      questions = Object.values(questions).every(
-        (v) => _.isPlainObject(v) && v.name === undefined,
+    let obs;
+    if (Array.isArray(questions)) {
+      obs = from(questions);
+    } else if (isObservable(questions)) {
+      obs = questions;
+    } else if (
+      Object.values(questions).every(
+        (maybeQuestion) =>
+          typeof maybeQuestion === 'object' &&
+          !Array.isArray(maybeQuestion) &&
+          maybeQuestion != null,
       )
-        ? Object.entries(questions).map(([name, question]) => ({ name, ...question }))
-        : [questions];
+    ) {
+      // Case: Called with a set of { name: question }
+      obs = from(
+        Object.entries(questions).map(([name, question]) => ({
+          name,
+          ...question,
+        })),
+      );
+    } else {
+      // Case: Called with a single question config
+      obs = from([questions]);
     }
-
-    // Create an observable, unless we received one as parameter.
-    // Note: As this is a public interface, we cannot do an instanceof check as we won't
-    // be using the exact same object in memory.
-    const obs = Array.isArray(questions) ? from(questions) : questions;
 
     this.process = obs.pipe(
       concatMap(this.processQuestion.bind(this)),
