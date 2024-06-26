@@ -1,14 +1,7 @@
-import defaults from 'lodash.defaults';
-import clone from 'lodash.clone';
 /**
  * Base prompt implementation
  * Should be extended by prompt types.
  */
-const _ = {
-  defaults,
-  clone,
-};
-
 import chalk from 'chalk';
 import runAsync from 'run-async';
 import { filter, flatMap, share, take, takeUntil } from 'rxjs';
@@ -24,7 +17,7 @@ export default class Prompt {
     });
 
     // Set defaults prompt options
-    this.opt = _.defaults(_.clone(question), {
+    this.opt = {
       validate: () => true,
       validatingText: '',
       filter: (val) => val,
@@ -33,7 +26,8 @@ export default class Prompt {
       suffix: '',
       prefix: chalk.green('?'),
       transformer: (val) => val,
-    });
+      ...question,
+    };
 
     // Make sure name is present
     if (!this.opt.name) {

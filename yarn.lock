@@ -4250,8 +4250,6 @@ __metadata:
     chalk: "npm:^5.3.0"
     cli-width: "npm:^4.1.0"
     external-editor: "npm:^3.1.0"
-    lodash.clone: "npm:^4.5.0"
-    lodash.defaults: "npm:^4.2.0"
     lodash.filter: "npm:^4.6.0"
     lodash.get: "npm:^4.4.2"
     lodash.isplainobject: "npm:^4.0.6"
@@ -4974,20 +4972,6 @@ __metadata:
   dependencies:
     p-locate: "npm:^5.0.0"
   checksum: 10/72eb661788a0368c099a184c59d2fee760b3831c9c1c33955e8a19ae4a21b4116e53fa736dc086cdeb9fce9f7cc508f2f92d2d3aae516f133e16a2bb59a39f5a
-  languageName: node
-  linkType: hard
-
-"lodash.clone@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "lodash.clone@npm:4.5.0"
-  checksum: 10/387ca92bb9182197dd8de48cd51f846589abbfbf2b03d7f739eafadcd8f5968be5f4f170d848277edfc2a9b05a23732a1435799b13ddbd85c533c64ea7375dfd
-  languageName: node
-  linkType: hard
-
-"lodash.defaults@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "lodash.defaults@npm:4.2.0"
-  checksum: 10/6a2a9ea5ad7585aff8d76836c9e1db4528e5f5fa50fc4ad81183152ba8717d83aef8aec4fa88bf3417ed946fd4b4358f145ee08fbc77fb82736788714d3e12db
   languageName: node
   linkType: hard
 
