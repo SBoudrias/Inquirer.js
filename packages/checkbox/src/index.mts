@@ -17,7 +17,7 @@ import {
   type Theme,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
-import chalk from 'chalk';
+import pc from 'picocolors';
 import figures from '@inquirer/figures';
 import ansiEscapes from 'ansi-escapes';
 
@@ -39,12 +39,12 @@ type CheckboxTheme = {
 
 const checkboxTheme: CheckboxTheme = {
   icon: {
-    checked: chalk.green(figures.circleFilled),
+    checked: pc.green(figures.circleFilled),
     unchecked: figures.circle,
     cursor: figures.pointer,
   },
   style: {
-    disabledChoice: (text: string) => chalk.dim(`- ${text}`),
+    disabledChoice: (text: string) => pc.dim(`- ${text}`),
     renderSelectedChoices: (selectedChoices) =>
       selectedChoices.map((choice) => choice.name || choice.value).join(', '),
   },

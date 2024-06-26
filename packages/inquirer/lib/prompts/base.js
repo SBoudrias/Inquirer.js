@@ -2,7 +2,7 @@
  * Base prompt implementation
  * Should be extended by prompt types.
  */
-import chalk from 'chalk';
+import pc from 'picocolors';
 import runAsync from 'run-async';
 import { filter, flatMap, share, take, takeUntil } from 'rxjs';
 import Choices from '../objects/choices.js';
@@ -24,7 +24,7 @@ export default class Prompt {
       filteringText: '',
       when: () => true,
       suffix: '',
-      prefix: chalk.green('?'),
+      prefix: pc.green('?'),
       transformer: (val) => val,
       ...question,
     };
@@ -149,9 +149,9 @@ export default class Prompt {
   getQuestion() {
     let message =
       (this.opt.prefix ? this.opt.prefix + ' ' : '') +
-      chalk.bold(this.opt.message) +
+      pc.bold(this.opt.message) +
       this.opt.suffix +
-      chalk.reset(' ');
+      pc.reset(' ');
 
     // Append the default if available, and if question isn't touched/answered
     if (
@@ -162,8 +162,8 @@ export default class Prompt {
       // If default password is supplied, hide it
       message +=
         this.opt.type === 'password'
-          ? chalk.italic.dim('[hidden] ')
-          : chalk.dim('(' + this.opt.default + ') ');
+          ? pc.italic(pc.dim('[hidden] '))
+          : pc.dim('(' + this.opt.default + ') ');
     }
 
     return message;

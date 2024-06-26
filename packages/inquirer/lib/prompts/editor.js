@@ -2,7 +2,7 @@
  * `editor` type prompt
  */
 
-import chalk from 'chalk';
+import pc from 'picocolors';
 import { editAsync } from 'external-editor';
 import { Subject } from 'rxjs';
 import observe from '../utils/events.js';
@@ -56,11 +56,11 @@ export default class EditorPrompt extends Base {
 
     message +=
       this.status === 'answered'
-        ? chalk.dim('Received')
-        : chalk.dim('Press <enter> to launch your preferred editor.');
+        ? pc.dim('Received')
+        : pc.dim('Press <enter> to launch your preferred editor.');
 
     if (error) {
-      bottomContent = chalk.red('>> ') + error;
+      bottomContent = pc.red('>> ') + error;
     }
 
     this.screen.render(message, bottomContent);
