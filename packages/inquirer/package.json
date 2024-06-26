@@ -61,7 +61,6 @@
   "dependencies": {
     "@inquirer/figures": "^1.0.3",
     "ansi-escapes": "^4.3.2",
-    "cli-cursor": "^3.1.0",
     "cli-width": "^4.1.0",
     "external-editor": "^3.1.0",
     "lodash": "^4.17.21",
