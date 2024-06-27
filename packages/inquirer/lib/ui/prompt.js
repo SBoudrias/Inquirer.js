@@ -1,10 +1,29 @@
-import get from 'lodash.get';
-import set from 'lodash.set';
-
 const _ = {
-  set,
-  get,
+  set: (obj, path = '', value) => {
+    let pointer = obj;
+    path.split('.').forEach((key, index, arr) => {
+      if (key === '__proto__' || key === 'constructor') return;
+
+      if (index === arr.length - 1) {
+        pointer[key] = value;
+      } else if (!(key in pointer)) {
+        pointer[key] = {};
+      }
+
+      pointer = pointer[key];
+    });
+  },
+  get: (obj, path = '', defaultValue) => {
+    const travel = (regexp) =>
+      String.prototype.split
+        .call(path, regexp)
+        .filter(Boolean)
+        .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj);
+    const result = travel(/[,[\]]+?/) || travel(/[,.[\]]+?/);
+    return result === undefined || result === obj ? defaultValue : result;
+  },
 };
+
 import {
   defer,
   EMPTY,
