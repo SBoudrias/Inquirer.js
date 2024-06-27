@@ -7,6 +7,10 @@
 
 A collection of common interactive command line user interfaces.
 
+### Note:
+
+> This is the legacy version of Inquirer.js. While it still receives maintenance, it is not actively developed. For the new Inquirer, see [@inquirer/prompts](https://www.npmjs.com/package/@inquirer/prompts).
+
 ## Table of Contents
 
 1.  [Documentation](#documentation)
