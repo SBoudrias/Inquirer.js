@@ -3,7 +3,7 @@
  */
 
 import ansiEscapes from 'ansi-escapes';
-import pc from 'picocolors';
+import colors from 'yoctocolors-cjs';
 import figures from '@inquirer/figures';
 import { map, takeUntil } from 'rxjs';
 import observe from '../utils/events.js';
@@ -88,19 +88,19 @@ export default class CheckboxPrompt extends Base {
     if (!this.dontShowHints) {
       message +=
         '(Press ' +
-        pc.cyan(pc.bold('<space>')) +
+        colors.cyan(colors.bold('<space>')) +
         ' to select, ' +
-        pc.cyan(pc.bold('<a>')) +
+        colors.cyan(colors.bold('<a>')) +
         ' to toggle all, ' +
-        pc.cyan(pc.bold('<i>')) +
+        colors.cyan(colors.bold('<i>')) +
         ' to invert selection, and ' +
-        pc.cyan(pc.bold('<enter>')) +
+        colors.cyan(colors.bold('<enter>')) +
         ' to proceed)';
     }
 
     // Render choices or answer depending on the state
     if (this.status === 'answered') {
-      message += pc.cyan(this.selection.join(', '));
+      message += colors.cyan(this.selection.join(', '));
     } else {
       const choicesStr = renderChoices(this.opt.choices, this.pointer);
       const indexPosition = this.opt.choices.indexOf(
@@ -132,7 +132,7 @@ export default class CheckboxPrompt extends Base {
     }
 
     if (error) {
-      bottomContent = pc.red('>> ') + error;
+      bottomContent = colors.red('>> ') + error;
     }
 
     message += ansiEscapes.cursorHide;
@@ -249,7 +249,9 @@ function renderChoices(choices, pointer) {
     } else {
       const line = getCheckbox(choice.checked) + ' ' + choice.name;
       output +=
-        i - separatorOffset === pointer ? pc.cyan(figures.pointer + line) : ' ' + line;
+        i - separatorOffset === pointer
+          ? colors.cyan(figures.pointer + line)
+          : ' ' + line;
     }
 
     output += '\n';
@@ -265,5 +267,5 @@ function renderChoices(choices, pointer) {
  */
 
 function getCheckbox(checked) {
-  return checked ? pc.green(figures.radioOn) : figures.radioOff;
+  return checked ? colors.green(figures.radioOn) : figures.radioOff;
 }

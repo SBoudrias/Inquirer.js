@@ -2,7 +2,7 @@
  * Base prompt implementation
  * Should be extended by prompt types.
  */
-import pc from 'picocolors';
+import colors from 'yoctocolors-cjs';
 import runAsync from 'run-async';
 import { filter, mergeMap, share, take, takeUntil } from 'rxjs';
 import Choices from '../objects/choices.js';
@@ -24,7 +24,7 @@ export default class Prompt {
       filteringText: '',
       when: () => true,
       suffix: '',
-      prefix: pc.green('?'),
+      prefix: colors.green('?'),
       transformer: (val) => val,
       ...question,
     };
@@ -149,9 +149,9 @@ export default class Prompt {
   getQuestion() {
     let message =
       (this.opt.prefix ? this.opt.prefix + ' ' : '') +
-      pc.bold(this.opt.message) +
+      colors.bold(this.opt.message) +
       this.opt.suffix +
-      pc.reset(' ');
+      colors.reset(' ');
 
     // Append the default if available, and if question isn't touched/answered
     if (
@@ -162,8 +162,8 @@ export default class Prompt {
       // If default password is supplied, hide it
       message +=
         this.opt.type === 'password'
-          ? pc.italic(pc.dim('[hidden] '))
-          : pc.dim('(' + this.opt.default + ') ');
+          ? colors.italic(colors.dim('[hidden] '))
+          : colors.dim('(' + this.opt.default + ') ');
     }
 
     return message;

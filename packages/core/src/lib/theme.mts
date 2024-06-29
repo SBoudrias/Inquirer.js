@@ -1,4 +1,4 @@
-import pc from 'picocolors';
+import colors from 'yoctocolors-cjs';
 import spinners from 'cli-spinners';
 import type { Prettify } from '@inquirer/type';
 
@@ -22,18 +22,18 @@ type DefaultTheme = {
 export type Theme<Extension extends object = object> = Prettify<Extension & DefaultTheme>;
 
 export const defaultTheme: DefaultTheme = {
-  prefix: pc.green('?'),
+  prefix: colors.green('?'),
   spinner: {
     interval: spinners.dots.interval,
-    frames: spinners.dots.frames.map((frame) => pc.yellow(frame)),
+    frames: spinners.dots.frames.map((frame) => colors.yellow(frame)),
   },
   style: {
-    answer: pc.cyan,
-    message: pc.bold,
-    error: (text) => pc.red(`> ${text}`),
-    defaultAnswer: (text) => pc.dim(`(${text})`),
-    help: pc.dim,
-    highlight: pc.cyan,
-    key: (text: string) => pc.cyan(pc.bold(`<${text}>`)),
+    answer: colors.cyan,
+    message: colors.bold,
+    error: (text) => colors.red(`> ${text}`),
+    defaultAnswer: (text) => colors.dim(`(${text})`),
+    help: colors.dim,
+    highlight: colors.cyan,
+    key: (text: string) => colors.cyan(colors.bold(`<${text}>`)),
   },
 };

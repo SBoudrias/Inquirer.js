@@ -2,7 +2,7 @@
  * `editor` type prompt
  */
 
-import pc from 'picocolors';
+import colors from 'yoctocolors-cjs';
 import { editAsync } from 'external-editor';
 import { Subject } from 'rxjs';
 import observe from '../utils/events.js';
@@ -56,11 +56,11 @@ export default class EditorPrompt extends Base {
 
     message +=
       this.status === 'answered'
-        ? pc.dim('Received')
-        : pc.dim('Press <enter> to launch your preferred editor.');
+        ? colors.dim('Received')
+        : colors.dim('Press <enter> to launch your preferred editor.');
 
     if (error) {
-      bottomContent = pc.red('>> ') + error;
+      bottomContent = colors.red('>> ') + error;
     }
 
     this.screen.render(message, bottomContent);
