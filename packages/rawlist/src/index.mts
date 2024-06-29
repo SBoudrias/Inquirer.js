@@ -9,7 +9,7 @@ import {
   type Theme,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
-import pc from 'picocolors';
+import colors from 'yoctocolors-cjs';
 
 const numberRegex = /\d+/;
 
@@ -60,7 +60,7 @@ export default createPrompt(
         } else if (value === '') {
           setError('Please input a value');
         } else {
-          setError(`"${pc.red(value)}" isn't an available option`);
+          setError(`"${colors.red(value)}" isn't an available option`);
         }
       } else {
         setValue(rl.line);

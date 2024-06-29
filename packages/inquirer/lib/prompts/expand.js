@@ -2,7 +2,7 @@
  * `rawlist` type prompt
  */
 
-import pc from 'picocolors';
+import colors from 'yoctocolors-cjs';
 import { map, takeUntil } from 'rxjs';
 import Separator from '../objects/separator.js';
 import observe from '../utils/events.js';
@@ -76,7 +76,7 @@ export default class ExpandPrompt extends Base {
     let bottomContent = '';
 
     if (this.status === 'answered') {
-      message += pc.cyan(this.answer);
+      message += colors.cyan(this.answer);
     } else if (this.status === 'expanded') {
       const choicesStr = renderChoices(this.opt.choices, this.selectedKey);
       message += this.paginator.paginate(choicesStr, this.selectedKey, this.opt.pageSize);
@@ -86,11 +86,11 @@ export default class ExpandPrompt extends Base {
     message += this.rl.line;
 
     if (error) {
-      bottomContent = pc.red('>> ') + error;
+      bottomContent = colors.red('>> ') + error;
     }
 
     if (hint) {
-      bottomContent = pc.cyan('>> ') + hint;
+      bottomContent = colors.cyan('>> ') + hint;
     }
 
     this.screen.render(message, bottomContent);
@@ -125,7 +125,7 @@ export default class ExpandPrompt extends Base {
 
       let choiceStr = choice.key + ') ' + choice.name;
       if (this.selectedKey === choice.key) {
-        choiceStr = pc.cyan(choiceStr);
+        choiceStr = colors.cyan(choiceStr);
       }
 
       output += choiceStr;
@@ -258,7 +258,7 @@ function renderChoices(choices, pointer) {
 
     let choiceStr = choice.key + ') ' + choice.name;
     if (pointer === choice.key) {
-      choiceStr = pc.cyan(choiceStr);
+      choiceStr = colors.cyan(choiceStr);
     }
 
     output += choiceStr;

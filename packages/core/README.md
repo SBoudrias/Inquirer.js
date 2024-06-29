@@ -15,7 +15,7 @@ yarn add @inquirer/core
 # Usage
 
 ```ts
-import pc from 'picocolors';
+import colors from 'yoctocolors';
 import {
   createPrompt,
   useState,
@@ -44,12 +44,12 @@ const confirm = createPrompt<boolean, { message: string; default?: boolean }>(
     let formattedValue = value;
     let defaultValue = '';
     if (status === 'done') {
-      formattedValue = pc.cyan(value);
+      formattedValue = colors.cyan(value);
     } else {
-      defaultValue = pc.dim(config.default === false ? ' (y/N)' : ' (Y/n)');
+      defaultValue = colors.dim(config.default === false ? ' (y/N)' : ' (Y/n)');
     }
 
-    const message = pc.bold(config.message);
+    const message = colors.bold(config.message);
     return `${prefix} ${message}${defaultValue} ${formattedValue}`;
   },
 );

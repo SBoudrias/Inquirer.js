@@ -2,7 +2,7 @@
  * `input` type prompt
  */
 
-import pc from 'picocolors';
+import colors from 'yoctocolors-cjs';
 import { map, takeUntil } from 'rxjs';
 import observe from '../utils/events.js';
 import Base from './base.js';
@@ -52,11 +52,11 @@ export default class InputPrompt extends Base {
     if (transformer) {
       message += transformer(appendContent, this.answers, { isFinal });
     } else {
-      message += isFinal ? pc.cyan(appendContent) : appendContent;
+      message += isFinal ? colors.cyan(appendContent) : appendContent;
     }
 
     if (error) {
-      bottomContent = pc.red('>> ') + error;
+      bottomContent = colors.red('>> ') + error;
     }
 
     this.screen.render(message, bottomContent);

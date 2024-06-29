@@ -8,7 +8,7 @@ import {
   type Theme,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
-import pc from 'picocolors';
+import colors from 'yoctocolors-cjs';
 
 type ExpandChoice =
   | { key: string; name: string }
@@ -67,7 +67,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
         } else if (value === '') {
           setError('Please input a value');
         } else {
-          setError(`"${pc.red(value)}" isn't an available option`);
+          setError(`"${colors.red(value)}" isn't an available option`);
         }
       }
     } else {
@@ -116,7 +116,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
   let helpTip = '';
   const currentOption = allChoices.find(({ key }) => key === value.toLowerCase());
   if (currentOption) {
-    helpTip = `${pc.cyan('>>')} ${getChoiceKey(currentOption, 'name')}`;
+    helpTip = `${colors.cyan('>>')} ${getChoiceKey(currentOption, 'name')}`;
   }
 
   let error = '';

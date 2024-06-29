@@ -2,7 +2,7 @@
  * `confirm` type prompt
  */
 
-import pc from 'picocolors';
+import colors from 'yoctocolors-cjs';
 import { take, takeUntil } from 'rxjs';
 import observe from '../utils/events.js';
 import Base from './base.js';
@@ -60,7 +60,7 @@ export default class ConfirmPrompt extends Base {
     let message = this.getQuestion();
 
     if (typeof answer === 'boolean') {
-      message += pc.cyan(answer ? 'Yes' : 'No');
+      message += colors.cyan(answer ? 'Yes' : 'No');
     } else if (answer) {
       message += answer;
     } else {

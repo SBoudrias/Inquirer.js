@@ -1,4 +1,4 @@
-import pc from 'picocolors';
+import colors from 'yoctocolors-cjs';
 import figures from '@inquirer/figures';
 
 /**
@@ -7,7 +7,7 @@ import figures from '@inquirer/figures';
  */
 
 export class Separator {
-  readonly separator = pc.dim(Array.from({ length: 15 }).join(figures.line));
+  readonly separator = colors.dim(Array.from({ length: 15 }).join(figures.line));
   readonly type = 'separator';
 
   constructor(separator?: string) {

@@ -1,4 +1,4 @@
-import pc from 'picocolors';
+import colors from 'yoctocolors-cjs';
 
 /**
  * The paginator returns a subset of the choices if the list is too long.
@@ -38,7 +38,9 @@ export default class Paginator {
       : this.getFiniteLines(lines, active, pageSize);
     this.lastIndex = active;
     return (
-      visibleLines.join('\n') + '\n' + pc.dim('(Move up and down to reveal more choices)')
+      visibleLines.join('\n') +
+      '\n' +
+      colors.dim('(Move up and down to reveal more choices)')
     );
   }
 
