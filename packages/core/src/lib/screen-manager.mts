@@ -2,7 +2,7 @@ import type { CursorPos } from 'node:readline';
 import stripAnsi from 'strip-ansi';
 import ansiEscapes from 'ansi-escapes';
 import { breakLines, readlineWidth } from './utils.mjs';
-import type { InquirerReadline } from './read-line.type.mjs';
+import type { InquirerReadline } from '@inquirer/type';
 
 const height = (content: string): number => content.split('\n').length;
 const lastLine = (content: string): string => content.split('\n').pop() ?? '';

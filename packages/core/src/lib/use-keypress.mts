@@ -1,4 +1,4 @@
-import { type InquirerReadline } from './read-line.type.mjs';
+import { type InquirerReadline } from '@inquirer/type';
 import { type KeypressEvent } from './key.mjs';
 import { useRef } from './use-ref.mjs';
 import { useEffect } from './use-effect.mjs';

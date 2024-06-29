@@ -8,10 +8,9 @@ import {
   usePrefix,
   isEnterKey,
   makeTheme,
-  type InquirerReadline,
   type Theme,
 } from '@inquirer/core';
-import type { PartialDeep } from '@inquirer/type';
+import type { PartialDeep, InquirerReadline } from '@inquirer/type';
 
 type EditorConfig = {
   message: string;

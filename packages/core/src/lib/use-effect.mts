@@ -1,5 +1,5 @@
 import { withPointer, effectScheduler } from './hook-engine.mjs';
-import type { InquirerReadline } from './read-line.type.mjs';
+import type { InquirerReadline } from '@inquirer/type';
 
 export function useEffect(
   cb: (rl: InquirerReadline) => void | (() => void),

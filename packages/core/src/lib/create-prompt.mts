@@ -3,7 +3,7 @@ import { CancelablePromise, type Prompt, type Prettify } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import { onExit as onSignalExit } from 'signal-exit';
 import ScreenManager from './screen-manager.mjs';
-import type { InquirerReadline } from './read-line.type.mjs';
+import type { InquirerReadline } from '@inquirer/type';
 import { withHooks, effectScheduler } from './hook-engine.mjs';
 import { CancelPromptError, ExitPromptError } from './errors.mjs';
 
