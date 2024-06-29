@@ -19,24 +19,25 @@ function fileExists(filepath) {
 }
 
 async function writeFile(filepath, content) {
-  if ((await fileExists(filepath)) && (await readFile(filepath)) !== content) {
+  if (!(await fileExists(filepath)) || (await readFile(filepath)) !== content) {
     await fs.writeFile(filepath, content);
   }
 }
+
+const prettierJsonOption = await prettier.resolveConfig('tsconfig.json');
+const formatJSON = (content) =>
+  prettier.format(JSON.stringify(content), { ...prettierJsonOption, parser: 'json' });
 
 const rootPkg = await readJSONFile(path.join(import.meta.dirname, '../package.json'));
 const paths = await globby(['packages/**/package.json', '!**/node_modules']);
 
 paths.forEach(async (pkgPath) => {
   const dir = path.dirname(pkgPath);
-
-  const prettierJsonOption = await prettier.resolveConfig('tsconfig.json');
-  const formatJSON = (content) =>
-    prettier.format(JSON.stringify(content), { ...prettierJsonOption, parser: 'json' });
+  const tsconfigPath = path.join(dir, 'tsconfig.json');
 
   // Set multi-module system builds exports
   const pkg = await readJSONFile(pkgPath);
-  const isTS = await fileExists(path.join(dir, 'tsconfig.json'));
+  const isTS = await fileExists(tsconfigPath);
   const hasReadme = await fileExists(path.join(dir, 'README.md'));
 
   // Replicate configs that should always be the same.
@@ -56,6 +57,8 @@ paths.forEach(async (pkgPath) => {
   }
 
   if (isTS) {
+    const tsconfig = await readJSONFile(tsconfigPath);
+
     delete pkg.type;
     pkg.scripts = pkg.scripts ?? {};
 
@@ -92,6 +95,7 @@ paths.forEach(async (pkgPath) => {
       include: ['./src'],
       exclude: ['**/*.test.mts'],
       compilerOptions: {
+        ...tsconfig.compilerOptions,
         lib: ['es2023'],
         target: 'es2022',
         module: 'NodeNext',
@@ -114,7 +118,7 @@ paths.forEach(async (pkgPath) => {
       },
     };
 
-    writeFile(path.join(dir, 'tsconfig.json'), await formatJSON(esmTsconfig));
+    writeFile(tsconfigPath, await formatJSON(esmTsconfig));
     writeFile(path.join(dir, 'tsconfig.cjs.json'), await formatJSON(cjsTsconfig));
   }
 
