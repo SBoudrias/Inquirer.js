@@ -121,7 +121,12 @@ describe('number prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? Enter an increment of 5"`);
 
     events.type('12');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Enter an increment of 5 12"`);
+    events.keypress('enter');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Enter an increment of 5 12
+      > Value must be a multiple of 5 starting from 3"
+    `);
 
     events.keypress('backspace');
     events.keypress('backspace');
