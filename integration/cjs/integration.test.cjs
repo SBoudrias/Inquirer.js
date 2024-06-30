@@ -4,6 +4,8 @@ const assert = require('node:assert');
 const { input } = require('@inquirer/prompts');
 const { createPrompt } = require('@inquirer/core');
 const defaultInput = require('@inquirer/input').default;
+const inquirer = require('inquirer').default;
+const { createPromptModule } = require('inquirer');
 
 describe('CommonJS Integration', () => {
   it('@inquirer/prompts should be exported', () => {
@@ -16,5 +18,11 @@ describe('CommonJS Integration', () => {
 
   it('@inquirer/core should export createPrompt', () => {
     assert(createPrompt instanceof Function);
+  });
+
+  it('inquirer should be exported', () => {
+    assert(inquirer.prompt instanceof Function);
+    assert(inquirer.createPromptModule instanceof Function);
+    assert(createPromptModule instanceof Function);
   });
 });
