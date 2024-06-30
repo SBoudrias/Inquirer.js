@@ -4,11 +4,28 @@ Prompt that'll open the user preferred editor with default content and allow for
 
 # Installation
 
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
+
 ```sh
 npm install @inquirer/editor
+```
 
+</td>
+<td>
+
+```sh
 yarn add @inquirer/editor
 ```
+
+</td>
+</tr>
+</table>
 
 # Usage
 
