@@ -58,27 +58,28 @@ paths.forEach(async (pkgPath) => {
 
   if (isTS) {
     const tsconfig = await readJSONFile(tsconfigPath);
+    const emitDeclaration = tsconfig?.compilerOptions?.declaration !== false;
 
     delete pkg.type;
     pkg.scripts = pkg.scripts ?? {};
+    pkg.files = ['dist/**/*'];
 
     // If the package supports Typescript, then apply the configs.
     pkg.exports = {
       '.': {
         import: {
-          types: './dist/esm/types/index.d.mts',
+          types: emitDeclaration ? './dist/esm/types/index.d.mts' : undefined,
           default: './dist/esm/index.mjs',
         },
         require: {
-          types: './dist/cjs/types/index.d.ts',
+          types: emitDeclaration ? './dist/cjs/types/index.d.ts' : undefined,
           default: './dist/cjs/index.js',
         },
       },
     };
 
     pkg.main = pkg.exports['.'].require.default;
-    pkg.typings = pkg.exports['.'].require.types;
-    pkg.files = ['dist/**/*'];
+    pkg.typings = emitDeclaration ? pkg.exports['.'].require.types : undefined;
 
     pkg.scripts = {
       tsc: 'yarn run tsc:esm && yarn run tsc:cjs',
@@ -86,7 +87,7 @@ paths.forEach(async (pkgPath) => {
       'tsc:cjs':
         'rm -rf dist/cjs && tsc -p ./tsconfig.cjs.json && node ../../tools/fix-ext.mjs',
       dev: 'tsc -p ./tsconfig.json --watch',
-      attw: 'attw --pack',
+      attw: emitDeclaration ? 'attw --pack' : undefined,
     };
 
     // Set ESM tsconfig
@@ -101,7 +102,7 @@ paths.forEach(async (pkgPath) => {
         module: 'NodeNext',
         moduleResolution: 'nodenext',
         outDir: 'dist/esm',
-        declarationDir: 'dist/esm/types',
+        declarationDir: emitDeclaration ? 'dist/esm/types' : undefined,
       },
     };
 
@@ -114,7 +115,7 @@ paths.forEach(async (pkgPath) => {
         module: 'commonjs',
         moduleResolution: 'node10',
         outDir: 'dist/cjs',
-        declarationDir: 'dist/cjs/types',
+        declarationDir: emitDeclaration ? 'dist/cjs/types' : undefined,
       },
     };
 
