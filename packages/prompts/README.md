@@ -124,6 +124,16 @@ import { editor } from '@inquirer/prompts';
 
 [See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/editor) for usage example and options documentation.
 
+## [Number](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/number)
+
+Very similar to the `input` prompt, but with built-in number validation configuration option.
+
+```js
+import { number } from '@inquirer/prompts';
+```
+
+[See documentation](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/number) for usage example and options documentation.
+
 ## [Raw List](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/rawlist)
 
 ![Raw list prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
