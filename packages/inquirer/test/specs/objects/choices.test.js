@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 
-import inquirer from '../../../lib/inquirer.js';
-import Choices from '../../../lib/objects/choices.js';
-import Choice from '../../../lib/objects/choice.js';
+import inquirer from '../../../src/index.js';
+import Choices from '../../../src/objects/choices.js';
+import Choice from '../../../src/objects/choice.js';
 
 describe('Choices collection', () => {
   it('should create Choice object from array member', () => {

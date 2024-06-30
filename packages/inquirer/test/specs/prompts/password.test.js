@@ -3,7 +3,7 @@ import { beforeEach, describe, it, expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
-import Password from '../../../lib/prompts/password.js';
+import Password from '../../../src/prompts/password.js';
 
 function testMasking(rl, mask) {
   return function (answer) {

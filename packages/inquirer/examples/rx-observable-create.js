@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import inquirer from '../lib/inquirer.js';
+import inquirer from '../src/index.js';
 
 const observe = new Observable((subscriber) => {
   subscriber.next({

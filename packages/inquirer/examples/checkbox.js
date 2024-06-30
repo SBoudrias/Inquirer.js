@@ -2,7 +2,7 @@
  * Checkbox list examples
  */
 
-import inquirer from '../lib/inquirer.js';
+import inquirer from '../src/index.js';
 
 inquirer
   .prompt([

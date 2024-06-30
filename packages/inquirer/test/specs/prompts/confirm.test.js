@@ -2,7 +2,7 @@ import { beforeEach, describe, it, expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
-import Confirm from '../../../lib/prompts/confirm.js';
+import Confirm from '../../../src/prompts/confirm.js';
 
 describe('`confirm` prompt', () => {
   let fixture;
