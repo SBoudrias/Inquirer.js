@@ -94,20 +94,7 @@ inquirer
   });
 ```
 
-> [!WARNING]
-> Inquirer v9 and higher are native esm modules, this mean you cannot use the commonjs syntax `require('inquirer')` anymore. If you want to learn more about using native esm in Node, I'd recommend reading [the following guide](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
-
-Alternatively, if you require a commonjs module, you should rely on an older version until you're ready to upgrade your environment:
-
-```sh
-npm install --save inquirer@^8.0.0
-```
-
-This will then allow import inquirer with the commonjs `require`:
-
-```js
-const inquirer = require('inquirer');
-```
+If you're using Typescript, you'll also want to [add `@types/inquirer`](https://www.npmjs.com/package/@types/inquirer).
 
 <a name="examples"></a>
 

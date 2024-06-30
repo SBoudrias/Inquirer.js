@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["./src"],
+  "exclude": ["**/*.test.mts"],
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "target": "es2022",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "outDir": "dist/esm",
+    "declaration": false,
+    "noImplicitAny": false
+  }
+}
