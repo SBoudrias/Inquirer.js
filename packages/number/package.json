@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/number",
-  "version": "2.1.11",
+  "version": "0.0.0",
   "description": "Inquirer number prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",

@@ -489,7 +489,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/number@npm:^2.1.11, @inquirer/number@workspace:packages/number":
+"@inquirer/number@npm:^0.0.0, @inquirer/number@workspace:packages/number":
   version: 0.0.0-use.local
   resolution: "@inquirer/number@workspace:packages/number"
   dependencies:
@@ -519,7 +519,7 @@ __metadata:
     "@inquirer/editor": "npm:^2.1.11"
     "@inquirer/expand": "npm:^2.1.11"
     "@inquirer/input": "npm:^2.1.11"
-    "@inquirer/number": "npm:^2.1.11"
+    "@inquirer/number": "npm:^0.0.0"
     "@inquirer/password": "npm:^2.1.11"
     "@inquirer/rawlist": "npm:^2.1.11"
     "@inquirer/select": "npm:^2.3.7"

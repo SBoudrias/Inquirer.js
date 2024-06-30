@@ -82,7 +82,7 @@
     "@inquirer/editor": "^2.1.11",
     "@inquirer/expand": "^2.1.11",
     "@inquirer/input": "^2.1.11",
-    "@inquirer/number": "^2.1.11",
+    "@inquirer/number": "^0.0.0",
     "@inquirer/password": "^2.1.11",
     "@inquirer/rawlist": "^2.1.11",
     "@inquirer/select": "^2.3.7"
