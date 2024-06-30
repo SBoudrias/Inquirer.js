@@ -12,13 +12,24 @@ Secondly, there's `packages/core` (npm `@inquirer/core`) which is the new framew
 2. Drop most dependencies (and mainly the big RxJS dependency)
 3. Remove flow management from the core, which I find isn't useful and often leads users to assume they cannot use the JavaScript constructs they know to build their prompt flows (hundreds of support requests on the issue tracker).
 
-The other packages, `packages/input`, `packages/checkbox`, `packages/*` are the new reimplement core prompts from the `inquirer` module.
+The other packages, `packages/input`, `packages/checkbox`, `packages/*` are the new reimplement core prompts from the `inquirer` module, or utility packages.
 
 # Running Inquirer locally
 
-First off, you'll need to run `yarn install`.
+This guide assumes you have an [LTS Node.js](https://nodejs.org/en/about/previous-releases) installed (double check with `node --version`.) You're free to manage the Node install & versions on your own - personally I like [Volta](https://docs.volta.sh/guide/getting-started).
+
+Inquirer is relying on Yarn, you'll need it for things to work as expected. This is now built-in with Node corepack:
+
+```sh
+corepack enable
+yarn install
+```
+
+At this point you should be good to go!
 
 ## Running test suite
+
+We're using vitest for all unit tests. And then have a few integration tests with the native Node.js test runner making sure different setups works (like CJS/ESM.)
 
 To run everything:
 
@@ -26,16 +37,20 @@ To run everything:
 yarn test
 ```
 
-And during development, you might want to run vitest in watch mode for quicker iteration:
+But during development, you'll have a better time running vitest in watch mode for quicker iteration:
 
 ```sh
 yarn vitest
+
+# or
+yarn vitest --ui --coverage
 ```
 
 ## Linting
 
 ```sh
-yarn eslint . --fix`
+yarn eslint . --fix
+yarn prettier --write .
 ```
 
 ## Type checking
@@ -44,6 +59,18 @@ yarn eslint . --fix`
 yarn turbo tsc
 ```
 
+## Running demos
+
+```sh
+# First you need to build the prompts; and every time you change code.
+yarn turbo tsc
+
+# Then run the demos
+yarn node packages/demo
+```
+
+(PR idea: Adding a watch mode for this flow would be great!)
+
 ## Publishing new versions
 
 Note: This can only be done by someone with permission to the org on `npm`.
@@ -51,11 +78,3 @@ Note: This can only be done by someone with permission to the org on `npm`.
 ```sh
 yarn lerna publish
 ```
-
-## Running demos
-
-```sh
-yarn ts-node packages/checkbox/demo.mts
-```
-
-(Also works for the `.js` demos)
