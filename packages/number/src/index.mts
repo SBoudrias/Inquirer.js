@@ -13,18 +13,55 @@ import type { PartialDeep } from '@inquirer/type';
 type NumberConfig = {
   message: string;
   default?: number;
+  min?: number;
+  max?: number;
+  step?: number | 'any';
+  required?: boolean;
   validate?: (value: number | undefined) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme>;
 };
 
+function validateNumber(
+  value: number | undefined,
+  {
+    min,
+    max,
+    step,
+  }: {
+    min: number;
+    max: number;
+    step: number | 'any';
+  },
+): boolean | string {
+  if (value == null || Number.isNaN(value)) {
+    return false;
+  } else if (value < min || value > max) {
+    return `Value must be between ${min} and ${max}`;
+  } else if (step !== 'any' && (value - (Number.isFinite(min) ? min : 0)) % step !== 0) {
+    return `Value must be a multiple of ${step}${Number.isFinite(min) ? ` starting from ${min}` : ''}`;
+  }
+
+  return true;
+}
+
 export default createPrompt<number | undefined, NumberConfig>((config, done) => {
-  const { validate = () => true } = config;
+  const {
+    validate = () => true,
+    min = -Infinity,
+    max = Infinity,
+    step = 1,
+    required = false,
+  } = config;
   const theme = makeTheme(config.theme);
   const [status, setStatus] = useState<string>('pending');
   const [value, setValue] = useState<string>(''); // store the input value as string and convert to number on "Enter"
-  const [defaultValue = '', setDefaultValue] = useState<string>(
-    config.default?.toString(),
-  );
+
+  // Ignore default if not valid.
+  const validDefault =
+    validateNumber(config.default, { min, max, step }) === true
+      ? config.default?.toString()
+      : undefined;
+  const [defaultValue = '', setDefaultValue] = useState<string>(validDefault);
   const [errorMsg, setError] = useState<string>();
 
   const isLoading = status === 'loading';
@@ -40,9 +77,17 @@ export default createPrompt<number | undefined, NumberConfig>((config, done) => 
       const input = value || defaultValue;
       const answer = input === '' ? undefined : Number(input);
       setStatus('loading');
-      const isValid = Number.isNaN(answer) ? false : await validate(answer);
+
+      let isValid: string | boolean = true;
+      if (required || answer != null) {
+        isValid = validateNumber(answer, { min, max, step });
+      }
       if (isValid === true) {
-        setValue(answer?.toString() ?? '');
+        isValid = await validate(answer);
+      }
+
+      if (isValid === true) {
+        setValue(String(answer ?? ''));
         setStatus('done');
         done(answer);
       } else {
