@@ -6,11 +6,12 @@ import confirmDemo from './demos/confirm.mjs';
 import editorDemo from './demos/editor.mjs';
 import expandDemo from './demos/expand.mjs';
 import inputDemo from './demos/input.mjs';
+import loaderDemo from './demos/loader.mjs';
+import numberDemo from './demos/number.mjs';
 import passwordDemo from './demos/password.mjs';
 import rawlistDemo from './demos/rawlist.mjs';
 import selectDemo from './demos/select.mjs';
 import timeoutDemo from './demos/timeout.mjs';
-import loaderDemo from './demos/loader.mjs';
 
 const demos = {
   checkbox: checkboxDemo,
@@ -18,11 +19,12 @@ const demos = {
   editor: editorDemo,
   expand: expandDemo,
   input: inputDemo,
+  loader: loaderDemo,
+  number: numberDemo,
   password: passwordDemo,
   rawlist: rawlistDemo,
   select: selectDemo,
   timeout: timeoutDemo,
-  loader: loaderDemo,
 };
 
 async function askNextDemo() {
@@ -37,6 +39,7 @@ async function askNextDemo() {
       { name: 'Expand', value: 'expand' },
       { name: 'Rawlist', value: 'rawlist' },
       { name: 'Editor', value: 'editor' },
+      { name: 'Number', value: 'number' },
       { name: 'Advanced demos', value: 'advanced' },
       { name: "Exit (I'm done)", value: 'exit' },
     ],
