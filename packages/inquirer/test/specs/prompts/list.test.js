@@ -2,7 +2,7 @@ import { vi, expect, beforeEach, describe, it } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
-import List from '../../../lib/prompts/list.js';
+import List from '../../../src/prompts/list.js';
 
 describe('`list` prompt', () => {
   let fixture;

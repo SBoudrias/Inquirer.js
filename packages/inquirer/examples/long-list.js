@@ -2,7 +2,7 @@
  * Paginated list
  */
 
-import inquirer from '../lib/inquirer.js';
+import inquirer from '../src/index.js';
 
 const choices = Array.apply(0, Array.from({ length: 26 })).map((x, y) =>
   String.fromCodePoint(y + 65),

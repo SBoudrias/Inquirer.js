@@ -2,7 +2,7 @@ import { vi, expect, beforeEach, describe, it } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
-import Checkbox from '../../../lib/prompts/checkbox.js';
+import Checkbox from '../../../src/prompts/checkbox.js';
 
 describe('`checkbox` prompt', () => {
   let fixture;

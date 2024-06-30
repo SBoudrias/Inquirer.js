@@ -5,9 +5,9 @@
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "files": [
-    "lib"
+    "src"
   ],
-  "main": "lib/inquirer.js",
+  "main": "src/index.js",
   "keywords": [
     "answer",
     "answers",

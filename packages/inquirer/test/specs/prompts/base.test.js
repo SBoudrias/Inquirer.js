@@ -1,7 +1,7 @@
 import { beforeEach, describe, it, expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 
-import Base from '../../../lib/prompts/base.js';
+import Base from '../../../src/prompts/base.js';
 
 describe('`base` prompt (e.g. prompt helpers)', () => {
   let rl;

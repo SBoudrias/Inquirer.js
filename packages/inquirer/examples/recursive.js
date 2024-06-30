@@ -3,7 +3,7 @@
  * Allows user to choose when to exit prompt
  */
 
-import inquirer from '../lib/inquirer.js';
+import inquirer from '../src/index.js';
 const output = [];
 
 const questions = [
