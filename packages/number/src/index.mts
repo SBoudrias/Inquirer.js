@@ -10,14 +10,14 @@ import {
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 
-type InputConfig = {
+type NumberConfig = {
   message: string;
   default?: number;
   validate?: (value: number | undefined) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme>;
 };
 
-export default createPrompt<number | undefined, InputConfig>((config, done) => {
+export default createPrompt<number | undefined, NumberConfig>((config, done) => {
   const { validate = () => true } = config;
   const theme = makeTheme(config.theme);
   const [status, setStatus] = useState<string>('pending');

@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
 import number from './src/index.mjs';
 
-describe('input prompt', () => {
+describe('number prompt', () => {
   it('handle simple use case', async () => {
     const { answer, events, getScreen } = await render(number, {
       message: 'What is your age',
