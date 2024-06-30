@@ -6,11 +6,28 @@ Interactive password input component for command line interfaces. Supports input
 
 # Installation
 
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
+
 ```sh
 npm install @inquirer/password
+```
 
+</td>
+<td>
+
+```sh
 yarn add @inquirer/password
 ```
+
+</td>
+</tr>
+</table>
 
 # Usage
 

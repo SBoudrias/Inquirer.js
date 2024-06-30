@@ -7,11 +7,28 @@ Compact single select prompt. Every option is assigned a shortcut key, and selec
 
 # Installation
 
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
+
 ```sh
 npm install @inquirer/expand
+```
 
+</td>
+<td>
+
+```sh
 yarn add @inquirer/expand
 ```
+
+</td>
+</tr>
+</table>
 
 # Usage
 

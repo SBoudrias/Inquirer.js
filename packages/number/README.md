@@ -4,11 +4,28 @@ Interactive free number input component for command line interfaces. Supports va
 
 # Installation
 
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
+
 ```sh
 npm install @inquirer/number
+```
 
+</td>
+<td>
+
+```sh
 yarn add @inquirer/number
 ```
+
+</td>
+</tr>
+</table>
 
 # Usage
 

@@ -6,11 +6,28 @@ Simple interactive command line prompt to gather boolean input from users.
 
 # Installation
 
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
+
 ```sh
 npm install @inquirer/confirm
+```
 
+</td>
+<td>
+
+```sh
 yarn add @inquirer/confirm
 ```
+
+</td>
+</tr>
+</table>
 
 # Usage
 

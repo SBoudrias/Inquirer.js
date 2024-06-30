@@ -6,11 +6,28 @@ Interactive free text input component for command line interfaces. Supports vali
 
 # Installation
 
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
+
 ```sh
 npm install @inquirer/input
+```
 
+</td>
+<td>
+
+```sh
 yarn add @inquirer/input
 ```
+
+</td>
+</tr>
+</table>
 
 # Usage
 

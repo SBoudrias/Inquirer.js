@@ -6,11 +6,28 @@ Simple interactive command line prompt to display a list of choices (single sele
 
 # Installation
 
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
+
 ```sh
 npm install @inquirer/select
+```
 
+</td>
+<td>
+
+```sh
 yarn add @inquirer/select
 ```
+
+</td>
+</tr>
+</table>
 
 # Usage
 

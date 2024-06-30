@@ -6,11 +6,28 @@ Simple interactive command line prompt to display a raw list of choices (single 
 
 # Installation
 
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
+
 ```sh
 npm install @inquirer/rawlist
+```
 
+</td>
+<td>
+
+```sh
 yarn add @inquirer/rawlist
 ```
+
+</td>
+</tr>
+</table>
 
 # Usage
 

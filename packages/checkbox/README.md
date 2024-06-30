@@ -6,11 +6,28 @@ Simple interactive command line prompt to display a list of checkboxes (multi se
 
 # Installation
 
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
+
 ```sh
 npm install @inquirer/checkbox
+```
 
+</td>
+<td>
+
+```sh
 yarn add @inquirer/checkbox
 ```
+
+</td>
+</tr>
+</table>
 
 # Usage
 

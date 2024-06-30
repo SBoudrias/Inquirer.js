@@ -6,11 +6,28 @@ It aims to implements a lightweight API similar to React hooks - but without JSX
 
 # Installation
 
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
+
 ```sh
 npm install @inquirer/core
+```
 
+</td>
+<td>
+
+```sh
 yarn add @inquirer/core
 ```
+
+</td>
+</tr>
+</table>
 
 # Usage
 
