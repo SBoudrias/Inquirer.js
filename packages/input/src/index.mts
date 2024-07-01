@@ -39,11 +39,10 @@ export default createPrompt<string, InputConfig>((config, done) => {
     if (isEnterKey(key)) {
       const answer = value || defaultValue;
       setStatus('loading');
-      const isValid = await validate(answer);
-      if (required && !answer) {
-        setError('You must provide a value');
-        setStatus('pending');
-      } else if (isValid === true) {
+
+      const isValid =
+        required && !answer ? 'You must provide a value' : await validate(answer);
+      if (isValid === true) {
         setValue(answer);
         setStatus('done');
         done(answer);
