@@ -3,7 +3,8 @@
   "tasks": {
     "tsc": {
       "dependsOn": ["^tsc"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "inputs": ["$TURBO_DEFAULT$", "../../tools/fix-ext.mjs"]
     },
     "attw": {
       "dependsOn": ["tsc"],
