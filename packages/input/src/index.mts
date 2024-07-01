@@ -13,13 +13,14 @@ import type { PartialDeep } from '@inquirer/type';
 type InputConfig = {
   message: string;
   default?: string;
+  required?: boolean;
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme>;
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {
-  const { validate = () => true } = config;
+  const { required, validate = () => true } = config;
   const theme = makeTheme(config.theme);
   const [status, setStatus] = useState<string>('pending');
   const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
@@ -39,7 +40,10 @@ export default createPrompt<string, InputConfig>((config, done) => {
       const answer = value || defaultValue;
       setStatus('loading');
       const isValid = await validate(answer);
-      if (isValid === true) {
+      if (required && !answer) {
+        setError('You must provide a value');
+        setStatus('pending');
+      } else if (isValid === true) {
         setValue(answer);
         setStatus('done');
         done(answer);
