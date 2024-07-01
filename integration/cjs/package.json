@@ -6,6 +6,9 @@
     "node": ">=18"
   },
   "devDependencies": {
-    "@inquirer/prompts": "workspace:*"
+    "@inquirer/core": "workspace:*",
+    "@inquirer/input": "workspace:*",
+    "@inquirer/prompts": "workspace:*",
+    "inquirer": "workspace:*"
   }
 }

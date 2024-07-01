@@ -396,7 +396,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@inquirer/cjs-integration-tests@workspace:integration/cjs"
   dependencies:
+    "@inquirer/core": "workspace:*"
+    "@inquirer/input": "workspace:*"
     "@inquirer/prompts": "workspace:*"
+    inquirer: "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -410,7 +413,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/core@npm:^9.0.0, @inquirer/core@workspace:packages/core":
+"@inquirer/core@npm:^9.0.0, @inquirer/core@workspace:*, @inquirer/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@inquirer/core@workspace:packages/core"
   dependencies:
@@ -458,7 +461,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@inquirer/esm-integration-tests@workspace:integration/esm"
   dependencies:
+    "@inquirer/core": "workspace:*"
+    "@inquirer/input": "workspace:*"
     "@inquirer/prompts": "workspace:*"
+    inquirer: "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -479,7 +485,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/input@npm:^2.1.12, @inquirer/input@workspace:packages/input":
+"@inquirer/input@npm:^2.1.12, @inquirer/input@workspace:*, @inquirer/input@workspace:packages/input":
   version: 0.0.0-use.local
   resolution: "@inquirer/input@workspace:packages/input"
   dependencies:
@@ -4423,7 +4429,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inquirer@workspace:packages/inquirer":
+"inquirer@workspace:*, inquirer@workspace:packages/inquirer":
   version: 0.0.0-use.local
   resolution: "inquirer@workspace:packages/inquirer"
   dependencies:
