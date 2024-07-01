@@ -154,6 +154,24 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mikey"`);
   });
 
+  it('shows validation message if user did not provide any value', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: `What's your favorite food?`,
+      required: true,
+    });
+
+    events.keypress('enter');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? What's your favorite food?
+      > You must provide a value"
+    `);
+
+    events.type('Quinoa');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('Quinoa');
+  });
+
   it('handle editing the answer (properly tracks cursor position)', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
