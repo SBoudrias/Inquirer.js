@@ -67,7 +67,7 @@
     "ora": "^5.4.1",
     "run-async": "^3.0.0",
     "rxjs": "^7.8.1",
-    "string-width": "^4.2.3",
+    "string-width": "^7.2.0",
     "strip-ansi": "^6.0.1",
     "wrap-ansi": "^6.2.0",
     "yoctocolors-cjs": "^2.1.1"
