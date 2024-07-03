@@ -6,5 +6,6 @@
 .yarn
 *.gz
 *.zip
+*.sh
 coverage
 yarn.lock

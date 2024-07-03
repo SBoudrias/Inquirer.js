@@ -67,25 +67,20 @@ paths.forEach(async (pkgPath) => {
     // If the package supports Typescript, then apply the configs.
     pkg.exports = {
       '.': {
-        import: {
-          types: emitDeclaration ? './dist/esm/types/index.d.mts' : undefined,
-          default: './dist/esm/index.mjs',
-        },
-        require: {
-          types: emitDeclaration ? './dist/cjs/types/index.d.ts' : undefined,
-          default: './dist/cjs/index.js',
-        },
+        import: './dist/esm/index.mjs',
+        require: './dist/cjs/index.js',
       },
     };
 
-    pkg.main = pkg.exports['.'].require.default;
-    pkg.typings = emitDeclaration ? pkg.exports['.'].require.types : undefined;
+    pkg.main = pkg.exports['.'].require;
+    pkg.types = emitDeclaration ? './dist/types/index.d.ts' : undefined;
+    pkg.typings = undefined;
 
     pkg.scripts = {
       tsc: 'yarn run tsc:esm && yarn run tsc:cjs',
-      'tsc:esm': 'rm -rf dist/esm && tsc -p ./tsconfig.json',
-      'tsc:cjs':
-        'rm -rf dist/cjs && tsc -p ./tsconfig.cjs.json && node ../../tools/fix-ext.mjs',
+      'tsc:esm':
+        'rm -rf dist/esm && tsc -p ./tsconfig.json && node ../../tools/fix-ext.mjs',
+      'tsc:cjs': 'rm -rf dist/cjs && tsc -p ./tsconfig.cjs.json',
       dev: 'tsc -p ./tsconfig.json --watch',
       attw: emitDeclaration ? 'attw --pack' : undefined,
     };
@@ -96,26 +91,27 @@ paths.forEach(async (pkgPath) => {
       include: ['./src'],
       exclude: ['**/*.test.mts'],
       compilerOptions: {
-        ...tsconfig.compilerOptions,
         lib: ['es2023'],
-        target: 'es2022',
-        module: 'NodeNext',
-        moduleResolution: 'nodenext',
+        target: 'esnext',
+        module: 'esnext',
+        moduleResolution: 'node',
         outDir: 'dist/esm',
-        declarationDir: emitDeclaration ? 'dist/esm/types' : undefined,
+        declarationDir: emitDeclaration ? 'dist/types' : undefined,
       },
     };
 
     // Set CJS tsconfig
     const cjsTsconfig = {
-      extends: './tsconfig.json',
+      extends: '../../tsconfig.json',
+      include: ['./src'],
+      exclude: ['**/*.test.mts'],
       compilerOptions: {
         lib: ['es2023'],
         target: 'es6',
         module: 'commonjs',
-        moduleResolution: 'node10',
+        moduleResolution: 'node',
         outDir: 'dist/cjs',
-        declarationDir: emitDeclaration ? 'dist/cjs/types' : undefined,
+        declaration: false,
       },
     };
 
