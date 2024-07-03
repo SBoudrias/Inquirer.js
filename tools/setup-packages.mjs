@@ -69,6 +69,7 @@ paths.forEach(async (pkgPath) => {
       '.': {
         import: './dist/esm/index.mjs',
         require: './dist/cjs/index.js',
+        types: emitDeclaration ? './dist/types/index.d.ts' : undefined,
       },
     };
 
