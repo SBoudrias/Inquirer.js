@@ -4,7 +4,7 @@
     "tsc": {
       "dependsOn": ["^tsc"],
       "outputs": ["dist/**"],
-      "inputs": ["$TURBO_DEFAULT$", "../../tools/fix-ext.mjs"]
+      "inputs": ["$TURBO_DEFAULT$", "../../tools/fix-ext.mjs", "../../tsconfig.json"]
     },
     "attw": {
       "dependsOn": ["tsc"],
