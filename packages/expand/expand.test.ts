@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import expand from './src/index.mjs';
+import expand from './src/index.js';
 
 const overwriteChoices = [
   {

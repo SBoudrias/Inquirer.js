@@ -1,11 +1,13 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../tsconfig.json",
+  "include": ["./src"],
+  "exclude": ["**/*.test.mts"],
   "compilerOptions": {
     "lib": ["es2023"],
     "target": "es6",
     "module": "commonjs",
-    "moduleResolution": "node10",
+    "moduleResolution": "node",
     "outDir": "dist/cjs",
-    "declarationDir": "dist/cjs/types"
+    "declaration": false
   }
 }

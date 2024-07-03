@@ -1,8 +1,8 @@
 import { type InquirerReadline } from '@inquirer/type';
-import { type KeypressEvent } from './key.mjs';
-import { useRef } from './use-ref.mjs';
-import { useEffect } from './use-effect.mjs';
-import { withUpdates } from './hook-engine.mjs';
+import { type KeypressEvent } from './key.js';
+import { useRef } from './use-ref.js';
+import { useEffect } from './use-effect.js';
+import { withUpdates } from './hook-engine.js';
 
 export function useKeypress(
   userHandler: (event: KeypressEvent, rl: InquirerReadline) => void,

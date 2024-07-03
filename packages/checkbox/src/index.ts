@@ -94,7 +94,7 @@ function check(checked: boolean) {
 }
 
 export default createPrompt(
-  <Value,>(config: Config<Value>, done: (value: Array<Value>) => void) => {
+  <Value>(config: Config<Value>, done: (value: Array<Value>) => void) => {
     const {
       instructions,
       pageSize = 7,

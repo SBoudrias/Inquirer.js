@@ -1,8 +1,8 @@
 import { AsyncResource } from 'node:async_hooks';
-import { useState } from './use-state.mjs';
-import { useEffect } from './use-effect.mjs';
-import { makeTheme } from './make-theme.mjs';
-import { type Theme } from './theme.mjs';
+import { useState } from './use-state.js';
+import { useEffect } from './use-effect.js';
+import { makeTheme } from './make-theme.js';
+import { type Theme } from './theme.js';
 
 export function usePrefix({
   isLoading = false,

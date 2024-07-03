@@ -4,10 +4,10 @@
   "exclude": ["**/*.test.mts"],
   "compilerOptions": {
     "lib": ["es2023"],
-    "target": "es2022",
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
     "outDir": "dist/esm",
-    "declarationDir": "dist/esm/types"
+    "declarationDir": "dist/types"
   }
 }

@@ -2,10 +2,10 @@ import * as readline from 'node:readline';
 import { CancelablePromise, type Prompt, type Prettify } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import { onExit as onSignalExit } from 'signal-exit';
-import ScreenManager from './screen-manager.mjs';
+import ScreenManager from './screen-manager.js';
 import type { InquirerReadline } from '@inquirer/type';
-import { withHooks, effectScheduler } from './hook-engine.mjs';
-import { CancelPromptError, ExitPromptError } from './errors.mjs';
+import { withHooks, effectScheduler } from './hook-engine.js';
+import { CancelPromptError, ExitPromptError } from './errors.js';
 
 type ViewFunction<Value, Config> = (
   config: Prettify<Config>,

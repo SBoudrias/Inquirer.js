@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import confirm from './src/index.mjs';
+import confirm from './src/index.js';
 
 describe('confirm prompt', () => {
   it('handles "yes"', async () => {

@@ -10,7 +10,7 @@ import {
   rawlist,
   select,
   Separator,
-} from './src/index.mjs';
+} from './src/index.js';
 
 describe('@inquirer/prompts', () => {
   it('export prompt functions', () => {

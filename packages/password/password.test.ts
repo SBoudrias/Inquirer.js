@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import password from './src/index.mjs';
+import password from './src/index.js';
 
 describe('password prompt', () => {
   it('handle muted input', async () => {

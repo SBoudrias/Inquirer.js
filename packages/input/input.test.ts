@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import input from './src/index.mjs';
+import input from './src/index.js';
 
 describe('input prompt', () => {
   it('handle simple use case', async () => {

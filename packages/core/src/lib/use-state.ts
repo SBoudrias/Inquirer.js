@@ -1,4 +1,4 @@
-import { withPointer, handleChange } from './hook-engine.mjs';
+import { withPointer, handleChange } from './hook-engine.js';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type NotFunction<T> = T extends Function ? never : T;

@@ -4,7 +4,6 @@
     "esm": true
   },
   "compilerOptions": {
-    "skipLibCheck": false,
     "esModuleInterop": true
   }
 }

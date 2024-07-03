@@ -33,7 +33,7 @@ Here's an example of a test running with Jest (though `@inquirer/testing` will w
 
 ```ts
 import { render } from '@inquirer/testing';
-import input from './src/index.mjs';
+import input from './src/index.js';
 
 describe('input prompt', () => {
   it('handle simple use case', async () => {

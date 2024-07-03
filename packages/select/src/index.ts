@@ -57,7 +57,7 @@ function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
 }
 
 export default createPrompt(
-  <Value,>(config: SelectConfig<Value>, done: (value: Value) => void): string => {
+  <Value>(config: SelectConfig<Value>, done: (value: Value) => void): string => {
     const { choices: items, loop = true, pageSize = 7 } = config;
     const firstRender = useRef(true);
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);

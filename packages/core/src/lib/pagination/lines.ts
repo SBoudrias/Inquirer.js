@@ -1,5 +1,5 @@
 import { type Prettify } from '@inquirer/type';
-import { breakLines } from '../utils.mjs';
+import { breakLines } from '../utils.js';
 
 /** Represents an item that's part of a layout, about to be rendered */
 export type Layout<T> = {

@@ -21,7 +21,7 @@ import {
   ValidationError,
   HookError,
   type KeypressEvent,
-} from './src/index.mjs';
+} from './src/index.js';
 
 describe('createPrompt()', () => {
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
