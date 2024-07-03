@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/input",
-  "version": "2.1.12",
+  "version": "2.2.0",
   "description": "Inquirer input text prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -54,11 +54,11 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/input/README.md",
   "dependencies": {
-    "@inquirer/core": "^9.0.0",
+    "@inquirer/core": "^9.0.1",
     "@inquirer/type": "^1.4.0"
   },
   "devDependencies": {
-    "@inquirer/testing": "^2.1.24"
+    "@inquirer/testing": "^2.1.25"
   },
   "scripts": {
     "tsc": "yarn run tsc:esm && yarn run tsc:cjs",

@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/prompts",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "description": "Inquirer prompts, combined in a single package",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -77,15 +77,15 @@
     }
   },
   "dependencies": {
-    "@inquirer/checkbox": "^2.3.8",
-    "@inquirer/confirm": "^3.1.12",
-    "@inquirer/editor": "^2.1.12",
-    "@inquirer/expand": "^2.1.12",
-    "@inquirer/input": "^2.1.12",
-    "@inquirer/number": "^1.0.0",
-    "@inquirer/password": "^2.1.12",
-    "@inquirer/rawlist": "^2.1.12",
-    "@inquirer/select": "^2.3.8"
+    "@inquirer/checkbox": "^2.3.9",
+    "@inquirer/confirm": "^3.1.13",
+    "@inquirer/editor": "^2.1.13",
+    "@inquirer/expand": "^2.1.13",
+    "@inquirer/input": "^2.2.0",
+    "@inquirer/number": "^1.0.1",
+    "@inquirer/password": "^2.1.13",
+    "@inquirer/rawlist": "^2.1.13",
+    "@inquirer/select": "^2.3.9"
   },
   "devDependencies": {
     "@inquirer/type": "^1.4.0"
