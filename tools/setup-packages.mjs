@@ -64,22 +64,30 @@ paths.forEach(async (pkgPath) => {
     pkg.scripts = pkg.scripts ?? {};
     pkg.files = ['dist/**/*'];
 
+    function exportDef(defaultPath, types) {
+      if (emitDeclaration) {
+        return { types, default: defaultPath };
+      }
+      return defaultPath;
+    }
+
     // If the package supports Typescript, then apply the configs.
+    delete pkg.exports['.'];
     pkg.exports = {
       '.': {
-        import: {
-          types: emitDeclaration ? './dist/esm/types/index.d.mts' : undefined,
-          default: './dist/esm/index.mjs',
-        },
-        require: {
-          types: emitDeclaration ? './dist/cjs/types/index.d.ts' : undefined,
-          default: './dist/cjs/index.js',
-        },
+        import: exportDef('./dist/esm/index.mjs', './dist/esm/types/index.d.mts'),
+        require: exportDef('./dist/cjs/index.js', './dist/cjs/types/index.d.ts'),
       },
+      ...pkg.exports,
     };
 
-    pkg.main = pkg.exports['.'].require.default;
-    pkg.typings = emitDeclaration ? pkg.exports['.'].require.types : undefined;
+    if (emitDeclaration) {
+      pkg.main = pkg.exports['.'].require.default;
+      pkg.typings = pkg.exports['.'].require.types;
+    } else {
+      pkg.main = pkg.exports['.'].require;
+      pkg.typings = undefined;
+    }
 
     pkg.scripts = {
       tsc: 'yarn run tsc:esm && yarn run tsc:cjs',
