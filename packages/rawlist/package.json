@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/rawlist",
-  "version": "2.1.13",
+  "version": "2.1.14",
   "description": "Inquirer rawlist prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -54,7 +54,7 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/rawlist/README.md",
   "dependencies": {
-    "@inquirer/core": "^9.0.1",
+    "@inquirer/core": "^9.0.2",
     "@inquirer/type": "^1.4.0",
     "yoctocolors-cjs": "^2.1.2"
   },
