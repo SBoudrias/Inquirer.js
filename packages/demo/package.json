@@ -63,7 +63,7 @@
   "dependencies": {
     "@inquirer/core": "^9.0.1",
     "@inquirer/prompts": "^5.1.1",
-    "yoctocolors-cjs": "^2.1.1"
+    "yoctocolors-cjs": "^2.1.2"
   },
   "publishConfig": {
     "access": "public"

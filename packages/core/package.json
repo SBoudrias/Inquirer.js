@@ -69,7 +69,7 @@
     "signal-exit": "^4.1.0",
     "strip-ansi": "^6.0.1",
     "wrap-ansi": "^6.2.0",
-    "yoctocolors-cjs": "^2.1.1"
+    "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
     "@inquirer/testing": "^2.1.25"

@@ -61,7 +61,7 @@
     "@inquirer/figures": "^1.0.3",
     "@inquirer/type": "^1.4.0",
     "ansi-escapes": "^4.3.2",
-    "yoctocolors-cjs": "^2.1.1"
+    "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
     "@inquirer/testing": "^2.1.25"
