@@ -8,7 +8,6 @@
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "outDir": "dist/esm",
-    "declaration": false,
-    "noImplicitAny": false
+    "declarationDir": "dist/esm/types"
   }
 }

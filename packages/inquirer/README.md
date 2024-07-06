@@ -94,8 +94,6 @@ inquirer
   });
 ```
 
-If you're using Typescript, you'll also want to [add `@types/inquirer`](https://www.npmjs.com/package/@types/inquirer).
-
 <a name="examples"></a>
 
 ### Examples (Run it and see it)
@@ -103,14 +101,17 @@ If you're using Typescript, you'll also want to [add `@types/inquirer`](https://
 Check out the [`packages/inquirer/examples/`](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/inquirer/examples) folder for code and interface examples.
 
 ```shell
-node packages/inquirer/examples/pizza.js
-node packages/inquirer/examples/checkbox.js
+yarn node packages/inquirer/examples/pizza.js
+yarn node packages/inquirer/examples/checkbox.js
 # etc...
 ```
 
 ### Methods
 
 <a name="methods"></a>
+
+> [!WARNING]
+> Those interfaces are not necessary for modern Javascript, while still maintained, they're depreciated. We highly encourage you to adopt the more ergonomic and modern API with [@inquirer/prompts](https://www.npmjs.com/package/@inquirer/prompts). Both `inquirer` and `@inquirer/prompts` are usable at the same time, so you can progressively migrate.
 
 #### `inquirer.prompt(questions, answers) -> promise`
 
@@ -323,29 +324,6 @@ The `postfix` property is useful if you want to provide an extension.
 
 `prompt()` requires that it is run in an interactive environment. (I.e. [One where `process.stdin.isTTY` is `true`](https://nodejs.org/docs/latest-v12.x/api/process.html#process_a_note_on_process_i_o)). If `prompt()` is invoked outside of such an environment, then `prompt()` will return a rejected promise with an error. For convenience, the error will have a `isTtyError` property to programmatically indicate the cause.
 
-## User Interfaces and layouts
-
-Along with the prompts, Inquirer offers some basic text UI.
-
-#### Bottom Bar - `inquirer.ui.BottomBar`
-
-This UI present a fixed text at the bottom of a free text zone. This is useful to keep a message to the bottom of the screen while outputting command outputs on the higher section.
-
-```javascript
-const ui = new inquirer.ui.BottomBar();
-
-// pipe a Stream to the log zone
-outputStream.pipe(ui.log);
-
-// Or simply write output
-ui.log.write('something just happened.');
-ui.log.write('Almost over, standby!');
-
-// During processing, update the bottom bar content to display a loader
-// or output a progress bar, etc
-ui.updateBottomBar('new bottom bar content');
-```
-
 <a name="reactive"></a>
 
 ## Reactive interface
@@ -422,7 +400,7 @@ Please refer to the [GitHub releases section for the changelog](https://github.c
 <a name="contributing"></a>
 
 **Unit test**
-Please add a unit test for every new feature or bug fix. `npm test` to run the test suite.
+Please add a unit test for every new feature or bug fix. `yarn test` to run the test suite.
 
 **Documentation**
 Add documentation for every API change. Feel free to send typo fixes and better docs!
@@ -442,6 +420,16 @@ Licensed under the MIT license.
 ## Plugins
 
 <a name="plugins"></a>
+
+You can build custom prompts, or use open sourced ones. See [`@inquirer/core` documentation for building custom prompts](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/core).
+
+You can either call the custom prompts directly, or you can register them:
+
+```js
+import CustomPrompt from '$$$/custom-prompt';
+
+inquirer.registerPrompt('custom', CustomPrompt);
+```
 
 ### Prompts
 
