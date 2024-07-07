@@ -1,6 +1,6 @@
 {
   "name": "inquirer",
-  "version": "9.3.5",
+  "version": "10.0.0",
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "main": "./dist/cjs/index.js",
