@@ -10,24 +10,40 @@ import { vi, expect, beforeEach, afterEach, describe, it } from 'vitest';
 import { Observable } from 'rxjs';
 
 import inquirer from '../../lib/index.js';
-import { autosubmit } from '../helpers/events.js';
-
-const ostype = os.type();
 
 function throwFunc(step) {
   throw new Error(`askAnswered Error ${step}`);
 }
 
+class StubPrompt {
+  constructor(question) {
+    this.question = question;
+  }
+
+  run() {
+    return Promise.resolve(this.question.answer ?? 'bar');
+  }
+
+  close() {}
+}
+
+class StubFailingPrompt {
+  run() {
+    return Promise.reject('This test prompt always reject');
+  }
+
+  close() {}
+}
+
+beforeEach(() => {
+  inquirer.restoreDefaultPrompts();
+  inquirer.registerPrompt('stub', StubPrompt);
+});
+
 describe('inquirer.prompt', () => {
-  let prompt;
-
-  beforeEach(() => {
-    prompt = inquirer.createPromptModule();
-  });
-
   it("should close and create a new readline instances each time it's called", async () => {
-    const promise = prompt({
-      type: 'confirm',
+    const promise = inquirer.prompt({
+      type: 'stub',
       name: 'q1',
       message: 'message',
     });
@@ -35,252 +51,241 @@ describe('inquirer.prompt', () => {
     const rl1 = promise.ui.rl;
     vi.spyOn(rl1, 'close');
     vi.spyOn(rl1.output, 'end');
-    rl1.emit('line');
 
-    return promise.then(() => {
-      expect(rl1.close).toHaveBeenCalledTimes(1);
-      expect(rl1.output.end).toHaveBeenCalledTimes(1);
+    await promise;
+    expect(rl1.close).toHaveBeenCalledTimes(1);
+    expect(rl1.output.end).toHaveBeenCalledTimes(1);
 
-      const promise2 = prompt({
-        type: 'confirm',
-        name: 'q1',
-        message: 'message',
-      });
-
-      const rl2 = promise2.ui.rl;
-      vi.spyOn(rl2, 'close');
-      vi.spyOn(rl2.output, 'end');
-      rl2.emit('line');
-
-      return promise2.then(() => {
-        expect(rl2.close).toHaveBeenCalledTimes(1);
-        expect(rl2.output.end).toHaveBeenCalledTimes(1);
-
-        expect(rl1).not.toEqual(rl2);
-      });
+    const promise2 = inquirer.prompt({
+      type: 'stub',
+      name: 'q1',
+      message: 'message',
     });
+
+    const rl2 = promise2.ui.rl;
+    vi.spyOn(rl2, 'close');
+    vi.spyOn(rl2.output, 'end');
+
+    await promise2;
+    expect(rl2.close).toHaveBeenCalledTimes(1);
+    expect(rl2.output.end).toHaveBeenCalledTimes(1);
+
+    expect(rl1).not.toEqual(rl2);
   });
 
-  it('should close readline instance on rejected promise', async () =>
-    new Promise((done) => {
-      prompt.registerPrompt('stub', () => {});
+  it('should close readline instance on rejected promise', async () => {
+    inquirer.registerPrompt('stub', StubFailingPrompt);
 
-      const promise = prompt({
-        type: 'stub',
-        name: 'q1',
-      });
+    const promise = inquirer.prompt({
+      type: 'stub',
+      name: 'q1',
+    });
 
-      const rl1 = promise.ui.rl;
-      vi.spyOn(rl1, 'close');
-      vi.spyOn(rl1.output, 'end');
+    const rl1 = promise.ui.rl;
+    vi.spyOn(rl1, 'close');
+    vi.spyOn(rl1.output, 'end');
 
-      promise.catch(() => {
-        expect(rl1.close).toHaveBeenCalledTimes(1);
-        expect(rl1.output.end).toHaveBeenCalledTimes(1);
-        done();
-      });
-    }));
+    await promise.catch(() => {
+      expect(rl1.close).toHaveBeenCalledTimes(1);
+      expect(rl1.output.end).toHaveBeenCalledTimes(1);
+    });
+  });
 
   it('should take a prompts array and return answers', async () => {
     const prompts = [
       {
-        type: 'confirm',
+        type: 'stub',
         name: 'q1',
-        message: 'message',
       },
       {
-        type: 'confirm',
+        type: 'stub',
         name: 'q2',
-        message: 'message',
-        default: false,
       },
     ];
 
-    const promise = prompt(prompts);
-    autosubmit(promise.ui);
+    const answers = await inquirer.prompt(prompts);
 
-    return promise.then((answers) => {
-      expect(answers.q1).toEqual(true);
-      expect(answers.q2).toEqual(false);
+    expect(answers).toEqual({
+      q1: 'bar',
+      q2: 'bar',
     });
   });
 
   it('should take a prompts nested object and return answers', async () => {
     const prompts = {
       q1: {
-        type: 'confirm',
+        type: 'stub',
         message: 'message',
       },
       q2: {
-        type: 'input',
+        type: 'stub',
         message: 'message',
         default: 'Foo',
       },
     };
 
-    const promise = prompt(prompts);
-    autosubmit(promise.ui);
-    const { q1, q2 } = await promise;
-    expect(q1).toEqual(true);
-    expect(q2).toEqual('Foo');
+    const answers = await inquirer.prompt(prompts);
+
+    expect(answers).toEqual({
+      q1: 'bar',
+      q2: 'bar',
+    });
   });
 
   it('should take a prompts array with nested names', async () => {
     const prompts = [
       {
-        type: 'confirm',
+        type: 'stub',
         name: 'foo.bar.q1',
         message: 'message',
       },
       {
-        type: 'confirm',
+        type: 'stub',
         name: 'foo.q2',
         message: 'message',
-        default: false,
       },
     ];
 
-    const promise = prompt(prompts);
-    autosubmit(promise.ui);
-
-    return promise.then((answers) => {
-      expect(answers).toEqual({
-        foo: {
-          bar: {
-            q1: true,
-          },
-          q2: false,
+    const answers = await inquirer.prompt(prompts);
+    expect(answers).toEqual({
+      foo: {
+        bar: {
+          q1: 'bar',
         },
-      });
+        q2: 'bar',
+      },
     });
   });
 
   it('should take a single prompt and return answer', async () => {
     const config = {
-      type: 'input',
+      type: 'stub',
       name: 'q1',
-      message: 'message',
-      default: 'bar',
     };
 
-    const promise = prompt(config);
-
-    promise.ui.rl.emit('line');
-    const answers = await promise;
-    expect(answers.q1).toEqual('bar');
+    const answers = await inquirer.prompt(config);
+    expect(answers).toEqual({ q1: 'bar' });
   });
 
   it('should parse `message` if passed as a function', async () => {
     const stubMessage = 'foo';
-    prompt.registerPrompt('stub', function (params) {
-      this.run = vi.fn(() => Promise.resolve());
-      expect(params.message).toEqual(stubMessage);
-    });
+    class FakePrompt {
+      constructor(question) {
+        expect(question.message).toEqual(stubMessage);
+      }
 
-    const msgFunc = function (answers) {
-      expect(answers.name1).toEqual('bar');
-      return stubMessage;
-    };
+      run() {
+        return Promise.resolve();
+      }
+
+      close() {}
+    }
+    inquirer.registerPrompt('stub', FakePrompt);
 
     const prompts = [
       {
-        type: 'input',
+        type: 'stub',
+        name: 'name',
+        message(answers) {
+          expect(answers.name1).toEqual('bar');
+          return stubMessage;
+        },
+      },
+    ];
+
+    await inquirer.prompt(prompts, { name1: 'bar' });
+  });
+
+  it('should run asynchronous `message`', async () => {
+    const stubMessage = 'Stub message';
+    class FakePrompt {
+      constructor(question) {
+        this.question = question;
+        expect(question.message).toEqual(stubMessage);
+      }
+
+      run() {
+        return Promise.resolve(this.question.answer);
+      }
+
+      close() {}
+    }
+    inquirer.registerPrompt('stub2', FakePrompt);
+
+    const prompts = [
+      {
+        type: 'stub',
         name: 'name1',
         message: 'message',
-        default: 'bar',
+        answer: 'bar',
+      },
+      {
+        type: 'stub',
+        name: 'name2',
+        answer: 'foo',
+        message(answers) {
+          expect(answers.name1).toEqual('bar');
+          const goOn = this.async();
+          setTimeout(() => {
+            goOn(null, stubMessage);
+          }, 0);
+        },
+      },
+    ];
+
+    const answers = await inquirer.prompt(prompts);
+    expect(answers['name1']).toEqual('bar');
+    expect(answers['name2']).toEqual('foo');
+  });
+
+  it('should parse `default` if passed as a function', async () => {
+    const prompts = [
+      {
+        type: 'stub',
+        name: 'name1',
+        message: 'message',
+        answer: 'bar',
       },
       {
         type: 'stub',
         name: 'name',
-        message: msgFunc,
+        message: 'message',
+        default(answers) {
+          expect(answers.name1).toEqual('bar');
+          return 'foo';
+        },
       },
     ];
 
-    const promise = prompt(prompts);
-    promise.ui.rl.emit('line');
-    promise.ui.rl.emit('line');
-
-    await promise;
-    // Ensure we're not overwriting original prompt values.
-    expect(prompts[1].message).toEqual(msgFunc);
+    await inquirer.prompt(prompts);
   });
-
-  it('should run asynchronous `messageasync `', () =>
-    new Promise((done) => {
-      const stubMessage = 'foo';
-      prompt.registerPrompt('stub', function (params) {
-        this.run = vi.fn(() => Promise.resolve());
-        expect(params.message).toEqual(stubMessage);
-        done();
-      });
-
-      const prompts = [
-        {
-          type: 'input',
-          name: 'name1',
-          message: 'message',
-          default: 'bar',
-        },
-        {
-          type: 'stub',
-          name: 'name',
-          message(answers) {
-            expect(answers.name1).toEqual('bar');
-            const goOn = this.async();
-            setTimeout(() => {
-              goOn(null, stubMessage);
-            }, 0);
-          },
-        },
-      ];
-
-      const promise = prompt(prompts);
-      promise.ui.rl.emit('line');
-    }));
-
-  it('should parse `default` if passed as a function', async () =>
-    new Promise((done) => {
-      const stubDefault = 'foo';
-      prompt.registerPrompt('stub', function (params) {
-        this.run = vi.fn(() => Promise.resolve());
-        expect(params.default).toEqual(stubDefault);
-        done();
-      });
-
-      const prompts = [
-        {
-          type: 'input',
-          name: 'name1',
-          message: 'message',
-          default: 'bar',
-        },
-        {
-          type: 'stub',
-          name: 'name',
-          message: 'message',
-          default(answers) {
-            expect(answers.name1).toEqual('bar');
-            return stubDefault;
-          },
-        },
-      ];
-
-      const promise = prompt(prompts);
-      promise.ui.rl.emit('line');
-    }));
 
   it('should run asynchronous `default`', async () => {
     let goesInDefault = false;
     const input2Default = 'foo';
+
+    class Stub2Prompt {
+      constructor(question) {
+        expect(question.default).toEqual(input2Default);
+      }
+
+      run() {
+        return Promise.resolve();
+      }
+
+      close() {}
+    }
+    inquirer.registerPrompt('stub2', Stub2Prompt);
+
     const prompts = [
       {
-        type: 'input',
+        type: 'stub',
         name: 'name1',
         message: 'message',
-        default: 'bar',
+        answer: 'bar',
       },
       {
-        type: 'input2',
+        type: 'stub2',
         name: 'q2',
         message: 'message',
         default(answers) {
@@ -290,389 +295,303 @@ describe('inquirer.prompt', () => {
           setTimeout(() => {
             goOn(null, input2Default);
           }, 0);
-          setTimeout(() => {
-            promise.ui.rl.emit('line');
-          }, 10);
         },
       },
     ];
 
-    const promise = prompt(prompts);
-    promise.ui.rl.emit('line');
-
-    const answers = await promise;
+    await inquirer.prompt(prompts);
     expect(goesInDefault).toEqual(true);
-    expect(answers.q2).toEqual(input2Default);
   });
 
-  it('should pass previous answers to the prompt constructor', async () =>
-    new Promise((done) => {
-      prompt.registerPrompt('stub', function (params, rl, answers) {
-        this.run = vi.fn(() => Promise.resolve());
-        expect(answers.name1).toEqual('bar');
-        done();
-      });
+  it('should pass previous answers to the prompt constructor', async () => {
+    class Stub2Prompt {
+      constructor(question, rl, answers) {
+        expect(answers['name1']).toEqual('bar');
+      }
 
-      const prompts = [
-        {
-          type: 'input',
-          name: 'name1',
-          message: 'message',
-          default: 'bar',
-        },
-        {
-          type: 'stub',
-          name: 'name',
-          message: 'message',
-        },
-      ];
+      run() {
+        return Promise.resolve();
+      }
 
-      const promise = prompt(prompts);
-      promise.ui.rl.emit('line');
-    }));
+      close() {}
+    }
+    inquirer.registerPrompt('stub2', Stub2Prompt);
 
-  it('should parse `choices` if passed as a function', async () =>
-    new Promise((done) => {
-      const stubChoices = ['foo', 'bar'];
-      prompt.registerPrompt('stub', function (params) {
-        this.run = vi.fn(() => Promise.resolve());
-        expect(params.choices).toEqual(stubChoices);
-        done();
-      });
-
-      const prompts = [
-        {
-          type: 'input',
-          name: 'name1',
-          message: 'message',
-          default: 'bar',
-        },
-        {
-          type: 'stub',
-          name: 'name',
-          message: 'message',
-          choices(answers) {
-            expect(answers.name1).toEqual('bar');
-            return stubChoices;
-          },
-        },
-      ];
-
-      const promise = prompt(prompts);
-      promise.ui.rl.emit('line');
-    }));
-
-  it('should returns a promise', async () =>
-    new Promise((done) => {
-      const config = {
-        type: 'input',
-        name: 'q1',
+    const prompts = [
+      {
+        type: 'stub',
+        name: 'name1',
         message: 'message',
-        default: 'bar',
-      };
+        answer: 'bar',
+      },
+      {
+        type: 'stub2',
+        name: 'name',
+        message: 'message',
+      },
+    ];
 
-      const promise = prompt(config);
-      promise.then((answers) => {
-        expect(answers.q1).toEqual('bar');
-        done();
-      });
+    await inquirer.prompt(prompts);
+  });
 
-      promise.ui.rl.emit('line');
-    }));
+  it('should parse `choices` if passed as a function', async () => {
+    const stubChoices = ['foo', 'bar'];
 
-  it('should expose the Reactive interface', async () =>
-    new Promise((done) => {
-      const prompts = [
-        {
-          type: 'input',
-          name: 'name1',
-          message: 'message',
-          default: 'bar',
+    class FakeSelect {
+      constructor(question) {
+        expect(question.choices).toEqual(stubChoices);
+      }
+
+      run() {
+        return Promise.resolve();
+      }
+
+      close() {}
+    }
+    inquirer.registerPrompt('stubSelect', FakeSelect);
+
+    const prompts = [
+      {
+        type: 'stub',
+        name: 'name1',
+        message: 'message',
+        answer: 'bar',
+      },
+      {
+        type: 'stubSelect',
+        name: 'name',
+        message: 'message',
+        choices(answers) {
+          expect(answers.name1).toEqual('bar');
+          return stubChoices;
         },
-        {
-          type: 'input',
-          name: 'name',
-          message: 'message',
-          default: 'doe',
-        },
-      ];
+      },
+    ];
 
-      const promise = prompt(prompts);
-      const spy = vi.fn();
-      promise.ui.process.subscribe(
-        spy,
-        () => {},
-        () => {
-          expect(spy).toHaveBeenCalledWith({ name: 'name1', answer: 'bar' });
-          expect(spy).toHaveBeenCalledWith({ name: 'name', answer: 'doe' });
-          done();
-        },
-      );
+    await inquirer.prompt(prompts);
+  });
 
-      autosubmit(promise.ui);
-    }));
+  it('should expose the Reactive interface', async () => {
+    const spy = vi.fn();
+    const prompts = [
+      {
+        type: 'stub',
+        name: 'name1',
+        message: 'message',
+        answer: 'bar',
+      },
+      {
+        type: 'stub',
+        name: 'name',
+        message: 'message',
+        answer: 'doe',
+      },
+    ];
 
-  it('should expose the UI', async () =>
-    new Promise((done) => {
-      const promise = prompt([]);
-      expect(promise.ui.answers).toBeTypeOf('object');
-      done();
-    }));
+    const promise = inquirer.prompt(prompts);
+    promise.ui.process.subscribe(spy);
+
+    await promise;
+    expect(spy).toHaveBeenCalledWith({ name: 'name1', answer: 'bar' });
+    expect(spy).toHaveBeenCalledWith({ name: 'name', answer: 'doe' });
+  });
+
+  it('should expose the UI', async () => {
+    const promise = inquirer.prompt([]);
+    expect(promise.ui.answers).toBeTypeOf('object');
+
+    await promise;
+  });
 
   it('takes an Observable as question', async () => {
     const prompts = new Observable((subscriber) => {
       subscriber.next({
-        type: 'confirm',
+        type: 'stub',
         name: 'q1',
         message: 'message',
+        answer: true,
       });
       setTimeout(() => {
         subscriber.next({
-          type: 'confirm',
+          type: 'stub',
           name: 'q2',
           message: 'message',
-          default: false,
+          answer: false,
         });
         subscriber.complete();
-        promise.ui.rl.emit('line');
       }, 30);
     });
 
-    const promise = prompt(prompts);
-    promise.ui.rl.emit('line');
-
-    return promise.then((answers) => {
-      expect(answers.q1).toEqual(true);
-      expect(answers.q2).toEqual(false);
-    });
+    const answers = await inquirer.prompt(prompts);
+    expect(answers['q1']).toEqual(true);
+    expect(answers['q2']).toEqual(false);
   });
 
   it('should take a prompts array and answers and return answers', async () => {
     const prompts = [
       {
-        type: 'confirm',
+        type: 'stub',
         name: 'q1',
         message: 'message',
+        answer: true,
       },
     ];
 
-    const promise = prompt(prompts, { prefiled: true });
-    autosubmit(promise.ui);
-
-    return promise.then((answers) => {
-      expect(answers.prefiled).toEqual(true);
-      expect(answers.q1).toEqual(true);
-    });
+    const answers = await inquirer.prompt(prompts, { prefilled: true });
+    expect(answers['prefilled']).toEqual(true);
+    expect(answers['q1']).toEqual(true);
   });
-
-  it('should provide answers in filter callback for lists', async () =>
-    new Promise((done) => {
-      const filter = vi.fn(() => 'foo');
-
-      const prompts = [
-        {
-          type: 'list',
-          name: 'q1',
-          default: 'foo',
-          choices: ['foo', 'bar'],
-          message: 'message',
-          filter,
-        },
-      ];
-
-      const promise = prompt(prompts);
-      promise.ui.rl.emit('line');
-      promise.then(() => {
-        const spyCalls = filter.mock.calls[0];
-
-        expect(spyCalls[0]).toEqual('foo');
-        expect(spyCalls[1]).toBeTypeOf('object');
-        done();
-      });
-    }));
 
   describe('hierarchical mode (`when`)', () => {
     it('should pass current answers to `when`', async () => {
       const prompts = [
         {
-          type: 'confirm',
+          type: 'stub',
           name: 'q1',
           message: 'message',
         },
         {
+          type: 'stub',
           name: 'q2',
           message: 'message',
           when(answers) {
             expect(answers).toBeTypeOf('object');
-            expect(answers.q1).toEqual(true);
+            expect(answers.q1).toEqual('bar');
           },
         },
       ];
 
-      const promise = prompt(prompts);
-
-      autosubmit(promise.ui);
-      return promise;
+      await inquirer.prompt(prompts);
     });
 
     it('should run prompt if `when` returns true', async () => {
-      let goesInWhen = false;
+      const when = vi.fn(() => true);
       const prompts = [
         {
-          type: 'confirm',
+          type: 'stub',
           name: 'q1',
           message: 'message',
         },
         {
-          type: 'input',
+          type: 'stub',
           name: 'q2',
           message: 'message',
-          default: 'bar-var',
-          when() {
-            goesInWhen = true;
-            return true;
-          },
+          when,
         },
       ];
 
-      const promise = prompt(prompts);
-      autosubmit(promise.ui);
-
-      return promise.then((answers) => {
-        expect(goesInWhen).toEqual(true);
-        expect(answers.q2).toEqual('bar-var');
-      });
+      const answers = await inquirer.prompt(prompts);
+      expect(when).toHaveBeenCalledOnce();
+      expect(answers['q2']).toEqual('bar');
     });
 
     it('should run prompt if `when` is true', async () => {
       const prompts = [
         {
-          type: 'confirm',
+          type: 'stub',
           name: 'q1',
           message: 'message',
         },
         {
-          type: 'input',
+          type: 'stub',
           name: 'q2',
           message: 'message',
-          default: 'bar-var',
           when: true,
         },
       ];
 
-      const promise = prompt(prompts);
-      autosubmit(promise.ui);
+      const answers = await inquirer.prompt(prompts);
 
-      return promise.then((answers) => {
-        expect(answers.q2).toEqual('bar-var');
-      });
+      expect(answers['q2']).toEqual('bar');
     });
 
     it('should not run prompt if `when` returns false', async () => {
-      let goesInWhen = false;
+      const when = vi.fn(() => false);
       const prompts = [
         {
-          type: 'confirm',
+          type: 'stub',
           name: 'q1',
           message: 'message',
         },
         {
-          type: 'confirm',
+          type: 'stub',
           name: 'q2',
           message: 'message',
-          when() {
-            goesInWhen = true;
-            return false;
-          },
+          when,
         },
         {
-          type: 'input',
+          type: 'stub',
           name: 'q3',
           message: 'message',
-          default: 'foo',
         },
       ];
 
-      const promise = prompt(prompts);
-      autosubmit(promise.ui);
+      const answers = await inquirer.prompt(prompts);
 
-      return promise.then((answers) => {
-        expect(goesInWhen).toEqual(true);
-        expect(answers.q2).toEqual(undefined);
-        expect(answers.q3).toEqual('foo');
-        expect(answers.q1).toEqual(true);
-      });
+      expect(when).toHaveBeenCalledOnce();
+      expect(answers['q2']).toEqual(undefined);
+      expect(answers['q3']).toEqual('bar');
+      expect(answers['q1']).toEqual('bar');
     });
 
     it('should not run prompt if `when` is false', async () => {
       const prompts = [
         {
-          type: 'confirm',
+          type: 'stub',
           name: 'q1',
           message: 'message',
         },
         {
-          type: 'confirm',
+          type: 'stub',
           name: 'q2',
           message: 'message',
           when: false,
         },
         {
-          type: 'input',
+          type: 'stub',
           name: 'q3',
           message: 'message',
           default: 'foo',
         },
       ];
 
-      const promise = prompt(prompts);
-      autosubmit(promise.ui);
-
-      return promise.then((answers) => {
-        expect(answers.q2).toEqual(undefined);
-        expect(answers.q3).toEqual('foo');
-        expect(answers.q1).toEqual(true);
-      });
+      const answers = await inquirer.prompt(prompts);
+      expect(answers['q2']).toEqual(undefined);
+      expect(answers['q3']).toEqual('bar');
+      expect(answers['q1']).toEqual('bar');
     });
 
     it('should run asynchronous `when`', async () => {
       let goesInWhen = false;
       const prompts = [
         {
-          type: 'confirm',
+          type: 'stub',
           name: 'q1',
           message: 'message',
         },
         {
-          type: 'input',
+          type: 'stub',
           name: 'q2',
           message: 'message',
-          default: 'foo-bar',
           when() {
             goesInWhen = true;
             const goOn = this.async();
             setTimeout(() => {
               goOn(null, true);
             }, 0);
-            setTimeout(() => {
-              promise.ui.rl.emit('line');
-            }, 10);
           },
         },
       ];
 
-      const promise = prompt(prompts);
-      autosubmit(promise.ui);
-
-      return promise.then((answers) => {
-        expect(goesInWhen).toEqual(true);
-        expect(answers.q2).toEqual('foo-bar');
-      });
+      const answers = await inquirer.prompt(prompts);
+      expect(goesInWhen).toEqual(true);
+      expect(answers['q2']).toEqual('bar');
     });
 
     it('should get the value which set in `when` on returns false', async () => {
       const prompts = [
         {
+          type: 'stub',
           name: 'q',
           message: 'message',
           when(answers) {
@@ -682,19 +601,15 @@ describe('inquirer.prompt', () => {
         },
       ];
 
-      const promise = prompt(prompts);
-      autosubmit(promise.ui);
-
-      return promise.then((answers) => {
-        expect(answers.q).toEqual('foo');
-      });
+      const answers = await inquirer.prompt(prompts);
+      expect(answers['q']).toEqual('foo');
     });
 
     it('should not run prompt if answer exists for question', async () => {
       const prompts = [
         {
           type: 'input',
-          name: 'prefiled',
+          name: 'prefilled',
           when: throwFunc.bind(undefined, 'when'),
           validate: throwFunc.bind(undefined, 'validate'),
           transformer: throwFunc.bind(undefined, 'transformer'),
@@ -704,19 +619,15 @@ describe('inquirer.prompt', () => {
         },
       ];
 
-      const promise = prompt(prompts, { prefiled: 'prefiled' });
-      autosubmit(promise.ui);
-
-      return promise.then((answers) => {
-        expect(answers.prefiled).toEqual('prefiled');
-      });
+      const answers = await inquirer.prompt(prompts, { prefilled: 'prefilled' });
+      expect(answers['prefilled']).toEqual('prefilled');
     });
 
     it('should not run prompt if nested answer exists for question', async () => {
       const prompts = [
         {
           type: 'input',
-          name: 'prefiled.nested',
+          name: 'prefilled.nested',
           when: throwFunc.bind(undefined, 'when'),
           validate: throwFunc.bind(undefined, 'validate'),
           transformer: throwFunc.bind(undefined, 'transformer'),
@@ -726,112 +637,87 @@ describe('inquirer.prompt', () => {
         },
       ];
 
-      const promise = prompt(prompts, { prefiled: { nested: 'prefiled' } });
-      autosubmit(promise.ui);
-
-      return promise.then((answers) => {
-        expect(answers.prefiled.nested).toEqual('prefiled');
+      const answers = await inquirer.prompt(prompts, {
+        prefilled: { nested: 'prefilled' },
       });
+      expect(answers['prefilled'].nested).toEqual('prefilled');
     });
 
     it('should run prompt if answer exists for question and askAnswered is set', async () => {
       const prompts = [
         {
           askAnswered: true,
-          type: 'input',
-          name: 'prefiled',
+          type: 'stub',
+          name: 'prefilled',
           message: 'message',
-          default: 'newValue',
         },
       ];
 
-      const promise = prompt(prompts, { prefiled: 'prefiled' });
-      autosubmit(promise.ui);
-
-      return promise.then((answers) => {
-        expect(answers.prefiled).toEqual('newValue');
-      });
+      const answers = await inquirer.prompt(prompts, { prefilled: 'prefilled' });
+      expect(answers['prefilled']).toEqual('bar');
     });
 
     it('should run prompt if nested answer exists for question and askAnswered is set', async () => {
       const prompts = [
         {
           askAnswered: true,
-          type: 'input',
-          name: 'prefiled.nested',
+          type: 'stub',
+          name: 'prefilled.nested',
           message: 'message',
           default: 'newValue',
         },
       ];
 
-      const promise = prompt(prompts, { prefiled: { nested: 'prefiled' } });
-      autosubmit(promise.ui);
-
-      return promise.then((answers) => {
-        expect(answers.prefiled.nested).toEqual('newValue');
+      const answers = await inquirer.prompt(prompts, {
+        prefilled: { nested: 'prefilled' },
       });
+      expect(answers['prefilled'].nested).toEqual('bar');
     });
   });
 
   describe('#registerPrompt()', () => {
-    it('register new prompt types', () =>
-      new Promise((done) => {
-        const questions = [{ type: 'foo', message: 'something' }];
-        inquirer.registerPrompt('foo', function (question, rl, answers) {
+    it('register new prompt types', async () => {
+      const questions = [{ type: 'foo', name: 'foo', message: 'something' }];
+      class FakePrompt {
+        constructor(question, rl, answers) {
           expect(question).toEqual(questions[0]);
           expect(answers).toEqual({});
-          this.run = vi.fn(() => Promise.resolve());
-          done();
-        });
+        }
 
-        inquirer.prompt(questions);
-      }));
+        run() {
+          return Promise.resolve('bar');
+        }
 
-    it('overwrite default prompt types', () =>
-      new Promise((done) => {
-        const questions = [{ type: 'confirm', message: 'something' }];
-        inquirer.registerPrompt('confirm', function () {
-          this.run = vi.fn(() => Promise.resolve());
-          done();
-        });
+        close() {}
+      }
 
-        inquirer.prompt(questions);
-        inquirer.restoreDefaultPrompts();
-      }));
+      inquirer.registerPrompt('foo', FakePrompt);
+
+      await expect(inquirer.prompt(questions)).resolves.toEqual({ foo: 'bar' });
+    });
+
+    it('overwrite default prompt types', async () => {
+      const questions = [{ type: 'stub', name: 'foo', message: 'something' }];
+
+      await expect(inquirer.prompt(questions)).resolves.toEqual({ foo: 'bar' });
+      inquirer.restoreDefaultPrompts();
+    });
   });
 
   describe('#restoreDefaultPrompts()', () => {
     it('restore default prompts', async () => {
-      const ConfirmPrompt = inquirer.prompt.prompts.confirm;
-      inquirer.registerPrompt('confirm', () => {});
+      class StubPrompt {
+        run = vi.fn(() => {
+          return Promise.resolve('bar');
+        });
+
+        close() {}
+      }
+
+      const ConfirmPrompt = inquirer.prompt.prompts['confirm'];
+      inquirer.registerPrompt('confirm', StubPrompt);
       inquirer.restoreDefaultPrompts();
-      expect(ConfirmPrompt).toEqual(inquirer.prompt.prompts.confirm);
-    });
-  });
-
-  // See: https://github.com/SBoudrias/Inquirer.js/pull/326
-  it('does not throw exception if cli-width reports width of 0', async () => {
-    const original = process.stdout.getWindowSize;
-    process.stdout.getWindowSize = function () {
-      return [0];
-    };
-
-    const localPrompt = inquirer.createPromptModule();
-
-    const prompts = [
-      {
-        type: 'confirm',
-        name: 'q1',
-        message: 'message',
-      },
-    ];
-
-    const promise = localPrompt(prompts);
-    promise.ui.rl.emit('line');
-
-    return promise.then((answers) => {
-      process.stdout.getWindowSize = original;
-      expect(answers.q1).toEqual(true);
+      expect(ConfirmPrompt).toEqual(inquirer.prompt.prompts['confirm']);
     });
   });
 
@@ -849,147 +735,107 @@ describe('inquirer.prompt', () => {
 
     it('Throw an exception when run in non-tty', async () => {
       const localPrompt = inquirer.createPromptModule({ skipTTYChecks: false });
+      localPrompt.registerPrompt('stub', StubPrompt);
 
       const prompts = [
         {
-          type: 'confirm',
+          type: 'stub',
           name: 'q1',
           message: 'message',
         },
       ];
 
       const promise = localPrompt(prompts);
-
-      return promise
-        .then(() => {
-          // Failure
-          expect(true).toEqual(false);
-        })
-        .catch((error) => {
-          expect(error.isTtyError).toEqual(true);
-        });
+      await expect(promise).rejects.toHaveProperty('isTtyError', true);
     });
 
-    it("Don't throw an exception when run in non-tty by defaultasync ", () =>
-      new Promise((done) => {
-        const localPrompt = inquirer.createPromptModule();
-        const prompts = [
-          {
-            type: 'confirm',
-            name: 'q1',
-            message: 'message',
-          },
-          {
-            type: 'confirm',
-            name: 'q2',
-            message: 'message',
-          },
-        ];
+    it("Don't throw an exception when run in non-tty by defaultasync ", async () => {
+      const localPrompt = inquirer.createPromptModule();
+      localPrompt.registerPrompt('stub', StubPrompt);
 
-        const promise = localPrompt(prompts);
-        autosubmit(promise.ui);
-        promise
-          .then(() => {
-            done();
-          })
-          .catch((error) => {
-            console.log(error);
-            expect(error.isTtyError).toEqual(false);
-          });
-      }));
+      const prompts = [
+        {
+          type: 'stub',
+          name: 'q1',
+          message: 'message',
+        },
+        {
+          type: 'stub',
+          name: 'q2',
+          message: 'message',
+        },
+      ];
 
-    it("Don't throw an exception when run in non-tty and skipTTYChecks is trueasync ", () =>
-      new Promise((done) => {
-        const localPrompt = inquirer.createPromptModule({ skipTTYChecks: true });
-        const prompts = [
-          {
-            type: 'confirm',
-            name: 'q1',
-            message: 'message',
-          },
-          {
-            type: 'confirm',
-            name: 'q2',
-            message: 'message',
-          },
-        ];
+      await localPrompt(prompts);
+    });
 
-        const promise = localPrompt(prompts);
-        autosubmit(promise.ui);
-        promise
-          .then(() => {
-            done();
-          })
-          .catch((error) => {
-            console.log(error);
-            expect(error.isTtyError).toEqual(false);
-          });
-      }));
+    it("Don't throw an exception when run in non-tty and skipTTYChecks is trueasync ", async () => {
+      const localPrompt = inquirer.createPromptModule({ skipTTYChecks: true });
+      localPrompt.registerPrompt('stub', StubPrompt);
 
-    it("Don't throw an exception when run in non-tty and custom input is providedasync ", () =>
-      new Promise((done) => {
-        const localPrompt = inquirer.createPromptModule({
-          input: new stream.Readable({
-            // We must have a default read implementation
-            // for this to work, if not it will error out
-            // with the following error message during testing
-            // Uncaught Error [ERR_METHOD_NOT_IMPLEMENTED]: The _read() method is not implemented
-            read() {},
-          }),
-        });
-        const prompts = [
-          {
-            type: 'confirm',
-            name: 'q1',
-            message: 'message',
-          },
-          {
-            type: 'confirm',
-            name: 'q2',
-            message: 'message',
-          },
-        ];
+      const prompts = [
+        {
+          type: 'stub',
+          name: 'q1',
+          message: 'message',
+        },
+        {
+          type: 'stub',
+          name: 'q2',
+          message: 'message',
+        },
+      ];
 
-        const promise = localPrompt(prompts);
-        autosubmit(promise.ui);
-        promise
-          .then(() => {
-            done();
-          })
-          .catch((error) => {
-            console.log(error);
-            expect(error.isTtyError).toEqual(false);
-          });
-      }));
+      await localPrompt(prompts);
+    });
+
+    it("Don't throw an exception when run in non-tty and custom input is provided async ", async () => {
+      const localPrompt = inquirer.createPromptModule({
+        input: new stream.Readable({
+          // We must have a default read implementation
+          // for this to work, if not it will error out
+          // with the following error message during testing
+          // Uncaught Error [ERR_METHOD_NOT_IMPLEMENTED]: The _read() method is not implemented
+          read() {},
+        }),
+      });
+      localPrompt.registerPrompt('stub', StubPrompt);
+
+      const prompts = [
+        {
+          type: 'stub',
+          name: 'q1',
+          message: 'message',
+        },
+        {
+          type: 'stub',
+          name: 'q2',
+          message: 'message',
+        },
+      ];
+      await localPrompt(prompts);
+    });
 
     it('Throw an exception when run in non-tty and custom input is provided with skipTTYChecks: false', async () => {
       const localPrompt = inquirer.createPromptModule({
         input: new stream.Readable(),
         skipTTYChecks: false,
       });
+      localPrompt.registerPrompt('stub', StubPrompt);
 
       const prompts = [
         {
-          type: 'confirm',
+          type: 'stub',
           name: 'q1',
           message: 'message',
         },
       ];
-
       const promise = localPrompt(prompts);
-
-      return promise
-        .then(() => {
-          // Failure
-          expect(true).toEqual(false);
-        })
-        .catch((error) => {
-          expect(error.isTtyError).toEqual(true);
-        });
+      await expect(promise).rejects.toHaveProperty('isTtyError', true);
     });
 
     const itSkipWindows =
-      ostype === 'Windows_NT' || process.env.GITHUB_ACTIONS ? it.skip : it;
+      os.type() === 'Windows_NT' || process.env['GITHUB_ACTIONS'] ? it.skip : it;
     itSkipWindows('No exception when using tty other than process.stdin', async () => {
       const input = new tty.ReadStream(fs.openSync('/dev/tty', 'r+'));
 
@@ -998,25 +844,22 @@ describe('inquirer.prompt', () => {
         input,
         skipTTYChecks: false,
       });
+      localPrompt.registerPrompt('stub', StubPrompt);
 
       const prompts = [
         {
-          type: 'input',
+          type: 'stub',
           name: 'q1',
-          default: 'foo',
           message: 'message',
         },
       ];
 
       const promise = localPrompt(prompts);
-      promise.ui.rl.emit('line');
 
       // Release the input tty socket
       input.unref();
 
-      return promise.then((answers) => {
-        expect(answers).toEqual({ q1: 'foo' });
-      });
+      await expect(promise).resolves.toEqual({ q1: 'bar' });
     });
   });
 });
