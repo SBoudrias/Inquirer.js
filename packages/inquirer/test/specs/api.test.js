@@ -5,7 +5,7 @@
 import { beforeEach, describe, it, expect } from 'vitest';
 import fixtures from '../helpers/fixtures.js';
 import ReadlineStub from '../helpers/readline.js';
-import inquirer from '../../src/index.js';
+import inquirer from '../../lib/index.js';
 import { autosubmit } from '../helpers/events.js';
 
 // Define prompts and their public API

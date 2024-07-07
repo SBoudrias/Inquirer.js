@@ -3,7 +3,7 @@
  * run example by writing `node pizza.js` in your console
  */
 
-import inquirer from '../src/index.js';
+import inquirer from '../lib/index.js';
 
 console.log('Hi, welcome to Node Pizza');
 

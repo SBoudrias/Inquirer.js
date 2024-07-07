@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import BottomBar from '../src/ui/bottom-bar.js';
+import BottomBar from '../lib/ui/bottom-bar.js';
 
 const loader = ['/ Installing', '| Installing', String.raw`\ Installing`, '- Installing'];
 let i = 4;

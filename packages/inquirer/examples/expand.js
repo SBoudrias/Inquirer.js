@@ -2,7 +2,7 @@
  * Expand list examples
  */
 
-import inquirer from '../src/index.js';
+import inquirer from '../lib/index.js';
 
 inquirer
   .prompt([

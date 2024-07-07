@@ -2,7 +2,7 @@
  * Editor prompt example
  */
 
-import inquirer from '../src/index.js';
+import inquirer from '../lib/index.js';
 
 const questions = [
   {

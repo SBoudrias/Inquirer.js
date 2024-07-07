@@ -1,7 +1,7 @@
 import { describe, it, beforeEach, expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
-import Input from '../../../src/prompts/input.js';
+import Input from '../../../lib/prompts/input.js';
 
 describe('`input` prompt', () => {
   beforeEach(function () {

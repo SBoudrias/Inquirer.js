@@ -2,7 +2,7 @@ import { beforeEach, describe, it, expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
-import Expand from '../../../src/prompts/expand.js';
+import Expand from '../../../lib/prompts/expand.js';
 
 describe('`expand` prompt', () => {
   let fixture;

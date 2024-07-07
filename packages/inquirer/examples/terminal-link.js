@@ -5,7 +5,7 @@
  */
 
 import terminalLink from 'terminal-link';
-import inquirer from '../src/index.js';
+import inquirer from '../lib/index.js';
 
 inquirer
   .prompt([

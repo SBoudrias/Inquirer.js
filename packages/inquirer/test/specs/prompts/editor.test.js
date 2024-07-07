@@ -3,7 +3,7 @@ import { beforeEach, afterEach, describe, it, expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
-import Editor from '../../../src/prompts/editor.js';
+import Editor from '../../../lib/prompts/editor.js';
 
 const defaultVisual = process.env.VISUAL;
 

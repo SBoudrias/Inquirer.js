@@ -5,9 +5,9 @@
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "files": [
-    "src"
+    "lib"
   ],
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "keywords": [
     "answer",
     "answers",
@@ -73,28 +73,5 @@
     "yoctocolors-cjs": "^2.1.2"
   },
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/inquirer/README.md",
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "import": "./src/index.js"
-    },
-    "./lib/objects/choices.js": {
-      "import": "./src/objects/choices.js"
-    },
-    "./lib/objects/separator.js": {
-      "import": "./src/objects/separator.js"
-    },
-    "./lib/prompts/base.js": {
-      "import": "./src/prompts/base.js"
-    },
-    "./lib/utils/events.js": {
-      "import": "./src/utils/events.js"
-    },
-    "./lib/utils/paginator.js": {
-      "import": "./src/utils/paginator.js"
-    },
-    "./lib/utils/readline.js": {
-      "import": "./src/utils/readline.js"
-    }
-  }
+  "sideEffects": false
 }
