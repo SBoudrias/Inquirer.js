@@ -16,6 +16,7 @@ export default defineConfig({
         '**/*.type.mts',
       ],
     },
+    testTimeout: 300,
   },
   resolve: {
     alias: [
