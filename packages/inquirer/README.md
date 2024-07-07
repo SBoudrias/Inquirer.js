@@ -52,9 +52,28 @@ A collection of common interactive command line user interfaces.
 
 <a name="installation"></a>
 
-```shell
-npm install --save inquirer
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
+
+```sh
+npm install inquirer
 ```
+
+</td>
+<td>
+
+```sh
+yarn add inquirer
+```
+
+</td>
+</tr>
+</table>
 
 ```javascript
 import inquirer from 'inquirer';

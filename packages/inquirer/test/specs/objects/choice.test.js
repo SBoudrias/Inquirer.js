@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
-import Choice from '../../../src/objects/choice.js';
-import Separator from '../../../src/objects/separator.js';
+import Choice from '../../../lib/objects/choice.js';
+import Separator from '../../../lib/objects/separator.js';
 
 describe('Choice object', () => {
   it('should normalize accept String as value', () => {

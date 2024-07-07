@@ -9,7 +9,7 @@ import tty from 'node:tty';
 import { vi, expect, beforeEach, afterEach, describe, it } from 'vitest';
 import { Observable } from 'rxjs';
 
-import inquirer from '../../src/index.js';
+import inquirer from '../../lib/index.js';
 import { autosubmit } from '../helpers/events.js';
 
 const ostype = os.type();

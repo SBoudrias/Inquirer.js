@@ -1,4 +1,4 @@
-import inquirer from '../../src/index.js';
+import inquirer from '../../lib/index.js';
 
 export default {
   input: {

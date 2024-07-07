@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import stripAnsi from 'strip-ansi';
 
-import Separator from '../../../src/objects/separator.js';
-import inquirer from '../../../src/index.js';
+import Separator from '../../../lib/objects/separator.js';
+import inquirer from '../../../lib/index.js';
 
 describe('Separator constructor', () => {
   it('should set a default', () => {

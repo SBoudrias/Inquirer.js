@@ -2,7 +2,7 @@ import { beforeEach, describe, it, expect } from 'vitest';
 import ReadlineStub from '../../helpers/readline.js';
 import fixtures from '../../helpers/fixtures.js';
 
-import NumberPrompt from '../../../src/prompts/number.js';
+import NumberPrompt from '../../../lib/prompts/number.js';
 
 const ACCEPTABLE_ERROR = 0.001;
 
