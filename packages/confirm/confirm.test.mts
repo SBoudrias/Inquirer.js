@@ -113,7 +113,7 @@ describe('confirm prompt', () => {
   it('supports transformer option', async () => {
     const { answer, events, getScreen } = await render(confirm, {
       message: 'Do you want to proceed?',
-      transformer: (value) => (value ? 'Oui!' : 'Oh non!'),
+      transformer: (value: boolean) => (value ? 'Oui!' : 'Oh non!'),
     });
 
     expect(getScreen()).toMatchInlineSnapshot('"? Do you want to proceed? (Y/n)"');

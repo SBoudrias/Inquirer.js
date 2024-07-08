@@ -29,9 +29,11 @@ describe('@inquirer/prompts', () => {
 /**
  * Type assertions to validate the interfaces.
  */
-Expect<
-  Equal<
-    Parameters<typeof checkbox>[0]['theme']['helpMode'],
-    Parameters<typeof select>[0]['theme']['helpMode']
-  >
->;
+export interface Test {
+  1: Expect<
+    Equal<
+      NonNullable<Parameters<typeof checkbox>[0]['theme']>['helpMode'],
+      NonNullable<Parameters<typeof select>[0]['theme']>['helpMode']
+    >
+  >;
+}

@@ -23,7 +23,8 @@ describe('input prompt', () => {
   it('handle transformer', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
-      transformer: (value, { isFinal }) => (isFinal ? 'Transformed' : `t+${value}`),
+      transformer: (value: string, { isFinal }: { isFinal: boolean }) =>
+        isFinal ? 'Transformed' : `t+${value}`,
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`"? What is your name t+"`);
@@ -39,7 +40,7 @@ describe('input prompt', () => {
   it('handle synchronous validation', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'Answer 2 ===',
-      validate: (value) => value === '2',
+      validate: (value: string) => value === '2',
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 ==="`);
@@ -65,8 +66,8 @@ describe('input prompt', () => {
   it('handle asynchronous validation', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'Answer 2 ===',
-      validate(value) {
-        return new Promise((resolve) => {
+      validate: (value: string) => {
+        return new Promise<string | boolean>((resolve) => {
           if (value === '2') {
             resolve(true);
           } else {
@@ -198,13 +199,13 @@ describe('input prompt', () => {
   it('is theme-able', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'Answer must be: 2',
-      validate: (value) => value === '2',
+      validate: (value?: string) => value === '2',
       theme: {
         prefix: 'Q:',
         style: {
-          message: (text) => `${text} ===`,
-          error: (text) => `!! ${text} !!`,
-          answer: (text) => `_${text}_`,
+          message: (text: string) => `${text} ===`,
+          error: (text: string) => `!! ${text} !!`,
+          answer: (text: string) => `_${text}_`,
         },
       },
     });

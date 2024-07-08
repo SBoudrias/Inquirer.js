@@ -16,7 +16,7 @@ const numberedChoices = [
   { value: 10 },
   { value: 11 },
   { value: 12 },
-];
+] as const;
 
 afterEach(() => {
   vi.useRealTimers();

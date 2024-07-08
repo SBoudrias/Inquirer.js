@@ -73,7 +73,7 @@ describe('editor prompt', () => {
   it('handles validation', async () => {
     const { answer, events, getScreen } = await render(editor, {
       message: 'Add a description',
-      validate(value) {
+      validate: (value: string) => {
         switch (value) {
           case '1': {
             return true;

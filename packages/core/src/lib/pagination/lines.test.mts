@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { lines } from './lines.mjs';
 
-function renderResult(result) {
+function renderResult(result: string[]) {
   return `\n${result.join('\n')}\n`;
 }
 

@@ -54,7 +54,7 @@ describe('createPrompt()', () => {
   });
 
   it('useEffect: works with setting state at once with objects', async () => {
-    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+    const Prompt = (_config: { message: string }, done: (value: string) => void) => {
       const [value, setValue] = useState([1, 2]);
 
       useEffect(() => {
@@ -518,7 +518,7 @@ describe('Error handling', () => {
   });
 
   it('surface errors in useEffect cleanup functions', async () => {
-    const Prompt = (config: object, done: (value: string) => void) => {
+    const Prompt = (_config: object, done: (value: string) => void) => {
       useEffect(() => {
         done('done');
 
@@ -537,7 +537,7 @@ describe('Error handling', () => {
   });
 
   it('prevent returning promises from useEffect hook', async () => {
-    const Prompt = (config: object, done: (value: string) => void) => {
+    const Prompt = (_config: object, done: (value: string) => void) => {
       // @ts-expect-error: Testing an invalid behavior.
       useEffect(async () => {
         done('done');

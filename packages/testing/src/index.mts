@@ -2,7 +2,7 @@ import { Stream } from 'node:stream';
 import MuteStream from 'mute-stream';
 import stripAnsi from 'strip-ansi';
 import ansiEscapes from 'ansi-escapes';
-import type { Prompt } from '@inquirer/type';
+import type { Prompt, Context } from '@inquirer/type';
 
 const ignoredAnsi = new Set([ansiEscapes.cursorHide, ansiEscapes.cursorShow]);
 
@@ -42,11 +42,11 @@ class BufferedStream extends Stream.Writable {
   }
 }
 
-export async function render<TestedPrompt extends Prompt<unknown, unknown>>(
-  prompt: TestedPrompt,
-  props: Parameters<TestedPrompt>[0],
-  options?: Parameters<TestedPrompt>[1],
-) {
+export async function render<
+  const Props,
+  const Value,
+  const TestedPrompt extends Prompt<Value, Props>,
+>(prompt: TestedPrompt, props: Props, options?: Context) {
   const input = new MuteStream();
   input.unmute();
 
