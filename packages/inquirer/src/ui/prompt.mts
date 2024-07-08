@@ -161,8 +161,8 @@ function setupReadlineOptions(opt: StreamOptions = {}) {
   };
 }
 
-function isQuestionMap<T extends Answers = Answers>(
-  questions: Question<T> | QuestionAnswerMap<T> | QuestionArray<T>,
+function isQuestionMap<T extends Answers>(
+  questions: QuestionArray<T> | QuestionAnswerMap<T> | Question<T>,
 ): questions is QuestionAnswerMap<T> {
   return Object.values(questions).every(
     (maybeQuestion) =>
@@ -185,7 +185,7 @@ function isPromptConstructor(
 /**
  * Base interface class other can inherits from
  */
-export default class PromptsRunner<T extends Answers = Answers> extends Base {
+export default class PromptsRunner<T extends Answers> extends Base {
   prompts: PromptCollection;
   answers: Partial<T> = {};
   process: Observable<any>;
@@ -202,12 +202,12 @@ export default class PromptsRunner<T extends Answers = Answers> extends Base {
 
   run(
     questions:
-      | Question<T>
+      | QuestionArray<T>
       | QuestionAnswerMap<T>
       | QuestionObservable<T>
-      | QuestionArray<T>,
+      | Question<T>,
     answers?: Partial<T>,
-  ): Promise<T> & { ui: PromptsRunner } {
+  ): Promise<T> & { ui: PromptsRunner<T> } {
     // Keep global reference to the answers
     this.answers = typeof answers === 'object' ? { ...answers } : {};
 
@@ -244,11 +244,9 @@ export default class PromptsRunner<T extends Answers = Answers> extends Base {
     ).then(
       () => this.onCompletion(),
       (error) => this.onError(error),
-    );
+    ) as Promise<T>;
 
-    // @ts-expect-error Monkey patch the UI on the promise object so
-    promise.ui = this;
-    return promise as Promise<T> & { ui: PromptsRunner };
+    return Object.assign(promise, { ui: this });
   }
 
   /**
@@ -386,7 +384,7 @@ export default class PromptsRunner<T extends Answers = Answers> extends Base {
           }
           return;
         }),
-      ).pipe(filter((val): val is Question => val != null)),
+      ).pipe(filter((val): val is Question<T> => val != null)),
     );
   }
 }

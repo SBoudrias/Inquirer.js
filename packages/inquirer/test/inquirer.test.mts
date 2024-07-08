@@ -156,12 +156,10 @@ describe('inquirer.prompt', () => {
   });
 
   it('should take a single prompt and return answer', async () => {
-    const config = {
+    const answers = await inquirer.prompt({
       type: 'stub',
       name: 'q1',
-    };
-
-    const answers = await inquirer.prompt(config);
+    });
     expect(answers).toEqual({ q1: 'bar' });
   });
 
@@ -352,7 +350,7 @@ describe('inquirer.prompt', () => {
     }
     inquirer.registerPrompt('stubSelect', FakeSelect);
 
-    const prompts = [
+    await inquirer.prompt([
       {
         type: 'stub',
         name: 'name1',
@@ -363,19 +361,18 @@ describe('inquirer.prompt', () => {
         type: 'stubSelect',
         name: 'name',
         message: 'message',
-        choices(answers) {
+        choices(answers: { name1: string }) {
           expect(answers.name1).toEqual('bar');
           return stubChoices;
         },
       },
-    ];
-
-    await inquirer.prompt(prompts);
+    ]);
   });
 
   it('should expose the Reactive interface', async () => {
     const spy = vi.fn();
-    const prompts = [
+
+    const promise = inquirer.prompt([
       {
         type: 'stub',
         name: 'name1',
@@ -388,9 +385,7 @@ describe('inquirer.prompt', () => {
         message: 'message',
         answer: 'doe',
       },
-    ];
-
-    const promise = inquirer.prompt(prompts);
+    ]);
     promise.ui.process.subscribe(spy);
 
     await promise;
@@ -616,7 +611,7 @@ describe('inquirer.prompt', () => {
     });
 
     it('should not run prompt if nested answer exists for question', async () => {
-      const answers = await inquirer.prompt(
+      const answers = await inquirer.prompt<{ prefilled: { nested: string } }>(
         [
           {
             type: 'input',
@@ -624,6 +619,7 @@ describe('inquirer.prompt', () => {
             when: throwFunc.bind(undefined, 'when'),
             validate: throwFunc.bind(undefined, 'validate'),
             transformer: throwFunc.bind(undefined, 'transformer'),
+            // @ts-expect-error ignoring this unused field for test purpose
             filter: throwFunc.bind(undefined, 'filter'),
             message: 'message',
             default: 'newValue',
@@ -633,7 +629,7 @@ describe('inquirer.prompt', () => {
           prefilled: { nested: 'prefilled' },
         },
       );
-      expect(answers['prefilled'].nested).toEqual('prefilled');
+      expect(answers.prefilled.nested).toEqual('prefilled');
     });
 
     it('should run prompt if answer exists for question and askAnswered is set', async () => {

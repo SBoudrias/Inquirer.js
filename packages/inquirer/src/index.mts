@@ -15,6 +15,7 @@ import {
   editor,
   Separator,
 } from '@inquirer/prompts';
+import type { Prettify } from '@inquirer/type';
 import { default as PromptsRunner } from './ui/prompt.mjs';
 import type {
   PromptCollection,
@@ -48,23 +49,21 @@ const defaultPrompts: PromptCollection = {
  * Create a new self-contained prompt module.
  */
 export function createPromptModule(opt?: StreamOptions) {
-  function promptModule<T extends Answers = Answers>(
+  function promptModule<T extends Answers>(
     questions:
-      | Question<T>
+      | QuestionArray<T>
       | QuestionAnswerMap<T>
       | QuestionObservable<T>
-      | QuestionArray<T>,
+      | Question<T>,
     answers?: Partial<T>,
-  ): Promise<T> & { ui: PromptsRunner } {
+  ): Promise<Prettify<T>> & { ui: PromptsRunner<T> } {
     const runner = new PromptsRunner<T>(promptModule.prompts, opt);
 
     try {
       return runner.run(questions, answers);
     } catch (error) {
-      const promise = Promise.reject(error);
-      // @ts-expect-error Monkey patch the UI on the promise object so
-      promise.ui = runner;
-      return promise as Promise<never> & { ui: PromptsRunner };
+      const promise = Promise.reject<T>(error);
+      return Object.assign(promise, { ui: runner });
     }
   }
 
@@ -85,7 +84,7 @@ export function createPromptModule(opt?: StreamOptions) {
    * Register the defaults provider prompts
    */
   promptModule.restoreDefaultPrompts = function () {
-    this.prompts = { ...defaultPrompts };
+    promptModule.prompts = { ...defaultPrompts };
   };
 
   promptModule.restoreDefaultPrompts();
