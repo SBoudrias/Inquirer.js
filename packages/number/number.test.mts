@@ -156,7 +156,7 @@ describe('number prompt', () => {
   it('handle synchronous validation', async () => {
     const { answer, events, getScreen } = await render(number, {
       message: 'Answer 2 ===',
-      validate: (value) => value === 2,
+      validate: (value?: number) => value === 2,
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 ==="`);
@@ -182,8 +182,8 @@ describe('number prompt', () => {
   it('handle asynchronous validation', async () => {
     const { answer, events, getScreen } = await render(number, {
       message: 'Answer 2 ===',
-      validate(value) {
-        return new Promise((resolve) => {
+      validate: (value?: number) => {
+        return new Promise<string | boolean>((resolve) => {
           if (value === 2) {
             resolve(true);
           } else {
@@ -320,13 +320,13 @@ describe('number prompt', () => {
   it('is theme-able', async () => {
     const { answer, events, getScreen } = await render(number, {
       message: 'Answer must be: 2',
-      validate: (value) => value === 2,
+      validate: (value?: number) => value === 2,
       theme: {
         prefix: 'Q:',
         style: {
-          message: (text) => `${text} ===`,
-          error: (text) => `!! ${text} !!`,
-          answer: (text) => `_${text}_`,
+          message: (text: string) => `${text} ===`,
+          error: (text: string) => `!! ${text} !!`,
+          answer: (text: string) => `_${text}_`,
         },
       },
     });

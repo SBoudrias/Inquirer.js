@@ -644,7 +644,7 @@ describe('checkbox prompt', () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a number',
       choices: numberedChoices,
-      validate(items: ReadonlyArray<unknown>) {
+      validate: (items: ReadonlyArray<unknown>) => {
         if (items.length !== 1) {
           return 'Please select only one choice';
         }
@@ -732,9 +732,9 @@ describe('checkbox prompt', () => {
         choices: numberedChoices,
         theme: {
           style: {
-            renderSelectedChoices(selected: { value: number }[]) {
+            renderSelectedChoices: (selected: { value: number }[]) => {
               if (selected.length > 1) {
-                return `You have selected ${selected[0].value} and ${selected.length - 1} more.`;
+                return `You have selected ${(selected[0] as { value: number }).value} and ${selected.length - 1} more.`;
               }
               return `You have selected ${selected
                 .slice(0, 1)
@@ -764,10 +764,10 @@ describe('checkbox prompt', () => {
         choices: numberedChoices,
         theme: {
           style: {
-            renderSelectedChoices(
+            renderSelectedChoices: (
               selected: { value: number }[],
               all: ({ value: number } | Separator)[],
-            ) {
+            ) => {
               return `You have selected ${selected.length} out of ${all.length} options.`;
             },
           },

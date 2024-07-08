@@ -64,7 +64,7 @@ describe('password prompt', () => {
     const { answer, events, getScreen } = await render(password, {
       message: 'Enter your password',
       mask: true,
-      validate: (value) => value.length >= 8,
+      validate: (value: string) => value.length >= 8,
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`"? Enter your password"`);
