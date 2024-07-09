@@ -14,8 +14,10 @@ jobs:
           node-version: 20
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
-      - name: Typescript
-        run: yarn turbo tsc
+      - name: Typescript - packages
+        run: yarn tsc
+      - name: Typescript - test files
+        run: yarn tsc:test
       - name: Eslint
         run: yarn eslint .
       - name: Validate package setup
@@ -63,7 +65,7 @@ jobs:
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
       - name: Typescript
-        run: yarn turbo tsc
+        run: yarn tsc
       - name: Integration tests
         run: yarn node --test integration/
 

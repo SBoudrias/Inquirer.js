@@ -94,7 +94,7 @@ paths.forEach(async (pkgPath) => {
       'tsc:esm': 'rm -rf dist/esm && tsc -p ./tsconfig.json',
       'tsc:cjs':
         'rm -rf dist/cjs && tsc -p ./tsconfig.cjs.json && node ../../tools/fix-ext.mjs',
-      dev: 'tsc -p ./tsconfig.json --watch',
+      'tsc:watch': 'tsc -p ./tsconfig.json --watch',
       attw: emitDeclaration ? 'attw --pack' : undefined,
     };
 

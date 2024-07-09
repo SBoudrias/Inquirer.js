@@ -1,16 +1,20 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
+    "attw": {
+      "dependsOn": ["tsc"],
+      "outputs": []
+    },
     "tsc": {
       "dependsOn": ["^tsc"],
       "outputs": ["dist/**"],
       "inputs": ["$TURBO_DEFAULT$", "../../tools/fix-ext.mjs", "../../tsconfig.json"]
     },
-    "attw": {
-      "dependsOn": ["tsc"],
-      "outputs": []
+    "tsc:watch": {
+      "cache": false,
+      "persistent": true
     },
-    "dev": {
+    "//#tsc:watch": {
       "cache": false,
       "persistent": true
     }
