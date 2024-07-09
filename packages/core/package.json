@@ -63,7 +63,7 @@
     "@types/node": "^20.14.10",
     "@types/wrap-ansi": "^3.0.0",
     "ansi-escapes": "^4.3.2",
-    "cli-spinners": "^2.9.2",
+    "cli-spinners": "^3.1.0",
     "cli-width": "^4.1.0",
     "mute-stream": "^1.0.0",
     "signal-exit": "^4.1.0",
