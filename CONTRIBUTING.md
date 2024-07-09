@@ -56,14 +56,14 @@ yarn prettier --write .
 ## Type checking
 
 ```sh
-yarn turbo tsc
+yarn tsc
 ```
 
 ## Running demos
 
 ```sh
-# First you need to build the prompts; and every time you change code.
-yarn turbo tsc
+# This command will launch tsc in watch mode
+yarn dev
 
 # Then run the demos
 yarn node packages/demo
