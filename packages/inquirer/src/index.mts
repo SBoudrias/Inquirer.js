@@ -15,7 +15,7 @@ import {
   editor,
   Separator,
 } from '@inquirer/prompts';
-import type { Prettify } from '@inquirer/type';
+import type { Prettify, UnionToIntersection } from '@inquirer/type';
 import { default as PromptsRunner } from './ui/prompt.mjs';
 import type {
   PromptCollection,
@@ -31,6 +31,8 @@ import type {
   StreamOptions,
 } from './types.mjs';
 
+export type { QuestionMap } from './types.mjs';
+
 const defaultPrompts: PromptCollection = {
   input,
   select,
@@ -45,24 +47,56 @@ const defaultPrompts: PromptCollection = {
   editor,
 };
 
+type PromptReturnType<T> =
+  | (Promise<Prettify<T>> & {
+      ui: PromptsRunner<Prettify<T>>;
+    })
+  | never;
+
 /**
  * Create a new self-contained prompt module.
  */
 export function createPromptModule(opt?: StreamOptions) {
-  function promptModule<T extends Answers>(
+  function promptModule<
+    const AnswerList extends readonly Answers[],
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: { [I in keyof AnswerList]: Question<PrefilledAnswers & AnswerList[I]> },
+    answers?: PrefilledAnswers,
+  ): PromptReturnType<PrefilledAnswers & UnionToIntersection<AnswerList[number]>>;
+  function promptModule<
+    const Map extends QuestionAnswerMap<A>,
+    const A extends Answers<Extract<keyof Map, string>>,
+    PrefilledAnswers extends Answers = object,
+  >(questions: Map, answers?: PrefilledAnswers): PromptReturnType<PrefilledAnswers & A>;
+  function promptModule<
+    const A extends Answers,
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: QuestionObservable<A>,
+    answers?: PrefilledAnswers,
+  ): PromptReturnType<PrefilledAnswers & A>;
+  function promptModule<
+    const A extends Answers,
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: Question<A>,
+    answers?: PrefilledAnswers,
+  ): PromptReturnType<PrefilledAnswers & A>;
+  function promptModule(
     questions:
-      | QuestionArray<T>
-      | QuestionAnswerMap<T>
-      | QuestionObservable<T>
-      | Question<T>,
-    answers?: Partial<T>,
-  ): Promise<Prettify<T>> & { ui: PromptsRunner<T> } {
-    const runner = new PromptsRunner<T>(promptModule.prompts, opt);
+      | QuestionArray<Answers>
+      | QuestionAnswerMap<Answers>
+      | QuestionObservable<Answers>
+      | Question<Answers>,
+    answers?: Partial<Answers>,
+  ): PromptReturnType<Answers> {
+    const runner = new PromptsRunner(promptModule.prompts, opt);
 
     try {
       return runner.run(questions, answers);
     } catch (error) {
-      const promise = Promise.reject<T>(error);
+      const promise = Promise.reject(error);
       return Object.assign(promise, { ui: runner });
     }
   }
@@ -86,8 +120,6 @@ export function createPromptModule(opt?: StreamOptions) {
   promptModule.restoreDefaultPrompts = function () {
     promptModule.prompts = { ...defaultPrompts };
   };
-
-  promptModule.restoreDefaultPrompts();
 
   return promptModule;
 }
