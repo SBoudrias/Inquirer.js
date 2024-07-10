@@ -423,12 +423,38 @@ Licensed under the MIT license.
 
 You can build custom prompts, or use open sourced ones. See [`@inquirer/core` documentation for building custom prompts](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/core).
 
-You can either call the custom prompts directly, or you can register them:
+You can either call the custom prompts directly (preferred), or you can register them (depreciated):
 
 ```js
-import CustomPrompt from '$$$/custom-prompt';
+import customPrompt from '$$$/custom-prompt';
 
-inquirer.registerPrompt('custom', CustomPrompt);
+// 1. Preferred solution with new plugins
+const answer = await customPrompt({ ...config });
+
+// 2. Depreciated interface (or for old plugins)
+inquirer.registerPrompt('custom', customPrompt);
+const answers = await inquirer.prompt([
+  {
+    type: 'custom',
+    ...config,
+  },
+]);
+```
+
+When using Typescript and `registerPrompt`, you'll also need to define your prompt signature. Since Typescript is static, we cannot infer available plugins from function calls.
+
+```ts
+import customPrompt from '$$$/custom-prompt';
+
+declare module 'inquirer' {
+  interface QuestionMap {
+    // 1. Easiest option
+    custom: Parameters<typeof customPrompt>[0];
+
+    // 2. Or manually define the prompt config
+    custom_alt: { message: string; option: number[] };
+  }
+}
 ```
 
 ### Prompts

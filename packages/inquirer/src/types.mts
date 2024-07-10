@@ -10,58 +10,76 @@ import {
   password,
   editor,
 } from '@inquirer/prompts';
-import type { Prettify } from '@inquirer/type';
+import type { Prettify, KeyUnion, DistributiveMerge, Pick } from '@inquirer/type';
 import { Observable } from 'rxjs';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type LiteralUnion<T extends F, F = string> = T | (F & {});
-type KeyUnion<T> = LiteralUnion<Extract<keyof T, string>>;
-
-export type Answers = {
-  [key: string]: any;
+export type Answers<Key extends string = string> = {
+  [key in Key]: any;
 };
 
-type whenFunction<T extends Answers> =
-  | ((answers: Partial<T>) => boolean | Promise<boolean>)
-  | ((this: { async: () => () => void }, answers: Partial<T>) => void);
+type AsyncCallbackFunction<R> = (
+  ...args: [error: null | undefined, value: R] | [error: Error, value: undefined]
+) => void;
 
-type InquirerFields<T extends Answers> = {
-  name: KeyUnion<T>;
-  when?: boolean | whenFunction<T>;
-  askAnswered?: boolean;
-};
+type AsyncGetterFunction<R, A extends Answers> = (
+  this: { async: () => AsyncCallbackFunction<R> },
+  answers: Partial<A>,
+) => void | R | Promise<R>;
 
-interface QuestionMap<T extends Answers> {
-  input: Prettify<{ type: 'input' } & Parameters<typeof input>[0] & InquirerFields<T>>;
-  select: Prettify<{ type: 'select' } & Parameters<typeof select>[0] & InquirerFields<T>>;
-  list: Prettify<{ type: 'list' } & Parameters<typeof select>[0] & InquirerFields<T>>;
-  number: Prettify<{ type: 'number' } & Parameters<typeof number>[0] & InquirerFields<T>>;
-  confirm: Prettify<
-    { type: 'confirm' } & Parameters<typeof confirm>[0] & InquirerFields<T>
-  >;
-  rawlist: Prettify<
-    { type: 'rawlist' } & Parameters<typeof rawlist>[0] & InquirerFields<T>
-  >;
-  expand: Prettify<{ type: 'expand' } & Parameters<typeof expand>[0] & InquirerFields<T>>;
-  checkbox: Prettify<
-    { type: 'checkbox' } & Parameters<typeof checkbox>[0] & InquirerFields<T>
-  >;
-  password: Prettify<
-    { type: 'password' } & Parameters<typeof password>[0] & InquirerFields<T>
-  >;
-  editor: Prettify<{ type: 'editor' } & Parameters<typeof editor>[0] & InquirerFields<T>>;
+export interface QuestionMap {
+  input: Parameters<typeof input>[0];
+  select: Parameters<typeof select>[0];
+  /** @deprecated `list` is now named `select` */
+  list: Parameters<typeof select>[0];
+  number: Parameters<typeof number>[0];
+  confirm: Parameters<typeof confirm>[0];
+  rawlist: Parameters<typeof rawlist>[0];
+  expand: Parameters<typeof expand>[0];
+  checkbox: Parameters<typeof checkbox>[0];
+  password: Parameters<typeof password>[0];
+  editor: Parameters<typeof editor>[0];
 }
 
-export type Question<T extends Answers> = QuestionMap<T>[keyof QuestionMap<T>];
+type PromptConfigMap<A extends Answers> = {
+  [key in keyof QuestionMap]: DistributiveMerge<
+    QuestionMap[keyof QuestionMap],
+    {
+      type: keyof QuestionMap;
+      name: KeyUnion<A>;
+      when?: AsyncGetterFunction<boolean, Prettify<A>> | boolean;
+      askAnswered?: boolean;
+      message:
+        | Pick<QuestionMap[keyof QuestionMap], 'message'>
+        | AsyncGetterFunction<
+            Pick<QuestionMap[keyof QuestionMap], 'message'>,
+            Prettify<A>
+          >;
+      choices?:
+        | Pick<QuestionMap[keyof QuestionMap], 'choices'>
+        | string[]
+        | AsyncGetterFunction<
+            Pick<QuestionMap[keyof QuestionMap], 'choices'> | string[],
+            Prettify<A>
+          >;
+      default?:
+        | Pick<QuestionMap[keyof QuestionMap], 'default'>
+        | AsyncGetterFunction<
+            Pick<QuestionMap[keyof QuestionMap], 'default'> | string[],
+            Prettify<A>
+          >;
+    }
+  >;
+};
 
-export type QuestionAnswerMap<T extends Answers> = Record<
-  KeyUnion<T>,
-  Prettify<Omit<Question<T>, 'name'>>
->;
+export type Question<A extends Answers> = PromptConfigMap<A>[keyof PromptConfigMap<A>];
 
-export type QuestionArray<T extends Answers> = Question<T>[];
+export type QuestionAnswerMap<A extends Answers> =
+  | { [name in KeyUnion<A>]: Omit<Question<A>, 'name'> }
+  | never;
 
-export type QuestionObservable<T extends Answers> = Observable<Question<T>>;
+export type QuestionArray<A extends Answers> = Question<A>[] | never;
+
+export type QuestionObservable<A extends Answers> = Observable<Question<A>> | never;
 
 export type StreamOptions = Prettify<
   Parameters<typeof input>[1] & { skipTTYChecks?: boolean }

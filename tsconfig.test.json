@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["**/*.test.mts"],
-  "exclude": ["packages/inquirer/test/**"],
+  "include": ["**/*.test.mts", "**/*.d.ts"],
   "compilerOptions": {
     "lib": ["es2023"],
     "target": "es2022",

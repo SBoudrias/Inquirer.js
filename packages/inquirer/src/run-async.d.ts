@@ -7,5 +7,5 @@ declare module 'run-async' {
     func: F,
   ) => (...args: Parameters<F>) => Promise<ExtractPromise<ReturnType<F>>>;
 
-  export = runAsync;
+  export default runAsync;
 }
