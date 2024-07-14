@@ -1,5 +1,4 @@
-import { describe, it, expect } from 'vitest';
-import { Expect, Equal } from '@inquirer/type';
+import { describe, it, expect, expectTypeOf } from 'vitest';
 import {
   checkbox,
   confirm,
@@ -24,16 +23,10 @@ describe('@inquirer/prompts', () => {
     expect(select).toBeTypeOf('function');
     expect(Separator).toBeTypeOf('function');
   });
-});
 
-/**
- * Type assertions to validate the interfaces.
- */
-export interface Test {
-  1: Expect<
-    Equal<
-      NonNullable<Parameters<typeof checkbox>[0]['theme']>['helpMode'],
-      NonNullable<Parameters<typeof select>[0]['theme']>['helpMode']
-    >
-  >;
-}
+  it('checkbox and select have matching helpMode', () => {
+    expectTypeOf<
+      NonNullable<Parameters<typeof checkbox>[0]['theme']>['helpMode']
+    >().toEqualTypeOf<NonNullable<Parameters<typeof select>[0]['theme']>['helpMode']>();
+  });
+});
