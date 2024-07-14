@@ -13,7 +13,6 @@ import {
   lastValueFrom,
 } from 'rxjs';
 import runAsync from 'run-async';
-import Base from './baseUI.mjs';
 import MuteStream from 'mute-stream';
 import type { InquirerReadline } from '@inquirer/type';
 import ansiEscapes from 'ansi-escapes';
@@ -64,22 +63,22 @@ const _ = {
  * Resolve a question property value if it is passed as a function.
  * This method will overwrite the property on the question object with the received value.
  */
-function fetchAsyncQuestionProperty<Q extends Question<any>, T extends keyof Q>(
+function fetchAsyncQuestionProperty<A extends Answers, Q extends Question<A>>(
   question: Q,
-  prop: T,
-  answers: Answers,
+  prop: string,
+  answers: A,
 ) {
-  const value = question[prop];
-  if (typeof value !== 'function') {
-    return of(question);
+  if (prop in question) {
+    const propGetter = question[prop as keyof Q];
+    if (typeof propGetter === 'function') {
+      return from(
+        runAsync(propGetter as (...args: any[]) => any)(answers).then((value) => {
+          return Object.assign(question, { [prop]: value });
+        }),
+      );
+    }
   }
-
-  return from(
-    runAsync(value as (...args: any[]) => any)(answers).then((value: Q[T]) => {
-      question[prop] = value;
-      return question;
-    }),
-  );
+  return of(question);
 }
 
 export interface PromptBase {
@@ -161,9 +160,9 @@ function setupReadlineOptions(opt: StreamOptions = {}) {
   };
 }
 
-function isQuestionMap<T extends Answers>(
-  questions: QuestionArray<T> | QuestionAnswerMap<T> | Question<T>,
-): questions is QuestionAnswerMap<T> {
+function isQuestionMap<A extends Answers>(
+  questions: QuestionArray<A> | QuestionAnswerMap<A> | Question<A>,
+): questions is QuestionAnswerMap<A> {
   return Object.values(questions).every(
     (maybeQuestion) =>
       typeof maybeQuestion === 'object' &&
@@ -185,47 +184,43 @@ function isPromptConstructor(
 /**
  * Base interface class other can inherits from
  */
-export default class PromptsRunner<T extends Answers> extends Base {
+export default class PromptsRunner<A extends Answers> {
   prompts: PromptCollection;
-  answers: Partial<T> = {};
-  process: Observable<any>;
+  answers: Partial<A> = {};
+  process: Observable<any> = EMPTY;
+  onClose?: () => void;
   opt?: StreamOptions;
   rl?: InquirerReadline;
 
   constructor(prompts: PromptCollection, opt?: StreamOptions) {
-    super();
     this.opt = opt;
     this.prompts = prompts;
-
-    this.process = EMPTY;
   }
 
   run(
     questions:
-      | QuestionArray<T>
-      | QuestionAnswerMap<T>
-      | QuestionObservable<T>
-      | Question<T>,
-    answers?: Partial<T>,
-  ): Promise<T> & { ui: PromptsRunner<T> } {
+      | QuestionArray<A>
+      | QuestionAnswerMap<A>
+      | QuestionObservable<A>
+      | Question<A>,
+    answers?: Partial<A>,
+  ): Promise<A> & { ui: PromptsRunner<A> } {
     // Keep global reference to the answers
     this.answers = typeof answers === 'object' ? { ...answers } : {};
 
-    let obs: Observable<Question<T>>;
+    let obs: Observable<Question<A>>;
     if (Array.isArray(questions)) {
       obs = from(questions);
     } else if (isObservable(questions)) {
       obs = questions;
-    } else if (isQuestionMap<T>(questions)) {
+    } else if (isQuestionMap<A>(questions)) {
       // Case: Called with a set of { name: question }
       obs = from(
-        Object.entries(questions).map(([name, question]): Question<T> => {
-          // @ts-expect-error TODO should be fixable.
-          return {
-            ...question,
-            name,
-          };
-        }),
+        Object.entries(questions).map(
+          ([name, question]: [string, Omit<Question<A>, 'name'>]): Question<A> => {
+            return Object.assign({}, question, { name }) as Question<A>;
+          },
+        ),
       );
     } else {
       // Case: Called with a single question config
@@ -244,7 +239,7 @@ export default class PromptsRunner<T extends Answers> extends Base {
     ).then(
       () => this.onCompletion(),
       (error) => this.onError(error),
-    ) as Promise<T>;
+    ) as Promise<A>;
 
     return Object.assign(promise, { ui: this });
   }
@@ -263,31 +258,27 @@ export default class PromptsRunner<T extends Answers> extends Base {
     return Promise.reject(error);
   }
 
-  processQuestion(question: Question<T>) {
+  processQuestion(question: Question<A>) {
     question = { ...question };
     return defer(() => {
       const obs = of(question);
 
       return obs.pipe(
-        concatMap(this.setDefaultType.bind(this)),
-        concatMap(this.filterIfRunnable.bind(this)),
+        concatMap(this.setDefaultType),
+        concatMap(this.filterIfRunnable),
         concatMap((question) =>
           fetchAsyncQuestionProperty(question, 'message', this.answers),
         ),
         concatMap((question) =>
-          // @ts-expect-error question type is too loose
           fetchAsyncQuestionProperty(question, 'default', this.answers),
         ),
         concatMap((question) =>
-          // @ts-expect-error question type is too loose
           fetchAsyncQuestionProperty(question, 'choices', this.answers),
         ),
         concatMap((question) => {
-          // @ts-expect-error question type is too loose
-          const { choices } = question;
-          if (Array.isArray(choices)) {
+          if ('choices' in question) {
             // @ts-expect-error question type is too loose
-            question.choices = choices.map((choice) => {
+            question.choices = question.choices.map((choice) => {
               if (typeof choice === 'string') {
                 return { name: choice, value: choice };
               }
@@ -302,7 +293,7 @@ export default class PromptsRunner<T extends Answers> extends Base {
     });
   }
 
-  fetchAnswer(question: Question<T>) {
+  fetchAnswer(question: Question<A>) {
     const prompt = this.prompts[question.type];
 
     if (prompt == null) {
@@ -326,6 +317,9 @@ export default class PromptsRunner<T extends Answers> extends Base {
           };
           this.onClose = onClose;
           this.rl = rl;
+
+          // Make sure new prompt start on a newline when closing
+          process.on('exit', this.onForceClose);
           rl.on('SIGINT', this.onForceClose);
 
           const activePrompt = new prompt(question, rl, this.answers);
@@ -350,16 +344,37 @@ export default class PromptsRunner<T extends Answers> extends Base {
         );
   }
 
-  setDefaultType(question: Question<T>): Observable<Question<T>> {
+  /**
+   * Handle the ^C exit
+   */
+  onForceClose = () => {
+    this.close();
+    process.kill(process.pid, 'SIGINT');
+    console.log('');
+  };
+
+  /**
+   * Close the interface and cleanup listeners
+   */
+  close = () => {
+    // Remove events listeners
+    process.removeListener('exit', this.onForceClose);
+
+    if (typeof this.onClose === 'function') {
+      this.onClose();
+    }
+  };
+
+  setDefaultType = (question: Question<A>): Observable<Question<A>> => {
     // Default type to input
     if (!this.prompts[question.type]) {
       question.type = 'input';
     }
 
     return defer(() => of(question));
-  }
+  };
 
-  filterIfRunnable(question: Question<T>): Observable<Question<T>> {
+  filterIfRunnable = (question: Question<A>): Observable<Question<A>> => {
     if (
       question.askAnswered !== true &&
       _.get(this.answers, question.name) !== undefined
@@ -384,7 +399,7 @@ export default class PromptsRunner<T extends Answers> extends Base {
           }
           return;
         }),
-      ).pipe(filter((val): val is Question<T> => val != null)),
+      ).pipe(filter((val): val is Question<A> => val != null)),
     );
-  }
+  };
 }
