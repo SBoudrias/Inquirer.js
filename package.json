@@ -51,9 +51,9 @@
     "@arethetypeswrong/cli": "^0.15.3",
     "@eslint/js": "^9.7.0",
     "@sindresorhus/tsconfig": "^6.0.0",
-    "@types/node": "^20.14.10",
-    "@vitest/coverage-v8": "^2.0.2",
-    "@vitest/ui": "^2.0.2",
+    "@types/node": "^20.14.11",
+    "@vitest/coverage-v8": "^2.0.3",
+    "@vitest/ui": "^2.0.3",
     "eslint": "^9.7.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-n": "^17.9.0",
@@ -66,10 +66,10 @@
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
-    "turbo": "^2.0.6",
+    "turbo": "^2.0.7",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^7.16.0",
-    "vitest": "^2.0.2"
+    "typescript-eslint": "^7.16.1",
+    "vitest": "^2.0.3"
   },
   "resolutions": {
     "type-fest": "^4.0.0"
