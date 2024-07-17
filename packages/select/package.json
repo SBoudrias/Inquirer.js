@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/select",
-  "version": "2.3.11",
+  "version": "2.4.0",
   "description": "Inquirer select/list prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",

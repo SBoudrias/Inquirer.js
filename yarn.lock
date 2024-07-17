@@ -411,7 +411,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@inquirer/checkbox@npm:^2.3.11, @inquirer/checkbox@workspace:packages/checkbox":
+"@inquirer/checkbox@npm:^2.4.0, @inquirer/checkbox@workspace:packages/checkbox":
   version: 0.0.0-use.local
   resolution: "@inquirer/checkbox@workspace:packages/checkbox"
   dependencies:
@@ -471,7 +471,7 @@ __metadata:
   resolution: "@inquirer/demo@workspace:packages/demo"
   dependencies:
     "@inquirer/core": "npm:^9.0.3"
-    "@inquirer/prompts": "npm:^5.1.3"
+    "@inquirer/prompts": "npm:^5.2.0"
     yoctocolors-cjs: "npm:^2.1.2"
   bin:
     inquirer-demo: index.mjs
@@ -548,11 +548,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/prompts@npm:^5.1.3, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
+"@inquirer/prompts@npm:^5.2.0, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
   version: 0.0.0-use.local
   resolution: "@inquirer/prompts@workspace:packages/prompts"
   dependencies:
-    "@inquirer/checkbox": "npm:^2.3.11"
+    "@inquirer/checkbox": "npm:^2.4.0"
     "@inquirer/confirm": "npm:^3.1.15"
     "@inquirer/editor": "npm:^2.1.15"
     "@inquirer/expand": "npm:^2.1.15"
@@ -560,7 +560,7 @@ __metadata:
     "@inquirer/number": "npm:^1.0.3"
     "@inquirer/password": "npm:^2.1.15"
     "@inquirer/rawlist": "npm:^2.1.15"
-    "@inquirer/select": "npm:^2.3.11"
+    "@inquirer/select": "npm:^2.4.0"
     "@inquirer/type": "npm:^1.5.0"
   languageName: unknown
   linkType: soft
@@ -605,7 +605,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/select@npm:^2.3.11, @inquirer/select@workspace:packages/select":
+"@inquirer/select@npm:^2.4.0, @inquirer/select@workspace:packages/select":
   version: 0.0.0-use.local
   resolution: "@inquirer/select@workspace:packages/select"
   dependencies:
@@ -4490,7 +4490,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inquirer@workspace:packages/inquirer"
   dependencies:
-    "@inquirer/prompts": "npm:^5.1.3"
+    "@inquirer/prompts": "npm:^5.2.0"
     "@inquirer/type": "npm:^1.5.0"
     "@types/mute-stream": "npm:^0.0.4"
     ansi-escapes: "npm:^4.3.2"
