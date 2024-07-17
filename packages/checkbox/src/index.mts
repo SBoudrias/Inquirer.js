@@ -46,7 +46,9 @@ const checkboxTheme: CheckboxTheme = {
   style: {
     disabledChoice: (text: string) => colors.dim(`- ${text}`),
     renderSelectedChoices: (selectedChoices) =>
-      selectedChoices.map((choice) => choice.name || choice.value).join(', '),
+      selectedChoices
+        .map((choice) => choice.short ?? choice.name ?? choice.value)
+        .join(', '),
   },
   helpMode: 'auto',
 };
@@ -54,6 +56,7 @@ const checkboxTheme: CheckboxTheme = {
 type Choice<Value> = {
   name?: string;
   value: Value;
+  short?: string;
   disabled?: boolean | string;
   checked?: boolean;
   type?: never;

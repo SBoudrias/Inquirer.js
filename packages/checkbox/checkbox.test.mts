@@ -758,6 +758,51 @@ describe('checkbox prompt', () => {
       );
     });
 
+    it('allow customizing short names after selection', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select a commit',
+        choices: [
+          {
+            name: '2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question',
+            value: '2cc9e311',
+            short: '2cc9e311',
+          },
+          {
+            name: '3272b94a (origin/main) Fix(inquirer): Fix close method not required',
+            value: '3272b94a',
+            short: '3272b94a',
+          },
+          {
+            name: 'e4e10545 Chore(dev-deps): Bump dev-deps',
+            value: 'e4e10545',
+            short: 'e4e10545',
+          },
+        ],
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a commit (Press <space> to select, <a> to toggle all, <i> to invert
+        selection, and <enter> to proceed)
+        ❯◯ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
+         ◯ 3272b94a (origin/main) Fix(inquirer): Fix close method not required
+         ◯ e4e10545 Chore(dev-deps): Bump dev-deps"
+      `);
+
+      events.keypress('space');
+      events.keypress('down');
+      events.keypress('space');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a commit
+         ◉ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
+        ❯◉ 3272b94a (origin/main) Fix(inquirer): Fix close method not required
+         ◯ e4e10545 Chore(dev-deps): Bump dev-deps"
+      `);
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['2cc9e311', '3272b94a']);
+      expect(getScreen()).toMatchInlineSnapshot(`"? Select a commit 2cc9e311, 3272b94a"`);
+    });
+
     it('using allChoices parameter', async () => {
       const { answer, events, getScreen } = await render(checkbox, {
         message: 'Select your favourite number.',
