@@ -158,8 +158,22 @@ function setupReadlineOptions(opt: StreamOptions = {}) {
   };
 }
 
+function isQuestionArray<A extends Answers>(
+  questions:
+    | QuestionArray<A>
+    | QuestionAnswerMap<A>
+    | QuestionObservable<A>
+    | Question<A>,
+): questions is QuestionArray<A> {
+  return Array.isArray(questions);
+}
+
 function isQuestionMap<A extends Answers>(
-  questions: QuestionArray<A> | QuestionAnswerMap<A> | Question<A>,
+  questions:
+    | QuestionArray<A>
+    | QuestionAnswerMap<A>
+    | QuestionObservable<A>
+    | Question<A>,
 ): questions is QuestionAnswerMap<A> {
   return Object.values(questions).every(
     (maybeQuestion) =>
@@ -207,7 +221,7 @@ export default class PromptsRunner<A extends Answers> {
     this.answers = typeof answers === 'object' ? { ...answers } : {};
 
     let obs: Observable<Question<A>>;
-    if (Array.isArray(questions)) {
+    if (isQuestionArray(questions)) {
       obs = from(questions);
     } else if (isObservable(questions)) {
       obs = questions;
@@ -366,7 +380,7 @@ export default class PromptsRunner<A extends Answers> {
   setDefaultType = (question: Question<A>): Observable<Question<A>> => {
     // Default type to input
     if (!this.prompts[question.type]) {
-      question.type = 'input';
+      question = Object.assign({}, question, { type: 'input' });
     }
 
     return defer(() => of(question));
