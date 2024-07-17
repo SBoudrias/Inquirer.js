@@ -89,8 +89,6 @@ export interface PromptBase {
    * The result of the prompt.
    */
   run(): Promise<any>;
-
-  close(): void;
 }
 
 /**
