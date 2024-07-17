@@ -37,6 +37,7 @@ type Choice<Value> = {
   value: Value;
   name?: string;
   description?: string;
+  short?: string;
   disabled?: boolean | string;
   type?: never;
 };
@@ -184,7 +185,8 @@ export default createPrompt(
 
     if (status === 'done') {
       const answer =
-        selectedChoice.name ||
+        selectedChoice.short ??
+        selectedChoice.name ??
         // TODO: Could we enforce that at the type level? Name should be defined for non-string values.
         String(selectedChoice.value);
       return `${prefix} ${message} ${theme.style.answer(answer)}`;

@@ -366,6 +366,40 @@ describe('select prompt', () => {
     await expect(answer).rejects.toBeInstanceOf(Error);
   });
 
+  it('allow customizing short names after selection', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a commit',
+      choices: [
+        {
+          name: '2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question',
+          value: '2cc9e311',
+          short: '2cc9e311',
+        },
+        {
+          name: '3272b94a (origin/main) Fix(inquirer): Fix close method not required',
+          value: '3272b94a',
+          short: '3272b94a',
+        },
+        {
+          name: 'e4e10545 Chore(dev-deps): Bump dev-deps',
+          value: 'e4e10545',
+          short: 'e4e10545',
+        },
+      ],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a commit (Use arrow keys)
+      ❯ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
+        3272b94a (origin/main) Fix(inquirer): Fix close method not required
+        e4e10545 Chore(dev-deps): Bump dev-deps"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('2cc9e311');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Select a commit 2cc9e311"`);
+  });
+
   it('throws if all choices are disabled', async () => {
     const { answer } = await render(select, {
       message: 'Select a topping',
