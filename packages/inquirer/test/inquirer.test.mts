@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import type { InquirerReadline } from '@inquirer/type';
 import inquirer, { type QuestionMap } from '../src/index.mjs';
 import type { Answers, Question } from '../src/types.mjs';
-import { _ } from '../src/ui/prompt.mts';
+import { _ } from '../src/ui/prompt';
 
 declare module '../src/index.mjs' {
   interface QuestionMap {
@@ -892,7 +892,7 @@ describe('Non-TTY checks', () => {
 
 describe('set utility function tests', () => {
   it('Should set an objects property when provided a path and a value', () => {
-    const obj = {};
+    const obj: any = {};
     const path = 'a.b';
     const value = 'c';
 
@@ -902,7 +902,7 @@ describe('set utility function tests', () => {
   });
 
   it('Should set an objects property when provided a path and an array value', () => {
-    const obj = {};
+    const obj: any = {};
     const path = 'a.b';
     const value = ['c', 'd'];
 
@@ -913,7 +913,7 @@ describe('set utility function tests', () => {
   });
 
   it('Should replace a boolean with an object when a path is provided that overrides that boolean', () => {
-    const obj = { a: true };
+    const obj: any = { a: true };
     const path = 'a.b';
     const value = 'c';
 
