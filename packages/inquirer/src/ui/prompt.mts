@@ -25,7 +25,7 @@ import type {
   StreamOptions,
 } from '../types.mjs';
 
-const _ = {
+export const _ = {
   set: (obj: object, path: string = '', value: unknown): void => {
     let pointer: any = obj;
     path.split('.').forEach((key, index, arr) => {
@@ -34,6 +34,10 @@ const _ = {
       if (index === arr.length - 1) {
         pointer[key] = value;
       } else if (!(key in pointer)) {
+        pointer[key] = {};
+      }
+
+      if (index !== arr.length - 1 && typeof pointer[key] === 'boolean') {
         pointer[key] = {};
       }
 
