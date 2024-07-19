@@ -33,13 +33,13 @@ export const _ = {
 
       if (index === arr.length - 1) {
         pointer[key] = value;
-      } else if (!(key in pointer)) {
+      } else if (!(key in pointer) || typeof pointer[key] !== 'object') {
         pointer[key] = {};
       }
 
-      if (index !== arr.length - 1 && typeof pointer[key] !== 'object') {
-        pointer[key] = {};
-      }
+      // if (index !== arr.length - 1 && typeof pointer[key] !== 'object') {
+      //   pointer[key] = {};
+      // }
 
       pointer = pointer[key];
     });
