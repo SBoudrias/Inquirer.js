@@ -1,4 +1,4 @@
-<img width="75px" height="75px" align="right" alt="Inquirer Logo" src="https://raw.githubusercontent.com/SBoudrias/Inquirer.js/master/assets/inquirer_readme.svg?sanitize=true" title="Inquirer.js"/>
+<img width="75px" height="75px" align="right" alt="Inquirer Logo" src="https://raw.githubusercontent.com/SBoudrias/Inquirer.js/main/assets/inquirer_readme.svg?sanitize=true" title="Inquirer.js"/>
 
 # Inquirer.js
 
@@ -98,7 +98,7 @@ inquirer
 
 ### Examples (Run it and see it)
 
-Check out the [`packages/inquirer/examples/`](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/inquirer/examples) folder for code and interface examples.
+Check out the [`packages/inquirer/examples/`](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/inquirer/examples) folder for code and interface examples.
 
 ```shell
 yarn node packages/inquirer/examples/pizza.js
@@ -421,7 +421,7 @@ Licensed under the MIT license.
 
 <a name="plugins"></a>
 
-You can build custom prompts, or use open sourced ones. See [`@inquirer/core` documentation for building custom prompts](https://github.com/SBoudrias/Inquirer.js/tree/master/packages/core).
+You can build custom prompts, or use open sourced ones. See [`@inquirer/core` documentation for building custom prompts](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/core).
 
 You can either call the custom prompts directly (preferred), or you can register them (depreciated):
 

@@ -63,7 +63,7 @@
     "run-async": "^3.0.0",
     "rxjs": "^7.8.1"
   },
-  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/inquirer/README.md",
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/inquirer/README.md",
   "sideEffects": false,
   "scripts": {
     "tsc": "yarn run tsc:esm && yarn run tsc:cjs",
