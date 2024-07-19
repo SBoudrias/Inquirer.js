@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import type { InquirerReadline } from '@inquirer/type';
 import inquirer, { type QuestionMap } from '../src/index.mjs';
 import type { Answers, Question } from '../src/types.mjs';
-import { _ } from '../src/ui/prompt';
+import { _ } from '../src/ui/prompt.mjs';
 
 declare module '../src/index.mjs' {
   interface QuestionMap {
