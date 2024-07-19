@@ -49,7 +49,7 @@ paths.forEach(async (pkgPath) => {
 
   if (hasReadme) {
     const repoPath = dir.split('/').slice(-2).join('/');
-    pkg.homepage = `https://github.com/SBoudrias/Inquirer.js/blob/master/${repoPath}/README.md`;
+    pkg.homepage = `https://github.com/SBoudrias/Inquirer.js/blob/main/${repoPath}/README.md`;
   }
 
   if (!('sideEffects' in pkg)) {

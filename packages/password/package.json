@@ -55,7 +55,7 @@
   ],
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "license": "MIT",
-  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/master/packages/password/README.md",
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/password/README.md",
   "dependencies": {
     "@inquirer/core": "^9.0.3",
     "@inquirer/type": "^1.5.0",

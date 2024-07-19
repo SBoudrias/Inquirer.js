@@ -79,14 +79,14 @@ const answer = await confirm({ message: 'Do you want to continue?' });
 
 See more examples:
 
-- [Confirm Prompt](https://github.com/SBoudrias/Inquirer.js/blob/master/packages/confirm/src/index.mts)
-- [Input Prompt](https://github.com/SBoudrias/Inquirer.js/blob/master/packages/input/src/index.mts)
-- [Password Prompt](https://github.com/SBoudrias/Inquirer.js/blob/master/packages/password/src/index.mts)
-- [Editor Prompt](https://github.com/SBoudrias/Inquirer.js/blob/master/packages/editor/src/index.mts)
-- [Select Prompt](https://github.com/SBoudrias/Inquirer.js/blob/master/packages/select/src/index.mts)
-- [Checkbox Prompt](https://github.com/SBoudrias/Inquirer.js/blob/master/packages/checkbox/src/index.mts)
-- [Rawlist Prompt](https://github.com/SBoudrias/Inquirer.js/blob/master/packages/rawlist/src/index.mts)
-- [Expand Prompt](https://github.com/SBoudrias/Inquirer.js/blob/master/packages/expand/src/index.mts)
+- [Confirm Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/confirm/src/index.mts)
+- [Input Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/src/index.mts)
+- [Password Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/password/src/index.mts)
+- [Editor Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/editor/src/index.mts)
+- [Select Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/select/src/index.mts)
+- [Checkbox Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/checkbox/src/index.mts)
+- [Rawlist Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/rawlist/src/index.mts)
+- [Expand Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/expand/src/index.mts)
 
 ## API
 
