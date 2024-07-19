@@ -921,4 +921,14 @@ describe('set utility function tests', () => {
 
     expect(obj.a.b).toBe('c');
   });
+
+  it('Should replace a string with an object when a path is provided that overrides that string', () => {
+    const obj: any = { a: 'test' };
+    const path = 'a.b';
+    const value = 'c';
+
+    _.set(obj, path, value);
+
+    expect(obj.a.b).toBe('c');
+  });
 });

@@ -37,7 +37,7 @@ export const _ = {
         pointer[key] = {};
       }
 
-      if (index !== arr.length - 1 && typeof pointer[key] === 'boolean') {
+      if (index !== arr.length - 1 && typeof pointer[key] !== 'object') {
         pointer[key] = {};
       }
 
