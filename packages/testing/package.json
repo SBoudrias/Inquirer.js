@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/testing",
-  "version": "2.1.26",
+  "version": "2.1.27",
   "engines": {
     "node": ">=18"
   },
