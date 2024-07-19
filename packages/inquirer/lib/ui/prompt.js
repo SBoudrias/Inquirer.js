@@ -6,19 +6,23 @@ const _ = {
 
       if (index === arr.length - 1) {
         pointer[key] = value;
-      } else if (!(key in pointer)) {
+      } else if (!(key in pointer) || typeof pointer[key] !== 'object') {
         pointer[key] = {};
       }
 
       pointer = pointer[key];
     });
   },
-  get: (obj, path = '', defaultValue) => {
+  get: (obj, path, defaultValue) => {
     const travel = (regexp) =>
       String.prototype.split
         .call(path, regexp)
         .filter(Boolean)
-        .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj);
+        .reduce(
+          // @ts-expect-error implicit any on res[key]
+          (res, key) => (res !== null && res !== undefined ? res[key] : res),
+          obj,
+        );
     const result = travel(/[,[\]]+?/) || travel(/[,.[\]]+?/);
     return result === undefined || result === obj ? defaultValue : result;
   },
