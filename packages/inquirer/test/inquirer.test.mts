@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import type { InquirerReadline } from '@inquirer/type';
 import inquirer, { type QuestionMap } from '../src/index.mjs';
 import type { Answers, Question } from '../src/types.mjs';
+import { _ } from '../src/ui/prompt.mjs';
 
 declare module '../src/index.mjs' {
   interface QuestionMap {
@@ -886,5 +887,48 @@ describe('Non-TTY checks', () => {
     input.unref();
 
     await expect(promise).resolves.toEqual({ q1: 'bar' });
+  });
+});
+
+describe('set utility function tests', () => {
+  it('Should set an objects property when provided a path and a value', () => {
+    const obj: any = {};
+    const path = 'a.b';
+    const value = 'c';
+
+    _.set(obj, path, value);
+
+    expect(obj.a.b).toBe('c');
+  });
+
+  it('Should set an objects property when provided a path and an array value', () => {
+    const obj: any = {};
+    const path = 'a.b';
+    const value = ['c', 'd'];
+
+    _.set(obj, path, value);
+
+    expect(obj.a.b[0]).toBe('c');
+    expect(obj.a.b[1]).toBe('d');
+  });
+
+  it('Should replace a boolean with an object when a path is provided that overrides that boolean', () => {
+    const obj: any = { a: true };
+    const path = 'a.b';
+    const value = 'c';
+
+    _.set(obj, path, value);
+
+    expect(obj.a.b).toBe('c');
+  });
+
+  it('Should replace a string with an object when a path is provided that overrides that string', () => {
+    const obj: any = { a: 'test' };
+    const path = 'a.b';
+    const value = 'c';
+
+    _.set(obj, path, value);
+
+    expect(obj.a.b).toBe('c');
   });
 });
