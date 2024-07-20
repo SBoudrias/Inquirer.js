@@ -10,6 +10,7 @@ import loaderDemo from './demos/loader.mjs';
 import numberDemo from './demos/number.mjs';
 import passwordDemo from './demos/password.mjs';
 import rawlistDemo from './demos/rawlist.mjs';
+import searchDemo from './demos/search.mjs';
 import selectDemo from './demos/select.mjs';
 import timeoutDemo from './demos/timeout.mjs';
 
@@ -23,6 +24,7 @@ const demos = {
   number: numberDemo,
   password: passwordDemo,
   rawlist: rawlistDemo,
+  search: searchDemo,
   select: selectDemo,
   timeout: timeoutDemo,
 };
@@ -36,6 +38,7 @@ async function askNextDemo() {
       { name: 'Confirm', value: 'confirm' },
       { name: 'Select', value: 'select' },
       { name: 'Checkbox', value: 'checkbox' },
+      { name: 'Search', value: 'search' },
       { name: 'Expand', value: 'expand' },
       { name: 'Rawlist', value: 'rawlist' },
       { name: 'Editor', value: 'editor' },

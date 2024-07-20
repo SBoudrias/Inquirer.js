@@ -6,5 +6,5 @@ export { default as number } from '@inquirer/number';
 export { default as expand } from '@inquirer/expand';
 export { default as rawlist } from '@inquirer/rawlist';
 export { default as password } from '@inquirer/password';
-
+export { default as search } from '@inquirer/search';
 export { default as select } from '@inquirer/select';
