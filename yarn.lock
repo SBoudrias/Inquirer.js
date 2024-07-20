@@ -560,6 +560,7 @@ __metadata:
     "@inquirer/number": "npm:^1.0.4"
     "@inquirer/password": "npm:^2.1.16"
     "@inquirer/rawlist": "npm:^2.1.16"
+    "@inquirer/search": "npm:^0.0.0"
     "@inquirer/select": "npm:^2.4.1"
     "@inquirer/type": "npm:^1.5.0"
   languageName: unknown
@@ -602,6 +603,18 @@ __metadata:
     typescript: "npm:^5.5.3"
     typescript-eslint: "npm:^7.16.1"
     vitest: "npm:^2.0.3"
+  languageName: unknown
+  linkType: soft
+
+"@inquirer/search@npm:^0.0.0, @inquirer/search@workspace:packages/search":
+  version: 0.0.0-use.local
+  resolution: "@inquirer/search@workspace:packages/search"
+  dependencies:
+    "@inquirer/core": "npm:^9.0.4"
+    "@inquirer/figures": "npm:^1.0.4"
+    "@inquirer/testing": "npm:^2.1.27"
+    "@inquirer/type": "npm:^1.5.0"
+    yoctocolors-cjs: "npm:^2.1.2"
   languageName: unknown
   linkType: soft
 

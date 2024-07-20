@@ -93,6 +93,16 @@ import { confirm } from '@inquirer/prompts';
 
 [See documentation](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/confirm) for usage example and options documentation.
 
+## [Search](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/search)
+
+![search prompt](https://raw.githubusercontent.com/SBoudrias/Inquirer.js/f459199e679aec7676cecc0fc12ef8a4cd3dda0b/assets/screenshots/search.png)
+
+```js
+import { search } from '@inquirer/prompts';
+```
+
+[See documentation](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/search) for usage example and options documentation.
+
 ## [Password](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/password)
 
 ![Password prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/password.svg)

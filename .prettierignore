@@ -6,5 +6,6 @@
 .yarn
 *.gz
 *.zip
+*.png
 coverage
 yarn.lock
