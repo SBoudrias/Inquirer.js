@@ -23,13 +23,19 @@ import ansiEscapes from 'ansi-escapes';
 
 type SelectTheme = {
   icon: { cursor: string };
-  style: { disabled: (text: string) => string };
+  style: {
+    disabled: (text: string) => string;
+    description: (text: string) => string;
+  };
   helpMode: 'always' | 'never' | 'auto';
 };
 
 const selectTheme: SelectTheme = {
   icon: { cursor: figures.pointer },
-  style: { disabled: (text: string) => colors.dim(`- ${text}`) },
+  style: {
+    disabled: (text: string) => colors.dim(`- ${text}`),
+    description: (text: string) => colors.cyan(text),
+  },
   helpMode: 'auto',
 };
 
@@ -58,7 +64,7 @@ function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
 }
 
 export default createPrompt(
-  <Value,>(config: SelectConfig<Value>, done: (value: Value) => void): string => {
+  <Value,>(config: SelectConfig<Value>, done: (value: Value) => void) => {
     const { choices: items, loop = true, pageSize = 7 } = config;
     const firstRender = useRef(true);
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
@@ -193,10 +199,10 @@ export default createPrompt(
     }
 
     const choiceDescription = selectedChoice.description
-      ? `\n${selectedChoice.description}`
+      ? `\n${theme.style.description(selectedChoice.description)}`
       : ``;
 
-    return `${[prefix, message, helpTipTop].filter(Boolean).join(' ')}\n${page}${choiceDescription}${helpTipBottom}${ansiEscapes.cursorHide}`;
+    return `${[prefix, message, helpTipTop].filter(Boolean).join(' ')}\n${page}${helpTipBottom}${choiceDescription}${ansiEscapes.cursorHide}`;
   },
 );
 

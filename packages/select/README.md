@@ -64,16 +64,38 @@ const answer = await select({
 
 ## Options
 
-| Property | Type                                                                                                                       | Required | Description                                                                                                                                                                                                                                                                                                                                           |
-| -------- | -------------------------------------------------------------------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| message  | `string`                                                                                                                   | yes      | The question to ask                                                                                                                                                                                                                                                                                                                                   |
-| choices  | `Array<{ value: string, name?: string, short?: string, description?: string, disabled?: boolean \| string } \| Separator>` | yes      | List of the available choices. The `value` will be returned as the answer, and used as display if no `name` is defined. Choices who're `disabled` will be displayed, but not selectable. The `description` will be displayed under the prompt when the cursor land over the choice. `short` if defined will be used instead of `name` once submitted. |
-| default  | `string`                                                                                                                   | no       | Defines in front of which item the cursor will initially appear. When omitted, the cursor will appear on the first selectable item.                                                                                                                                                                                                                   |
-| pageSize | `number`                                                                                                                   | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                                                                                                                                                                           |
-| loop     | `boolean`                                                                                                                  | no       | Defaults to `true`. When set to `false`, the cursor will be constrained to the top and bottom of the choice list without looping.                                                                                                                                                                                                                     |
-| theme    | [See Theming](#Theming)                                                                                                    | no       | Customize look of the prompt.                                                                                                                                                                                                                                                                                                                         |
+| Property | Type                    | Required | Description                                                                                                                                 |
+| -------- | ----------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| message  | `string`                | yes      | The question to ask                                                                                                                         |
+| choices  | `Choice[]`              | yes      | List of the available choices.                                                                                                              |
+| default  | `string`                | no       | Defines in front of which item the cursor will initially appear. When omitted, the cursor will appear on the first selectable item.         |
+| pageSize | `number`                | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once. |
+| loop     | `boolean`               | no       | Defaults to `true`. When set to `false`, the cursor will be constrained to the top and bottom of the choice list without looping.           |
+| theme    | [See Theming](#Theming) | no       | Customize look of the prompt.                                                                                                               |
 
-The `Separator` object can be used to render non-selectable lines in the choice list. By default it'll render a line, but you can provide the text as argument (`new Separator('-- Dependencies --')`). This option is often used to add labels to groups within long list of options.
+`Separator` objects can be used in the `choices` array to render non-selectable lines in the choice list. By default it'll render a line, but you can provide the text as argument (`new Separator('-- Dependencies --')`). This option is often used to add labels to groups within long list of options.
+
+### `Choice` object
+
+The `Choice` object is typed as
+
+```ts
+type Choice<Value> = {
+  value: Value;
+  name?: string;
+  description?: string;
+  short?: string;
+  disabled?: boolean | string;
+};
+```
+
+Here's each property:
+
+- `value`: The value is what will be returned by `await select()`.
+- `name`: This is the string displayed in the choice list.
+- `description`: Option for a longer description string that'll appear under the list when the cursor highlight a given choice.
+- `short`: Once the prompt is done (press enter), we'll use `short` if defined to render next to the question. By default we'll use `name`.
+- `disabled`: Disallow the option from being selected. If `disabled` is a string, it'll be used as a help tip explaining why the choice isn't available.
 
 ## Theming
 
@@ -92,6 +114,7 @@ type Theme = {
     error: (text: string) => string;
     help: (text: string) => string;
     highlight: (text: string) => string;
+    description: (text: string) => string;
     disabled: (text: string) => string;
   };
   icon: {
