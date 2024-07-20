@@ -55,7 +55,8 @@ export function lines<T>({
     isActive: index === active,
   }));
   const layoutsInPage = rotate(active - requested, layouts).slice(0, pageSize);
-  const renderItemAt = (index: number) => split(renderItem(layoutsInPage[index]!), width);
+  const renderItemAt = (index: number) =>
+    layoutsInPage[index] == null ? [] : split(renderItem(layoutsInPage[index]), width);
 
   // Create a blank array of lines for the page
   const pageBuffer: string[] = Array.from({ length: pageSize });
