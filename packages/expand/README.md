@@ -16,6 +16,25 @@ Compact single select prompt. Every option is assigned a shortcut key, and selec
 <td>
 
 ```sh
+npm install @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<td colSpan="2" align="center">Or</td>
+</tr>
+<tr>
+<td>
+
+```sh
 npm install @inquirer/expand
 ```
 
@@ -33,7 +52,9 @@ yarn add @inquirer/expand
 # Usage
 
 ```js
-import expand from '@inquirer/expand';
+import { expand } from '@inquirer/prompts';
+// Or
+// import expand from '@inquirer/expand';
 
 const answer = await expand({
   message: 'Conflict on file.js',

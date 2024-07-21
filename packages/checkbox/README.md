@@ -15,6 +15,25 @@ Simple interactive command line prompt to display a list of checkboxes (multi se
 <td>
 
 ```sh
+npm install @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<td colSpan="2" align="center">Or</td>
+</tr>
+<tr>
+<td>
+
+```sh
 npm install @inquirer/checkbox
 ```
 
@@ -32,7 +51,9 @@ yarn add @inquirer/checkbox
 # Usage
 
 ```js
-import checkbox, { Separator } from '@inquirer/checkbox';
+import { checkbox, Separator } from '@inquirer/prompts';
+// Or
+// import checkbox, { Separator } from '@inquirer/checkbox';
 
 const answer = await checkbox({
   message: 'Select a package manager',

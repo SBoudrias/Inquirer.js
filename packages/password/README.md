@@ -15,6 +15,25 @@ Interactive password input component for command line interfaces. Supports input
 <td>
 
 ```sh
+npm install @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<td colSpan="2" align="center">Or</td>
+</tr>
+<tr>
+<td>
+
+```sh
 npm install @inquirer/password
 ```
 
@@ -32,7 +51,9 @@ yarn add @inquirer/password
 # Usage
 
 ```js
-import password from '@inquirer/password';
+import { password } from '@inquirer/prompts';
+// Or
+// import password from '@inquirer/password';
 
 const answer = await password({ message: 'Enter your name' });
 ```

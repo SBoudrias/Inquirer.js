@@ -13,6 +13,25 @@ Interactive free number input component for command line interfaces. Supports va
 <td>
 
 ```sh
+npm install @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<td colSpan="2" align="center">Or</td>
+</tr>
+<tr>
+<td>
+
+```sh
 npm install @inquirer/number
 ```
 
@@ -30,7 +49,9 @@ yarn add @inquirer/number
 # Usage
 
 ```js
-import number from '@inquirer/number';
+import { number } from '@inquirer/prompts';
+// Or
+// import number from '@inquirer/number';
 
 const answer = await number({ message: 'Enter your age' });
 ```
