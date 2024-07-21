@@ -589,16 +589,16 @@ __metadata:
     eslint: "npm:^9.7.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-n: "npm:^17.9.0"
-    eslint-plugin-prettier: "npm:^5.1.3"
+    eslint-plugin-prettier: "npm:^5.2.1"
     eslint-plugin-unicorn: "npm:^54.0.0"
     globals: "npm:^15.8.0"
     globby: "npm:^14.0.2"
-    husky: "npm:^9.0.11"
-    lerna: "npm:^8.1.6"
+    husky: "npm:^9.1.1"
+    lerna: "npm:^8.1.7"
     lint-staged: "npm:^15.2.7"
     prettier: "npm:^3.3.3"
     ts-node: "npm:^10.9.2"
-    turbo: "npm:^2.0.7"
+    turbo: "npm:^2.0.9"
     typescript: "npm:^5.5.3"
     typescript-eslint: "npm:^7.16.1"
     vitest: "npm:^2.0.3"
@@ -728,9 +728,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/create@npm:8.1.6":
-  version: 8.1.6
-  resolution: "@lerna/create@npm:8.1.6"
+"@lerna/create@npm:8.1.7":
+  version: 8.1.7
+  resolution: "@lerna/create@npm:8.1.7"
   dependencies:
     "@npmcli/arborist": "npm:7.5.3"
     "@npmcli/package-json": "npm:5.2.0"
@@ -790,6 +790,7 @@ __metadata:
     slash: "npm:^3.0.0"
     ssri: "npm:^10.0.6"
     string-width: "npm:^4.2.3"
+    strip-ansi: "npm:^6.0.1"
     strong-log-transformer: "npm:2.1.0"
     tar: "npm:6.2.1"
     temp-dir: "npm:1.0.0"
@@ -802,7 +803,7 @@ __metadata:
     write-pkg: "npm:4.0.0"
     yargs: "npm:17.7.2"
     yargs-parser: "npm:21.1.1"
-  checksum: 10/f8d57fdeb32e17fc8c84ef4187ea14a0aa8153371dc5c956f7a21936b9bd12cdb42ecc54b0644e4876e1ec9b273f545ff1c51504c0d7ba04b33ea5d2af6d0dd1
+  checksum: 10/81e6054f395a1f14de8d6f4539403a61c59ce477360167a6b1a1946ad1676a1157b94960d139a6b7eca5715a101fd7ee8609e2959729dd75531793d8920c2f4b
   languageName: node
   linkType: hard
 
@@ -3363,12 +3364,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:^5.1.3":
-  version: 5.1.3
-  resolution: "eslint-plugin-prettier@npm:5.1.3"
+"eslint-plugin-prettier@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "eslint-plugin-prettier@npm:5.2.1"
   dependencies:
     prettier-linter-helpers: "npm:^1.0.0"
-    synckit: "npm:^0.8.6"
+    synckit: "npm:^0.9.1"
   peerDependencies:
     "@types/eslint": ">=8.0.0"
     eslint: ">=8.0.0"
@@ -3379,7 +3380,7 @@ __metadata:
       optional: true
     eslint-config-prettier:
       optional: true
-  checksum: 10/4f26a30444adc61ed692cdb5a9f7e8d9f5794f0917151051e66755ce032a08c3cc72c8b5d56101412e90f6d77035bd8194ea8731e9c16aacdd5ae345a8dae188
+  checksum: 10/10ddf68215237e327af09a47adab4c63f3885fda4fb28c4c42d1fc5f47d8a0cc45df6484799360ff1417a0aa3c77c3aaac49d7e9dfd145557b17e2d7ecc2a27c
   languageName: node
   linkType: hard
 
@@ -4338,12 +4339,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:^9.0.11":
-  version: 9.0.11
-  resolution: "husky@npm:9.0.11"
+"husky@npm:^9.1.1":
+  version: 9.1.1
+  resolution: "husky@npm:9.1.1"
   bin:
-    husky: bin.mjs
-  checksum: 10/8a9b7cb9dc8494b470b3b47b386e65d579608c6206da80d3cc8b71d10e37947264af3dfe00092368dad9673b51d2a5ee87afb4b2291e77ba9e7ec1ac36e56cd1
+    husky: bin.js
+  checksum: 10/c3be0392071b78c680fc6b9fd7978f52c26e18238a2840c6eabfc0db395e19fcd798da8eff0e31a9e76c479d6019a567d83a8de80f360d28552bc83bd1839b7c
   languageName: node
   linkType: hard
 
@@ -5014,11 +5015,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lerna@npm:^8.1.6":
-  version: 8.1.6
-  resolution: "lerna@npm:8.1.6"
+"lerna@npm:^8.1.7":
+  version: 8.1.7
+  resolution: "lerna@npm:8.1.7"
   dependencies:
-    "@lerna/create": "npm:8.1.6"
+    "@lerna/create": "npm:8.1.7"
     "@npmcli/arborist": "npm:7.5.3"
     "@npmcli/package-json": "npm:5.2.0"
     "@npmcli/run-script": "npm:8.1.0"
@@ -5085,6 +5086,7 @@ __metadata:
     slash: "npm:3.0.0"
     ssri: "npm:^10.0.6"
     string-width: "npm:^4.2.3"
+    strip-ansi: "npm:^6.0.1"
     strong-log-transformer: "npm:2.1.0"
     tar: "npm:6.2.1"
     temp-dir: "npm:1.0.0"
@@ -5100,7 +5102,7 @@ __metadata:
     yargs-parser: "npm:21.1.1"
   bin:
     lerna: dist/cli.js
-  checksum: 10/5dbc0128b9cde7f66cd97867fa0e462ff7544134b2388c6ba28e7259b2e175017f988a77e3eed8c16e4f54fc61593f73795f740df83f3b6c6137856d8a20221b
+  checksum: 10/8286b0634c9c4c58aed2606bb2b22af5ba91f4676cb3d5fad60777553d7f05f7abce688ced4348feca1c1eef5c808d6e6119bb944bf883fdc51d32fa81fee9fb
   languageName: node
   linkType: hard
 
@@ -7746,13 +7748,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"synckit@npm:^0.8.6":
-  version: 0.8.8
-  resolution: "synckit@npm:0.8.8"
+"synckit@npm:^0.9.1":
+  version: 0.9.1
+  resolution: "synckit@npm:0.9.1"
   dependencies:
     "@pkgr/core": "npm:^0.1.0"
     tslib: "npm:^2.6.2"
-  checksum: 10/2864a5c3e689ad5b991bebbd8a583c5682c4fa08a4f39986b510b6b5d160c08fc3672444069f8f96ed6a9d12772879c674c1f61e728573eadfa90af40a765b74
+  checksum: 10/bff3903976baf8b699b5483228116d70223781a93b17c70e685c277ee960cdfd1a09cb5a741e6a9ec35e2428f14f4664baec41ccc99a598f267608b2a54f529b
   languageName: node
   linkType: hard
 
@@ -8012,58 +8014,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turbo-darwin-64@npm:2.0.7":
-  version: 2.0.7
-  resolution: "turbo-darwin-64@npm:2.0.7"
+"turbo-darwin-64@npm:2.0.9":
+  version: 2.0.9
+  resolution: "turbo-darwin-64@npm:2.0.9"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-darwin-arm64@npm:2.0.7":
-  version: 2.0.7
-  resolution: "turbo-darwin-arm64@npm:2.0.7"
+"turbo-darwin-arm64@npm:2.0.9":
+  version: 2.0.9
+  resolution: "turbo-darwin-arm64@npm:2.0.9"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-linux-64@npm:2.0.7":
-  version: 2.0.7
-  resolution: "turbo-linux-64@npm:2.0.7"
+"turbo-linux-64@npm:2.0.9":
+  version: 2.0.9
+  resolution: "turbo-linux-64@npm:2.0.9"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-linux-arm64@npm:2.0.7":
-  version: 2.0.7
-  resolution: "turbo-linux-arm64@npm:2.0.7"
+"turbo-linux-arm64@npm:2.0.9":
+  version: 2.0.9
+  resolution: "turbo-linux-arm64@npm:2.0.9"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo-windows-64@npm:2.0.7":
-  version: 2.0.7
-  resolution: "turbo-windows-64@npm:2.0.7"
+"turbo-windows-64@npm:2.0.9":
+  version: 2.0.9
+  resolution: "turbo-windows-64@npm:2.0.9"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"turbo-windows-arm64@npm:2.0.7":
-  version: 2.0.7
-  resolution: "turbo-windows-arm64@npm:2.0.7"
+"turbo-windows-arm64@npm:2.0.9":
+  version: 2.0.9
+  resolution: "turbo-windows-arm64@npm:2.0.9"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"turbo@npm:^2.0.7":
-  version: 2.0.7
-  resolution: "turbo@npm:2.0.7"
+"turbo@npm:^2.0.9":
+  version: 2.0.9
+  resolution: "turbo@npm:2.0.9"
   dependencies:
-    turbo-darwin-64: "npm:2.0.7"
-    turbo-darwin-arm64: "npm:2.0.7"
-    turbo-linux-64: "npm:2.0.7"
-    turbo-linux-arm64: "npm:2.0.7"
-    turbo-windows-64: "npm:2.0.7"
-    turbo-windows-arm64: "npm:2.0.7"
+    turbo-darwin-64: "npm:2.0.9"
+    turbo-darwin-arm64: "npm:2.0.9"
+    turbo-linux-64: "npm:2.0.9"
+    turbo-linux-arm64: "npm:2.0.9"
+    turbo-windows-64: "npm:2.0.9"
+    turbo-windows-arm64: "npm:2.0.9"
   dependenciesMeta:
     turbo-darwin-64:
       optional: true
@@ -8079,7 +8081,7 @@ __metadata:
       optional: true
   bin:
     turbo: bin/turbo
-  checksum: 10/7c5af598c461235accb5ebbc598a7bcab85db7a2e9372a36371070f3b8c7e60f6cc3ce2dc4642ce6db7d7db5c3e6246d199dc43106eb297b8da04c89c3c84c0e
+  checksum: 10/4f185741bc5deca4059a99cf12ea1ddf22c6855fd468e25ad5d494646259d75e34203d8744b1dd40e85ea23ba7629582bc38e46f22e0c2bf3f009d48941a8842
   languageName: node
   linkType: hard
 
