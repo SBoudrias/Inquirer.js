@@ -81,12 +81,12 @@
   "scripts": {
     "prepare": "husky && turbo tsc attw",
     "setup": "node ./tools/setup-packages.mjs",
-    "pretest": "eslint . && turbo tsc",
+    "pretest": "eslint . && turbo tsc && yarn tsc:test",
     "test": "vitest --run packages && node --test integration/**/*.test.*",
-    "dev": "turbo tsc:watch --concurrency 17",
+    "dev": "turbo watch tsc",
+    "demo": "node --watch-path=packages/ packages/demo/",
     "tsc": "turbo tsc",
-    "tsc:test": "tsc -p tsconfig.test.json",
-    "tsc:watch": "tsc -p tsconfig.test.json --watch"
+    "tsc:test": "tsc -p tsconfig.test.json"
   },
   "repository": {
     "type": "git",

@@ -9,14 +9,6 @@
       "dependsOn": ["^tsc"],
       "outputs": ["dist/**"],
       "inputs": ["$TURBO_DEFAULT$", "../../tools/fix-ext.mjs", "../../tsconfig.json"]
-    },
-    "tsc:watch": {
-      "cache": false,
-      "persistent": true
-    },
-    "//#tsc:watch": {
-      "cache": false,
-      "persistent": true
     }
   }
 }

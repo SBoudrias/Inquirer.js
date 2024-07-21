@@ -66,7 +66,7 @@ yarn tsc
 yarn dev
 
 # Then run the demos
-yarn node packages/demo
+yarn demo
 ```
 
 (PR idea: Adding a watch mode for this flow would be great!)
