@@ -15,6 +15,22 @@ Interactive search prompt component for command line interfaces.
 <td>
 
 ```sh
+npm install @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```sh
 npm install @inquirer/search
 ```
 
@@ -32,7 +48,9 @@ yarn add @inquirer/search
 # Usage
 
 ```js
-import search, { Separator } from '@inquirer/search';
+import { search, Separator } from '@inquirer/prompts';
+// Or
+// import search, { Separator } from '@inquirer/search';
 
 const answer = await search({
   message: 'Select an npm package',
