@@ -13,6 +13,7 @@ import {
   checkbox,
   password,
   editor,
+  search,
   Separator,
 } from '@inquirer/prompts';
 import type { Prettify, UnionToIntersection } from '@inquirer/type';
@@ -45,6 +46,7 @@ const defaultPrompts: PromptCollection = {
   checkbox,
   password,
   editor,
+  search,
 };
 
 type PromptReturnType<T> =
