@@ -71,7 +71,7 @@ type Config<Value> = {
   loop?: boolean;
   required?: boolean;
   validate?: (
-    items: ReadonlyArray<Item<Value>>,
+    choices: ReadonlyArray<Choice<Value>>,
   ) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme<CheckboxTheme>>;
 };
