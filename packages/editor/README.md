@@ -13,6 +13,25 @@ Prompt that'll open the user preferred editor with default content and allow for
 <td>
 
 ```sh
+npm install @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<td colSpan="2" align="center">Or</td>
+</tr>
+<tr>
+<td>
+
+```sh
 npm install @inquirer/editor
 ```
 
@@ -30,7 +49,9 @@ yarn add @inquirer/editor
 # Usage
 
 ```js
-import editor from '@inquirer/editor';
+import { editor } from '@inquirer/prompts';
+// Or
+// import editor from '@inquirer/editor';
 
 const answer = await editor({
   message: 'Enter a description',

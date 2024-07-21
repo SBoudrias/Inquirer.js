@@ -15,6 +15,25 @@ Simple interactive command line prompt to display a raw list of choices (single 
 <td>
 
 ```sh
+npm install @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<td colSpan="2" align="center">Or</td>
+</tr>
+<tr>
+<td>
+
+```sh
 npm install @inquirer/rawlist
 ```
 
@@ -32,7 +51,9 @@ yarn add @inquirer/rawlist
 # Usage
 
 ```js
-import rawlist from '@inquirer/rawlist';
+import { rawlist } from '@inquirer/prompts';
+// Or
+// import rawlist from '@inquirer/rawlist';
 
 const answer = await rawlist({
   message: 'Select a package manager',

@@ -15,6 +15,25 @@ Simple interactive command line prompt to display a list of choices (single sele
 <td>
 
 ```sh
+npm install @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<td colSpan="2" align="center">Or</td>
+</tr>
+<tr>
+<td>
+
+```sh
 npm install @inquirer/select
 ```
 
@@ -32,7 +51,9 @@ yarn add @inquirer/select
 # Usage
 
 ```js
-import select, { Separator } from '@inquirer/select';
+import { select, Separator } from '@inquirer/prompts';
+// Or
+// import select, { Separator } from '@inquirer/select';
 
 const answer = await select({
   message: 'Select a package manager',

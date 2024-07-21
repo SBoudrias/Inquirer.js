@@ -15,6 +15,25 @@ Simple interactive command line prompt to gather boolean input from users.
 <td>
 
 ```sh
+npm install @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<td colSpan="2" align="center">Or</td>
+</tr>
+<tr>
+<td>
+
+```sh
 npm install @inquirer/confirm
 ```
 
@@ -32,7 +51,9 @@ yarn add @inquirer/confirm
 # Usage
 
 ```js
-import confirm from '@inquirer/confirm';
+import { confirm } from '@inquirer/prompts';
+// Or
+// import confirm from '@inquirer/confirm';
 
 const answer = await confirm({ message: 'Continue?' });
 ```

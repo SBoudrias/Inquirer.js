@@ -15,6 +15,25 @@ Interactive free text input component for command line interfaces. Supports vali
 <td>
 
 ```sh
+npm install @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<td colSpan="2" align="center">Or</td>
+</tr>
+<tr>
+<td>
+
+```sh
 npm install @inquirer/input
 ```
 
@@ -32,7 +51,9 @@ yarn add @inquirer/input
 # Usage
 
 ```js
-import input from '@inquirer/input';
+import { input } from '@inquirer/prompts';
+// Or
+// import input from '@inquirer/input';
 
 const answer = await input({ message: 'Enter your name' });
 ```
