@@ -8,8 +8,6 @@ import {
   useEffect,
   useMemo,
   isEnterKey,
-  isUpKey,
-  isDownKey,
   Separator,
   makeTheme,
   type Theme,
@@ -128,13 +126,13 @@ export default createPrompt(
       if (isEnterKey(key) && selectedChoice) {
         setStatus('done');
         done(selectedChoice.value);
-      } else if (status !== 'searching' && (isUpKey(key) || isDownKey(key))) {
+      } else if (status !== 'searching' && (key.name === 'up' || key.name === 'down')) {
         rl.clearLine(0);
         if (
-          (isUpKey(key) && active !== bounds.first) ||
-          (isDownKey(key) && active !== bounds.last)
+          (key.name === 'up' && active !== bounds.first) ||
+          (key.name === 'down' && active !== bounds.last)
         ) {
-          const offset = isUpKey(key) ? -1 : 1;
+          const offset = key.name === 'up' ? -1 : 1;
           let next = active;
           do {
             next = (next + offset + searchResults.length) % searchResults.length;
