@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, expectTypeOf } from 'vitest';
 import { render } from '@inquirer/testing';
 import search, { Separator } from './src/index.mjs';
 
@@ -24,7 +24,7 @@ function getListSearch(
     Separator | { value: string; name?: string; disabled?: boolean | string }
   >,
 ) {
-  return (term: string | void) => {
+  return (term: string = '') => {
     if (!term) return choices;
 
     return choices.filter((choice) => {
@@ -312,5 +312,18 @@ describe('search prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('Targaryen');
+  });
+
+  it('allows default parameters to be used as source function parameters', async () => {
+    const { answer } = await render(search, {
+      message: 'Select a family',
+      source: async (term: string = '') => {
+        expectTypeOf(term).toEqualTypeOf<string>();
+        return [];
+      },
+    });
+
+    answer.cancel();
+    await expect(answer).rejects.toThrow();
   });
 });
