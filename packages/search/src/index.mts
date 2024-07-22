@@ -50,7 +50,7 @@ type Choice<Value> = {
 type SearchConfig<Value> = {
   message: string;
   source: (
-    term: string | void,
+    term: string | undefined,
     opt: { signal: AbortSignal },
   ) =>
     | ReadonlyArray<Choice<Value> | Separator>
