@@ -6,6 +6,7 @@ import {
   usePagination,
   useRef,
   useMemo,
+  useEffect,
   isBackspaceKey,
   isEnterKey,
   isUpKey,
@@ -148,6 +149,13 @@ export default createPrompt(
         }, 700);
       }
     });
+
+    useEffect(
+      () => () => {
+        clearTimeout(searchTimeoutRef.current);
+      },
+      [],
+    );
 
     const message = theme.style.message(config.message);
 
