@@ -36,13 +36,19 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
         }
 
         const removeExitListener = onSignalExit((code, signal) => {
-          onExit();
+          finalizeExit();
           reject(
             new ExitPromptError(`User force closed the prompt with ${code} ${signal}`),
           );
         });
 
-        function onExit() {
+        function closeCallback() {
+          // Used by `rl.on('close', closeCallback)`
+          // We need to delay its execution to after the 'keypress' event handler finished
+          setImmediate(hooksCleanup);
+        }
+
+        function hooksCleanup() {
           try {
             store.hooksCleanup.forEach((cleanFn) => {
               cleanFn?.();
@@ -50,7 +56,10 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           } catch (error) {
             reject(error);
           }
+          store.rl.removeListener('close', closeCallback);
+        }
 
+        function finalizeExit() {
           if (context?.clearPromptOnDone) {
             screen.clean();
           } else {
@@ -60,6 +69,11 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
           removeExitListener();
           store.rl.input.removeListener('keypress', checkCursorPos);
+        }
+
+        function onExit() {
+          hooksCleanup();
+          finalizeExit();
         }
 
         cancel = () => {
@@ -102,6 +116,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
         // We set the listener after the initial workLoop to avoid a double render if render triggered
         // by a state change sets the cursor to the right position.
         store.rl.input.on('keypress', checkCursorPos);
+        store.rl.on('close', closeCallback);
       });
     });
 
