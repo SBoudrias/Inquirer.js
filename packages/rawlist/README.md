@@ -67,11 +67,33 @@ const answer = await rawlist({
 
 ## Options
 
-| Property | Type                                                    | Required | Description                                                                                                                                                                                                              |
-| -------- | ------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| message  | `string`                                                | yes      | The question to ask                                                                                                                                                                                                      |
-| choices  | `Array<{ value: string, name?: string, key?: string }>` | yes      | List of the available choices. The `value` will be returned as the answer, and used as display if no `name` is defined. By default, choices will be selected by index. This can be customized by using the `key` option. |
-| theme    | [See Theming](#Theming)                                 | no       | Customize look of the prompt.                                                                                                                                                                                            |
+| Property | Type                    | Required | Description                    |
+| -------- | ----------------------- | -------- | ------------------------------ |
+| message  | `string`                | yes      | The question to ask            |
+| choices  | `Choice[]`              | yes      | List of the available choices. |
+| theme    | [See Theming](#Theming) | no       | Customize look of the prompt.  |
+
+`Separator` objects can be used in the `choices` array to render non-selectable lines in the choice list. By default it'll render a line, but you can provide the text as argument (`new Separator('-- Dependencies --')`). This option is often used to add labels to groups within long list of options.
+
+### `Choice` object
+
+The `Choice` object is typed as
+
+```ts
+type Choice<Value> = {
+  value: Value;
+  name?: string;
+  short?: string;
+  key?: string;
+};
+```
+
+Here's each property:
+
+- `value`: The value is what will be returned by `await select()`.
+- `name`: This is the string displayed in the choice list.
+- `short`: Once the prompt is done (press enter), we'll use `short` if defined to render next to the question. By default we'll use `name`.
+- `key`: The key of the choice. Displayed as `key) name`.
 
 ## Theming
 
