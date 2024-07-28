@@ -33,6 +33,36 @@ describe('rawlist prompt', () => {
     await expect(answer).resolves.toEqual(4);
   });
 
+  it('uses custom `key`, and `short` once a value is selected', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a country',
+      choices: [
+        { key: 'C', value: 'CA', name: 'Canada', short: 'Can' },
+        { key: 'M', value: 'MX', name: 'Mexico', short: 'Mex' },
+        { key: 'U', value: 'US', name: 'United States of America', short: 'USA' },
+      ],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a country
+        C) Canada
+        M) Mexico
+        U) United States of America"
+    `);
+
+    events.type('M');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a country M
+        C) Canada
+        M) Mexico
+        U) United States of America"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('MX');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Select a country Mex"`);
+  });
+
   it('skip separator by number key', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select a topping',

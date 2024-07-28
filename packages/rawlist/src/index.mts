@@ -16,6 +16,7 @@ const numberRegex = /\d+/;
 type Choice<Value> = {
   value: Value;
   name?: string;
+  short?: string;
   key?: string;
 };
 
@@ -47,14 +48,15 @@ export default createPrompt(
           const answer = Number.parseInt(value, 10) - 1;
           selectedChoice = choices.filter(isSelectableChoice)[answer];
         } else {
-          const answer = value.toLowerCase();
           selectedChoice = choices.find(
-            (choice) => isSelectableChoice(choice) && choice.key === answer,
+            (choice) => isSelectableChoice(choice) && choice.key === value,
           );
         }
 
         if (isSelectableChoice(selectedChoice)) {
-          setValue(selectedChoice.name || String(selectedChoice.value));
+          setValue(
+            selectedChoice.short ?? selectedChoice.name ?? String(selectedChoice.value),
+          );
           setStatus('done');
           done(selectedChoice.value);
         } else if (value === '') {
