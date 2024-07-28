@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/number",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Inquirer number prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -54,11 +54,11 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/number/README.md",
   "dependencies": {
-    "@inquirer/core": "^9.0.5",
+    "@inquirer/core": "^9.0.6",
     "@inquirer/type": "^1.5.1"
   },
   "devDependencies": {
-    "@inquirer/testing": "^2.1.28"
+    "@inquirer/testing": "^2.1.29"
   },
   "scripts": {
     "tsc": "yarn run tsc:esm && yarn run tsc:cjs",
