@@ -125,6 +125,7 @@ export type PromptFn<Value = any, Config = any> = (
 export type PromptCollection = Record<string, PromptFn | LegacyPromptConstructor>;
 
 class TTYError extends Error {
+  override name = 'TTYError';
   isTtyError = true;
 }
 
