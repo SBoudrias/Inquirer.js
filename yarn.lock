@@ -471,7 +471,7 @@ __metadata:
   resolution: "@inquirer/demo@workspace:packages/demo"
   dependencies:
     "@inquirer/core": "npm:^9.0.6"
-    "@inquirer/prompts": "npm:^5.3.3"
+    "@inquirer/prompts": "npm:^5.3.4"
     yoctocolors-cjs: "npm:^2.1.2"
   bin:
     inquirer-demo: index.mjs
@@ -548,7 +548,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/prompts@npm:^5.3.3, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
+"@inquirer/prompts@npm:^5.3.4, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
   version: 0.0.0-use.local
   resolution: "@inquirer/prompts@workspace:packages/prompts"
   dependencies:
@@ -559,14 +559,14 @@ __metadata:
     "@inquirer/input": "npm:^2.2.5"
     "@inquirer/number": "npm:^1.0.6"
     "@inquirer/password": "npm:^2.1.18"
-    "@inquirer/rawlist": "npm:^2.1.18"
+    "@inquirer/rawlist": "npm:^2.2.0"
     "@inquirer/search": "npm:^1.0.3"
     "@inquirer/select": "npm:^2.4.3"
     "@inquirer/type": "npm:^1.5.1"
   languageName: unknown
   linkType: soft
 
-"@inquirer/rawlist@npm:^2.1.18, @inquirer/rawlist@workspace:packages/rawlist":
+"@inquirer/rawlist@npm:^2.2.0, @inquirer/rawlist@workspace:packages/rawlist":
   version: 0.0.0-use.local
   resolution: "@inquirer/rawlist@workspace:packages/rawlist"
   dependencies:
@@ -4496,7 +4496,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inquirer@workspace:packages/inquirer"
   dependencies:
-    "@inquirer/prompts": "npm:^5.3.3"
+    "@inquirer/prompts": "npm:^5.3.4"
     "@inquirer/type": "npm:^1.5.1"
     "@types/mute-stream": "npm:^0.0.4"
     ansi-escapes: "npm:^4.3.2"

@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/prompts",
-  "version": "5.3.3",
+  "version": "5.3.4",
   "description": "Inquirer prompts, combined in a single package",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -83,7 +83,7 @@
     "@inquirer/input": "^2.2.5",
     "@inquirer/number": "^1.0.6",
     "@inquirer/password": "^2.1.18",
-    "@inquirer/rawlist": "^2.1.18",
+    "@inquirer/rawlist": "^2.2.0",
     "@inquirer/search": "^1.0.3",
     "@inquirer/select": "^2.4.3"
   },
