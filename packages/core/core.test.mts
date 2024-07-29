@@ -467,6 +467,40 @@ describe('createPrompt()', () => {
     await expect(answer).resolves.toEqual('done');
     expect(getScreen({ raw: true })).toEqual(ansiEscapes.eraseLines(1));
   });
+
+  it('clear timeout when force closing', { timeout: 1000 }, async () => {
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      const timeout = useRef<NodeJS.Timeout | undefined>();
+      useKeypress(() => {
+        clearTimeout(timeout.current);
+        timeout.current = setTimeout(() => {}, 1000);
+      });
+
+      useEffect(
+        () => () => {
+          clearTimeout(timeout.current);
+          // We call done explicitly, as onSignalExit is not triggered in this case
+          // But, CTRL+C will trigger rl.close, which should call this effect
+          // This way we can have the promise resolve
+          done('closed');
+        },
+        [],
+      );
+
+      return '';
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+
+    // This triggers the timeout
+    events.keypress('a');
+    // This closes the readline
+    events.keypress({ ctrl: true, name: 'c' });
+
+    const result = await answer;
+    expect(result).toBe('closed');
+  });
 });
 
 it('allow cancelling the prompt multiple times', async () => {
