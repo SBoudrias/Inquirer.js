@@ -487,7 +487,7 @@ describe('createPrompt()', () => {
         [],
       );
 
-      return '';
+      return config.message;
     };
 
     const prompt = createPrompt(Prompt);
