@@ -1,4 +1,5 @@
 import * as readline from 'node:readline';
+import { AsyncResource } from 'node:async_hooks';
 import { CancelablePromise, type Prompt, type Prettify } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import { onExit as onSignalExit } from 'signal-exit';
@@ -36,30 +37,23 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
         }
 
         const removeExitListener = onSignalExit((code, signal) => {
-          finalizeExit();
+          onExit();
           reject(
             new ExitPromptError(`User force closed the prompt with ${code} ${signal}`),
           );
         });
 
-        function closeCallback() {
-          // Used by `rl.on('close', closeCallback)`
-          // We need to delay its execution to after the 'keypress' event handler finished
-          setImmediate(hooksCleanup);
-        }
-
-        function hooksCleanup() {
+        const hooksCleanup = AsyncResource.bind(() => {
           try {
-            store.hooksCleanup.forEach((cleanFn) => {
-              cleanFn?.();
-            });
+            effectScheduler.clearAll();
           } catch (error) {
             reject(error);
           }
-          store.rl.removeListener('close', closeCallback);
-        }
+        });
 
-        function finalizeExit() {
+        function onExit() {
+          hooksCleanup();
+
           if (context?.clearPromptOnDone) {
             screen.clean();
           } else {
@@ -69,11 +63,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
           removeExitListener();
           store.rl.input.removeListener('keypress', checkCursorPos);
-        }
-
-        function onExit() {
-          hooksCleanup();
-          finalizeExit();
+          store.rl.removeListener('close', hooksCleanup);
         }
 
         cancel = () => {
@@ -116,7 +106,11 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
         // We set the listener after the initial workLoop to avoid a double render if render triggered
         // by a state change sets the cursor to the right position.
         store.rl.input.on('keypress', checkCursorPos);
-        store.rl.on('close', closeCallback);
+
+        // The close event triggers immediately when the user press ctrl+c. SignalExit on the other hand
+        // triggers after the process is done (which happens after timeouts are done triggering.)
+        // We triggers the hooks cleanup phase on rl `close` so active timeouts can be cleared.
+        store.rl.on('close', hooksCleanup);
       });
     });
 
