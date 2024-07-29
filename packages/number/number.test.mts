@@ -352,11 +352,11 @@ describe('number prompt', () => {
   });
 
   it('handle decimal steps', async () => {
-    const {answer, events, getScreen} = await render(number, {
+    const { answer, events, getScreen } = await render(number, {
       message: 'Enter a decimal number',
       min: 1,
       max: 100,
-      step: 0.01
+      step: 0.01,
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`"? Enter a decimal number"`);

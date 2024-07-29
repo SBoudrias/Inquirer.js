@@ -37,7 +37,13 @@ function validateNumber(
     return false;
   } else if (value < min || value > max) {
     return `Value must be between ${min} and ${max}`;
-  } else if (step !== 'any' && (value * Math.pow(10,6) - (Number.isFinite(min) ? (min * value * Math.pow(10,6)) : 0)) % (step * value * Math.pow(10,6)) !== 0) {
+  } else if (
+    step !== 'any' &&
+    (value * Math.pow(10,6) -
+      (Number.isFinite(min) ? (min * value * Math.pow(10,6)) : 0)) %
+    (step * value * Math.pow(10,6)) !==
+    0
+  ) {
     return `Value must be a multiple of ${step}${Number.isFinite(min) ? ` starting from ${min}` : ''}`;
   }
 
