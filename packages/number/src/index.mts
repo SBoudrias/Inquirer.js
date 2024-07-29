@@ -21,6 +21,14 @@ type NumberConfig = {
   theme?: PartialDeep<Theme>;
 };
 
+function isStepOf(value: number, step: number, min: number): boolean {
+  const valuePow = value * Math.pow(10, 6);
+  const stepPow = step * Math.pow(10, 6);
+  const minPow = min * Math.pow(10, 6);
+
+  return (valuePow - (Number.isFinite(min) ? minPow : 0)) % stepPow === 0;
+}
+
 function validateNumber(
   value: number | undefined,
   {
@@ -37,7 +45,7 @@ function validateNumber(
     return false;
   } else if (value < min || value > max) {
     return `Value must be between ${min} and ${max}`;
-  } else if (step !== 'any' && (value - (Number.isFinite(min) ? min : 0)) % step !== 0) {
+  } else if (step !== 'any' && !isStepOf(value, step, min)) {
     return `Value must be a multiple of ${step}${Number.isFinite(min) ? ` starting from ${min}` : ''}`;
   }
 
