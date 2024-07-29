@@ -350,4 +350,20 @@ describe('number prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`"Q: Answer must be: 2 === _2_"`);
   });
+
+  it('handle decimal steps', async () => {
+    const {answer, events, getScreen} = await render(number, {
+      message: 'Enter a decimal number',
+      min: 1,
+      max: 100,
+      step: 0.01
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a decimal number"`);
+
+    events.type('10.01');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(10.01);
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a decimal number 10.01"`);
+  });
 });
