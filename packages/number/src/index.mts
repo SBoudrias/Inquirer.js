@@ -40,7 +40,7 @@ function validateNumber(
   } else if (
     step !== 'any' &&
     (value * Math.pow(10, 6) -
-      (Number.isFinite(min) ? (min * Math.pow(10, 6)) : 0)) %
+      (Number.isFinite(min) ? min * Math.pow(10, 6) : 0)) %
       (step * Math.pow(10, 6)) !==
       0
   ) {
