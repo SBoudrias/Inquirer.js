@@ -140,4 +140,13 @@ export const effectScheduler = {
       store.hooksEffect.length = 0;
     })();
   },
+  clearAll() {
+    const store = getStore();
+    store.hooksCleanup.forEach((cleanFn) => {
+      cleanFn?.();
+    });
+
+    store.hooksEffect.length = 0;
+    store.hooksCleanup.length = 0;
+  },
 };

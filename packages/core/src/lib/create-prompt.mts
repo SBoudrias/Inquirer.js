@@ -1,4 +1,5 @@
 import * as readline from 'node:readline';
+import { AsyncResource } from 'node:async_hooks';
 import { CancelablePromise, type Prompt, type Prettify } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import { onExit as onSignalExit } from 'signal-exit';
@@ -42,11 +43,9 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           );
         });
 
-        function onExit() {
+        const onExit = AsyncResource.bind(() => {
           try {
-            store.hooksCleanup.forEach((cleanFn) => {
-              cleanFn?.();
-            });
+            effectScheduler.clearAll();
           } catch (error) {
             reject(error);
           }
@@ -60,7 +59,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
           removeExitListener();
           store.rl.input.removeListener('keypress', checkCursorPos);
-        }
+        });
 
         cancel = () => {
           onExit();
