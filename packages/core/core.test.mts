@@ -471,7 +471,11 @@ describe('createPrompt()', () => {
   it('clear timeout when force closing', { timeout: 1000 }, async () => {
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       const timeout = useRef<NodeJS.Timeout | undefined>();
+      const cleaned = useRef(false);
       useKeypress(() => {
+        if (cleaned.current) {
+          expect.unreachable('once cleaned up keypress should not be called');
+        }
         clearTimeout(timeout.current);
         timeout.current = setTimeout(() => {}, 1000);
       });
@@ -479,6 +483,7 @@ describe('createPrompt()', () => {
       useEffect(
         () => () => {
           clearTimeout(timeout.current);
+          cleaned.current = true;
           // We call done explicitly, as onSignalExit is not triggered in this case
           // But, CTRL+C will trigger rl.close, which should call this effect
           // This way we can have the promise resolve
