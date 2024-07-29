@@ -469,33 +469,34 @@ describe('createPrompt()', () => {
   });
 
   it('clear timeout when force closing', { timeout: 1000 }, async () => {
-    const Prompt = (config: { message: string }, done: (value: string) => void) => {
-      const timeout = useRef<NodeJS.Timeout | undefined>();
-      const cleaned = useRef(false);
-      useKeypress(() => {
-        if (cleaned.current) {
-          expect.unreachable('once cleaned up keypress should not be called');
-        }
-        clearTimeout(timeout.current);
-        timeout.current = setTimeout(() => {}, 1000);
-      });
+    let exitSpy = vi.fn();
+    const prompt = createPrompt(
+      (config: { message: string }, done: (value: string) => void) => {
+        const timeout = useRef<NodeJS.Timeout | undefined>();
+        const cleaned = useRef(false);
+        useKeypress(() => {
+          if (cleaned.current) {
+            expect.unreachable('once cleaned up keypress should not be called');
+          }
+          clearTimeout(timeout.current);
+          timeout.current = setTimeout(() => {}, 1000);
+        });
 
-      useEffect(
-        () => () => {
+        exitSpy = vi.fn(() => {
           clearTimeout(timeout.current);
           cleaned.current = true;
           // We call done explicitly, as onSignalExit is not triggered in this case
           // But, CTRL+C will trigger rl.close, which should call this effect
           // This way we can have the promise resolve
           done('closed');
-        },
-        [],
-      );
+        });
 
-      return config.message;
-    };
+        useEffect(() => exitSpy, []);
 
-    const prompt = createPrompt(Prompt);
+        return config.message;
+      },
+    );
+
     const { answer, events } = await render(prompt, { message: 'Question' });
 
     // This triggers the timeout
@@ -503,8 +504,8 @@ describe('createPrompt()', () => {
     // This closes the readline
     events.keypress({ ctrl: true, name: 'c' });
 
-    const result = await answer;
-    expect(result).toBe('closed');
+    await expect(answer).resolves.toBe('closed');
+    expect(exitSpy).toHaveBeenCalledTimes(1);
   });
 });
 
