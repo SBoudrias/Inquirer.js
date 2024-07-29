@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/expand",
-  "version": "2.1.18",
+  "version": "2.1.19",
   "description": "Inquirer checkbox prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -54,12 +54,12 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/expand/README.md",
   "dependencies": {
-    "@inquirer/core": "^9.0.6",
+    "@inquirer/core": "^9.0.7",
     "@inquirer/type": "^1.5.1",
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
-    "@inquirer/testing": "^2.1.29"
+    "@inquirer/testing": "^2.1.30"
   },
   "scripts": {
     "tsc": "yarn run tsc:esm && yarn run tsc:cjs",

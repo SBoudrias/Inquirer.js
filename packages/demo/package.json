@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/demo",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "engines": {
     "node": ">=18"
   },
@@ -61,8 +61,8 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js",
   "dependencies": {
-    "@inquirer/core": "^9.0.6",
-    "@inquirer/prompts": "^5.3.4",
+    "@inquirer/core": "^9.0.7",
+    "@inquirer/prompts": "^5.3.5",
     "yoctocolors-cjs": "^2.1.2"
   },
   "publishConfig": {
