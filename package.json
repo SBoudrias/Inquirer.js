@@ -81,7 +81,7 @@
   "scripts": {
     "prepare": "husky && turbo tsc attw",
     "setup": "node ./tools/setup-packages.mjs",
-    "pretest": "eslint . && turbo tsc && yarn tsc:test",
+    "pretest": "turbo tsc && eslint . && yarn tsc:test",
     "test": "vitest --run packages && node --test integration/**/*.test.*",
     "dev": "turbo watch tsc",
     "demo": "node --watch-path=packages/ packages/demo/",
