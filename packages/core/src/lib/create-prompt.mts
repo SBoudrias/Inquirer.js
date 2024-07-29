@@ -31,7 +31,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
     let cancel: () => void = () => {};
     const answer = new CancelablePromise<Value>((resolve, reject) => {
-      withHooks(rl, (store) => {
+      withHooks(rl, (cycle) => {
         function checkCursorPos() {
           screen.checkCursorPos();
         }
@@ -58,7 +58,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           screen.done();
 
           removeExitListener();
-          store.rl.input.removeListener('keypress', checkCursorPos);
+          rl.input.removeListener('keypress', checkCursorPos);
         });
 
         cancel = () => {
@@ -76,9 +76,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           });
         }
 
-        function workLoop() {
-          store.index = 0;
-
+        cycle(() => {
           try {
             const nextView = view(config, done);
 
@@ -91,16 +89,13 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
             onExit();
             reject(error);
           }
-        }
-
-        store.handleChange = () => workLoop();
-        workLoop();
+        });
 
         // Re-renders only happen when the state change; but the readline cursor could change position
         // and that also requires a re-render (and a manual one because we mute the streams).
         // We set the listener after the initial workLoop to avoid a double render if render triggered
         // by a state change sets the cursor to the right position.
-        store.rl.input.on('keypress', checkCursorPos);
+        rl.input.on('keypress', checkCursorPos);
       });
     });
 
