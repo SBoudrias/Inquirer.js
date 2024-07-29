@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/testing",
-  "version": "2.1.28",
+  "version": "2.1.29",
   "engines": {
     "node": ">=18"
   },
@@ -62,7 +62,7 @@
   "dependencies": {
     "@inquirer/type": "^1.5.1",
     "@types/mute-stream": "^0.0.4",
-    "@types/node": "^20.14.11",
+    "@types/node": "^22.0.0",
     "ansi-escapes": "^4.3.2",
     "mute-stream": "^1.0.0",
     "strip-ansi": "^6.0.1"

@@ -590,7 +590,7 @@ describe('Error handling', () => {
     const { answer } = await render(prompt, { message: 'Question' });
 
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: useEffect return value must be a cleanup function or nothing.]`,
+      `[ValidationError: useEffect return value must be a cleanup function or nothing.]`,
     );
     await expect(answer).rejects.toBeInstanceOf(ValidationError);
   });
@@ -599,7 +599,7 @@ describe('Error handling', () => {
     expect(() => {
       useEffect(() => {}, []);
     }).toThrowErrorMatchingInlineSnapshot(
-      `[Error: [Inquirer] Hook functions can only be called from within a prompt]`,
+      `[HookError: [Inquirer] Hook functions can only be called from within a prompt]`,
     );
     expect(() => {
       useEffect(() => {}, []);
@@ -610,7 +610,7 @@ describe('Error handling', () => {
     expect(() => {
       useKeypress(() => {});
     }).toThrowErrorMatchingInlineSnapshot(
-      `[Error: [Inquirer] Hook functions can only be called from within a prompt]`,
+      `[HookError: [Inquirer] Hook functions can only be called from within a prompt]`,
     );
     expect(() => {
       useKeypress(() => {});

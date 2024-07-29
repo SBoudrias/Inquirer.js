@@ -125,6 +125,7 @@ export type PromptFn<Value = any, Config = any> = (
 export type PromptCollection = Record<string, PromptFn | LegacyPromptConstructor>;
 
 class TTYError extends Error {
+  override name = 'TTYError';
   isTtyError = true;
 }
 
@@ -291,8 +292,10 @@ export default class PromptsRunner<A extends Answers> {
           if ('choices' in question) {
             // @ts-expect-error question type is too loose
             question.choices = question.choices.map((choice) => {
-              if (typeof choice === 'string') {
+              if (typeof choice === 'string' || typeof choice === 'number') {
                 return { name: choice, value: choice };
+              } else if (!('value' in choice)) {
+                return { ...choice, value: choice.name };
               }
               return choice;
             });

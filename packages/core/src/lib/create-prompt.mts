@@ -31,7 +31,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
     let cancel: () => void = () => {};
     const answer = new CancelablePromise<Value>((resolve, reject) => {
-      withHooks(rl, (store) => {
+      withHooks(rl, (cycle) => {
         function checkCursorPos() {
           screen.checkCursorPos();
         }
@@ -62,8 +62,8 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           screen.done();
 
           removeExitListener();
-          store.rl.input.removeListener('keypress', checkCursorPos);
-          store.rl.removeListener('close', hooksCleanup);
+          rl.input.removeListener('keypress', checkCursorPos);
+          rl.removeListener('close', hooksCleanup);
         }
 
         cancel = () => {
@@ -81,9 +81,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           });
         }
 
-        function workLoop() {
-          store.index = 0;
-
+        cycle(() => {
           try {
             const nextView = view(config, done);
 
@@ -96,21 +94,18 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
             onExit();
             reject(error);
           }
-        }
-
-        store.handleChange = () => workLoop();
-        workLoop();
+        });
 
         // Re-renders only happen when the state change; but the readline cursor could change position
         // and that also requires a re-render (and a manual one because we mute the streams).
         // We set the listener after the initial workLoop to avoid a double render if render triggered
         // by a state change sets the cursor to the right position.
-        store.rl.input.on('keypress', checkCursorPos);
+        rl.input.on('keypress', checkCursorPos);
 
         // The close event triggers immediately when the user press ctrl+c. SignalExit on the other hand
         // triggers after the process is done (which happens after timeouts are done triggering.)
         // We triggers the hooks cleanup phase on rl `close` so active timeouts can be cleared.
-        store.rl.on('close', hooksCleanup);
+        rl.on('close', hooksCleanup);
       });
     });
 
