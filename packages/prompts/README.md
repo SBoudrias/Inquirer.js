@@ -365,6 +365,24 @@ option, <enter> to select option)
  (Use arrow keys to reveal more options)
 ```
 
+[**File Selector Prompt**](https://github.com/br14n-sol/inquirer-file-selector)<br/>
+A file selector, you can navigate freely between directories, choose what type of files you want to allow and it is fully customizable.
+
+```sh
+? Select a file:
+/main/path/
+├── folder1/
+├── folder2/
+├── folder3/
+├── file1.txt
+├── file2.pdf
+└── file3.jpg (not allowed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Use ↑↓ to navigate through the list
+Press <esc> to navigate to the parent directory
+Press <enter> to select a file or navigate to a directory
+```
+
 # License
 
 Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
