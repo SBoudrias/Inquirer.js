@@ -157,6 +157,26 @@ type Theme = {
 - `always`: The help tips will always show and never hide.
 - `never`: The help tips will never show.
 
+## Recipes
+
+### Debounce search
+
+```js
+import { setTimeout } from 'node:timers/promises';
+import { search } from '@inquirer/prompts';
+
+const answer = await search({
+  message: 'Select an npm package',
+  source: async (input, { signal }) => {
+    await setTimeout(300);
+    if (signal.aborted) return [];
+
+    // Do the search
+    fetch(...)
+  },
+});
+```
+
 # License
 
 Copyright (c) 2024 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
