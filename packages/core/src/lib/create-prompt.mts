@@ -43,12 +43,16 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           );
         });
 
-        const onExit = AsyncResource.bind(() => {
+        const hooksCleanup = AsyncResource.bind(() => {
           try {
             effectScheduler.clearAll();
           } catch (error) {
             reject(error);
           }
+        });
+
+        function onExit() {
+          hooksCleanup();
 
           if (context?.clearPromptOnDone) {
             screen.clean();
@@ -59,7 +63,8 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
           removeExitListener();
           rl.input.removeListener('keypress', checkCursorPos);
-        });
+          rl.removeListener('close', hooksCleanup);
+        }
 
         cancel = () => {
           onExit();
@@ -96,6 +101,11 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
         // We set the listener after the initial workLoop to avoid a double render if render triggered
         // by a state change sets the cursor to the right position.
         rl.input.on('keypress', checkCursorPos);
+
+        // The close event triggers immediately when the user press ctrl+c. SignalExit on the other hand
+        // triggers after the process is done (which happens after timeouts are done triggering.)
+        // We triggers the hooks cleanup phase on rl `close` so active timeouts can be cleared.
+        rl.on('close', hooksCleanup);
       });
     });
 

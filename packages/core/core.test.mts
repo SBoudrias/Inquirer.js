@@ -467,6 +467,46 @@ describe('createPrompt()', () => {
     await expect(answer).resolves.toEqual('done');
     expect(getScreen({ raw: true })).toEqual(ansiEscapes.eraseLines(1));
   });
+
+  it('clear timeout when force closing', { timeout: 1000 }, async () => {
+    let exitSpy = vi.fn();
+    const prompt = createPrompt(
+      (config: { message: string }, done: (value: string) => void) => {
+        const timeout = useRef<NodeJS.Timeout | undefined>();
+        const cleaned = useRef(false);
+        useKeypress(() => {
+          if (cleaned.current) {
+            expect.unreachable('once cleaned up keypress should not be called');
+          }
+          clearTimeout(timeout.current);
+          timeout.current = setTimeout(() => {}, 1000);
+        });
+
+        exitSpy = vi.fn(() => {
+          clearTimeout(timeout.current);
+          cleaned.current = true;
+          // We call done explicitly, as onSignalExit is not triggered in this case
+          // But, CTRL+C will trigger rl.close, which should call this effect
+          // This way we can have the promise resolve
+          done('closed');
+        });
+
+        useEffect(() => exitSpy, []);
+
+        return config.message;
+      },
+    );
+
+    const { answer, events } = await render(prompt, { message: 'Question' });
+
+    // This triggers the timeout
+    events.keypress('a');
+    // This closes the readline
+    events.keypress({ ctrl: true, name: 'c' });
+
+    await expect(answer).resolves.toBe('closed');
+    expect(exitSpy).toHaveBeenCalledTimes(1);
+  });
 });
 
 it('allow cancelling the prompt multiple times', async () => {

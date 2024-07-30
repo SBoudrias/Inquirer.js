@@ -11,12 +11,15 @@ export function useKeypress(
   signal.current = userHandler;
 
   useEffect((rl) => {
+    let ignore = false;
     const handler = withUpdates((_input: string, event: KeypressEvent) => {
+      if (ignore) return;
       signal.current(event, rl);
     });
 
     rl.input.on('keypress', handler);
     return () => {
+      ignore = true;
       rl.input.removeListener('keypress', handler);
     };
   }, []);
