@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/editor",
-  "version": "2.1.19",
+  "version": "2.1.20",
   "description": "Inquirer multiline editor prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -54,7 +54,7 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/editor/README.md",
   "dependencies": {
-    "@inquirer/core": "^9.0.7",
+    "@inquirer/core": "^9.0.8",
     "@inquirer/type": "^1.5.1",
     "external-editor": "^3.1.0"
   },
