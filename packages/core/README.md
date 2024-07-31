@@ -31,116 +31,136 @@ yarn add @inquirer/core
 
 # Usage
 
+## Basic concept
+
+Visual terminal apps are at their core strings rendered onto the terminal.
+
+The most basic prompt is a function returning a string that'll be rendered in the terminal. This function will run every time the prompt state change, and the new returned string will replace the previously rendered one. The prompt cursor appears after the string.
+
+Wrapping the rendering function with `createPrompt()` will setup the rendering layer, inject the state management utilities, and wait until the `done` callback is called.
+
 ```ts
-import colors from 'yoctocolors';
-import {
-  createPrompt,
-  useState,
-  useKeypress,
-  isEnterKey,
-  usePrefix,
-} from '@inquirer/core';
+import { createPrompt } from '@inquirer/core';
 
-const confirm = createPrompt<boolean, { message: string; default?: boolean }>(
-  (config, done) => {
-    const [status, setStatus] = useState('pending');
-    const [value, setValue] = useState('');
-    const prefix = usePrefix({});
+const input = createPrompt((config, done) => {
+  // Implement logic
 
-    useKeypress((key, rl) => {
-      if (isEnterKey(key)) {
-        const answer = value ? /^y(es)?/i.test(value) : config.default !== false;
-        setValue(answer ? 'yes' : 'no');
-        setStatus('done');
-        done(answer);
-      } else {
-        setValue(rl.line);
-      }
-    });
+  return '? My question';
+});
 
-    let formattedValue = value;
-    let defaultValue = '';
-    if (status === 'done') {
-      formattedValue = colors.cyan(value);
-    } else {
-      defaultValue = colors.dim(config.default === false ? ' (y/N)' : ' (Y/n)');
-    }
-
-    const message = colors.bold(config.message);
-    return `${prefix} ${message}${defaultValue} ${formattedValue}`;
-  },
-);
-
-/**
- *  Which then can be used like this:
- */
-const answer = await confirm({ message: 'Do you want to continue?' });
+// And it is then called as
+const answer = await input({
+  /* config */
+});
 ```
 
-See more examples:
+## Hooks
 
-- [Confirm Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/confirm/src/index.mts)
-- [Input Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/src/index.mts)
-- [Password Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/password/src/index.mts)
-- [Editor Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/editor/src/index.mts)
-- [Select Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/select/src/index.mts)
-- [Checkbox Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/checkbox/src/index.mts)
-- [Rawlist Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/rawlist/src/index.mts)
-- [Expand Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/expand/src/index.mts)
+State management and user interactions are handled through hooks. Hooks are common [within the React ecosystem](https://react.dev/reference/react/hooks), and Inquirer reimplement the common ones.
 
-## API
+### State hook
 
-### `createPrompt(viewFn)`
+State lets a component “remember” information like user input. For example, an input prompt can use state to store the input value, while a list prompt can use state to track the cursor index.
 
-The `createPrompt` function returns an asynchronous function that returns a cancelable promise resolving to the valid answer a user submit. This prompt function takes the prompt configuration as its first argument (this is defined by each prompt), and the context options as a second argument.
+`useState` declares a state variable that you can update directly.
 
-The prompt configuration is unique to each prompt. The context options are:
+```ts
+import { createPrompt, useState } from '@inquirer/core';
 
-| Property          | Type                    | Required | Description                                                  |
-| ----------------- | ----------------------- | -------- | ------------------------------------------------------------ |
-| input             | `NodeJS.ReadableStream` | no       | The stdin stream (defaults to `process.stdin`)               |
-| output            | `NodeJS.WritableStream` | no       | The stdout stream (defaults to `process.stdout`)             |
-| clearPromptOnDone | `boolean`               | no       | If true, we'll clear the screen after the prompt is answered |
+const input = createPrompt((config, done) => {
+  const [index, setIndex] = useState(0);
 
-The cancelable promise exposes a `cancel` method that'll exit the prompt and reject the promise.
+  // ...
+```
 
-#### Typescript
+### Keypress hook
 
-If using typescript, `createPrompt` takes 2 generic arguments (ex `createPrompt<string, { message: string }>()`)
+Almost all prompts need to react to user actions. In a terminal, this is done through typing.
 
-The first one is the type of the resolved value; `function createPrompt<Value>(): Promise<Value> {}`
+`useKeypress` allows you to react to keypress events, and access the prompt line.
 
-The second one is the type of the prompt config; in other words the interface the created prompt will provide to users.
+```ts
+const input = createPrompt((config, done) => {
+  useKeypress((key) => {
+    if (key.name === 'enter') {
+      done(answer);
+    }
+  });
 
-### Hooks
+  // ...
+```
 
-Hooks can only be called within the prompt function and are used to handle state and events.
+Behind the scenes, Inquirer prompts are wrappers around [readlines](https://nodejs.org/api/readline.html). Aside the keypress event object, the hook also pass the active readline instance to the event handler.
 
-Those hooks are matching the React hooks API:
+```ts
+const input = createPrompt((config, done) => {
+  useKeypress((key, readline) => {
+    setValue(readline.line);
+  });
 
-- `useState`
-- `useRef`
-- `useEffect`
-- `useMemo`
+  // ...
+```
 
-And those are custom utilities from Inquirer:
+### Ref hook
 
-- `useKeypress`
-- `usePagination`
-- `usePrefix`
+Refs let a prompt hold some information that isn’t used for rendering, like a class instance or a timeout ID. Unlike with state, updating a ref does not re-render your prompt. Refs are an “escape hatch” from the rendering paradigm.
 
-### Key utilities
+`useRef` declares a ref. You can hold any value in it, but most often it’s used to hold a timeout ID.
 
-Listening for keypress events inside an inquirer prompt is a very common pattern. To ease this, we export a few utility functions taking in the keypress event object and return a boolean:
+```ts
+const input = createPrompt((config, done) => {
+  const timeout = useRef(null);
 
-- `isEnterKey()`
-- `isBackspaceKey()`
-- `isSpaceKey()`
-- `isUpKey()` - Note: this utility will handle vim and emacs keybindings (up, `k`, and `ctrl+p`)
-- `isDownKey()` - Note: this utility will handle vim and emacs keybindings (down, `j`, and `ctrl+n`)
-- `isNumberKey()` one of 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
+  // ...
+```
 
-### `usePagination`
+### Effect Hook
+
+Effects let a prompt connect to and synchronize with external systems. This includes dealing with network or animations.
+
+`useEffect` connects a component to an external system.
+
+```ts
+const chat = createPrompt((config, done) => {
+  useEffect(() => {
+    const connection = createConnection(roomId);
+    connection.connect();
+    return () => connection.disconnect();
+  }, [roomId]);
+
+  // ...
+```
+
+### Performance hook
+
+A common way to optimize re-rendering performance is to skip unnecessary work. For example, you can tell Inquirer to reuse a cached calculation or to skip a re-render if the data has not changed since the previous render.
+
+`useMemo` lets you cache the result of an expensive calculation.
+
+```ts
+const todoSelect = createPrompt((config, done) => {
+  const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);
+
+  // ...
+```
+
+### Rendering hooks
+
+#### Prefix / loading
+
+All default prompts, and most custom ones, uses a prefix at the beginning of the prompt line. This helps visually delineate different questions, and provides a convenient area to render a loading spinner.
+
+`usePrefix` is a built-in hook to do this.
+
+```ts
+const input = createPrompt((config, done) => {
+  const prefix = usePrefix({ isLoading });
+
+  return `${prefix} My question`;
+});
+```
+
+#### Pagination
 
 When looping through a long list of options (like in the `select` prompt), paginating the results appearing on the screen at once can be necessary. The `usePagination` hook is the utility used within the `select` and `checkbox` prompts to cycle through the list of options.
 
@@ -164,7 +184,71 @@ export default createPrompt((config, done) => {
 });
 ```
 
-### Theming
+## `createPrompt()` API
+
+As we saw earlier, the rendering function should return a string, and eventually call `done` to close the prompt and return the answer.
+
+```ts
+const input = createPrompt((config, done) => {
+  const [value, setValue] = useState();
+
+  useKeypress((key, readline) => {
+    if (key.name === 'enter') {
+      done(answer);
+    } else {
+      setValue(readline.line);
+    }
+  });
+
+  return `? ${config.message} ${value}`;
+});
+```
+
+The rendering function can also return a tuple of 2 string (`[string, string]`.) The first string represents the prompt. The second one is content to render under the prompt, like an error message. The text input cursor will appear after the first string.
+
+```ts
+const number = createPrompt((config, done) => {
+  // Add some logic here
+
+  return [`? My question ${input}`, `! The input must be a number`];
+});
+```
+
+### Typescript
+
+If using typescript, `createPrompt` takes 2 generic arguments.
+
+```ts
+// createPrompt<Value, Config>
+const input = createPrompt<string, { message: string }>(// ...
+```
+
+The first one is the type of the resolved value
+
+```ts
+const answer: string = await input();
+```
+
+The second one is the type of the prompt config; in other words the interface the created prompt will provide to users.
+
+```ts
+const answer = await input({
+  message: 'My question',
+});
+```
+
+## Key utilities
+
+Listening for keypress events inside an inquirer prompt is a very common pattern. To ease this, we export a few utility functions taking in the keypress event object and return a boolean:
+
+- `isEnterKey()`
+- `isBackspaceKey()`
+- `isSpaceKey()`
+- `isUpKey()` - Note: this utility will handle vim and emacs keybindings (up, `k`, and `ctrl+p`)
+- `isDownKey()` - Note: this utility will handle vim and emacs keybindings (down, `j`, and `ctrl+n`)
+- `isNumberKey()` one of 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
+
+## Theming
 
 Theming utilities will allow you to expose customization of the prompt style. Inquirer also has a few standard theme values shared across all the official prompts.
 
@@ -231,6 +315,65 @@ type DefaultTheme = {
     key: (text: string) => string;
   };
 };
+```
+
+# Examples
+
+You can refer to any `@inquirer/prompts` prompts for real examples:
+
+- [Confirm Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/confirm/src/index.mts)
+- [Input Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/src/index.mts)
+- [Password Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/password/src/index.mts)
+- [Editor Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/editor/src/index.mts)
+- [Select Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/select/src/index.mts)
+- [Checkbox Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/checkbox/src/index.mts)
+- [Rawlist Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/rawlist/src/index.mts)
+- [Expand Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/expand/src/index.mts)
+
+```ts
+import colors from 'yoctocolors';
+import {
+  createPrompt,
+  useState,
+  useKeypress,
+  isEnterKey,
+  usePrefix,
+} from '@inquirer/core';
+
+const confirm = createPrompt<boolean, { message: string; default?: boolean }>(
+  (config, done) => {
+    const [status, setStatus] = useState('pending');
+    const [value, setValue] = useState('');
+    const prefix = usePrefix({});
+
+    useKeypress((key, rl) => {
+      if (isEnterKey(key)) {
+        const answer = value ? /^y(es)?/i.test(value) : config.default !== false;
+        setValue(answer ? 'yes' : 'no');
+        setStatus('done');
+        done(answer);
+      } else {
+        setValue(rl.line);
+      }
+    });
+
+    let formattedValue = value;
+    let defaultValue = '';
+    if (status === 'done') {
+      formattedValue = colors.cyan(value);
+    } else {
+      defaultValue = colors.dim(config.default === false ? ' (y/N)' : ' (Y/n)');
+    }
+
+    const message = colors.bold(config.message);
+    return `${prefix} ${message}${defaultValue} ${formattedValue}`;
+  },
+);
+
+/**
+ *  Which then can be used like this:
+ */
+const answer = await confirm({ message: 'Do you want to continue?' });
 ```
 
 # License
