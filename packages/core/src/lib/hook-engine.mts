@@ -63,10 +63,10 @@ export function readline(): InquirerReadline {
 }
 
 // Merge state updates happening within the callback function to avoid multiple renders.
-export function withUpdates<T extends (...args: any) => any>(
+export function withUpdates<R, T extends (...args: any[]) => R>(
   fn: T,
-): (...args: Parameters<T>) => ReturnType<T> {
-  const wrapped = (...args: any): ReturnType<T> => {
+): (...args: Parameters<T>) => R {
+  const wrapped = (...args: Parameters<T>): R => {
     const store = getStore();
     let shouldUpdate = false;
     const oldHandleChange = store.handleChange;
@@ -105,10 +105,10 @@ export function withPointer<Value, ReturnValue>(
 
   const { index } = store;
   const pointer: Pointer<Value> = {
-    get() {
+    get(): any {
       return store.hooks[index];
     },
-    set(value: any) {
+    set(value: unknown) {
       store.hooks[index] = value;
     },
     initialized: index in store.hooks,

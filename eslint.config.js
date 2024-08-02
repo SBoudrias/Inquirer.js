@@ -41,7 +41,17 @@ export default tseslint.config(
   },
   {
     files: ['**/*.mts', '**/*.ts'],
-    extends: [...tseslint.configs.recommended],
+    extends: [...tseslint.configs.recommendedTypeChecked],
+    languageOptions: {
+      parserOptions: {
+        projectService: {
+          allowDefaultProject: ['packages/*/*.test.mts'],
+          defaultProject: './tsconfig.test.json',
+          maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 20,
+        },
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
   },
   {
     files: ['**/*.cjs'],
@@ -55,6 +65,7 @@ export default tseslint.config(
   {
     files: ['packages/inquirer/test/**', 'packages/**/*.test.*'],
     rules: {
+      '@typescript-eslint/unbound-method': 'off',
       'n/no-extraneous-import': [
         'error',
         {

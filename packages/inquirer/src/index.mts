@@ -49,11 +49,9 @@ const defaultPrompts: PromptCollection = {
   search,
 };
 
-type PromptReturnType<T> =
-  | (Promise<Prettify<T>> & {
-      ui: PromptsRunner<Prettify<T>>;
-    })
-  | never;
+type PromptReturnType<T> = Promise<Prettify<T>> & {
+  ui: PromptsRunner<Prettify<T>>;
+};
 
 /**
  * Create a new self-contained prompt module.
@@ -98,6 +96,7 @@ export function createPromptModule(opt?: StreamOptions) {
     try {
       return runner.run(questions, answers);
     } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
       const promise = Promise.reject(error);
       return Object.assign(promise, { ui: runner });
     }

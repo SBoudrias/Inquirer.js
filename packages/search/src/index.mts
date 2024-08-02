@@ -112,7 +112,7 @@ export default createPrompt(
         }
       };
 
-      fetchResults();
+      void fetchResults();
 
       return () => {
         controller.abort();
@@ -122,7 +122,7 @@ export default createPrompt(
     // Safe to assume the cursor position never points to a Separator.
     const selectedChoice = searchResults[active] as Choice<Value> | void;
 
-    useKeypress(async (key, rl) => {
+    useKeypress((key, rl) => {
       if (isEnterKey(key) && selectedChoice) {
         setStatus('done');
         done(selectedChoice.value);
@@ -171,7 +171,7 @@ export default createPrompt(
           return ` ${item.separator}`;
         }
 
-        const line = item.name || item.value;
+        const line = String(item.name || item.value);
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';

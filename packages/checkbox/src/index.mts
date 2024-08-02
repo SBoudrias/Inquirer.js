@@ -186,7 +186,7 @@ export default createPrompt(
           return ` ${item.separator}`;
         }
 
-        const line = item.name || item.value;
+        const line = String(item.name || item.value);
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';

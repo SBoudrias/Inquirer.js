@@ -1,7 +1,6 @@
 import { withPointer, handleChange } from './hook-engine.mjs';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type NotFunction<T> = T extends Function ? never : T;
+type NotFunction<T> = T extends (...args: never) => unknown ? never : T;
 
 export function useState<Value>(
   defaultValue: NotFunction<Value> | (() => Value),
