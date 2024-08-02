@@ -317,7 +317,7 @@ describe('search prompt', () => {
   it('allows default parameters to be used as source function parameters', async () => {
     const { answer } = await render(search, {
       message: 'Select a family',
-      source: async (term: string = '') => {
+      source: (term: string = '') => {
         expectTypeOf(term).toEqualTypeOf<string>();
         return [];
       },

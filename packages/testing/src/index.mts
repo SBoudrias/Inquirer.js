@@ -87,11 +87,11 @@ export async function render<
     answer,
     input,
     events,
-    getScreen({ raw }: { raw?: boolean } = {}): string {
+    getScreen: ({ raw }: { raw?: boolean } = {}): string => {
       const lastScreen = output.getLastChunk({ raw });
       return raw ? lastScreen : stripAnsi(lastScreen).trim();
     },
-    getFullOutput(): string {
+    getFullOutput: (): string => {
       return output.getFullOutput();
     },
   };

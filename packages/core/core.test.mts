@@ -579,6 +579,7 @@ describe('Error handling', () => {
   it('prevent returning promises from useEffect hook', async () => {
     const Prompt = (_config: object, done: (value: string) => void) => {
       // @ts-expect-error: Testing an invalid behavior.
+      // eslint-disable-next-line @typescript-eslint/require-await
       useEffect(async () => {
         done('done');
       }, []);
@@ -595,7 +596,7 @@ describe('Error handling', () => {
     await expect(answer).rejects.toBeInstanceOf(ValidationError);
   });
 
-  it('useEffect throws outside prompt', async () => {
+  it('useEffect throws outside prompt', () => {
     expect(() => {
       useEffect(() => {}, []);
     }).toThrowErrorMatchingInlineSnapshot(
@@ -606,7 +607,7 @@ describe('Error handling', () => {
     }).toThrow(HookError);
   });
 
-  it('useKeypress throws outside prompt', async () => {
+  it('useKeypress throws outside prompt', () => {
     expect(() => {
       useKeypress(() => {});
     }).toThrowErrorMatchingInlineSnapshot(

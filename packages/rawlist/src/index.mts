@@ -84,7 +84,7 @@ export default createPrompt(
         }
 
         index += 1;
-        const line = `  ${choice.key || index}) ${choice.name || choice.value}`;
+        const line = `  ${choice.key || index}) ${String(choice.name || choice.value)}`;
 
         if (choice.key === value.toLowerCase() || String(index) === value) {
           return theme.style.highlight(line);

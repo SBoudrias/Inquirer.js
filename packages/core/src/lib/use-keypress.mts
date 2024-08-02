@@ -5,7 +5,7 @@ import { useEffect } from './use-effect.mjs';
 import { withUpdates } from './hook-engine.mjs';
 
 export function useKeypress(
-  userHandler: (event: KeypressEvent, rl: InquirerReadline) => void,
+  userHandler: (event: KeypressEvent, rl: InquirerReadline) => void | Promise<void>,
 ) {
   const signal = useRef(userHandler);
   signal.current = userHandler;
@@ -14,7 +14,7 @@ export function useKeypress(
     let ignore = false;
     const handler = withUpdates((_input: string, event: KeypressEvent) => {
       if (ignore) return;
-      signal.current(event, rl);
+      void signal.current(event, rl);
     });
 
     rl.input.on('keypress', handler);

@@ -26,8 +26,8 @@ import type {
 } from '../types.mjs';
 
 export const _ = {
-  set: (obj: object, path: string = '', value: unknown): void => {
-    let pointer: any = obj;
+  set: (obj: Record<string, unknown>, path: string = '', value: unknown): void => {
+    let pointer = obj;
     path.split('.').forEach((key, index, arr) => {
       if (key === '__proto__' || key === 'constructor') return;
 
@@ -37,7 +37,7 @@ export const _ = {
         pointer[key] = {};
       }
 
-      pointer = pointer[key];
+      pointer = pointer[key] as Record<string, unknown>;
     });
   },
   get: (
@@ -51,6 +51,7 @@ export const _ = {
         .filter(Boolean)
         .reduce(
           // @ts-expect-error implicit any on res[key]
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           (res, key) => (res !== null && res !== undefined ? res[key] : res),
           obj,
         );
@@ -72,7 +73,7 @@ function fetchAsyncQuestionProperty<A extends Answers, Q extends Question<A>>(
     const propGetter = question[prop as keyof Q];
     if (typeof propGetter === 'function') {
       return from(
-        runAsync(propGetter as (...args: any[]) => any)(answers).then((value) => {
+        runAsync(propGetter as (...args: unknown[]) => unknown)(answers).then((value) => {
           return Object.assign(question, { [prop]: value });
         }),
       );
@@ -187,10 +188,11 @@ function isQuestionMap<A extends Answers>(
 function isPromptConstructor(
   prompt: PromptFn | LegacyPromptConstructor,
 ): prompt is LegacyPromptConstructor {
-  return (
+  return Boolean(
     prompt.prototype &&
-    'run' in prompt.prototype &&
-    typeof prompt.prototype.run === 'function'
+      'run' in prompt.prototype &&
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      typeof prompt.prototype.run === 'function',
   );
 }
 
@@ -244,14 +246,14 @@ export default class PromptsRunner<A extends Answers> {
 
     const promise = lastValueFrom(
       this.process.pipe(
-        reduce((answersObj, answer) => {
+        reduce((answersObj, answer: { name: string; answer: unknown }) => {
           _.set(answersObj, answer.name, answer.answer);
           return answersObj;
         }, this.answers),
       ),
     ).then(
       () => this.onCompletion(),
-      (error) => this.onError(error),
+      (error: Error) => this.onError(error),
     ) as Promise<A>;
 
     return Object.assign(promise, { ui: this });
@@ -289,16 +291,19 @@ export default class PromptsRunner<A extends Answers> {
           fetchAsyncQuestionProperty(question, 'choices', this.answers),
         ),
         concatMap((question) => {
-          if ('choices' in question) {
+          const { choices } = question;
+          if (Array.isArray(choices)) {
             // @ts-expect-error question type is too loose
-            question.choices = question.choices.map((choice) => {
-              if (typeof choice === 'string' || typeof choice === 'number') {
-                return { name: choice, value: choice };
-              } else if (!('value' in choice)) {
-                return { ...choice, value: choice.name };
-              }
-              return choice;
-            });
+            question.choices = choices.map(
+              (choice: string | number | { value?: string; name: string }) => {
+                if (typeof choice === 'string' || typeof choice === 'number') {
+                  return { name: choice, value: choice };
+                } else if (!('value' in choice)) {
+                  return { ...choice, value: choice.name };
+                }
+                return choice;
+              },
+            );
           }
 
           return of(question);
@@ -340,7 +345,7 @@ export default class PromptsRunner<A extends Answers> {
           const activePrompt = new prompt(question, rl, this.answers);
 
           return from(
-            activePrompt.run().then((answer) => {
+            activePrompt.run().then((answer: unknown) => {
               onClose();
               this.onClose = undefined;
               this.rl = undefined;
@@ -351,7 +356,7 @@ export default class PromptsRunner<A extends Answers> {
         })
       : defer(() =>
           from(
-            prompt(question, this.opt).then((answer) => ({
+            prompt(question, this.opt).then((answer: unknown) => ({
               name: question.name,
               answer,
             })),

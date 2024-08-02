@@ -22,7 +22,7 @@ type EditorConfig = {
 };
 
 export default createPrompt<string, EditorConfig>((config, done) => {
-  const { waitForUseInput = true, validate = () => true } = config;
+  const { waitForUseInput = true, postfix = '.txt', validate = () => true } = config;
   const theme = makeTheme(config.theme);
 
   const [status, setStatus] = useState<string>('pending');
@@ -34,31 +34,28 @@ export default createPrompt<string, EditorConfig>((config, done) => {
 
   function startEditor(rl: InquirerReadline) {
     rl.pause();
-    editAsync(
-      value,
-      // Note: The bind call isn't strictly required. But we need it for our mocks to work as expected.
-      AsyncResource.bind(async (error, answer) => {
-        rl.resume();
-        if (error) {
-          setError(error.toString());
+
+    // Note: The bind call isn't strictly required. But we need it for our mocks to work as expected.
+    const editCallback = AsyncResource.bind(async (error: Error, answer: string) => {
+      rl.resume();
+      if (error) {
+        setError(error.toString());
+      } else {
+        setStatus('loading');
+        const isValid = await validate(answer);
+        if (isValid === true) {
+          setError(undefined);
+          setStatus('done');
+          done(answer);
         } else {
-          setStatus('loading');
-          const isValid = await validate(answer);
-          if (isValid === true) {
-            setError(undefined);
-            setStatus('done');
-            done(answer);
-          } else {
-            setValue(answer);
-            setError(isValid || 'You must provide a valid value');
-            setStatus('pending');
-          }
+          setValue(answer);
+          setError(isValid || 'You must provide a valid value');
+          setStatus('pending');
         }
-      }),
-      {
-        postfix: config.postfix || '.txt',
-      },
-    );
+      }
+    });
+
+    editAsync(value, (error, answer) => void editCallback(error, answer), { postfix });
   }
 
   useEffect((rl) => {

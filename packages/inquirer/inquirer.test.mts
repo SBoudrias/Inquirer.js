@@ -10,11 +10,11 @@ import tty from 'node:tty';
 import { vi, expect, beforeEach, afterEach, describe, it, expectTypeOf } from 'vitest';
 import { Observable } from 'rxjs';
 import type { InquirerReadline } from '@inquirer/type';
-import inquirer, { type QuestionMap } from '../src/index.mjs';
-import type { Answers, Question } from '../src/types.mjs';
-import { _ } from '../src/ui/prompt.mjs';
+import inquirer, { type QuestionMap } from './src/index.mjs';
+import type { Answers, Question } from './src/types.mjs';
+import { _ } from './src/ui/prompt.mjs';
 
-declare module '../src/index.mjs' {
+declare module './src/index.mjs' {
   interface QuestionMap {
     stub: { answer?: string | boolean; message: string };
     stub2: { answer?: string | boolean; message: string; default: string };
@@ -43,7 +43,7 @@ class StubPrompt {
 
 class StubFailingPrompt {
   run() {
-    return Promise.reject('This test prompt always reject');
+    return Promise.reject(new Error('This test prompt always reject'));
   }
 
   close() {}
@@ -635,13 +635,14 @@ describe('inquirer.prompt(...)', () => {
 
     it('should not run prompt if answer exists for question', async () => {
       const answers = await inquirer.prompt(
+        // @ts-expect-error Passing wrong type on purpose.
         [
           {
             type: 'input',
             name: 'prefilled',
-            when: throwFunc.bind(undefined, 'when') as any,
-            validate: throwFunc.bind(undefined, 'validate') as any,
-            transformer: throwFunc.bind(undefined, 'transformer') as any,
+            when: throwFunc.bind(undefined, 'when'),
+            validate: throwFunc.bind(undefined, 'validate'),
+            transformer: throwFunc.bind(undefined, 'transformer'),
             message: 'message',
             default: 'newValue',
           },
@@ -654,13 +655,14 @@ describe('inquirer.prompt(...)', () => {
 
     it('should not run prompt if nested answer exists for question', async () => {
       const answers = await inquirer.prompt(
+        // @ts-expect-error Passing wrong type on purpose.
         [
           {
             type: 'input',
             name: 'prefilled.nested',
-            when: throwFunc.bind(undefined, 'when') as any,
-            validate: throwFunc.bind(undefined, 'validate') as any,
-            transformer: throwFunc.bind(undefined, 'transformer') as any,
+            when: throwFunc.bind(undefined, 'when'),
+            validate: throwFunc.bind(undefined, 'validate'),
+            transformer: throwFunc.bind(undefined, 'transformer'),
             message: 'message',
             default: 'newValue',
           },
@@ -741,7 +743,7 @@ describe('inquirer.prompt(...)', () => {
   });
 
   describe('#restoreDefaultPrompts()', () => {
-    it('restore default prompts', async () => {
+    it('restore default prompts', () => {
       class StubPrompt {
         run = vi.fn(() => {
           return Promise.resolve('bar');
@@ -891,6 +893,8 @@ describe('Non-TTY checks', () => {
 });
 
 describe('set utility function tests', () => {
+  /* eslint-disable @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */
+
   it('Should set an objects property when provided a path and a value', () => {
     const obj: any = {};
     const path = 'a.b';
@@ -931,4 +935,6 @@ describe('set utility function tests', () => {
 
     expect(obj.a.b).toBe('c');
   });
+
+  /* eslint-enable @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */
 });

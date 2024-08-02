@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
+import type {
   input,
   select,
   number,
@@ -75,13 +75,13 @@ type PromptConfigMap<A extends Answers> = {
 
 export type Question<A extends Answers> = PromptConfigMap<A>[keyof PromptConfigMap<A>];
 
-export type QuestionAnswerMap<A extends Answers> =
-  | Readonly<{ [name in KeyUnion<A>]: Omit<Question<A>, 'name'> }>
-  | never;
+export type QuestionAnswerMap<A extends Answers> = Readonly<{
+  [name in KeyUnion<A>]: Omit<Question<A>, 'name'>;
+}>;
 
-export type QuestionArray<A extends Answers> = readonly Question<A>[] | never;
+export type QuestionArray<A extends Answers> = readonly Question<A>[];
 
-export type QuestionObservable<A extends Answers> = Observable<Question<A>> | never;
+export type QuestionObservable<A extends Answers> = Observable<Question<A>>;
 
 export type StreamOptions = Prettify<
   Parameters<typeof input>[1] & { skipTTYChecks?: boolean }

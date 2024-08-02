@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { lines } from './lines.mjs';
+import { lines } from './src/lib/pagination/lines.mjs';
 
 function renderResult(result: string[]) {
   return `\n${result.join('\n')}\n`;

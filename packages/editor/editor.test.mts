@@ -13,7 +13,10 @@ async function editorAction(error: undefined | Error, value?: string) {
   if (!lastCall) throw new Error("editor wasn't open");
 
   // Bugfix: The callback error value is nullable.
-  const editCallback = lastCall[1] as (error: undefined | Error, value: string) => void;
+  const editCallback = lastCall[1] as (
+    error: undefined | Error,
+    value: string,
+  ) => void | Promise<void>;
   await editCallback(error, value ?? '');
 }
 
