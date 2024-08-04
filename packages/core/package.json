@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/core",
-  "version": "9.0.8",
+  "version": "9.0.9",
   "engines": {
     "node": ">=18"
   },
@@ -58,7 +58,7 @@
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/core/README.md",
   "dependencies": {
     "@inquirer/figures": "^1.0.5",
-    "@inquirer/type": "^1.5.1",
+    "@inquirer/type": "^1.5.2",
     "@types/mute-stream": "^0.0.4",
     "@types/node": "^22.1.0",
     "@types/wrap-ansi": "^3.0.0",
@@ -72,7 +72,7 @@
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
-    "@inquirer/testing": "^2.1.30"
+    "@inquirer/testing": "^2.1.31"
   },
   "scripts": {
     "tsc": "yarn run tsc:esm && yarn run tsc:cjs",
