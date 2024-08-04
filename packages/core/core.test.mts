@@ -465,7 +465,9 @@ describe('createPrompt()', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('done');
-    expect(getScreen({ raw: true })).toEqual(ansiEscapes.eraseLines(1));
+    expect(getScreen({ raw: true })).toEqual(
+      ansiEscapes.eraseLines(1) + ansiEscapes.cursorShow,
+    );
   });
 
   it('clear timeout when force closing', { timeout: 1000 }, async () => {
