@@ -54,12 +54,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
         function onExit() {
           hooksCleanup();
 
-          if (context?.clearPromptOnDone) {
-            screen.clean();
-          } else {
-            screen.clearContent();
-          }
-          screen.done();
+          screen.done({ clearContent: Boolean(context?.clearPromptOnDone) });
 
           removeExitListener();
           rl.input.removeListener('keypress', checkCursorPos);

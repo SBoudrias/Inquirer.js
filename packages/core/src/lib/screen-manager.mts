@@ -7,6 +7,10 @@ import type { InquirerReadline } from '@inquirer/type';
 const height = (content: string): number => content.split('\n').length;
 const lastLine = (content: string): string => content.split('\n').pop() ?? '';
 
+function cursorDown(n: number): string {
+  return n > 0 ? ansiEscapes.cursorDown(n) : '';
+}
+
 export default class ScreenManager {
   // These variables are keeping information to allow correct prompt re-rendering
   private height: number = 0;
@@ -18,11 +22,14 @@ export default class ScreenManager {
     this.cursorPos = rl.getCursorPos();
   }
 
-  render(content: string, bottomContent: string = '') {
-    /**
-     * Write message to screen and setPrompt to control backspace
-     */
+  write(content: string) {
+    this.rl.output.unmute();
+    this.rl.output.write(content);
+    this.rl.output.mute();
+  }
 
+  render(content: string, bottomContent: string = '') {
+    // Write message to screen and setPrompt to control backspace
     const promptLine = lastLine(content);
     const rawPromptLine = stripAnsi(promptLine);
 
@@ -69,63 +76,35 @@ export default class ScreenManager {
     // Return cursor to the initial left offset.
     output += ansiEscapes.cursorTo(this.cursorPos.cols);
 
-    this.clean();
-    this.rl.output.unmute();
-
     /**
-     * Set up state for next re-rendering
+     * Render and store state for future re-rendering
      */
+    this.write(
+      cursorDown(this.extraLinesUnderPrompt) +
+        ansiEscapes.eraseLines(this.height) +
+        output,
+    );
+
     this.extraLinesUnderPrompt = bottomContentHeight;
     this.height = height(output);
-
-    this.rl.output.write(output);
-    this.rl.output.mute();
   }
 
   checkCursorPos() {
     const cursorPos = this.rl.getCursorPos();
     if (cursorPos.cols !== this.cursorPos.cols) {
-      this.rl.output.unmute();
-      this.rl.output.write(ansiEscapes.cursorTo(cursorPos.cols));
-      this.rl.output.mute();
+      this.write(ansiEscapes.cursorTo(cursorPos.cols));
       this.cursorPos = cursorPos;
     }
   }
 
-  clean() {
-    this.rl.output.unmute();
-    this.rl.output.write(
-      [
-        this.extraLinesUnderPrompt > 0
-          ? ansiEscapes.cursorDown(this.extraLinesUnderPrompt)
-          : '',
-        ansiEscapes.eraseLines(this.height),
-      ].join(''),
-    );
-
-    this.extraLinesUnderPrompt = 0;
-    this.rl.output.mute();
-  }
-
-  clearContent() {
-    this.rl.output.unmute();
-    // Reset the cursor at the end of the previously displayed content
-    this.rl.output.write(
-      [
-        this.extraLinesUnderPrompt > 0
-          ? ansiEscapes.cursorDown(this.extraLinesUnderPrompt)
-          : '',
-        '\n',
-      ].join(''),
-    );
-    this.rl.output.mute();
-  }
-
-  done() {
+  done({ clearContent }: { clearContent: boolean }) {
     this.rl.setPrompt('');
-    this.rl.output.unmute();
-    this.rl.output.write(ansiEscapes.cursorShow);
-    this.rl.output.end();
+
+    let output = cursorDown(this.extraLinesUnderPrompt);
+    output += clearContent ? ansiEscapes.eraseLines(this.height) : '\n';
+    output += ansiEscapes.cursorShow;
+    this.write(output);
+
     this.rl.close();
   }
 }
