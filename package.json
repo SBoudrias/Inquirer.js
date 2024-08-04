@@ -7,7 +7,7 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "yarn@4.3.1+sha256.2535167e742927e1d2a1610d5004576e4e8f764d2ca5470d19536790f55cd6e2",
+  "packageManager": "yarn@4.4.0+sha256.5f228cb28f2edb97d8c3b667fb7b2fdcf06c46798e25ea889dad9e0b4bc2e2c1",
   "keywords": [
     "answer",
     "answers",
