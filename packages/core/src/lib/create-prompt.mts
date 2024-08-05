@@ -59,7 +59,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           removeExitListener();
           rl.input.removeListener('keypress', checkCursorPos);
           rl.removeListener('close', hooksCleanup);
-          output.destroy();
+          output.end();
         }
 
         cancel = () => {

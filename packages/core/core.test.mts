@@ -1,4 +1,5 @@
 import { AsyncResource } from 'node:async_hooks';
+import { Stream } from 'node:stream';
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import stripAnsi from 'strip-ansi';
@@ -508,6 +509,40 @@ describe('createPrompt()', () => {
 
     await expect(answer).resolves.toBe('closed');
     expect(exitSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('release listeners when done', async () => {
+    class WritableStream extends Stream.Writable {
+      override _write() {}
+    }
+
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done('done');
+        }
+      });
+
+      return config.message;
+    };
+    const prompt = createPrompt(Prompt);
+
+    const warningSpy = vi.fn();
+    process.on('warning', warningSpy);
+
+    // We need to reuse the same stream to ensure it gets cleaned up properly.
+    const output = new WritableStream();
+    for (let i = 0; i < 15; i++) {
+      const { answer, events } = await render(
+        prompt,
+        { message: `Question ${i}` },
+        { output },
+      );
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual('done');
+    }
+
+    expect(warningSpy).not.toHaveBeenCalled();
   });
 });
 
