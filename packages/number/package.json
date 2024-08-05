@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/number",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Inquirer number prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -54,7 +54,7 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/number/README.md",
   "dependencies": {
-    "@inquirer/core": "^9.0.9",
+    "@inquirer/core": "^9.0.10",
     "@inquirer/type": "^1.5.2"
   },
   "devDependencies": {
