@@ -330,4 +330,161 @@ describe('search prompt', () => {
     answer.cancel();
     await expect(answer).rejects.toThrow();
   });
+
+  it('Autocomplete with tab', async () => {
+    const { answer, events, getScreen } = await render(search, {
+      message: 'Select a Canadian province',
+      source: getListSearch(PROVINCES),
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province 
+      ❯ Alberta
+        British Columbia
+        Manitoba
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+        Ontario
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.type('New');
+
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province New
+      ❯ New Brunswick
+        Newfoundland and Labrador
+      (Use arrow keys)"
+    `);
+
+    events.keypress('tab');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province New Brunswick
+      ❯ New Brunswick
+        Newfoundland and Labrador
+      (Use arrow keys)"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('NB');
+  });
+
+  it('Autocomplete when pressing enter fail validation', async () => {
+    const FOLDERS = ['src', 'dist'];
+    const FILES = ['src/index.mts', 'dist/index.js'];
+
+    const { answer, events, getScreen } = await render(search, {
+      message: 'Select a file',
+      source: (term?: string) => {
+        if (term && FOLDERS.includes(term)) {
+          return FILES.filter((file) => file.includes(term)).map((file) => ({
+            name: file,
+            value: file,
+          }));
+        }
+
+        return FOLDERS.filter((folder) => !term || folder.includes(term)).map((file) => ({
+          name: file,
+          value: file,
+        }));
+      },
+      validate: (value: string) => {
+        return FILES.includes(value) ? true : 'Invalid file';
+      },
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a file 
+      ❯ src
+        dist
+      (Use arrow keys)"
+    `);
+
+    events.type('di');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a file di
+      ❯ dist"
+    `);
+
+    events.keypress('enter');
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a file dist
+      ❯ dist/index.js"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('dist/index.js');
+  });
+
+  it('handles validation errors', async () => {
+    const { answer, events, getScreen } = await render(search, {
+      message: 'Select a Canadian province',
+      source: getListSearch(PROVINCES),
+      validate: (value: string) => {
+        if (value === 'NB') return 'New Brunswick is unavailable at the moment.';
+        if (value === 'AB') return false; // Test default error
+        return true;
+      },
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province 
+      ❯ Alberta
+        British Columbia
+        Manitoba
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+        Ontario
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('enter');
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province Alberta
+      ❯ Alberta"
+    `);
+
+    events.keypress('enter');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province Alberta
+      > You must provide a valid value"
+    `);
+
+    events.keypress({ name: 'backspace', ctrl: true });
+    events.type('New Brun');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province New Brun
+      ❯ New Brunswick"
+    `);
+
+    events.keypress('enter');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province New Brunswick
+      ❯ New Brunswick"
+    `);
+
+    events.keypress('enter');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province New Brunswick
+      > New Brunswick is unavailable at the moment."
+    `);
+
+    events.keypress({ name: 'backspace', ctrl: true });
+    events.type('Quebec');
+    await Promise.resolve();
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('QC');
+  });
 });

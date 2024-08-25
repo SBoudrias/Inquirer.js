@@ -76,12 +76,13 @@ const answer = await search({
 
 ## Options
 
-| Property | Type                                          | Required | Description                                                                                                                                 |
-| -------- | --------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| message  | `string`                                      | yes      | The question to ask                                                                                                                         |
-| source   | `(term: string \| void) => Promise<Choice[]>` | yes      | This function returns the choices relevant to the search term.                                                                              |
-| pageSize | `number`                                      | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once. |
-| theme    | [See Theming](#Theming)                       | no       | Customize look of the prompt.                                                                                                               |
+| Property | Type                                                       | Required | Description                                                                                                                                                                                          |
+| -------- | ---------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message  | `string`                                                   | yes      | The question to ask                                                                                                                                                                                  |
+| source   | `(term: string \| void) => Promise<Choice[]>`              | yes      | This function returns the choices relevant to the search term.                                                                                                                                       |
+| pageSize | `number`                                                   | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                          |
+| validate | `Value => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the answer. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
+| theme    | [See Theming](#Theming)                                    | no       | Customize look of the prompt.                                                                                                                                                                        |
 
 ### `source` function
 
@@ -122,6 +123,18 @@ Here's each property:
 - `description`: Option for a longer description string that'll appear under the list when the cursor highlight a given choice.
 - `short`: Once the prompt is done (press enter), we'll use `short` if defined to render next to the question. By default we'll use `name`.
 - `disabled`: Disallow the option from being selected. If `disabled` is a string, it'll be used as a help tip explaining why the choice isn't available.
+
+### Validation & autocomplete interaction
+
+The validation within the search prompt acts as a signal for the autocomplete feature.
+
+When a list value is submitted and fail validation, the prompt will compare it to the search term. If they're the same, the prompt display the error. If they're not the same, we'll autocomplete the search term to match the value. Doing this will trigger a new search.
+
+You can rely on this behavior to implement progressive autocomplete searches. Where you want the user to narrow the search in a progressive manner.
+
+Pressing `tab` also triggers the term autocomplete.
+
+You can see this behavior in action in [our search demo](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/demo/demos/search.mjs).
 
 ## Theming
 
