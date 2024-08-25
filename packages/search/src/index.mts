@@ -53,6 +53,7 @@ type SearchConfig<Value> = {
   ) =>
     | ReadonlyArray<Choice<Value> | Separator>
     | Promise<ReadonlyArray<Choice<Value> | Separator>>;
+  validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
   theme?: PartialDeep<Theme<SearchTheme>>;
 };
@@ -69,7 +70,7 @@ function stringifyChoice(choice: Choice<unknown>): string {
 
 export default createPrompt(
   <Value,>(config: SearchConfig<Value>, done: (value: Value) => void) => {
-    const { pageSize = 7 } = config;
+    const { pageSize = 7, validate = () => true } = config;
     const theme = makeTheme<SearchTheme>(searchTheme, config.theme);
     const firstRender = useRef(true);
     const [status, setStatus] = useState<string>('searching');
@@ -126,10 +127,32 @@ export default createPrompt(
     // Safe to assume the cursor position never points to a Separator.
     const selectedChoice = searchResults[active] as Choice<Value> | void;
 
-    useKeypress((key, rl) => {
-      if (isEnterKey(key) && selectedChoice) {
-        setStatus('done');
-        done(selectedChoice.value);
+    useKeypress(async (key, rl) => {
+      if (isEnterKey(key)) {
+        if (selectedChoice) {
+          setStatus('loading');
+          const isValid = await validate(selectedChoice.value);
+          setStatus('pending');
+
+          if (isValid === true) {
+            setStatus('done');
+            done(selectedChoice.value);
+          } else if (selectedChoice.name === searchTerm) {
+            setSearchError(isValid || 'You must provide a valid value');
+          } else {
+            // Reset line with new search term
+            rl.write(stringifyChoice(selectedChoice));
+            setSearchTerm(stringifyChoice(selectedChoice));
+          }
+        } else {
+          // Reset the readline line value to the previous value. On line event, the value
+          // get cleared, forcing the user to re-enter the value instead of fixing it.
+          rl.write(searchTerm);
+        }
+      } else if (key.name === 'tab' && selectedChoice) {
+        rl.clearLine(0); // Remove the tab character.
+        rl.write(stringifyChoice(selectedChoice));
+        setSearchTerm(stringifyChoice(selectedChoice));
       } else if (status !== 'searching' && (key.name === 'up' || key.name === 'down')) {
         rl.clearLine(0);
         if (
