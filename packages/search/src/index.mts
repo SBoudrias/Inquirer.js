@@ -159,7 +159,7 @@ export default createPrompt(
       helpTip =
         searchResults.length > pageSize
           ? `\n${theme.style.help('(Use arrow keys to reveal more choices)')}`
-          : theme.style.help('(Use arrow keys)');
+          : `\n${theme.style.help('(Use arrow keys)')}`;
     }
 
     // TODO: What to do if no results are found? Should we display a message?

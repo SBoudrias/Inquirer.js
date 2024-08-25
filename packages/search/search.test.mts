@@ -62,7 +62,8 @@ describe('search prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
       ❯ New Brunswick
-        Newfoundland and Labrador(Use arrow keys)"
+        Newfoundland and Labrador
+      (Use arrow keys)"
     `);
 
     events.keypress('enter');
@@ -135,7 +136,8 @@ describe('search prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
       ❯ New Brunswick
-        Newfoundland and Labrador(Use arrow keys)"
+        Newfoundland and Labrador
+      (Use arrow keys)"
     `);
 
     events.keypress('up');
@@ -143,7 +145,8 @@ describe('search prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
       ❯ New Brunswick
-        Newfoundland and Labrador(Use arrow keys)"
+        Newfoundland and Labrador
+      (Use arrow keys)"
     `);
     events.keypress('down');
     events.keypress('down');
@@ -289,7 +292,8 @@ describe('search prompt', () => {
       "? Select a family 
       ❯ Stark
         Lannister
-        Targaryen(Use arrow keys)
+        Targaryen
+      (Use arrow keys)
       Winter is coming"
     `);
 
