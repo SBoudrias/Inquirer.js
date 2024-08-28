@@ -92,10 +92,10 @@ export type CustomQuestion<
   [key in Extract<keyof Q, string>]: Readonly<QuestionWithGetters<key, Q[key], A>>;
 }[Extract<keyof Q, string>];
 
-export type PromptSession<Q extends AnyQuestion<any>> =
-  | Q[]
-  | Record<string, Omit<Q, 'name'>>
-  | Observable<Q>
-  | Q;
+export type PromptSession<A extends Answers> =
+  | AnyQuestion<A>[]
+  | Record<string, Omit<AnyQuestion<A>, 'name'>>
+  | Observable<AnyQuestion<A>>
+  | AnyQuestion<A>;
 
 export type StreamOptions = Prettify<Context & { skipTTYChecks?: boolean }>;

@@ -29,12 +29,13 @@ import type {
   BuiltInQuestion,
   StreamOptions,
   QuestionMap,
+  PromptSession,
 } from './types.mjs';
 import { Observable } from 'rxjs';
 
 export type { QuestionMap } from './types.mjs';
 
-const defaultPrompts: PromptCollection = {
+const builtInPrompts: PromptCollection = {
   input,
   select,
   /** @deprecated `list` is now named `select` */
@@ -94,11 +95,7 @@ export function createPromptModule<
     answers?: PrefilledAnswers,
   ): PromptReturnType<PrefilledAnswers & A>;
   function promptModule<A extends Answers>(
-    questions:
-      | NamedQuestion<A>[]
-      | Record<keyof A, Question<A>>
-      | Observable<NamedQuestion<A>>
-      | NamedQuestion<A>,
+    questions: PromptSession<A>,
     answers?: Partial<A>,
   ): PromptReturnType<A> {
     const runner = new PromptsRunner<A>(promptModule.prompts, opt);
@@ -107,7 +104,7 @@ export function createPromptModule<
     return Object.assign(promptPromise, { ui: runner });
   }
 
-  promptModule.prompts = { ...defaultPrompts };
+  promptModule.prompts = { ...builtInPrompts };
 
   /**
    * Register a prompt type
@@ -124,7 +121,7 @@ export function createPromptModule<
    * Register the defaults provider prompts
    */
   promptModule.restoreDefaultPrompts = function () {
-    promptModule.prompts = { ...defaultPrompts };
+    promptModule.prompts = { ...builtInPrompts };
   };
 
   return promptModule;

@@ -14,6 +14,7 @@ import {
 } from 'rxjs';
 import runAsync from 'run-async';
 import MuteStream from 'mute-stream';
+import { AbortPromptError } from '@inquirer/core';
 import type { InquirerReadline } from '@inquirer/type';
 import ansiEscapes from 'ansi-escapes';
 import type { Answers, AnyQuestion, PromptSession, StreamOptions } from '../types.mjs';
@@ -154,13 +155,13 @@ function setupReadlineOptions(opt: StreamOptions) {
 }
 
 function isQuestionArray<A extends Answers>(
-  questions: PromptSession<AnyQuestion<A>>,
+  questions: PromptSession<A>,
 ): questions is AnyQuestion<A>[] {
   return Array.isArray(questions);
 }
 
 function isQuestionMap<A extends Answers>(
-  questions: PromptSession<AnyQuestion<A>>,
+  questions: PromptSession<A>,
 ): questions is Record<string, Omit<AnyQuestion<A>, 'name'>> {
   return Object.values(questions).every(
     (maybeQuestion) =>
@@ -188,7 +189,7 @@ export default class PromptsRunner<A extends Answers> {
   prompts: PromptCollection;
   answers: Partial<A> = {};
   process: Observable<any> = EMPTY;
-  onClose?: () => void;
+  abortController?: AbortController;
   opt: StreamOptions;
   rl?: InquirerReadline;
 
@@ -197,7 +198,7 @@ export default class PromptsRunner<A extends Answers> {
     this.prompts = prompts;
   }
 
-  async run(questions: PromptSession<AnyQuestion<A>>, answers?: Partial<A>): Promise<A> {
+  async run(questions: PromptSession<A>, answers?: Partial<A>): Promise<A> {
     // Keep global reference to the answers
     this.answers = typeof answers === 'object' ? { ...answers } : {};
 
@@ -267,7 +268,7 @@ export default class PromptsRunner<A extends Answers> {
 
           return of(question);
         }),
-        concatMap((question) => this.fetchAnswer(question)),
+        concatMap((question) => defer(() => from(this.fetchAnswer(question)))),
       );
     });
   }
@@ -279,48 +280,77 @@ export default class PromptsRunner<A extends Answers> {
       throw new Error(`Prompt for type ${question.type} not found`);
     }
 
-    return isPromptConstructor(prompt)
-      ? defer(() => {
-          const rl = readline.createInterface(
-            setupReadlineOptions(this.opt),
-          ) as InquirerReadline;
-          rl.resume();
+    let cleanupSignal: (() => void) | undefined;
 
-          const onClose = () => {
-            rl.removeListener('SIGINT', this.onForceClose);
-            rl.setPrompt('');
-            rl.output.unmute();
-            rl.output.write(ansiEscapes.cursorShow);
-            rl.output.end();
-            rl.close();
-          };
-          this.onClose = onClose;
-          this.rl = rl;
+    const promptFn: PromptFn<A> = isPromptConstructor(prompt)
+      ? (q, { signal } = {}) =>
+          new Promise<A>((resolve, reject) => {
+            const rl = readline.createInterface(
+              setupReadlineOptions(this.opt),
+            ) as InquirerReadline;
+            rl.resume();
 
-          // Make sure new prompt start on a newline when closing
-          process.on('exit', this.onForceClose);
-          rl.on('SIGINT', this.onForceClose);
+            const onClose = () => {
+              process.removeListener('exit', this.onForceClose);
+              rl.removeListener('SIGINT', this.onForceClose);
+              rl.setPrompt('');
+              rl.output.unmute();
+              rl.output.write(ansiEscapes.cursorShow);
+              rl.output.end();
+              rl.close();
+            };
+            this.rl = rl;
 
-          const activePrompt = new prompt(question, rl, this.answers);
+            // Make sure new prompt start on a newline when closing
+            process.on('exit', this.onForceClose);
+            rl.on('SIGINT', this.onForceClose);
 
-          return from(
-            activePrompt.run().then((answer: unknown) => {
+            const activePrompt = new prompt(q, rl, this.answers);
+
+            const cleanup = () => {
               onClose();
-              this.onClose = undefined;
               this.rl = undefined;
+              cleanupSignal?.();
+            };
 
-              return { name: question.name, answer };
-            }),
-          );
-        })
-      : defer(() =>
-          from(
-            prompt(question, this.opt).then((answer: unknown) => ({
-              name: question.name,
-              answer,
-            })),
-          ),
-        );
+            if (signal) {
+              const abort = () => {
+                reject(new AbortPromptError({ cause: signal.reason }));
+                cleanup();
+              };
+              if (signal.aborted) {
+                abort();
+                return;
+              }
+              signal.addEventListener('abort', abort);
+              cleanupSignal = () => {
+                signal.removeEventListener('abort', abort);
+                cleanupSignal = undefined;
+              };
+            }
+            activePrompt.run().then(resolve, reject).finally(cleanup);
+          })
+      : prompt;
+
+    const { signal: moduleSignal } = this.opt;
+    this.abortController = new AbortController();
+    if (moduleSignal?.aborted) {
+      this.abortController.abort(moduleSignal.reason);
+    } else if (moduleSignal) {
+      const abort = (reason: unknown) => this.abortController?.abort(reason);
+      moduleSignal.addEventListener('abort', abort);
+      cleanupSignal = () => {
+        moduleSignal.removeEventListener('abort', abort);
+      };
+    }
+
+    const { signal } = this.abortController;
+    return promptFn(question, { ...this.opt, signal })
+      .then((answer: unknown) => ({ name: question.name, answer }))
+      .finally(() => {
+        cleanupSignal?.();
+        this.abortController = undefined;
+      });
   }
 
   /**
@@ -336,12 +366,7 @@ export default class PromptsRunner<A extends Answers> {
    * Close the interface and cleanup listeners
    */
   close = () => {
-    // Remove events listeners
-    process.removeListener('exit', this.onForceClose);
-
-    if (typeof this.onClose === 'function') {
-      this.onClose();
-    }
+    this.abortController?.abort();
   };
 
   setDefaultType = (question: AnyQuestion<A>): Observable<AnyQuestion<A>> => {
