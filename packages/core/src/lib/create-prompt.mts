@@ -6,7 +6,7 @@ import { onExit as onSignalExit } from 'signal-exit';
 import ScreenManager from './screen-manager.mjs';
 import { CancelablePromise, type InquirerReadline } from '@inquirer/type';
 import { withHooks, effectScheduler } from './hook-engine.mjs';
-import { CancelPromptError, ExitPromptError } from './errors.mjs';
+import { AbortPromptError, CancelPromptError, ExitPromptError } from './errors.mjs';
 
 type ViewFunction<Value, Config> = (
   config: Prettify<Config>,
@@ -16,7 +16,7 @@ type ViewFunction<Value, Config> = (
 export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
   const prompt: Prompt<Value, Config> = (config, context = {}) => {
     // Default `input` to stdin
-    const { input = process.stdin } = context;
+    const { input = process.stdin, signal } = context;
 
     // Add mute capabilities to the output
     const output = new MuteStream();
@@ -42,6 +42,16 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
     function fail(error: unknown) {
       onExit();
       reject(error);
+    }
+
+    if (signal) {
+      const abort = () => fail(new AbortPromptError({ cause: signal.reason }));
+      if (signal.aborted) {
+        abort();
+        return;
+      }
+      signal.addEventListener('abort', abort);
+      cleanups.add(() => signal.removeEventListener('abort', abort));
     }
 
     withHooks(rl, (cycle) => {
