@@ -84,5 +84,5 @@ export type QuestionArray<A extends Answers> = readonly Question<A>[];
 export type QuestionObservable<A extends Answers> = Observable<Question<A>>;
 
 export type StreamOptions = Prettify<
-  Parameters<typeof input>[1] & { skipTTYChecks?: boolean }
+  Parameters<typeof input>[1] & { skipTTYChecks?: boolean; signal?: AbortSignal }
 >;

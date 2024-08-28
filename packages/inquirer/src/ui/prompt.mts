@@ -14,6 +14,7 @@ import {
 } from 'rxjs';
 import runAsync from 'run-async';
 import MuteStream from 'mute-stream';
+import { AbortPromptError } from '@inquirer/core';
 import type { InquirerReadline } from '@inquirer/type';
 import ansiEscapes from 'ansi-escapes';
 import type {
@@ -303,6 +304,11 @@ export default class PromptsRunner<A extends Answers> {
       throw new Error(`Prompt for type ${question.type} not found`);
     }
 
+    const { signal } = this.opt ?? {};
+    if (signal?.aborted) {
+      throw new AbortPromptError({ cause: signal.reason });
+    }
+
     return isPromptConstructor(prompt)
       ? defer(() => {
           const rl = readline.createInterface(
@@ -328,12 +334,22 @@ export default class PromptsRunner<A extends Answers> {
           const activePrompt = new prompt(question, rl, this.answers);
 
           return from(
-            activePrompt.run().then((answer: unknown) => {
-              onClose();
-              this.onClose = undefined;
-              this.rl = undefined;
-
-              return { name: question.name, answer };
+            new Promise<any>((resolve, reject) => {
+              const cleanup = () => {
+                onClose();
+                this.onClose = undefined;
+                this.rl = undefined;
+              };
+              signal?.addEventListener('abort', () => {
+                reject(new AbortPromptError({ cause: signal.reason }));
+                cleanup();
+              });
+              activePrompt
+                .run()
+                .then((answer: unknown) => {
+                  resolve({ name: question.name, answer });
+                }, reject)
+                .finally(cleanup);
             }),
           );
         })
