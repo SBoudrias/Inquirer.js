@@ -12,7 +12,7 @@ import {
 } from '@inquirer/core';
 import type { PartialDeep, InquirerReadline } from '@inquirer/type';
 
-type EditorConfig = {
+export type EditorConfig = {
   message: string;
   default?: string;
   postfix?: string;

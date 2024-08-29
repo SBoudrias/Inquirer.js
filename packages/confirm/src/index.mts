@@ -9,7 +9,7 @@ import {
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 
-type ConfirmConfig = {
+export type ConfirmConfig = {
   message: string;
   default?: boolean;
   transformer?: (value: boolean) => string;

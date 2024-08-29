@@ -10,7 +10,7 @@ import {
 import ansiEscapes from 'ansi-escapes';
 import type { PartialDeep } from '@inquirer/type';
 
-type PasswordConfig = {
+export type PasswordConfig = {
   message: string;
   mask?: boolean | string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;

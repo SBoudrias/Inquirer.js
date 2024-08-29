@@ -28,7 +28,7 @@ type NormalizedChoice<Value> = {
   key: string;
 };
 
-type RawlistConfig<
+export type RawlistConfig<
   Value,
   ChoicesObject =
     | ReadonlyArray<string | Separator>

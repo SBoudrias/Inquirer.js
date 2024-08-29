@@ -10,7 +10,7 @@ import {
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 
-type InputConfig = {
+export type InputConfig = {
   message: string;
   default?: string;
   required?: boolean;
