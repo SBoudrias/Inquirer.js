@@ -32,7 +32,14 @@ import type {
   StreamOptions,
 } from './types.mjs';
 
-export type { QuestionMap } from './types.mjs';
+export type {
+  Answers,
+  Question,
+  QuestionAnswerMap,
+  QuestionArray,
+  QuestionObservable,
+  QuestionMap,
+} from './types.mjs';
 
 const defaultPrompts: PromptCollection = {
   input,
