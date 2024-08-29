@@ -16,7 +16,7 @@ import {
   search,
   Separator,
 } from '@inquirer/prompts';
-import type { Prettify, UnionToIntersection } from '@inquirer/type';
+import type { Prettify } from '@inquirer/type';
 import { default as PromptsRunner } from './ui/prompt.mjs';
 import type {
   PromptCollection,
@@ -25,12 +25,15 @@ import type {
 } from './ui/prompt.mjs';
 import type {
   Answers,
-  Question,
-  QuestionAnswerMap,
-  QuestionArray,
-  QuestionObservable,
+  CustomQuestions,
+  LegacyQuestion,
+  Question as BuiltInQuestion,
   StreamOptions,
+  QuestionMap,
+  NamedLegacyQuestion,
+  Named,
 } from './types.mjs';
+import { Observable } from 'rxjs';
 
 export type { QuestionMap } from './types.mjs';
 
@@ -56,42 +59,68 @@ type PromptReturnType<T> = Promise<Prettify<T>> & {
 /**
  * Create a new self-contained prompt module.
  */
-export function createPromptModule(opt?: StreamOptions) {
-  function promptModule<
-    const AnswerList extends readonly Answers[],
-    PrefilledAnswers extends Answers = object,
-  >(
-    questions: { [I in keyof AnswerList]: Question<PrefilledAnswers & AnswerList[I]> },
-    answers?: PrefilledAnswers,
-  ): PromptReturnType<PrefilledAnswers & UnionToIntersection<AnswerList[number]>>;
-  function promptModule<
-    const Map extends QuestionAnswerMap<A>,
-    const A extends Answers<Extract<keyof Map, string>>,
-    PrefilledAnswers extends Answers = object,
-  >(questions: Map, answers?: PrefilledAnswers): PromptReturnType<PrefilledAnswers & A>;
+export function createPromptModule<
+  Prompts extends Record<string, Record<string, unknown>> = never,
+>(opt?: StreamOptions) {
   function promptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
   >(
-    questions: QuestionObservable<A>,
+    questions: (
+      | Named<BuiltInQuestion<Prettify<PrefilledAnswers & A>>, Extract<keyof A, string>>
+      | Named<
+          CustomQuestions<Prettify<PrefilledAnswers & A>, Prompts>,
+          Extract<keyof A, string>
+        >
+    )[],
     answers?: PrefilledAnswers,
-  ): PromptReturnType<PrefilledAnswers & A>;
+  ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
   function promptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
   >(
-    questions: Question<A>,
+    questions: {
+      [name in keyof A]:
+        | BuiltInQuestion<Prettify<PrefilledAnswers & A>>
+        | CustomQuestions<Prettify<PrefilledAnswers & A>, Prompts>;
+    },
     answers?: PrefilledAnswers,
-  ): PromptReturnType<PrefilledAnswers & A>;
-  function promptModule(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): PromptReturnType<Prettify<PrefilledAnswers & Record<keyof A, any>>>;
+  function promptModule<
+    const A extends Answers,
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: Observable<
+      | Named<BuiltInQuestion<Prettify<PrefilledAnswers & A>>, Extract<keyof A, string>>
+      | Named<
+          CustomQuestions<Prettify<PrefilledAnswers & A>, Prompts>,
+          Extract<keyof A, string>
+        >
+    >,
+    answers?: PrefilledAnswers,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): PromptReturnType<Prettify<PrefilledAnswers & Record<keyof A, any>>>;
+  function promptModule<
+    K extends string = string,
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    | Named<BuiltInQuestion<Record<K, any> & PrefilledAnswers>, K>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      | Named<CustomQuestions<Record<K, any> & PrefilledAnswers, Prompts>, K>,
+    answers?: PrefilledAnswers,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): PromptReturnType<PrefilledAnswers & Record<K, any>>;
+  function promptModule<A extends Answers>(
     questions:
-      | QuestionArray<Answers>
-      | QuestionAnswerMap<Answers>
-      | QuestionObservable<Answers>
-      | Question<Answers>,
-    answers?: Partial<Answers>,
-  ): PromptReturnType<Answers> {
-    const runner = new PromptsRunner(promptModule.prompts, opt);
+      | NamedLegacyQuestion<A>[]
+      | Record<string, LegacyQuestion<A>>
+      | Observable<NamedLegacyQuestion<A>>
+      | NamedLegacyQuestion<A>,
+    answers?: Partial<A>,
+  ): PromptReturnType<A> {
+    const runner = new PromptsRunner<A>(promptModule.prompts, opt);
 
     const promptPromise = runner.run(questions, answers);
     return Object.assign(promptPromise, { ui: runner });
@@ -123,7 +152,7 @@ export function createPromptModule(opt?: StreamOptions) {
 /**
  * Public CLI helper interface
  */
-const prompt = createPromptModule();
+const prompt = createPromptModule<Omit<QuestionMap, '__dummy'>>();
 
 // Expose helper functions on the top level for easiest usage by common users
 function registerPrompt(name: string, newPrompt: LegacyPromptConstructor) {
