@@ -169,6 +169,7 @@ The context options are:
 | input             | `NodeJS.ReadableStream` | no       | The stdin stream (defaults to `process.stdin`)               |
 | output            | `NodeJS.WritableStream` | no       | The stdout stream (defaults to `process.stdout`)             |
 | clearPromptOnDone | `boolean`               | no       | If true, we'll clear the screen after the prompt is answered |
+| signal            | `AbortSignal`           | no       | An AbortSignal to cancel prompts asynchronously              |
 
 Example:
 
