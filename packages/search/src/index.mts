@@ -156,8 +156,7 @@ export default createPrompt(
 
     let helpTip = '';
     if (
-      status === 'pending' &&
-      searchResults.length > 0 &&
+      searchResults.length > 1 &&
       (theme.helpMode === 'always' || (theme.helpMode === 'auto' && firstRender.current))
     ) {
       helpTip =
