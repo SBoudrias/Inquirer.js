@@ -63,6 +63,10 @@ function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
   return !Separator.isSeparator(item) && !item.disabled;
 }
 
+function stringifyChoice(choice: Choice<unknown>): string {
+  return choice.name ?? String(choice.value);
+}
+
 export default createPrompt(
   <Value,>(config: SearchConfig<Value>, done: (value: Value) => void) => {
     const { pageSize = 7 } = config;
@@ -171,7 +175,7 @@ export default createPrompt(
           return ` ${item.separator}`;
         }
 
-        const line = String(item.name || item.value);
+        const line = stringifyChoice(item);
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
@@ -195,11 +199,7 @@ export default createPrompt(
 
     let searchStr;
     if (status === 'done' && selectedChoice) {
-      const answer =
-        selectedChoice.short ??
-        selectedChoice.name ??
-        // TODO: Could we enforce that at the type level? Name should be defined for non-string values.
-        String(selectedChoice.value);
+      const answer = selectedChoice.short ?? stringifyChoice(selectedChoice);
       return `${prefix} ${message} ${theme.style.answer(answer)}`;
     } else {
       searchStr = theme.style.searchTerm(searchTerm);
