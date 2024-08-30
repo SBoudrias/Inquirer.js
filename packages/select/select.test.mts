@@ -79,6 +79,25 @@ describe('select prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1"');
   });
 
+  it('allow passing strings as choices', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select one',
+      choices: ['Option A', 'Option B', 'Option C'],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select one (Use arrow keys)
+      ❯ Option A
+        Option B
+        Option C"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Select one Option A"`);
+
+    await expect(answer).resolves.toEqual('Option A');
+  });
+
   it('use number key to select an option', async () => {
     const { answer, events, getScreen } = await render(select, {
       message: 'Select a number',

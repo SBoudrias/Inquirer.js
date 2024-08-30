@@ -49,29 +49,72 @@ type Choice<Value> = {
   type?: never;
 };
 
-type SelectConfig<Value> = {
+type NormalizedChoice<Value> = {
+  value: Value;
+  name: string;
+  description?: string;
+  short: string;
+  disabled: boolean | string;
+};
+
+type SelectConfig<
+  Value,
+  ChoicesObject =
+    | ReadonlyArray<string | Separator>
+    | ReadonlyArray<Choice<Value> | Separator>,
+> = {
   message: string;
-  choices: ReadonlyArray<Choice<Value> | Separator>;
+  choices: ChoicesObject extends ReadonlyArray<string | Separator>
+    ? ChoicesObject
+    : ReadonlyArray<Choice<Value> | Separator>;
   pageSize?: number;
   loop?: boolean;
   default?: unknown;
   theme?: PartialDeep<Theme<SelectTheme>>;
 };
 
-type Item<Value> = Separator | Choice<Value>;
-
-function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
+function isSelectable<Value>(
+  item: NormalizedChoice<Value> | Separator,
+): item is NormalizedChoice<Value> {
   return !Separator.isSeparator(item) && !item.disabled;
+}
+
+function normalizeChoices<Value>(
+  choices: ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
+): Array<NormalizedChoice<Value> | Separator> {
+  return choices.map((choice) => {
+    if (Separator.isSeparator(choice)) return choice;
+
+    if (typeof choice === 'string') {
+      return {
+        value: choice as Value,
+        name: choice,
+        short: choice,
+        disabled: false,
+      };
+    }
+
+    const name = choice.name ?? String(choice.value);
+    return {
+      value: choice.value,
+      name,
+      description: choice.description,
+      short: choice.short ?? name,
+      disabled: choice.disabled ?? false,
+    };
+  });
 }
 
 export default createPrompt(
   <Value,>(config: SelectConfig<Value>, done: (value: Value) => void) => {
-    const { choices: items, loop = true, pageSize = 7 } = config;
+    const { loop = true, pageSize = 7 } = config;
     const firstRender = useRef(true);
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
     const prefix = usePrefix({ theme });
     const [status, setStatus] = useState('pending');
     const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+    const items = useMemo(() => normalizeChoices(config.choices), [config.choices]);
 
     const bounds = useMemo(() => {
       const first = items.findIndex(isSelectable);
@@ -98,7 +141,7 @@ export default createPrompt(
     );
 
     // Safe to assume the cursor position always point to a Choice.
-    const selectedChoice = items[active] as Choice<Value>;
+    const selectedChoice = items[active] as NormalizedChoice<Value>;
 
     useKeypress((key, rl) => {
       clearTimeout(searchTimeoutRef.current);
@@ -135,9 +178,7 @@ export default createPrompt(
         const matchIndex = items.findIndex((item) => {
           if (Separator.isSeparator(item) || !isSelectable(item)) return false;
 
-          return String(item.name || item.value)
-            .toLowerCase()
-            .startsWith(searchTerm);
+          return item.name.toLowerCase().startsWith(searchTerm);
         });
 
         if (matchIndex >= 0) {
@@ -174,36 +215,30 @@ export default createPrompt(
       }
     }
 
-    const page = usePagination<Item<Value>>({
+    const page = usePagination({
       items,
       active,
-      renderItem({ item, isActive }: { item: Item<Value>; isActive: boolean }) {
+      renderItem({ item, isActive }) {
         if (Separator.isSeparator(item)) {
           return ` ${item.separator}`;
         }
 
-        const line = String(item.name || item.value);
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
-          return theme.style.disabled(`${line} ${disabledLabel}`);
+          return theme.style.disabled(`${item.name} ${disabledLabel}`);
         }
 
         const color = isActive ? theme.style.highlight : (x: string) => x;
         const cursor = isActive ? theme.icon.cursor : ` `;
-        return color(`${cursor} ${line}`);
+        return color(`${cursor} ${item.name}`);
       },
       pageSize,
       loop,
     });
 
     if (status === 'done') {
-      const answer =
-        selectedChoice.short ??
-        selectedChoice.name ??
-        // TODO: Could we enforce that at the type level? Name should be defined for non-string values.
-        String(selectedChoice.value);
-      return `${prefix} ${message} ${theme.style.answer(answer)}`;
+      return `${prefix} ${message} ${theme.style.answer(selectedChoice.short)}`;
     }
 
     const choiceDescription = selectedChoice.description
