@@ -16,9 +16,12 @@ export class Separator {
     }
   }
 
-  static isSeparator(
-    choice: undefined | Separator | Record<string, unknown>,
-  ): choice is Separator {
-    return Boolean(choice && choice.type === 'separator');
+  static isSeparator(choice: unknown): choice is Separator {
+    return Boolean(
+      choice &&
+        typeof choice === 'object' &&
+        'type' in choice &&
+        choice.type === 'separator',
+    );
   }
 }
