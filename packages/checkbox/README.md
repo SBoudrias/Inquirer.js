@@ -93,6 +93,7 @@ The `Choice` object is typed as
 type Choice<Value> = {
   value: Value;
   name?: string;
+  description?: string;
   short?: string;
   checked?: boolean;
   disabled?: boolean | string;
@@ -103,6 +104,7 @@ Here's each property:
 
 - `value`: The value is what will be returned by `await checkbox()`.
 - `name`: This is the string displayed in the choice list.
+- `description`: Option for a longer description string that'll appear under the list when the cursor highlight a given choice.
 - `short`: Once the prompt is done (press enter), we'll use `short` if defined to render next to the question. By default we'll use `name`.
 - `checked`: If `true`, the option will be checked by default.
 - `disabled`: Disallow the option from being selected. If `disabled` is a string, it'll be used as a help tip explaining why the choice isn't available.
@@ -131,6 +133,7 @@ type Theme = {
     highlight: (text: string) => string;
     key: (text: string) => string;
     disabledChoice: (text: string) => string;
+    description: (text: string) => string;
     renderSelectedChoices: <T>(
       selectedChoices: ReadonlyArray<Choice<T>>,
       allChoices: ReadonlyArray<Choice<T> | Separator>,

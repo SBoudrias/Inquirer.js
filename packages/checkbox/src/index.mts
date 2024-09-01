@@ -33,6 +33,7 @@ type CheckboxTheme = {
       selectedChoices: ReadonlyArray<NormalizedChoice<T>>,
       allChoices: ReadonlyArray<NormalizedChoice<T> | Separator>,
     ) => string;
+    description: (text: string) => string;
   };
   helpMode: 'always' | 'never' | 'auto';
 };
@@ -47,6 +48,7 @@ const checkboxTheme: CheckboxTheme = {
     disabledChoice: (text: string) => colors.dim(`- ${text}`),
     renderSelectedChoices: (selectedChoices) =>
       selectedChoices.map((choice) => choice.short).join(', '),
+    description: (text: string) => colors.cyan(text),
   },
   helpMode: 'auto',
 };
@@ -54,6 +56,7 @@ const checkboxTheme: CheckboxTheme = {
 type Choice<Value> = {
   value: Value;
   name?: string;
+  description?: string;
   short?: string;
   disabled?: boolean | string;
   checked?: boolean;
@@ -63,6 +66,7 @@ type Choice<Value> = {
 type NormalizedChoice<Value> = {
   value: Value;
   name: string;
+  description?: string;
   short: string;
   disabled: boolean | string;
   checked: boolean;
@@ -130,6 +134,7 @@ function normalizeChoices<Value>(
       value: choice.value,
       name,
       short: choice.short ?? name,
+      description: choice.description,
       disabled: choice.disabled ?? false,
       checked: choice.checked ?? false,
     };
@@ -217,6 +222,7 @@ export default createPrompt(
 
     const message = theme.style.message(config.message);
 
+    let description;
     const page = usePagination({
       items,
       active,
@@ -229,6 +235,10 @@ export default createPrompt(
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
           return theme.style.disabledChoice(`${item.name} ${disabledLabel}`);
+        }
+
+        if (isActive) {
+          description = item.description;
         }
 
         const checkbox = item.checked ? theme.icon.checked : theme.icon.unchecked;
@@ -279,12 +289,16 @@ export default createPrompt(
       }
     }
 
+    const choiceDescription = description
+      ? `\n${theme.style.description(description)}`
+      : ``;
+
     let error = '';
     if (errorMsg) {
       error = `\n${theme.style.error(errorMsg)}`;
     }
 
-    return `${prefix} ${message}${helpTipTop}\n${page}${helpTipBottom}${error}${ansiEscapes.cursorHide}`;
+    return `${prefix} ${message}${helpTipTop}\n${page}${helpTipBottom}${choiceDescription}${error}${ansiEscapes.cursorHide}`;
   },
 );
 

@@ -668,6 +668,50 @@ describe('checkbox prompt', () => {
     await expect(answer).resolves.toEqual([1]);
   });
 
+  it('shows description of the highlighted choice', async () => {
+    const choices = [
+      { value: 'Stark', description: 'Winter is coming' },
+      { value: 'Lannister', description: 'Hear me roar' },
+      { value: 'Targaryen', description: 'Fire and blood' },
+    ];
+
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a family',
+      choices: choices,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a family (Press <space> to select, <a> to toggle all, <i> to invert
+      selection, and <enter> to proceed)
+      ❯◯ Stark
+       ◯ Lannister
+       ◯ Targaryen
+      Winter is coming"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a family (Press <space> to select, <a> to toggle all, <i> to invert
+      selection, and <enter> to proceed)
+       ◯ Stark
+      ❯◯ Lannister
+       ◯ Targaryen
+      Hear me roar"
+    `);
+
+    events.keypress('space');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a family
+       ◯ Stark
+      ❯◉ Lannister
+       ◯ Targaryen
+      Hear me roar"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(['Lannister']);
+  });
+
   it('uses custom validation', async () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a number',
