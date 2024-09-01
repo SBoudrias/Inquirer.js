@@ -4,22 +4,22 @@ import expand from './src/index.mjs';
 
 const overwriteChoices = [
   {
-    key: 'y',
+    key: 'y' as const,
     name: 'Overwrite',
     value: 'overwrite',
   },
   {
-    key: 'a',
+    key: 'a' as const,
     name: 'Overwrite this one and all next',
     value: 'overwrite_all',
   },
   {
-    key: 'd',
+    key: 'd' as const,
     name: 'Show diff',
     value: 'diff',
   },
   {
-    key: 'x',
+    key: 'x' as const,
     name: 'Abort',
     value: 'abort',
   },
