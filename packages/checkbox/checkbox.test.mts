@@ -58,6 +58,34 @@ describe('checkbox prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"? Select a number 2, 3"');
   });
 
+  it('works with string choices', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: ['Option A', 'Option B', 'Option C'],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
+      selection, and <enter> to proceed)
+      ❯◯ Option A
+       ◯ Option B
+       ◯ Option C"
+    `);
+
+    events.keypress('down');
+    events.keypress('space');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+       ◯ Option A
+      ❯◉ Option B
+       ◯ Option C"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(['Option B']);
+    expect(getScreen()).toMatchInlineSnapshot(`"? Select a number Option B"`);
+  });
+
   it('does not scroll up beyond first item when not looping', async () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a number',

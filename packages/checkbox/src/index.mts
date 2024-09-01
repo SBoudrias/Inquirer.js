@@ -30,8 +30,8 @@ type CheckboxTheme = {
   style: {
     disabledChoice: (text: string) => string;
     renderSelectedChoices: <T>(
-      selectedChoices: ReadonlyArray<Choice<T>>,
-      allChoices: ReadonlyArray<Choice<T> | Separator>,
+      selectedChoices: ReadonlyArray<NormalizedChoice<T>>,
+      allChoices: ReadonlyArray<NormalizedChoice<T> | Separator>,
     ) => string;
   };
   helpMode: 'always' | 'never' | 'auto';
@@ -46,28 +46,41 @@ const checkboxTheme: CheckboxTheme = {
   style: {
     disabledChoice: (text: string) => colors.dim(`- ${text}`),
     renderSelectedChoices: (selectedChoices) =>
-      selectedChoices
-        .map((choice) => choice.short ?? choice.name ?? choice.value)
-        .join(', '),
+      selectedChoices.map((choice) => choice.short).join(', '),
   },
   helpMode: 'auto',
 };
 
 type Choice<Value> = {
-  name?: string;
   value: Value;
+  name?: string;
   short?: string;
   disabled?: boolean | string;
   checked?: boolean;
   type?: never;
 };
 
-type Config<Value> = {
+type NormalizedChoice<Value> = {
+  value: Value;
+  name: string;
+  short: string;
+  disabled: boolean | string;
+  checked: boolean;
+};
+
+type CheckboxConfig<
+  Value,
+  ChoicesObject =
+    | ReadonlyArray<string | Separator>
+    | ReadonlyArray<Choice<Value> | Separator>,
+> = {
   message: string;
   prefix?: string;
   pageSize?: number;
   instructions?: string | boolean;
-  choices: ReadonlyArray<Choice<Value> | Separator>;
+  choices: ChoicesObject extends ReadonlyArray<string | Separator>
+    ? ChoicesObject
+    : ReadonlyArray<Choice<Value> | Separator>;
   loop?: boolean;
   required?: boolean;
   validate?: (
@@ -76,13 +89,13 @@ type Config<Value> = {
   theme?: PartialDeep<Theme<CheckboxTheme>>;
 };
 
-type Item<Value> = Separator | Choice<Value>;
+type Item<Value> = NormalizedChoice<Value> | Separator;
 
-function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
+function isSelectable<Value>(item: Item<Value>): item is NormalizedChoice<Value> {
   return !Separator.isSeparator(item) && !item.disabled;
 }
 
-function isChecked<Value>(item: Item<Value>): item is Choice<Value> {
+function isChecked<Value>(item: Item<Value>): item is NormalizedChoice<Value> {
   return isSelectable(item) && Boolean(item.checked);
 }
 
@@ -96,13 +109,39 @@ function check(checked: boolean) {
   };
 }
 
+function normalizeChoices<Value>(
+  choices: ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
+): Item<Value>[] {
+  return choices.map((choice) => {
+    if (Separator.isSeparator(choice)) return choice;
+
+    if (typeof choice === 'string') {
+      return {
+        value: choice as Value,
+        name: choice,
+        short: choice,
+        disabled: false,
+        checked: false,
+      };
+    }
+
+    const name = choice.name ?? String(choice.value);
+    return {
+      value: choice.value,
+      name,
+      short: choice.short ?? name,
+      disabled: choice.disabled ?? false,
+      checked: choice.checked ?? false,
+    };
+  });
+}
+
 export default createPrompt(
-  <Value,>(config: Config<Value>, done: (value: Array<Value>) => void) => {
+  <Value,>(config: CheckboxConfig<Value>, done: (value: Array<Value>) => void) => {
     const {
       instructions,
       pageSize = 7,
       loop = true,
-      choices,
       required,
       validate = () => true,
     } = config;
@@ -111,7 +150,7 @@ export default createPrompt(
     const firstRender = useRef(true);
     const [status, setStatus] = useState('pending');
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
-      choices.map((choice) => ({ ...choice })),
+      normalizeChoices(config.choices),
     );
 
     const bounds = useMemo(() => {
@@ -178,25 +217,24 @@ export default createPrompt(
 
     const message = theme.style.message(config.message);
 
-    const page = usePagination<Item<Value>>({
+    const page = usePagination({
       items,
       active,
-      renderItem({ item, isActive }: { item: Item<Value>; isActive: boolean }) {
+      renderItem({ item, isActive }) {
         if (Separator.isSeparator(item)) {
           return ` ${item.separator}`;
         }
 
-        const line = String(item.name || item.value);
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
-          return theme.style.disabledChoice(`${line} ${disabledLabel}`);
+          return theme.style.disabledChoice(`${item.name} ${disabledLabel}`);
         }
 
         const checkbox = item.checked ? theme.icon.checked : theme.icon.unchecked;
         const color = isActive ? theme.style.highlight : (x: string) => x;
         const cursor = isActive ? theme.icon.cursor : ' ';
-        return color(`${cursor}${checkbox} ${line}`);
+        return color(`${cursor}${checkbox} ${item.name}`);
       },
       pageSize,
       loop,

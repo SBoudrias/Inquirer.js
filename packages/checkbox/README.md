@@ -101,13 +101,15 @@ type Choice<Value> = {
 
 Here's each property:
 
-- `value`: The value is what will be returned by `await select()`.
+- `value`: The value is what will be returned by `await checkbox()`.
 - `name`: This is the string displayed in the choice list.
 - `short`: Once the prompt is done (press enter), we'll use `short` if defined to render next to the question. By default we'll use `name`.
 - `checked`: If `true`, the option will be checked by default.
 - `disabled`: Disallow the option from being selected. If `disabled` is a string, it'll be used as a help tip explaining why the choice isn't available.
 
 Also note the `choices` array can contain `Separator`s to help organize long lists.
+
+`choices` can also be an array of string, in which case the string will be used both as the `value` and the `name`.
 
 ## Theming
 
