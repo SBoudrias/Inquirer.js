@@ -72,7 +72,7 @@ describe('expand prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? abort"');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? Abort"`);
 
     await expect(answer).resolves.toEqual('abort');
   });
@@ -139,7 +139,7 @@ describe('expand prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? abort"');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? Abort"`);
 
     await expect(answer).resolves.toEqual('abort');
   });
@@ -245,7 +245,7 @@ describe('expand prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (Yadxh)"');
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? overwrite"');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? Overwrite"`);
 
     await expect(answer).resolves.toEqual('overwrite');
   });
