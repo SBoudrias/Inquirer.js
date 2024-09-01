@@ -90,10 +90,12 @@ type Choice<Value> = {
 
 Here's each property:
 
-- `value`: The value is what will be returned by `await select()`.
+- `value`: The value is what will be returned by `await rawlist()`.
 - `name`: This is the string displayed in the choice list.
 - `short`: Once the prompt is done (press enter), we'll use `short` if defined to render next to the question. By default we'll use `name`.
 - `key`: The key of the choice. Displayed as `key) name`.
+
+`choices` can also be an array of string, in which case the string will be used both as the `value` and the `name`.
 
 ## Theming
 

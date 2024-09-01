@@ -1,5 +1,6 @@
 import {
   createPrompt,
+  useMemo,
   useState,
   useKeypress,
   usePrefix,
@@ -20,21 +21,62 @@ type Choice<Value> = {
   key?: string;
 };
 
-type RawlistConfig<Value> = {
+type NormalizedChoice<Value> = {
+  value: Value;
+  name: string;
+  short: string;
+  key: string;
+};
+
+type RawlistConfig<
+  Value,
+  ChoicesObject =
+    | ReadonlyArray<string | Separator>
+    | ReadonlyArray<Choice<Value> | Separator>,
+> = {
   message: string;
-  choices: ReadonlyArray<Choice<Value> | Separator>;
+  choices: ChoicesObject extends ReadonlyArray<string | Separator>
+    ? ChoicesObject
+    : ReadonlyArray<Choice<Value> | Separator>;
   theme?: PartialDeep<Theme>;
 };
 
 function isSelectableChoice<T>(
-  choice: undefined | Separator | Choice<T>,
-): choice is Choice<T> {
+  choice: undefined | Separator | NormalizedChoice<T>,
+): choice is NormalizedChoice<T> {
   return choice != null && !Separator.isSeparator(choice);
+}
+
+function normalizeChoices<Value>(
+  choices: ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
+): Array<NormalizedChoice<Value> | Separator> {
+  let index = 0;
+  return choices.map((choice) => {
+    if (Separator.isSeparator(choice)) return choice;
+
+    index += 1;
+    if (typeof choice === 'string') {
+      return {
+        value: choice as Value,
+        name: choice,
+        short: choice,
+        key: String(index),
+      };
+    }
+
+    const name = choice.name ?? String(choice.value);
+    return {
+      value: choice.value,
+      name,
+      short: choice.short ?? name,
+      key: choice.key ?? String(index),
+    };
+  });
 }
 
 export default createPrompt(
   <Value,>(config: RawlistConfig<Value>, done: (value: Value) => void) => {
-    const { choices } = config;
+    const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
     const [status, setStatus] = useState<string>('pending');
     const [value, setValue] = useState<string>('');
     const [errorMsg, setError] = useState<string>();
@@ -76,17 +118,15 @@ export default createPrompt(
       return `${prefix} ${message} ${theme.style.answer(value)}`;
     }
 
-    let index = 0;
     const choicesStr = choices
       .map((choice) => {
         if (Separator.isSeparator(choice)) {
           return ` ${choice.separator}`;
         }
 
-        index += 1;
-        const line = `  ${choice.key || index}) ${String(choice.name || choice.value)}`;
+        const line = `  ${choice.key}) ${choice.name}`;
 
-        if (choice.key === value.toLowerCase() || String(index) === value) {
+        if (choice.key === value.toLowerCase()) {
           return theme.style.highlight(line);
         }
 

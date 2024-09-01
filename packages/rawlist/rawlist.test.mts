@@ -33,6 +33,28 @@ describe('rawlist prompt', () => {
     await expect(answer).resolves.toEqual(4);
   });
 
+  it('works with string choices', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a number',
+      choices: ['1', '2', '3', '4', '5'],
+    });
+
+    events.type('4');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number 4
+        1) 1
+        2) 2
+        3) 3
+        4) 4
+        5) 5"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 4"');
+
+    await expect(answer).resolves.toEqual('4');
+  });
+
   it('uses custom `key`, and `short` once a value is selected', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select a country',
