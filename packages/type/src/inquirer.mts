@@ -3,6 +3,17 @@ import MuteStream from 'mute-stream';
 
 export class CancelablePromise<T> extends Promise<T> {
   public cancel: () => void = () => {};
+
+  static withResolver<T>() {
+    let resolve: (value: T) => void;
+    let reject: (error: unknown) => void;
+    const promise = new CancelablePromise<T>((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
+
+    return { promise, resolve: resolve!, reject: reject! };
+  }
 }
 
 export type InquirerReadline = readline.ReadLine & {
