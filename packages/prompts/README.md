@@ -192,16 +192,37 @@ const allowEmail = await confirm(
 
 ## Canceling prompt
 
-All prompt functions are returning a cancelable promise. This special promise type has a `cancel` method that'll cancel and cleanup the prompt.
+This can preferably be done with either an `AbortController` or `AbortSignal`.
+
+```js
+// Example 1: using built-in AbortSignal utilities
+import { confirm } from '@inquirer/prompts';
+
+const answer = await confirm({ ... }, { signal: AbortSignal.timeout(5000) });
+```
+
+```js
+// Example 1: implementing custom cancellation logic
+import { confirm } from '@inquirer/prompts';
+
+const controller = new AbortController();
+setTimeout(() => {
+  controller.abort(); // This will reject the promise
+}, 5000);
+
+const answer = await confirm({ ... }, { signal: controller.signal });
+```
+
+Alternatively, all prompt functions are returning a cancelable promise. This special promise type has a `cancel` method that'll cancel and cleanup the prompt.
 
 On calling `cancel`, the answer promise will become rejected.
 
 ```js
 import { confirm } from '@inquirer/prompts';
 
-const answer = confirm(...); // note: for this you cannot use `await`
+const promise = confirm(...); // Warning: for this pattern to work, `await` cannot be used.
 
-answer.cancel();
+promise.cancel();
 ```
 
 # Recipes
@@ -239,27 +260,18 @@ if (allowEmail) {
 ## Get default value after timeout
 
 ```js
-import { setTimeout } from 'node:timers/promises';
 import { input } from '@inquirer/prompts';
 
-const ac = new AbortController();
-const prompt = input({
-  message: 'Enter a value (timing out in 5 seconds)',
+const answer = await input(
+  { message: 'Enter a value (timing out in 5 seconds)' },
+  { signal: AbortSignal.timeout(5000) },
+).catch((error) => {
+  if (error.name === 'AbortPromptError') {
+    return 'Default value';
+  }
+
+  throw error;
 });
-
-prompt
-  .finally(() => {
-    ac.abort();
-  })
-  // Silencing the cancellation error.
-  .catch(() => {});
-
-const defaultValue = setTimeout(5000, 'timeout', { signal: ac.signal }).then(() => {
-  prompt.cancel();
-  return 'Timed out!';
-});
-
-const answer = await Promise.race([defaultValue, prompt]);
 ```
 
 ## Using as pre-commit/git hooks, or scripts
