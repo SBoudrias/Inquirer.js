@@ -45,27 +45,64 @@ type Choice<Value> = {
   type?: never;
 };
 
-type SearchConfig<Value> = {
+type NormalizedChoice<Value> = {
+  value: Value;
+  name: string;
+  description?: string;
+  short: string;
+  disabled: boolean | string;
+};
+
+type SearchConfig<
+  Value,
+  ChoicesObject =
+    | ReadonlyArray<string | Separator>
+    | ReadonlyArray<Choice<Value> | Separator>,
+> = {
   message: string;
   source: (
     term: string | undefined,
     opt: { signal: AbortSignal },
-  ) =>
-    | ReadonlyArray<Choice<Value> | Separator>
-    | Promise<ReadonlyArray<Choice<Value> | Separator>>;
+  ) => ChoicesObject extends ReadonlyArray<string | Separator>
+    ? ChoicesObject | Promise<ChoicesObject>
+    :
+        | ReadonlyArray<Choice<Value> | Separator>
+        | Promise<ReadonlyArray<Choice<Value> | Separator>>;
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
   theme?: PartialDeep<Theme<SearchTheme>>;
 };
 
-type Item<Value> = Separator | Choice<Value>;
+type Item<Value> = Separator | NormalizedChoice<Value>;
 
-function isSelectable<Value>(item: Item<Value>): item is Choice<Value> {
+function isSelectable<Value>(item: Item<Value>): item is NormalizedChoice<Value> {
   return !Separator.isSeparator(item) && !item.disabled;
 }
 
-function stringifyChoice(choice: Choice<unknown>): string {
-  return choice.name ?? String(choice.value);
+function normalizeChoices<Value>(
+  choices: ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
+): Array<NormalizedChoice<Value> | Separator> {
+  return choices.map((choice) => {
+    if (Separator.isSeparator(choice)) return choice;
+
+    if (typeof choice === 'string') {
+      return {
+        value: choice as Value,
+        name: choice,
+        short: choice,
+        disabled: false,
+      };
+    }
+
+    const name = choice.name ?? String(choice.value);
+    return {
+      value: choice.value,
+      name,
+      description: choice.description,
+      short: choice.short ?? name,
+      disabled: choice.disabled ?? false,
+    };
+  });
 }
 
 export default createPrompt(
@@ -107,7 +144,7 @@ export default createPrompt(
             // Reset the pointer
             setActive(undefined);
             setSearchError(undefined);
-            setSearchResults(results);
+            setSearchResults(normalizeChoices(results));
             setStatus('pending');
           }
         } catch (error: unknown) {
@@ -125,7 +162,7 @@ export default createPrompt(
     }, [searchTerm]);
 
     // Safe to assume the cursor position never points to a Separator.
-    const selectedChoice = searchResults[active] as Choice<Value> | void;
+    const selectedChoice = searchResults[active] as NormalizedChoice<Value> | void;
 
     useKeypress(async (key, rl) => {
       if (isEnterKey(key)) {
@@ -141,8 +178,8 @@ export default createPrompt(
             setSearchError(isValid || 'You must provide a valid value');
           } else {
             // Reset line with new search term
-            rl.write(stringifyChoice(selectedChoice));
-            setSearchTerm(stringifyChoice(selectedChoice));
+            rl.write(selectedChoice.name);
+            setSearchTerm(selectedChoice.name);
           }
         } else {
           // Reset the readline line value to the previous value. On line event, the value
@@ -151,8 +188,8 @@ export default createPrompt(
         }
       } else if (key.name === 'tab' && selectedChoice) {
         rl.clearLine(0); // Remove the tab character.
-        rl.write(stringifyChoice(selectedChoice));
-        setSearchTerm(stringifyChoice(selectedChoice));
+        rl.write(selectedChoice.name);
+        setSearchTerm(selectedChoice.name);
       } else if (status !== 'searching' && (key.name === 'up' || key.name === 'down')) {
         rl.clearLine(0);
         if (
@@ -189,24 +226,23 @@ export default createPrompt(
     }
 
     // TODO: What to do if no results are found? Should we display a message?
-    const page = usePagination<Item<Value>>({
+    const page = usePagination({
       items: searchResults,
       active,
-      renderItem({ item, isActive }: { item: Item<Value>; isActive: boolean }) {
+      renderItem({ item, isActive }) {
         if (Separator.isSeparator(item)) {
           return ` ${item.separator}`;
         }
 
-        const line = stringifyChoice(item);
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
-          return theme.style.disabled(`${line} ${disabledLabel}`);
+          return theme.style.disabled(`${item.name} ${disabledLabel}`);
         }
 
         const color = isActive ? theme.style.highlight : (x: string) => x;
         const cursor = isActive ? theme.icon.cursor : ` `;
-        return color(`${cursor} ${line}`);
+        return color(`${cursor} ${item.name}`);
       },
       pageSize,
       loop: false,
@@ -221,7 +257,7 @@ export default createPrompt(
 
     let searchStr;
     if (status === 'done' && selectedChoice) {
-      const answer = selectedChoice.short ?? stringifyChoice(selectedChoice);
+      const answer = selectedChoice.short ?? selectedChoice.name;
       return `${prefix} ${message} ${theme.style.answer(answer)}`;
     } else {
       searchStr = theme.style.searchTerm(searchTerm);
