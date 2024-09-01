@@ -1,5 +1,6 @@
 import {
   createPrompt,
+  useMemo,
   useState,
   useKeypress,
   usePrefix,
@@ -10,18 +11,36 @@ import {
 import type { PartialDeep } from '@inquirer/type';
 import colors from 'yoctocolors-cjs';
 
-type ExpandChoice =
+type Choice =
   | { key: string; name: string }
   | { key: string; value: string }
   | { key: string; name: string; value: string };
 
+type NormalizedChoice = {
+  value: string;
+  name: string;
+  key: string;
+};
+
 type ExpandConfig = {
   message: string;
-  choices: ReadonlyArray<ExpandChoice>;
+  choices: ReadonlyArray<Choice>;
   default?: string;
   expanded?: boolean;
   theme?: PartialDeep<Theme>;
 };
+
+function normalizeChoices(choices: readonly Choice[]): NormalizedChoice[] {
+  return choices.map((choice) => {
+    const name: string = 'name' in choice ? choice.name : String(choice.value);
+    const value = 'value' in choice ? choice.value : name;
+    return {
+      value,
+      name,
+      key: choice.key.toLowerCase(),
+    };
+  });
+}
 
 const helpChoice = {
   key: 'h',
@@ -29,25 +48,12 @@ const helpChoice = {
   value: undefined,
 };
 
-function getChoiceKey(choice: ExpandChoice, key: 'name' | 'value'): string {
-  if (key === 'name') {
-    if ('name' in choice) return choice.name;
-    return choice.value;
-  }
-
-  if ('value' in choice) return choice.value;
-  return choice.name;
-}
-
 export default createPrompt<string, ExpandConfig>((config, done) => {
-  const {
-    choices,
-    default: defaultKey = 'h',
-    expanded: defaultExpandState = false,
-  } = config;
+  const { default: defaultKey = 'h' } = config;
+  const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
   const [status, setStatus] = useState<string>('pending');
   const [value, setValue] = useState<string>('');
-  const [expanded, setExpanded] = useState<boolean>(defaultExpandState);
+  const [expanded, setExpanded] = useState<boolean>(config.expanded ?? false);
   const [errorMsg, setError] = useState<string>();
   const theme = makeTheme(config.theme);
   const prefix = usePrefix({ theme });
@@ -60,10 +66,10 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
       } else {
         const selectedChoice = choices.find(({ key }) => key === answer);
         if (selectedChoice) {
-          const finalValue = getChoiceKey(selectedChoice, 'value');
-          setValue(finalValue);
           setStatus('done');
-          done(finalValue);
+          // Set the value as we might've selected the default one.
+          setValue(answer);
+          done(selectedChoice.value);
         } else if (value === '') {
           setError('Please input a value');
         } else {
@@ -79,8 +85,9 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
   const message = theme.style.message(config.message);
 
   if (status === 'done') {
-    // TODO: `value` should be the display name instead of the raw value.
-    return `${prefix} ${message} ${theme.style.answer(value)}`;
+    // If the prompt is done, it's safe to assume there is a selected value.
+    const selectedChoice = choices.find(({ key }) => key === value) as NormalizedChoice;
+    return `${prefix} ${message} ${theme.style.answer(selectedChoice.name)}`;
   }
 
   const allChoices = expanded ? choices : [...choices, helpChoice];
@@ -103,7 +110,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
     shortChoices = '';
     longChoices = allChoices
       .map((choice) => {
-        const line = `  ${choice.key}) ${getChoiceKey(choice, 'name')}`;
+        const line = `  ${choice.key}) ${choice.name}`;
         if (choice.key === value.toLowerCase()) {
           return theme.style.highlight(line);
         }
@@ -116,7 +123,7 @@ export default createPrompt<string, ExpandConfig>((config, done) => {
   let helpTip = '';
   const currentOption = allChoices.find(({ key }) => key === value.toLowerCase());
   if (currentOption) {
-    helpTip = `${colors.cyan('>>')} ${getChoiceKey(currentOption, 'name')}`;
+    helpTip = `${colors.cyan('>>')} ${currentOption.name}`;
   }
 
   let error = '';
