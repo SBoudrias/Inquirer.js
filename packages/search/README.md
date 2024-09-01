@@ -124,6 +124,8 @@ Here's each property:
 - `short`: Once the prompt is done (press enter), we'll use `short` if defined to render next to the question. By default we'll use `name`.
 - `disabled`: Disallow the option from being selected. If `disabled` is a string, it'll be used as a help tip explaining why the choice isn't available.
 
+Choices can also be an array of string, in which case the string will be used both as the `value` and the `name`.
+
 ### Validation & autocomplete interaction
 
 The validation within the search prompt acts as a signal for the autocomplete feature.

@@ -73,6 +73,61 @@ describe('search prompt', () => {
     );
   });
 
+  it('works with string results', async () => {
+    const choices = [
+      'Stark',
+      'Lannister',
+      'Targaryen',
+      'Baratheon',
+      'Greyjoy',
+      'Martell',
+      'Tyrell',
+      'Arryn',
+      'Tully',
+    ];
+
+    const { answer, events, getScreen } = await render(search, {
+      message: 'Select a family',
+      source: (term: string = '') => {
+        return choices.filter((choice) => choice.includes(term));
+      },
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a family 
+      ❯ Stark
+        Lannister
+        Targaryen
+        Baratheon
+        Greyjoy
+        Martell
+        Tyrell
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a family 
+        Stark
+      ❯ Lannister
+        Targaryen
+        Baratheon
+        Greyjoy
+        Martell
+        Tyrell"
+    `);
+
+    events.type('Targ');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a family Targ
+      ❯ Targaryen"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('Targaryen');
+  });
+
   it('allows to search and navigate the list', async () => {
     const { answer, events, getScreen } = await render(search, {
       message: 'Select a Canadian province',
