@@ -48,7 +48,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
       const abort = () => fail(new AbortPromptError({ cause: signal.reason }));
       if (signal.aborted) {
         abort();
-        return;
+        return promise;
       }
       signal.addEventListener('abort', abort);
       cleanups.add(() => signal.removeEventListener('abort', abort));
