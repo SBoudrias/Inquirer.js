@@ -86,13 +86,31 @@ const answer = await expand({
 
 ## Options
 
-| Property | Type                                                   | Required | Description                                                                               |
-| -------- | ------------------------------------------------------ | -------- | ----------------------------------------------------------------------------------------- |
-| message  | `string`                                               | yes      | The question to ask                                                                       |
-| choices  | `Array<{ key: string, name: string, value?: string }>` | yes      | Array of the different allowed choices. The `h`/help option is always provided by default |
-| default  | `string`                                               | no       | Default choices to be selected. (value must be one of the choices `key`)                  |
-| expanded | `boolean`                                              | no       | Expand the choices by default                                                             |
-| theme    | [See Theming](#Theming)                                | no       | Customize look of the prompt.                                                             |
+| Property | Type                    | Required | Description                                                                               |
+| -------- | ----------------------- | -------- | ----------------------------------------------------------------------------------------- |
+| message  | `string`                | yes      | The question to ask                                                                       |
+| choices  | `Choice[]`              | yes      | Array of the different allowed choices. The `h`/help option is always provided by default |
+| default  | `string`                | no       | Default choices to be selected. (value must be one of the choices `key`)                  |
+| expanded | `boolean`               | no       | Expand the choices by default                                                             |
+| theme    | [See Theming](#Theming) | no       | Customize look of the prompt.                                                             |
+
+### `Choice` object
+
+The `Choice` object is typed as
+
+```ts
+type Choice<Value> = {
+  value: Value;
+  name?: string;
+  key: string;
+};
+```
+
+Here's each property:
+
+- `value`: The value is what will be returned by `await expand()`.
+- `name`: The string displayed in the choice list. It'll default to the stringify `value`.
+- `key`: The input the use must provide to select the choice. Must be a lowercase single alpha-numeric character string.
 
 ## Theming
 

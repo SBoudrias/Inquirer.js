@@ -11,31 +11,69 @@ import {
 import type { PartialDeep } from '@inquirer/type';
 import colors from 'yoctocolors-cjs';
 
+type Key =
+  | 'a'
+  | 'b'
+  | 'c'
+  | 'd'
+  | 'e'
+  | 'f'
+  | 'g'
+  // | 'h' // Help is excluded since it's a reserved key
+  | 'i'
+  | 'j'
+  | 'k'
+  | 'l'
+  | 'm'
+  | 'n'
+  | 'o'
+  | 'p'
+  | 'q'
+  | 'r'
+  | 's'
+  | 't'
+  | 'u'
+  | 'v'
+  | 'w'
+  | 'x'
+  | 'y'
+  | 'z'
+  | '0'
+  | '1'
+  | '2'
+  | '3'
+  | '4'
+  | '5'
+  | '6'
+  | '7'
+  | '8'
+  | '9';
+
 type Choice<Value> =
-  | { key: string; value: Value }
-  | { key: string; name: string; value: Value };
+  | { key: Key; value: Value }
+  | { key: Key; name: string; value: Value };
 
 type NormalizedChoice<Value> = {
   value: Value;
   name: string;
-  key: string;
+  key: Key;
 };
 
 type ExpandConfig<
   Value,
-  ChoicesObject = readonly { key: string; name: string }[] | readonly Choice<Value>[],
+  ChoicesObject = readonly { key: Key; name: string }[] | readonly Choice<Value>[],
 > = {
   message: string;
-  choices: ChoicesObject extends readonly { key: string; name: string }[]
+  choices: ChoicesObject extends readonly { key: Key; name: string }[]
     ? ChoicesObject
     : readonly Choice<Value>[];
-  default?: string;
+  default?: Key | 'h';
   expanded?: boolean;
   theme?: PartialDeep<Theme>;
 };
 
 function normalizeChoices<Value>(
-  choices: readonly { key: string; name: string }[] | readonly Choice<Value>[],
+  choices: readonly { key: Key; name: string }[] | readonly Choice<Value>[],
 ): NormalizedChoice<Value>[] {
   return choices.map((choice) => {
     const name: string = 'name' in choice ? choice.name : String(choice.value);
@@ -43,7 +81,7 @@ function normalizeChoices<Value>(
     return {
       value: value as Value,
       name,
-      key: choice.key.toLowerCase(),
+      key: choice.key.toLowerCase() as Key,
     };
   });
 }
