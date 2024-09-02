@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
-  InputConfig,
-  SelectConfig,
-  CheckboxConfig,
-  ConfirmConfig,
-  NumberConfig,
-  RawlistConfig,
-  ExpandConfig,
-  PasswordConfig,
-  EditorConfig,
+  input,
+  select,
+  checkbox,
+  confirm,
+  number,
+  rawlist,
+  expand,
+  password,
+  editor,
 } from '@inquirer/prompts';
 import type { Context, DistributiveMerge, Prettify } from '@inquirer/type';
 
@@ -72,16 +72,16 @@ export type LegacyAsyncQuestion<
 >;
 
 export type Question<A extends Answers = object> =
-  | LegacyAsyncQuestion<'confirm', ConfirmConfig, A>
-  | LegacyAsyncQuestion<'expand', ExpandConfig<string | Record<string, any>>, A>
-  | LegacyAsyncQuestion<'editor', EditorConfig, A>
-  | LegacyAsyncQuestion<'input', InputConfig, A>
-  | LegacyAsyncQuestion<'list', SelectConfig<string | Record<string, any>>, A>
-  | LegacyAsyncQuestion<'number', NumberConfig, A>
-  | LegacyAsyncQuestion<'password', PasswordConfig, A>
-  | LegacyAsyncQuestion<'rawlist', RawlistConfig<string | Record<string, any>>, A>
-  | LegacyAsyncQuestion<'select', SelectConfig<string | Record<string, any>>, A>
-  | LegacyAsyncQuestion<'checkbox', CheckboxConfig<string | Record<string, any>>, A>;
+  | LegacyAsyncQuestion<'confirm', Parameters<typeof confirm>[0], A>
+  | LegacyAsyncQuestion<'expand', Parameters<typeof expand>[0], A>
+  | LegacyAsyncQuestion<'editor', Parameters<typeof editor>[0], A>
+  | LegacyAsyncQuestion<'input', Parameters<typeof input>[0], A>
+  | LegacyAsyncQuestion<'list', Parameters<typeof select>[0], A>
+  | LegacyAsyncQuestion<'number', Parameters<typeof number>[0], A>
+  | LegacyAsyncQuestion<'password', Parameters<typeof password>[0], A>
+  | LegacyAsyncQuestion<'rawlist', Parameters<typeof rawlist>[0], A>
+  | LegacyAsyncQuestion<'select', Parameters<typeof select>[0], A>
+  | LegacyAsyncQuestion<'checkbox', Parameters<typeof checkbox>[0], A>;
 
 export type CustomQuestions<
   A extends Answers,
