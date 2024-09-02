@@ -9,7 +9,6 @@ import stream from 'node:stream';
 import tty from 'node:tty';
 import { vi, expect, beforeEach, afterEach, describe, it, expectTypeOf } from 'vitest';
 import { Observable } from 'rxjs';
-import { AbortPromptError, createPrompt } from '@inquirer/core';
 import type { InquirerReadline } from '@inquirer/type';
 import inquirer, { type QuestionMap } from './src/index.mjs';
 import type { Answers, Question } from './src/types.mjs';
@@ -48,19 +47,6 @@ class StubFailingPrompt {
   }
 
   close() {}
-}
-
-class StubEventualyFailingPrompt {
-  timeout?: NodeJS.Timeout;
-
-  run() {
-    this.timeout = setTimeout(() => {}, 1000);
-    return Promise.reject(new Error('This test prompt always reject'));
-  }
-
-  close() {
-    clearTimeout(this.timeout);
-  }
 }
 
 beforeEach(() => {
@@ -771,39 +757,6 @@ describe('inquirer.prompt(...)', () => {
       inquirer.restoreDefaultPrompts();
       expect(ConfirmPrompt).toEqual(inquirer.prompt.prompts['confirm']);
     });
-  });
-});
-
-describe('AbortSignal support', () => {
-  it('throws on aborted signal', async () => {
-    const localPrompt = inquirer.createPromptModule({ signal: AbortSignal.abort() });
-    localPrompt.registerPrompt('stub', StubEventualyFailingPrompt);
-
-    const promise = localPrompt({ type: 'stub', name: 'q1', message: 'message' });
-    await expect(promise).rejects.toThrow(AbortPromptError);
-  });
-
-  it('legacy prompts can be aborted', async () => {
-    const abortController = new AbortController();
-    const localPrompt = inquirer.createPromptModule({ signal: abortController.signal });
-    localPrompt.registerPrompt('stub', StubEventualyFailingPrompt);
-
-    const promise = localPrompt({ type: 'stub', name: 'q1', message: 'message' });
-    abortController.abort();
-    await expect(promise).rejects.toThrow(AbortPromptError);
-  });
-
-  it('modern prompts can be aborted', async () => {
-    const abortController = new AbortController();
-    const localPrompt = inquirer.createPromptModule({ signal: abortController.signal });
-    localPrompt.registerPrompt(
-      'stub',
-      createPrompt(() => 'dummy prompt'),
-    );
-
-    const promise = localPrompt({ type: 'stub', name: 'q1', message: 'message' });
-    abortController.abort();
-    await expect(promise).rejects.toThrow(AbortPromptError);
   });
 });
 

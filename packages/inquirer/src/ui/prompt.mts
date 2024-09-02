@@ -14,7 +14,6 @@ import {
 } from 'rxjs';
 import runAsync from 'run-async';
 import MuteStream from 'mute-stream';
-import { AbortPromptError } from '@inquirer/core';
 import type { InquirerReadline } from '@inquirer/type';
 import ansiEscapes from 'ansi-escapes';
 import type {
@@ -304,60 +303,48 @@ export default class PromptsRunner<A extends Answers> {
       throw new Error(`Prompt for type ${question.type} not found`);
     }
 
-    const promptFn: PromptFn = isPromptConstructor(prompt)
-      ? (q, opt = {}) =>
-          new Promise<any>((resolve, reject) => {
-            const rl = readline.createInterface(
-              setupReadlineOptions(this.opt),
-            ) as InquirerReadline;
-            rl.resume();
+    return isPromptConstructor(prompt)
+      ? defer(() => {
+          const rl = readline.createInterface(
+            setupReadlineOptions(this.opt),
+          ) as InquirerReadline;
+          rl.resume();
 
-            const onClose = () => {
-              rl.removeListener('SIGINT', this.onForceClose);
-              rl.setPrompt('');
-              rl.output.unmute();
-              rl.output.write(ansiEscapes.cursorShow);
-              rl.output.end();
-              rl.close();
-            };
-            this.onClose = onClose;
-            this.rl = rl;
+          const onClose = () => {
+            rl.removeListener('SIGINT', this.onForceClose);
+            rl.setPrompt('');
+            rl.output.unmute();
+            rl.output.write(ansiEscapes.cursorShow);
+            rl.output.end();
+            rl.close();
+          };
+          this.onClose = onClose;
+          this.rl = rl;
 
-            // Make sure new prompt start on a newline when closing
-            process.on('exit', this.onForceClose);
-            rl.on('SIGINT', this.onForceClose);
+          // Make sure new prompt start on a newline when closing
+          process.on('exit', this.onForceClose);
+          rl.on('SIGINT', this.onForceClose);
 
-            const activePrompt = new prompt(q, rl, this.answers);
+          const activePrompt = new prompt(question, rl, this.answers);
 
-            const cleanup = () => {
+          return from(
+            activePrompt.run().then((answer: unknown) => {
               onClose();
               this.onClose = undefined;
               this.rl = undefined;
-            };
-            const { signal } = opt;
-            if (signal) {
-              const abort = () => {
-                reject(new AbortPromptError({ cause: signal.reason }));
-                cleanup();
-              };
-              if (signal.aborted) {
-                abort();
-                return;
-              }
-              signal.addEventListener('abort', () => abort());
-            }
-            activePrompt.run().then(resolve, reject).finally(cleanup);
-          })
-      : prompt;
 
-    return defer(() =>
-      from(
-        promptFn(question, this.opt).then((answer: unknown) => ({
-          name: question.name,
-          answer,
-        })),
-      ),
-    );
+              return { name: question.name, answer };
+            }),
+          );
+        })
+      : defer(() =>
+          from(
+            prompt(question, this.opt).then((answer: unknown) => ({
+              name: question.name,
+              answer,
+            })),
+          ),
+        );
   }
 
   /**
