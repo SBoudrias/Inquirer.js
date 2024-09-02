@@ -265,10 +265,8 @@ export default class PromptsRunner<A extends Answers> {
           fetchAsyncQuestionProperty(question, 'choices', this.answers),
         ),
         concatMap((question) => {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          let { choices } = question as any;
-          if (Array.isArray(choices)) {
-            choices = choices.map(
+          if ('choices' in question && Array.isArray(question.choices)) {
+            const choices = question.choices.map(
               (choice: string | number | { value?: string; name: string }) => {
                 if (typeof choice === 'string' || typeof choice === 'number') {
                   return { name: choice, value: choice };
@@ -278,10 +276,11 @@ export default class PromptsRunner<A extends Answers> {
                 return choice;
               },
             );
+
+            return of({ ...question, choices });
           }
 
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          return of({ ...question, choices });
+          return of(question);
         }),
         concatMap((question) => this.fetchAnswer(question)),
       );
@@ -394,7 +393,7 @@ export default class PromptsRunner<A extends Answers> {
           }
           return;
         }),
-      ).pipe(filter((val): val is AnyQuestion<A> => val != null)),
+      ).pipe(filter((val) => val != null)),
     );
   };
 }

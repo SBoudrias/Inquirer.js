@@ -77,8 +77,7 @@ export function createPromptModule<
       [name in keyof A]: Question<Prettify<PrefilledAnswers & A>>;
     },
     answers?: PrefilledAnswers,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): PromptReturnType<Prettify<PrefilledAnswers & Record<keyof A, any>>>;
+  ): PromptReturnType<Prettify<PrefilledAnswers & Answers<Extract<keyof A, string>>>>;
   function promptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
