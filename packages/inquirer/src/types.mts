@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
-  input,
   InputConfig,
   SelectConfig,
   CheckboxConfig,
@@ -11,7 +10,7 @@ import type {
   PasswordConfig,
   EditorConfig,
 } from '@inquirer/prompts';
-import type { DistributiveMerge, Prettify } from '@inquirer/type';
+import type { Context, DistributiveMerge, Prettify } from '@inquirer/type';
 
 export type Answers<Key extends string = string> = Record<Key, any>;
 
@@ -91,6 +90,4 @@ export type CustomQuestions<
   [key in Extract<keyof Q, string>]: Readonly<LegacyAsyncQuestion<key, Q[key], A>>;
 }[Extract<keyof Q, string>];
 
-export type StreamOptions = Prettify<
-  Parameters<typeof input>[1] & { skipTTYChecks?: boolean }
->;
+export type StreamOptions = Prettify<Context & { skipTTYChecks?: boolean }>;
