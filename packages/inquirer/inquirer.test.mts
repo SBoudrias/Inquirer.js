@@ -30,7 +30,7 @@ type TestQuestions = {
   failing: { message: string };
 };
 
-function throwFunc(step: string) {
+function throwFunc(step: any): any {
   throw new Error(`askAnswered Error ${step}`);
 }
 
@@ -639,9 +639,9 @@ describe('inquirer.prompt(...)', () => {
           {
             type: 'input',
             name: 'prefilled',
-            when: throwFunc.bind(undefined, 'when'),
-            validate: throwFunc.bind(undefined, 'validate'),
-            transformer: throwFunc.bind(undefined, 'transformer'),
+            when: throwFunc,
+            validate: throwFunc,
+            transformer: throwFunc,
             message: 'message',
             default: 'newValue',
           },
@@ -658,9 +658,9 @@ describe('inquirer.prompt(...)', () => {
           {
             type: 'input',
             name: 'prefilled.nested',
-            when: throwFunc.bind(undefined, 'when'),
-            validate: throwFunc.bind(undefined, 'validate'),
-            transformer: throwFunc.bind(undefined, 'transformer'),
+            when: throwFunc,
+            validate: throwFunc,
+            transformer: throwFunc,
             message: 'message',
             default: 'newValue',
           },
