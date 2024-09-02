@@ -252,8 +252,8 @@ export default class PromptsRunner<A extends Answers> {
         }, this.answers),
       ),
     )
-      .then(() => this.answers)
-      .finally(() => this.close()) as Promise<A>;
+      .then(() => this.answers as A)
+      .finally(() => this.close());
   }
 
   processQuestion(question: Question<A>) {
