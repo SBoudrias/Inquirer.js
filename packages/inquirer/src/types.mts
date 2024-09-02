@@ -53,7 +53,7 @@ export type AnyQuestion<A extends Answers, Type extends string = string> = {
   when?: boolean | AsyncGetterFunction<boolean, A>;
 };
 
-type LegacyAsyncQuestion<
+type QuestionWithGetters<
   Type extends string,
   Q extends Record<string, any>,
   A extends Answers,
@@ -71,24 +71,24 @@ type LegacyAsyncQuestion<
 >;
 
 export type BuiltInQuestion<A extends Answers = object> =
-  | LegacyAsyncQuestion<'checkbox', Parameters<typeof checkbox>[0], A>
-  | LegacyAsyncQuestion<'confirm', Parameters<typeof confirm>[0], A>
-  | LegacyAsyncQuestion<'editor', Parameters<typeof editor>[0], A>
-  | LegacyAsyncQuestion<'expand', Parameters<typeof expand>[0], A>
-  | LegacyAsyncQuestion<'input', Parameters<typeof input>[0], A>
-  | LegacyAsyncQuestion<'number', Parameters<typeof number>[0], A>
-  | LegacyAsyncQuestion<'password', Parameters<typeof password>[0], A>
-  | LegacyAsyncQuestion<'rawlist', Parameters<typeof rawlist>[0], A>
-  | LegacyAsyncQuestion<'search', Parameters<typeof search>[0], A>
+  | QuestionWithGetters<'checkbox', Parameters<typeof checkbox>[0], A>
+  | QuestionWithGetters<'confirm', Parameters<typeof confirm>[0], A>
+  | QuestionWithGetters<'editor', Parameters<typeof editor>[0], A>
+  | QuestionWithGetters<'expand', Parameters<typeof expand>[0], A>
+  | QuestionWithGetters<'input', Parameters<typeof input>[0], A>
+  | QuestionWithGetters<'number', Parameters<typeof number>[0], A>
+  | QuestionWithGetters<'password', Parameters<typeof password>[0], A>
+  | QuestionWithGetters<'rawlist', Parameters<typeof rawlist>[0], A>
+  | QuestionWithGetters<'search', Parameters<typeof search>[0], A>
   // Alias list type to select; it's been renamed.
-  | LegacyAsyncQuestion<'list', Parameters<typeof select>[0], A>
-  | LegacyAsyncQuestion<'select', Parameters<typeof select>[0], A>;
+  | QuestionWithGetters<'list', Parameters<typeof select>[0], A>
+  | QuestionWithGetters<'select', Parameters<typeof select>[0], A>;
 
 export type CustomQuestion<
   A extends Answers,
   Q extends Record<string, Record<string, any>>,
 > = {
-  [key in Extract<keyof Q, string>]: Readonly<LegacyAsyncQuestion<key, Q[key], A>>;
+  [key in Extract<keyof Q, string>]: Readonly<QuestionWithGetters<key, Q[key], A>>;
 }[Extract<keyof Q, string>];
 
 export type StreamOptions = Prettify<Context & { skipTTYChecks?: boolean }>;

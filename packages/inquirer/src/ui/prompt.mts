@@ -123,7 +123,7 @@ class TTYError extends Error {
   isTtyError = true;
 }
 
-function setupReadlineOptions(opt: StreamOptions = {}) {
+function setupReadlineOptions(opt: StreamOptions) {
   // Inquirer 8.x:
   // opt.skipTTYChecks = opt.skipTTYChecks === undefined ? opt.input !== undefined : opt.skipTTYChecks;
   opt.skipTTYChecks = opt.skipTTYChecks === undefined ? true : opt.skipTTYChecks;
@@ -197,10 +197,10 @@ export default class PromptsRunner<A extends Answers> {
   answers: Partial<A> = {};
   process: Observable<any> = EMPTY;
   onClose?: () => void;
-  opt?: StreamOptions;
+  opt: StreamOptions;
   rl?: InquirerReadline;
 
-  constructor(prompts: PromptCollection, opt?: StreamOptions) {
+  constructor(prompts: PromptCollection, opt: StreamOptions = {}) {
     this.opt = opt;
     this.prompts = prompts;
   }
