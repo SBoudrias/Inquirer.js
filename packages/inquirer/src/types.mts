@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type {
-  input,
-  select,
+import {
   checkbox,
   confirm,
-  number,
-  rawlist,
-  expand,
-  password,
   editor,
+  expand,
+  input,
+  number,
+  password,
+  rawlist,
+  search,
+  select,
 } from '@inquirer/prompts';
 import type { Context, DistributiveMerge, Prettify } from '@inquirer/type';
 
@@ -28,7 +29,7 @@ type AsyncGetterFunction<R, A extends Answers> = (
  *
  * @example
  * ```ts
- * declare module './src/index.mjs' {
+ * declare module 'inquirer' {
  *   interface QuestionMap {
  *     custom: { message: string };
  *   }
@@ -45,25 +46,23 @@ export interface QuestionMap {
 type KeyValueOrAsyncGetterFunction<T, k extends string, A extends Answers> =
   T extends Record<string, any> ? T[k] | AsyncGetterFunction<T[k], A> : never;
 
-export type Named<T, N = string> = T & { name: N };
-
-export type LegacyQuestion<A extends Answers, Type extends string = string> = {
+export type AnyQuestion<A extends Answers, Type extends string = string> = {
+  name: string;
   type: Type;
   askAnswered?: boolean;
   when?: boolean | AsyncGetterFunction<boolean, A>;
 };
 
-export type NamedLegacyQuestion<A extends Answers, Type extends string = string> = Named<
-  LegacyQuestion<A, Type>
->;
-
-export type LegacyAsyncQuestion<
+type LegacyAsyncQuestion<
   Type extends string,
   Q extends Record<string, any>,
   A extends Answers,
 > = DistributiveMerge<
   Q,
-  LegacyQuestion<A, Type> & {
+  {
+    type: Type;
+    askAnswered?: boolean;
+    when?: boolean | AsyncGetterFunction<boolean, A>;
     filter?(input: any, answers: A): any;
     message: KeyValueOrAsyncGetterFunction<Q, 'message', A>;
     default?: KeyValueOrAsyncGetterFunction<Q, 'default', A>;
@@ -71,19 +70,21 @@ export type LegacyAsyncQuestion<
   }
 >;
 
-export type Question<A extends Answers = object> =
+export type BuiltInQuestion<A extends Answers = object> =
+  | LegacyAsyncQuestion<'checkbox', Parameters<typeof checkbox>[0], A>
   | LegacyAsyncQuestion<'confirm', Parameters<typeof confirm>[0], A>
-  | LegacyAsyncQuestion<'expand', Parameters<typeof expand>[0], A>
   | LegacyAsyncQuestion<'editor', Parameters<typeof editor>[0], A>
+  | LegacyAsyncQuestion<'expand', Parameters<typeof expand>[0], A>
   | LegacyAsyncQuestion<'input', Parameters<typeof input>[0], A>
-  | LegacyAsyncQuestion<'list', Parameters<typeof select>[0], A>
   | LegacyAsyncQuestion<'number', Parameters<typeof number>[0], A>
   | LegacyAsyncQuestion<'password', Parameters<typeof password>[0], A>
   | LegacyAsyncQuestion<'rawlist', Parameters<typeof rawlist>[0], A>
-  | LegacyAsyncQuestion<'select', Parameters<typeof select>[0], A>
-  | LegacyAsyncQuestion<'checkbox', Parameters<typeof checkbox>[0], A>;
+  | LegacyAsyncQuestion<'search', Parameters<typeof search>[0], A>
+  // Alias list type to select; it's been renamed.
+  | LegacyAsyncQuestion<'list', Parameters<typeof select>[0], A>
+  | LegacyAsyncQuestion<'select', Parameters<typeof select>[0], A>;
 
-export type CustomQuestions<
+export type CustomQuestion<
   A extends Answers,
   Q extends Record<string, Record<string, any>>,
 > = {

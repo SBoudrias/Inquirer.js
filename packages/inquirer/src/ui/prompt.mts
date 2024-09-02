@@ -16,12 +16,7 @@ import runAsync from 'run-async';
 import MuteStream from 'mute-stream';
 import type { InquirerReadline } from '@inquirer/type';
 import ansiEscapes from 'ansi-escapes';
-import type {
-  Answers,
-  LegacyQuestion,
-  NamedLegacyQuestion,
-  StreamOptions,
-} from '../types.mjs';
+import type { Answers, AnyQuestion, StreamOptions } from '../types.mjs';
 
 export const _ = {
   set: (obj: Record<string, unknown>, path: string = '', value: unknown): void => {
@@ -62,11 +57,11 @@ export const _ = {
  * Resolve a question property value if it is passed as a function.
  * This method will overwrite the property on the question object with the received value.
  */
-function fetchAsyncQuestionProperty<A extends Answers, Q extends NamedLegacyQuestion<A>>(
+function fetchAsyncQuestionProperty<A extends Answers, Q extends AnyQuestion<A>>(
   question: Q,
   prop: string,
   answers: A,
-): Observable<NamedLegacyQuestion<A>> {
+): Observable<AnyQuestion<A>> {
   if (prop in question) {
     const propGetter = question[prop as keyof Q];
     if (typeof propGetter === 'function') {
@@ -160,21 +155,21 @@ function setupReadlineOptions(opt: StreamOptions = {}) {
 
 function isQuestionArray<A extends Answers>(
   questions:
-    | NamedLegacyQuestion<A>[]
-    | Record<string, LegacyQuestion<A>>
-    | Observable<NamedLegacyQuestion<A>>
-    | NamedLegacyQuestion<A>,
-): questions is NamedLegacyQuestion<A>[] {
+    | AnyQuestion<A>[]
+    | Record<string, Omit<AnyQuestion<A>, 'name'>>
+    | Observable<AnyQuestion<A>>
+    | AnyQuestion<A>,
+): questions is AnyQuestion<A>[] {
   return Array.isArray(questions);
 }
 
 function isQuestionMap<A extends Answers>(
   questions:
-    | NamedLegacyQuestion<A>[]
-    | Record<string, LegacyQuestion<A>>
-    | Observable<NamedLegacyQuestion<A>>
-    | NamedLegacyQuestion<A>,
-): questions is Record<string, LegacyQuestion<A>> {
+    | AnyQuestion<A>[]
+    | Record<string, Omit<AnyQuestion<A>, 'name'>>
+    | Observable<AnyQuestion<A>>
+    | AnyQuestion<A>,
+): questions is Record<string, Omit<AnyQuestion<A>, 'name'>> {
   return Object.values(questions).every(
     (maybeQuestion) =>
       typeof maybeQuestion === 'object' &&
@@ -212,16 +207,16 @@ export default class PromptsRunner<A extends Answers> {
 
   async run(
     questions:
-      | NamedLegacyQuestion<A>[]
-      | Record<string, LegacyQuestion<A>>
-      | Observable<NamedLegacyQuestion<A>>
-      | NamedLegacyQuestion<A>,
+      | AnyQuestion<A>[]
+      | Record<string, Omit<AnyQuestion<A>, 'name'>>
+      | Observable<AnyQuestion<A>>
+      | AnyQuestion<A>,
     answers?: Partial<A>,
   ): Promise<A> {
     // Keep global reference to the answers
     this.answers = typeof answers === 'object' ? { ...answers } : {};
 
-    let obs: Observable<NamedLegacyQuestion<A>>;
+    let obs: Observable<AnyQuestion<A>>;
     if (isQuestionArray(questions)) {
       obs = from(questions);
     } else if (isObservable(questions)) {
@@ -229,7 +224,7 @@ export default class PromptsRunner<A extends Answers> {
     } else if (isQuestionMap(questions)) {
       // Case: Called with a set of { name: question }
       obs = from(
-        Object.entries(questions).map(([name, question]): NamedLegacyQuestion<A> => {
+        Object.entries(questions).map(([name, question]): AnyQuestion<A> => {
           return Object.assign({}, question, { name });
         }),
       );
@@ -252,7 +247,7 @@ export default class PromptsRunner<A extends Answers> {
       .finally(() => this.close());
   }
 
-  processQuestion(question: NamedLegacyQuestion<A>) {
+  processQuestion(question: AnyQuestion<A>) {
     question = { ...question };
     return defer(() => {
       const obs = of(question);
@@ -293,7 +288,7 @@ export default class PromptsRunner<A extends Answers> {
     });
   }
 
-  fetchAnswer(question: NamedLegacyQuestion<A>) {
+  fetchAnswer(question: AnyQuestion<A>) {
     const prompt = this.prompts[question.type];
 
     if (prompt == null) {
@@ -365,9 +360,7 @@ export default class PromptsRunner<A extends Answers> {
     }
   };
 
-  setDefaultType = (
-    question: NamedLegacyQuestion<A>,
-  ): Observable<NamedLegacyQuestion<A>> => {
+  setDefaultType = (question: AnyQuestion<A>): Observable<AnyQuestion<A>> => {
     // Default type to input
     if (!this.prompts[question.type]) {
       question = Object.assign({}, question, { type: 'input' });
@@ -376,9 +369,7 @@ export default class PromptsRunner<A extends Answers> {
     return defer(() => of(question));
   };
 
-  filterIfRunnable = (
-    question: NamedLegacyQuestion<A>,
-  ): Observable<NamedLegacyQuestion<A>> => {
+  filterIfRunnable = (question: AnyQuestion<A>): Observable<AnyQuestion<A>> => {
     if (
       question.askAnswered !== true &&
       _.get(this.answers, question.name) !== undefined
@@ -403,7 +394,7 @@ export default class PromptsRunner<A extends Answers> {
           }
           return;
         }),
-      ).pipe(filter((val): val is NamedLegacyQuestion<A> => val != null)),
+      ).pipe(filter((val): val is AnyQuestion<A> => val != null)),
     );
   };
 }

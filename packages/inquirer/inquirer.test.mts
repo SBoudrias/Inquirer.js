@@ -635,7 +635,6 @@ describe('inquirer.prompt(...)', () => {
 
     it('should not run prompt if answer exists for question', async () => {
       const answers = await inquirer.prompt(
-        // @ts-expect-error Passing wrong type on purpose.
         [
           {
             type: 'input',
@@ -655,7 +654,6 @@ describe('inquirer.prompt(...)', () => {
 
     it('should not run prompt if nested answer exists for question', async () => {
       const answers = await inquirer.prompt(
-        // @ts-expect-error Passing wrong type on purpose.
         [
           {
             type: 'input',

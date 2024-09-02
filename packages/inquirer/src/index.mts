@@ -25,13 +25,11 @@ import type {
 } from './ui/prompt.mjs';
 import type {
   Answers,
-  CustomQuestions,
-  LegacyQuestion,
-  Question as BuiltInQuestion,
+  CustomQuestion,
+  BuiltInQuestion,
   StreamOptions,
   QuestionMap,
-  NamedLegacyQuestion,
-  Named,
+  AnyQuestion,
 } from './types.mjs';
 import { Observable } from 'rxjs';
 
@@ -62,8 +60,8 @@ type PromptReturnType<T> = Promise<Prettify<T>> & {
 export function createPromptModule<
   Prompts extends Record<string, Record<string, unknown>> = never,
 >(opt?: StreamOptions) {
-  type Question<A extends Answers> = BuiltInQuestion<A> | CustomQuestions<A, Prompts>;
-  type NamedQuestion<A extends Answers, N extends string> = Named<Question<A>, N>;
+  type Question<A extends Answers> = BuiltInQuestion<A> | CustomQuestion<A, Prompts>;
+  type NamedQuestion<A extends Answers, N extends string> = Question<A> & { name: N };
   function promptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
@@ -99,10 +97,10 @@ export function createPromptModule<
   ): PromptReturnType<PrefilledAnswers & A>;
   function promptModule<A extends Answers>(
     questions:
-      | NamedLegacyQuestion<A>[]
-      | Record<string, LegacyQuestion<A>>
-      | Observable<NamedLegacyQuestion<A>>
-      | NamedLegacyQuestion<A>,
+      | AnyQuestion<A>[]
+      | Record<string, Omit<AnyQuestion<A>, 'name'>>
+      | Observable<AnyQuestion<A>>
+      | AnyQuestion<A>,
     answers?: Partial<A>,
   ): PromptReturnType<A> {
     const runner = new PromptsRunner<A>(promptModule.prompts, opt);
