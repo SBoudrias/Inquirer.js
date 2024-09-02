@@ -16,7 +16,7 @@ import runAsync from 'run-async';
 import MuteStream from 'mute-stream';
 import type { InquirerReadline } from '@inquirer/type';
 import ansiEscapes from 'ansi-escapes';
-import type { Answers, AnyQuestion, StreamOptions } from '../types.mjs';
+import type { Answers, AnyQuestion, PromptSession, StreamOptions } from '../types.mjs';
 
 export const _ = {
   set: (obj: Record<string, unknown>, path: string = '', value: unknown): void => {
@@ -154,21 +154,13 @@ function setupReadlineOptions(opt: StreamOptions) {
 }
 
 function isQuestionArray<A extends Answers>(
-  questions:
-    | AnyQuestion<A>[]
-    | Record<string, Omit<AnyQuestion<A>, 'name'>>
-    | Observable<AnyQuestion<A>>
-    | AnyQuestion<A>,
+  questions: PromptSession<AnyQuestion<A>>,
 ): questions is AnyQuestion<A>[] {
   return Array.isArray(questions);
 }
 
 function isQuestionMap<A extends Answers>(
-  questions:
-    | AnyQuestion<A>[]
-    | Record<string, Omit<AnyQuestion<A>, 'name'>>
-    | Observable<AnyQuestion<A>>
-    | AnyQuestion<A>,
+  questions: PromptSession<AnyQuestion<A>>,
 ): questions is Record<string, Omit<AnyQuestion<A>, 'name'>> {
   return Object.values(questions).every(
     (maybeQuestion) =>
@@ -205,14 +197,7 @@ export default class PromptsRunner<A extends Answers> {
     this.prompts = prompts;
   }
 
-  async run(
-    questions:
-      | AnyQuestion<A>[]
-      | Record<string, Omit<AnyQuestion<A>, 'name'>>
-      | Observable<AnyQuestion<A>>
-      | AnyQuestion<A>,
-    answers?: Partial<A>,
-  ): Promise<A> {
+  async run(questions: PromptSession<AnyQuestion<A>>, answers?: Partial<A>): Promise<A> {
     // Keep global reference to the answers
     this.answers = typeof answers === 'object' ? { ...answers } : {};
 

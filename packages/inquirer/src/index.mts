@@ -29,7 +29,6 @@ import type {
   BuiltInQuestion,
   StreamOptions,
   QuestionMap,
-  AnyQuestion,
 } from './types.mjs';
 import { Observable } from 'rxjs';
 
@@ -61,12 +60,14 @@ export function createPromptModule<
   Prompts extends Record<string, Record<string, unknown>> = never,
 >(opt?: StreamOptions) {
   type Question<A extends Answers> = BuiltInQuestion<A> | CustomQuestion<A, Prompts>;
-  type NamedQuestion<A extends Answers, N extends string> = Question<A> & { name: N };
+  type NamedQuestion<A extends Answers> = Question<A> & {
+    name: Extract<keyof A, string>;
+  };
   function promptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
   >(
-    questions: NamedQuestion<Prettify<PrefilledAnswers & A>, Extract<keyof A, string>>[],
+    questions: NamedQuestion<Prettify<PrefilledAnswers & A>>[],
     answers?: PrefilledAnswers,
   ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
   function promptModule<
@@ -82,24 +83,22 @@ export function createPromptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
   >(
-    questions: Observable<
-      NamedQuestion<Prettify<PrefilledAnswers & A>, Extract<keyof A, string>>
-    >,
+    questions: Observable<NamedQuestion<Prettify<PrefilledAnswers & A>>>,
     answers?: PrefilledAnswers,
   ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
   function promptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
   >(
-    questions: NamedQuestion<A & PrefilledAnswers, Extract<keyof A, string>>,
+    questions: NamedQuestion<A & PrefilledAnswers>,
     answers?: PrefilledAnswers,
   ): PromptReturnType<PrefilledAnswers & A>;
   function promptModule<A extends Answers>(
     questions:
-      | AnyQuestion<A>[]
-      | Record<string, Omit<AnyQuestion<A>, 'name'>>
-      | Observable<AnyQuestion<A>>
-      | AnyQuestion<A>,
+      | NamedQuestion<A>[]
+      | Record<keyof A, Question<A>>
+      | Observable<NamedQuestion<A>>
+      | NamedQuestion<A>,
     answers?: Partial<A>,
   ): PromptReturnType<A> {
     const runner = new PromptsRunner<A>(promptModule.prompts, opt);

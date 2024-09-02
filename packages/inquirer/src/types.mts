@@ -12,6 +12,7 @@ import {
   select,
 } from '@inquirer/prompts';
 import type { Context, DistributiveMerge, Prettify } from '@inquirer/type';
+import { Observable } from 'rxjs';
 
 export type Answers<Key extends string = string> = Record<Key, any>;
 
@@ -47,8 +48,8 @@ type KeyValueOrAsyncGetterFunction<T, k extends string, A extends Answers> =
   T extends Record<string, any> ? T[k] | AsyncGetterFunction<T[k], A> : never;
 
 export type AnyQuestion<A extends Answers, Type extends string = string> = {
-  name: string;
   type: Type;
+  name: string;
   askAnswered?: boolean;
   when?: boolean | AsyncGetterFunction<boolean, A>;
 };
@@ -90,5 +91,11 @@ export type CustomQuestion<
 > = {
   [key in Extract<keyof Q, string>]: Readonly<QuestionWithGetters<key, Q[key], A>>;
 }[Extract<keyof Q, string>];
+
+export type PromptSession<Q extends AnyQuestion<any>> =
+  | Q[]
+  | Record<string, Omit<Q, 'name'>>
+  | Observable<Q>
+  | Q;
 
 export type StreamOptions = Prettify<Context & { skipTTYChecks?: boolean }>;
