@@ -26,6 +26,7 @@ export type Context = {
   input?: NodeJS.ReadableStream;
   output?: NodeJS.WritableStream;
   clearPromptOnDone?: boolean;
+  signal?: AbortSignal;
 };
 
 export type Prompt<Value, Config> = (

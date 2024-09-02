@@ -1,3 +1,13 @@
+export class AbortPromptError extends Error {
+  override name = 'AbortPromptError';
+  override message = 'Prompt was aborted';
+
+  constructor(options?: { cause?: unknown }) {
+    super();
+    this.cause = options?.cause;
+  }
+}
+
 export class CancelPromptError extends Error {
   override name = 'CancelPromptError';
   override message = 'Prompt was canceled';
