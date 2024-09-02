@@ -18,6 +18,7 @@ import {
   isEnterKey,
   isSpaceKey,
   Separator,
+  AbortPromptError,
   CancelPromptError,
   ValidationError,
   HookError,
@@ -565,6 +566,51 @@ it('allow cancelling the prompt multiple times', async () => {
   events.keypress('enter');
 
   await expect(answer).rejects.toThrow(CancelPromptError);
+});
+
+it('allow aborting the prompt using signals', async () => {
+  const Prompt = (config: { message: string }, done: (value: string) => void) => {
+    useKeypress((key: KeypressEvent) => {
+      if (isEnterKey(key)) {
+        done('done');
+      }
+    });
+
+    return config.message;
+  };
+
+  const prompt = createPrompt(Prompt);
+  const abortController = new AbortController();
+  const { answer } = await render(
+    prompt,
+    { message: 'Question' },
+    { signal: abortController.signal },
+  );
+
+  abortController.abort();
+
+  await expect(answer).rejects.toThrow(AbortPromptError);
+});
+
+it('fail on aborted signals', async () => {
+  const Prompt = (config: { message: string }, done: (value: string) => void) => {
+    useKeypress((key: KeypressEvent) => {
+      if (isEnterKey(key)) {
+        done('done');
+      }
+    });
+
+    return config.message;
+  };
+
+  const prompt = createPrompt(Prompt);
+  const { answer } = await render(
+    prompt,
+    { message: 'Question' },
+    { signal: AbortSignal.abort() },
+  );
+
+  await expect(answer).rejects.toThrow(AbortPromptError);
 });
 
 describe('Error handling', () => {

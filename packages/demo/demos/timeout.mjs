@@ -1,26 +1,17 @@
 import * as url from 'node:url';
-import { setTimeout } from 'node:timers/promises';
 import { input } from '@inquirer/prompts';
 
 async function demo() {
-  const ac = new AbortController();
-  const prompt = input({
-    message: 'Enter a value (timing out in 5 seconds)',
+  const answer = await input(
+    { message: 'Enter a value (timing out in 5 seconds)' },
+    { signal: AbortSignal.timeout(5000) },
+  ).catch((error) => {
+    if (error.name === 'AbortPromptError') {
+      return 'Default value';
+    }
+
+    throw error;
   });
-
-  prompt
-    .finally(() => {
-      ac.abort();
-    })
-    // Silencing the cancellation error.
-    .catch(() => {});
-
-  const defaultValue = setTimeout(5000, 'timeout', { signal: ac.signal }).then(() => {
-    prompt.cancel();
-    return 'Timed out!';
-  });
-
-  const answer = await Promise.race([defaultValue, prompt]);
   console.log('Answer:', answer);
 }
 
