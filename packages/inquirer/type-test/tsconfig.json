@@ -1,8 +1,0 @@
-{
-  "extends": "../../../tsconfig.test.json",
-  "include": ["./**/*.mts"],
-  "compilerOptions": {
-    "skipLibCheck": false,
-    "declaration": true
-  }
-}
