@@ -7,7 +7,6 @@ import fs from 'node:fs';
 import os from 'node:os';
 import stream from 'node:stream';
 import tty from 'node:tty';
-import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
 import { vi, expect, beforeEach, afterEach, describe, it, expectTypeOf } from 'vitest';
 import { Observable } from 'rxjs';
 import { AbortPromptError, createPrompt } from '@inquirer/core';
@@ -52,12 +51,16 @@ class StubFailingPrompt {
 }
 
 class StubEventualyFailingPrompt {
-  async run() {
-    await setTimeoutPromise(100);
-    throw new Error('This test prompt always reject');
+  timeout?: NodeJS.Timeout;
+
+  run() {
+    this.timeout = setTimeout(() => {}, 1000);
+    return Promise.reject(new Error('This test prompt always reject'));
   }
 
-  close() {}
+  close() {
+    clearTimeout(this.timeout);
+  }
 }
 
 beforeEach(() => {
