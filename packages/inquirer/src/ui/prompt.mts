@@ -251,24 +251,9 @@ export default class PromptsRunner<A extends Answers> {
           return answersObj;
         }, this.answers),
       ),
-    ).then(
-      () => this.onCompletion(),
-      (error: Error) => this.onError(error),
-    ) as Promise<A>;
-  }
-
-  /**
-   * Once all prompt are over
-   */
-  onCompletion() {
-    this.close();
-
-    return this.answers;
-  }
-
-  onError(error: Error) {
-    this.close();
-    return Promise.reject(error);
+    )
+      .then(() => this.answers)
+      .finally(() => this.close()) as Promise<A>;
   }
 
   processQuestion(question: Question<A>) {
