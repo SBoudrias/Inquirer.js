@@ -62,17 +62,13 @@ type PromptReturnType<T> = Promise<Prettify<T>> & {
 export function createPromptModule<
   Prompts extends Record<string, Record<string, unknown>> = never,
 >(opt?: StreamOptions) {
+  type Question<A extends Answers> = BuiltInQuestion<A> | CustomQuestions<A, Prompts>;
+  type NamedQuestion<A extends Answers, N extends string> = Named<Question<A>, N>;
   function promptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
   >(
-    questions: (
-      | Named<BuiltInQuestion<Prettify<PrefilledAnswers & A>>, Extract<keyof A, string>>
-      | Named<
-          CustomQuestions<Prettify<PrefilledAnswers & A>, Prompts>,
-          Extract<keyof A, string>
-        >
-    )[],
+    questions: NamedQuestion<Prettify<PrefilledAnswers & A>, Extract<keyof A, string>>[],
     answers?: PrefilledAnswers,
   ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
   function promptModule<
@@ -80,9 +76,7 @@ export function createPromptModule<
     PrefilledAnswers extends Answers = object,
   >(
     questions: {
-      [name in keyof A]:
-        | BuiltInQuestion<Prettify<PrefilledAnswers & A>>
-        | CustomQuestions<Prettify<PrefilledAnswers & A>, Prompts>;
+      [name in keyof A]: Question<Prettify<PrefilledAnswers & A>>;
     },
     answers?: PrefilledAnswers,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,26 +86,17 @@ export function createPromptModule<
     PrefilledAnswers extends Answers = object,
   >(
     questions: Observable<
-      | Named<BuiltInQuestion<Prettify<PrefilledAnswers & A>>, Extract<keyof A, string>>
-      | Named<
-          CustomQuestions<Prettify<PrefilledAnswers & A>, Prompts>,
-          Extract<keyof A, string>
-        >
+      NamedQuestion<Prettify<PrefilledAnswers & A>, Extract<keyof A, string>>
     >,
     answers?: PrefilledAnswers,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): PromptReturnType<Prettify<PrefilledAnswers & Record<keyof A, any>>>;
+  ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
   function promptModule<
-    K extends string = string,
+    const A extends Answers,
     PrefilledAnswers extends Answers = object,
   >(
-    questions: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    | Named<BuiltInQuestion<Record<K, any> & PrefilledAnswers>, K>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      | Named<CustomQuestions<Record<K, any> & PrefilledAnswers, Prompts>, K>,
+    questions: NamedQuestion<A & PrefilledAnswers, Extract<keyof A, string>>,
     answers?: PrefilledAnswers,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): PromptReturnType<PrefilledAnswers & Record<K, any>>;
+  ): PromptReturnType<PrefilledAnswers & A>;
   function promptModule<A extends Answers>(
     questions:
       | NamedLegacyQuestion<A>[]
