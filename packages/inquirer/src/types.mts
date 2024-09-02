@@ -1,21 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type {
-  input,
-  select,
-  number,
-  confirm,
-  rawlist,
-  expand,
+import {
   checkbox,
-  password,
+  confirm,
   editor,
+  expand,
+  input,
+  number,
+  password,
+  rawlist,
+  search,
+  select,
 } from '@inquirer/prompts';
-import type { Prettify, KeyUnion, DistributiveMerge, Pick } from '@inquirer/type';
+import type { Context, DistributiveMerge, Prettify } from '@inquirer/type';
 import { Observable } from 'rxjs';
 
-export type Answers<Key extends string = string> = {
-  [key in Key]: any;
-};
+export type Answers<Key extends string = string> = Record<Key, any>;
 
 type AsyncCallbackFunction<R> = (
   ...args: [error: null | undefined, value: R] | [error: Error, value: undefined]
@@ -23,66 +22,80 @@ type AsyncCallbackFunction<R> = (
 
 type AsyncGetterFunction<R, A extends Answers> = (
   this: { async: () => AsyncCallbackFunction<R> },
-  answers: Partial<A>,
+  answers: Prettify<Partial<A>>,
 ) => void | R | Promise<R>;
 
+/**
+ * Allows to inject a custom question type into inquirer module.
+ *
+ * @example
+ * ```ts
+ * declare module 'inquirer' {
+ *   interface QuestionMap {
+ *     custom: { message: string };
+ *   }
+ * }
+ * ```
+ *
+ * Globally defined question types are not correct.
+ */
 export interface QuestionMap {
-  input: Parameters<typeof input>[0];
-  select: Parameters<typeof select>[0];
-  /** @deprecated `list` is now named `select` */
-  list: Parameters<typeof select>[0];
-  number: Parameters<typeof number>[0];
-  confirm: Parameters<typeof confirm>[0];
-  rawlist: Parameters<typeof rawlist>[0];
-  expand: Parameters<typeof expand>[0];
-  checkbox: Parameters<typeof checkbox>[0];
-  password: Parameters<typeof password>[0];
-  editor: Parameters<typeof editor>[0];
+  // Dummy key to avoid empty object type
+  __dummy: { message: string };
 }
 
-type PromptConfigMap<A extends Answers> = {
-  [key in keyof QuestionMap]: Readonly<
-    DistributiveMerge<
-      QuestionMap[keyof QuestionMap],
-      {
-        type: keyof QuestionMap;
-        name: KeyUnion<A>;
-        when?: AsyncGetterFunction<boolean, Prettify<A>> | boolean;
-        askAnswered?: boolean;
-        message:
-          | Pick<QuestionMap[keyof QuestionMap], 'message'>
-          | AsyncGetterFunction<
-              Pick<QuestionMap[keyof QuestionMap], 'message'>,
-              Prettify<A>
-            >;
-        choices?:
-          | Pick<QuestionMap[keyof QuestionMap], 'choices'>
-          | string[]
-          | AsyncGetterFunction<
-              Pick<QuestionMap[keyof QuestionMap], 'choices'> | string[],
-              Prettify<A>
-            >;
-        default?:
-          | Pick<QuestionMap[keyof QuestionMap], 'default'>
-          | AsyncGetterFunction<
-              Pick<QuestionMap[keyof QuestionMap], 'default'> | string[],
-              Prettify<A>
-            >;
-      }
-    >
-  >;
+type KeyValueOrAsyncGetterFunction<T, k extends string, A extends Answers> =
+  T extends Record<string, any> ? T[k] | AsyncGetterFunction<T[k], A> : never;
+
+export type AnyQuestion<A extends Answers, Type extends string = string> = {
+  type: Type;
+  name: string;
+  askAnswered?: boolean;
+  when?: boolean | AsyncGetterFunction<boolean, A>;
 };
 
-export type Question<A extends Answers> = PromptConfigMap<A>[keyof PromptConfigMap<A>];
-
-export type QuestionAnswerMap<A extends Answers> = Readonly<{
-  [name in KeyUnion<A>]: Omit<Question<A>, 'name'>;
-}>;
-
-export type QuestionArray<A extends Answers> = readonly Question<A>[];
-
-export type QuestionObservable<A extends Answers> = Observable<Question<A>>;
-
-export type StreamOptions = Prettify<
-  Parameters<typeof input>[1] & { skipTTYChecks?: boolean }
+type QuestionWithGetters<
+  Type extends string,
+  Q extends Record<string, any>,
+  A extends Answers,
+> = DistributiveMerge<
+  Q,
+  {
+    type: Type;
+    askAnswered?: boolean;
+    when?: boolean | AsyncGetterFunction<boolean, A>;
+    filter?(input: any, answers: A): any;
+    message: KeyValueOrAsyncGetterFunction<Q, 'message', A>;
+    default?: KeyValueOrAsyncGetterFunction<Q, 'default', A>;
+    choices?: KeyValueOrAsyncGetterFunction<Q, 'choices', A>;
+  }
 >;
+
+export type BuiltInQuestion<A extends Answers = object> =
+  | QuestionWithGetters<'checkbox', Parameters<typeof checkbox>[0], A>
+  | QuestionWithGetters<'confirm', Parameters<typeof confirm>[0], A>
+  | QuestionWithGetters<'editor', Parameters<typeof editor>[0], A>
+  | QuestionWithGetters<'expand', Parameters<typeof expand>[0], A>
+  | QuestionWithGetters<'input', Parameters<typeof input>[0], A>
+  | QuestionWithGetters<'number', Parameters<typeof number>[0], A>
+  | QuestionWithGetters<'password', Parameters<typeof password>[0], A>
+  | QuestionWithGetters<'rawlist', Parameters<typeof rawlist>[0], A>
+  | QuestionWithGetters<'search', Parameters<typeof search>[0], A>
+  // Alias list type to select; it's been renamed.
+  | QuestionWithGetters<'list', Parameters<typeof select>[0], A>
+  | QuestionWithGetters<'select', Parameters<typeof select>[0], A>;
+
+export type CustomQuestion<
+  A extends Answers,
+  Q extends Record<string, Record<string, any>>,
+> = {
+  [key in Extract<keyof Q, string>]: Readonly<QuestionWithGetters<key, Q[key], A>>;
+}[Extract<keyof Q, string>];
+
+export type PromptSession<Q extends AnyQuestion<any>> =
+  | Q[]
+  | Record<string, Omit<Q, 'name'>>
+  | Observable<Q>
+  | Q;
+
+export type StreamOptions = Prettify<Context & { skipTTYChecks?: boolean }>;

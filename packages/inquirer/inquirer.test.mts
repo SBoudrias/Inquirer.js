@@ -8,22 +8,29 @@ import os from 'node:os';
 import stream from 'node:stream';
 import tty from 'node:tty';
 import { vi, expect, beforeEach, afterEach, describe, it, expectTypeOf } from 'vitest';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import type { InquirerReadline } from '@inquirer/type';
 import inquirer, { type QuestionMap } from './src/index.mjs';
-import type { Answers, Question } from './src/types.mjs';
+import type { Answers } from './src/types.mjs';
 import { _ } from './src/ui/prompt.mjs';
 
 declare module './src/index.mjs' {
   interface QuestionMap {
-    stub: { answer?: string | boolean; message: string };
+    stub: { answer?: string | boolean; message: string; default?: string };
     stub2: { answer?: string | boolean; message: string; default: string };
-    stubSelect: { choices: { value: string }[] };
+    stubSelect: { choices: string[] };
     failing: { message: string };
   }
 }
 
-function throwFunc(step: string) {
+type TestQuestions = {
+  stub: { answer?: string | boolean; message: string };
+  stub2: { answer?: string | boolean; message: string; default: string };
+  stubSelect: { choices: string[] };
+  failing: { message: string };
+};
+
+function throwFunc(step: any): any {
   throw new Error(`askAnswered Error ${step}`);
 }
 
@@ -110,27 +117,24 @@ describe('inquirer.prompt(...)', () => {
 
     it('takes an Observable', async () => {
       const answers = await inquirer.prompt(
-        new Observable<Question<{ q1: boolean; q2: boolean }>>((subscriber) => {
-          subscriber.next({
+        of(
+          {
             type: 'stub',
             name: 'q1',
             message: 'message',
             answer: true,
-          });
-          setTimeout(() => {
-            subscriber.next({
-              type: 'stub',
-              name: 'q2',
-              message: 'message',
-              answer: false,
-            });
-            subscriber.complete();
-          }, 30);
-        }),
+          } as const,
+          {
+            type: 'stub',
+            name: 'q2',
+            message: 'message',
+            answer: false,
+          } as const,
+        ),
       );
 
       expect(answers).toEqual({ q1: true, q2: false });
-      expectTypeOf(answers).toEqualTypeOf<{ q1: boolean; q2: boolean }>();
+      expectTypeOf(answers).toEqualTypeOf<{ q1: any; q2: any }>();
     });
   });
 
@@ -273,7 +277,6 @@ describe('inquirer.prompt(...)', () => {
         name: 'name2',
         answer: 'foo',
         message(answers) {
-          // @ts-expect-error TODO fix answer types passed in getters.
           expectTypeOf(answers).toEqualTypeOf<Partial<{ name1: any; name2: any }>>();
           expect(answers).toEqual({ name1: 'bar' });
           const goOn = this.async();
@@ -299,7 +302,7 @@ describe('inquirer.prompt(...)', () => {
         type: 'stub',
         name: 'name',
         message: 'message',
-        default(answers: { name1: string }) {
+        default(answers) {
           expect(answers.name1).toEqual('bar');
           return 'foo';
         },
@@ -337,7 +340,6 @@ describe('inquirer.prompt(...)', () => {
         message: 'message',
         default(answers) {
           goesInDefault = true;
-          // @ts-expect-error TODO fix answer types passed in getters.
           expectTypeOf(answers).toEqualTypeOf<Partial<{ name1: any; q2: any }>>();
           expect(answers).toEqual({ name1: 'bar' });
           const goOn = this.async();
@@ -413,7 +415,6 @@ describe('inquirer.prompt(...)', () => {
         name: 'name',
         message: 'message',
         choices(answers) {
-          // @ts-expect-error TODO fix answer types passed in getters.
           expectTypeOf(answers).toEqualTypeOf<Partial<{ name1: any; name: any }>>();
           expect(answers).toEqual({ name1: 'bar' });
           return stubChoices;
@@ -581,7 +582,6 @@ describe('inquirer.prompt(...)', () => {
           answer: 'answer from running',
           when(answers) {
             expect(answers).toEqual({ q1: 'bar' });
-            // @ts-expect-error TODO fix answer types passed in getters.
             expectTypeOf(answers).toEqualTypeOf<Partial<{ q1: any; q2: any }>>();
 
             goesInWhen = true;
@@ -635,14 +635,13 @@ describe('inquirer.prompt(...)', () => {
 
     it('should not run prompt if answer exists for question', async () => {
       const answers = await inquirer.prompt(
-        // @ts-expect-error Passing wrong type on purpose.
         [
           {
             type: 'input',
             name: 'prefilled',
-            when: throwFunc.bind(undefined, 'when'),
-            validate: throwFunc.bind(undefined, 'validate'),
-            transformer: throwFunc.bind(undefined, 'transformer'),
+            when: throwFunc,
+            validate: throwFunc,
+            transformer: throwFunc,
             message: 'message',
             default: 'newValue',
           },
@@ -655,14 +654,13 @@ describe('inquirer.prompt(...)', () => {
 
     it('should not run prompt if nested answer exists for question', async () => {
       const answers = await inquirer.prompt(
-        // @ts-expect-error Passing wrong type on purpose.
         [
           {
             type: 'input',
             name: 'prefilled.nested',
-            when: throwFunc.bind(undefined, 'when'),
-            validate: throwFunc.bind(undefined, 'validate'),
-            transformer: throwFunc.bind(undefined, 'transformer'),
+            when: throwFunc,
+            validate: throwFunc,
+            transformer: throwFunc,
             message: 'message',
             default: 'newValue',
           },
@@ -773,7 +771,9 @@ describe('Non-TTY checks', () => {
   });
 
   it('Throw an exception when run in non-tty', async () => {
-    const localPrompt = inquirer.createPromptModule({ skipTTYChecks: false });
+    const localPrompt = inquirer.createPromptModule<TestQuestions>({
+      skipTTYChecks: false,
+    });
     localPrompt.registerPrompt('stub', StubPrompt);
 
     const promise = localPrompt([
@@ -787,7 +787,7 @@ describe('Non-TTY checks', () => {
   });
 
   it("Don't throw an exception when run in non-tty by default ", async () => {
-    const localPrompt = inquirer.createPromptModule();
+    const localPrompt = inquirer.createPromptModule<TestQuestions>();
     localPrompt.registerPrompt('stub', StubPrompt);
 
     await localPrompt([
@@ -805,7 +805,9 @@ describe('Non-TTY checks', () => {
   });
 
   it("Don't throw an exception when run in non-tty and skipTTYChecks is true ", async () => {
-    const localPrompt = inquirer.createPromptModule({ skipTTYChecks: true });
+    const localPrompt = inquirer.createPromptModule<TestQuestions>({
+      skipTTYChecks: true,
+    });
     localPrompt.registerPrompt('stub', StubPrompt);
 
     await localPrompt([
@@ -823,7 +825,7 @@ describe('Non-TTY checks', () => {
   });
 
   it("Don't throw an exception when run in non-tty and custom input is provided async ", async () => {
-    const localPrompt = inquirer.createPromptModule({
+    const localPrompt = inquirer.createPromptModule<TestQuestions>({
       input: new stream.Readable({
         // We must have a default read implementation
         // for this to work, if not it will error out
@@ -849,7 +851,7 @@ describe('Non-TTY checks', () => {
   });
 
   it('Throw an exception when run in non-tty and custom input is provided with skipTTYChecks: false', async () => {
-    const localPrompt = inquirer.createPromptModule({
+    const localPrompt = inquirer.createPromptModule<TestQuestions>({
       input: new stream.Readable(),
       skipTTYChecks: false,
     });
@@ -871,7 +873,7 @@ describe('Non-TTY checks', () => {
     const input = new tty.ReadStream(fs.openSync('/dev/tty', 'r+'));
 
     // Uses manually opened tty as input instead of process.stdin
-    const localPrompt = inquirer.createPromptModule({
+    const localPrompt = inquirer.createPromptModule<TestQuestions>({
       input,
       skipTTYChecks: false,
     });

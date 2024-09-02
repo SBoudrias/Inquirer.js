@@ -16,7 +16,7 @@ import {
   search,
   Separator,
 } from '@inquirer/prompts';
-import type { Prettify, UnionToIntersection } from '@inquirer/type';
+import type { Prettify } from '@inquirer/type';
 import { default as PromptsRunner } from './ui/prompt.mjs';
 import type {
   PromptCollection,
@@ -25,12 +25,12 @@ import type {
 } from './ui/prompt.mjs';
 import type {
   Answers,
-  Question,
-  QuestionAnswerMap,
-  QuestionArray,
-  QuestionObservable,
+  CustomQuestion,
+  BuiltInQuestion,
   StreamOptions,
+  QuestionMap,
 } from './types.mjs';
+import { Observable } from 'rxjs';
 
 export type { QuestionMap } from './types.mjs';
 
@@ -56,42 +56,52 @@ type PromptReturnType<T> = Promise<Prettify<T>> & {
 /**
  * Create a new self-contained prompt module.
  */
-export function createPromptModule(opt?: StreamOptions) {
-  function promptModule<
-    const AnswerList extends readonly Answers[],
-    PrefilledAnswers extends Answers = object,
-  >(
-    questions: { [I in keyof AnswerList]: Question<PrefilledAnswers & AnswerList[I]> },
-    answers?: PrefilledAnswers,
-  ): PromptReturnType<PrefilledAnswers & UnionToIntersection<AnswerList[number]>>;
-  function promptModule<
-    const Map extends QuestionAnswerMap<A>,
-    const A extends Answers<Extract<keyof Map, string>>,
-    PrefilledAnswers extends Answers = object,
-  >(questions: Map, answers?: PrefilledAnswers): PromptReturnType<PrefilledAnswers & A>;
+export function createPromptModule<
+  Prompts extends Record<string, Record<string, unknown>> = never,
+>(opt?: StreamOptions) {
+  type Question<A extends Answers> = BuiltInQuestion<A> | CustomQuestion<A, Prompts>;
+  type NamedQuestion<A extends Answers> = Question<A> & {
+    name: Extract<keyof A, string>;
+  };
   function promptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
   >(
-    questions: QuestionObservable<A>,
+    questions: NamedQuestion<Prettify<PrefilledAnswers & A>>[],
     answers?: PrefilledAnswers,
-  ): PromptReturnType<PrefilledAnswers & A>;
+  ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
   function promptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
   >(
-    questions: Question<A>,
+    questions: {
+      [name in keyof A]: Question<Prettify<PrefilledAnswers & A>>;
+    },
+    answers?: PrefilledAnswers,
+  ): PromptReturnType<Prettify<PrefilledAnswers & Answers<Extract<keyof A, string>>>>;
+  function promptModule<
+    const A extends Answers,
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: Observable<NamedQuestion<Prettify<PrefilledAnswers & A>>>,
+    answers?: PrefilledAnswers,
+  ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
+  function promptModule<
+    const A extends Answers,
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: NamedQuestion<A & PrefilledAnswers>,
     answers?: PrefilledAnswers,
   ): PromptReturnType<PrefilledAnswers & A>;
-  function promptModule(
+  function promptModule<A extends Answers>(
     questions:
-      | QuestionArray<Answers>
-      | QuestionAnswerMap<Answers>
-      | QuestionObservable<Answers>
-      | Question<Answers>,
-    answers?: Partial<Answers>,
-  ): PromptReturnType<Answers> {
-    const runner = new PromptsRunner(promptModule.prompts, opt);
+      | NamedQuestion<A>[]
+      | Record<keyof A, Question<A>>
+      | Observable<NamedQuestion<A>>
+      | NamedQuestion<A>,
+    answers?: Partial<A>,
+  ): PromptReturnType<A> {
+    const runner = new PromptsRunner<A>(promptModule.prompts, opt);
 
     const promptPromise = runner.run(questions, answers);
     return Object.assign(promptPromise, { ui: runner });
@@ -123,7 +133,7 @@ export function createPromptModule(opt?: StreamOptions) {
 /**
  * Public CLI helper interface
  */
-const prompt = createPromptModule();
+const prompt = createPromptModule<Omit<QuestionMap, '__dummy'>>();
 
 // Expose helper functions on the top level for easiest usage by common users
 function registerPrompt(name: string, newPrompt: LegacyPromptConstructor) {
