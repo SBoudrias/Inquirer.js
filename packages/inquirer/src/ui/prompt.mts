@@ -284,27 +284,25 @@ export default class PromptsRunner<A extends Answers> {
         concatMap((question) =>
           fetchAsyncQuestionProperty(question, 'choices', this.answers),
         ),
-        concatMap(
-          (question: NamedLegacyQuestion<A>): Observable<NamedLegacyQuestion<A>> => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            let { choices } = question as any;
-            if (Array.isArray(choices)) {
-              choices = choices.map(
-                (choice: string | number | { value?: string; name: string }) => {
-                  if (typeof choice === 'string' || typeof choice === 'number') {
-                    return { name: choice, value: choice };
-                  } else if (!('value' in choice)) {
-                    return { ...choice, value: choice.name };
-                  }
-                  return choice;
-                },
-              );
-            }
+        concatMap((question) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          let { choices } = question as any;
+          if (Array.isArray(choices)) {
+            choices = choices.map(
+              (choice: string | number | { value?: string; name: string }) => {
+                if (typeof choice === 'string' || typeof choice === 'number') {
+                  return { name: choice, value: choice };
+                } else if (!('value' in choice)) {
+                  return { ...choice, value: choice.name };
+                }
+                return choice;
+              },
+            );
+          }
 
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            return of({ ...question, choices });
-          },
-        ),
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          return of({ ...question, choices });
+        }),
         concatMap((question) => this.fetchAnswer(question)),
       );
     });
