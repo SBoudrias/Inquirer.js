@@ -10,7 +10,7 @@ import {
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 
-export type NumberConfig = {
+type NumberConfig = {
   message: string;
   default?: number;
   min?: number;

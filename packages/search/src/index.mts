@@ -53,7 +53,7 @@ type NormalizedChoice<Value> = {
   disabled: boolean | string;
 };
 
-export type SearchConfig<
+type SearchConfig<
   Value,
   ChoicesObject =
     | ReadonlyArray<string | Separator>

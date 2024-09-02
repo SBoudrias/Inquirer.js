@@ -59,7 +59,7 @@ type NormalizedChoice<Value> = {
   key: Key;
 };
 
-export type ExpandConfig<
+type ExpandConfig<
   Value,
   ChoicesObject = readonly { key: Key; name: string }[] | readonly Choice<Value>[],
 > = {

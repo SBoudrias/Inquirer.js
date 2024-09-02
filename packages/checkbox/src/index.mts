@@ -72,7 +72,7 @@ type NormalizedChoice<Value> = {
   checked: boolean;
 };
 
-export type CheckboxConfig<
+type CheckboxConfig<
   Value,
   ChoicesObject =
     | ReadonlyArray<string | Separator>
