@@ -93,13 +93,8 @@ export function createPromptModule(opt?: StreamOptions) {
   ): PromptReturnType<Answers> {
     const runner = new PromptsRunner(promptModule.prompts, opt);
 
-    try {
-      return runner.run(questions, answers);
-    } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
-      const promise = Promise.reject(error);
-      return Object.assign(promise, { ui: runner });
-    }
+    const promptPromise = runner.run(questions, answers);
+    return Object.assign(promptPromise, { ui: runner });
   }
 
   promptModule.prompts = { ...defaultPrompts };

@@ -212,14 +212,14 @@ export default class PromptsRunner<A extends Answers> {
     this.prompts = prompts;
   }
 
-  run(
+  async run(
     questions:
       | QuestionArray<A>
       | QuestionAnswerMap<A>
       | QuestionObservable<A>
       | Question<A>,
     answers?: Partial<A>,
-  ): Promise<A> & { ui: PromptsRunner<A> } {
+  ): Promise<A> {
     // Keep global reference to the answers
     this.answers = typeof answers === 'object' ? { ...answers } : {};
 
@@ -244,33 +244,16 @@ export default class PromptsRunner<A extends Answers> {
 
     this.process = obs.pipe(concatMap((question) => this.processQuestion(question)));
 
-    const promise = lastValueFrom(
+    return lastValueFrom(
       this.process.pipe(
         reduce((answersObj, answer: { name: string; answer: unknown }) => {
           _.set(answersObj, answer.name, answer.answer);
           return answersObj;
         }, this.answers),
       ),
-    ).then(
-      () => this.onCompletion(),
-      (error: Error) => this.onError(error),
-    ) as Promise<A>;
-
-    return Object.assign(promise, { ui: this });
-  }
-
-  /**
-   * Once all prompt are over
-   */
-  onCompletion() {
-    this.close();
-
-    return this.answers;
-  }
-
-  onError(error: Error) {
-    this.close();
-    return Promise.reject(error);
+    )
+      .then(() => this.answers as A)
+      .finally(() => this.close());
   }
 
   processQuestion(question: Question<A>) {
