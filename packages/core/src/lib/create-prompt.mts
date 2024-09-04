@@ -17,7 +17,7 @@ type ViewFunction<Value, Config> = (
 export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
   const prompt: Prompt<Value, Config> = (config, context = {}) => {
     // Default `input` to stdin
-    const { input = process.stdin, signal: outsideSignal } = context;
+    const { input = process.stdin, signal: signal } = context;
     const { promise, resolve, reject, onFinally } =
       CancelablePromise.withResolver<Value>();
 
@@ -37,15 +37,14 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
       output.end();
     });
 
-    if (outsideSignal) {
-      const outsideAbort = () =>
-        reject(new AbortPromptError({ cause: outsideSignal.reason }));
-      if (outsideSignal.aborted) {
-        outsideAbort();
+    if (signal) {
+      const abort = () => reject(new AbortPromptError({ cause: signal.reason }));
+      if (signal.aborted) {
+        abort();
         return promise;
       }
-      outsideSignal.addEventListener('abort', outsideAbort);
-      onFinally(() => outsideSignal.removeEventListener('abort', outsideAbort));
+      signal.addEventListener('abort', abort);
+      onFinally(() => signal.removeEventListener('abort', abort));
     }
 
     withHooks(rl, (cycle) => {
