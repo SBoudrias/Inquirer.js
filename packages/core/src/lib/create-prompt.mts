@@ -6,7 +6,8 @@ import { onExit as onSignalExit } from 'signal-exit';
 import ScreenManager from './screen-manager.mjs';
 import { CancelablePromise, type InquirerReadline } from '@inquirer/type';
 import { withHooks, effectScheduler } from './hook-engine.mjs';
-import { AbortPromptError, CancelPromptError, ExitPromptError } from './errors.mjs';
+import { AbortPromptError, ExitPromptError } from './errors.mjs';
+import { executeOnce } from './utils.mjs';
 
 type ViewFunction<Value, Config> = (
   config: Prettify<Config>,
@@ -16,7 +17,9 @@ type ViewFunction<Value, Config> = (
 export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
   const prompt: Prompt<Value, Config> = (config, context = {}) => {
     // Default `input` to stdin
-    const { input = process.stdin, signal } = context;
+    const { input = process.stdin, signal: outsideSignal } = context;
+    const { promise, resolve, reject, abort, onFinally } =
+      CancelablePromise.withResolver<Value>();
 
     // Add mute capabilities to the output
     const output = new MuteStream();
@@ -29,48 +32,41 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
     }) as InquirerReadline;
     const screen = new ScreenManager(rl);
 
-    const cleanups = new Set<() => void>();
-    const { promise, resolve, reject } = CancelablePromise.withResolver<Value>();
-
-    function onExit() {
-      cleanups.forEach((cleanup) => cleanup());
-
+    onFinally(() => {
       screen.done({ clearContent: Boolean(context?.clearPromptOnDone) });
       output.end();
-    }
+    });
 
-    function fail(error: unknown) {
-      onExit();
-      reject(error);
-    }
-
-    if (signal) {
-      const abort = () => fail(new AbortPromptError({ cause: signal.reason }));
-      if (signal.aborted) {
-        abort();
+    if (outsideSignal) {
+      const outsideAbort = () =>
+        abort(new AbortPromptError({ cause: outsideSignal.reason }));
+      if (outsideSignal.aborted) {
+        outsideAbort();
         return promise;
       }
-      signal.addEventListener('abort', abort);
-      cleanups.add(() => signal.removeEventListener('abort', abort));
+      outsideSignal.addEventListener('abort', outsideAbort);
+      onFinally(() => outsideSignal.removeEventListener('abort', outsideAbort));
     }
 
     withHooks(rl, (cycle) => {
-      cleanups.add(
+      onFinally(
         onSignalExit((code, signal) => {
-          fail(
+          abort(
             new ExitPromptError(`User force closed the prompt with ${code} ${signal}`),
           );
         }),
       );
 
-      const hooksCleanup = AsyncResource.bind(() => {
-        try {
-          effectScheduler.clearAll();
-        } catch (error) {
-          reject(error);
-        }
-      });
-      cleanups.add(hooksCleanup);
+      const hooksCleanup = executeOnce(
+        AsyncResource.bind(() => {
+          try {
+            effectScheduler.clearAll();
+          } catch (error) {
+            reject(error);
+          }
+        }),
+      );
+      onFinally(hooksCleanup);
 
       // Re-renders only happen when the state change; but the readline cursor could change position
       // and that also requires a re-render (and a manual one because we mute the streams).
@@ -78,18 +74,18 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
       // by a state change sets the cursor to the right position.
       const checkCursorPos = () => screen.checkCursorPos();
       rl.input.on('keypress', checkCursorPos);
-      cleanups.add(() => rl.input.removeListener('keypress', checkCursorPos));
+      onFinally(() => rl.input.removeListener('keypress', checkCursorPos));
 
       // The close event triggers immediately when the user press ctrl+c. SignalExit on the other hand
       // triggers after the process is done (which happens after timeouts are done triggering.)
       // We triggers the hooks cleanup phase on rl `close` so active timeouts can be cleared.
       rl.on('close', hooksCleanup);
-      cleanups.add(() => rl.removeListener('close', hooksCleanup));
+      onFinally(() => rl.removeListener('close', hooksCleanup));
 
       function done(value: Value) {
         // Delay execution to let time to the hookCleanup functions to registers.
         setImmediate(() => {
-          onExit();
+          hooksCleanup();
 
           // Finally we resolve our promise
           resolve(value);
@@ -106,14 +102,10 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
           effectScheduler.run();
         } catch (error: unknown) {
-          fail(error);
+          abort(error);
         }
       });
     });
-
-    promise.cancel = () => {
-      fail(new CancelPromptError());
-    };
     return promise;
   };
 

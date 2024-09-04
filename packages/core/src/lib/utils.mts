@@ -27,3 +27,11 @@ export function breakLines(content: string, width: number): string {
 export function readlineWidth(): number {
   return cliWidth({ defaultWidth: 80, output: readline().output });
 }
+
+export function executeOnce(fn?: () => void) {
+  let once = fn;
+  return () => {
+    once?.();
+    once = undefined;
+  };
+}
