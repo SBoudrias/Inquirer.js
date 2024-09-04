@@ -6,12 +6,6 @@ export class CancelablePromise<T> extends Promise<T> {
   public cancel: () => void = () => {};
 
   static withResolver<T>() {
-    const abortController = new AbortController();
-    const { signal } = abortController;
-    abortController.signal.addEventListener('abort', () => reject(signal.reason), {
-      once: true,
-    });
-
     const finallyCallbacks = new Set<() => void>();
     const onFinally = (onfinally: () => void) => finallyCallbacks.add(onfinally);
 
@@ -33,13 +27,7 @@ export class CancelablePromise<T> extends Promise<T> {
 
     promise.cancel = () => reject(new CancelPromptError());
 
-    return {
-      promise,
-      resolve: resolve!,
-      reject: reject!,
-      signal: abortController.signal,
-      onFinally,
-    };
+    return { promise, resolve: resolve!, reject: reject!, onFinally };
   }
 }
 
