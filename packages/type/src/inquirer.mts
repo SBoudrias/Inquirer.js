@@ -11,7 +11,6 @@ export class CancelablePromise<T> extends Promise<T> {
     abortController.signal.addEventListener('abort', () => reject(signal.reason), {
       once: true,
     });
-    const abort = (error: unknown) => abortController.abort(error);
 
     const finallyCallbacks = new Set<() => void>();
     const onFinally = (onfinally: () => void) => finallyCallbacks.add(onfinally);
@@ -32,7 +31,7 @@ export class CancelablePromise<T> extends Promise<T> {
         });
     });
 
-    promise.cancel = () => abort(new CancelPromptError());
+    promise.cancel = () => reject(new CancelPromptError());
 
     return {
       promise,
@@ -40,7 +39,6 @@ export class CancelablePromise<T> extends Promise<T> {
       reject: reject!,
       signal: abortController.signal,
       onFinally,
-      abort,
     };
   }
 }

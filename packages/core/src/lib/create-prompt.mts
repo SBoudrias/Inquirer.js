@@ -18,7 +18,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
   const prompt: Prompt<Value, Config> = (config, context = {}) => {
     // Default `input` to stdin
     const { input = process.stdin, signal: outsideSignal } = context;
-    const { promise, resolve, reject, abort, onFinally } =
+    const { promise, resolve, reject, onFinally } =
       CancelablePromise.withResolver<Value>();
 
     // Add mute capabilities to the output
@@ -39,7 +39,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
     if (outsideSignal) {
       const outsideAbort = () =>
-        abort(new AbortPromptError({ cause: outsideSignal.reason }));
+        reject(new AbortPromptError({ cause: outsideSignal.reason }));
       if (outsideSignal.aborted) {
         outsideAbort();
         return promise;
@@ -51,7 +51,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
     withHooks(rl, (cycle) => {
       onFinally(
         onSignalExit((code, signal) => {
-          abort(
+          reject(
             new ExitPromptError(`User force closed the prompt with ${code} ${signal}`),
           );
         }),
@@ -102,7 +102,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
           effectScheduler.run();
         } catch (error: unknown) {
-          abort(error);
+          reject(error);
         }
       });
     });
