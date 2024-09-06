@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/expand",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Inquirer checkbox prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
