@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import expand from './src/index.mjs';
+import expand, { Separator } from './src/index.mjs';
 
 const overwriteChoices = [
   {
@@ -142,6 +142,58 @@ describe('expand prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? Abort"`);
 
     await expect(answer).resolves.toEqual('abort');
+  });
+
+  it('supports separators', async () => {
+    const { answer, events, getScreen } = await render(expand, {
+      message: 'Overwrite this file?',
+      choices: [
+        {
+          value: 'Yarn',
+          key: 'y',
+        },
+        new Separator(),
+        {
+          value: 'npm',
+          key: 'n',
+        },
+      ],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? (ynH)"`);
+
+    events.type('h');
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Overwrite this file? h
+        y) Yarn
+       ──────────────
+        n) npm"
+    `);
+
+    events.type('y');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Overwrite this file? y
+        y) Yarn
+       ──────────────
+        n) npm
+      >> Yarn"
+    `);
+
+    events.keypress('backspace');
+    events.type('n');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Overwrite this file? n
+        y) Yarn
+       ──────────────
+        n) npm
+      >> npm"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? npm"`);
+
+    await expect(answer).resolves.toEqual('npm');
   });
 
   it('selects without value', async () => {
