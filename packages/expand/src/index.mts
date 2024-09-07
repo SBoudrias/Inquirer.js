@@ -6,6 +6,7 @@ import {
   usePrefix,
   isEnterKey,
   makeTheme,
+  Separator,
   type Theme,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
@@ -64,18 +65,24 @@ type ExpandConfig<
   ChoicesObject = readonly { key: Key; name: string }[] | readonly Choice<Value>[],
 > = {
   message: string;
-  choices: ChoicesObject extends readonly { key: Key; name: string }[]
+  choices: ChoicesObject extends readonly (Separator | { key: Key; name: string })[]
     ? ChoicesObject
-    : readonly Choice<Value>[];
+    : readonly (Separator | Choice<Value>)[];
   default?: Key | 'h';
   expanded?: boolean;
   theme?: PartialDeep<Theme>;
 };
 
 function normalizeChoices<Value>(
-  choices: readonly { key: Key; name: string }[] | readonly Choice<Value>[],
-): NormalizedChoice<Value>[] {
+  choices:
+    | readonly (Separator | { key: Key; name: string })[]
+    | readonly (Separator | Choice<Value>)[],
+): (Separator | NormalizedChoice<Value>)[] {
   return choices.map((choice) => {
+    if (Separator.isSeparator(choice)) {
+      return choice;
+    }
+
     const name: string = 'name' in choice ? choice.name : String(choice.value);
     const value = 'value' in choice ? choice.value : name;
     return {
@@ -109,7 +116,10 @@ export default createPrompt(
         if (answer === 'h' && !expanded) {
           setExpanded(true);
         } else {
-          const selectedChoice = choices.find(({ key }) => key === answer);
+          const selectedChoice = choices.find(
+            (choice): choice is NormalizedChoice<Value> =>
+              !Separator.isSeparator(choice) && choice.key === answer,
+          );
           if (selectedChoice) {
             setStatus('done');
             // Set the value as we might've selected the default one.
@@ -132,8 +142,9 @@ export default createPrompt(
     if (status === 'done') {
       // If the prompt is done, it's safe to assume there is a selected value.
       const selectedChoice = choices.find(
-        ({ key }) => key === value,
-      ) as NormalizedChoice<Value>;
+        (choice): choice is NormalizedChoice<Value> =>
+          !Separator.isSeparator(choice) && choice.key === value.toLowerCase(),
+      )!;
       return `${prefix} ${message} ${theme.style.answer(selectedChoice.name)}`;
     }
 
@@ -143,6 +154,8 @@ export default createPrompt(
     let longChoices = '';
     let shortChoices = allChoices
       .map((choice) => {
+        if (Separator.isSeparator(choice)) return '';
+
         if (choice.key === defaultKey) {
           return choice.key.toUpperCase();
         }
@@ -157,6 +170,10 @@ export default createPrompt(
       shortChoices = '';
       longChoices = allChoices
         .map((choice) => {
+          if (Separator.isSeparator(choice)) {
+            return ` ${choice.separator}`;
+          }
+
           const line = `  ${choice.key}) ${choice.name}`;
           if (choice.key === value.toLowerCase()) {
             return theme.style.highlight(line);
@@ -168,7 +185,10 @@ export default createPrompt(
     }
 
     let helpTip = '';
-    const currentOption = allChoices.find(({ key }) => key === value.toLowerCase());
+    const currentOption = choices.find(
+      (choice): choice is NormalizedChoice<Value> =>
+        !Separator.isSeparator(choice) && choice.key === value.toLowerCase(),
+    );
     if (currentOption) {
       helpTip = `${colors.cyan('>>')} ${currentOption.name}`;
     }
@@ -184,3 +204,5 @@ export default createPrompt(
     ];
   },
 );
+
+export { Separator } from '@inquirer/core';

@@ -94,6 +94,8 @@ const answer = await expand({
 | expanded | `boolean`               | no       | Expand the choices by default                                                             |
 | theme    | [See Theming](#Theming) | no       | Customize look of the prompt.                                                             |
 
+`Separator` objects can be used in the `choices` array to render non-selectable lines in the choice list. By default it'll render a line, but you can provide the text as argument (`new Separator('-- Dependencies --')`). This option is often used to add labels to groups within long list of options.
+
 ### `Choice` object
 
 The `Choice` object is typed as

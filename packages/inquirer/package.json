@@ -1,6 +1,6 @@
 {
   "name": "inquirer",
-  "version": "10.2.0",
+  "version": "10.2.1",
   "description": "A collection of common interactive command line user interfaces.",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "main": "./dist/cjs/index.js",
@@ -56,7 +56,7 @@
   "license": "MIT",
   "dependencies": {
     "@inquirer/core": "^9.1.0",
-    "@inquirer/prompts": "^5.4.0",
+    "@inquirer/prompts": "^5.5.0",
     "@inquirer/type": "^1.5.3",
     "@types/mute-stream": "^0.0.4",
     "ansi-escapes": "^4.3.2",
