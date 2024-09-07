@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
 import readline from 'node:readline';
 import {
   defer,
@@ -17,7 +17,13 @@ import MuteStream from 'mute-stream';
 import { AbortPromptError } from '@inquirer/core';
 import type { InquirerReadline } from '@inquirer/type';
 import ansiEscapes from 'ansi-escapes';
-import type { Answers, AnyQuestion, PromptSession, StreamOptions } from '../types.mjs';
+import type {
+  Answers,
+  AnyQuestion,
+  AsyncGetterFunction,
+  PromptSession,
+  StreamOptions,
+} from '../types.mjs';
 
 export const _ = {
   set: (obj: Record<string, unknown>, path: string = '', value: unknown): void => {
@@ -45,7 +51,6 @@ export const _ = {
         .filter(Boolean)
         .reduce(
           // @ts-expect-error implicit any on res[key]
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           (res, key) => (res !== null && res !== undefined ? res[key] : res),
           obj,
         );
@@ -58,22 +63,23 @@ export const _ = {
  * Resolve a question property value if it is passed as a function.
  * This method will overwrite the property on the question object with the received value.
  */
-function fetchAsyncQuestionProperty<A extends Answers, Q extends AnyQuestion<A>>(
+async function fetchAsyncQuestionProperty<
+  A extends Answers,
+  Prop extends keyof Q,
+  Q extends AnyQuestion<A>,
+>(
   question: Q,
-  prop: string,
+  prop: Prop,
   answers: A,
-): Observable<AnyQuestion<A>> {
-  if (prop in question) {
-    const propGetter = question[prop as keyof Q];
-    if (typeof propGetter === 'function') {
-      return from(
-        runAsync(propGetter as (...args: unknown[]) => unknown)(answers).then((value) => {
-          return Object.assign(question, { [prop]: value });
-        }),
-      );
-    }
+): Promise<Exclude<Q[Prop], AsyncGetterFunction<any, any>>> {
+  type RawValue = Exclude<Q[Prop], AsyncGetterFunction<any, any>>;
+
+  const propGetter = question[prop];
+  if (typeof propGetter === 'function') {
+    return runAsync(propGetter as (...args: unknown[]) => Promise<RawValue>)(answers);
   }
-  return of(question);
+
+  return propGetter as RawValue;
 }
 
 export interface PromptBase {
@@ -186,11 +192,11 @@ function isPromptConstructor(
  * Base interface class other can inherits from
  */
 export default class PromptsRunner<A extends Answers> {
-  prompts: PromptCollection;
+  private prompts: PromptCollection;
   answers: Partial<A> = {};
   process: Observable<any> = EMPTY;
-  abortController?: AbortController;
-  opt: StreamOptions;
+  private abortController: AbortController = new AbortController();
+  private opt: StreamOptions;
   rl?: InquirerReadline;
 
   constructor(prompts: PromptCollection, opt: StreamOptions = {}) {
@@ -199,6 +205,8 @@ export default class PromptsRunner<A extends Answers> {
   }
 
   async run(questions: PromptSession<A>, answers?: Partial<A>): Promise<A> {
+    this.abortController = new AbortController();
+
     // Keep global reference to the answers
     this.answers = typeof answers === 'object' ? { ...answers } : {};
 
@@ -219,7 +227,23 @@ export default class PromptsRunner<A extends Answers> {
       obs = from([questions]);
     }
 
-    this.process = obs.pipe(concatMap((question) => this.processQuestion(question)));
+    this.process = obs.pipe(
+      concatMap((question) =>
+        of(question).pipe(
+          concatMap((question) =>
+            from(
+              this.shouldRun(question).then((shouldRun: boolean | void) => {
+                if (shouldRun) {
+                  return question;
+                }
+                return;
+              }),
+            ).pipe(filter((val) => val != null)),
+          ),
+          concatMap((question) => defer(() => from(this.fetchAnswer(question)))),
+        ),
+      ),
+    );
 
     return lastValueFrom(
       this.process.pipe(
@@ -233,47 +257,40 @@ export default class PromptsRunner<A extends Answers> {
       .finally(() => this.close());
   }
 
-  processQuestion(question: AnyQuestion<A>) {
-    question = { ...question };
-    return defer(() => {
-      const obs = of(question);
+  private prepareQuestion = async (question: AnyQuestion<A>) => {
+    const [message, defaultValue, resolvedChoices] = await Promise.all([
+      fetchAsyncQuestionProperty(question, 'message', this.answers),
+      fetchAsyncQuestionProperty(question, 'default', this.answers),
+      fetchAsyncQuestionProperty(question, 'choices', this.answers),
+    ]);
 
-      return obs.pipe(
-        concatMap(this.setDefaultType),
-        concatMap(this.filterIfRunnable),
-        concatMap((question) =>
-          fetchAsyncQuestionProperty(question, 'message', this.answers),
-        ),
-        concatMap((question) =>
-          fetchAsyncQuestionProperty(question, 'default', this.answers),
-        ),
-        concatMap((question) =>
-          fetchAsyncQuestionProperty(question, 'choices', this.answers),
-        ),
-        concatMap((question) => {
-          if ('choices' in question && Array.isArray(question.choices)) {
-            const choices = question.choices.map(
-              (choice: string | number | { value?: string; name: string }) => {
-                if (typeof choice === 'string' || typeof choice === 'number') {
-                  return { name: choice, value: choice };
-                } else if (!('value' in choice)) {
-                  return { ...choice, value: choice.name };
-                }
-                return choice;
-              },
-            );
+    let choices;
+    if (Array.isArray(resolvedChoices)) {
+      choices = resolvedChoices.map((choice: unknown) => {
+        if (typeof choice === 'string' || typeof choice === 'number') {
+          return { name: choice, value: choice };
+        } else if (
+          typeof choice === 'object' &&
+          choice != null &&
+          !('value' in choice) &&
+          'name' in choice
+        ) {
+          return { ...choice, value: choice.name };
+        }
+        return choice;
+      });
+    }
 
-            return of({ ...question, choices });
-          }
-
-          return of(question);
-        }),
-        concatMap((question) => defer(() => from(this.fetchAnswer(question)))),
-      );
+    return Object.assign({}, question, {
+      message,
+      default: defaultValue,
+      choices,
+      type: question.type in this.prompts ? question.type : 'input',
     });
-  }
+  };
 
-  fetchAnswer(question: AnyQuestion<A>) {
+  private fetchAnswer = async (rawQuestion: AnyQuestion<A>) => {
+    const question = await this.prepareQuestion(rawQuestion);
     const prompt = this.prompts[question.type];
 
     if (prompt == null) {
@@ -333,7 +350,6 @@ export default class PromptsRunner<A extends Answers> {
       : prompt;
 
     const { signal: moduleSignal } = this.opt;
-    this.abortController = new AbortController();
     if (moduleSignal?.aborted) {
       this.abortController.abort(moduleSignal.reason);
     } else if (moduleSignal) {
@@ -344,19 +360,22 @@ export default class PromptsRunner<A extends Answers> {
       };
     }
 
+    const { filter = (value) => value } = question;
     const { signal } = this.abortController;
     return promptFn(question, { ...this.opt, signal })
-      .then((answer: unknown) => ({ name: question.name, answer }))
+      .then((answer: unknown) => ({
+        name: question.name,
+        answer: filter(answer, this.answers),
+      }))
       .finally(() => {
         cleanupSignal?.();
-        this.abortController = undefined;
       });
-  }
+  };
 
   /**
    * Handle the ^C exit
    */
-  onForceClose = () => {
+  private onForceClose = () => {
     this.close();
     process.kill(process.pid, 'SIGINT');
     console.log('');
@@ -369,41 +388,20 @@ export default class PromptsRunner<A extends Answers> {
     this.abortController?.abort();
   };
 
-  setDefaultType = (question: AnyQuestion<A>): Observable<AnyQuestion<A>> => {
-    // Default type to input
-    if (!this.prompts[question.type]) {
-      question = Object.assign({}, question, { type: 'input' });
-    }
-
-    return defer(() => of(question));
-  };
-
-  filterIfRunnable = (question: AnyQuestion<A>): Observable<AnyQuestion<A>> => {
+  private shouldRun = async (question: AnyQuestion<A>): Promise<boolean> => {
     if (
       question.askAnswered !== true &&
       _.get(this.answers, question.name) !== undefined
     ) {
-      return EMPTY;
+      return false;
     }
 
     const { when } = question;
-    if (when === false) {
-      return EMPTY;
+    if (typeof when === 'function') {
+      const shouldRun = await runAsync(when)(this.answers);
+      return shouldRun !== false;
     }
 
-    if (typeof when !== 'function') {
-      return of(question);
-    }
-
-    return defer(() =>
-      from(
-        runAsync(when)(this.answers).then((shouldRun: boolean | void) => {
-          if (shouldRun) {
-            return question;
-          }
-          return;
-        }),
-      ).pipe(filter((val) => val != null)),
-    );
+    return when !== false;
   };
 }
