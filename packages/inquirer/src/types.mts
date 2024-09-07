@@ -20,7 +20,7 @@ type AsyncCallbackFunction<R> = (
   ...args: [error: null | undefined, value: R] | [error: Error, value: undefined]
 ) => void;
 
-type AsyncGetterFunction<R, A extends Answers> = (
+export type AsyncGetterFunction<R, A extends Answers> = (
   this: { async: () => AsyncCallbackFunction<R> },
   answers: Prettify<Partial<A>>,
 ) => void | R | Promise<R>;
@@ -50,6 +50,10 @@ type KeyValueOrAsyncGetterFunction<T, k extends string, A extends Answers> =
 export type AnyQuestion<A extends Answers, Type extends string = string> = {
   type: Type;
   name: string;
+  message: string | AsyncGetterFunction<string, A>;
+  default?: any;
+  choices?: any;
+  filter?: (answer: any, answers: Partial<A>) => any;
   askAnswered?: boolean;
   when?: boolean | AsyncGetterFunction<boolean, A>;
 };
