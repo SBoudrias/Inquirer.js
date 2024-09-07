@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import stream from 'node:stream';
 import tty from 'node:tty';
+import readline from 'node:readline';
 import { vi, expect, beforeEach, afterEach, describe, it, expectTypeOf } from 'vitest';
 import { of } from 'rxjs';
 import { AbortPromptError, createPrompt } from '@inquirer/core';
@@ -153,6 +154,14 @@ describe('inquirer.prompt(...)', () => {
   });
 
   it("should close and create a new readline instances each time it's called", async () => {
+    const actualCreateInterface = readline.createInterface;
+    vi.spyOn(readline, 'createInterface').mockImplementation((opts) => {
+      const rl = actualCreateInterface(opts) as InquirerReadline;
+      vi.spyOn(rl, 'close');
+      vi.spyOn(rl.output, 'end');
+      return rl;
+    });
+
     const promise = inquirer.prompt([
       {
         type: 'stub',
@@ -161,11 +170,9 @@ describe('inquirer.prompt(...)', () => {
       },
     ]);
 
-    const rl1 = promise.ui.rl as InquirerReadline;
-    vi.spyOn(rl1, 'close');
-    vi.spyOn(rl1.output, 'end');
-
     await promise;
+    const rl1 = vi.mocked(readline.createInterface).mock.results[0]!
+      .value as InquirerReadline;
     expect(rl1.close).toHaveBeenCalledTimes(1);
     expect(rl1.output.end).toHaveBeenCalledTimes(1);
 
@@ -177,18 +184,24 @@ describe('inquirer.prompt(...)', () => {
       },
     ]);
 
-    const rl2 = promise2.ui.rl as InquirerReadline;
-    vi.spyOn(rl2, 'close');
-    vi.spyOn(rl2.output, 'end');
-
     await promise2;
+    const rl2 = vi.mocked(readline.createInterface).mock.results[1]!
+      .value as InquirerReadline;
     expect(rl2.close).toHaveBeenCalledTimes(1);
     expect(rl2.output.end).toHaveBeenCalledTimes(1);
 
-    expect(rl1).not.toEqual(rl2);
+    expect(rl1).not.toBe(rl2);
   });
 
   it('should close readline instance on rejected promise', async () => {
+    const actualCreateInterface = readline.createInterface;
+    vi.spyOn(readline, 'createInterface').mockImplementation((opts) => {
+      const rl = actualCreateInterface(opts) as InquirerReadline;
+      vi.spyOn(rl, 'close');
+      vi.spyOn(rl.output, 'end');
+      return rl;
+    });
+
     const promise = inquirer.prompt([
       {
         type: 'failing',
@@ -197,13 +210,11 @@ describe('inquirer.prompt(...)', () => {
       },
     ]);
 
-    const rl1 = promise.ui.rl as InquirerReadline;
-    vi.spyOn(rl1, 'close');
-    vi.spyOn(rl1.output, 'end');
-
     await promise.catch(() => {
-      expect(rl1.close).toHaveBeenCalledTimes(1);
-      expect(rl1.output.end).toHaveBeenCalledTimes(1);
+      const rl = vi.mocked(readline.createInterface).mock.results[0]!
+        .value as InquirerReadline;
+      expect(rl.close).toHaveBeenCalledTimes(1);
+      expect(rl.output.end).toHaveBeenCalledTimes(1);
     });
   });
 
