@@ -4549,6 +4549,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "inquirer@workspace:packages/inquirer"
   dependencies:
+    "@inquirer/core": "npm:^9.1.0"
     "@inquirer/prompts": "npm:^5.5.0"
     "@inquirer/type": "npm:^1.5.3"
     "@types/mute-stream": "npm:^0.0.4"

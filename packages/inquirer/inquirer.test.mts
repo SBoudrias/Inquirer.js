@@ -9,6 +9,7 @@ import stream from 'node:stream';
 import tty from 'node:tty';
 import { vi, expect, beforeEach, afterEach, describe, it, expectTypeOf } from 'vitest';
 import { of } from 'rxjs';
+import { AbortPromptError, createPrompt } from '@inquirer/core';
 import type { InquirerReadline } from '@inquirer/type';
 import inquirer, { type QuestionMap } from './src/index.mjs';
 import type { Answers } from './src/types.mjs';
@@ -755,6 +756,23 @@ describe('inquirer.prompt(...)', () => {
       inquirer.restoreDefaultPrompts();
       expect(ConfirmPrompt).toEqual(inquirer.prompt.prompts['confirm']);
     });
+  });
+});
+
+describe('AbortSignal support', () => {
+  it('modern prompts can be aborted through PromptModule constructor', async () => {
+    const abortController = new AbortController();
+    const localPrompt = inquirer.createPromptModule<TestQuestions>({
+      signal: abortController.signal,
+    });
+    localPrompt.registerPrompt(
+      'stub',
+      createPrompt(() => 'dummy prompt'),
+    );
+
+    const promise = localPrompt({ type: 'stub', name: 'q1', message: 'message' });
+    abortController.abort();
+    await expect(promise).rejects.toThrow(AbortPromptError);
   });
 });
 
