@@ -31,21 +31,15 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
     }) as InquirerReadline;
     const screen = new ScreenManager(rl);
 
-    const {
-      promise: rootPromise,
-      resolve,
-      reject,
-    } = PromisePolyfill.withResolver<Value>();
-    const promise = Object.assign(rootPromise, {
-      /** @deprecated pass an AbortSignal in the context options instead. See {@link https://github.com/SBoudrias/Inquirer.js#canceling-prompt} */
-      cancel: () => reject(new CancelPromptError()),
-    });
+    const { promise, resolve, reject } = PromisePolyfill.withResolver<Value>();
+    /** @deprecated pass an AbortSignal in the context options instead. See {@link https://github.com/SBoudrias/Inquirer.js#canceling-prompt} */
+    const cancel = () => reject(new CancelPromptError());
 
     if (signal) {
       const abort = () => reject(new AbortPromptError({ cause: signal.reason }));
       if (signal.aborted) {
         abort();
-        return promise;
+        return Object.assign(promise, { cancel });
       }
       signal.addEventListener('abort', abort);
       cleanups.add(() => signal.removeEventListener('abort', abort));
@@ -67,66 +61,54 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
     rl.input.on('keypress', checkCursorPos);
     cleanups.add(() => rl.input.removeListener('keypress', checkCursorPos));
 
-    withHooks(rl, (cycle) => {
-      const hooksCleanup = AsyncResource.bind(() => {
-        try {
-          effectScheduler.clearAll();
-        } catch (error) {
-          reject(error);
-        }
-      });
-      cleanups.add(hooksCleanup);
-
+    return withHooks(rl, (cycle) => {
       // The close event triggers immediately when the user press ctrl+c. SignalExit on the other hand
       // triggers after the process is done (which happens after timeouts are done triggering.)
       // We triggers the hooks cleanup phase on rl `close` so active timeouts can be cleared.
+      const hooksCleanup = AsyncResource.bind(() => effectScheduler.clearAll());
       rl.on('close', hooksCleanup);
       cleanups.add(() => rl.removeListener('close', hooksCleanup));
 
       cycle(() => {
-        let isCycleDone = false;
-        let afterCycle: (() => void) | undefined;
-        function done(value: Value) {
-          if (isCycleDone) {
-            setImmediate(() => {
-              hooksCleanup();
-              resolve(value);
-            });
-          } else {
-            afterCycle = () => {
-              hooksCleanup();
-              resolve(value);
-            };
-          }
-        }
-
         try {
-          const nextView = view(config, done);
+          const nextView = view(config, (value) => {
+            setImmediate(() => resolve(value));
+          });
 
           const [content, bottomContent] =
             typeof nextView === 'string' ? [nextView] : nextView;
           screen.render(content, bottomContent);
 
           effectScheduler.run();
-          isCycleDone = true;
-          afterCycle?.();
         } catch (error: unknown) {
           reject(error);
         }
       });
+
+      return Object.assign(
+        promise
+          .then(
+            (answer) => {
+              effectScheduler.clearAll();
+              return answer;
+            },
+            (error) => {
+              effectScheduler.clearAll();
+              throw error;
+            },
+          )
+          // Wait for the promise to settle, then cleanup.
+          .finally(() => {
+            cleanups.forEach((cleanup) => cleanup());
+
+            screen.done({ clearContent: Boolean(context?.clearPromptOnDone) });
+            output.end();
+          })
+          // Once cleanup is done, let the expose promise resolve/reject to the internal one.
+          .then(() => promise),
+        { cancel },
+      );
     });
-
-    // Wait for the promise to settle, then cleanup.
-    // We do this shadowing the promise so uncaught rejections errors are properly raised to the caller.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    Promise.allSettled([promise]).finally(() => {
-      cleanups.forEach((cleanup) => cleanup());
-
-      screen.done({ clearContent: Boolean(context?.clearPromptOnDone) });
-      output.end();
-    });
-
-    return promise;
   };
 
   return prompt;
