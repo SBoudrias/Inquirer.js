@@ -83,11 +83,12 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
       rl.on('close', hooksCleanup);
       cleanups.add(() => rl.removeListener('close', hooksCleanup));
 
-      function done(value: Value) {
-        resolve(value);
-      }
+      cycle((delayAfterCycle) => {
+        const done = delayAfterCycle((value: Value) => {
+          hooksCleanup();
+          resolve(value);
+        });
 
-      cycle(() => {
         try {
           const nextView = view(config, done);
 

@@ -30,14 +30,41 @@ function createStore(rl: InquirerReadline) {
 // Run callback in with the hook engine setup.
 export function withHooks(
   rl: InquirerReadline,
-  cb: (cycle: (render: () => void) => void) => void,
+  cb: (
+    cycle: (
+      render: (
+        delayAfterCycle: <T>(fn: (value: T) => void) => (value: T) => void,
+      ) => void,
+    ) => void,
+  ) => void,
 ) {
   const store = createStore(rl);
   return hookStorage.run(store, () => {
-    function cycle(render: () => void) {
+    function cycle(
+      render: (
+        delayAfterCycle: <T>(fn: (value: T) => void) => (value: T) => void,
+      ) => void,
+    ) {
       store.handleChange = () => {
         store.index = 0;
-        render();
+
+        let isCycleDone = false;
+        let afterCycle: (() => void) | undefined;
+        function delayAfterCycle<T>(fn: (value: T) => void) {
+          return (value: T) => {
+            if (isCycleDone) {
+              setImmediate(() => {
+                fn(value);
+              });
+            } else {
+              afterCycle = () => fn(value);
+            }
+          };
+        }
+
+        render(delayAfterCycle);
+        isCycleDone = true;
+        afterCycle?.();
       };
 
       store.handleChange();
