@@ -473,7 +473,7 @@ describe('createPrompt()', () => {
   });
 
   it('clear timeout when force closing', { timeout: 1000 }, async () => {
-    let exitSpy = vi.fn();
+    const exitSpy = vi.fn();
     const prompt = createPrompt(
       (config: { message: string }, done: (value: string) => void) => {
         const timeout = useRef<NodeJS.Timeout | undefined>();
@@ -486,7 +486,7 @@ describe('createPrompt()', () => {
           timeout.current = setTimeout(() => {}, 1000);
         });
 
-        exitSpy = vi.fn(() => {
+        exitSpy.mockImplementation(() => {
           clearTimeout(timeout.current);
           cleaned.current = true;
           // We call done explicitly, as onSignalExit is not triggered in this case
