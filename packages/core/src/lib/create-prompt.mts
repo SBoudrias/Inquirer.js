@@ -38,23 +38,11 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
     } = PromisePolyfill.withResolver<Value>();
     const promise = Object.assign(rootPromise, {
       /** @deprecated pass an AbortSignal in the context options instead. See {@link https://github.com/SBoudrias/Inquirer.js#canceling-prompt} */
-      cancel: () => fail(new CancelPromptError()),
+      cancel: () => reject(new CancelPromptError()),
     });
 
-    function onExit() {
-      cleanups.forEach((cleanup) => cleanup());
-
-      screen.done({ clearContent: Boolean(context?.clearPromptOnDone) });
-      output.end();
-    }
-
-    function fail(error: unknown) {
-      onExit();
-      reject(error);
-    }
-
     if (signal) {
-      const abort = () => fail(new AbortPromptError({ cause: signal.reason }));
+      const abort = () => reject(new AbortPromptError({ cause: signal.reason }));
       if (signal.aborted) {
         abort();
         return promise;
@@ -65,7 +53,9 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
     cleanups.add(
       onSignalExit((code, signal) => {
-        fail(new ExitPromptError(`User force closed the prompt with ${code} ${signal}`));
+        reject(
+          new ExitPromptError(`User force closed the prompt with ${code} ${signal}`),
+        );
       }),
     );
 
@@ -94,13 +84,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
       cleanups.add(() => rl.removeListener('close', hooksCleanup));
 
       function done(value: Value) {
-        // Delay execution to let time to the hookCleanup functions to registers.
-        setImmediate(() => {
-          onExit();
-
-          // Finally we resolve our promise
-          resolve(value);
-        });
+        resolve(value);
       }
 
       cycle(() => {
@@ -113,9 +97,19 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
           effectScheduler.run();
         } catch (error: unknown) {
-          fail(error);
+          reject(error);
         }
       });
+    });
+
+    // Wait for the promise to settle, then cleanup.
+    // We do this shadowing the promise so uncaught rejections errors are properly raised to the caller.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    Promise.allSettled([promise]).finally(() => {
+      cleanups.forEach((cleanup) => cleanup());
+
+      screen.done({ clearContent: Boolean(context?.clearPromptOnDone) });
+      output.end();
     });
 
     return promise;
