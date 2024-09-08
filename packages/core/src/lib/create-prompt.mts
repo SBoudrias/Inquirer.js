@@ -83,11 +83,23 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
       rl.on('close', hooksCleanup);
       cleanups.add(() => rl.removeListener('close', hooksCleanup));
 
-      function done(value: Value) {
-        resolve(value);
-      }
-
       cycle(() => {
+        let isCycleDone = false;
+        let afterCycle: (() => void) | undefined;
+        function done(value: Value) {
+          if (isCycleDone) {
+            setImmediate(() => {
+              hooksCleanup();
+              resolve(value);
+            });
+          } else {
+            afterCycle = () => {
+              hooksCleanup();
+              resolve(value);
+            };
+          }
+        }
+
         try {
           const nextView = view(config, done);
 
@@ -96,6 +108,8 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           screen.render(content, bottomContent);
 
           effectScheduler.run();
+          isCycleDone = true;
+          afterCycle?.();
         } catch (error: unknown) {
           reject(error);
         }
