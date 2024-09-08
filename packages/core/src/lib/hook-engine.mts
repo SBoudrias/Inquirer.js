@@ -28,10 +28,10 @@ function createStore(rl: InquirerReadline) {
 }
 
 // Run callback in with the hook engine setup.
-export function withHooks(
+export function withHooks<T>(
   rl: InquirerReadline,
-  cb: (cycle: (render: () => void) => void) => void,
-) {
+  cb: (cycle: (render: () => void) => void) => T,
+): T {
   const store = createStore(rl);
   return hookStorage.run(store, () => {
     function cycle(render: () => void) {
@@ -43,7 +43,7 @@ export function withHooks(
       store.handleChange();
     }
 
-    cb(cycle);
+    return cb(cycle);
   });
 }
 
