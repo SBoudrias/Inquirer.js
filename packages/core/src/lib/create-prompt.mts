@@ -69,6 +69,14 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
       }),
     );
 
+    // Re-renders only happen when the state change; but the readline cursor could change position
+    // and that also requires a re-render (and a manual one because we mute the streams).
+    // We set the listener after the initial workLoop to avoid a double render if render triggered
+    // by a state change sets the cursor to the right position.
+    const checkCursorPos = () => screen.checkCursorPos();
+    rl.input.on('keypress', checkCursorPos);
+    cleanups.add(() => rl.input.removeListener('keypress', checkCursorPos));
+
     withHooks(rl, (cycle) => {
       const hooksCleanup = AsyncResource.bind(() => {
         try {
@@ -78,14 +86,6 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
         }
       });
       cleanups.add(hooksCleanup);
-
-      // Re-renders only happen when the state change; but the readline cursor could change position
-      // and that also requires a re-render (and a manual one because we mute the streams).
-      // We set the listener after the initial workLoop to avoid a double render if render triggered
-      // by a state change sets the cursor to the right position.
-      const checkCursorPos = () => screen.checkCursorPos();
-      rl.input.on('keypress', checkCursorPos);
-      cleanups.add(() => rl.input.removeListener('keypress', checkCursorPos));
 
       // The close event triggers immediately when the user press ctrl+c. SignalExit on the other hand
       // triggers after the process is done (which happens after timeouts are done triggering.)
