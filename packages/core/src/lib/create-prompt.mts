@@ -4,7 +4,8 @@ import { type Prompt, type Prettify } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import { onExit as onSignalExit } from 'signal-exit';
 import ScreenManager from './screen-manager.mjs';
-import { CancelablePromise, type InquirerReadline } from '@inquirer/type';
+import { PromisePolyfill } from './promise-polyfill.mjs';
+import { type InquirerReadline } from '@inquirer/type';
 import { withHooks, effectScheduler } from './hook-engine.mjs';
 import { AbortPromptError, CancelPromptError, ExitPromptError } from './errors.mjs';
 
@@ -17,6 +18,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
   const prompt: Prompt<Value, Config> = (config, context = {}) => {
     // Default `input` to stdin
     const { input = process.stdin, signal } = context;
+    const cleanups = new Set<() => void>();
 
     // Add mute capabilities to the output
     const output = new MuteStream();
@@ -29,8 +31,15 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
     }) as InquirerReadline;
     const screen = new ScreenManager(rl);
 
-    const cleanups = new Set<() => void>();
-    const { promise, resolve, reject } = CancelablePromise.withResolver<Value>();
+    const {
+      promise: rootPromise,
+      resolve,
+      reject,
+    } = PromisePolyfill.withResolver<Value>();
+    const promise = Object.assign(rootPromise, {
+      /** @deprecated pass an AbortSignal in the context options instead. See {@link https://github.com/SBoudrias/Inquirer.js#canceling-prompt} */
+      cancel: () => fail(new CancelPromptError()),
+    });
 
     function onExit() {
       cleanups.forEach((cleanup) => cleanup());
@@ -54,15 +63,13 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
       cleanups.add(() => signal.removeEventListener('abort', abort));
     }
 
-    withHooks(rl, (cycle) => {
-      cleanups.add(
-        onSignalExit((code, signal) => {
-          fail(
-            new ExitPromptError(`User force closed the prompt with ${code} ${signal}`),
-          );
-        }),
-      );
+    cleanups.add(
+      onSignalExit((code, signal) => {
+        fail(new ExitPromptError(`User force closed the prompt with ${code} ${signal}`));
+      }),
+    );
 
+    withHooks(rl, (cycle) => {
       const hooksCleanup = AsyncResource.bind(() => {
         try {
           effectScheduler.clearAll();
@@ -111,9 +118,6 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
       });
     });
 
-    promise.cancel = () => {
-      fail(new CancelPromptError());
-    };
     return promise;
   };
 
