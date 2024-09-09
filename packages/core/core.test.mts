@@ -23,6 +23,7 @@ import {
   ValidationError,
   HookError,
   type KeypressEvent,
+  makeTheme,
 } from './src/index.mjs';
 
 describe('createPrompt()', () => {
@@ -371,12 +372,15 @@ describe('createPrompt()', () => {
 
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       const [status, setStatus] = useState('loading');
-      const prefix = usePrefix({ status });
+      const prefix = usePrefix({
+        status,
+        theme: makeTheme({ prefix: (s: string) => (s === 'done' ? '✔' : '?') }),
+      });
 
       useEffect(() => {
         setTimeout(
           AsyncResource.bind(() => {
-            setStatus('idle');
+            setStatus('done');
           }),
           totalDuration,
         );
@@ -408,7 +412,7 @@ describe('createPrompt()', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"⠸ Question"`);
 
     vi.advanceTimersByTime(totalDuration);
-    expect(getScreen()).toMatchInlineSnapshot(`"? Question"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Question"`);
 
     vi.useRealTimers();
 
