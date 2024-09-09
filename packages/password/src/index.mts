@@ -54,7 +54,7 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     }
   });
 
-  const message = theme.style.message(config.message);
+  const message = theme.style.message(config.message, status);
 
   let formattedValue = '';
   let helpTip;

@@ -220,7 +220,7 @@ export default createPrompt(
       }
     });
 
-    const message = theme.style.message(config.message);
+    const message = theme.style.message(config.message, status);
 
     let description;
     const page = usePagination({

@@ -10,7 +10,7 @@ type DefaultTheme = {
   };
   style: {
     answer: (text: string) => string;
-    message: (text: string) => string;
+    message: (text: string, status: string) => string;
     error: (text: string) => string;
     defaultAnswer: (text: string) => string;
     help: (text: string) => string;
