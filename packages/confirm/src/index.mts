@@ -21,7 +21,7 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   const [status, setStatus] = useState('pending');
   const [value, setValue] = useState('');
   const theme = makeTheme(config.theme);
-  const prefix = usePrefix({ theme });
+  const prefix = usePrefix({ status, theme });
 
   useKeypress((key, rl) => {
     if (isEnterKey(key)) {

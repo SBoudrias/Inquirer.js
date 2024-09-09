@@ -371,7 +371,7 @@ describe('createPrompt()', () => {
 
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       const [status, setStatus] = useState('loading');
-      const prefix = usePrefix({ isLoading: status === 'loading' });
+      const prefix = usePrefix({ status });
 
       useEffect(() => {
         setTimeout(

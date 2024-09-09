@@ -110,8 +110,8 @@ export default createPrompt(
     const { loop = true, pageSize = 7 } = config;
     const firstRender = useRef(true);
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
-    const prefix = usePrefix({ theme });
     const [status, setStatus] = useState('pending');
+    const prefix = usePrefix({ status, theme });
     const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
     const items = useMemo(() => normalizeChoices(config.choices), [config.choices]);

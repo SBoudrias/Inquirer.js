@@ -81,7 +81,7 @@ export default createPrompt(
     const [value, setValue] = useState<string>('');
     const [errorMsg, setError] = useState<string>();
     const theme = makeTheme(config.theme);
-    const prefix = usePrefix({ theme });
+    const prefix = usePrefix({ status, theme });
 
     useKeypress((key, rl) => {
       if (isEnterKey(key)) {

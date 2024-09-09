@@ -151,9 +151,9 @@ export default createPrompt(
       validate = () => true,
     } = config;
     const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme);
-    const prefix = usePrefix({ theme });
     const firstRender = useRef(true);
     const [status, setStatus] = useState('pending');
+    const prefix = usePrefix({ status, theme });
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
       normalizeChoices(config.choices),
     );

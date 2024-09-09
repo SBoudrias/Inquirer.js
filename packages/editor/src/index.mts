@@ -29,8 +29,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
   const [value, setValue] = useState<string>(config.default || '');
   const [errorMsg, setError] = useState<string>();
 
-  const isLoading = status === 'loading';
-  const prefix = usePrefix({ isLoading, theme });
+  const prefix = usePrefix({ status, theme });
 
   function startEditor(rl: InquirerReadline) {
     rl.pause();

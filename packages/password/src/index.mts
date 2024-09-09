@@ -25,8 +25,7 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
   const [errorMsg, setError] = useState<string>();
   const [value, setValue] = useState<string>('');
 
-  const isLoading = status === 'loading';
-  const prefix = usePrefix({ isLoading, theme });
+  const prefix = usePrefix({ status, theme });
 
   useKeypress(async (key, rl) => {
     // Ignore keypress while our prompt is doing other processing.

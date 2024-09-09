@@ -3,7 +3,7 @@ import spinners from 'cli-spinners';
 import type { Prettify } from '@inquirer/type';
 
 type DefaultTheme = {
-  prefix: string;
+  prefix: string | ((status: string) => string);
   spinner: {
     interval: number;
     frames: string[];
