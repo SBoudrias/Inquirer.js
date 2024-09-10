@@ -31,33 +31,15 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
     }) as InquirerReadline;
     const screen = new ScreenManager(rl);
 
-    const {
-      promise: rootPromise,
-      resolve,
-      reject,
-    } = PromisePolyfill.withResolver<Value>();
-    const promise = Object.assign(rootPromise, {
-      /** @deprecated pass an AbortSignal in the context options instead. See {@link https://github.com/SBoudrias/Inquirer.js#canceling-prompt} */
-      cancel: () => fail(new CancelPromptError()),
-    });
-
-    function onExit() {
-      cleanups.forEach((cleanup) => cleanup());
-
-      screen.done({ clearContent: Boolean(context?.clearPromptOnDone) });
-      output.end();
-    }
-
-    function fail(error: unknown) {
-      onExit();
-      reject(error);
-    }
+    const { promise, resolve, reject } = PromisePolyfill.withResolver<Value>();
+    /** @deprecated pass an AbortSignal in the context options instead. See {@link https://github.com/SBoudrias/Inquirer.js#canceling-prompt} */
+    const cancel = () => reject(new CancelPromptError());
 
     if (signal) {
-      const abort = () => fail(new AbortPromptError({ cause: signal.reason }));
+      const abort = () => reject(new AbortPromptError({ cause: signal.reason }));
       if (signal.aborted) {
         abort();
-        return promise;
+        return Object.assign(promise, { cancel });
       }
       signal.addEventListener('abort', abort);
       cleanups.add(() => signal.removeEventListener('abort', abort));
@@ -65,7 +47,9 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
     cleanups.add(
       onSignalExit((code, signal) => {
-        fail(new ExitPromptError(`User force closed the prompt with ${code} ${signal}`));
+        reject(
+          new ExitPromptError(`User force closed the prompt with ${code} ${signal}`),
+        );
       }),
     );
 
@@ -77,35 +61,19 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
     rl.input.on('keypress', checkCursorPos);
     cleanups.add(() => rl.input.removeListener('keypress', checkCursorPos));
 
-    withHooks(rl, (cycle) => {
-      const hooksCleanup = AsyncResource.bind(() => {
-        try {
-          effectScheduler.clearAll();
-        } catch (error) {
-          reject(error);
-        }
-      });
-      cleanups.add(hooksCleanup);
-
+    return withHooks(rl, (cycle) => {
       // The close event triggers immediately when the user press ctrl+c. SignalExit on the other hand
       // triggers after the process is done (which happens after timeouts are done triggering.)
       // We triggers the hooks cleanup phase on rl `close` so active timeouts can be cleared.
+      const hooksCleanup = AsyncResource.bind(() => effectScheduler.clearAll());
       rl.on('close', hooksCleanup);
       cleanups.add(() => rl.removeListener('close', hooksCleanup));
 
-      function done(value: Value) {
-        // Delay execution to let time to the hookCleanup functions to registers.
-        setImmediate(() => {
-          onExit();
-
-          // Finally we resolve our promise
-          resolve(value);
-        });
-      }
-
       cycle(() => {
         try {
-          const nextView = view(config, done);
+          const nextView = view(config, (value) => {
+            setImmediate(() => resolve(value));
+          });
 
           const [content, bottomContent] =
             typeof nextView === 'string' ? [nextView] : nextView;
@@ -113,12 +81,34 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
 
           effectScheduler.run();
         } catch (error: unknown) {
-          fail(error);
+          reject(error);
         }
       });
-    });
 
-    return promise;
+      return Object.assign(
+        promise
+          .then(
+            (answer) => {
+              effectScheduler.clearAll();
+              return answer;
+            },
+            (error) => {
+              effectScheduler.clearAll();
+              throw error;
+            },
+          )
+          // Wait for the promise to settle, then cleanup.
+          .finally(() => {
+            cleanups.forEach((cleanup) => cleanup());
+
+            screen.done({ clearContent: Boolean(context?.clearPromptOnDone) });
+            output.end();
+          })
+          // Once cleanup is done, let the expose promise resolve/reject to the internal one.
+          .then(() => promise),
+        { cancel },
+      );
+    });
   };
 
   return prompt;
