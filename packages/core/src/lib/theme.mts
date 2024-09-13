@@ -22,15 +22,10 @@ type DefaultTheme = {
    * If `status === 'loading'`, this property is ignored and the spinner (styled
    * by the `spinner` property) will be displayed instead.
    *
-   * @example
-   * ```ts
-   * (status) => status === 'done' ? colors.green('✔') : colors.green('?')
-   * ```
-   *
    * @defaultValue
    * ```ts
    * // import colors from 'yoctocolors-cjs';
-   * colors.green('?')
+   * (status) => status === 'done' ? colors.green('✔') : colors.blue('?')
    * ```
    */
   prefix: string | ((status: Status) => string);
@@ -168,7 +163,7 @@ type DefaultTheme = {
 export type Theme<Extension extends object = object> = Prettify<Extension & DefaultTheme>;
 
 export const defaultTheme: DefaultTheme = {
-  prefix: colors.green('?'),
+  prefix: (status) => (status === 'done' ? colors.green('✔') : colors.blue('?')),
   spinner: {
     interval: spinners.dots.interval,
     frames: spinners.dots.frames.map((frame) => colors.yellow(frame)),
