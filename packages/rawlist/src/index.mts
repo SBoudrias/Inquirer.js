@@ -8,6 +8,7 @@ import {
   Separator,
   makeTheme,
   type Theme,
+  type Status,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 import colors from 'yoctocolors-cjs';
@@ -77,7 +78,7 @@ function normalizeChoices<Value>(
 export default createPrompt(
   <Value,>(config: RawlistConfig<Value>, done: (value: Value) => void) => {
     const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
-    const [status, setStatus] = useState<string>('pending');
+    const [status, setStatus] = useState<Status>('idle');
     const [value, setValue] = useState<string>('');
     const [errorMsg, setError] = useState<string>();
     const theme = makeTheme(config.theme);

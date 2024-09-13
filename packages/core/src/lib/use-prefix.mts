@@ -2,13 +2,13 @@ import { AsyncResource } from 'node:async_hooks';
 import { useState } from './use-state.mjs';
 import { useEffect } from './use-effect.mjs';
 import { makeTheme } from './make-theme.mjs';
-import { type Theme } from './theme.mjs';
+import type { Theme, Status } from './theme.mjs';
 
 export function usePrefix({
-  status = 'pending',
+  status = 'idle',
   theme,
 }: {
-  status?: string;
+  status?: Status;
   theme?: Theme;
 }): string {
   const [showLoader, setShowLoader] = useState(false);

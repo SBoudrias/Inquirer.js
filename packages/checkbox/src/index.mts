@@ -15,6 +15,7 @@ import {
   ValidationError,
   Separator,
   type Theme,
+  type Status,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 import colors from 'yoctocolors-cjs';
@@ -152,7 +153,7 @@ export default createPrompt(
     } = config;
     const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme);
     const firstRender = useRef(true);
-    const [status, setStatus] = useState('pending');
+    const [status, setStatus] = useState<Status>('idle');
     const prefix = usePrefix({ status, theme });
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
       normalizeChoices(config.choices),

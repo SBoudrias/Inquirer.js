@@ -338,11 +338,12 @@ import {
   useKeypress,
   isEnterKey,
   usePrefix,
+  type Status,
 } from '@inquirer/core';
 
 const confirm = createPrompt<boolean, { message: string; default?: boolean }>(
   (config, done) => {
-    const [status, setStatus] = useState('pending');
+    const [status, setStatus] = useState<Status>('idle');
     const [value, setValue] = useState('');
     const prefix = usePrefix({});
 

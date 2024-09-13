@@ -6,6 +6,7 @@ import {
   isEnterKey,
   makeTheme,
   type Theme,
+  type Status,
 } from '@inquirer/core';
 import ansiEscapes from 'ansi-escapes';
 import type { PartialDeep } from '@inquirer/type';
@@ -21,7 +22,7 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
   const { validate = () => true } = config;
   const theme = makeTheme(config.theme);
 
-  const [status, setStatus] = useState<string>('pending');
+  const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setError] = useState<string>();
   const [value, setValue] = useState<string>('');
 
@@ -29,7 +30,7 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
 
   useKeypress(async (key, rl) => {
     // Ignore keypress while our prompt is doing other processing.
-    if (status !== 'pending') {
+    if (status !== 'idle') {
       return;
     }
 
@@ -46,7 +47,7 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
         // get cleared, forcing the user to re-enter the value instead of fixing it.
         rl.write(value);
         setError(isValid || 'You must provide a valid value');
-        setStatus('pending');
+        setStatus('idle');
       }
     } else {
       setValue(rl.line);

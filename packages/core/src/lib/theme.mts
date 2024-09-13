@@ -2,12 +2,21 @@ import colors from 'yoctocolors-cjs';
 import spinners from 'cli-spinners';
 import type { Prettify } from '@inquirer/type';
 
+/**
+ * Union type representing the possible statuses of a prompt.
+ *
+ * -   `'loading'`: The prompt is currently loading.
+ * -   `'idle'`: The prompt is loaded and currently waiting for the user to
+ *     submit an answer.
+ * -   `'done'`: The user has submitted an answer and the prompt is finished.
+ */
+export type Status = 'loading' | 'idle' | 'done';
+
 type DefaultTheme = {
   /**
    * Prefix to prepend to the message. If a function is provided, it will be
-   * called with the current status of the prompt (this will usually be
-   * `'pending'`, `'done'`, or `'loading'`), and the return value will be used
-   * as the prefix.
+   * called with the current status of the prompt, and the return value will be
+   * used as the prefix.
    *
    * @remarks
    * If `status === 'loading'`, this property is ignored and the spinner (styled
@@ -24,7 +33,7 @@ type DefaultTheme = {
    * colors.green('?')
    * ```
    */
-  prefix: string | ((status: string) => string);
+  prefix: string | ((status: Status) => string);
 
   /**
    * Configuration for the spinner that is displayed when the prompt is in the
@@ -82,7 +91,7 @@ type DefaultTheme = {
      * (text, status) => colors.bold(text)
      * ```
      */
-    message: (text: string, status: string) => string;
+    message: (text: string, status: Status) => string;
 
     /**
      * Style to apply to error messages.

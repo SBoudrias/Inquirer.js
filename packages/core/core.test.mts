@@ -24,6 +24,7 @@ import {
   HookError,
   type KeypressEvent,
   makeTheme,
+  type Status,
 } from './src/index.mjs';
 
 describe('createPrompt()', () => {
@@ -371,7 +372,7 @@ describe('createPrompt()', () => {
     const totalDuration = interval * spinners.dots.frames.length;
 
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
-      const [status, setStatus] = useState('loading');
+      const [status, setStatus] = useState<Status>('loading');
       const prefix = usePrefix({
         status,
         theme: makeTheme({ prefix: (s: string) => (s === 'done' ? '✔' : '?') }),

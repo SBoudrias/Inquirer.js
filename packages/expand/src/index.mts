@@ -8,6 +8,7 @@ import {
   makeTheme,
   Separator,
   type Theme,
+  type Status,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 import colors from 'yoctocolors-cjs';
@@ -103,7 +104,7 @@ export default createPrompt(
   <Value,>(config: ExpandConfig<Value>, done: (value: Value) => void) => {
     const { default: defaultKey = 'h' } = config;
     const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
-    const [status, setStatus] = useState<string>('pending');
+    const [status, setStatus] = useState<Status>('idle');
     const [value, setValue] = useState<string>('');
     const [expanded, setExpanded] = useState<boolean>(config.expanded ?? false);
     const [errorMsg, setError] = useState<string>();
