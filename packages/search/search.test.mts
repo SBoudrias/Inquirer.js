@@ -69,7 +69,7 @@ describe('search prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual('NB');
     expect(getScreen()).toMatchInlineSnapshot(
-      `"? Select a Canadian province New Brunswick"`,
+      `"✔ Select a Canadian province New Brunswick"`,
     );
   });
 
@@ -176,7 +176,7 @@ describe('search prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual('NL');
     expect(getScreen()).toMatchInlineSnapshot(
-      `"? Select a Canadian province Newfoundland and Labrador"`,
+      `"✔ Select a Canadian province Newfoundland and Labrador"`,
     );
   });
 
@@ -222,7 +222,7 @@ describe('search prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual('NB');
     expect(getScreen()).toMatchInlineSnapshot(
-      `"? Select a Canadian province New Brunswick"`,
+      `"✔ Select a Canadian province New Brunswick"`,
     );
   });
 
@@ -328,7 +328,7 @@ describe('search prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('United States');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Select a country United States"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a country United States"`);
   });
 
   it('handles choices with descriptions', async () => {

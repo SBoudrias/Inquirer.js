@@ -28,7 +28,7 @@ describe('rawlist prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 4"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 4"');
 
     await expect(answer).resolves.toEqual(4);
   });
@@ -50,7 +50,7 @@ describe('rawlist prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 4"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 4"');
 
     await expect(answer).resolves.toEqual('4');
   });
@@ -82,7 +82,7 @@ describe('rawlist prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('MX');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Select a country Mex"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a country Mex"`);
   });
 
   it('skip separator by number key', async () => {
@@ -111,7 +111,7 @@ describe('rawlist prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Pepperoni"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
 
     await expect(answer).resolves.toEqual('pepperoni');
   });
@@ -202,7 +202,7 @@ describe('rawlist prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number No"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number No"');
 
     await expect(answer).resolves.toEqual('no');
   });

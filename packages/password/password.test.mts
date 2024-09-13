@@ -21,7 +21,7 @@ describe('password prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('John');
-    expect(getScreen()).toMatchInlineSnapshot('"? Enter your password"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Enter your password"');
   });
 
   it('handle masked input', async () => {
@@ -39,7 +39,7 @@ describe('password prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('John');
-    expect(getScreen()).toMatchInlineSnapshot('"? Enter your password ****"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Enter your password ****"');
   });
 
   it('handle custom masked input', async () => {
@@ -57,7 +57,7 @@ describe('password prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('John');
-    expect(getScreen()).toMatchInlineSnapshot('"? Enter your password %%%%"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Enter your password %%%%"');
   });
 
   it('handle synchronous validation', async () => {

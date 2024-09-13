@@ -72,7 +72,7 @@ describe('expand prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? Abort"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? Abort"`);
 
     await expect(answer).resolves.toEqual('abort');
   });
@@ -139,7 +139,7 @@ describe('expand prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? Abort"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? Abort"`);
 
     await expect(answer).resolves.toEqual('abort');
   });
@@ -191,7 +191,7 @@ describe('expand prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? npm"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? npm"`);
 
     await expect(answer).resolves.toEqual('npm');
   });
@@ -211,7 +211,7 @@ describe('expand prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? Overwrite"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Overwrite this file? Overwrite"');
 
     await expect(answer).resolves.toEqual('Overwrite');
   });
@@ -231,7 +231,7 @@ describe('expand prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? overwrite"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Overwrite this file? overwrite"');
 
     await expect(answer).resolves.toEqual('overwrite');
   });
@@ -297,7 +297,7 @@ describe('expand prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (Yadxh)"');
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? Overwrite"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? Overwrite"`);
 
     await expect(answer).resolves.toEqual('overwrite');
   });

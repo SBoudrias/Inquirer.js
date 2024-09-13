@@ -17,7 +17,7 @@ describe('number prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(42);
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your age 42"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 42"`);
   });
 
   it('handle non numeric input', async () => {
@@ -48,7 +48,7 @@ describe('number prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual(2);
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your age 2"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 2"`);
   });
 
   it('supports min/max options', async () => {
@@ -84,7 +84,7 @@ describe('number prompt', () => {
     events.type('30');
     events.keypress('enter');
     await expect(answer).resolves.toEqual(30);
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your age 30"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 30"`);
   });
 
   it('supports step option', async () => {
@@ -108,7 +108,7 @@ describe('number prompt', () => {
     events.type('15');
     events.keypress('enter');
     await expect(answer).resolves.toEqual(15);
-    expect(getScreen()).toMatchInlineSnapshot(`"? Enter an increment of 5 15"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter an increment of 5 15"`);
   });
 
   it('supports step option from min', async () => {
@@ -134,7 +134,7 @@ describe('number prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual(13);
-    expect(getScreen()).toMatchInlineSnapshot(`"? Enter an increment of 5 13"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter an increment of 5 13"`);
   });
 
   it('drops invalid default', async () => {
@@ -150,7 +150,7 @@ describe('number prompt', () => {
     events.type('22');
     events.keypress('enter');
     await expect(answer).resolves.toEqual(22);
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your age 22"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 22"`);
   });
 
   it('handle synchronous validation', async () => {
@@ -223,7 +223,7 @@ describe('number prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual(35);
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your age 35"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 35"`);
   });
 
   it('handle overwriting the default option', async () => {
@@ -237,7 +237,7 @@ describe('number prompt', () => {
     events.type('37');
     events.keypress('enter');
     await expect(answer).resolves.toEqual(37);
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your age 37"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 37"`);
   });
 
   it('handle removing the default option', async () => {
@@ -251,7 +251,7 @@ describe('number prompt', () => {
     events.keypress('backspace');
     events.keypress('enter');
     await expect(answer).resolves.toEqual(undefined);
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your age"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age"`);
   });
 
   it('handle removing the default option with required prompt', async () => {
@@ -274,7 +274,7 @@ describe('number prompt', () => {
     events.type('1');
     events.keypress('enter');
     await expect(answer).resolves.toEqual(1);
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your age 1"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 1"`);
   });
 
   it('handle editing the default option', async () => {
@@ -291,7 +291,7 @@ describe('number prompt', () => {
     events.type('1');
     events.keypress('enter');
     await expect(answer).resolves.toEqual(351);
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your age 351"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 351"`);
   });
 
   it('handle editing the answer (properly tracks cursor position)', async () => {
@@ -314,7 +314,7 @@ describe('number prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual(312);
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your age 312"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 312"`);
   });
 
   it('is theme-able', async () => {
@@ -364,6 +364,6 @@ describe('number prompt', () => {
     events.type('10.01');
     events.keypress('enter');
     await expect(answer).resolves.toEqual(10.01);
-    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a decimal number 10.01"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a decimal number 10.01"`);
   });
 });

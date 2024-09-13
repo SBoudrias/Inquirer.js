@@ -55,7 +55,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([2, 3]);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 2, 3"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2, 3"');
   });
 
   it('works with string choices', async () => {
@@ -83,7 +83,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual(['Option B']);
-    expect(getScreen()).toMatchInlineSnapshot(`"? Select a number Option B"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number Option B"`);
   });
 
   it('does not scroll up beyond first item when not looping', async () => {
@@ -121,7 +121,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
   });
 
   it('does not scroll up beyond first selectable item when not looping', async () => {
@@ -159,7 +159,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
   });
 
   it('does not scroll down beyond last option when not looping', async () => {
@@ -198,7 +198,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([12]);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 12"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 12"');
   });
 
   it('does not scroll down beyond last selectable option when not looping', async () => {
@@ -237,7 +237,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([12]);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 12"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 12"');
   });
 
   it('use number key to select an option', async () => {
@@ -261,7 +261,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([4]);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 4"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 4"');
   });
 
   it('allow setting a smaller page size', async () => {
@@ -368,7 +368,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual(['pepperoni']);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Pepperoni"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
   });
 
   it('skip disabled options by number key', async () => {
@@ -400,7 +400,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([]);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping"');
   });
 
   it('skip separator by arrow keys', async () => {
@@ -432,7 +432,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual(['pepperoni']);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Pepperoni"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
   });
 
   it('skip separator by number key', async () => {
@@ -464,7 +464,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([]);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping"');
   });
 
   it('allow select all', async () => {
@@ -589,7 +589,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([]);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number"');
   });
 
   it('allow customizing help tip', async () => {
@@ -615,7 +615,7 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([]);
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number"');
   });
 
   it('throws if all choices are disabled', async () => {
@@ -826,7 +826,7 @@ describe('checkbox prompt', () => {
 
       await answer;
       expect(getScreen()).toMatchInlineSnapshot(
-        '"? Select your favourite number. You have selected 1 and 2 more."',
+        '"✔ Select your favourite number. You have selected 1 and 2 more."',
       );
     });
 
@@ -872,7 +872,9 @@ describe('checkbox prompt', () => {
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual(['2cc9e311', '3272b94a']);
-      expect(getScreen()).toMatchInlineSnapshot(`"? Select a commit 2cc9e311, 3272b94a"`);
+      expect(getScreen()).toMatchInlineSnapshot(
+        `"✔ Select a commit 2cc9e311, 3272b94a"`,
+      );
     });
 
     it('using allChoices parameter', async () => {
@@ -899,7 +901,7 @@ describe('checkbox prompt', () => {
 
       await answer;
       expect(getScreen()).toMatchInlineSnapshot(
-        '"? Select your favourite number. You have selected 2 out of 12 options."',
+        '"✔ Select your favourite number. You have selected 2 out of 12 options."',
       );
     });
   });
@@ -961,7 +963,7 @@ describe('checkbox prompt', () => {
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual([2]);
-      expect(getScreen()).toMatchInlineSnapshot(`"? Select a number 2"`);
+      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
     });
 
     it('helpMode: always', async () => {
@@ -1020,7 +1022,7 @@ describe('checkbox prompt', () => {
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual([2]);
-      expect(getScreen()).toMatchInlineSnapshot(`"? Select a number 2"`);
+      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
     });
 
     it('helpMode: never', async () => {
@@ -1073,7 +1075,7 @@ describe('checkbox prompt', () => {
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual([2]);
-      expect(getScreen()).toMatchInlineSnapshot(`"? Select a number 2"`);
+      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
     });
   });
 });
