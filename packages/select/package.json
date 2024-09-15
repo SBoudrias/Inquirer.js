@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/select",
-  "version": "2.5.0",
+  "version": "3.0.0",
   "description": "Inquirer select/list prompt",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -54,14 +54,14 @@
   "license": "MIT",
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/select/README.md",
   "dependencies": {
-    "@inquirer/core": "^9.1.0",
+    "@inquirer/core": "^9.2.0",
     "@inquirer/figures": "^1.0.5",
-    "@inquirer/type": "^1.5.3",
+    "@inquirer/type": "^1.5.4",
     "ansi-escapes": "^4.3.2",
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
-    "@inquirer/testing": "^2.1.32"
+    "@inquirer/testing": "^2.1.33"
   },
   "scripts": {
     "tsc": "yarn run tsc:esm && yarn run tsc:cjs",

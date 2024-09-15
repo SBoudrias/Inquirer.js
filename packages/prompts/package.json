@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/prompts",
-  "version": "5.5.0",
+  "version": "6.0.0",
   "description": "Inquirer prompts, combined in a single package",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
@@ -76,19 +76,19 @@
     }
   },
   "dependencies": {
-    "@inquirer/checkbox": "^2.5.0",
-    "@inquirer/confirm": "^3.2.0",
-    "@inquirer/editor": "^2.2.0",
-    "@inquirer/expand": "^2.3.0",
-    "@inquirer/input": "^2.3.0",
-    "@inquirer/number": "^1.1.0",
-    "@inquirer/password": "^2.2.0",
-    "@inquirer/rawlist": "^2.3.0",
-    "@inquirer/search": "^1.1.0",
-    "@inquirer/select": "^2.5.0"
+    "@inquirer/checkbox": "^3.0.0",
+    "@inquirer/confirm": "^4.0.0",
+    "@inquirer/editor": "^3.0.0",
+    "@inquirer/expand": "^3.0.0",
+    "@inquirer/input": "^3.0.0",
+    "@inquirer/number": "^2.0.0",
+    "@inquirer/password": "^3.0.0",
+    "@inquirer/rawlist": "^3.0.0",
+    "@inquirer/search": "^2.0.0",
+    "@inquirer/select": "^3.0.0"
   },
   "devDependencies": {
-    "@inquirer/type": "^1.5.3"
+    "@inquirer/type": "^1.5.4"
   },
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/prompts/README.md",
   "sideEffects": false
