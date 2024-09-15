@@ -7,7 +7,7 @@ export function useState<Value>(
 ): [Value, (newValue: Value) => void];
 export function useState<Value>(
   defaultValue?: NotFunction<Value> | (() => Value),
-): [Value | undefined, (newValue?: Value | undefined) => void];
+): [Value | undefined, (newValue?: Value) => void];
 export function useState<Value>(defaultValue: NotFunction<Value> | (() => Value)) {
   return withPointer<Value, [Value, (newValue: Value) => void]>((pointer) => {
     const setFn = (newValue: Value) => {
