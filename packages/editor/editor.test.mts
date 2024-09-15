@@ -37,7 +37,7 @@ describe('editor prompt', () => {
     await editorAction(undefined, 'value from editor');
 
     await expect(answer).resolves.toEqual('value from editor');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Add a description"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
 
   it('open editor immediately', async () => {
@@ -50,7 +50,7 @@ describe('editor prompt', () => {
     await editorAction(undefined, 'value from editor');
 
     await expect(answer).resolves.toEqual('value from editor');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Add a description"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
 
   it('allow setting a default value & postfix', async () => {
@@ -70,7 +70,7 @@ describe('editor prompt', () => {
     await editorAction(undefined, 'value from editor');
 
     await expect(answer).resolves.toEqual('value from editor');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Add a description"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
 
   it('handles validation', async () => {
@@ -119,7 +119,7 @@ describe('editor prompt', () => {
 
     await editorAction(undefined, '1');
     await expect(answer).resolves.toEqual('1');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Add a description"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
 
   it('surfaces external-editor errors', async () => {
@@ -144,6 +144,6 @@ describe('editor prompt', () => {
     await editorAction(undefined, 'new value');
 
     await expect(answer).resolves.toEqual('new value');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Add a description"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
 });

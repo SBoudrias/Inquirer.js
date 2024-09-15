@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import { select } from '@inquirer/prompts';
+import colors from 'yoctocolors-cjs';
+import figures from '@inquirer/figures';
 import checkboxDemo from './demos/checkbox.mjs';
 import confirmDemo from './demos/confirm.mjs';
 import editorDemo from './demos/editor.mjs';
@@ -46,17 +48,27 @@ async function askNextDemo() {
       { name: 'Advanced demos', value: 'advanced' },
       { name: "Exit (I'm done)", value: 'exit' },
     ],
+    theme: {
+      prefix: {
+        done: colors.magenta(figures.play),
+      },
+    },
   });
 
   if (selectedDemo === 'advanced') {
-    selectedDemo = await select({
-      message: 'Which demo do you want to run?',
-      choices: [
-        { name: 'Default value after timeout', value: 'timeout' },
-        { name: 'Loader', value: 'loader' },
-        { name: 'Go back', value: 'back' },
-      ],
-    });
+    selectedDemo = await select(
+      {
+        message: 'Which demo do you want to run?',
+        choices: [
+          { name: 'Default value after timeout', value: 'timeout' },
+          { name: 'Loader', value: 'loader' },
+          { name: 'Go back', value: 'back' },
+        ],
+      },
+      {
+        clearPromptOnDone: true,
+      },
+    );
   }
 
   if (selectedDemo === 'back') {
@@ -67,9 +79,18 @@ async function askNextDemo() {
 }
 
 (async () => {
-  let nextDemo = await askNextDemo();
-  while (nextDemo !== 'exit') {
-    await demos[nextDemo]();
-    nextDemo = await askNextDemo();
+  try {
+    let nextDemo = await askNextDemo();
+    while (nextDemo !== 'exit') {
+      await demos[nextDemo]();
+      nextDemo = await askNextDemo();
+    }
+  } catch (error) {
+    if (error.name === 'ExitPromptError') {
+      // noop; silence this error
+      return;
+    }
+
+    throw error;
   }
 })();

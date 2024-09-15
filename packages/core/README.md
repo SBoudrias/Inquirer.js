@@ -154,7 +154,7 @@ All default prompts, and most custom ones, uses a prefix at the beginning of the
 
 ```ts
 const input = createPrompt((config, done) => {
-  const prefix = usePrefix({ isLoading });
+  const prefix = usePrefix({ status });
 
   return `${prefix} My question`;
 });
@@ -265,7 +265,7 @@ type PromptConfig = {
 export default createPrompt<string, PromptConfig>((config, done) => {
   const theme = makeTheme(config.theme);
 
-  const prefix = usePrefix({ isLoading, theme });
+  const prefix = usePrefix({ status, theme });
 
   return `${prefix} ${theme.style.highlight('hello')}`;
 });
@@ -290,7 +290,7 @@ type PromptConfig = {
 export default createPrompt<string, PromptConfig>((config, done) => {
   const theme = makeTheme(promptTheme, config.theme);
 
-  const prefix = usePrefix({ isLoading, theme });
+  const prefix = usePrefix({ status, theme });
 
   return `${prefix} ${theme.icon}`;
 });
@@ -300,14 +300,14 @@ The [default theme keys cover](https://github.com/SBoudrias/Inquirer.js/blob/the
 
 ```ts
 type DefaultTheme = {
-  prefix: string;
+  prefix: string | { idle: string; done: string };
   spinner: {
     interval: number;
     frames: string[];
   };
   style: {
     answer: (text: string) => string;
-    message: (text: string) => string;
+    message: (text: string, status: 'idle' | 'done' | 'loading') => string;
     error: (text: string) => string;
     defaultAnswer: (text: string) => string;
     help: (text: string) => string;
@@ -338,11 +338,12 @@ import {
   useKeypress,
   isEnterKey,
   usePrefix,
+  type Status,
 } from '@inquirer/core';
 
 const confirm = createPrompt<boolean, { message: string; default?: boolean }>(
   (config, done) => {
-    const [status, setStatus] = useState('pending');
+    const [status, setStatus] = useState<Status>('idle');
     const [value, setValue] = useState('');
     const prefix = usePrefix({});
 

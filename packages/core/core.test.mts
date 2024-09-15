@@ -23,6 +23,8 @@ import {
   ValidationError,
   HookError,
   type KeypressEvent,
+  makeTheme,
+  type Status,
 } from './src/index.mjs';
 
 describe('createPrompt()', () => {
@@ -370,13 +372,19 @@ describe('createPrompt()', () => {
     const totalDuration = interval * spinners.dots.frames.length;
 
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
-      const [status, setStatus] = useState('loading');
-      const prefix = usePrefix({ isLoading: status === 'loading' });
+      const theme = makeTheme({
+        prefix: {
+          idle: '?',
+          done: '✔',
+        },
+      });
+      const [status, setStatus] = useState<Status>('loading');
+      const prefix = usePrefix({ status, theme });
 
       useEffect(() => {
         setTimeout(
           AsyncResource.bind(() => {
-            setStatus('idle');
+            setStatus('done');
           }),
           totalDuration,
         );
@@ -408,7 +416,7 @@ describe('createPrompt()', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"⠸ Question"`);
 
     vi.advanceTimersByTime(totalDuration);
-    expect(getScreen()).toMatchInlineSnapshot(`"? Question"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Question"`);
 
     vi.useRealTimers();
 

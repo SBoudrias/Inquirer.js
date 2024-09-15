@@ -11,6 +11,7 @@ import {
   Separator,
   makeTheme,
   type Theme,
+  type Status,
 } from '@inquirer/core';
 import colors from 'yoctocolors-cjs';
 import figures from '@inquirer/figures';
@@ -110,14 +111,13 @@ export default createPrompt(
     const { pageSize = 7, validate = () => true } = config;
     const theme = makeTheme<SearchTheme>(searchTheme, config.theme);
     const firstRender = useRef(true);
-    const [status, setStatus] = useState<string>('searching');
+    const [status, setStatus] = useState<Status>('loading');
 
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<ReadonlyArray<Item<Value>>>([]);
     const [searchError, setSearchError] = useState<string>();
 
-    const isLoading = status === 'loading' || status === 'searching';
-    const prefix = usePrefix({ isLoading, theme });
+    const prefix = usePrefix({ status, theme });
 
     const bounds = useMemo(() => {
       const first = searchResults.findIndex(isSelectable);
@@ -131,7 +131,7 @@ export default createPrompt(
     useEffect(() => {
       const controller = new AbortController();
 
-      setStatus('searching');
+      setStatus('loading');
       setSearchError(undefined);
 
       const fetchResults = async () => {
@@ -145,7 +145,7 @@ export default createPrompt(
             setActive(undefined);
             setSearchError(undefined);
             setSearchResults(normalizeChoices(results));
-            setStatus('pending');
+            setStatus('idle');
           }
         } catch (error: unknown) {
           if (!controller.signal.aborted && error instanceof Error) {
@@ -169,7 +169,7 @@ export default createPrompt(
         if (selectedChoice) {
           setStatus('loading');
           const isValid = await validate(selectedChoice.value);
-          setStatus('pending');
+          setStatus('idle');
 
           if (isValid === true) {
             setStatus('done');
@@ -190,7 +190,7 @@ export default createPrompt(
         rl.clearLine(0); // Remove the tab character.
         rl.write(selectedChoice.name);
         setSearchTerm(selectedChoice.name);
-      } else if (status !== 'searching' && (key.name === 'up' || key.name === 'down')) {
+      } else if (status !== 'loading' && (key.name === 'up' || key.name === 'down')) {
         rl.clearLine(0);
         if (
           (key.name === 'up' && active !== bounds.first) ||
@@ -208,7 +208,7 @@ export default createPrompt(
       }
     });
 
-    const message = theme.style.message(config.message);
+    const message = theme.style.message(config.message, status);
 
     if (active > 0) {
       firstRender.current = false;
@@ -251,7 +251,7 @@ export default createPrompt(
     let error;
     if (searchError) {
       error = theme.style.error(searchError);
-    } else if (searchResults.length === 0 && searchTerm !== '' && status === 'pending') {
+    } else if (searchResults.length === 0 && searchTerm !== '' && status === 'idle') {
       error = theme.style.error('No results found');
     }
 

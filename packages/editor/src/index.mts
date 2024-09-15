@@ -9,6 +9,7 @@ import {
   isEnterKey,
   makeTheme,
   type Theme,
+  type Status,
 } from '@inquirer/core';
 import type { PartialDeep, InquirerReadline } from '@inquirer/type';
 
@@ -25,12 +26,11 @@ export default createPrompt<string, EditorConfig>((config, done) => {
   const { waitForUseInput = true, postfix = '.txt', validate = () => true } = config;
   const theme = makeTheme(config.theme);
 
-  const [status, setStatus] = useState<string>('pending');
+  const [status, setStatus] = useState<Status>('idle');
   const [value, setValue] = useState<string>(config.default || '');
   const [errorMsg, setError] = useState<string>();
 
-  const isLoading = status === 'loading';
-  const prefix = usePrefix({ isLoading, theme });
+  const prefix = usePrefix({ status, theme });
 
   function startEditor(rl: InquirerReadline) {
     rl.pause();
@@ -50,7 +50,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
         } else {
           setValue(answer);
           setError(isValid || 'You must provide a valid value');
-          setStatus('pending');
+          setStatus('idle');
         }
       }
     });
@@ -66,7 +66,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
 
   useKeypress((key, rl) => {
     // Ignore keypress while our prompt is doing other processing.
-    if (status !== 'pending') {
+    if (status !== 'idle') {
       return;
     }
 
@@ -75,11 +75,11 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     }
   });
 
-  const message = theme.style.message(config.message);
+  const message = theme.style.message(config.message, status);
   let helpTip = '';
   if (status === 'loading') {
     helpTip = theme.style.help('Received');
-  } else if (status === 'pending') {
+  } else if (status === 'idle') {
     const enterKey = theme.style.key('enter');
     helpTip = theme.style.help(`Press ${enterKey} to launch your preferred editor.`);
   }

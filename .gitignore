@@ -10,3 +10,4 @@ coverage
 !.yarn/sdks
 !.yarn/versions
 .turbo
+.DS_Store

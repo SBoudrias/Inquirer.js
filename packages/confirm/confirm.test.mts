@@ -16,7 +16,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(true);
-    expect(getScreen()).toMatchInlineSnapshot('"? Do you want to proceed? yes"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? yes"');
   });
 
   it('handles "no"', async () => {
@@ -32,7 +32,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(false);
-    expect(getScreen()).toMatchInlineSnapshot('"? Do you want to proceed? no"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? no"');
   });
 
   it('handles "y"', async () => {
@@ -48,7 +48,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(true);
-    expect(getScreen()).toMatchInlineSnapshot('"? Do you want to proceed? yes"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? yes"');
   });
 
   it('handles "n"', async () => {
@@ -64,7 +64,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(false);
-    expect(getScreen()).toMatchInlineSnapshot('"? Do you want to proceed? no"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? no"');
   });
 
   it('uses default (yes) on empty input', async () => {
@@ -78,7 +78,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(true);
-    expect(getScreen()).toMatchInlineSnapshot('"? Do you want to proceed? yes"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? yes"');
   });
 
   it('uses default (no) on empty input', async () => {
@@ -92,7 +92,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(false);
-    expect(getScreen()).toMatchInlineSnapshot('"? Do you want to proceed? no"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? no"');
   });
 
   it('uses default on gibberish input', async () => {
@@ -107,7 +107,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(true);
-    expect(getScreen()).toMatchInlineSnapshot('"? Do you want to proceed? yes"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? yes"');
   });
 
   it('supports transformer option', async () => {
@@ -121,6 +121,6 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(true);
-    expect(getScreen()).toMatchInlineSnapshot('"? Do you want to proceed? Oui!"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? Oui!"');
   });
 });

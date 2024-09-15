@@ -7,6 +7,7 @@ import {
   isBackspaceKey,
   makeTheme,
   type Theme,
+  type Status,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 
@@ -22,17 +23,16 @@ type InputConfig = {
 export default createPrompt<string, InputConfig>((config, done) => {
   const { required, validate = () => true } = config;
   const theme = makeTheme(config.theme);
-  const [status, setStatus] = useState<string>('pending');
+  const [status, setStatus] = useState<Status>('idle');
   const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
   const [errorMsg, setError] = useState<string>();
   const [value, setValue] = useState<string>('');
 
-  const isLoading = status === 'loading';
-  const prefix = usePrefix({ isLoading, theme });
+  const prefix = usePrefix({ status, theme });
 
   useKeypress(async (key, rl) => {
     // Ignore keypress while our prompt is doing other processing.
-    if (status !== 'pending') {
+    if (status !== 'idle') {
       return;
     }
 
@@ -51,7 +51,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
         // get cleared, forcing the user to re-enter the value instead of fixing it.
         rl.write(value);
         setError(isValid || 'You must provide a valid value');
-        setStatus('pending');
+        setStatus('idle');
       }
     } else if (isBackspaceKey(key) && !value) {
       setDefaultValue(undefined);
@@ -66,7 +66,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
     }
   });
 
-  const message = theme.style.message(config.message);
+  const message = theme.style.message(config.message, status);
   let formattedValue = value;
   if (typeof config.transformer === 'function') {
     formattedValue = config.transformer(value, { isFinal: status === 'done' });

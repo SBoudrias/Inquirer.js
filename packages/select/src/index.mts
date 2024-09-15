@@ -16,6 +16,7 @@ import {
   ValidationError,
   makeTheme,
   type Theme,
+  type Status,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 import colors from 'yoctocolors-cjs';
@@ -110,8 +111,8 @@ export default createPrompt(
     const { loop = true, pageSize = 7 } = config;
     const firstRender = useRef(true);
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
-    const prefix = usePrefix({ theme });
-    const [status, setStatus] = useState('pending');
+    const [status, setStatus] = useState<Status>('idle');
+    const prefix = usePrefix({ status, theme });
     const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
     const items = useMemo(() => normalizeChoices(config.choices), [config.choices]);
@@ -198,7 +199,7 @@ export default createPrompt(
       [],
     );
 
-    const message = theme.style.message(config.message);
+    const message = theme.style.message(config.message, status);
 
     let helpTipTop = '';
     let helpTipBottom = '';

@@ -7,6 +7,7 @@ import {
   isBackspaceKey,
   makeTheme,
   type Theme,
+  type Status,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 
@@ -61,7 +62,7 @@ export default createPrompt<number | undefined, NumberConfig>((config, done) => 
     required = false,
   } = config;
   const theme = makeTheme(config.theme);
-  const [status, setStatus] = useState<string>('pending');
+  const [status, setStatus] = useState<Status>('idle');
   const [value, setValue] = useState<string>(''); // store the input value as string and convert to number on "Enter"
 
   // Ignore default if not valid.
@@ -72,12 +73,11 @@ export default createPrompt<number | undefined, NumberConfig>((config, done) => 
   const [defaultValue = '', setDefaultValue] = useState<string>(validDefault);
   const [errorMsg, setError] = useState<string>();
 
-  const isLoading = status === 'loading';
-  const prefix = usePrefix({ isLoading, theme });
+  const prefix = usePrefix({ status, theme });
 
   useKeypress(async (key, rl) => {
     // Ignore keypress while our prompt is doing other processing.
-    if (status !== 'pending') {
+    if (status !== 'idle') {
       return;
     }
 
@@ -103,7 +103,7 @@ export default createPrompt<number | undefined, NumberConfig>((config, done) => 
         // get cleared, forcing the user to re-enter the value instead of fixing it.
         rl.write(value);
         setError(isValid || 'You must provide a valid numeric value');
-        setStatus('pending');
+        setStatus('idle');
       }
     } else if (isBackspaceKey(key) && !value) {
       setDefaultValue(undefined);
@@ -118,7 +118,7 @@ export default createPrompt<number | undefined, NumberConfig>((config, done) => 
     }
   });
 
-  const message = theme.style.message(config.message);
+  const message = theme.style.message(config.message, status);
   let formattedValue = value;
   if (status === 'done') {
     formattedValue = theme.style.answer(value);

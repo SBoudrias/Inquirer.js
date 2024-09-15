@@ -481,6 +481,7 @@ __metadata:
   resolution: "@inquirer/demo@workspace:packages/demo"
   dependencies:
     "@inquirer/core": "npm:^9.1.0"
+    "@inquirer/figures": "npm:^1.0.5"
     "@inquirer/prompts": "npm:^5.5.0"
     yoctocolors-cjs: "npm:^2.1.2"
   bin:

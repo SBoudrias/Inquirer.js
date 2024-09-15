@@ -8,6 +8,7 @@ import {
   Separator,
   makeTheme,
   type Theme,
+  type Status,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 import colors from 'yoctocolors-cjs';
@@ -77,11 +78,11 @@ function normalizeChoices<Value>(
 export default createPrompt(
   <Value,>(config: RawlistConfig<Value>, done: (value: Value) => void) => {
     const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
-    const [status, setStatus] = useState<string>('pending');
+    const [status, setStatus] = useState<Status>('idle');
     const [value, setValue] = useState<string>('');
     const [errorMsg, setError] = useState<string>();
     const theme = makeTheme(config.theme);
-    const prefix = usePrefix({ theme });
+    const prefix = usePrefix({ status, theme });
 
     useKeypress((key, rl) => {
       if (isEnterKey(key)) {
@@ -112,7 +113,7 @@ export default createPrompt(
       }
     });
 
-    const message = theme.style.message(config.message);
+    const message = theme.style.message(config.message, status);
 
     if (status === 'done') {
       return `${prefix} ${message} ${theme.style.answer(value)}`;

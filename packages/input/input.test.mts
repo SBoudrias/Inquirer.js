@@ -17,7 +17,7 @@ describe('input prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('John');
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name John"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name John"`);
   });
 
   it('handle transformer', async () => {
@@ -34,7 +34,7 @@ describe('input prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('John');
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Transformed"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Transformed"`);
   });
 
   it('handle synchronous validation', async () => {
@@ -107,7 +107,7 @@ describe('input prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('Mike');
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mike"`);
   });
 
   it('handle overwriting the default option', async () => {
@@ -121,7 +121,7 @@ describe('input prompt', () => {
     events.type('John');
     events.keypress('enter');
     await expect(answer).resolves.toEqual('John');
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name John"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name John"`);
   });
 
   it('handle removing the default option', async () => {
@@ -135,7 +135,7 @@ describe('input prompt', () => {
     events.keypress('backspace');
     events.keypress('enter');
     await expect(answer).resolves.toEqual('');
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name"`);
   });
 
   it('handle editing the default option', async () => {
@@ -152,7 +152,7 @@ describe('input prompt', () => {
     events.type('y');
     events.keypress('enter');
     await expect(answer).resolves.toEqual('Mikey');
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mikey"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mikey"`);
   });
 
   it('shows validation message if user did not provide any value', async () => {
@@ -193,7 +193,7 @@ describe('input prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('Mike');
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mike"`);
   });
 
   it('is theme-able', async () => {

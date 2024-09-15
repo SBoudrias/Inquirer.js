@@ -55,7 +55,7 @@ describe('select prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 3"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 3"');
 
     await expect(answer).resolves.toEqual(3);
   });
@@ -76,7 +76,7 @@ describe('select prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual(1);
 
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 1"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
   });
 
   it('allow passing strings as choices', async () => {
@@ -93,7 +93,7 @@ describe('select prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Select one Option A"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select one Option A"`);
 
     await expect(answer).resolves.toEqual('Option A');
   });
@@ -117,7 +117,7 @@ describe('select prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a number 4"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 4"');
 
     await expect(answer).resolves.toEqual(4);
   });
@@ -330,7 +330,7 @@ describe('select prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Pepperoni"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
 
     await expect(answer).resolves.toEqual('pepperoni');
   });
@@ -361,7 +361,7 @@ describe('select prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Ham"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Ham"');
 
     await expect(answer).resolves.toEqual('ham');
   });
@@ -416,7 +416,7 @@ describe('select prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('2cc9e311');
-    expect(getScreen()).toMatchInlineSnapshot(`"? Select a commit 2cc9e311"`);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a commit 2cc9e311"`);
   });
 
   it('throws if all choices are disabled', async () => {
@@ -460,7 +460,7 @@ describe('select prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Pepperoni"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
 
     await expect(answer).resolves.toEqual('pepperoni');
   });
@@ -491,7 +491,7 @@ describe('select prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Ham"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Ham"');
 
     await expect(answer).resolves.toEqual('ham');
   });
@@ -521,7 +521,7 @@ describe('select prompt', () => {
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"? Select a topping Pineapple"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pineapple"');
 
     await expect(answer).resolves.toEqual('pineapple');
   });
@@ -651,7 +651,7 @@ describe('select prompt', () => {
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual(2);
-      expect(getScreen()).toMatchInlineSnapshot('"? Select a number 2"');
+      expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
     });
 
     it('helpMode: always', async () => {
@@ -690,7 +690,7 @@ describe('select prompt', () => {
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual(2);
-      expect(getScreen()).toMatchInlineSnapshot('"? Select a number 2"');
+      expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
     });
 
     it('helpMode: never', async () => {
@@ -727,7 +727,7 @@ describe('select prompt', () => {
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual(2);
-      expect(getScreen()).toMatchInlineSnapshot('"? Select a number 2"');
+      expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
     });
   });
 });

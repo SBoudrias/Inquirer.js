@@ -6,6 +6,7 @@ import {
   usePrefix,
   makeTheme,
   type Theme,
+  type Status,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 
@@ -18,10 +19,10 @@ type ConfirmConfig = {
 
 export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   const { transformer = (answer) => (answer ? 'yes' : 'no') } = config;
-  const [status, setStatus] = useState('pending');
+  const [status, setStatus] = useState<Status>('idle');
   const [value, setValue] = useState('');
   const theme = makeTheme(config.theme);
-  const prefix = usePrefix({ theme });
+  const prefix = usePrefix({ status, theme });
 
   useKeypress((key, rl) => {
     if (isEnterKey(key)) {
@@ -47,6 +48,6 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
     )}`;
   }
 
-  const message = theme.style.message(config.message);
+  const message = theme.style.message(config.message, status);
   return `${prefix} ${message}${defaultValue} ${formattedValue}`;
 });
