@@ -1,5 +1,6 @@
 import colors from 'yoctocolors-cjs';
 import spinners from 'cli-spinners';
+import figures from '@inquirer/figures';
 import type { Prettify } from '@inquirer/type';
 
 /**
@@ -28,7 +29,7 @@ type DefaultTheme = {
    * (status) => status === 'done' ? colors.green('✔') : colors.blue('?')
    * ```
    */
-  prefix: string | ((status: Status) => string);
+  prefix: string | Prettify<Omit<Record<Status, string>, 'loading'>>;
 
   /**
    * Configuration for the spinner that is displayed when the prompt is in the
@@ -163,7 +164,11 @@ type DefaultTheme = {
 export type Theme<Extension extends object = object> = Prettify<Extension & DefaultTheme>;
 
 export const defaultTheme: DefaultTheme = {
-  prefix: (status) => (status === 'done' ? colors.green('✔') : colors.blue('?')),
+  prefix: {
+    idle: colors.blue('?'),
+    // TODO: use figure
+    done: colors.green(figures.tick),
+  },
   spinner: {
     interval: spinners.dots.interval,
     frames: spinners.dots.frames.map((frame) => colors.yellow(frame)),

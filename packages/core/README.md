@@ -300,14 +300,14 @@ The [default theme keys cover](https://github.com/SBoudrias/Inquirer.js/blob/the
 
 ```ts
 type DefaultTheme = {
-  prefix: string;
+  prefix: string | { idle: string; done: string };
   spinner: {
     interval: number;
     frames: string[];
   };
   style: {
     answer: (text: string) => string;
-    message: (text: string) => string;
+    message: (text: string, status: 'idle' | 'done' | 'loading') => string;
     error: (text: string) => string;
     defaultAnswer: (text: string) => string;
     help: (text: string) => string;

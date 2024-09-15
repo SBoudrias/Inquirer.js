@@ -372,11 +372,14 @@ describe('createPrompt()', () => {
     const totalDuration = interval * spinners.dots.frames.length;
 
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
-      const [status, setStatus] = useState<Status>('loading');
-      const prefix = usePrefix({
-        status,
-        theme: makeTheme({ prefix: (s: string) => (s === 'done' ? '✔' : '?') }),
+      const theme = makeTheme({
+        prefix: {
+          idle: '?',
+          done: '✔',
+        },
       });
+      const [status, setStatus] = useState<Status>('loading');
+      const prefix = usePrefix({ status, theme });
 
       useEffect(() => {
         setTimeout(
