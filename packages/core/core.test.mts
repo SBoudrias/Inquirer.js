@@ -4,7 +4,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import stripAnsi from 'strip-ansi';
 import ansiEscapes from 'ansi-escapes';
-import spinners from 'cli-spinners';
 import {
   createPrompt,
   useEffect,
@@ -368,8 +367,8 @@ describe('createPrompt()', () => {
   it('usePrefix() renders loader and prefix', async () => {
     vi.useFakeTimers();
     const delay = 300;
-    const { interval } = spinners.dots;
-    const totalDuration = interval * spinners.dots.frames.length;
+    let totalDuration = 0;
+    let interval = 0;
 
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       const theme = makeTheme({
@@ -380,6 +379,9 @@ describe('createPrompt()', () => {
       });
       const [status, setStatus] = useState<Status>('loading');
       const prefix = usePrefix({ status, theme });
+
+      interval = theme.spinner.interval;
+      totalDuration = interval * theme.spinner.frames.length;
 
       useEffect(() => {
         setTimeout(

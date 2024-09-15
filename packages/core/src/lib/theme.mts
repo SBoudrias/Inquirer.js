@@ -1,5 +1,4 @@
 import colors from 'yoctocolors-cjs';
-import spinners from 'cli-spinners';
 import figures from '@inquirer/figures';
 import type { Prettify } from '@inquirer/type';
 
@@ -34,6 +33,8 @@ type DefaultTheme = {
   /**
    * Configuration for the spinner that is displayed when the prompt is in the
    * `'loading'` state.
+   *
+   * We recommend the use of {@link https://github.com/sindresorhus/cli-spinners|cli-spinners} for a list of available spinners.
    */
   spinner: {
     /**
@@ -170,8 +171,10 @@ export const defaultTheme: DefaultTheme = {
     done: colors.green(figures.tick),
   },
   spinner: {
-    interval: spinners.dots.interval,
-    frames: spinners.dots.frames.map((frame) => colors.yellow(frame)),
+    interval: 80,
+    frames: ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'].map((frame) =>
+      colors.yellow(frame),
+    ),
   },
   style: {
     answer: colors.cyan,
