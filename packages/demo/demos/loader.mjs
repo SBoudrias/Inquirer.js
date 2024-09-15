@@ -14,7 +14,7 @@ const loader = createPrompt((config, done) => {
 });
 
 const demo = async () => {
-  await loader();
+  await loader({}, { clearPromptOnDone: true });
 };
 
 if (import.meta.url.startsWith('file:')) {

@@ -62,6 +62,7 @@
   "homepage": "https://github.com/SBoudrias/Inquirer.js",
   "dependencies": {
     "@inquirer/core": "^9.1.0",
+    "@inquirer/figures": "^1.0.5",
     "@inquirer/prompts": "^5.5.0",
     "yoctocolors-cjs": "^2.1.2"
   },
