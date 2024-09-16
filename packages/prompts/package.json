@@ -76,19 +76,19 @@
     }
   },
   "dependencies": {
-    "@inquirer/checkbox": "^3.0.0",
-    "@inquirer/confirm": "^4.0.0",
-    "@inquirer/editor": "^3.0.0",
-    "@inquirer/expand": "^3.0.0",
-    "@inquirer/input": "^3.0.0",
-    "@inquirer/number": "^2.0.0",
-    "@inquirer/password": "^3.0.0",
-    "@inquirer/rawlist": "^3.0.0",
-    "@inquirer/search": "^2.0.0",
-    "@inquirer/select": "^3.0.0"
+    "@inquirer/checkbox": "3.0.0",
+    "@inquirer/confirm": "4.0.0",
+    "@inquirer/editor": "3.0.0",
+    "@inquirer/expand": "3.0.0",
+    "@inquirer/input": "3.0.0",
+    "@inquirer/number": "2.0.0",
+    "@inquirer/password": "3.0.0",
+    "@inquirer/rawlist": "3.0.0",
+    "@inquirer/search": "2.0.0",
+    "@inquirer/select": "3.0.0"
   },
   "devDependencies": {
-    "@inquirer/type": "^1.5.4"
+    "@inquirer/type": "1.5.4"
   },
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/prompts/README.md",
   "sideEffects": false
