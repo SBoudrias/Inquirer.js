@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/figures",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Vendored version of figures, for CJS compatibility",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",

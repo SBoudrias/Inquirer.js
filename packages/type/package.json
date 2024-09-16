@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/type",
-  "version": "1.5.4",
+  "version": "2.0.0",
   "description": "Inquirer core TS types",
   "main": "./dist/cjs/index.js",
   "typings": "./dist/cjs/types/index.d.ts",
