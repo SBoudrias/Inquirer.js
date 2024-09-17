@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
 import readline from 'node:readline';
+import { isProxy } from 'node:util/types';
 import {
   defer,
-  EMPTY,
   from,
   of,
   concatMap,
@@ -10,7 +10,9 @@ import {
   reduce,
   isObservable,
   Observable,
+  Subject,
   lastValueFrom,
+  tap,
 } from 'rxjs';
 import runAsync from 'run-async';
 import MuteStream from 'mute-stream';
@@ -40,11 +42,7 @@ export const _ = {
       pointer = pointer[key] as Record<string, unknown>;
     });
   },
-  get: (
-    obj: object,
-    path: string | number | symbol = '',
-    defaultValue?: unknown,
-  ): any => {
+  get: (obj: object, path: string = '', defaultValue?: unknown): any => {
     const travel = (regexp: RegExp) =>
       String.prototype.split
         .call(path, regexp)
@@ -193,21 +191,41 @@ function isPromptConstructor(
  */
 export default class PromptsRunner<A extends Answers> {
   private prompts: PromptCollection;
-  answers: Partial<A> = {};
-  process: Observable<any> = EMPTY;
+  answers: Partial<A>;
+  process: Subject<{ name: string; answer: any }> = new Subject();
   private abortController: AbortController = new AbortController();
   private opt: StreamOptions;
 
-  constructor(prompts: PromptCollection, opt: StreamOptions = {}) {
+  constructor(
+    prompts: PromptCollection,
+    { answers = {}, ...opt }: StreamOptions & { answers?: Partial<A> } = {},
+  ) {
     this.opt = opt;
     this.prompts = prompts;
+
+    this.answers = isProxy(answers)
+      ? answers
+      : new Proxy(
+          { ...answers },
+          {
+            get: (target, prop) => {
+              if (typeof prop !== 'string') {
+                return;
+              }
+              return _.get(target, prop);
+            },
+            set: (target, prop: string, value) => {
+              _.set(target, prop, value);
+              return true;
+            },
+          },
+        );
   }
 
-  async run(questions: PromptSession<A>, answers?: Partial<A>): Promise<A> {
+  async run<Session extends PromptSession<A> = PromptSession<A>>(
+    questions: Session,
+  ): Promise<A> {
     this.abortController = new AbortController();
-
-    // Keep global reference to the answers
-    this.answers = typeof answers === 'object' ? { ...answers } : {};
 
     let obs: Observable<AnyQuestion<A>>;
     if (isQuestionArray(questions)) {
@@ -223,34 +241,36 @@ export default class PromptsRunner<A extends Answers> {
       );
     } else {
       // Case: Called with a single question config
-      obs = from([questions]);
+      obs = from([questions as AnyQuestion<A>]);
     }
 
-    this.process = obs.pipe(
-      concatMap((question) =>
-        of(question).pipe(
-          concatMap((question) =>
-            from(
-              this.shouldRun(question).then((shouldRun: boolean | void) => {
-                if (shouldRun) {
-                  return question;
-                }
-                return;
-              }),
-            ).pipe(filter((val) => val != null)),
-          ),
-          concatMap((question) => defer(() => from(this.fetchAnswer(question)))),
-        ),
-      ),
-    );
-
     return lastValueFrom(
-      this.process.pipe(
-        reduce((answersObj, answer: { name: string; answer: unknown }) => {
-          _.set(answersObj, answer.name, answer.answer);
-          return answersObj;
-        }, this.answers),
-      ),
+      obs
+        .pipe(
+          concatMap((question) =>
+            of(question)
+              .pipe(
+                concatMap((question) =>
+                  from(
+                    this.shouldRun(question).then((shouldRun: boolean | void) => {
+                      if (shouldRun) {
+                        return question;
+                      }
+                      return;
+                    }),
+                  ).pipe(filter((val) => val != null)),
+                ),
+                concatMap((question) => defer(() => from(this.fetchAnswer(question)))),
+              )
+              .pipe(tap((answer) => this.process.next(answer))),
+          ),
+        )
+        .pipe(
+          reduce((answersObj: Record<string, any>, answer: { name: string; answer: unknown }) => {
+            answersObj[answer.name] = answer.answer;
+            return answersObj;
+          }, this.answers),
+        ),
     )
       .then(() => this.answers as A)
       .finally(() => this.close());
@@ -388,10 +408,7 @@ export default class PromptsRunner<A extends Answers> {
   };
 
   private shouldRun = async (question: AnyQuestion<A>): Promise<boolean> => {
-    if (
-      question.askAnswered !== true &&
-      _.get(this.answers, question.name) !== undefined
-    ) {
+    if (question.askAnswered !== true && this.answers[question.name] !== undefined) {
       return false;
     }
 
