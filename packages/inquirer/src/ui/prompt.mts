@@ -197,7 +197,6 @@ export default class PromptsRunner<A extends Answers> {
   process: Observable<any> = EMPTY;
   private abortController: AbortController = new AbortController();
   private opt: StreamOptions;
-  rl?: InquirerReadline;
 
   constructor(prompts: PromptCollection, opt: StreamOptions = {}) {
     this.opt = opt;
@@ -316,7 +315,6 @@ export default class PromptsRunner<A extends Answers> {
               rl.output.end();
               rl.close();
             };
-            this.rl = rl;
 
             // Make sure new prompt start on a newline when closing
             process.on('exit', this.onForceClose);
@@ -326,7 +324,6 @@ export default class PromptsRunner<A extends Answers> {
 
             const cleanup = () => {
               onClose();
-              this.rl = undefined;
               cleanupSignal?.();
             };
 
