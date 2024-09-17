@@ -117,7 +117,7 @@ export interface LegacyPromptConstructor {
 
 export type PromptFn<Value = any, Config = any> = (
   config: Config,
-  context?: StreamOptions,
+  context: StreamOptions & { signal: AbortSignal },
 ) => Promise<Value>;
 
 /**
@@ -299,7 +299,7 @@ export default class PromptsRunner<A extends Answers> {
     let cleanupSignal: (() => void) | undefined;
 
     const promptFn: PromptFn<A> = isPromptConstructor(prompt)
-      ? (q, { signal } = {}) =>
+      ? (q, { signal }) =>
           new Promise<A>((resolve, reject) => {
             const rl = readline.createInterface(
               setupReadlineOptions(this.opt),
@@ -335,21 +335,20 @@ export default class PromptsRunner<A extends Answers> {
               cleanupSignal?.();
             };
 
-            if (signal) {
-              const abort = () => {
-                reject(new AbortPromptError({ cause: signal.reason }));
-                cleanup();
-              };
-              if (signal.aborted) {
-                abort();
-                return;
-              }
-              signal.addEventListener('abort', abort);
-              cleanupSignal = () => {
-                signal.removeEventListener('abort', abort);
-                cleanupSignal = undefined;
-              };
+            const abort = () => {
+              reject(new AbortPromptError({ cause: signal.reason }));
+              cleanup();
+            };
+            if (signal.aborted) {
+              abort();
+              return;
             }
+            signal.addEventListener('abort', abort);
+            cleanupSignal = () => {
+              signal.removeEventListener('abort', abort);
+              cleanupSignal = undefined;
+            };
+
             activePrompt.run().then(resolve, reject).finally(cleanup);
           })
       : prompt;
