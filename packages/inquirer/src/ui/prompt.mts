@@ -117,7 +117,7 @@ export interface LegacyPromptConstructor {
 
 export type PromptFn<Value = any, Config = any> = (
   config: Config,
-  context?: StreamOptions,
+  context: StreamOptions & { signal: AbortSignal },
 ) => Promise<Value>;
 
 /**
@@ -197,7 +197,6 @@ export default class PromptsRunner<A extends Answers> {
   process: Observable<any> = EMPTY;
   private abortController: AbortController = new AbortController();
   private opt: StreamOptions;
-  rl?: InquirerReadline;
 
   constructor(prompts: PromptCollection, opt: StreamOptions = {}) {
     this.opt = opt;
@@ -300,62 +299,70 @@ export default class PromptsRunner<A extends Answers> {
     let cleanupSignal: (() => void) | undefined;
 
     const promptFn: PromptFn<A> = isPromptConstructor(prompt)
-      ? (q, { signal } = {}) =>
+      ? (q, opt) =>
           new Promise<A>((resolve, reject) => {
+            const { signal } = opt;
+            if (signal.aborted) {
+              reject(new AbortPromptError({ cause: signal.reason }));
+              return;
+            }
+
             const rl = readline.createInterface(
-              setupReadlineOptions(this.opt),
+              setupReadlineOptions(opt),
             ) as InquirerReadline;
-            rl.resume();
+
+            /**
+             * Handle the ^C exit
+             */
+            const onForceClose = () => {
+              this.close();
+              process.kill(process.pid, 'SIGINT');
+              console.log('');
+            };
 
             const onClose = () => {
-              process.removeListener('exit', this.onForceClose);
-              rl.removeListener('SIGINT', this.onForceClose);
+              process.removeListener('exit', onForceClose);
+              rl.removeListener('SIGINT', onForceClose);
               rl.setPrompt('');
               rl.output.unmute();
               rl.output.write(ansiEscapes.cursorShow);
               rl.output.end();
               rl.close();
             };
-            this.rl = rl;
 
             // Make sure new prompt start on a newline when closing
-            process.on('exit', this.onForceClose);
-            rl.on('SIGINT', this.onForceClose);
+            process.on('exit', onForceClose);
+            rl.on('SIGINT', onForceClose);
 
             const activePrompt = new prompt(q, rl, this.answers);
 
             const cleanup = () => {
               onClose();
-              this.rl = undefined;
               cleanupSignal?.();
             };
 
-            if (signal) {
-              const abort = () => {
-                reject(new AbortPromptError({ cause: signal.reason }));
-                cleanup();
-              };
-              if (signal.aborted) {
-                abort();
-                return;
-              }
-              signal.addEventListener('abort', abort);
-              cleanupSignal = () => {
-                signal.removeEventListener('abort', abort);
-                cleanupSignal = undefined;
-              };
-            }
+            const abort = () => {
+              reject(new AbortPromptError({ cause: signal.reason }));
+              cleanup();
+            };
+            signal.addEventListener('abort', abort);
+            cleanupSignal = () => {
+              signal.removeEventListener('abort', abort);
+              cleanupSignal = undefined;
+            };
+
             activePrompt.run().then(resolve, reject).finally(cleanup);
           })
       : prompt;
 
+    let cleanupModuleSignal: (() => void) | undefined;
     const { signal: moduleSignal } = this.opt;
     if (moduleSignal?.aborted) {
       this.abortController.abort(moduleSignal.reason);
     } else if (moduleSignal) {
-      const abort = (reason: unknown) => this.abortController?.abort(reason);
+      const abort = () => this.abortController?.abort(moduleSignal.reason);
       moduleSignal.addEventListener('abort', abort);
-      cleanupSignal = () => {
+      cleanupModuleSignal = () => {
         moduleSignal.removeEventListener('abort', abort);
       };
     }
@@ -369,16 +376,8 @@ export default class PromptsRunner<A extends Answers> {
       }))
       .finally(() => {
         cleanupSignal?.();
+        cleanupModuleSignal?.();
       });
-  };
-
-  /**
-   * Handle the ^C exit
-   */
-  private onForceClose = () => {
-    this.close();
-    process.kill(process.pid, 'SIGINT');
-    console.log('');
   };
 
   /**
