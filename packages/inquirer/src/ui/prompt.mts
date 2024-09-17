@@ -299,10 +299,16 @@ export default class PromptsRunner<A extends Answers> {
     let cleanupSignal: (() => void) | undefined;
 
     const promptFn: PromptFn<A> = isPromptConstructor(prompt)
-      ? (q, { signal }) =>
+      ? (q, opt) =>
           new Promise<A>((resolve, reject) => {
+            const { signal } = opt;
+            if (signal.aborted) {
+              reject(new AbortPromptError({ cause: signal.reason }));
+              return;
+            }
+
             const rl = readline.createInterface(
-              setupReadlineOptions(this.opt),
+              setupReadlineOptions(opt),
             ) as InquirerReadline;
 
             /**
@@ -339,10 +345,6 @@ export default class PromptsRunner<A extends Answers> {
               reject(new AbortPromptError({ cause: signal.reason }));
               cleanup();
             };
-            if (signal.aborted) {
-              abort();
-              return;
-            }
             signal.addEventListener('abort', abort);
             cleanupSignal = () => {
               signal.removeEventListener('abort', abort);
