@@ -304,11 +304,19 @@ export default class PromptsRunner<A extends Answers> {
             const rl = readline.createInterface(
               setupReadlineOptions(this.opt),
             ) as InquirerReadline;
-            rl.resume();
+
+            /**
+             * Handle the ^C exit
+             */
+            const onForceClose = () => {
+              this.close();
+              process.kill(process.pid, 'SIGINT');
+              console.log('');
+            };
 
             const onClose = () => {
-              process.removeListener('exit', this.onForceClose);
-              rl.removeListener('SIGINT', this.onForceClose);
+              process.removeListener('exit', onForceClose);
+              rl.removeListener('SIGINT', onForceClose);
               rl.setPrompt('');
               rl.output.unmute();
               rl.output.write(ansiEscapes.cursorShow);
@@ -317,8 +325,8 @@ export default class PromptsRunner<A extends Answers> {
             };
 
             // Make sure new prompt start on a newline when closing
-            process.on('exit', this.onForceClose);
-            rl.on('SIGINT', this.onForceClose);
+            process.on('exit', onForceClose);
+            rl.on('SIGINT', onForceClose);
 
             const activePrompt = new prompt(q, rl, this.answers);
 
@@ -367,15 +375,6 @@ export default class PromptsRunner<A extends Answers> {
       .finally(() => {
         cleanupSignal?.();
       });
-  };
-
-  /**
-   * Handle the ^C exit
-   */
-  private onForceClose = () => {
-    this.close();
-    process.kill(process.pid, 'SIGINT');
-    console.log('');
   };
 
   /**
