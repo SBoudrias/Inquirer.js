@@ -355,13 +355,14 @@ export default class PromptsRunner<A extends Answers> {
           })
       : prompt;
 
+    let cleanupModuleSignal: (() => void) | undefined;
     const { signal: moduleSignal } = this.opt;
     if (moduleSignal?.aborted) {
       this.abortController.abort(moduleSignal.reason);
     } else if (moduleSignal) {
       const abort = (reason: unknown) => this.abortController?.abort(reason);
       moduleSignal.addEventListener('abort', abort);
-      cleanupSignal = () => {
+      cleanupModuleSignal = () => {
         moduleSignal.removeEventListener('abort', abort);
       };
     }
@@ -375,6 +376,7 @@ export default class PromptsRunner<A extends Answers> {
       }))
       .finally(() => {
         cleanupSignal?.();
+        cleanupModuleSignal?.();
       });
   };
 
