@@ -398,7 +398,7 @@ export default class PromptsRunner<A extends Answers> {
     const { when } = question;
     if (typeof when === 'function') {
       const shouldRun = await runAsync(when)(this.answers);
-      return shouldRun !== false;
+      return Boolean(shouldRun);
     }
 
     return when !== false;
