@@ -360,7 +360,7 @@ export default class PromptsRunner<A extends Answers> {
     if (moduleSignal?.aborted) {
       this.abortController.abort(moduleSignal.reason);
     } else if (moduleSignal) {
-      const abort = (reason: unknown) => this.abortController?.abort(reason);
+      const abort = () => this.abortController?.abort(moduleSignal.reason);
       moduleSignal.addEventListener('abort', abort);
       cleanupModuleSignal = () => {
         moduleSignal.removeEventListener('abort', abort);
