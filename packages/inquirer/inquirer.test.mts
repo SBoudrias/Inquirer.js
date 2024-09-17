@@ -62,8 +62,11 @@ class StubEventualyFailingPrompt {
   timeout?: NodeJS.Timeout;
 
   run() {
-    this.timeout = setTimeout(() => {}, 1000);
-    return Promise.reject(new Error('This test prompt always reject'));
+    return new Promise((_, reject) => {
+      this.timeout = setTimeout(() => {
+        reject(new Error('This test prompt always reject'));
+      }, 1000);
+    });
   }
 
   close() {
@@ -802,7 +805,7 @@ describe('AbortSignal support', () => {
     localPrompt.registerPrompt('stub', StubEventualyFailingPrompt);
 
     const promise = localPrompt({ type: 'stub', name: 'q1', message: 'message' });
-    abortController.abort();
+    setTimeout(() => abortController.abort(), 0);
     await expect(promise).rejects.toThrow(AbortPromptError);
   });
 
