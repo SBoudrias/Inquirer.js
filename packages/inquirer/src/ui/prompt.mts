@@ -331,11 +331,11 @@ async function fetchAnswer<A extends Answers>(
  * Base interface class other can inherits from
  */
 export default class PromptsRunner<A extends Answers> {
-  private prompts: PromptCollection;
-  answers: Partial<A>;
-  process: Subject<{ name: string; answer: any }> = new Subject();
+  private readonly prompts: PromptCollection;
+  readonly answers: Partial<A>;
+  readonly process: Subject<{ name: string; answer: any }> = new Subject();
   private abortController: AbortController = new AbortController();
-  private opt: StreamOptions;
+  private readonly opt: StreamOptions;
 
   constructor(
     prompts: PromptCollection,
