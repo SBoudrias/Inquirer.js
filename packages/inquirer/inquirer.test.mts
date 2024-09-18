@@ -80,6 +80,35 @@ beforeEach(() => {
   inquirer.registerPrompt('failing', StubFailingPrompt);
 });
 
+describe('exported types', () => {
+  type Answers = import('./src/index.mjs').Answers;
+  type Question = import('./src/index.mjs').Question;
+
+  it('Question type is not any', () => {
+    expectTypeOf({}).not.toMatchTypeOf<Question>();
+  });
+
+  it('exported Question type requires type, name and message', () => {
+    expectTypeOf({
+      type: 'stub',
+      name: 'q1',
+      message: 'message',
+    }).toMatchTypeOf<Question>();
+    expectTypeOf({ name: 'q1', message: 'message' }).not.toMatchTypeOf<Question>();
+    expectTypeOf({ type: 'stub', message: 'message' }).not.toMatchTypeOf<Question>();
+    expectTypeOf({ type: 'stub', name: 'q1' }).not.toMatchTypeOf<Question>();
+  });
+
+  it('exported Answers type is not any', () => {
+    expectTypeOf(false).not.toMatchTypeOf<Answers>();
+  });
+
+  it('exported Answers type matches any object', () => {
+    expectTypeOf({}).toMatchTypeOf<Answers>();
+    expectTypeOf({ foo: 'bar' }).toMatchTypeOf<Answers>();
+  });
+});
+
 describe('inquirer.prompt(...)', () => {
   describe('interfaces', () => {
     it('takes a prompts array', async () => {

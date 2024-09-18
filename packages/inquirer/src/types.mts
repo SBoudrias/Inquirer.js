@@ -47,7 +47,7 @@ export interface QuestionMap {
 type KeyValueOrAsyncGetterFunction<T, k extends string, A extends Answers> =
   T extends Record<string, any> ? T[k] | AsyncGetterFunction<T[k], A> : never;
 
-export type AnyQuestion<A extends Answers, Type extends string = string> = {
+export type AnyQuestion<A extends Answers = Answers, Type extends string = string> = {
   type: Type;
   name: string;
   message: string | AsyncGetterFunction<string, A>;

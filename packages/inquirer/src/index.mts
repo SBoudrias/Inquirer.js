@@ -33,7 +33,7 @@ import type {
 } from './types.mjs';
 import { Observable } from 'rxjs';
 
-export type { QuestionMap } from './types.mjs';
+export type { QuestionMap, AnyQuestion as Question, Answers } from './types.mjs';
 
 const builtInPrompts: PromptCollection = {
   input,
