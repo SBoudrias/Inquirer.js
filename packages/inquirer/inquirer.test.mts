@@ -83,17 +83,24 @@ beforeEach(() => {
 describe('exported types', () => {
   type Answers = import('./src/index.mjs').Answers;
   type Question = import('./src/index.mjs').Question;
+  type BuiltInQuestion = import('./src/index.mjs').BuiltInQuestion;
+  type PromptSession = import('./src/index.mjs').PromptSession;
 
   it('Question type is not any', () => {
     expectTypeOf({}).not.toMatchTypeOf<Question>();
   });
 
   it('exported Question type requires type, name and message', () => {
-    expectTypeOf({
-      type: 'stub',
+    const question = {
+      type: 'input',
       name: 'q1',
       message: 'message',
-    }).toMatchTypeOf<Question>();
+    } as const;
+    expectTypeOf(question).toMatchTypeOf<Question>();
+    expectTypeOf(question).toMatchTypeOf<BuiltInQuestion>();
+    expectTypeOf(question).toMatchTypeOf<PromptSession>();
+    expectTypeOf([question]).toMatchTypeOf<PromptSession>();
+    expectTypeOf({ q1: question }).toMatchTypeOf<PromptSession>();
     expectTypeOf({ name: 'q1', message: 'message' }).not.toMatchTypeOf<Question>();
     expectTypeOf({ type: 'stub', message: 'message' }).not.toMatchTypeOf<Question>();
     expectTypeOf({ type: 'stub', name: 'q1' }).not.toMatchTypeOf<Question>();

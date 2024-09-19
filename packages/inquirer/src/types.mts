@@ -75,7 +75,7 @@ type QuestionWithGetters<
   }
 >;
 
-export type BuiltInQuestion<A extends Answers = object> =
+export type UnnamedBuiltInQuestion<A extends Answers = object> =
   | QuestionWithGetters<'checkbox', Parameters<typeof checkbox>[0], A>
   | QuestionWithGetters<'confirm', Parameters<typeof confirm>[0], A>
   | QuestionWithGetters<'editor', Parameters<typeof editor>[0], A>
@@ -89,6 +89,12 @@ export type BuiltInQuestion<A extends Answers = object> =
   | QuestionWithGetters<'list', Parameters<typeof select>[0], A>
   | QuestionWithGetters<'select', Parameters<typeof select>[0], A>;
 
+export type BuiltInQuestion<A extends Answers = Answers> = Prettify<
+  UnnamedBuiltInQuestion<A> & {
+    name: Extract<keyof A, string>;
+  }
+>;
+
 export type CustomQuestion<
   A extends Answers,
   Q extends Record<string, Record<string, any>>,
@@ -96,10 +102,9 @@ export type CustomQuestion<
   [key in Extract<keyof Q, string>]: Readonly<QuestionWithGetters<key, Q[key], A>>;
 }[Extract<keyof Q, string>];
 
-export type PromptSession<A extends Answers> =
-  | AnyQuestion<A>[]
-  | Record<string, Omit<AnyQuestion<A>, 'name'>>
-  | Observable<AnyQuestion<A>>
-  | AnyQuestion<A>;
+export type PromptSession<
+  A extends Answers = Answers,
+  Q extends AnyQuestion<A> = AnyQuestion<A>,
+> = Q[] | Record<string, Omit<Q, 'name'>> | Observable<Q> | Q;
 
 export type StreamOptions = Prettify<Context & { skipTTYChecks?: boolean }>;
