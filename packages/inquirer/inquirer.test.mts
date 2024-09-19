@@ -106,6 +106,16 @@ describe('exported types', () => {
     expectTypeOf({ type: 'stub', name: 'q1' }).not.toMatchTypeOf<Question>();
   });
 
+  it('Exported types can be used with "as const" and "satifies" to keep prompt type inference', async () => {
+    const question = {
+      type: 'stub',
+      name: 'q1',
+      message: 'message',
+    } as const satisfies PromptSession;
+
+    expectTypeOf(await inquirer.prompt(question)).toEqualTypeOf<{ q1: any }>();
+  });
+
   it('exported Answers type is not any', () => {
     expectTypeOf(false).not.toMatchTypeOf<Answers>();
   });
