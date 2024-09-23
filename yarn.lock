@@ -30,10 +30,10 @@ __metadata:
   linkType: hard
 
 "@arethetypeswrong/cli@npm:^0.16.2":
-  version: 0.16.2
-  resolution: "@arethetypeswrong/cli@npm:0.16.2"
+  version: 0.16.4
+  resolution: "@arethetypeswrong/cli@npm:0.16.4"
   dependencies:
-    "@arethetypeswrong/core": "npm:0.16.2"
+    "@arethetypeswrong/core": "npm:0.16.4"
     chalk: "npm:^4.1.2"
     cli-table3: "npm:^0.6.3"
     commander: "npm:^10.0.1"
@@ -42,13 +42,13 @@ __metadata:
     semver: "npm:^7.5.4"
   bin:
     attw: dist/index.js
-  checksum: 10/28d7f6e150ad23bb70d7da25b8c6dc27613582c6525c81a933032d796e9efc77ddf7285fef5bf380d106bc79557017b5f4e23354688ddb888c4233034878f1f9
+  checksum: 10/ec6c285e37f2c681e158d16dc77e56fd4422fdcc41fc55d018f0f0e3795c32128084d7fa436cb15a5d07f77ca1a1e0b59cc2d7e641d75c9316c93dc90c0a249a
   languageName: node
   linkType: hard
 
-"@arethetypeswrong/core@npm:0.16.2":
-  version: 0.16.2
-  resolution: "@arethetypeswrong/core@npm:0.16.2"
+"@arethetypeswrong/core@npm:0.16.4":
+  version: 0.16.4
+  resolution: "@arethetypeswrong/core@npm:0.16.4"
   dependencies:
     "@andrewbranch/untar.js": "npm:^1.0.3"
     cjs-module-lexer: "npm:^1.2.3"
@@ -57,7 +57,7 @@ __metadata:
     semver: "npm:^7.5.4"
     typescript: "npm:5.6.1-rc"
     validate-npm-package-name: "npm:^5.0.0"
-  checksum: 10/39233d8f5a8c16e2d1307684c2c5e5b2166f955cb421662719825f1478c4dfe2c1fedac893e950ee01d716e3ad689ab264afe220c9c43d22c95074b72c5e5883
+  checksum: 10/cb392d5b69cc0c4326d8227d783e1abb1830986c4312a5f1897b827b8947060ec7dce3b607f4a91b699bb810919d02f68f523aac93d51bdecd1eb303f49c86aa
   languageName: node
   linkType: hard
 
