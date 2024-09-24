@@ -786,6 +786,64 @@ describe('inquirer.prompt(...)', () => {
   });
 });
 
+describe('createPromptSession', () => {
+  it('should expose a Reactive subject across a session', async () => {
+    const localPrompt = inquirer.createPromptModule<TestQuestions>();
+    localPrompt.registerPrompt('stub', StubPrompt);
+    const session = localPrompt.createPromptSession();
+    const spy = vi.fn();
+
+    await session.run([
+      {
+        type: 'stub',
+        name: 'nonSubscribed',
+        message: 'nonSubscribedMessage',
+        answer: 'nonSubscribedAnswer',
+      },
+    ]);
+
+    session.process.subscribe(spy);
+    expect(spy).not.toHaveBeenCalled();
+
+    await session.run([
+      {
+        type: 'stub',
+        name: 'name1',
+        message: 'message',
+        answer: 'bar',
+      },
+      {
+        type: 'stub',
+        name: 'name',
+        message: 'message',
+        answer: 'doe',
+      },
+    ]);
+
+    expect(spy).toHaveBeenCalledWith({ name: 'name1', answer: 'bar' });
+    expect(spy).toHaveBeenCalledWith({ name: 'name', answer: 'doe' });
+  });
+
+  it('should return proxy object as prefilled answers', async () => {
+    const localPrompt = inquirer.createPromptModule<TestQuestions>();
+    localPrompt.registerPrompt('stub', StubPrompt);
+
+    const proxy = new Proxy({ prefilled: 'prefilled' }, {});
+    const session = localPrompt.createPromptSession({ answers: proxy });
+
+    const answers = await session.run([
+      {
+        type: 'stub',
+        name: 'nonSubscribed',
+        message: 'nonSubscribedMessage',
+        answer: 'nonSubscribedAnswer',
+      },
+    ]);
+
+    expect(answers).toBe(proxy);
+  });
+});
+
 describe('AbortSignal support', () => {
   it('throws on aborted signal', async () => {
     const localPrompt = inquirer.createPromptModule<TestQuestions>({

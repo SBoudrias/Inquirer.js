@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
 import readline from 'node:readline';
+import { isProxy } from 'node:util/types';
 import {
   defer,
-  EMPTY,
   from,
   of,
   concatMap,
@@ -10,7 +10,9 @@ import {
   reduce,
   isObservable,
   Observable,
+  Subject,
   lastValueFrom,
+  tap,
 } from 'rxjs';
 import runAsync from 'run-async';
 import MuteStream from 'mute-stream';
@@ -40,11 +42,7 @@ export const _ = {
       pointer = pointer[key] as Record<string, unknown>;
     });
   },
-  get: (
-    obj: object,
-    path: string | number | symbol = '',
-    defaultValue?: unknown,
-  ): any => {
+  get: (obj: object, path: string = '', defaultValue?: unknown): any => {
     const travel = (regexp: RegExp) =>
       String.prototype.split
         .call(path, regexp)
@@ -125,6 +123,15 @@ export type PromptFn<Value = any, Config = any> = (
  */
 export type PromptCollection = Record<string, PromptFn | LegacyPromptConstructor>;
 
+type ResolvedQuestion<A extends Answers, Type extends string = string> = AnyQuestion<
+  A,
+  Type
+> & {
+  message: string;
+  default?: any;
+  choices?: any;
+};
+
 class TTYError extends Error {
   override name = 'TTYError';
   isTtyError = true;
@@ -188,26 +195,190 @@ function isPromptConstructor(
   );
 }
 
+async function shouldRun<A extends Answers>(
+  question: AnyQuestion<A>,
+  answers: Partial<A>,
+): Promise<boolean> {
+  if (question.askAnswered !== true && answers[question.name] !== undefined) {
+    return false;
+  }
+
+  const { when } = question;
+  if (typeof when === 'function') {
+    const shouldRun = await runAsync(when)(answers);
+    return Boolean(shouldRun);
+  }
+
+  return when !== false;
+}
+
+function createLegacyPromptFn<A extends Answers>(
+  prompt: LegacyPromptConstructor,
+  answers: Partial<A>,
+): PromptFn<A> {
+  return (q, opt) =>
+    new Promise<A>((resolve, reject) => {
+      let cleanupSignal: (() => void) | undefined;
+
+      const { signal } = opt;
+      if (signal.aborted) {
+        reject(new AbortPromptError({ cause: signal.reason }));
+        return;
+      }
+
+      const rl = readline.createInterface(setupReadlineOptions(opt)) as InquirerReadline;
+
+      const abort = () => {
+        reject(new AbortPromptError({ cause: signal.reason }));
+        cleanup();
+      };
+      /**
+       * Handle the ^C exit
+       */
+      const onForceClose = () => {
+        abort();
+        process.kill(process.pid, 'SIGINT');
+        console.log('');
+      };
+
+      const onClose = () => {
+        process.removeListener('exit', onForceClose);
+        rl.removeListener('SIGINT', onForceClose);
+        rl.setPrompt('');
+        rl.output.unmute();
+        rl.output.write(ansiEscapes.cursorShow);
+        rl.output.end();
+        rl.close();
+      };
+
+      // Make sure new prompt start on a newline when closing
+      process.on('exit', onForceClose);
+      rl.on('SIGINT', onForceClose);
+
+      const activePrompt = new prompt(q, rl, answers);
+
+      const cleanup = () => {
+        onClose();
+        cleanupSignal?.();
+      };
+
+      signal.addEventListener('abort', abort);
+      cleanupSignal = () => {
+        signal.removeEventListener('abort', abort);
+        cleanupSignal = undefined;
+      };
+
+      activePrompt.run().then(resolve, reject).finally(cleanup);
+    });
+}
+
+async function prepareQuestion<A extends Answers>(
+  question: AnyQuestion<A>,
+  answers: Partial<A>,
+) {
+  const [message, defaultValue, resolvedChoices] = await Promise.all([
+    fetchAsyncQuestionProperty(question, 'message', answers),
+    fetchAsyncQuestionProperty(question, 'default', answers),
+    fetchAsyncQuestionProperty(question, 'choices', answers),
+  ]);
+
+  let choices;
+  if (Array.isArray(resolvedChoices)) {
+    choices = resolvedChoices.map((choice: unknown) => {
+      if (typeof choice === 'string' || typeof choice === 'number') {
+        return { name: choice, value: choice };
+      } else if (
+        typeof choice === 'object' &&
+        choice != null &&
+        !('value' in choice) &&
+        'name' in choice
+      ) {
+        return { ...choice, value: choice.name };
+      }
+      return choice;
+    });
+  }
+
+  return Object.assign({}, question, {
+    message,
+    default: defaultValue,
+    choices,
+  });
+}
+
+async function fetchAnswer<A extends Answers>(
+  prompt: PromptFn<any, any> | LegacyPromptConstructor | undefined,
+  question: ResolvedQuestion<A>,
+  answers: Partial<A>,
+  context: StreamOptions & { signal: AbortSignal },
+) {
+  if (prompt == null) {
+    throw new Error(`Prompt for type ${question.type} not found`);
+  }
+
+  const promptFn: PromptFn<A> = isPromptConstructor(prompt)
+    ? createLegacyPromptFn(prompt, answers)
+    : prompt;
+
+  const { filter = (value) => value } = question;
+  return promptFn(question, context).then((answer: unknown) => ({
+    name: question.name,
+    answer: filter(answer, answers),
+  }));
+}
+
 /**
  * Base interface class other can inherits from
  */
 export default class PromptsRunner<A extends Answers> {
-  private prompts: PromptCollection;
-  answers: Partial<A> = {};
-  process: Observable<any> = EMPTY;
+  private readonly prompts: PromptCollection;
+  readonly answers: Partial<A>;
+  readonly process: Subject<{ name: string; answer: any }> = new Subject();
   private abortController: AbortController = new AbortController();
-  private opt: StreamOptions;
+  private readonly opt: StreamOptions;
 
-  constructor(prompts: PromptCollection, opt: StreamOptions = {}) {
+  constructor(
+    prompts: PromptCollection,
+    { answers = {}, ...opt }: StreamOptions & { answers?: Partial<A> } = {},
+  ) {
     this.opt = opt;
     this.prompts = prompts;
+
+    this.answers = isProxy(answers)
+      ? answers
+      : new Proxy(
+          { ...answers },
+          {
+            get: (target, prop) => {
+              if (typeof prop !== 'string') {
+                return;
+              }
+              return _.get(target, prop);
+            },
+            set: (target, prop: string, value) => {
+              _.set(target, prop, value);
+              return true;
+            },
+          },
+        );
   }
 
-  async run(questions: PromptSession<A>, answers?: Partial<A>): Promise<A> {
+  async run<Session extends PromptSession<A> = PromptSession<A>>(
+    questions: Session,
+  ): Promise<A> {
     this.abortController = new AbortController();
 
-    // Keep global reference to the answers
-    this.answers = typeof answers === 'object' ? { ...answers } : {};
+    let cleanupModuleSignal: (() => void) | undefined;
+    const { signal: moduleSignal } = this.opt;
+    if (moduleSignal?.aborted) {
+      this.abortController.abort(moduleSignal.reason);
+    } else if (moduleSignal) {
+      const abort = () => this.abortController?.abort(moduleSignal.reason);
+      moduleSignal.addEventListener('abort', abort);
+      cleanupModuleSignal = () => {
+        moduleSignal.removeEventListener('abort', abort);
+      };
+    }
 
     let obs: Observable<AnyQuestion<A>>;
     if (isQuestionArray(questions)) {
@@ -223,184 +394,69 @@ export default class PromptsRunner<A extends Answers> {
       );
     } else {
       // Case: Called with a single question config
-      obs = from([questions]);
+      obs = from([questions as AnyQuestion<A>]);
     }
-
-    this.process = obs.pipe(
-      concatMap((question) =>
-        of(question).pipe(
-          concatMap((question) =>
-            from(
-              this.shouldRun(question).then((shouldRun: boolean | void) => {
-                if (shouldRun) {
-                  return question;
-                }
-                return;
-              }),
-            ).pipe(filter((val) => val != null)),
-          ),
-          concatMap((question) => defer(() => from(this.fetchAnswer(question)))),
-        ),
-      ),
-    );
 
     return lastValueFrom(
-      this.process.pipe(
-        reduce((answersObj, answer: { name: string; answer: unknown }) => {
-          _.set(answersObj, answer.name, answer.answer);
-          return answersObj;
-        }, this.answers),
-      ),
+      obs
+        .pipe(
+          concatMap((question) =>
+            of(question)
+              .pipe(
+                concatMap((question) =>
+                  from(
+                    shouldRun<A>(question, this.answers).then(
+                      (shouldRun: boolean | void) => {
+                        if (shouldRun) {
+                          return question;
+                        }
+                        return;
+                      },
+                    ),
+                  ).pipe(filter((val) => val != null)),
+                ),
+                concatMap((question) =>
+                  defer(() =>
+                    from(
+                      prepareQuestion(question, this.answers).then((question) =>
+                        fetchAnswer(
+                          this.prompts[question.type] ?? this.prompts['input'],
+                          question,
+                          this.answers,
+                          { ...this.opt, signal: this.abortController.signal },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+              .pipe(tap((answer) => this.process.next(answer))),
+          ),
+        )
+        .pipe(
+          reduce(
+            (
+              answersObj: Record<string, any>,
+              answer: { name: string; answer: unknown },
+            ) => {
+              answersObj[answer.name] = answer.answer;
+              return answersObj;
+            },
+            this.answers,
+          ),
+        ),
     )
       .then(() => this.answers as A)
-      .finally(() => this.close());
-  }
-
-  private prepareQuestion = async (question: AnyQuestion<A>) => {
-    const [message, defaultValue, resolvedChoices] = await Promise.all([
-      fetchAsyncQuestionProperty(question, 'message', this.answers),
-      fetchAsyncQuestionProperty(question, 'default', this.answers),
-      fetchAsyncQuestionProperty(question, 'choices', this.answers),
-    ]);
-
-    let choices;
-    if (Array.isArray(resolvedChoices)) {
-      choices = resolvedChoices.map((choice: unknown) => {
-        if (typeof choice === 'string' || typeof choice === 'number') {
-          return { name: choice, value: choice };
-        } else if (
-          typeof choice === 'object' &&
-          choice != null &&
-          !('value' in choice) &&
-          'name' in choice
-        ) {
-          return { ...choice, value: choice.name };
-        }
-        return choice;
-      });
-    }
-
-    return Object.assign({}, question, {
-      message,
-      default: defaultValue,
-      choices,
-      type: question.type in this.prompts ? question.type : 'input',
-    });
-  };
-
-  private fetchAnswer = async (rawQuestion: AnyQuestion<A>) => {
-    const question = await this.prepareQuestion(rawQuestion);
-    const prompt = this.prompts[question.type];
-
-    if (prompt == null) {
-      throw new Error(`Prompt for type ${question.type} not found`);
-    }
-
-    let cleanupSignal: (() => void) | undefined;
-
-    const promptFn: PromptFn<A> = isPromptConstructor(prompt)
-      ? (q, opt) =>
-          new Promise<A>((resolve, reject) => {
-            const { signal } = opt;
-            if (signal.aborted) {
-              reject(new AbortPromptError({ cause: signal.reason }));
-              return;
-            }
-
-            const rl = readline.createInterface(
-              setupReadlineOptions(opt),
-            ) as InquirerReadline;
-
-            /**
-             * Handle the ^C exit
-             */
-            const onForceClose = () => {
-              this.close();
-              process.kill(process.pid, 'SIGINT');
-              console.log('');
-            };
-
-            const onClose = () => {
-              process.removeListener('exit', onForceClose);
-              rl.removeListener('SIGINT', onForceClose);
-              rl.setPrompt('');
-              rl.output.unmute();
-              rl.output.write(ansiEscapes.cursorShow);
-              rl.output.end();
-              rl.close();
-            };
-
-            // Make sure new prompt start on a newline when closing
-            process.on('exit', onForceClose);
-            rl.on('SIGINT', onForceClose);
-
-            const activePrompt = new prompt(q, rl, this.answers);
-
-            const cleanup = () => {
-              onClose();
-              cleanupSignal?.();
-            };
-
-            const abort = () => {
-              reject(new AbortPromptError({ cause: signal.reason }));
-              cleanup();
-            };
-            signal.addEventListener('abort', abort);
-            cleanupSignal = () => {
-              signal.removeEventListener('abort', abort);
-              cleanupSignal = undefined;
-            };
-
-            activePrompt.run().then(resolve, reject).finally(cleanup);
-          })
-      : prompt;
-
-    let cleanupModuleSignal: (() => void) | undefined;
-    const { signal: moduleSignal } = this.opt;
-    if (moduleSignal?.aborted) {
-      this.abortController.abort(moduleSignal.reason);
-    } else if (moduleSignal) {
-      const abort = () => this.abortController?.abort(moduleSignal.reason);
-      moduleSignal.addEventListener('abort', abort);
-      cleanupModuleSignal = () => {
-        moduleSignal.removeEventListener('abort', abort);
-      };
-    }
-
-    const { filter = (value) => value } = question;
-    const { signal } = this.abortController;
-    return promptFn(question, { ...this.opt, signal })
-      .then((answer: unknown) => ({
-        name: question.name,
-        answer: filter(answer, this.answers),
-      }))
       .finally(() => {
-        cleanupSignal?.();
         cleanupModuleSignal?.();
+        this.close();
       });
-  };
+  }
 
   /**
    * Close the interface and cleanup listeners
    */
   close = () => {
     this.abortController?.abort();
-  };
-
-  private shouldRun = async (question: AnyQuestion<A>): Promise<boolean> => {
-    if (
-      question.askAnswered !== true &&
-      _.get(this.answers, question.name) !== undefined
-    ) {
-      return false;
-    }
-
-    const { when } = question;
-    if (typeof when === 'function') {
-      const shouldRun = await runAsync(when)(this.answers);
-      return Boolean(shouldRun);
-    }
-
-    return when !== false;
   };
 }

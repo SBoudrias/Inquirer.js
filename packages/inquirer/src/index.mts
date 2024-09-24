@@ -98,9 +98,8 @@ export function createPromptModule<
     questions: PromptSession<A>,
     answers?: Partial<A>,
   ): PromptReturnType<A> {
-    const runner = new PromptsRunner<A>(promptModule.prompts, opt);
-
-    const promptPromise = runner.run(questions, answers);
+    const runner = promptModule.createPromptSession<A>({ answers });
+    const promptPromise = runner.run(questions);
     return Object.assign(promptPromise, { ui: runner });
   }
 
@@ -122,6 +121,12 @@ export function createPromptModule<
    */
   promptModule.restoreDefaultPrompts = function () {
     promptModule.prompts = { ...builtInPrompts };
+  };
+
+  promptModule.createPromptSession = function <A extends Answers>({
+    answers,
+  }: { answers?: Partial<A> } = {}) {
+    return new PromptsRunner<A>(promptModule.prompts, { ...opt, answers });
   };
 
   return promptModule;
