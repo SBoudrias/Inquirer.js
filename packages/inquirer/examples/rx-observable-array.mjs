@@ -1,5 +1,5 @@
 import { from } from 'rxjs';
-import inquirer from '../dist/esm/index.mjs';
+import inquirer from '../dist/esm/index.js';
 
 const questions = [
   {

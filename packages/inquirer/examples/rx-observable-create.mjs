@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import inquirer from '../dist/esm/index.mjs';
+import inquirer from '../dist/esm/index.js';
 
 const observe = new Observable((subscriber) => {
   subscriber.next({

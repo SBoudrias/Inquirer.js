@@ -2,7 +2,7 @@
  * Paginated list
  */
 
-import inquirer from '../dist/esm/index.mjs';
+import inquirer from '../dist/esm/index.js';
 
 const choices = Array.apply(0, Array.from({ length: 26 })).map((x, y) =>
   String.fromCodePoint(y + 65),

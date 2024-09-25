@@ -2,7 +2,7 @@
  * Nested Inquirer call
  */
 
-import inquirer from '../dist/esm/index.mjs';
+import inquirer from '../dist/esm/index.js';
 
 inquirer
   .prompt({
