@@ -7,5 +7,5 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*test.mts, *.md]
+[*test.ts, *.md]
 trim_trailing_whitespace = false
