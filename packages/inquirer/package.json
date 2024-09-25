@@ -2,11 +2,6 @@
   "name": "inquirer",
   "version": "11.1.0",
   "description": "A collection of common interactive command line user interfaces.",
-  "author": "Simon Boudrias <admin@simonboudrias.com>",
-  "main": "./dist/cjs/index.js",
-  "files": [
-    "dist/**/*"
-  ],
   "keywords": [
     "answer",
     "answers",
@@ -46,14 +41,38 @@
     "yo",
     "zsh"
   ],
-  "engines": {
-    "node": ">=18"
-  },
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/inquirer/README.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/SBoudrias/Inquirer.js.git"
   },
   "license": "MIT",
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/index.d.ts",
+        "default": "./dist/commonjs/index.js"
+      }
+    }
+  },
+  "main": "./dist/commonjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/commonjs/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "attw": "attw --pack",
+    "tsc": "tshy"
+  },
   "dependencies": {
     "@inquirer/core": "^9.2.1",
     "@inquirer/prompts": "^6.0.1",
@@ -64,35 +83,20 @@
     "run-async": "^3.0.0",
     "rxjs": "^7.8.1"
   },
-  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/inquirer/README.md",
-  "sideEffects": false,
-  "scripts": {
-    "tsc": "yarn run tsc:esm && yarn run tsc:cjs",
-    "tsc:esm": "rm -rf dist/esm && tsc -p ./tsconfig.json",
-    "tsc:cjs": "rm -rf dist/cjs && tsc -p ./tsconfig.cjs.json && node ../../tools/fix-ext.mjs",
-    "attw": "attw --pack"
-  },
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/esm/types/index.d.mts",
-        "default": "./dist/esm/index.mjs"
-      },
-      "require": {
-        "types": "./dist/cjs/types/index.d.ts",
-        "default": "./dist/cjs/index.js"
-      }
-    }
-  },
-  "typings": "./dist/cjs/types/index.d.ts",
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "tshy": {
-    "project": "@repo/tsconfig",
     "exclude": [
       "src/**/*.test.ts"
-    ]
+    ],
+    "exports": {
+      "./package.json": "./package.json",
+      ".": "./src/index.ts"
+    }
   }
 }

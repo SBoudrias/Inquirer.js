@@ -1,14 +1,14 @@
 {
-  "private": true,
   "name": "@inquirer/cjs-integration-tests",
   "version": "0.0.0",
-  "engines": {
-    "node": ">=18"
-  },
+  "private": true,
   "devDependencies": {
     "@inquirer/core": "workspace:*",
     "@inquirer/input": "workspace:*",
     "@inquirer/prompts": "workspace:*",
     "inquirer": "workspace:*"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
