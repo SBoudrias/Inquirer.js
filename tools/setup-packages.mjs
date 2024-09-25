@@ -1,7 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import { globby } from 'globby';
-import prettier from 'prettier';
 
 function readFile(filepath) {
   return fs.readFile(filepath, 'utf8');
@@ -24,112 +23,62 @@ async function writeFile(filepath, content) {
   }
 }
 
-const prettierJsonOption = await prettier.resolveConfig('tsconfig.json');
-const formatJSON = (content) =>
-  prettier.format(JSON.stringify(content), { ...prettierJsonOption, parser: 'json' });
-
+const versions = {};
 const rootPkg = await readJSONFile(path.join(import.meta.dirname, '../package.json'));
 const paths = await globby(['packages/**/package.json', '!**/node_modules']);
 
-paths.forEach(async (pkgPath) => {
-  const dir = path.dirname(pkgPath);
-  const tsconfigPath = path.join(dir, 'tsconfig.json');
+Promise.all(
+  paths.map(async (pkgPath) => {
+    const pkg = await readJSONFile(pkgPath);
 
-  // Set multi-module system builds exports
-  const pkg = await readJSONFile(pkgPath);
-  const isTS = await fileExists(tsconfigPath);
-  const hasReadme = await fileExists(path.join(dir, 'README.md'));
+    // Collect all dependencies versions
+    Object.assign(versions, pkg.devDependencies, pkg.dependencies);
 
-  // Replicate configs that should always be the same.
-  pkg.engines = rootPkg.engines;
-  pkg.author = rootPkg.author;
-  pkg.license = rootPkg.license;
-  pkg.repository = rootPkg.repository;
-  pkg.keywords = [...new Set([...rootPkg.keywords, ...(pkg.keywords ?? [])])];
+    return [pkgPath, pkg];
+  }),
+).then((packages) =>
+  packages.forEach(async ([pkgPath, pkg]) => {
+    const dir = path.dirname(pkgPath);
 
-  if (hasReadme) {
-    const repoPath = dir.split('/').slice(-2).join('/');
-    pkg.homepage = `https://github.com/SBoudrias/Inquirer.js/blob/main/${repoPath}/README.md`;
-  }
+    const isTS = await fileExists(path.join(dir, 'src/index.ts'));
+    const hasReadme = await fileExists(path.join(dir, 'README.md'));
 
-  if (!('sideEffects' in pkg)) {
-    pkg.sideEffects = false;
-  }
+    // Replicate configs that should always be the same.
+    pkg.engines = rootPkg.engines;
+    pkg.author = rootPkg.author;
+    pkg.license = rootPkg.license;
+    pkg.repository = rootPkg.repository;
+    pkg.keywords = [...new Set([...rootPkg.keywords, ...(pkg.keywords ?? [])])];
+    pkg.sideEffects = pkg.sideEffects ?? false;
 
-  if (isTS) {
-    const tsconfig = await readJSONFile(tsconfigPath);
-    const emitDeclaration = tsconfig?.compilerOptions?.declaration !== false;
-
-    delete pkg.type;
-    pkg.scripts = pkg.scripts ?? {};
-    pkg.devDependencies = pkg.devDependencies ?? {};
-    pkg.files = ['dist/**/*'];
-
-    pkg.devDependencies['@repo/tsconfig'] = 'workspace:*';
-
-    function exportDef(defaultPath, types) {
-      if (emitDeclaration) {
-        return { types, default: defaultPath };
-      }
-      return defaultPath;
+    if (hasReadme) {
+      const repoPath = dir.split('/').slice(-2).join('/');
+      pkg.homepage = `https://github.com/SBoudrias/Inquirer.js/blob/main/${repoPath}/README.md`;
     }
 
-    // If the package supports Typescript, then apply the configs.
-    delete pkg.exports['.'];
-    pkg.exports = {
-      '.': {
-        import: exportDef('./dist/esm/index.mjs', './dist/esm/types/index.d.mts'),
-        require: exportDef('./dist/cjs/index.js', './dist/cjs/types/index.d.ts'),
-      },
-      ...pkg.exports,
-    };
+    if (isTS) {
+      pkg.files = ['dist'];
 
-    if (emitDeclaration) {
-      pkg.main = pkg.exports['.'].require.default;
-      pkg.typings = pkg.exports['.'].require.types;
-    } else {
-      pkg.main = pkg.exports['.'].require;
-      pkg.typings = undefined;
+      pkg.devDependencies = pkg.devDependencies ?? {};
+      pkg.devDependencies['@repo/tsconfig'] = 'workspace:*';
+      pkg.devDependencies['tshy'] = versions['tshy'];
+
+      pkg.tshy = pkg.tshy ?? {};
+      pkg.tshy.exclude = ['src/**/*.test.ts'];
+
+      pkg.scripts = pkg.scripts ?? {};
+      pkg.scripts.tsc = 'tshy';
+      pkg.scripts.attw = 'attw --pack';
+
+      const tsconfig = {
+        extends: '@repo/tsconfig',
+      };
+      writeFile(
+        path.join(dir, 'tsconfig.json'),
+        JSON.stringify(tsconfig, null, 2) + '\n',
+      );
     }
 
-    pkg.scripts = {
-      tsc: 'yarn run tsc:esm && yarn run tsc:cjs',
-      'tsc:esm': 'rm -rf dist/esm && tsc -p ./tsconfig.json',
-      'tsc:cjs':
-        'rm -rf dist/cjs && tsc -p ./tsconfig.cjs.json && node ../../tools/fix-ext.mjs',
-      attw: emitDeclaration ? 'attw --pack' : undefined,
-    };
-
-    // Set ESM tsconfig
-    const esmTsconfig = {
-      extends: '@repo/tsconfig',
-      include: ['./src'],
-      exclude: ['**/*.test.mts'],
-      compilerOptions: {
-        ...tsconfig.compilerOptions,
-        target: 'es2022',
-        module: 'NodeNext',
-        moduleResolution: 'nodenext',
-        outDir: 'dist/esm',
-        declarationDir: emitDeclaration ? 'dist/esm/types' : undefined,
-      },
-    };
-
-    // Set CJS tsconfig
-    const cjsTsconfig = {
-      extends: './tsconfig.json',
-      compilerOptions: {
-        target: 'es6',
-        module: 'commonjs',
-        moduleResolution: 'node10',
-        outDir: 'dist/cjs',
-        declarationDir: emitDeclaration ? 'dist/cjs/types' : undefined,
-      },
-    };
-
-    writeFile(tsconfigPath, await formatJSON(esmTsconfig));
-    writeFile(path.join(dir, 'tsconfig.cjs.json'), await formatJSON(cjsTsconfig));
-  }
-
-  writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
-});
+    writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+  }),
+);
