@@ -3,7 +3,7 @@
  * run example by writing `node pizza.mjs` in your console
  */
 
-import inquirer from '../dist/esm/index.mjs';
+import inquirer from '../dist/esm/index.js';
 
 console.log('Hi, welcome to Node Pizza');
 

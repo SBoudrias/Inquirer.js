@@ -2,7 +2,7 @@
  * Password prompt example
  */
 
-import inquirer from '../dist/esm/index.mjs';
+import inquirer from '../dist/esm/index.js';
 
 const requireLetterAndNumber = (value) => {
   if (/\w/.test(value) && /\d/.test(value)) {
