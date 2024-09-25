@@ -1,6 +1,7 @@
 node_modules
 dist
 coverage
+.tshy-build
 .idea
 .yarn/*
 !.yarn/cache

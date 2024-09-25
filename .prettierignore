@@ -1,3 +1,4 @@
 .husky
 .yarn
+.tshy
 coverage

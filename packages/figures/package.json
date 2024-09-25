@@ -77,6 +77,13 @@
   },
   "sideEffects": false,
   "devDependencies": {
-    "@repo/tsconfig": "workspace:*"
+    "@repo/tsconfig": "workspace:*",
+    "tshy": "^3.0.2"
+  },
+  "tshy": {
+    "project": "@repo/tsconfig",
+    "exclude": [
+      "src/**/*.test.ts"
+    ]
   }
 }
