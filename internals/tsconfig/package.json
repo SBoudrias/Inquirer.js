@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "@repo/tsconfig",
+  "version": "0.0.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "tsconfig.json",
+  "dependencies": {
+    "@sindresorhus/tsconfig": "^6.0.0"
+  }
+}

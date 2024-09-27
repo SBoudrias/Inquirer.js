@@ -62,7 +62,10 @@ paths.forEach(async (pkgPath) => {
 
     delete pkg.type;
     pkg.scripts = pkg.scripts ?? {};
+    pkg.devDependencies = pkg.devDependencies ?? {};
     pkg.files = ['dist/**/*'];
+
+    pkg.devDependencies['@repo/tsconfig'] = 'workspace:*';
 
     function exportDef(defaultPath, types) {
       if (emitDeclaration) {
@@ -99,7 +102,7 @@ paths.forEach(async (pkgPath) => {
 
     // Set ESM tsconfig
     const esmTsconfig = {
-      extends: '../../tsconfig.json',
+      extends: '@repo/tsconfig',
       include: ['./src'],
       exclude: ['**/*.test.mts'],
       compilerOptions: {

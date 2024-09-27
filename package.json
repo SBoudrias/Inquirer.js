@@ -50,7 +50,7 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.16.2",
     "@eslint/js": "^9.10.0",
-    "@sindresorhus/tsconfig": "^6.0.0",
+    "@repo/tsconfig": "workspace:*",
     "@types/node": "^22.5.5",
     "@vitest/coverage-v8": "^2.1.1",
     "@vitest/ui": "^2.1.1",
@@ -76,7 +76,8 @@
   },
   "workspaces": [
     "packages/*",
-    "integration/*"
+    "integration/*",
+    "internals/*"
   ],
   "scripts": {
     "prepare": "husky && turbo tsc attw",

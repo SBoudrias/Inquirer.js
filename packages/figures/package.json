@@ -75,5 +75,8 @@
       }
     }
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*"
+  }
 }

@@ -84,5 +84,8 @@
       }
     }
   },
-  "typings": "./dist/cjs/types/index.d.ts"
+  "typings": "./dist/cjs/types/index.d.ts",
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*"
+  }
 }

@@ -429,6 +429,7 @@ __metadata:
     "@inquirer/figures": "npm:^1.0.6"
     "@inquirer/testing": "npm:^2.1.34"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
     ansi-escapes: "npm:^4.3.2"
     yoctocolors-cjs: "npm:^2.1.2"
   languageName: unknown
@@ -452,6 +453,7 @@ __metadata:
     "@inquirer/core": "npm:^9.2.1"
     "@inquirer/testing": "npm:^2.1.34"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -462,6 +464,7 @@ __metadata:
     "@inquirer/figures": "npm:^1.0.6"
     "@inquirer/testing": "npm:^2.1.34"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^22.5.5"
     "@types/wrap-ansi": "npm:^3.0.0"
@@ -495,6 +498,7 @@ __metadata:
     "@inquirer/core": "npm:^9.2.1"
     "@inquirer/testing": "npm:^2.1.34"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
     external-editor: "npm:^3.1.0"
   languageName: unknown
   linkType: soft
@@ -517,6 +521,7 @@ __metadata:
     "@inquirer/core": "npm:^9.2.1"
     "@inquirer/testing": "npm:^2.1.34"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
     yoctocolors-cjs: "npm:^2.1.2"
   languageName: unknown
   linkType: soft
@@ -524,6 +529,8 @@ __metadata:
 "@inquirer/figures@npm:^1.0.6, @inquirer/figures@workspace:packages/figures":
   version: 0.0.0-use.local
   resolution: "@inquirer/figures@workspace:packages/figures"
+  dependencies:
+    "@repo/tsconfig": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -534,6 +541,7 @@ __metadata:
     "@inquirer/core": "npm:^9.2.1"
     "@inquirer/testing": "npm:^2.1.34"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -544,6 +552,7 @@ __metadata:
     "@inquirer/core": "npm:^9.2.1"
     "@inquirer/testing": "npm:^2.1.34"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -554,6 +563,7 @@ __metadata:
     "@inquirer/core": "npm:^9.2.1"
     "@inquirer/testing": "npm:^2.1.34"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
     ansi-escapes: "npm:^4.3.2"
   languageName: unknown
   linkType: soft
@@ -573,6 +583,7 @@ __metadata:
     "@inquirer/search": "npm:^2.0.1"
     "@inquirer/select": "npm:^3.0.1"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -583,6 +594,7 @@ __metadata:
     "@inquirer/core": "npm:^9.2.1"
     "@inquirer/testing": "npm:^2.1.34"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
     yoctocolors-cjs: "npm:^2.1.2"
   languageName: unknown
   linkType: soft
@@ -593,7 +605,7 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.16.2"
     "@eslint/js": "npm:^9.10.0"
-    "@sindresorhus/tsconfig": "npm:^6.0.0"
+    "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^22.5.5"
     "@vitest/coverage-v8": "npm:^2.1.1"
     "@vitest/ui": "npm:^2.1.1"
@@ -624,6 +636,7 @@ __metadata:
     "@inquirer/figures": "npm:^1.0.6"
     "@inquirer/testing": "npm:^2.1.34"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
     yoctocolors-cjs: "npm:^2.1.2"
   languageName: unknown
   linkType: soft
@@ -636,6 +649,7 @@ __metadata:
     "@inquirer/figures": "npm:^1.0.6"
     "@inquirer/testing": "npm:^2.1.34"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
     ansi-escapes: "npm:^4.3.2"
     yoctocolors-cjs: "npm:^2.1.2"
   languageName: unknown
@@ -646,6 +660,7 @@ __metadata:
   resolution: "@inquirer/testing@workspace:packages/testing"
   dependencies:
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^22.5.5"
     ansi-escapes: "npm:^4.3.2"
@@ -658,6 +673,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@inquirer/type@workspace:packages/type"
   dependencies:
+    "@repo/tsconfig": "workspace:*"
     mute-stream: "npm:^1.0.0"
   languageName: unknown
   linkType: soft
@@ -1355,6 +1371,14 @@ __metadata:
   checksum: 10/00baec4458ac86ca27edf7ce807ccfad97cd1d4b67bdedaf3401a9e755757588f3331e891290d1deea52d88df2bf2387caf8d94a6835b614d5b37b638a688273
   languageName: node
   linkType: hard
+
+"@repo/tsconfig@workspace:*, @repo/tsconfig@workspace:internals/tsconfig":
+  version: 0.0.0-use.local
+  resolution: "@repo/tsconfig@workspace:internals/tsconfig"
+  dependencies:
+    "@sindresorhus/tsconfig": "npm:^6.0.0"
+  languageName: unknown
+  linkType: soft
 
 "@rollup/rollup-android-arm-eabi@npm:4.22.4":
   version: 4.22.4
@@ -4630,6 +4654,7 @@ __metadata:
     "@inquirer/core": "npm:^9.2.1"
     "@inquirer/prompts": "npm:^6.0.1"
     "@inquirer/type": "npm:^2.0.0"
+    "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
     ansi-escapes: "npm:^4.3.2"
     mute-stream: "npm:^1.0.0"
