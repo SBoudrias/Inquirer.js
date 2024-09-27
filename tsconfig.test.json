@@ -1,6 +1,6 @@
 {
   "extends": "@repo/tsconfig",
-  "include": ["**/*.test.mts", "**/*.d.ts"],
+  "include": ["vitest.config.ts", "**/*.test.mts", "**/*.d.ts"],
   "compilerOptions": {
     "skipLibCheck": true,
     "noEmit": true
