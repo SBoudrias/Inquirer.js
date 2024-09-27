@@ -2,10 +2,6 @@
   "extends": "./tsconfig.json",
   "include": ["**/*.test.mts", "**/*.d.ts"],
   "compilerOptions": {
-    "lib": ["es2023"],
-    "target": "es2022",
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
     "skipLibCheck": true,
     "noEmit": true
   }

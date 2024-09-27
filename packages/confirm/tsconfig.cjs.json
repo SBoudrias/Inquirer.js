@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "lib": ["es2023"],
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node10",
