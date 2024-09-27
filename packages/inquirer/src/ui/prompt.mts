@@ -19,7 +19,7 @@ import type { InquirerReadline } from '@inquirer/type';
 import ansiEscapes from 'ansi-escapes';
 import type {
   Answers,
-  AnyQuestion,
+  Question,
   AsyncGetterFunction,
   PromptSession,
   StreamOptions,
@@ -66,7 +66,7 @@ export const _ = {
 async function fetchAsyncQuestionProperty<
   A extends Answers,
   Prop extends keyof Q,
-  Q extends AnyQuestion<A>,
+  Q extends Question<A>,
 >(
   question: Q,
   prop: Prop,
@@ -162,13 +162,13 @@ function setupReadlineOptions(opt: StreamOptions) {
 
 function isQuestionArray<A extends Answers>(
   questions: PromptSession<A>,
-): questions is AnyQuestion<A>[] {
+): questions is Question<A>[] {
   return Array.isArray(questions);
 }
 
 function isQuestionMap<A extends Answers>(
   questions: PromptSession<A>,
-): questions is Record<string, Omit<AnyQuestion<A>, 'name'>> {
+): questions is Record<string, Omit<Question<A>, 'name'>> {
   return Object.values(questions).every(
     (maybeQuestion) =>
       typeof maybeQuestion === 'object' &&
@@ -209,7 +209,7 @@ export default class PromptsRunner<A extends Answers> {
     // Keep global reference to the answers
     this.answers = typeof answers === 'object' ? { ...answers } : {};
 
-    let obs: Observable<AnyQuestion<A>>;
+    let obs: Observable<Question<A>>;
     if (isQuestionArray(questions)) {
       obs = from(questions);
     } else if (isObservable(questions)) {
@@ -217,7 +217,7 @@ export default class PromptsRunner<A extends Answers> {
     } else if (isQuestionMap(questions)) {
       // Case: Called with a set of { name: question }
       obs = from(
-        Object.entries(questions).map(([name, question]): AnyQuestion<A> => {
+        Object.entries(questions).map(([name, question]): Question<A> => {
           return Object.assign({}, question, { name });
         }),
       );
@@ -256,7 +256,7 @@ export default class PromptsRunner<A extends Answers> {
       .finally(() => this.close());
   }
 
-  private prepareQuestion = async (question: AnyQuestion<A>) => {
+  private prepareQuestion = async (question: Question<A>) => {
     const [message, defaultValue, resolvedChoices] = await Promise.all([
       fetchAsyncQuestionProperty(question, 'message', this.answers),
       fetchAsyncQuestionProperty(question, 'default', this.answers),
@@ -288,7 +288,7 @@ export default class PromptsRunner<A extends Answers> {
     });
   };
 
-  private fetchAnswer = async (rawQuestion: AnyQuestion<A>) => {
+  private fetchAnswer = async (rawQuestion: Question<A>) => {
     const question = await this.prepareQuestion(rawQuestion);
     const prompt = this.prompts[question.type];
 
@@ -387,7 +387,7 @@ export default class PromptsRunner<A extends Answers> {
     this.abortController?.abort();
   };
 
-  private shouldRun = async (question: AnyQuestion<A>): Promise<boolean> => {
+  private shouldRun = async (question: Question<A>): Promise<boolean> => {
     if (
       question.askAnswered !== true &&
       _.get(this.answers, question.name) !== undefined

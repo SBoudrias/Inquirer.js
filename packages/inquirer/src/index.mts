@@ -26,14 +26,20 @@ import type {
 import type {
   Answers,
   CustomQuestion,
-  BuiltInQuestion,
+  UnnamedDistinctQuestion,
   StreamOptions,
   QuestionMap,
   PromptSession,
 } from './types.mjs';
 import { Observable } from 'rxjs';
 
-export type { QuestionMap } from './types.mjs';
+export type {
+  QuestionMap,
+  Question,
+  DistinctQuestion,
+  Answers,
+  PromptSession,
+} from './types.mjs';
 
 const builtInPrompts: PromptCollection = {
   input,
@@ -60,8 +66,10 @@ type PromptReturnType<T> = Promise<Prettify<T>> & {
 export function createPromptModule<
   Prompts extends Record<string, Record<string, unknown>> = never,
 >(opt?: StreamOptions) {
-  type Question<A extends Answers> = BuiltInQuestion<A> | CustomQuestion<A, Prompts>;
-  type NamedQuestion<A extends Answers> = Question<A> & {
+  type SpecificQuestion<A extends Answers> =
+    | UnnamedDistinctQuestion<A>
+    | CustomQuestion<A, Prompts>;
+  type NamedQuestion<A extends Answers> = SpecificQuestion<A> & {
     name: Extract<keyof A, string>;
   };
   function promptModule<
@@ -76,7 +84,7 @@ export function createPromptModule<
     PrefilledAnswers extends Answers = object,
   >(
     questions: {
-      [name in keyof A]: Question<Prettify<PrefilledAnswers & A>>;
+      [name in keyof A]: SpecificQuestion<Prettify<PrefilledAnswers & A>>;
     },
     answers?: PrefilledAnswers,
   ): PromptReturnType<Prettify<PrefilledAnswers & Answers<Extract<keyof A, string>>>>;
