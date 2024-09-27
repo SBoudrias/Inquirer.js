@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "@repo/tsconfig",
   "include": ["**/*.test.mts", "**/*.d.ts"],
   "compilerOptions": {
     "skipLibCheck": true,

@@ -88,7 +88,8 @@
     "@inquirer/select": "^3.0.1"
   },
   "devDependencies": {
-    "@inquirer/type": "^2.0.0"
+    "@inquirer/type": "^2.0.0",
+    "@repo/tsconfig": "workspace:*"
   },
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/prompts/README.md",
   "sideEffects": false

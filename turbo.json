@@ -8,12 +8,7 @@
     "tsc": {
       "dependsOn": ["^tsc"],
       "outputs": ["dist/**"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "../../tools/fix-ext.mjs",
-        "../../tsconfig.json",
-        "../../package.json"
-      ]
+      "inputs": ["$TURBO_DEFAULT$", "../../tools/fix-ext.mjs", "../../package.json"]
     }
   }
 }
