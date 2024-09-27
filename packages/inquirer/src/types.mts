@@ -47,7 +47,7 @@ export interface QuestionMap {
 type KeyValueOrAsyncGetterFunction<T, k extends string, A extends Answers> =
   T extends Record<string, any> ? T[k] | AsyncGetterFunction<T[k], A> : never;
 
-export type AnyQuestion<A extends Answers = Answers, Type extends string = string> = {
+export type Question<A extends Answers = Answers, Type extends string = string> = {
   type: Type;
   name: string;
   message: string | AsyncGetterFunction<string, A>;
@@ -75,7 +75,7 @@ type QuestionWithGetters<
   }
 >;
 
-export type UnnamedBuiltInQuestion<A extends Answers = object> =
+export type UnnamedDistinctQuestion<A extends Answers = object> =
   | QuestionWithGetters<'checkbox', Parameters<typeof checkbox>[0], A>
   | QuestionWithGetters<'confirm', Parameters<typeof confirm>[0], A>
   | QuestionWithGetters<'editor', Parameters<typeof editor>[0], A>
@@ -89,8 +89,8 @@ export type UnnamedBuiltInQuestion<A extends Answers = object> =
   | QuestionWithGetters<'list', Parameters<typeof select>[0], A>
   | QuestionWithGetters<'select', Parameters<typeof select>[0], A>;
 
-export type BuiltInQuestion<A extends Answers = Answers> = Prettify<
-  UnnamedBuiltInQuestion<A> & {
+export type DistinctQuestion<A extends Answers = Answers> = Prettify<
+  UnnamedDistinctQuestion<A> & {
     name: Extract<keyof A, string>;
   }
 >;
@@ -104,7 +104,7 @@ export type CustomQuestion<
 
 export type PromptSession<
   A extends Answers = Answers,
-  Q extends AnyQuestion<A> = AnyQuestion<A>,
+  Q extends Question<A> = Question<A>,
 > = Q[] | Record<string, Omit<Q, 'name'>> | Observable<Q> | Q;
 
 export type StreamOptions = Prettify<Context & { skipTTYChecks?: boolean }>;

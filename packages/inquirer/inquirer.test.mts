@@ -12,8 +12,8 @@ import { vi, expect, beforeEach, afterEach, describe, it, expectTypeOf } from 'v
 import { of } from 'rxjs';
 import { AbortPromptError, createPrompt } from '@inquirer/core';
 import type { InquirerReadline } from '@inquirer/type';
-import inquirer, { type QuestionMap } from './src/index.mjs';
-import type { Answers } from './src/types.mjs';
+import inquirer from './src/index.mjs';
+import type { QuestionMap, Answers, Question, DistinctQuestion } from './src/index.mjs';
 import { _ } from './src/ui/prompt.mjs';
 
 declare module './src/index.mjs' {
@@ -58,7 +58,7 @@ class StubFailingPrompt {
   close() {}
 }
 
-class StubEventualyFailingPrompt {
+class StubEventuallyFailingPrompt {
   timeout?: NodeJS.Timeout;
 
   run() {
@@ -81,11 +81,6 @@ beforeEach(() => {
 });
 
 describe('exported types', () => {
-  type Answers = import('./src/index.mjs').Answers;
-  type Question = import('./src/index.mjs').Question;
-  type BuiltInQuestion = import('./src/index.mjs').BuiltInQuestion;
-  type PromptSession = import('./src/index.mjs').PromptSession;
-
   it('Question type is not any', () => {
     expectTypeOf({}).not.toMatchTypeOf<Question>();
   });
@@ -97,23 +92,49 @@ describe('exported types', () => {
       message: 'message',
     } as const;
     expectTypeOf(question).toMatchTypeOf<Question>();
-    expectTypeOf(question).toMatchTypeOf<BuiltInQuestion>();
-    expectTypeOf(question).toMatchTypeOf<PromptSession>();
-    expectTypeOf([question]).toMatchTypeOf<PromptSession>();
-    expectTypeOf({ q1: question }).toMatchTypeOf<PromptSession>();
+    expectTypeOf(question).toMatchTypeOf<DistinctQuestion>();
     expectTypeOf({ name: 'q1', message: 'message' }).not.toMatchTypeOf<Question>();
     expectTypeOf({ type: 'stub', message: 'message' }).not.toMatchTypeOf<Question>();
     expectTypeOf({ type: 'stub', name: 'q1' }).not.toMatchTypeOf<Question>();
   });
 
-  it('Exported types can be used with "as const" and "satifies" to keep prompt type inference', async () => {
+  it('Exported types can be used with "as const satisfies Question" to keep prompt type inference', async () => {
     const question = {
       type: 'stub',
       name: 'q1',
       message: 'message',
-    } as const satisfies PromptSession;
-
+    } as const satisfies Question;
     expectTypeOf(await inquirer.prompt(question)).toEqualTypeOf<{ q1: any }>();
+
+    const questions = [
+      {
+        type: 'stub',
+        name: 'q1',
+        message: 'message',
+      },
+      {
+        type: 'stub',
+        name: 'q2',
+        message: 'message',
+      },
+    ] as const satisfies Question[];
+    expectTypeOf(await inquirer.prompt(questions)).toEqualTypeOf<{ q1: any; q2: any }>();
+
+    const questions2 = [
+      {
+        type: 'input',
+        name: 'q1',
+        message: 'message',
+        when: false,
+      },
+      {
+        type: 'password',
+        name: 'q2',
+        message: 'message',
+        when: false,
+      },
+    ] as const satisfies DistinctQuestion[];
+    expectTypeOf(await inquirer.prompt(questions2)).toEqualTypeOf<{ q1: any; q2: any }>();
   });
 
   it('exported Answers type is not any', () => {
@@ -837,7 +858,7 @@ describe('AbortSignal support', () => {
     const localPrompt = inquirer.createPromptModule<TestQuestions>({
       signal: AbortSignal.abort(),
     });
-    localPrompt.registerPrompt('stub', StubEventualyFailingPrompt);
+    localPrompt.registerPrompt('stub', StubEventuallyFailingPrompt);
 
     const promise = localPrompt({ type: 'stub', name: 'q1', message: 'message' });
     await expect(promise).rejects.toThrow(AbortPromptError);
@@ -848,7 +869,7 @@ describe('AbortSignal support', () => {
     const localPrompt = inquirer.createPromptModule<TestQuestions>({
       signal: abortController.signal,
     });
-    localPrompt.registerPrompt('stub', StubEventualyFailingPrompt);
+    localPrompt.registerPrompt('stub', StubEventuallyFailingPrompt);
 
     const promise = localPrompt({ type: 'stub', name: 'q1', message: 'message' });
     setTimeout(() => abortController.abort(), 0);
