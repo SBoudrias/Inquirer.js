@@ -4,6 +4,7 @@
     "esm": true
   },
   "compilerOptions": {
+    "lib": ["es2023"],
     "skipLibCheck": false,
     "esModuleInterop": true
   }

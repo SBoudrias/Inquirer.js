@@ -104,7 +104,6 @@ paths.forEach(async (pkgPath) => {
       exclude: ['**/*.test.mts'],
       compilerOptions: {
         ...tsconfig.compilerOptions,
-        lib: ['es2023'],
         target: 'es2022',
         module: 'NodeNext',
         moduleResolution: 'nodenext',
@@ -117,7 +116,6 @@ paths.forEach(async (pkgPath) => {
     const cjsTsconfig = {
       extends: './tsconfig.json',
       compilerOptions: {
-        lib: ['es2023'],
         target: 'es6',
         module: 'commonjs',
         moduleResolution: 'node10',
