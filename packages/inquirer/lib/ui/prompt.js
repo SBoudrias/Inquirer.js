@@ -13,7 +13,7 @@ const _ = {
       pointer = pointer[key];
     });
   },
-  get: (obj, path, defaultValue) => {
+  get: (obj, path = '', defaultValue) => {
     const travel = (regexp) =>
       String.prototype.split
         .call(path, regexp)
