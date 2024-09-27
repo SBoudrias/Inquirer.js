@@ -1,11 +1,3 @@
-.eslintignore
-.gitattributes
-.gitignore
 .husky
-.prettierignore
 .yarn
-*.gz
-*.zip
-*.png
 coverage
-yarn.lock

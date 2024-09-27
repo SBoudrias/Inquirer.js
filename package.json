@@ -93,7 +93,7 @@
     "url": "https://github.com/SBoudrias/Inquirer.js.git"
   },
   "lint-staged": {
-    "*": "yarn prettier --write",
+    "*": "yarn prettier --write --ignore-unknown",
     "*.m?[jt]sx?": "yarn eslint --fix"
   }
 }
