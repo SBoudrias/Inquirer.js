@@ -70,7 +70,6 @@
     "type-fest": "^4.0.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.16.2",
     "@eslint/js": "^9.10.0",
     "@repo/tsconfig": "workspace:*",
     "@types/node": "^22.5.5",

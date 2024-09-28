@@ -75,6 +75,7 @@
     "tsc": "tshy"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.16.4",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },

@@ -62,6 +62,7 @@ Promise.all(
       pkg.devDependencies = pkg.devDependencies ?? {};
       pkg.devDependencies['@repo/tsconfig'] = 'workspace:*';
       pkg.devDependencies['tshy'] = versions['tshy'];
+      pkg.devDependencies['@arethetypeswrong/cli'] = versions['@arethetypeswrong/cli'];
 
       pkg.tshy = pkg.tshy ?? {};
       pkg.tshy.exclude = ['src/**/*.test.ts'];
