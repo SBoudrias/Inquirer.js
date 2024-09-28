@@ -478,7 +478,7 @@ __metadata:
     "@inquirer/type": "npm:^2.0.0"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
-    "@types/node": "npm:^22.5.5"
+    "@types/node": "npm:^22.7.4"
     "@types/wrap-ansi": "npm:^3.0.0"
     ansi-escapes: "npm:^4.3.2"
     cli-width: "npm:^4.1.0"
@@ -634,7 +634,7 @@ __metadata:
   dependencies:
     "@eslint/js": "npm:^9.11.1"
     "@repo/tsconfig": "workspace:*"
-    "@types/node": "npm:^22.5.5"
+    "@types/node": "npm:^22.7.4"
     "@vitest/coverage-v8": "npm:^2.1.1"
     "@vitest/ui": "npm:^2.1.1"
     eslint: "npm:^9.11.1"
@@ -650,7 +650,7 @@ __metadata:
     prettier: "npm:^3.3.3"
     ts-node: "npm:^10.9.2"
     turbo: "npm:^2.1.2"
-    typescript: "npm:^5.5.4"
+    typescript: "npm:^5.6.2"
     typescript-eslint: "npm:^8.7.0"
     vitest: "npm:^2.1.1"
   languageName: unknown
@@ -695,7 +695,7 @@ __metadata:
     "@inquirer/type": "npm:^2.0.0"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
-    "@types/node": "npm:^22.5.5"
+    "@types/node": "npm:^22.7.4"
     ansi-escapes: "npm:^4.3.2"
     mute-stream: "npm:^1.0.0"
     strip-ansi: "npm:^6.0.1"
@@ -1719,12 +1719,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.5.5":
-  version: 22.5.5
-  resolution: "@types/node@npm:22.5.5"
+"@types/node@npm:^22.7.4":
+  version: 22.7.4
+  resolution: "@types/node@npm:22.7.4"
   dependencies:
     undici-types: "npm:~6.19.2"
-  checksum: 10/172d02c8e6d921699edcf559c28b3805616bd6481af1b3cb0299f89ad9a6f33b71050434c06ce7b503166054a26275344187c443f99f745d0b12601372452f19
+  checksum: 10/19ddab80c4eba2253c855ed67c9bbc47417183049d01e59010a738bd80d47338bab79fd1f44ae51516bd63a1db4bf21ddb38b16bf6401a2e93252068ec52e88b
   languageName: node
   linkType: hard
 
@@ -8638,7 +8638,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:>=3 < 6, typescript@npm:^5.5.3, typescript@npm:^5.5.4":
+"typescript@npm:>=3 < 6, typescript@npm:^5.5.3, typescript@npm:^5.6.2":
   version: 5.6.2
   resolution: "typescript@npm:5.6.2"
   bin:
@@ -8658,7 +8658,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.4#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.2#optional!builtin<compat/typescript>":
   version: 5.6.2
   resolution: "typescript@patch:typescript@npm%3A5.6.2#optional!builtin<compat/typescript>::version=5.6.2&hash=8c6c40"
   bin:

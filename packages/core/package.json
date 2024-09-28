@@ -77,7 +77,7 @@
     "@inquirer/figures": "^1.0.6",
     "@inquirer/type": "^2.0.0",
     "@types/mute-stream": "^0.0.4",
-    "@types/node": "^22.5.5",
+    "@types/node": "^22.7.4",
     "@types/wrap-ansi": "^3.0.0",
     "ansi-escapes": "^4.3.2",
     "cli-width": "^4.1.0",
