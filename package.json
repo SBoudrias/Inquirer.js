@@ -70,14 +70,14 @@
     "type-fest": "^4.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.10.0",
+    "@eslint/js": "^9.11.1",
     "@repo/tsconfig": "workspace:*",
     "@types/node": "^22.5.5",
     "@vitest/coverage-v8": "^2.1.1",
     "@vitest/ui": "^2.1.1",
-    "eslint": "^9.10.0",
+    "eslint": "^9.11.1",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-n": "^17.10.2",
+    "eslint-plugin-n": "^17.10.3",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-unicorn": "^55.0.0",
     "globals": "^15.9.0",
@@ -89,7 +89,7 @@
     "ts-node": "^10.9.2",
     "turbo": "^2.1.2",
     "typescript": "^5.5.4",
-    "typescript-eslint": "^8.5.0",
+    "typescript-eslint": "^8.7.0",
     "vitest": "^2.1.1"
   },
   "packageManager": "yarn@4.5.0+sha512.837566d24eec14ec0f5f1411adb544e892b3454255e61fdef8fd05f3429480102806bac7446bc9daff3896b01ae4b62d00096c7e989f1596f2af10b927532f39",
