@@ -499,6 +499,7 @@ __metadata:
     "@inquirer/figures": "npm:^1.0.6"
     "@inquirer/prompts": "npm:^6.0.1"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^22.7.4"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
   bin:
@@ -711,8 +712,9 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.16.4"
     "@repo/tsconfig": "workspace:*"
-    mute-stream: "npm:^2.0.0"
     tshy: "npm:^3.0.2"
+  peerDependencies:
+    "@types/node": "*"
   languageName: unknown
   linkType: soft
 
@@ -1712,16 +1714,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
-  version: 22.5.4
-  resolution: "@types/node@npm:22.5.4"
-  dependencies:
-    undici-types: "npm:~6.19.2"
-  checksum: 10/d46e0abf437b36bdf89011287aa43873d68ea6f2521a11b5c9a033056fd0d07af36daf51439010e8d41c62c55d0b00e9b5e09ed00bb2617723f73f28a873903a
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^22.7.4":
+"@types/node@npm:*, @types/node@npm:^22.7.4":
   version: 22.7.4
   resolution: "@types/node@npm:22.7.4"
   dependencies:

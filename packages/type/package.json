@@ -74,13 +74,13 @@
     "attw": "attw --pack",
     "tsc": "tshy"
   },
-  "dependencies": {
-    "mute-stream": "^2.0.0"
-  },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.16.4",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
+  },
+  "peerDependencies": {
+    "@types/node": ">=18"
   },
   "engines": {
     "node": ">=18"

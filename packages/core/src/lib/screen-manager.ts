@@ -1,4 +1,3 @@
-import type { CursorPos } from 'node:readline';
 import stripAnsi from 'strip-ansi';
 import ansiEscapes from 'ansi-escapes';
 import { breakLines, readlineWidth } from './utils.js';
@@ -15,7 +14,10 @@ export default class ScreenManager {
   // These variables are keeping information to allow correct prompt re-rendering
   private height: number = 0;
   private extraLinesUnderPrompt: number = 0;
-  private cursorPos: CursorPos;
+  private cursorPos: {
+    rows: number;
+    cols: number;
+  };
 
   constructor(private readonly rl: InquirerReadline) {
     this.rl = rl;

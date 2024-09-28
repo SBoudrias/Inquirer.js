@@ -309,7 +309,7 @@ export default class PromptsRunner<A extends Answers> {
 
             const rl = readline.createInterface(
               setupReadlineOptions(opt),
-            ) as InquirerReadline;
+            ) as unknown as InquirerReadline;
 
             /**
              * Handle the ^C exit

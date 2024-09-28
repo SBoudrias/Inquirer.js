@@ -77,7 +77,6 @@
     "@inquirer/core": "^9.2.1",
     "@inquirer/prompts": "^6.0.1",
     "@inquirer/type": "^2.0.0",
-    "@types/mute-stream": "^0.0.4",
     "ansi-escapes": "^4.3.2",
     "mute-stream": "^2.0.0",
     "run-async": "^3.0.0",
@@ -86,6 +85,7 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.16.4",
     "@repo/tsconfig": "workspace:*",
+    "@types/mute-stream": "^0.0.4",
     "tshy": "^3.0.2"
   },
   "engines": {
