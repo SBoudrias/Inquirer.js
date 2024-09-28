@@ -1,13 +1,6 @@
 {
-  "private": true,
-  "type": "module",
   "name": "@inquirer/root",
-  "author": "Simon Boudrias <admin@simonboudrias.com>",
-  "license": "MIT",
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "yarn@4.5.0+sha512.837566d24eec14ec0f5f1411adb544e892b3454255e61fdef8fd05f3429480102806bac7446bc9daff3896b01ae4b62d00096c7e989f1596f2af10b927532f39",
+  "private": true,
   "keywords": [
     "answer",
     "answers",
@@ -47,6 +40,35 @@
     "yo",
     "zsh"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
+  "license": "MIT",
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "integration/*",
+    "internals/*"
+  ],
+  "scripts": {
+    "demo": "node --watch-path=packages/ packages/demo/",
+    "dev": "turbo watch tsc",
+    "prepare": "husky && turbo tsc attw",
+    "setup": "node ./tools/setup-packages.mjs",
+    "pretest": "turbo tsc && eslint . && yarn tsc:test",
+    "test": "vitest --run packages && node --test integration/**/*.test.*",
+    "tsc": "turbo tsc",
+    "tsc:test": "tsc -p tsconfig.json"
+  },
+  "lint-staged": {
+    "*": "yarn prettier --write --ignore-unknown",
+    "*.m?[jt]sx?": "yarn eslint --fix"
+  },
+  "resolutions": {
+    "type-fest": "^4.0.0"
+  },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.16.2",
     "@eslint/js": "^9.10.0",
@@ -71,30 +93,8 @@
     "typescript-eslint": "^8.5.0",
     "vitest": "^2.1.1"
   },
-  "resolutions": {
-    "type-fest": "^4.0.0"
-  },
-  "workspaces": [
-    "packages/*",
-    "integration/*",
-    "internals/*"
-  ],
-  "scripts": {
-    "prepare": "husky && turbo tsc attw",
-    "setup": "node ./tools/setup-packages.mjs",
-    "pretest": "turbo tsc && eslint . && yarn tsc:test",
-    "test": "vitest --run packages && node --test integration/**/*.test.*",
-    "dev": "turbo watch tsc",
-    "demo": "node --watch-path=packages/ packages/demo/",
-    "tsc": "turbo tsc",
-    "tsc:test": "tsc -p tsconfig.test.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SBoudrias/Inquirer.js.git"
-  },
-  "lint-staged": {
-    "*": "yarn prettier --write --ignore-unknown",
-    "*.m?[jt]sx?": "yarn eslint --fix"
+  "packageManager": "yarn@4.5.0+sha512.837566d24eec14ec0f5f1411adb544e892b3454255e61fdef8fd05f3429480102806bac7446bc9daff3896b01ae4b62d00096c7e989f1596f2af10b927532f39",
+  "engines": {
+    "node": ">=18"
   }
 }

@@ -44,12 +44,7 @@ export default tseslint.config(
     extends: [...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       parserOptions: {
-        projectService: {
-          allowDefaultProject: ['vitest.config.ts', 'packages/*/*.test.mts'],
-          defaultProject: './tsconfig.test.json',
-          maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 20,
-        },
-        tsconfigRootDir: import.meta.dirname,
+        projectService: true,
       },
     },
   },
