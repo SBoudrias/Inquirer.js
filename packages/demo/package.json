@@ -50,6 +50,7 @@
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "sideEffects": false,
   "type": "module",
+  "main": "index.mjs",
   "bin": {
     "inquirer-demo": "index.mjs"
   },
