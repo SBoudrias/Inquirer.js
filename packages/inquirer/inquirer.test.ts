@@ -226,9 +226,9 @@ describe('inquirer.prompt(...)', () => {
   it("should close and create a new readline instances each time it's called", async () => {
     const actualCreateInterface = readline.createInterface;
     vi.spyOn(readline, 'createInterface').mockImplementation((opts) => {
-      const rl = actualCreateInterface(opts) as InquirerReadline;
+      const rl = actualCreateInterface(opts);
       vi.spyOn(rl, 'close');
-      vi.spyOn(rl.output, 'end');
+      vi.spyOn((rl as unknown as InquirerReadline).output, 'end');
       return rl;
     });
 
@@ -266,9 +266,9 @@ describe('inquirer.prompt(...)', () => {
   it('should close readline instance on rejected promise', async () => {
     const actualCreateInterface = readline.createInterface;
     vi.spyOn(readline, 'createInterface').mockImplementation((opts) => {
-      const rl = actualCreateInterface(opts) as InquirerReadline;
+      const rl = actualCreateInterface(opts);
       vi.spyOn(rl, 'close');
-      vi.spyOn(rl.output, 'end');
+      vi.spyOn((rl as unknown as InquirerReadline).output, 'end');
       return rl;
     });
 

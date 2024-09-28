@@ -28,7 +28,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
       terminal: true,
       input,
       output,
-    }) as InquirerReadline;
+    }) as unknown as InquirerReadline;
     const screen = new ScreenManager(rl);
 
     const { promise, resolve, reject } = PromisePolyfill.withResolver<Value>();
