@@ -295,6 +295,22 @@ exec < /dev/tty
 node my-script.js
 ```
 
+## Using with nodemon
+
+When using inquirer prompts with nodemon, you need to pass the `--no-stdin` flag for everything to work as expected.
+
+```sh
+npx nodemon ./packages/demo/demos/password.mjs --no-stdin
+```
+
+Note that for most of you, you'll be able to use the new watch-mode built-in Node. This mode works out of the box with inquirer.
+
+```sh
+# One of depending on your need
+node --watch script.js
+node --watch-path=packages/ packages/demo/
+```
+
 ## Wait for config
 
 Maybe some question configuration require to await a value.
