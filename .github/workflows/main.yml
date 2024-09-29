@@ -105,6 +105,39 @@ jobs:
       - name: Integration tests
         run: yarn node --test integration/
 
+  e2e:
+    name: End to End build tests
+    runs-on: ubuntu-latest
+    needs: Compile
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-turbo-
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+      - run: yarn install --immutable --immutable-cache
+      - run: yarn tsc
+      - name: Link packages to test
+        run: yarn workspaces foreach --all run link
+      - name: Extract demos to an isolated folder
+        run: |
+          cur_dir=$(pwd)
+          temp_dir=$(mktemp -d)
+          cp -r packages/demo "$temp_dir"
+          cd $temp_dir/demo
+          yarn install
+          yarn link -p "$cur_dir/packages/prompts"
+          yarn link -p "$cur_dir/packages/core"
+          yarn link -p "$cur_dir/packages/figures"
+      - run: yarn run tsc
+
   Package:
     name: Are the types wrong?
     runs-on: ubuntu-latest
