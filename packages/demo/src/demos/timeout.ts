@@ -6,7 +6,7 @@ async function demo() {
     { message: 'Enter a value (timing out in 5 seconds)' },
     { signal: AbortSignal.timeout(5000) },
   ).catch((error) => {
-    if (error.name === 'AbortPromptError') {
+    if (error instanceof Error && error.name === 'AbortPromptError') {
       return 'Default value';
     }
 
@@ -18,7 +18,7 @@ async function demo() {
 if (import.meta.url.startsWith('file:')) {
   const modulePath = url.fileURLToPath(import.meta.url);
   if (process.argv[1] === modulePath) {
-    demo();
+    await demo();
   }
 }
 

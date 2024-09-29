@@ -1,7 +1,7 @@
 import * as url from 'node:url';
 import { createPrompt, useKeypress, usePrefix, isEnterKey } from '@inquirer/core';
 
-const loader = createPrompt((config, done) => {
+const loader = createPrompt((_config, done: (value: void) => void) => {
   const prefix = usePrefix({ status: 'loading' });
 
   useKeypress((key) => {
@@ -20,7 +20,7 @@ const demo = async () => {
 if (import.meta.url.startsWith('file:')) {
   const modulePath = url.fileURLToPath(import.meta.url);
   if (process.argv[1] === modulePath) {
-    demo();
+    await demo();
   }
 }
 

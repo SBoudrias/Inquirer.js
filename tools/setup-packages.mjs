@@ -60,24 +60,33 @@ Promise.all(
       pkg.files = ['dist'];
 
       pkg.devDependencies = pkg.devDependencies ?? {};
-      pkg.devDependencies['@repo/tsconfig'] = 'workspace:*';
       pkg.devDependencies['tshy'] = versions['tshy'];
-      pkg.devDependencies['@arethetypeswrong/cli'] = versions['@arethetypeswrong/cli'];
 
       pkg.tshy = pkg.tshy ?? {};
       pkg.tshy.exclude = ['src/**/*.test.ts'];
 
       pkg.scripts = pkg.scripts ?? {};
       pkg.scripts.tsc = 'tshy';
-      pkg.scripts.attw = 'attw --pack';
 
-      const tsconfig = {
-        extends: '@repo/tsconfig',
-      };
+      // Only set attw if the package is using commonjs
+      const shouldUseAttw =
+        !Array.isArray(pkg.tshy.dialects) || pkg.tshy.dialects.includes('commonjs');
+      pkg.scripts.attw = shouldUseAttw ? 'attw --pack' : undefined;
+      if (shouldUseAttw) {
+        pkg.devDependencies['@arethetypeswrong/cli'] = versions['@arethetypeswrong/cli'];
+      }
+
+      const tsconfig = (await fileExists(path.join(dir, 'tsconfig.json')))
+        ? await readJSONFile(path.join(dir, 'tsconfig.json'))
+        : { extends: '@repo/tsconfig' };
       writeFile(
         path.join(dir, 'tsconfig.json'),
         JSON.stringify(tsconfig, null, 2) + '\n',
       );
+
+      if (tsconfig.extends === '@repo/tsconfig') {
+        pkg.devDependencies['@repo/tsconfig'] = 'workspace:*';
+      }
     }
 
     writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');

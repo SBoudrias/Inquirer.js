@@ -3,14 +3,14 @@ import path from 'node:path';
 import * as url from 'node:url';
 import { search } from '@inquirer/prompts';
 
-async function fileExists(filepath) {
+async function fileExists(filepath: string) {
   return fs.access(filepath).then(
     () => true,
     () => false,
   );
 }
 
-async function isDirectory(path) {
+async function isDirectory(path: string) {
   if (await fileExists(path)) {
     const stats = await fs.stat(path);
     return stats.isDirectory();
@@ -33,7 +33,9 @@ const demo = async () => {
         `https://registry.npmjs.org/-/v1/search?text=${encodeURIComponent(input)}&size=20`,
         { signal },
       );
-      const data = await response.json();
+      const data = (await response.json()) as {
+        objects: ReadonlyArray<{ package: { name: string; description: string } }>;
+      };
 
       return data.objects.map((pkg) => ({
         name: pkg.package.name,
@@ -84,7 +86,7 @@ const demo = async () => {
 if (import.meta.url.startsWith('file:')) {
   const modulePath = url.fileURLToPath(import.meta.url);
   if (process.argv[1] === modulePath) {
-    demo();
+    await demo();
   }
 }
 

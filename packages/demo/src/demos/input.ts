@@ -3,7 +3,7 @@ import colors from 'yoctocolors-cjs';
 import { input } from '@inquirer/prompts';
 
 const hexRegEx = /(\d|[a-f])/gim;
-const isHex = (value) =>
+const isHex = (value: string) =>
   (value.match(hexRegEx) || []).length === value.length &&
   (value.length === 3 || value.length === 6);
 
@@ -41,7 +41,7 @@ const demo = async () => {
 if (import.meta.url.startsWith('file:')) {
   const modulePath = url.fileURLToPath(import.meta.url);
   if (process.argv[1] === modulePath) {
-    demo();
+    await demo();
   }
 }
 
