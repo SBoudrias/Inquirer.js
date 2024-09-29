@@ -1,29 +1,26 @@
 import * as url from 'node:url';
-import { expand } from '@inquirer/prompts';
+import { rawlist, Separator } from '@inquirer/prompts';
 
 const demo = async () => {
   let answer;
 
-  answer = await expand({
-    message: 'Conflict on `file.js`:',
+  answer = await rawlist({
+    message: '(no keys) Conflict on `file.js`:',
     choices: [
       {
-        key: 'y',
         name: 'Overwrite',
         value: 'overwrite',
       },
       {
-        key: 'a',
         name: 'Overwrite this one and all next',
         value: 'overwrite_all',
       },
       {
-        key: 'd',
         name: 'Show diff',
         value: 'diff',
       },
+      new Separator(),
       {
-        key: 'x',
         name: 'Abort',
         value: 'abort',
       },
@@ -31,9 +28,8 @@ const demo = async () => {
   });
   console.log('Answer:', answer);
 
-  answer = await expand({
-    message: '(With default) Conflict on `file.js`:',
-    default: 'y',
+  answer = await rawlist({
+    message: '(with keys) Conflict on `file.js`:',
     choices: [
       {
         key: 'y',
@@ -50,34 +46,7 @@ const demo = async () => {
         name: 'Show diff',
         value: 'diff',
       },
-      {
-        key: 'x',
-        name: 'Abort',
-        value: 'abort',
-      },
-    ],
-  });
-  console.log('Answer:', answer);
-
-  answer = await expand({
-    expanded: true,
-    message: '(Auto-expand) Conflict on `file.js`:',
-    choices: [
-      {
-        key: 'y',
-        name: 'Overwrite',
-        value: 'overwrite',
-      },
-      {
-        key: 'a',
-        name: 'Overwrite this one and all next',
-        value: 'overwrite_all',
-      },
-      {
-        key: 'd',
-        name: 'Show diff',
-        value: 'diff',
-      },
+      new Separator(),
       {
         key: 'x',
         name: 'Abort',
@@ -91,7 +60,7 @@ const demo = async () => {
 if (import.meta.url.startsWith('file:')) {
   const modulePath = url.fileURLToPath(import.meta.url);
   if (process.argv[1] === modulePath) {
-    demo();
+    await demo();
   }
 }
 

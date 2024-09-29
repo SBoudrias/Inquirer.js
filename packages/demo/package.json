@@ -50,24 +50,51 @@
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "sideEffects": false,
   "type": "module",
-  "main": "index.mjs",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      }
+    }
+  },
+  "module": "./dist/esm/index.js",
   "bin": {
-    "inquirer-demo": "index.mjs"
+    "inquirer-demo": "./dist/esm/index.js"
   },
   "files": [
-    "index.mjs",
-    "demos/"
+    "dist"
   ],
+  "scripts": {
+    "tsc": "tshy"
+  },
   "dependencies": {
     "@inquirer/core": "^9.2.1",
     "@inquirer/figures": "^1.0.6",
     "@inquirer/prompts": "^6.0.1",
     "yoctocolors-cjs": "^2.1.2"
   },
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "^6.0.0",
+    "tshy": "^3.0.2"
+  },
   "engines": {
     "node": ">=18"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "tshy": {
+    "dialects": [
+      "esm"
+    ],
+    "exclude": [
+      "src/**/*.test.ts"
+    ],
+    "exports": {
+      "./package.json": "./package.json",
+      ".": "./src/index.ts"
+    }
   }
 }

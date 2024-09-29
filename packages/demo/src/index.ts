@@ -3,18 +3,18 @@
 import { select } from '@inquirer/prompts';
 import colors from 'yoctocolors-cjs';
 import figures from '@inquirer/figures';
-import checkboxDemo from './demos/checkbox.mjs';
-import confirmDemo from './demos/confirm.mjs';
-import editorDemo from './demos/editor.mjs';
-import expandDemo from './demos/expand.mjs';
-import inputDemo from './demos/input.mjs';
-import loaderDemo from './demos/loader.mjs';
-import numberDemo from './demos/number.mjs';
-import passwordDemo from './demos/password.mjs';
-import rawlistDemo from './demos/rawlist.mjs';
-import searchDemo from './demos/search.mjs';
-import selectDemo from './demos/select.mjs';
-import timeoutDemo from './demos/timeout.mjs';
+import checkboxDemo from './demos/checkbox.js';
+import confirmDemo from './demos/confirm.js';
+import editorDemo from './demos/editor.js';
+import expandDemo from './demos/expand.js';
+import inputDemo from './demos/input.js';
+import loaderDemo from './demos/loader.js';
+import numberDemo from './demos/number.js';
+import passwordDemo from './demos/password.js';
+import rawlistDemo from './demos/rawlist.js';
+import searchDemo from './demos/search.js';
+import selectDemo from './demos/select.js';
+import timeoutDemo from './demos/timeout.js';
 
 const demos = {
   checkbox: checkboxDemo,
@@ -29,10 +29,12 @@ const demos = {
   search: searchDemo,
   select: selectDemo,
   timeout: timeoutDemo,
-};
+} as const;
+
+type Demos = keyof typeof demos | 'advanced' | 'back' | 'exit';
 
 async function askNextDemo() {
-  let selectedDemo = await select({
+  let selectedDemo: Demos = await select({
     message: 'Which prompt demo do you want to run?',
     choices: [
       { name: 'Input', value: 'input' },
@@ -78,19 +80,16 @@ async function askNextDemo() {
   return selectedDemo;
 }
 
-(async () => {
-  try {
-    let nextDemo = await askNextDemo();
-    while (nextDemo !== 'exit') {
-      await demos[nextDemo]();
-      nextDemo = await askNextDemo();
-    }
-  } catch (error) {
-    if (error.name === 'ExitPromptError') {
-      // noop; silence this error
-      return;
-    }
-
+try {
+  let nextDemo = await askNextDemo();
+  while (nextDemo !== 'exit') {
+    await demos[nextDemo]();
+    nextDemo = await askNextDemo();
+  }
+} catch (error) {
+  if (error instanceof Error && error.name === 'ExitPromptError') {
+    // noop; silence this error
+  } else {
     throw error;
   }
-})();
+}

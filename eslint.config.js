@@ -27,6 +27,7 @@ export default tseslint.config(
       },
     },
     rules: {
+      'n/hashbang': 'off',
       'unicorn/consistent-function-scoping': 'off',
       'unicorn/filename-case': 'off',
       'unicorn/no-array-callback-reference': 'off',
