@@ -482,7 +482,7 @@ __metadata:
     "@types/wrap-ansi": "npm:^3.0.0"
     ansi-escapes: "npm:^4.3.2"
     cli-width: "npm:^4.1.0"
-    mute-stream: "npm:^1.0.0"
+    mute-stream: "npm:^2.0.0"
     signal-exit: "npm:^4.1.0"
     strip-ansi: "npm:^6.0.1"
     tshy: "npm:^3.0.2"
@@ -699,7 +699,7 @@ __metadata:
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^22.7.4"
     ansi-escapes: "npm:^4.3.2"
-    mute-stream: "npm:^1.0.0"
+    mute-stream: "npm:^2.0.0"
     strip-ansi: "npm:^6.0.1"
     tshy: "npm:^3.0.2"
   languageName: unknown
@@ -711,7 +711,7 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.16.4"
     "@repo/tsconfig": "workspace:*"
-    mute-stream: "npm:^1.0.0"
+    mute-stream: "npm:^2.0.0"
     tshy: "npm:^3.0.2"
   languageName: unknown
   linkType: soft
@@ -4775,7 +4775,7 @@ __metadata:
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
     ansi-escapes: "npm:^4.3.2"
-    mute-stream: "npm:^1.0.0"
+    mute-stream: "npm:^2.0.0"
     run-async: "npm:^3.0.0"
     rxjs: "npm:^7.8.1"
     tshy: "npm:^3.0.2"
@@ -6139,6 +6139,13 @@ __metadata:
   version: 1.0.0
   resolution: "mute-stream@npm:1.0.0"
   checksum: 10/36fc968b0e9c9c63029d4f9dc63911950a3bdf55c9a87f58d3a266289b67180201cade911e7699f8b2fa596b34c9db43dad37649e3f7fdd13c3bb9edb0017ee7
+  languageName: node
+  linkType: hard
+
+"mute-stream@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "mute-stream@npm:2.0.0"
+  checksum: 10/d2e4fd2f5aa342b89b98134a8d899d8ef9b0a6d69274c4af9df46faa2d97aeb1f2ce83d867880d6de63643c52386579b99139801e24e7526c3b9b0a6d1e18d6c
   languageName: node
   linkType: hard
 

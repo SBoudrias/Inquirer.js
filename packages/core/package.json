@@ -81,7 +81,7 @@
     "@types/wrap-ansi": "^3.0.0",
     "ansi-escapes": "^4.3.2",
     "cli-width": "^4.1.0",
-    "mute-stream": "^1.0.0",
+    "mute-stream": "^2.0.0",
     "signal-exit": "^4.1.0",
     "strip-ansi": "^6.0.1",
     "wrap-ansi": "^6.2.0",
