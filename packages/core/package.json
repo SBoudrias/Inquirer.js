@@ -76,7 +76,6 @@
   "dependencies": {
     "@inquirer/figures": "^1.0.6",
     "@inquirer/type": "^2.0.0",
-    "@types/mute-stream": "^0.0.4",
     "@types/node": "^22.7.4",
     "@types/wrap-ansi": "^3.0.0",
     "ansi-escapes": "^4.3.2",
@@ -91,6 +90,7 @@
     "@arethetypeswrong/cli": "^0.16.4",
     "@inquirer/testing": "^2.1.34",
     "@repo/tsconfig": "workspace:*",
+    "@types/mute-stream": "^0.0.4",
     "tshy": "^3.0.2"
   },
   "engines": {
