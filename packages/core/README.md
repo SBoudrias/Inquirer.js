@@ -154,7 +154,7 @@ All default prompts, and most custom ones, uses a prefix at the beginning of the
 
 ```ts
 const input = createPrompt((config, done) => {
-  const prefix = usePrefix({ isLoading });
+  const prefix = usePrefix({ status, theme });
 
   return `${prefix} My question`;
 });
@@ -265,7 +265,7 @@ type PromptConfig = {
 export default createPrompt<string, PromptConfig>((config, done) => {
   const theme = makeTheme(config.theme);
 
-  const prefix = usePrefix({ isLoading, theme });
+  const prefix = usePrefix({ status, theme });
 
   return `${prefix} ${theme.style.highlight('hello')}`;
 });
@@ -290,7 +290,7 @@ type PromptConfig = {
 export default createPrompt<string, PromptConfig>((config, done) => {
   const theme = makeTheme(promptTheme, config.theme);
 
-  const prefix = usePrefix({ isLoading, theme });
+  const prefix = usePrefix({ status, theme });
 
   return `${prefix} ${theme.icon}`;
 });

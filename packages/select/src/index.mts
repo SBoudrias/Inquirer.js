@@ -110,7 +110,7 @@ export default createPrompt(
     const { loop = true, pageSize = 7 } = config;
     const firstRender = useRef(true);
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
-    const prefix = usePrefix({ theme });
+    const prefix = usePrefix({ status, theme });
     const [status, setStatus] = useState('pending');
     const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -199,7 +199,7 @@ export default createPrompt(
     );
 
     const message = theme.style.message(config.message, status);
-    
+
     let helpTipTop = '';
     let helpTipBottom = '';
     if (

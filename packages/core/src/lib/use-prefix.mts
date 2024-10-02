@@ -5,10 +5,10 @@ import { makeTheme } from './make-theme.mjs';
 import { type Theme } from './theme.mjs';
 
 export function usePrefix({
-  isLoading = false,
+  status = 'pending',
   theme,
 }: {
-  isLoading?: boolean;
+  status?: string;
   theme?: Theme;
 }): string {
   const [showLoader, setShowLoader] = useState(false);
@@ -16,7 +16,7 @@ export function usePrefix({
   const { prefix, spinner } = makeTheme(theme);
 
   useEffect((): void | (() => unknown) => {
-    if (isLoading) {
+    if (status === 'loading') {
       let tickInterval: NodeJS.Timeout | undefined;
       let inc = -1;
       // Delay displaying spinner by 300ms, to avoid flickering
@@ -42,11 +42,11 @@ export function usePrefix({
     } else {
       setShowLoader(false);
     }
-  }, [isLoading]);
+  }, [status]);
 
   if (showLoader) {
     return spinner.frames[tick]!;
   }
 
-  return prefix;
+  return typeof prefix === 'string' ? prefix : prefix(status);
 }

@@ -116,8 +116,7 @@ export default createPrompt(
     const [searchResults, setSearchResults] = useState<ReadonlyArray<Item<Value>>>([]);
     const [searchError, setSearchError] = useState<string>();
 
-    const isLoading = status === 'loading' || status === 'searching';
-    const prefix = usePrefix({ isLoading, theme });
+    const prefix = usePrefix({ status, theme });
 
     const bounds = useMemo(() => {
       const first = searchResults.findIndex(isSelectable);
@@ -209,7 +208,7 @@ export default createPrompt(
     });
 
     const message = theme.style.message(config.message, status);
-    
+
     if (active > 0) {
       firstRender.current = false;
     }

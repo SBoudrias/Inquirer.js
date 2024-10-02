@@ -72,8 +72,7 @@ export default createPrompt<number | undefined, NumberConfig>((config, done) => 
   const [defaultValue = '', setDefaultValue] = useState<string>(validDefault);
   const [errorMsg, setError] = useState<string>();
 
-  const isLoading = status === 'loading';
-  const prefix = usePrefix({ isLoading, theme });
+  const prefix = usePrefix({ status, theme });
 
   useKeypress(async (key, rl) => {
     // Ignore keypress while our prompt is doing other processing.
@@ -119,7 +118,7 @@ export default createPrompt<number | undefined, NumberConfig>((config, done) => 
   });
 
   const message = theme.style.message(config.message, status);
-  
+
   let formattedValue = value;
   if (status === 'done') {
     formattedValue = theme.style.answer(value);
