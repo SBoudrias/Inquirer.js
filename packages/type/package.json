@@ -75,7 +75,7 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "mute-stream": "^1.0.0"
+    "mute-stream": "^2.0.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.16.4",

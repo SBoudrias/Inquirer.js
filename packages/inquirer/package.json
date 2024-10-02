@@ -79,7 +79,7 @@
     "@inquirer/type": "^2.0.0",
     "@types/mute-stream": "^0.0.4",
     "ansi-escapes": "^4.3.2",
-    "mute-stream": "^1.0.0",
+    "mute-stream": "^2.0.0",
     "run-async": "^3.0.0",
     "rxjs": "^7.8.1"
   },
