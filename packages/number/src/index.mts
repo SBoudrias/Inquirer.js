@@ -118,7 +118,8 @@ export default createPrompt<number | undefined, NumberConfig>((config, done) => 
     }
   });
 
-  const message = theme.style.message(config.message);
+  const message = theme.style.message(config.message, status);
+  
   let formattedValue = value;
   if (status === 'done') {
     formattedValue = theme.style.answer(value);

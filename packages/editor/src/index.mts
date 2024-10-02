@@ -75,7 +75,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     }
   });
 
-  const message = theme.style.message(config.message);
+  const message = theme.style.message(config.message, status);
   let helpTip = '';
   if (status === 'loading') {
     helpTip = theme.style.help('Received');

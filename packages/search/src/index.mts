@@ -208,8 +208,8 @@ export default createPrompt(
       }
     });
 
-    const message = theme.style.message(config.message);
-
+    const message = theme.style.message(config.message, status);
+    
     if (active > 0) {
       firstRender.current = false;
     }

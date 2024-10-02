@@ -66,7 +66,8 @@ export default createPrompt<string, InputConfig>((config, done) => {
     }
   });
 
-  const message = theme.style.message(config.message);
+  const message = theme.style.message(config.message, status);
+  
   let formattedValue = value;
   if (typeof config.transformer === 'function') {
     formattedValue = config.transformer(value, { isFinal: status === 'done' });
