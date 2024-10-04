@@ -109,6 +109,8 @@ jobs:
     name: End to End build tests
     runs-on: ubuntu-latest
     needs: Compile
+    env:
+      YARN_ENABLE_IMMUTABLE_INSTALLS: false
     steps:
       - uses: actions/checkout@v4
       - name: Cache turbo build setup
@@ -124,19 +126,27 @@ jobs:
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
       - run: yarn tsc
-      - name: Link packages to test
-        run: yarn workspaces foreach --all run link
-      - name: Extract demos to an isolated folder
+      - run: yarn workspaces focus --all --production
+      - name: Pack the monorepo modules
+        run: |
+          mkdir -p /tmp/artifacts
+          yarn workspace @inquirer/core pack --out /tmp/artifacts/inquirer-core.tgz
+          yarn workspace @inquirer/prompts pack --out /tmp/artifacts/inquirer-prompts.tgz
+          yarn workspace @inquirer/figures pack --out /tmp/artifacts/inquirer-figures.tgz
+          yarn workspace @repo/tsconfig pack --out /tmp/artifacts/tsconfig.tgz
+      - name: Extract @inquirer/demo to an isolated project & build
         run: |
           cur_dir=$(pwd)
           temp_dir=$(mktemp -d)
-          cp -r packages/demo "$temp_dir"
+          cp -r packages/demo $temp_dir
+          cp .yarnrc.yml $temp_dir/demo
           cd $temp_dir/demo
+          yarn add --dev @repo/tsconfig@file:/tmp/artifacts/tsconfig.tgz
+          yarn add @inquirer/core@file:/tmp/artifacts/inquirer-core.tgz
+          yarn add @inquirer/prompts@file:/tmp/artifacts/inquirer-prompts.tgz
+          yarn add @inquirer/figures@file:/tmp/artifacts/inquirer-figures.tgz
           yarn install
-          yarn link -p "$cur_dir/packages/prompts"
-          yarn link -p "$cur_dir/packages/core"
-          yarn link -p "$cur_dir/packages/figures"
-      - run: yarn run tsc
+          yarn tsc
 
   Package:
     name: Are the types wrong?

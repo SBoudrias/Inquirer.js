@@ -76,7 +76,7 @@
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
-    "@sindresorhus/tsconfig": "^6.0.0",
+    "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },
   "engines": {
