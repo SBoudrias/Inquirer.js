@@ -498,7 +498,7 @@ __metadata:
     "@inquirer/core": "npm:^9.2.1"
     "@inquirer/figures": "npm:^1.0.6"
     "@inquirer/prompts": "npm:^6.0.1"
-    "@sindresorhus/tsconfig": "npm:^6.0.0"
+    "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
   bin:
