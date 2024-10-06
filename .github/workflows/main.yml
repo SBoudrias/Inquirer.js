@@ -133,6 +133,7 @@ jobs:
           yarn workspace @inquirer/core pack --out /tmp/artifacts/inquirer-core.tgz
           yarn workspace @inquirer/prompts pack --out /tmp/artifacts/inquirer-prompts.tgz
           yarn workspace @inquirer/figures pack --out /tmp/artifacts/inquirer-figures.tgz
+          yarn workspace @inquirer/type pack --out /tmp/artifacts/inquirer-type.tgz
           yarn workspace @repo/tsconfig pack --out /tmp/artifacts/tsconfig.tgz
       - name: Extract @inquirer/demo to an isolated project & build
         run: |
@@ -141,10 +142,12 @@ jobs:
           cp -r packages/demo $temp_dir
           cp .yarnrc.yml $temp_dir/demo
           cd $temp_dir/demo
+          yarn set version stable
           yarn add --dev @repo/tsconfig@file:/tmp/artifacts/tsconfig.tgz
           yarn add @inquirer/core@file:/tmp/artifacts/inquirer-core.tgz
           yarn add @inquirer/prompts@file:/tmp/artifacts/inquirer-prompts.tgz
           yarn add @inquirer/figures@file:/tmp/artifacts/inquirer-figures.tgz
+          yarn set resolution @inquirer/type@npm:* file:/tmp/artifacts/inquirer-type.tgz
           yarn install
           yarn tsc
 
