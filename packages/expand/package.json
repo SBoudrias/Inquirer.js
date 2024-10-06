@@ -75,7 +75,7 @@
   },
   "dependencies": {
     "@inquirer/core": "^9.2.1",
-    "@inquirer/type": "^2.0.0",
+    "@inquirer/type": "2.0.0",
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {

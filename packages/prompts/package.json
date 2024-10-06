@@ -89,7 +89,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.16.4",
-    "@inquirer/type": "^2.0.0",
+    "@inquirer/type": "2.0.0",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },
