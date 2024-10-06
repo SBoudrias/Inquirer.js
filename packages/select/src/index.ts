@@ -121,7 +121,7 @@ export default createPrompt(
       const first = items.findIndex(isSelectable);
       const last = items.findLastIndex(isSelectable);
 
-      if (first < 0) {
+      if (first === -1) {
         throw new ValidationError(
           '[select prompt] No selectable choices. All choices are disabled.',
         );
@@ -182,7 +182,7 @@ export default createPrompt(
           return item.name.toLowerCase().startsWith(searchTerm);
         });
 
-        if (matchIndex >= 0) {
+        if (matchIndex !== -1) {
           setActive(matchIndex);
         }
 

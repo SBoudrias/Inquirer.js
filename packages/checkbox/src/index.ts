@@ -163,7 +163,7 @@ export default createPrompt(
       const first = items.findIndex(isSelectable);
       const last = items.findLastIndex(isSelectable);
 
-      if (first < 0) {
+      if (first === -1) {
         throw new ValidationError(
           '[checkbox prompt] No selectable choices. All choices are disabled.',
         );
