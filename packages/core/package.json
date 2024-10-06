@@ -75,7 +75,7 @@
   },
   "dependencies": {
     "@inquirer/figures": "^1.0.6",
-    "@inquirer/type": "^2.0.0",
+    "@inquirer/type": "2.0.0",
     "ansi-escapes": "^4.3.2",
     "cli-width": "^4.1.0",
     "mute-stream": "^2.0.0",

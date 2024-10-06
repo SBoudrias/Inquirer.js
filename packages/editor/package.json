@@ -75,7 +75,7 @@
   },
   "dependencies": {
     "@inquirer/core": "^9.2.1",
-    "@inquirer/type": "^2.0.0",
+    "@inquirer/type": "2.0.0",
     "external-editor": "^3.1.0"
   },
   "devDependencies": {
