@@ -27,6 +27,14 @@ import {
 } from './src/index.js';
 
 describe('createPrompt()', () => {
+  it('should gracefully error on missing message', async () => {
+    // @ts-expect-error Testing an invalid behavior.
+    const prompt = createPrompt(() => undefined);
+    const { answer } = await render(prompt, {});
+    console.log();
+    await expect(answer).rejects.toThrow('Question is missing a message');
+  });
+
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       const [value, setValue] = useState('');

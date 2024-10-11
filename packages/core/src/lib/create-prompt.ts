@@ -75,6 +75,10 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
             setImmediate(() => resolve(value));
           });
 
+          if (nextView === undefined) {
+            throw new Error('Question is missing a message');
+          }
+
           const [content, bottomContent] =
             typeof nextView === 'string' ? [nextView] : nextView;
           screen.render(content, bottomContent);
