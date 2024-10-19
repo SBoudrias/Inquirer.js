@@ -5,7 +5,7 @@ async function demo() {
   const answer = await input(
     { message: 'Enter a value (timing out in 5 seconds)' },
     { signal: AbortSignal.timeout(5000) },
-  ).catch((error) => {
+  ).catch((error: unknown) => {
     if (error instanceof Error && error.name === 'AbortPromptError') {
       return 'Default value';
     }

@@ -68,7 +68,7 @@ export function withUpdates<R, T extends (...args: any[]) => R>(
 ): (...args: Parameters<T>) => R {
   const wrapped = (...args: Parameters<T>): R => {
     const store = getStore();
-    let shouldUpdate = false;
+    let shouldUpdate = false as boolean;
     const oldHandleChange = store.handleChange;
     store.handleChange = () => {
       shouldUpdate = true;
@@ -125,7 +125,7 @@ export function handleChange() {
 }
 
 export const effectScheduler = {
-  queue(cb: (readline: InquirerReadline) => void) {
+  queue(cb: (readline: InquirerReadline) => void | (() => void)) {
     const store = getStore();
     const { index } = store;
 

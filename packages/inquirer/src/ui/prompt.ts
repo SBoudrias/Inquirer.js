@@ -51,7 +51,7 @@ export const _ = {
         .filter(Boolean)
         .reduce(
           // @ts-expect-error implicit any on res[key]
-          (res, key) => (res !== null && res !== undefined ? res[key] : res),
+          (res: object | undefined, key) => (res == null ? res : res[key]),
           obj,
         );
     const result = travel(/[,[\]]+?/) || travel(/[,.[\]]+?/);
@@ -351,6 +351,7 @@ export default class PromptsRunner<A extends Answers> {
               cleanupSignal = undefined;
             };
 
+            // eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
             activePrompt.run().then(resolve, reject).finally(cleanup);
           })
       : prompt;
@@ -360,7 +361,7 @@ export default class PromptsRunner<A extends Answers> {
     if (moduleSignal?.aborted) {
       this.abortController.abort(moduleSignal.reason);
     } else if (moduleSignal) {
-      const abort = () => this.abortController?.abort(moduleSignal.reason);
+      const abort = () => this.abortController.abort(moduleSignal.reason);
       moduleSignal.addEventListener('abort', abort);
       cleanupModuleSignal = () => {
         moduleSignal.removeEventListener('abort', abort);
@@ -384,7 +385,7 @@ export default class PromptsRunner<A extends Answers> {
    * Close the interface and cleanup listeners
    */
   close = () => {
-    this.abortController?.abort();
+    this.abortController.abort();
   };
 
   private shouldRun = async (question: Question<A>): Promise<boolean> => {

@@ -36,24 +36,26 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     rl.pause();
 
     // Note: The bind call isn't strictly required. But we need it for our mocks to work as expected.
-    const editCallback = AsyncResource.bind(async (error: Error, answer: string) => {
-      rl.resume();
-      if (error) {
-        setError(error.toString());
-      } else {
-        setStatus('loading');
-        const isValid = await validate(answer);
-        if (isValid === true) {
-          setError(undefined);
-          setStatus('done');
-          done(answer);
+    const editCallback = AsyncResource.bind(
+      async (error: Error | undefined, answer: string) => {
+        rl.resume();
+        if (error) {
+          setError(error.toString());
         } else {
-          setValue(answer);
-          setError(isValid || 'You must provide a valid value');
-          setStatus('idle');
+          setStatus('loading');
+          const isValid = await validate(answer);
+          if (isValid === true) {
+            setError(undefined);
+            setStatus('done');
+            done(answer);
+          } else {
+            setValue(answer);
+            setError(isValid || 'You must provide a valid value');
+            setStatus('idle');
+          }
         }
-      }
-    });
+      },
+    );
 
     editAsync(value, (error, answer) => void editCallback(error, answer), { postfix });
   }
