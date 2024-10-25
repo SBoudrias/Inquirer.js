@@ -465,6 +465,8 @@ __metadata:
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -489,6 +491,8 @@ __metadata:
     "@inquirer/type": "npm:^3.0.0"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -526,6 +530,8 @@ __metadata:
     "@types/node": "npm:^22.8.0"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
+  peerDependencies:
+    "@types/node": ">=18"
   bin:
     inquirer-demo: ./dist/esm/index.js
   languageName: unknown
@@ -542,6 +548,8 @@ __metadata:
     "@repo/tsconfig": "workspace:*"
     external-editor: "npm:^3.1.0"
     tshy: "npm:^3.0.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -567,6 +575,8 @@ __metadata:
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -590,6 +600,8 @@ __metadata:
     "@inquirer/type": "npm:^3.0.0"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -603,6 +615,8 @@ __metadata:
     "@inquirer/type": "npm:^3.0.0"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -617,6 +631,8 @@ __metadata:
     "@repo/tsconfig": "workspace:*"
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -638,6 +654,8 @@ __metadata:
     "@inquirer/type": "npm:^3.0.0"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -652,6 +670,8 @@ __metadata:
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -660,6 +680,7 @@ __metadata:
   resolution: "@inquirer/root@workspace:."
   dependencies:
     "@eslint/js": "npm:^9.13.0"
+    "@repo/hoist-peer-dependencies": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^22.8.0"
     "@vitest/coverage-v8": "npm:^2.1.3"
@@ -695,6 +716,8 @@ __metadata:
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -711,6 +734,8 @@ __metadata:
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -727,6 +752,8 @@ __metadata:
     mute-stream: "npm:^2.0.0"
     strip-ansi: "npm:^6.0.1"
     tshy: "npm:^3.0.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -1435,6 +1462,12 @@ __metadata:
   checksum: 10/00baec4458ac86ca27edf7ce807ccfad97cd1d4b67bdedaf3401a9e755757588f3331e891290d1deea52d88df2bf2387caf8d94a6835b614d5b37b638a688273
   languageName: node
   linkType: hard
+
+"@repo/hoist-peer-dependencies@workspace:*, @repo/hoist-peer-dependencies@workspace:internals/hoist-peer-dependencies":
+  version: 0.0.0-use.local
+  resolution: "@repo/hoist-peer-dependencies@workspace:internals/hoist-peer-dependencies"
+  languageName: unknown
+  linkType: soft
 
 "@repo/tsconfig@workspace:*, @repo/tsconfig@workspace:internals/tsconfig":
   version: 0.0.0-use.local
@@ -4819,6 +4852,8 @@ __metadata:
     run-async: "npm:^3.0.0"
     rxjs: "npm:^7.8.1"
     tshy: "npm:^3.0.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 

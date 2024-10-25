@@ -99,5 +99,8 @@
       "./package.json": "./package.json",
       ".": "./src/index.ts"
     }
+  },
+  "peerDependencies": {
+    "@types/node": ">=18"
   }
 }
