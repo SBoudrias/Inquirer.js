@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/core",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "description": "Core Inquirer prompt API",
   "keywords": [
     "answer",
@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.16.4",
-    "@inquirer/testing": "^2.1.35",
+    "@inquirer/testing": "^2.1.36",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
     "@types/node": "^22.8.0",
