@@ -71,6 +71,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@repo/hoist-peer-dependencies": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@types/node": "^22.8.0",
     "@vitest/coverage-v8": "^2.1.3",
