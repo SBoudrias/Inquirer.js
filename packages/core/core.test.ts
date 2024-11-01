@@ -638,7 +638,7 @@ describe('Error handling', () => {
     await expect(answer).rejects.toMatchInlineSnapshot(
       `
       [Error: Prompt functions must return a string.
-          at /Users/simon.boudrias/github/Inquirer.js/packages/core/core.test.ts]
+          at ${import.meta.filename}]
     `,
     );
   });
