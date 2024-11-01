@@ -223,7 +223,7 @@ export default createPrompt(
 
     const message = theme.style.message(config.message, status);
 
-    let description;
+    let description: string | undefined;
     const page = usePagination({
       items,
       active,
@@ -283,6 +283,7 @@ export default createPrompt(
       if (
         items.length > pageSize &&
         (theme.helpMode === 'always' ||
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           (theme.helpMode === 'auto' && firstRender.current))
       ) {
         helpTipBottom = `\n${theme.style.help('(Use arrow keys to reveal more choices)')}`;

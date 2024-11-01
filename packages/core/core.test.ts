@@ -383,6 +383,7 @@ describe('createPrompt()', () => {
         prefix: {
           idle: '?',
           done: '✔',
+          unicorn: '🦄',
         },
       });
       const [status, setStatus] = useState<Status>('loading');
@@ -403,6 +404,9 @@ describe('createPrompt()', () => {
       useKeypress((event: KeypressEvent) => {
         if (isEnterKey(event)) {
           done('');
+        }
+        if (isSpaceKey(event)) {
+          setStatus('unicorn');
         }
       });
 
@@ -427,6 +431,9 @@ describe('createPrompt()', () => {
 
     vi.advanceTimersByTime(totalDuration);
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Question"`);
+
+    events.keypress('space');
+    expect(getScreen()).toMatchInlineSnapshot(`"🦄 Question"`);
 
     vi.useRealTimers();
 

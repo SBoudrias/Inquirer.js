@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/demo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Inquirer demos",
   "keywords": [
     "answer",
@@ -70,14 +70,14 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.0.0",
+    "@inquirer/core": "^10.0.1",
     "@inquirer/figures": "^1.0.7",
-    "@inquirer/prompts": "^7.0.0",
+    "@inquirer/prompts": "^7.0.1",
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "@types/node": "^22.7.4",
+    "@types/node": "^22.8.0",
     "tshy": "^3.0.2"
   },
   "engines": {
@@ -97,5 +97,8 @@
       "./package.json": "./package.json",
       ".": "./src/index.ts"
     }
+  },
+  "peerDependencies": {
+    "@types/node": ">=18"
   }
 }

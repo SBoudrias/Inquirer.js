@@ -50,5 +50,5 @@ export function usePrefix({
 
   // There's a delay before we show the loader. So we want to ignore `loading` here, and pass idle instead.
   const iconName = status === 'loading' ? 'idle' : status;
-  return typeof prefix === 'string' ? prefix : prefix[iconName];
+  return typeof prefix === 'string' ? prefix : (prefix[iconName] ?? prefix['idle']);
 }

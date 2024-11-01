@@ -1,6 +1,7 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import { globby } from 'globby';
+import { fixPeerDeps } from '@repo/hoist-peer-dependencies';
 
 function readFile(filepath) {
   return fs.readFile(filepath, 'utf8');
@@ -39,6 +40,7 @@ Promise.all(
 ).then((packages) =>
   packages.forEach(async ([pkgPath, pkg]) => {
     const dir = path.dirname(pkgPath);
+    fixPeerDeps(path.resolve(path.join(dir)));
 
     const isTS = await fileExists(path.join(dir, 'src/index.ts'));
     const hasReadme = await fileExists(path.join(dir, 'README.md'));

@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/confirm",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Inquirer confirm prompt",
   "keywords": [
     "answer",
@@ -74,12 +74,12 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.0.0",
+    "@inquirer/core": "^10.0.1",
     "@inquirer/type": "^3.0.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.16.4",
-    "@inquirer/testing": "^2.1.35",
+    "@inquirer/testing": "^2.1.36",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },
@@ -97,5 +97,8 @@
       "./package.json": "./package.json",
       ".": "./src/index.ts"
     }
+  },
+  "peerDependencies": {
+    "@types/node": ">=18"
   }
 }

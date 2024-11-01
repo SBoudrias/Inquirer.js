@@ -97,9 +97,7 @@ export default createPrompt(
         }
 
         if (isSelectableChoice(selectedChoice)) {
-          setValue(
-            selectedChoice.short ?? selectedChoice.name ?? String(selectedChoice.value),
-          );
+          setValue(selectedChoice.short);
           setStatus('done');
           done(selectedChoice.value);
         } else if (value === '') {

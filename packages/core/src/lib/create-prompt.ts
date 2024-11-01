@@ -96,7 +96,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
               effectScheduler.clearAll();
               return answer;
             },
-            (error) => {
+            (error: unknown) => {
               effectScheduler.clearAll();
               throw error;
             },
@@ -105,7 +105,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           .finally(() => {
             cleanups.forEach((cleanup) => cleanup());
 
-            screen.done({ clearContent: Boolean(context?.clearPromptOnDone) });
+            screen.done({ clearContent: Boolean(context.clearPromptOnDone) });
             output.end();
           })
           // Once cleanup is done, let the expose promise resolve/reject to the internal one.

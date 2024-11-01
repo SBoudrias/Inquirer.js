@@ -257,7 +257,7 @@ export default createPrompt(
 
     let searchStr;
     if (status === 'done' && selectedChoice) {
-      const answer = selectedChoice.short ?? selectedChoice.name;
+      const answer = selectedChoice.short;
       return `${prefix} ${message} ${theme.style.answer(answer)}`;
     } else {
       searchStr = theme.style.searchTerm(searchTerm);

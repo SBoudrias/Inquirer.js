@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/testing",
-  "version": "2.1.35",
+  "version": "2.1.36",
   "description": "Inquirer testing utilities",
   "keywords": [
     "answer",
@@ -86,7 +86,7 @@
     "@arethetypeswrong/cli": "^0.16.4",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
-    "@types/node": "^22.7.4",
+    "@types/node": "^22.8.0",
     "tshy": "^3.0.2"
   },
   "engines": {
@@ -100,5 +100,8 @@
       "./package.json": "./package.json",
       ".": "./src/index.ts"
     }
+  },
+  "peerDependencies": {
+    "@types/node": ">=18"
   }
 }
