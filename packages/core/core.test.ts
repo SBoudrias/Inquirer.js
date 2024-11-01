@@ -27,14 +27,6 @@ import {
 } from './src/index.js';
 
 describe('createPrompt()', () => {
-  it('should gracefully error on missing message', async () => {
-    // @ts-expect-error Testing an invalid behavior.
-    const prompt = createPrompt(() => undefined);
-    const { answer } = await render(prompt, {});
-    console.log();
-    await expect(answer).rejects.toThrow('Question is missing a message');
-  });
-
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       const [value, setValue] = useState('');
@@ -639,6 +631,24 @@ it('fail on aborted signals', async () => {
 });
 
 describe('Error handling', () => {
+  it('gracefully error on missing content', async () => {
+    // @ts-expect-error Testing an invalid behavior.
+    const prompt = createPrompt(function TestPrompt() {});
+    const { answer } = await render(prompt, {});
+    await expect(answer).rejects.toMatchInlineSnapshot(
+      `[Error: [@inquirer/core] Prompt functions must return a string. TestPrompt returned undefined.]`,
+    );
+  });
+
+  it('gracefully error on missing content & unnamed function', async () => {
+    // @ts-expect-error Testing an invalid behavior.
+    const prompt = createPrompt(() => {});
+    const { answer } = await render(prompt, {});
+    await expect(answer).rejects.toMatchInlineSnapshot(
+      `[Error: [@inquirer/core] Prompt functions must return a string. Unnamed prompt function returned undefined.]`,
+    );
+  });
+
   it('surface errors in render functions', async () => {
     const Prompt = () => {
       throw new Error('Error in render function');

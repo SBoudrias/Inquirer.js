@@ -75,8 +75,12 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
             setImmediate(() => resolve(value));
           });
 
+          // Typescript won't allow this, but not all users rely on typescript.
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (nextView === undefined) {
-            throw new Error('Question is missing a message');
+            throw new Error(
+              `[@inquirer/core] Prompt functions must return a string. ${view.name || 'Unnamed prompt function'} returned undefined.`,
+            );
           }
 
           const [content, bottomContent] =
