@@ -397,7 +397,7 @@ describe('createPrompt()', () => {
         if (isEnterKey(event)) {
           done('');
         }
-        if(isSpaceKey(event)){
+        if (isSpaceKey(event)) {
           setStatus('unicorn');
         }
       });
