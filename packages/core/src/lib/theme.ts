@@ -9,8 +9,9 @@ import type { Prettify } from '@inquirer/type';
  * -   `'idle'`: The prompt is loaded and currently waiting for the user to
  *     submit an answer.
  * -   `'done'`: The user has submitted an answer and the prompt is finished.
+ * -   `string`: Any other string: The prompt is in a custom state.
  */
-export type Status = 'loading' | 'idle' | 'done';
+export type Status = 'loading' | 'idle' | 'done' | (string & {});
 
 type DefaultTheme = {
   /**
