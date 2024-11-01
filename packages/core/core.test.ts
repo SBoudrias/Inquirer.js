@@ -636,16 +636,10 @@ describe('Error handling', () => {
     const prompt = createPrompt(function TestPrompt() {});
     const { answer } = await render(prompt, {});
     await expect(answer).rejects.toMatchInlineSnapshot(
-      `[Error: [@inquirer/core] Prompt functions must return a string. TestPrompt returned undefined.]`,
-    );
-  });
-
-  it('gracefully error on missing content & unnamed function', async () => {
-    // @ts-expect-error Testing an invalid behavior.
-    const prompt = createPrompt(() => {});
-    const { answer } = await render(prompt, {});
-    await expect(answer).rejects.toMatchInlineSnapshot(
-      `[Error: [@inquirer/core] Prompt functions must return a string. Unnamed prompt function returned undefined.]`,
+      `
+      [Error: Prompt functions must return a string.
+          at /Users/simon.boudrias/github/Inquirer.js/packages/core/core.test.ts]
+    `,
     );
   });
 

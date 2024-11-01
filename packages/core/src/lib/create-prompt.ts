@@ -14,7 +14,28 @@ type ViewFunction<Value, Config> = (
   done: (value: Value) => void,
 ) => string | [string, string | undefined];
 
+function getCallSites() {
+  const _prepareStackTrace = Error.prepareStackTrace;
+  try {
+    let result: NodeJS.CallSite[] = [];
+    Error.prepareStackTrace = (_, callSites) => {
+      const callSitesWithoutCurrent = callSites.slice(1);
+      result = callSitesWithoutCurrent;
+      return callSitesWithoutCurrent;
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, unicorn/error-message
+    new Error().stack;
+    return result;
+  } finally {
+    Error.prepareStackTrace = _prepareStackTrace;
+  }
+}
+
 export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
+  const callSites = getCallSites();
+  const callerFilename = callSites[1]?.getFileName?.();
+
   const prompt: Prompt<Value, Config> = (config, context = {}) => {
     // Default `input` to stdin
     const { input = process.stdin, signal } = context;
@@ -79,7 +100,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (nextView === undefined) {
             throw new Error(
-              `[@inquirer/core] Prompt functions must return a string. ${view.name || 'Unnamed prompt function'} returned undefined.`,
+              `Prompt functions must return a string.\n    at ${callerFilename}`,
             );
           }
 
