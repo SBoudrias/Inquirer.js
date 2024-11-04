@@ -24,6 +24,7 @@ describe('editor prompt', () => {
   it('open editor after pressing enter', async () => {
     const { answer, events, getScreen } = await render(editor, {
       message: 'Add a description',
+      file: { postfix: '.txt' },
     });
 
     expect(getScreen()).toMatchInlineSnapshot(
@@ -57,7 +58,9 @@ describe('editor prompt', () => {
     const { answer, events, getScreen } = await render(editor, {
       message: 'Add a description',
       default: 'default description',
-      postfix: '.md',
+      file: {
+        postfix: '.md',
+      },
     });
 
     expect(editAsync).not.toHaveBeenCalled();

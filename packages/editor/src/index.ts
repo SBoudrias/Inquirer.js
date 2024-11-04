@@ -1,5 +1,5 @@
 import { AsyncResource } from 'node:async_hooks';
-import { editAsync } from 'external-editor';
+import { editAsync, IFileOptions } from 'external-editor';
 import {
   createPrompt,
   useEffect,
@@ -16,14 +16,18 @@ import type { PartialDeep, InquirerReadline } from '@inquirer/type';
 type EditorConfig = {
   message: string;
   default?: string;
-  postfix?: string;
   waitForUseInput?: boolean;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme>;
+  file?: IFileOptions;
 };
 
 export default createPrompt<string, EditorConfig>((config, done) => {
-  const { waitForUseInput = true, postfix = '.txt', validate = () => true } = config;
+  const {
+    waitForUseInput = true,
+    file: { postfix = '.txt', ...fileProps } = {},
+    validate = () => true,
+  } = config;
   const theme = makeTheme(config.theme);
 
   const [status, setStatus] = useState<Status>('idle');
@@ -57,7 +61,10 @@ export default createPrompt<string, EditorConfig>((config, done) => {
       },
     );
 
-    editAsync(value, (error, answer) => void editCallback(error, answer), { postfix });
+    editAsync(value, (error, answer) => void editCallback(error, answer), {
+      postfix,
+      ...fileProps,
+    });
   }
 
   useEffect((rl) => {
