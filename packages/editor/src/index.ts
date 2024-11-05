@@ -19,13 +19,14 @@ type EditorConfig = {
   waitForUseInput?: boolean;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme>;
+  postfix?: string;
   file?: IFileOptions;
 };
 
 export default createPrompt<string, EditorConfig>((config, done) => {
   const {
     waitForUseInput = true,
-    file: { postfix = '.txt', ...fileProps } = {},
+    file: { postfix = config.postfix ?? '.txt', ...fileProps } = {},
     validate = () => true,
   } = config;
   const theme = makeTheme(config.theme);
