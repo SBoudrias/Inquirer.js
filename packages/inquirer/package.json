@@ -83,7 +83,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.16.4",
+    "@arethetypeswrong/cli": "^0.17.0",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
     "tshy": "^3.0.2"

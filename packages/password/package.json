@@ -79,7 +79,7 @@
     "ansi-escapes": "^4.3.2"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.16.4",
+    "@arethetypeswrong/cli": "^0.17.0",
     "@inquirer/testing": "^2.1.36",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
