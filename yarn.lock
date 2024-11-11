@@ -402,10 +402,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.13.0, @eslint/js@npm:^9.13.0":
+"@eslint/js@npm:9.13.0":
   version: 9.13.0
   resolution: "@eslint/js@npm:9.13.0"
   checksum: 10/aa7a4c45044a6cf6e14666ecc0b56ad41c80f022bd4718620b4a7e3d892111312f4e4ac4787fd11b3bf5abdb6ff9a95fdae7e73ef790528f150d86e9be1754a2
+  languageName: node
+  linkType: hard
+
+"@eslint/js@npm:^9.13.0":
+  version: 9.14.0
+  resolution: "@eslint/js@npm:9.14.0"
+  checksum: 10/897e26bd68f898e56e96f85c92a1d823ef3d9f34e17d88d0ff40e88882ddae28d2f35915150c21cf640e0c64cb23703d0fbe6f7c9b9d6328aabe58ca30d9b4fe
   languageName: node
   linkType: hard
 
