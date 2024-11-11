@@ -73,6 +73,29 @@ describe('editor prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
 
+  it('allow setting temp file options', async () => {
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      file: {
+        postfix: '.md',
+        dir: '/tmp',
+      },
+    });
+
+    expect(editAsync).not.toHaveBeenCalled();
+
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledWith('', expect.any(Function), {
+      postfix: '.md',
+      dir: '/tmp',
+    });
+
+    await editorAction(undefined, 'value from editor');
+
+    await expect(answer).resolves.toEqual('value from editor');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
+  });
+
   it('handles validation', async () => {
     const { answer, events, getScreen } = await render(editor, {
       message: 'Add a description',
