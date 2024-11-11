@@ -128,8 +128,6 @@ import { expand } from '@inquirer/prompts';
 
 Launches an instance of the users preferred editor on a temporary file. Once the user exits their editor, the content of the temporary file is read as the answer. The editor used is determined by reading the $VISUAL or $EDITOR environment variables. If neither of those are present, the OS default is used (notepad on Windows, vim on Mac or Linux.)
 
-A new option `file` allows customization of the temporary file’s properties, such as `postfix` (file extension) and other attributes. For backward compatibility, `postfix` can still be set as a top-level property. See the [`external-editor` options](https://github.com/mrkmg/node-external-editor#config-options) for more details.
-
 ```js
 import { editor } from '@inquirer/prompts';
 ```

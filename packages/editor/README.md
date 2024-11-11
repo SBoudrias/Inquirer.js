@@ -12,6 +12,40 @@ Prompt that'll open the user preferred editor with default content and allow for
 <tr>
 <td>
 
+```sh
+npm install @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<td colSpan="2" align="center">Or</td>
+</tr>
+<tr>
+<td>
+
+```sh
+npm install @inquirer/editor
+```
+
+</td>
+<td>
+
+```sh
+yarn add @inquirer/editor
+```
+
+</td>
+</tr>
+</table>
+
 # Usage
 
 ```js
@@ -58,5 +92,5 @@ type Theme = {
 
 # License
 
-Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))`<br/>`
+Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
 Licensed under the MIT license.
