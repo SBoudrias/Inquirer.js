@@ -16,11 +16,11 @@ import type { PartialDeep, InquirerReadline } from '@inquirer/type';
 type EditorConfig = {
   message: string;
   default?: string;
+  postfix?: string;
   waitForUseInput?: boolean;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
-  theme?: PartialDeep<Theme>;
-  postfix?: string;
   file?: IFileOptions;
+  theme?: PartialDeep<Theme>;
 };
 
 export default createPrompt<string, EditorConfig>((config, done) => {

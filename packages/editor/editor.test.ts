@@ -24,7 +24,6 @@ describe('editor prompt', () => {
   it('open editor after pressing enter', async () => {
     const { answer, events, getScreen } = await render(editor, {
       message: 'Add a description',
-      file: { postfix: '.txt' },
     });
 
     expect(getScreen()).toMatchInlineSnapshot(
@@ -58,9 +57,7 @@ describe('editor prompt', () => {
     const { answer, events, getScreen } = await render(editor, {
       message: 'Add a description',
       default: 'default description',
-      file: {
-        postfix: '.md',
-      },
+      postfix: '.md',
     });
 
     expect(editAsync).not.toHaveBeenCalled();
@@ -68,6 +65,29 @@ describe('editor prompt', () => {
     events.keypress('enter');
     expect(editAsync).toHaveBeenCalledWith('default description', expect.any(Function), {
       postfix: '.md',
+    });
+
+    await editorAction(undefined, 'value from editor');
+
+    await expect(answer).resolves.toEqual('value from editor');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
+  });
+
+  it('allow setting temp file options', async () => {
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      file: {
+        postfix: '.md',
+        dir: '/tmp',
+      },
+    });
+
+    expect(editAsync).not.toHaveBeenCalled();
+
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledWith('', expect.any(Function), {
+      postfix: '.md',
+      dir: '/tmp',
     });
 
     await editorAction(undefined, 'value from editor');
