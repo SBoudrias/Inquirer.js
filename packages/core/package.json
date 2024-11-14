@@ -61,6 +61,16 @@
         "types": "./dist/commonjs/index.d.ts",
         "default": "./dist/commonjs/index.js"
       }
+    },
+    "./ansi": {
+      "import": {
+        "types": "./dist/esm/ansi.d.ts",
+        "default": "./dist/esm/ansi.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/ansi.d.ts",
+        "default": "./dist/commonjs/ansi.js"
+      }
     }
   },
   "main": "./dist/commonjs/index.js",
@@ -76,7 +86,6 @@
   "dependencies": {
     "@inquirer/figures": "^1.0.8",
     "@inquirer/type": "^3.0.1",
-    "ansi-escapes": "^4.3.2",
     "cli-width": "^4.1.0",
     "mute-stream": "^2.0.0",
     "signal-exit": "^4.1.0",
@@ -105,7 +114,8 @@
     ],
     "exports": {
       "./package.json": "./package.json",
-      ".": "./src/index.ts"
+      ".": "./src/index.ts",
+      "./ansi": "./src/ansi.ts"
     }
   }
 }

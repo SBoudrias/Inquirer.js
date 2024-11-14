@@ -3,7 +3,6 @@ import { Stream } from 'node:stream';
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import stripAnsi from 'strip-ansi';
-import ansiEscapes from 'ansi-escapes';
 import {
   createPrompt,
   useEffect,
@@ -25,6 +24,7 @@ import {
   makeTheme,
   type Status,
 } from './src/index.js';
+import { cursorHide, cursorShow, eraseLines } from './src/ansi.js';
 
 describe('createPrompt()', () => {
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
@@ -441,7 +441,7 @@ describe('createPrompt()', () => {
         }
       });
 
-      return `${config.message} ${ansiEscapes.cursorHide}`;
+      return `${config.message} ${cursorHide}`;
     };
 
     const prompt = createPrompt(Prompt);
@@ -455,11 +455,9 @@ describe('createPrompt()', () => {
     await expect(answer).rejects.toThrow(CancelPromptError);
 
     const output = getFullOutput();
-    expect(output).toContain(ansiEscapes.cursorHide);
-    expect(output).toContain(ansiEscapes.cursorShow);
-    expect(output.lastIndexOf(ansiEscapes.cursorHide)).toBeLessThan(
-      output.lastIndexOf(ansiEscapes.cursorShow),
-    );
+    expect(output).toContain(cursorHide);
+    expect(output).toContain(cursorShow);
+    expect(output.lastIndexOf(cursorHide)).toBeLessThan(output.lastIndexOf(cursorShow));
   });
 
   it('allow cleaning the prompt after completion', async () => {
@@ -484,9 +482,7 @@ describe('createPrompt()', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('done');
-    expect(getScreen({ raw: true })).toEqual(
-      ansiEscapes.eraseLines(1) + ansiEscapes.cursorShow,
-    );
+    expect(getScreen({ raw: true })).toEqual(eraseLines(1) + cursorShow);
   });
 
   it('clear timeout when force closing', { timeout: 1000 }, async () => {
