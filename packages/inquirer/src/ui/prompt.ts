@@ -15,8 +15,8 @@ import {
 import runAsync from 'run-async';
 import MuteStream from 'mute-stream';
 import { AbortPromptError } from '@inquirer/core';
+import { cursorShow } from '@inquirer/ansi';
 import type { InquirerReadline } from '@inquirer/type';
-import ansiEscapes from 'ansi-escapes';
 import type {
   Answers,
   Question,
@@ -336,7 +336,7 @@ export default class PromptsRunner<A extends Answers> {
               rl.removeListener('SIGINT', onForceClose);
               rl.setPrompt('');
               rl.output.unmute();
-              rl.output.write(ansiEscapes.cursorShow);
+              rl.output.write(cursorShow);
               rl.output.end();
               rl.close();
             };

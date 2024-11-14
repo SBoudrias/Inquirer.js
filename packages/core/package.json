@@ -74,9 +74,9 @@
     "tsc": "tshy"
   },
   "dependencies": {
+    "@inquirer/ansi": "^0.0.0",
     "@inquirer/figures": "^1.0.13",
     "@inquirer/type": "^3.0.8",
-    "ansi-escapes": "^4.3.2",
     "cli-width": "^4.1.0",
     "mute-stream": "^2.0.0",
     "signal-exit": "^4.1.0",

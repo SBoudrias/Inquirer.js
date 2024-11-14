@@ -74,10 +74,10 @@
     "tsc": "tshy"
   },
   "dependencies": {
+    "@inquirer/ansi": "^0.0.0",
     "@inquirer/core": "^10.2.1",
     "@inquirer/figures": "^1.0.13",
     "@inquirer/type": "^3.0.8",
-    "ansi-escapes": "^4.3.2",
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
