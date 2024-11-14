@@ -463,17 +463,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@inquirer/ansi@npm:^0.0.0, @inquirer/ansi@workspace:packages/ansi":
+  version: 0.0.0-use.local
+  resolution: "@inquirer/ansi@workspace:packages/ansi"
+  dependencies:
+    "@arethetypeswrong/cli": "npm:^0.18.2"
+    "@repo/tsconfig": "workspace:*"
+    tshy: "npm:^3.0.2"
+  languageName: unknown
+  linkType: soft
+
 "@inquirer/checkbox@npm:^4.2.3, @inquirer/checkbox@workspace:packages/checkbox":
   version: 0.0.0-use.local
   resolution: "@inquirer/checkbox@workspace:packages/checkbox"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
+    "@inquirer/ansi": "npm:^0.0.0"
     "@inquirer/core": "npm:^10.2.1"
     "@inquirer/figures": "npm:^1.0.13"
     "@inquirer/testing": "npm:^2.1.49"
     "@inquirer/type": "npm:^3.0.8"
     "@repo/tsconfig": "workspace:*"
-    ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
   peerDependencies:
@@ -518,6 +528,7 @@ __metadata:
   resolution: "@inquirer/core@workspace:packages/core"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
+    "@inquirer/ansi": "npm:^0.0.0"
     "@inquirer/figures": "npm:^1.0.13"
     "@inquirer/testing": "npm:^2.1.49"
     "@inquirer/type": "npm:^3.0.8"
@@ -525,7 +536,6 @@ __metadata:
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^24.0.15"
     "@types/wrap-ansi": "npm:^3.0.0"
-    ansi-escapes: "npm:^4.3.2"
     cli-width: "npm:^4.1.0"
     mute-stream: "npm:^2.0.0"
     signal-exit: "npm:^4.1.0"
@@ -679,11 +689,11 @@ __metadata:
   resolution: "@inquirer/password@workspace:packages/password"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
+    "@inquirer/ansi": "npm:^0.0.0"
     "@inquirer/core": "npm:^10.2.1"
     "@inquirer/testing": "npm:^2.1.49"
     "@inquirer/type": "npm:^3.0.8"
     "@repo/tsconfig": "workspace:*"
-    ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
@@ -791,12 +801,12 @@ __metadata:
   resolution: "@inquirer/select@workspace:packages/select"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
+    "@inquirer/ansi": "npm:^0.0.0"
     "@inquirer/core": "npm:^10.2.1"
     "@inquirer/figures": "npm:^1.0.13"
     "@inquirer/testing": "npm:^2.1.49"
     "@inquirer/type": "npm:^3.0.8"
     "@repo/tsconfig": "workspace:*"
-    ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
   peerDependencies:
@@ -2282,7 +2292,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-escapes@npm:^4.2.1, ansi-escapes@npm:^4.3.2":
+"ansi-escapes@npm:^4.2.1":
   version: 4.3.2
   resolution: "ansi-escapes@npm:4.3.2"
   dependencies:
@@ -4688,12 +4698,12 @@ __metadata:
   resolution: "inquirer@workspace:packages/inquirer"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
+    "@inquirer/ansi": "npm:^0.0.0"
     "@inquirer/core": "npm:^10.2.1"
     "@inquirer/prompts": "npm:^7.8.5"
     "@inquirer/type": "npm:^3.0.8"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
-    ansi-escapes: "npm:^4.3.2"
     mute-stream: "npm:^2.0.0"
     run-async: "npm:^4.0.5"
     rxjs: "npm:^7.8.2"

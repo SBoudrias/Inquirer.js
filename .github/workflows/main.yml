@@ -128,6 +128,7 @@ jobs:
           yarn workspace @inquirer/prompts pack --out /tmp/artifacts/inquirer-prompts.tgz
           yarn workspace @inquirer/figures pack --out /tmp/artifacts/inquirer-figures.tgz
           yarn workspace @inquirer/type pack --out /tmp/artifacts/inquirer-type.tgz
+          yarn workspace @inquirer/ansi pack --out /tmp/artifacts/inquirer-ansi.tgz
           yarn workspace @repo/tsconfig pack --out /tmp/artifacts/tsconfig.tgz
       - name: Extract @inquirer/demo to an isolated project & build
         run: |
@@ -138,9 +139,10 @@ jobs:
           cd $temp_dir/demo
           yarn set version stable
           yarn add --dev @repo/tsconfig@file:/tmp/artifacts/tsconfig.tgz
-          yarn add @inquirer/core@file:/tmp/artifacts/inquirer-core.tgz
-          yarn add @inquirer/prompts@file:/tmp/artifacts/inquirer-prompts.tgz
-          yarn add @inquirer/figures@file:/tmp/artifacts/inquirer-figures.tgz
+          yarn set resolution @inquirer/core@npm:* file:/tmp/artifacts/inquirer-core.tgz
+          yarn set resolution @inquirer/prompts@npm:* file:/tmp/artifacts/inquirer-prompts.tgz
+          yarn set resolution @inquirer/figures@npm:* file:/tmp/artifacts/inquirer-figures.tgz
+          yarn set resolution @inquirer/ansi@npm:* file:/tmp/artifacts/inquirer-ansi.tgz
           yarn set resolution @inquirer/type@npm:* file:/tmp/artifacts/inquirer-type.tgz
           yarn install
           yarn tsc

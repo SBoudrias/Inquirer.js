@@ -1,14 +1,10 @@
 import { stripVTControlCharacters } from 'node:util';
-import ansiEscapes from 'ansi-escapes';
 import { breakLines, readlineWidth } from './utils.ts';
+import { cursorDown, cursorUp, cursorTo, cursorShow, eraseLines } from '@inquirer/ansi';
 import type { InquirerReadline } from '@inquirer/type';
 
 const height = (content: string): number => content.split('\n').length;
 const lastLine = (content: string): string => content.split('\n').pop() ?? '';
-
-function cursorDown(n: number): string {
-  return n > 0 ? ansiEscapes.cursorDown(n) : '';
-}
 
 export default class ScreenManager {
   // These variables are keeping information to allow correct prompt re-rendering
@@ -74,19 +70,15 @@ export default class ScreenManager {
       promptLineUpDiff + (bottomContent ? height(bottomContent) : 0);
 
     // Return cursor to the input position (on top of the bottomContent)
-    if (bottomContentHeight > 0) output += ansiEscapes.cursorUp(bottomContentHeight);
+    if (bottomContentHeight > 0) output += cursorUp(bottomContentHeight);
 
     // Return cursor to the initial left offset.
-    output += ansiEscapes.cursorTo(this.cursorPos.cols);
+    output += cursorTo(this.cursorPos.cols);
 
     /**
      * Render and store state for future re-rendering
      */
-    this.write(
-      cursorDown(this.extraLinesUnderPrompt) +
-        ansiEscapes.eraseLines(this.height) +
-        output,
-    );
+    this.write(cursorDown(this.extraLinesUnderPrompt) + eraseLines(this.height) + output);
 
     this.extraLinesUnderPrompt = bottomContentHeight;
     this.height = height(output);
@@ -95,7 +87,7 @@ export default class ScreenManager {
   checkCursorPos(): void {
     const cursorPos = this.rl.getCursorPos();
     if (cursorPos.cols !== this.cursorPos.cols) {
-      this.write(ansiEscapes.cursorTo(cursorPos.cols));
+      this.write(cursorTo(cursorPos.cols));
       this.cursorPos = cursorPos;
     }
   }
@@ -104,8 +96,8 @@ export default class ScreenManager {
     this.rl.setPrompt('');
 
     let output = cursorDown(this.extraLinesUnderPrompt);
-    output += clearContent ? ansiEscapes.eraseLines(this.height) : '\n';
-    output += ansiEscapes.cursorShow;
+    output += clearContent ? eraseLines(this.height) : '\n';
+    output += cursorShow;
     this.write(output);
 
     this.rl.close();
