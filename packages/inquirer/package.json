@@ -77,7 +77,6 @@
     "@inquirer/core": "^10.1.0",
     "@inquirer/prompts": "^7.1.0",
     "@inquirer/type": "^3.0.1",
-    "ansi-escapes": "^4.3.2",
     "mute-stream": "^2.0.0",
     "run-async": "^3.0.0",
     "rxjs": "^7.8.1"

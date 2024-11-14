@@ -77,7 +77,6 @@
     "@inquirer/core": "^10.1.0",
     "@inquirer/figures": "^1.0.8",
     "@inquirer/type": "^3.0.1",
-    "ansi-escapes": "^4.3.2",
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {

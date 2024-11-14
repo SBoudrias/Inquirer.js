@@ -17,10 +17,10 @@ import {
   type Theme,
   type Status,
 } from '@inquirer/core';
+import { cursorHide } from '@inquirer/core/ansi';
 import type { PartialDeep } from '@inquirer/type';
 import colors from 'yoctocolors-cjs';
 import figures from '@inquirer/figures';
-import ansiEscapes from 'ansi-escapes';
 
 type CheckboxTheme = {
   icon: {
@@ -300,7 +300,7 @@ export default createPrompt(
       error = `\n${theme.style.error(errorMsg)}`;
     }
 
-    return `${prefix} ${message}${helpTipTop}\n${page}${helpTipBottom}${choiceDescription}${error}${ansiEscapes.cursorHide}`;
+    return `${prefix} ${message}${helpTipTop}\n${page}${helpTipBottom}${choiceDescription}${error}${cursorHide}`;
   },
 );
 
