@@ -575,8 +575,6 @@ __metadata:
     yoctocolors-cjs: "npm:^2.1.2"
   peerDependencies:
     "@types/node": ">=18"
-  bin:
-    inquirer-demo: ./dist/esm/index.js
   languageName: unknown
   linkType: soft
 

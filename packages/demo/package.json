@@ -54,14 +54,9 @@
     "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
+        "default": "./dist/esm/index.ts"
       }
     }
-  },
-  "module": "./dist/esm/index.js",
-  "bin": {
-    "inquirer-demo": "./dist/esm/index.js"
   },
   "files": [
     "dist"
@@ -84,7 +79,10 @@
     "node": ">=18"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "bin": {
+      "inquirer-demo": "./dist/esm/index.js"
+    }
   },
   "tshy": {
     "dialects": [
@@ -96,9 +94,11 @@
     "exports": {
       "./package.json": "./package.json",
       ".": "./src/index.ts"
-    }
+    },
+    "liveDev": true
   },
   "peerDependencies": {
     "@types/node": ">=18"
-  }
+  },
+  "module": "./dist/esm/index.ts"
 }

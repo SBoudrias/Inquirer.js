@@ -58,7 +58,7 @@
     "prepare": "husky && turbo tsc attw",
     "setup": "node ./tools/setup-packages.mjs",
     "pretest": "turbo tsc && eslint . && yarn tsc:test",
-    "test": "vitest --run packages && node --test integration/**/*.test.*",
+    "test": "vitest --run && node --test integration/**/*.test.*",
     "tsc": "turbo tsc",
     "tsc:test": "tsc -p tsconfig.json"
   },

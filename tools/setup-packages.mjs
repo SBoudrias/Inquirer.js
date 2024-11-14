@@ -66,6 +66,7 @@ Promise.all(
 
       pkg.tshy = pkg.tshy ?? {};
       pkg.tshy.exclude = ['src/**/*.test.ts'];
+      pkg.tshy.liveDev = true;
 
       pkg.scripts = pkg.scripts ?? {};
       pkg.scripts.tsc = 'tshy';
