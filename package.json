@@ -62,7 +62,7 @@
     "tsc": "turbo tsc",
     "tsc:test": "tsc -p tsconfig.json"
   },
-  "lint-staged": {
+  "nano-staged": {
     "*": "yarn prettier --write --ignore-unknown",
     "*.m?[jt]sx?": "yarn eslint --fix"
   },
@@ -85,7 +85,7 @@
     "globby": "^14.0.2",
     "husky": "^9.1.6",
     "lerna": "^8.1.9",
-    "lint-staged": "^15.2.10",
+    "nano-staged": "^0.8.0",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "turbo": "^2.2.3",
