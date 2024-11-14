@@ -631,6 +631,18 @@ it('fail on aborted signals', async () => {
 });
 
 describe('Error handling', () => {
+  it('gracefully error on missing content', async () => {
+    // @ts-expect-error Testing an invalid behavior.
+    const prompt = createPrompt(function TestPrompt() {});
+    const { answer } = await render(prompt, {});
+    await expect(answer).rejects.toMatchInlineSnapshot(
+      `
+      [Error: Prompt functions must return a string.
+          at ${import.meta.filename}]
+    `,
+    );
+  });
+
   it('surface errors in render functions', async () => {
     const Prompt = () => {
       throw new Error('Error in render function');

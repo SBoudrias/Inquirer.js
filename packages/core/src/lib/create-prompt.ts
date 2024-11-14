@@ -14,7 +14,28 @@ type ViewFunction<Value, Config> = (
   done: (value: Value) => void,
 ) => string | [string, string | undefined];
 
+function getCallSites() {
+  const _prepareStackTrace = Error.prepareStackTrace;
+  try {
+    let result: NodeJS.CallSite[] = [];
+    Error.prepareStackTrace = (_, callSites) => {
+      const callSitesWithoutCurrent = callSites.slice(1);
+      result = callSitesWithoutCurrent;
+      return callSitesWithoutCurrent;
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, unicorn/error-message
+    new Error().stack;
+    return result;
+  } finally {
+    Error.prepareStackTrace = _prepareStackTrace;
+  }
+}
+
 export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
+  const callSites = getCallSites();
+  const callerFilename = callSites[1]?.getFileName?.();
+
   const prompt: Prompt<Value, Config> = (config, context = {}) => {
     // Default `input` to stdin
     const { input = process.stdin, signal } = context;
@@ -74,6 +95,14 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           const nextView = view(config, (value) => {
             setImmediate(() => resolve(value));
           });
+
+          // Typescript won't allow this, but not all users rely on typescript.
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (nextView === undefined) {
+            throw new Error(
+              `Prompt functions must return a string.\n    at ${callerFilename}`,
+            );
+          }
 
           const [content, bottomContent] =
             typeof nextView === 'string' ? [nextView] : nextView;
