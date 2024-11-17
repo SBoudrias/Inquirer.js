@@ -1,6 +1,6 @@
 import stripAnsi from 'strip-ansi';
 import { breakLines, readlineWidth } from './utils.js';
-import { cursorDown, cursorUp, cursorTo, cursorShow, eraseLines } from '../ansi.js';
+import { cursorDown, cursorUp, cursorTo, cursorShow, eraseLines } from './ansi.js';
 import type { InquirerReadline } from '@inquirer/type';
 
 const height = (content: string): number => content.split('\n').length;

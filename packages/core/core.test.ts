@@ -24,7 +24,7 @@ import {
   makeTheme,
   type Status,
 } from './src/index.js';
-import { cursorHide, cursorShow, eraseLines } from './src/ansi.js';
+import { cursorHide, cursorShow, eraseLines } from './src/lib/ansi.js';
 
 describe('createPrompt()', () => {
   it('onKeypress: allow to implement custom behavior on keypress', async () => {

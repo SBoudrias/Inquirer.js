@@ -64,12 +64,12 @@
     },
     "./ansi": {
       "import": {
-        "types": "./dist/esm/ansi.d.ts",
-        "default": "./dist/esm/ansi.js"
+        "types": "./dist/esm/lib/ansi.d.ts",
+        "default": "./dist/esm/lib/ansi.js"
       },
       "require": {
-        "types": "./dist/commonjs/ansi.d.ts",
-        "default": "./dist/commonjs/ansi.js"
+        "types": "./dist/commonjs/lib/ansi.d.ts",
+        "default": "./dist/commonjs/lib/ansi.js"
       }
     }
   },
@@ -77,7 +77,8 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/commonjs/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "ansi.cjs"
   ],
   "scripts": {
     "attw": "attw --pack",
@@ -115,7 +116,7 @@
     "exports": {
       "./package.json": "./package.json",
       ".": "./src/index.ts",
-      "./ansi": "./src/ansi.ts"
+      "./ansi": "./src/lib/ansi.ts"
     }
   }
 }

@@ -59,7 +59,9 @@ Promise.all(
     }
 
     if (isTS) {
-      pkg.files = ['dist'];
+      const files = new Set(pkg.files ?? []);
+      files.add('dist');
+      pkg.files = [...files];
 
       pkg.devDependencies = pkg.devDependencies ?? {};
       pkg.devDependencies['tshy'] = versions['tshy'];
