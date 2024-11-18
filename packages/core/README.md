@@ -296,7 +296,7 @@ export default createPrompt<string, PromptConfig>((config, done) => {
 });
 ```
 
-The [default theme keys cover](https://github.com/SBoudrias/Inquirer.js/blob/theme/packages/core/src/lib/theme.mts):
+The [default theme keys cover](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/core/src/lib/theme.ts):
 
 ```ts
 type DefaultTheme = {
@@ -321,14 +321,14 @@ type DefaultTheme = {
 
 You can refer to any `@inquirer/prompts` prompts for real examples:
 
-- [Confirm Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/confirm/src/index.mts)
-- [Input Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/src/index.mts)
-- [Password Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/password/src/index.mts)
-- [Editor Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/editor/src/index.mts)
-- [Select Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/select/src/index.mts)
-- [Checkbox Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/checkbox/src/index.mts)
-- [Rawlist Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/rawlist/src/index.mts)
-- [Expand Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/expand/src/index.mts)
+- [Confirm Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/confirm/src/index.ts)
+- [Input Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/src/index.ts)
+- [Password Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/password/src/index.ts)
+- [Editor Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/editor/src/index.ts)
+- [Select Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/select/src/index.ts)
+- [Checkbox Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/checkbox/src/index.ts)
+- [Rawlist Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/rawlist/src/index.ts)
+- [Expand Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/expand/src/index.ts)
 
 ```ts
 import colors from 'yoctocolors';

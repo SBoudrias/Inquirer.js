@@ -72,7 +72,7 @@ The core utility of `@inquirer/testing` is the `render()` function. This `render
 3. `events` (`{ keypress: (name | Key) => void, type: (string) => void }`) Is the utilities allowing you to interact with the prompt. Use it to trigger keypress events, or typing any input.
 4. `getFullOutput` (`() => string`) Return a raw dump of everything that got sent on the output stream.
 
-You can refer to [the `@inquirer/input` prompt test suite](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/input.test.mts) as a practical example.
+You can refer to [the `@inquirer/input` prompt test suite](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/input.test.ts) as a practical example.
 
 # License
 
