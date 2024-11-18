@@ -75,7 +75,7 @@ jobs:
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
       - run: yarn vitest --run --coverage
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
 
   Integration:
     name: Integration Tests
