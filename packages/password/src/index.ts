@@ -8,7 +8,7 @@ import {
   type Theme,
   type Status,
 } from '@inquirer/core';
-import ansiEscapes from 'ansi-escapes';
+import { cursorHide } from '@inquirer/core/ansi';
 import type { PartialDeep } from '@inquirer/type';
 
 type PasswordConfig = {
@@ -63,7 +63,7 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     const maskChar = typeof config.mask === 'string' ? config.mask : '*';
     formattedValue = maskChar.repeat(value.length);
   } else if (status !== 'done') {
-    helpTip = `${theme.style.help('[input is masked]')}${ansiEscapes.cursorHide}`;
+    helpTip = `${theme.style.help('[input is masked]')}${cursorHide}`;
   }
 
   if (status === 'done') {

@@ -75,8 +75,7 @@
   },
   "dependencies": {
     "@inquirer/core": "^10.1.0",
-    "@inquirer/type": "^3.0.1",
-    "ansi-escapes": "^4.3.2"
+    "@inquirer/type": "^3.0.1"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",

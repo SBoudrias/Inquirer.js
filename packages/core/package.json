@@ -61,13 +61,24 @@
         "types": "./dist/commonjs/index.d.ts",
         "default": "./dist/commonjs/index.js"
       }
+    },
+    "./ansi": {
+      "import": {
+        "types": "./dist/esm/lib/ansi.d.ts",
+        "default": "./dist/esm/lib/ansi.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/lib/ansi.d.ts",
+        "default": "./dist/commonjs/lib/ansi.js"
+      }
     }
   },
   "main": "./dist/commonjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/commonjs/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "ansi.cjs"
   ],
   "scripts": {
     "attw": "attw --pack",
@@ -76,7 +87,6 @@
   "dependencies": {
     "@inquirer/figures": "^1.0.8",
     "@inquirer/type": "^3.0.1",
-    "ansi-escapes": "^4.3.2",
     "cli-width": "^4.1.0",
     "mute-stream": "^2.0.0",
     "signal-exit": "^4.1.0",
@@ -105,7 +115,8 @@
     ],
     "exports": {
       "./package.json": "./package.json",
-      ".": "./src/index.ts"
+      ".": "./src/index.ts",
+      "./ansi": "./src/lib/ansi.ts"
     }
   }
 }

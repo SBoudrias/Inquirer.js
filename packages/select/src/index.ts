@@ -18,10 +18,10 @@ import {
   type Theme,
   type Status,
 } from '@inquirer/core';
+import { cursorHide } from '@inquirer/core/ansi';
 import type { PartialDeep } from '@inquirer/type';
 import colors from 'yoctocolors-cjs';
 import figures from '@inquirer/figures';
-import ansiEscapes from 'ansi-escapes';
 
 type SelectTheme = {
   icon: { cursor: string };
@@ -246,7 +246,7 @@ export default createPrompt(
       ? `\n${theme.style.description(selectedChoice.description)}`
       : ``;
 
-    return `${[prefix, message, helpTipTop].filter(Boolean).join(' ')}\n${page}${helpTipBottom}${choiceDescription}${ansiEscapes.cursorHide}`;
+    return `${[prefix, message, helpTipTop].filter(Boolean).join(' ')}\n${page}${helpTipBottom}${choiceDescription}${cursorHide}`;
   },
 );
 
