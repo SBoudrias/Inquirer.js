@@ -227,6 +227,36 @@ promise.cancel();
 
 # Recipes
 
+## Handling `ctrl+c` gracefully
+
+When a user press `ctrl+c` to exit a prompt, Inquirer rejects the prompt promise. This is the expected behavior in order to allow your program to teardown/cleanup its environment. When using `async/await`, rejected promises throw their error. When unhandled, those errors print their stack trace in your user's terminal.
+
+```
+ExitPromptError: User force closed the prompt with 0 null
+  at file://example/packages/core/dist/esm/lib/create-prompt.js:55:20
+  at Emitter.emit (file://example/node_modules/signal-exit/dist/mjs/index.js:67:19)
+  at #processEmit (file://example/node_modules/signal-exit/dist/mjs/index.js:236:27)
+  at #process.emit (file://example/node_modules/signal-exit/dist/mjs/index.js:187:37)
+  at process.callbackTrampoline (node:internal/async_hooks:130:17)
+```
+
+This isn't a great UX, which is why we highly recommend you to handle those errors gracefully.
+
+First option is to wrap your scripts in `try/catch`; like [we do in our demo program](https://github.com/SBoudrias/Inquirer.js/blob/649e78147cbb6390a162ff842d4b21d53a233472/packages/demo/src/index.ts#L89-L95). Or handle the error in your CLI framework mechanism; for example [`Clipanion catch` method](https://mael.dev/clipanion/docs/errors#custom-error-handling).
+
+Lastly, you could handle the error globally with an event listener and silence it.
+
+```ts
+process.on('uncaughtException', (error) => {
+  if (error instanceof Error && error.name === 'ExitPromptError') {
+    console.log('👋 until next time!');
+  } else {
+    // Rethrow unknown errors
+    throw error;
+  }
+});
+```
+
 ## Get answers in an object
 
 When asking many questions, you might not want to keep one variable per answer everywhere. In which case, you can put the answer inside an object.
