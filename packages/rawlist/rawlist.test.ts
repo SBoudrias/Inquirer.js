@@ -117,10 +117,15 @@ describe('rawlist prompt', () => {
   });
 
   it('errors when no selected options', async () => {
-    const { answer, events, getScreen } = await render(rawlist, {
-      message: 'Select a number',
-      choices: numberedChoices,
-    });
+    const abortController = new AbortController();
+    const { answer, events, getScreen } = await render(
+      rawlist,
+      {
+        message: 'Select a number',
+        choices: numberedChoices,
+      },
+      { signal: abortController.signal },
+    );
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -142,15 +147,20 @@ describe('rawlist prompt', () => {
       > Please input a value"
     `);
 
-    answer.cancel();
+    abortController.abort();
     await expect(answer).rejects.toThrow();
   });
 
   it('errors when selecting invalid option', async () => {
-    const { answer, events, getScreen } = await render(rawlist, {
-      message: 'Select a number',
-      choices: numberedChoices,
-    });
+    const abortController = new AbortController();
+    const { answer, events, getScreen } = await render(
+      rawlist,
+      {
+        message: 'Select a number',
+        choices: numberedChoices,
+      },
+      { signal: abortController.signal },
+    );
 
     events.type('A');
     expect(getScreen()).toMatchInlineSnapshot(`
@@ -173,7 +183,7 @@ describe('rawlist prompt', () => {
       > "A" isn't an available option"
     `);
 
-    answer.cancel();
+    abortController.abort();
     await expect(answer).rejects.toThrow();
   });
 

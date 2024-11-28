@@ -237,10 +237,15 @@ describe('expand prompt', () => {
   });
 
   it('handles empty selection', async () => {
-    const { answer, events, getScreen } = await render(expand, {
-      message: 'Overwrite this file?',
-      choices: overwriteChoices,
-    });
+    const abortController = new AbortController();
+    const { answer, events, getScreen } = await render(
+      expand,
+      {
+        message: 'Overwrite this file?',
+        choices: overwriteChoices,
+      },
+      { signal: abortController.signal },
+    );
 
     expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
 
@@ -264,15 +269,20 @@ describe('expand prompt', () => {
       > Please input a value"
     `);
 
-    answer.cancel();
+    abortController.abort();
     await expect(answer).rejects.toThrow();
   });
 
   it('handles non-existing selection', async () => {
-    const { answer, events, getScreen } = await render(expand, {
-      message: 'Overwrite this file?',
-      choices: overwriteChoices,
-    });
+    const abortController = new AbortController();
+    const { answer, events, getScreen } = await render(
+      expand,
+      {
+        message: 'Overwrite this file?',
+        choices: overwriteChoices,
+      },
+      { signal: abortController.signal },
+    );
 
     expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
 
@@ -283,7 +293,7 @@ describe('expand prompt', () => {
       > "4" isn't an available option"
     `);
 
-    answer.cancel();
+    abortController.abort();
     await expect(answer).rejects.toThrow();
   });
 
@@ -303,11 +313,16 @@ describe('expand prompt', () => {
   });
 
   it('can defaults to expanded', async () => {
-    const { answer, getScreen } = await render(expand, {
-      message: 'Overwrite this file?',
-      choices: overwriteChoices,
-      expanded: true,
-    });
+    const abortController = new AbortController();
+    const { answer, getScreen } = await render(
+      expand,
+      {
+        message: 'Overwrite this file?',
+        choices: overwriteChoices,
+        expanded: true,
+      },
+      { signal: abortController.signal },
+    );
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file?
@@ -317,7 +332,7 @@ describe('expand prompt', () => {
         x) Abort"
     `);
 
-    answer.cancel();
+    abortController.abort();
     await expect(answer).rejects.toThrow();
   });
 });
