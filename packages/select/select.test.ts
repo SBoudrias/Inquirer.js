@@ -367,13 +367,18 @@ describe('select prompt', () => {
   });
 
   it('allow customizing disabled label', async () => {
-    const { answer, getScreen } = await render(select, {
-      message: 'Select a topping',
-      choices: [
-        { name: 'Ham', value: 'ham' },
-        { name: 'Pineapple', value: 'pineapple', disabled: '*premium*' },
-      ],
-    });
+    const abortController = new AbortController();
+    const { answer, getScreen } = await render(
+      select,
+      {
+        message: 'Select a topping',
+        choices: [
+          { name: 'Ham', value: 'ham' },
+          { name: 'Pineapple', value: 'pineapple', disabled: '*premium*' },
+        ],
+      },
+      { signal: abortController.signal },
+    );
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping (Use arrow keys)
@@ -381,7 +386,7 @@ describe('select prompt', () => {
       - Pineapple *premium*"
     `);
 
-    answer.cancel();
+    abortController.abort();
     await expect(answer).rejects.toBeInstanceOf(Error);
   });
 

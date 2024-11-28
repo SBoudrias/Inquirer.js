@@ -46,7 +46,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province 
+      "? Select a Canadian province
       ❯ Alberta
         British Columbia
         Manitoba
@@ -94,7 +94,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a family 
+      "? Select a family
       ❯ Stark
         Lannister
         Targaryen
@@ -107,7 +107,7 @@ describe('search prompt', () => {
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a family 
+      "? Select a family
         Stark
       ❯ Lannister
         Targaryen
@@ -135,7 +135,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province 
+      "? Select a Canadian province
       ❯ Alberta
         British Columbia
         Manitoba
@@ -227,14 +227,19 @@ describe('search prompt', () => {
   });
 
   it('handles search errors', async () => {
-    const { answer, events, getScreen } = await render(search, {
-      message: 'Select a Canadian province',
-      source: (term: string | void) => {
-        if (!term) return Promise.resolve([]);
+    const abortController = new AbortController();
+    const { answer, events, getScreen } = await render(
+      search,
+      {
+        message: 'Select a Canadian province',
+        source: (term: string | void) => {
+          if (!term) return Promise.resolve([]);
 
-        throw new Error("You're being rate limited");
+          throw new Error("You're being rate limited");
+        },
       },
-    });
+      { signal: abortController.signal },
+    );
 
     expect(getScreen()).toMatchInlineSnapshot(`"? Select a Canadian province"`);
 
@@ -245,15 +250,20 @@ describe('search prompt', () => {
       > You're being rate limited"
     `);
 
-    answer.cancel();
+    abortController.abort();
     await expect(answer).rejects.toThrow();
   });
 
   it('handles empty results', async () => {
-    const { answer, events, getScreen } = await render(search, {
-      message: 'Select a Canadian province',
-      source: () => [],
-    });
+    const abortController = new AbortController();
+    const { answer, events, getScreen } = await render(
+      search,
+      {
+        message: 'Select a Canadian province',
+        source: () => [],
+      },
+      { signal: abortController.signal },
+    );
 
     expect(getScreen()).toMatchInlineSnapshot(`"? Select a Canadian province"`);
 
@@ -267,7 +277,7 @@ describe('search prompt', () => {
     events.keypress('backspace');
     expect(getScreen()).toMatchInlineSnapshot(`"? Select a Canadian province"`);
 
-    answer.cancel();
+    abortController.abort();
     await expect(answer).rejects.toThrow();
   });
 
@@ -289,7 +299,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a country 
+      "? Select a country
        ~ Americas ~
       ❯ Canada
         United States
@@ -313,7 +323,7 @@ describe('search prompt', () => {
     Array.from({ length: 'France'.length }).forEach(() => events.keypress('backspace'));
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a country 
+      "? Select a country
        ~ Americas ~
       ❯ Canada
         United States
@@ -344,7 +354,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a family 
+      "? Select a family
       ❯ Stark
         Lannister
         Targaryen
@@ -354,7 +364,7 @@ describe('search prompt', () => {
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a family 
+      "? Select a family
         Stark
       ❯ Lannister
         Targaryen
@@ -374,15 +384,20 @@ describe('search prompt', () => {
   });
 
   it('allows default parameters to be used as source function parameters', async () => {
-    const { answer } = await render(search, {
-      message: 'Select a family',
-      source: (term: string = '') => {
-        expectTypeOf(term).toEqualTypeOf<string>();
-        return [];
+    const abortController = new AbortController();
+    const { answer } = await render(
+      search,
+      {
+        message: 'Select a family',
+        source: (term: string = '') => {
+          expectTypeOf(term).toEqualTypeOf<string>();
+          return [];
+        },
       },
-    });
+      { signal: abortController.signal },
+    );
 
-    answer.cancel();
+    abortController.abort();
     await expect(answer).rejects.toThrow();
   });
 
@@ -393,7 +408,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province 
+      "? Select a Canadian province
       ❯ Alberta
         British Columbia
         Manitoba
@@ -451,7 +466,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a file 
+      "? Select a file
       ❯ src
         dist
       (Use arrow keys)"
@@ -488,7 +503,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province 
+      "? Select a Canadian province
       ❯ Alberta
         British Columbia
         Manitoba
