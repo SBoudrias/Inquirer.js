@@ -89,7 +89,7 @@
     "@inquirer/testing": "^2.1.37",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
-    "@types/node": "^22.9.3",
+    "@types/node": "^22.10.1",
     "@types/wrap-ansi": "^3.0.0",
     "tshy": "^3.0.2"
   },

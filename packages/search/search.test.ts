@@ -46,7 +46,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province
+      "? Select a Canadian province 
       ❯ Alberta
         British Columbia
         Manitoba
@@ -94,7 +94,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a family
+      "? Select a family 
       ❯ Stark
         Lannister
         Targaryen
@@ -107,7 +107,7 @@ describe('search prompt', () => {
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a family
+      "? Select a family 
         Stark
       ❯ Lannister
         Targaryen
@@ -135,7 +135,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province
+      "? Select a Canadian province 
       ❯ Alberta
         British Columbia
         Manitoba
@@ -299,7 +299,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a country
+      "? Select a country 
        ~ Americas ~
       ❯ Canada
         United States
@@ -323,7 +323,7 @@ describe('search prompt', () => {
     Array.from({ length: 'France'.length }).forEach(() => events.keypress('backspace'));
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a country
+      "? Select a country 
        ~ Americas ~
       ❯ Canada
         United States
@@ -354,7 +354,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a family
+      "? Select a family 
       ❯ Stark
         Lannister
         Targaryen
@@ -364,7 +364,7 @@ describe('search prompt', () => {
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a family
+      "? Select a family 
         Stark
       ❯ Lannister
         Targaryen
@@ -408,7 +408,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province
+      "? Select a Canadian province 
       ❯ Alberta
         British Columbia
         Manitoba
@@ -466,7 +466,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a file
+      "? Select a file 
       ❯ src
         dist
       (Use arrow keys)"
@@ -503,7 +503,7 @@ describe('search prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province
+      "? Select a Canadian province 
       ❯ Alberta
         British Columbia
         Manitoba
