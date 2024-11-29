@@ -10,10 +10,11 @@ export default defineConfig({
       exclude: [
         ...coverageConfigDefaults.exclude,
         'tools/**',
+        'internals/**',
+        'packages/*/dist/**',
         'packages/inquirer/examples/**',
         'packages/demo/**',
         '.yarn/**',
-        '**/*.type.mts',
       ],
     },
     testTimeout: 300,
