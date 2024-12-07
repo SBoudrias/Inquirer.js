@@ -53,7 +53,7 @@
     "internals/*"
   ],
   "scripts": {
-    "demo": "node --watch-path=packages/ packages/demo/",
+    "demo": "node --watch-path=packages/ packages/demo/dist/esm/index.js",
     "dev": "turbo watch tsc",
     "prepare": "husky && turbo tsc attw",
     "setup": "node ./tools/setup-packages.mjs",
