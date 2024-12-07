@@ -13,6 +13,14 @@ import {
 } from '@inquirer/core';
 import type { PartialDeep, InquirerReadline } from '@inquirer/type';
 
+type EditorTheme = {
+  validationFailureMode: 'keep' | 'clear';
+};
+
+const editorTheme: EditorTheme = {
+  validationFailureMode: 'keep',
+};
+
 type EditorConfig = {
   message: string;
   default?: string;
@@ -20,7 +28,7 @@ type EditorConfig = {
   waitForUseInput?: boolean;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
   file?: IFileOptions;
-  theme?: PartialDeep<Theme>;
+  theme?: PartialDeep<Theme<EditorTheme>>;
 };
 
 export default createPrompt<string, EditorConfig>((config, done) => {
@@ -29,10 +37,10 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     file: { postfix = config.postfix ?? '.txt', ...fileProps } = {},
     validate = () => true,
   } = config;
-  const theme = makeTheme(config.theme);
+  const theme = makeTheme<EditorTheme>(editorTheme, config.theme);
 
   const [status, setStatus] = useState<Status>('idle');
-  const [value, setValue] = useState<string>(config.default || '');
+  const [value = '', setValue] = useState<string | undefined>(config.default);
   const [errorMsg, setError] = useState<string>();
 
   const prefix = usePrefix({ status, theme });
@@ -54,7 +62,12 @@ export default createPrompt<string, EditorConfig>((config, done) => {
             setStatus('done');
             done(answer);
           } else {
-            setValue(answer);
+            if (theme.validationFailureMode === 'clear') {
+              setValue(config.default);
+            } else {
+              setValue(answer);
+            }
+
             setError(isValid || 'You must provide a valid value');
             setStatus('idle');
           }
