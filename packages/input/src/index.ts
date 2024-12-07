@@ -11,18 +11,26 @@ import {
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 
+type InputTheme = {
+  validationFailureMode: 'keep' | 'clear';
+};
+
+const inputTheme: InputTheme = {
+  validationFailureMode: 'keep',
+};
+
 type InputConfig = {
   message: string;
   default?: string;
   required?: boolean;
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
-  theme?: PartialDeep<Theme>;
+  theme?: PartialDeep<Theme<InputTheme>>;
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {
   const { required, validate = () => true } = config;
-  const theme = makeTheme(config.theme);
+  const theme = makeTheme<InputTheme>(inputTheme, config.theme);
   const [status, setStatus] = useState<Status>('idle');
   const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
   const [errorMsg, setError] = useState<string>();
@@ -47,9 +55,13 @@ export default createPrompt<string, InputConfig>((config, done) => {
         setStatus('done');
         done(answer);
       } else {
-        // Reset the readline line value to the previous value. On line event, the value
-        // get cleared, forcing the user to re-enter the value instead of fixing it.
-        rl.write(value);
+        if (theme.validationFailureMode === 'clear') {
+          setValue('');
+        } else {
+          // Reset the readline line value to the previous value. On line event, the value
+          // get cleared, forcing the user to re-enter the value instead of fixing it.
+          rl.write(value);
+        }
         setError(isValid || 'You must provide a valid value');
         setStatus('idle');
       }

@@ -63,6 +63,34 @@ describe('input prompt', () => {
     await expect(answer).resolves.toEqual('2');
   });
 
+  it('can clear value when validation fail', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'Answer 2 ===',
+      validate: (value: string) => value === '2',
+      theme: {
+        validationFailureMode: 'clear',
+      },
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 ==="`);
+
+    events.type('1');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 1"`);
+
+    events.keypress('enter');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Answer 2 ===
+      > You must provide a valid value"
+    `);
+
+    events.type('2');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 2"`);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('2');
+  });
+
   it('handle asynchronous validation', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'Answer 2 ===',
