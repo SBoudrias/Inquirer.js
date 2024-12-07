@@ -17,8 +17,19 @@ type ConfirmConfig = {
   theme?: PartialDeep<Theme>;
 };
 
+function getBooleanValue(value: string, defaultValue?: boolean): boolean {
+  let answer = defaultValue !== false;
+  if (/^(y|yes)/i.test(value)) answer = true;
+  else if (/^(n|no)/i.test(value)) answer = false;
+  return answer;
+}
+
+function boolToString(value: boolean): string {
+  return value ? 'Yes' : 'No';
+}
+
 export default createPrompt<boolean, ConfirmConfig>((config, done) => {
-  const { transformer = (answer) => (answer ? 'yes' : 'no') } = config;
+  const { transformer = boolToString } = config;
   const [status, setStatus] = useState<Status>('idle');
   const [value, setValue] = useState('');
   const theme = makeTheme(config.theme);
@@ -26,13 +37,15 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
 
   useKeypress((key, rl) => {
     if (isEnterKey(key)) {
-      let answer = config.default !== false;
-      if (/^(y|yes)/i.test(value)) answer = true;
-      else if (/^(n|no)/i.test(value)) answer = false;
-
+      const answer = getBooleanValue(value, config.default);
       setValue(transformer(answer));
       setStatus('done');
       done(answer);
+    } else if (key.name === 'tab') {
+      const answer = boolToString(!getBooleanValue(value, config.default));
+      rl.clearLine(0); // Remove the tab character.
+      rl.write(answer);
+      setValue(answer);
     } else {
       setValue(rl.line);
     }

@@ -16,7 +16,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(true);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? yes"');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? Yes"`);
   });
 
   it('handles "no"', async () => {
@@ -32,7 +32,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(false);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? no"');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? No"`);
   });
 
   it('handles "y"', async () => {
@@ -48,7 +48,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(true);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? yes"');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? Yes"`);
   });
 
   it('handles "n"', async () => {
@@ -64,7 +64,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(false);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? no"');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? No"`);
   });
 
   it('uses default (yes) on empty input', async () => {
@@ -78,7 +78,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(true);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? yes"');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? Yes"`);
   });
 
   it('uses default (no) on empty input', async () => {
@@ -92,7 +92,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(false);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? no"');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? No"`);
   });
 
   it('uses default on gibberish input', async () => {
@@ -107,7 +107,7 @@ describe('confirm prompt', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual(true);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? yes"');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? Yes"`);
   });
 
   it('supports transformer option', async () => {
@@ -122,5 +122,26 @@ describe('confirm prompt', () => {
 
     await expect(answer).resolves.toEqual(true);
     expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? Oui!"');
+  });
+
+  it('toggle between values with the tab key', async () => {
+    const { answer, events, getScreen } = await render(confirm, {
+      message: 'Do you want to proceed?',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot('"? Do you want to proceed? (Y/n)"');
+
+    events.keypress('tab');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Do you want to proceed? (Y/n) No"`);
+
+    events.keypress('tab');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Do you want to proceed? (Y/n) Yes"`);
+
+    events.keypress('tab');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Do you want to proceed? (Y/n) No"`);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(false);
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? No"');
   });
 });
