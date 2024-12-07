@@ -264,6 +264,52 @@ describe('checkbox prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 4"');
   });
 
+  it('allow preselecting an option', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: [{ value: 1 }, { value: 2, checked: true }],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
+      selection, and <enter> to proceed)
+      ❯◯ 1
+       ◉ 2"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual([2]);
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
+  });
+
+  it('allow preselecting and changing that selection', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: [{ value: 1 }, { value: 2, checked: true }],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
+      selection, and <enter> to proceed)
+      ❯◯ 1
+       ◉ 2"
+    `);
+
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('space');
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+       ◉ 1
+      ❯◯ 2"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual([1]);
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
+  });
+
   it('allow setting a smaller page size', async () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a number',
