@@ -87,8 +87,11 @@ type Theme = {
     help: (text: string) => string;
     key: (text: string) => string;
   };
+  validationFailureMode: 'keep' | 'clear';
 };
 ```
+
+`validationFailureMode` defines the behavior of the prompt when the value submitted is invalid. By default, we'll keep the value allowing the user to edit it. When the theme option is set to `clear`, we'll remove and reset to the default value or empty string.
 
 # License
 

@@ -32,7 +32,9 @@ describe('editor prompt', () => {
     expect(editAsync).not.toHaveBeenCalled();
 
     events.keypress('enter');
-    expect(editAsync).toHaveBeenCalledWith('', expect.any(Function), { postfix: '.txt' });
+    expect(editAsync).toHaveBeenLastCalledWith('', expect.any(Function), {
+      postfix: '.txt',
+    });
 
     await editorAction(undefined, 'value from editor');
 
@@ -45,7 +47,9 @@ describe('editor prompt', () => {
       message: 'Add a description',
       waitForUseInput: false,
     });
-    expect(editAsync).toHaveBeenCalledWith('', expect.any(Function), { postfix: '.txt' });
+    expect(editAsync).toHaveBeenLastCalledWith('', expect.any(Function), {
+      postfix: '.txt',
+    });
 
     await editorAction(undefined, 'value from editor');
 
@@ -63,9 +67,13 @@ describe('editor prompt', () => {
     expect(editAsync).not.toHaveBeenCalled();
 
     events.keypress('enter');
-    expect(editAsync).toHaveBeenCalledWith('default description', expect.any(Function), {
-      postfix: '.md',
-    });
+    expect(editAsync).toHaveBeenLastCalledWith(
+      'default description',
+      expect.any(Function),
+      {
+        postfix: '.md',
+      },
+    );
 
     await editorAction(undefined, 'value from editor');
 
@@ -85,7 +93,7 @@ describe('editor prompt', () => {
     expect(editAsync).not.toHaveBeenCalled();
 
     events.keypress('enter');
-    expect(editAsync).toHaveBeenCalledWith('', expect.any(Function), {
+    expect(editAsync).toHaveBeenLastCalledWith('', expect.any(Function), {
       postfix: '.md',
       dir: '/tmp',
     });
@@ -129,6 +137,10 @@ describe('editor prompt', () => {
     expect(editAsync).toHaveBeenCalledOnce();
     events.keypress('enter');
     expect(editAsync).toHaveBeenCalledTimes(2);
+    // Previous answer is passed in the second time for editing
+    expect(editAsync).toHaveBeenLastCalledWith('3', expect.any(Function), {
+      postfix: '.txt',
+    });
 
     // Test user defined error message
     await editorAction(undefined, '2');
@@ -139,6 +151,99 @@ describe('editor prompt', () => {
 
     events.keypress('enter');
     expect(editAsync).toHaveBeenCalledTimes(3);
+
+    await editorAction(undefined, '1');
+    await expect(answer).resolves.toEqual('1');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
+  });
+
+  it('clear value on failed validation', async () => {
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      validate: (value: string) => {
+        switch (value) {
+          case '1': {
+            return true;
+          }
+          case '2': {
+            return '"2" is not an allowed value';
+          }
+          default: {
+            return false;
+          }
+        }
+      },
+      theme: {
+        validationFailureMode: 'clear',
+      },
+    });
+
+    expect(editAsync).not.toHaveBeenCalled();
+    events.keypress('enter');
+
+    expect(editAsync).toHaveBeenCalledOnce();
+    expect(editAsync).toHaveBeenLastCalledWith('', expect.any(Function), {
+      postfix: '.txt',
+    });
+    await editorAction(undefined, 'foo bar');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Add a description Press <enter> to launch your preferred editor.
+      > You must provide a valid value"
+    `);
+
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledTimes(2);
+    // Because we clear, the second call goes back to an empty string
+    expect(editAsync).toHaveBeenLastCalledWith('', expect.any(Function), {
+      postfix: '.txt',
+    });
+
+    await editorAction(undefined, '1');
+    await expect(answer).resolves.toEqual('1');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
+  });
+
+  it('goes back to default value on failed validation', async () => {
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      default: 'default value',
+      validate: (value: string) => {
+        switch (value) {
+          case '1': {
+            return true;
+          }
+          case '2': {
+            return '"2" is not an allowed value';
+          }
+          default: {
+            return false;
+          }
+        }
+      },
+      theme: {
+        validationFailureMode: 'clear',
+      },
+    });
+
+    expect(editAsync).not.toHaveBeenCalled();
+    events.keypress('enter');
+
+    expect(editAsync).toHaveBeenCalledOnce();
+    expect(editAsync).toHaveBeenLastCalledWith('default value', expect.any(Function), {
+      postfix: '.txt',
+    });
+    await editorAction(undefined, 'foo bar');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Add a description Press <enter> to launch your preferred editor.
+      > You must provide a valid value"
+    `);
+
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledTimes(2);
+    // Because we clear, the second call goes back to the default value
+    expect(editAsync).toHaveBeenLastCalledWith('default value', expect.any(Function), {
+      postfix: '.txt',
+    });
 
     await editorAction(undefined, '1');
     await expect(answer).resolves.toEqual('1');
