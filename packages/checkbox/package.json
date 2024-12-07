@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/checkbox",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Inquirer checkbox prompt",
   "keywords": [
     "answer",
@@ -74,7 +74,7 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.1.0",
+    "@inquirer/core": "^10.1.1",
     "@inquirer/figures": "^1.0.8",
     "@inquirer/type": "^3.0.1",
     "ansi-escapes": "^4.3.2",
@@ -82,7 +82,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",
-    "@inquirer/testing": "^2.1.37",
+    "@inquirer/testing": "^2.1.38",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },
