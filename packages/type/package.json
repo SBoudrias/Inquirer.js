@@ -55,18 +55,15 @@
     "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
+        "default": "./dist/esm/index.ts"
       },
       "require": {
-        "types": "./dist/commonjs/index.d.ts",
-        "default": "./dist/commonjs/index.js"
+        "default": "./dist/commonjs/index.ts"
       }
     }
   },
-  "main": "./dist/commonjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/commonjs/index.d.ts",
+  "main": "./dist/commonjs/index.ts",
+  "module": "./dist/esm/index.ts",
   "files": [
     "dist"
   ],
@@ -92,6 +89,7 @@
     "exports": {
       "./package.json": "./package.json",
       ".": "./src/index.ts"
-    }
+    },
+    "liveDev": true
   }
 }
