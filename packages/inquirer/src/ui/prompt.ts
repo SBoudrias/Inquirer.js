@@ -267,15 +267,25 @@ export default class PromptsRunner<A extends Answers> {
     if (Array.isArray(resolvedChoices)) {
       choices = resolvedChoices.map((choice: unknown) => {
         if (typeof choice === 'string' || typeof choice === 'number') {
-          return { name: choice, value: choice };
+          choice = { name: choice, value: choice };
         } else if (
           typeof choice === 'object' &&
           choice != null &&
           !('value' in choice) &&
           'name' in choice
         ) {
-          return { ...choice, value: choice.name };
+          choice = { ...choice, value: choice.name };
         }
+
+        if (typeof choice === 'object' && choice != null && 'value' in choice) {
+          // Add checked to question for backward compatibility. default was supported as alternative of per choice checked.
+          return {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            checked: Array.isArray(defaultValue) && defaultValue.includes(choice.value),
+            ...choice,
+          };
+        }
+
         return choice;
       });
     }
