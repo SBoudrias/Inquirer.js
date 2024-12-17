@@ -486,7 +486,7 @@ describe('inquirer.prompt(...)', () => {
     class FakeSelect {
       constructor(question: QuestionMap['stubSelect']) {
         expect(question.choices).toEqual(
-          stubChoices.map((choice) => ({ name: choice, value: choice })),
+          stubChoices.map((choice) => ({ checked: false, name: choice, value: choice })),
         );
       }
 
