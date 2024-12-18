@@ -486,7 +486,7 @@ describe('inquirer.prompt(...)', () => {
     class FakeSelect {
       constructor(question: QuestionMap['stubSelect']) {
         expect(question.choices).toEqual(
-          stubChoices.map((choice) => ({ checked: false, name: choice, value: choice })),
+          stubChoices.map((choice) => ({ name: choice, value: choice })),
         );
       }
 
@@ -517,6 +517,35 @@ describe('inquirer.prompt(...)', () => {
       },
     ]);
     expect(answers).toEqual({ name1: 'bar', name: undefined });
+  });
+
+  it('should use `default` when passed along `choices`', async () => {
+    class FakeSelect {
+      constructor(question: QuestionMap['stubSelect']) {
+        expect(question.choices).toEqual([
+          { name: 'A', value: 'A', checked: false },
+          { name: 'B', value: 'B', checked: true },
+        ]);
+      }
+
+      run() {
+        return Promise.resolve();
+      }
+
+      close() {}
+    }
+    inquirer.registerPrompt('stubSelect', FakeSelect);
+
+    const answers = await inquirer.prompt([
+      {
+        type: 'stubSelect',
+        name: 'name',
+        message: 'message',
+        choices: ['A', 'B'],
+        default: ['B'],
+      },
+    ]);
+    expect(answers).toEqual({ name: undefined });
   });
 
   it('should expose the Reactive interface', async () => {
