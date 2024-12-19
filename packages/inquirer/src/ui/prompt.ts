@@ -266,17 +266,28 @@ export default class PromptsRunner<A extends Answers> {
     let choices;
     if (Array.isArray(resolvedChoices)) {
       choices = resolvedChoices.map((choice: unknown) => {
-        if (typeof choice === 'string' || typeof choice === 'number') {
-          return { name: choice, value: choice };
-        } else if (
-          typeof choice === 'object' &&
-          choice != null &&
-          !('value' in choice) &&
-          'name' in choice
-        ) {
-          return { ...choice, value: choice.name };
+        const choiceObj =
+          typeof choice !== 'object' || choice == null
+            ? { name: choice, value: choice }
+            : {
+                ...choice,
+                value:
+                  'value' in choice
+                    ? choice.value
+                    : 'name' in choice
+                      ? choice.name
+                      : undefined,
+              };
+
+        if ('value' in choiceObj && Array.isArray(defaultValue)) {
+          // Add checked to question for backward compatibility. default was supported as alternative of per choice checked.
+          return {
+            checked: defaultValue.includes(choiceObj.value),
+            ...choiceObj,
+          };
         }
-        return choice;
+
+        return choiceObj;
       });
     }
 
