@@ -78,7 +78,11 @@ type QuestionWithGetters<
 >;
 
 export type UnnamedDistinctQuestion<A extends Answers = object> =
-  | QuestionWithGetters<'checkbox', Parameters<typeof checkbox>[0], A>
+  | QuestionWithGetters<
+      'checkbox',
+      Parameters<typeof checkbox>[0] & { default: unknown[] },
+      A
+    >
   | QuestionWithGetters<'confirm', Parameters<typeof confirm>[0], A>
   | QuestionWithGetters<'editor', Parameters<typeof editor>[0], A>
   | QuestionWithGetters<'expand', Parameters<typeof expand>[0], A>
