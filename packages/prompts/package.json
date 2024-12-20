@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/prompts",
-  "version": "7.2.0",
+  "version": "7.2.1",
   "description": "Inquirer prompts, combined in a single package",
   "keywords": [
     "answer",
@@ -76,20 +76,20 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/checkbox": "^4.0.3",
-    "@inquirer/confirm": "^5.1.0",
-    "@inquirer/editor": "^4.2.0",
-    "@inquirer/expand": "^4.0.3",
-    "@inquirer/input": "^4.1.0",
-    "@inquirer/number": "^3.0.3",
-    "@inquirer/password": "^4.0.3",
-    "@inquirer/rawlist": "^4.0.3",
-    "@inquirer/search": "^3.0.3",
-    "@inquirer/select": "^4.0.3"
+    "@inquirer/checkbox": "^4.0.4",
+    "@inquirer/confirm": "^5.1.1",
+    "@inquirer/editor": "^4.2.1",
+    "@inquirer/expand": "^4.0.4",
+    "@inquirer/input": "^4.1.1",
+    "@inquirer/number": "^3.0.4",
+    "@inquirer/password": "^4.0.4",
+    "@inquirer/rawlist": "^4.0.4",
+    "@inquirer/search": "^3.0.4",
+    "@inquirer/select": "^4.0.4"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.2",
-    "@inquirer/type": "^3.0.1",
+    "@inquirer/type": "^3.0.2",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },
