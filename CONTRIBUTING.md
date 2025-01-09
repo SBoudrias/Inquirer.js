@@ -73,8 +73,16 @@ yarn demo
 
 ## Publishing new versions
 
-Note: This can only be done by someone with permission to the org on `npm`.
+Note: This can only be done by someone with permission to the org on `npm` and requires 2FA setup.
 
 ```sh
-yarn lerna publish
+yarn publish
 ```
+
+You'll need to add a `./publish.env` at the root of the repo. And inside define your 2FA codes:
+
+```
+NPM_CONFIG_OTP=""
+```
+
+The publish alias relies on 1password for developer to fetch the private information.

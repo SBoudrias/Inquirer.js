@@ -12,3 +12,4 @@ coverage
 !.yarn/versions
 .turbo
 .DS_Store
+publish.env

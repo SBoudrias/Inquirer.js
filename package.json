@@ -53,6 +53,7 @@
     "internals/*"
   ],
   "scripts": {
+    "publish": "op run --env-file='./publish.env' -- yarn lerna publish",
     "demo": "node --watch-path=packages/ packages/demo/dist/esm/index.js",
     "dev": "turbo watch tsc",
     "prepare": "husky && turbo tsc attw",
