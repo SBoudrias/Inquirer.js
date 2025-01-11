@@ -20,7 +20,7 @@ npx @inquirer/demo@latest
 <div align="center">
 <br>
 <br>
-<a href="https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=lsd_20231001">
+<a href="https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer">
 <div>
   <picture>
     <img alt="Warp" width="400" src="https://github.com/user-attachments/assets/2bda420d-4211-4900-a37e-e3c7056d799c">
