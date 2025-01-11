@@ -6,22 +6,13 @@ Simple interactive command line prompt to display a list of choices (single sele
 
 # Special Thanks
 
-<div align="center">
-<br>
-<br>
-<a href="https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer">
-<div>
-  <picture>
-    <img alt="Warp" width="400" src="https://github.com/user-attachments/assets/2bda420d-4211-4900-a37e-e3c7056d799c">
-  </picture>
-</div>
-  <b>Warp, the intelligent terminal for developers</b>
-  <div>
-    <sup>Available for MacOS and Linux<br>
-Visit warp.dev to learn more
-    </sup>
-  </div>
-</a>
+<div align="center" markdown="1">
+
+[![Warp](https://github.com/user-attachments/assets/2bda420d-4211-4900-a37e-e3c7056d799c)](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
+**[Warp, the intelligent terminal for developers](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)**<br>
+[Available for MacOS and Linux](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
+[Visit warp.dev to learn more](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)
+
 </div>
 
 # Installation
