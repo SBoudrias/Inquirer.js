@@ -53,7 +53,6 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
     const screen = new ScreenManager(rl);
 
     const { promise, resolve, reject } = PromisePolyfill.withResolver<Value>();
-    /** @deprecated pass an AbortSignal in the context options instead. See {@link https://github.com/SBoudrias/Inquirer.js#canceling-prompt} */
     const cancel = () => reject(new CancelPromptError());
 
     if (signal) {

@@ -362,7 +362,6 @@ export default class PromptsRunner<A extends Answers> {
               cleanupSignal = undefined;
             };
 
-            // eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
             activePrompt.run().then(resolve, reject).finally(cleanup);
           })
       : prompt;
