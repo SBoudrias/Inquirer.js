@@ -42,11 +42,11 @@ class BufferedStream extends Stream.Writable {
   }
 }
 
-export async function render<
-  const Props,
-  const Value,
-  const TestedPrompt extends Prompt<Value, Props>,
->(prompt: TestedPrompt, props: Props, options?: Context) {
+export async function render<const Props, const Value>(
+  prompt: Prompt<Value, Props>,
+  props: Props,
+  options?: Context,
+) {
   const input = new MuteStream();
   input.unmute();
 
