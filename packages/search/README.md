@@ -4,6 +4,26 @@ Interactive search prompt component for command line interfaces.
 
 ![search prompt](https://raw.githubusercontent.com/SBoudrias/Inquirer.js/f459199e679aec7676cecc0fc12ef8a4cd3dda0b/assets/screenshots/search.png)
 
+# Special Thanks
+
+<div align="center">
+<br>
+<br>
+<a href="https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer">
+<div>
+  <picture>
+    <img alt="Warp" width="400" src="https://github.com/user-attachments/assets/2bda420d-4211-4900-a37e-e3c7056d799c">
+  </picture>
+</div>
+  <b>Warp, the intelligent terminal for developers</b>
+  <div>
+    <sup>Available for MacOS and Linux<br>
+Visit warp.dev to learn more
+    </sup>
+  </div>
+</a>
+</div>
+
 # Installation
 
 <table>

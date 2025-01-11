@@ -4,6 +4,26 @@ Simple interactive command line prompt to display a list of checkboxes (multi se
 
 ![Checkbox prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/checkbox.svg)
 
+# Special Thanks
+
+<div align="center">
+<br>
+<br>
+<a href="https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer">
+<div>
+  <picture>
+    <img alt="Warp" width="400" src="https://github.com/user-attachments/assets/2bda420d-4211-4900-a37e-e3c7056d799c">
+  </picture>
+</div>
+  <b>Warp, the intelligent terminal for developers</b>
+  <div>
+    <sup>Available for MacOS and Linux<br>
+Visit warp.dev to learn more
+    </sup>
+  </div>
+</a>
+</div>
+
 # Installation
 
 <table>

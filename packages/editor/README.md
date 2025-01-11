@@ -2,6 +2,26 @@
 
 Prompt that'll open the user preferred editor with default content and allow for a convenient multi-line input controlled through the command line.
 
+# Special Thanks
+
+<div align="center">
+<br>
+<br>
+<a href="https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer">
+<div>
+  <picture>
+    <img alt="Warp" width="400" src="https://github.com/user-attachments/assets/2bda420d-4211-4900-a37e-e3c7056d799c">
+  </picture>
+</div>
+  <b>Warp, the intelligent terminal for developers</b>
+  <div>
+    <sup>Available for MacOS and Linux<br>
+Visit warp.dev to learn more
+    </sup>
+  </div>
+</a>
+</div>
+
 # Installation
 
 <table>
