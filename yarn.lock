@@ -733,6 +733,7 @@ __metadata:
   dependencies:
     "@eslint/js": "npm:^9.18.0"
     "@repo/hoist-peer-dependencies": "workspace:*"
+    "@repo/lage-workers": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^22.10.5"
     "@vitest/coverage-v8": "npm:^3.0.2"
@@ -745,6 +746,7 @@ __metadata:
     globals: "npm:^15.14.0"
     globby: "npm:^14.0.2"
     husky: "npm:^9.1.7"
+    lage: "npm:^2.12.6"
     lerna: "npm:^8.1.9"
     nano-staged: "npm:^0.8.0"
     prettier: "npm:^3.4.2"
@@ -1506,6 +1508,15 @@ __metadata:
 "@repo/hoist-peer-dependencies@workspace:*, @repo/hoist-peer-dependencies@workspace:internals/hoist-peer-dependencies":
   version: 0.0.0-use.local
   resolution: "@repo/hoist-peer-dependencies@workspace:internals/hoist-peer-dependencies"
+  languageName: unknown
+  linkType: soft
+
+"@repo/lage-workers@workspace:*, @repo/lage-workers@workspace:internals/lage-workers":
+  version: 0.0.0-use.local
+  resolution: "@repo/lage-workers@workspace:internals/lage-workers"
+  dependencies:
+    eslint: "npm:^9.18.0"
+    typescript: "npm:^5.7.3"
   languageName: unknown
   linkType: soft
 
@@ -4360,6 +4371,65 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob-hasher-darwin-arm64@npm:1.4.2":
+  version: 1.4.2
+  resolution: "glob-hasher-darwin-arm64@npm:1.4.2"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"glob-hasher-darwin-x64@npm:1.4.2":
+  version: 1.4.2
+  resolution: "glob-hasher-darwin-x64@npm:1.4.2"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"glob-hasher-linux-x64-gnu@npm:1.4.2":
+  version: 1.4.2
+  resolution: "glob-hasher-linux-x64-gnu@npm:1.4.2"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"glob-hasher-win32-arm64-msvc@npm:1.4.2":
+  version: 1.4.2
+  resolution: "glob-hasher-win32-arm64-msvc@npm:1.4.2"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"glob-hasher-win32-x64-msvc@npm:1.4.2":
+  version: 1.4.2
+  resolution: "glob-hasher-win32-x64-msvc@npm:1.4.2"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"glob-hasher@npm:^1.4.2":
+  version: 1.4.2
+  resolution: "glob-hasher@npm:1.4.2"
+  dependencies:
+    glob-hasher-darwin-arm64: "npm:1.4.2"
+    glob-hasher-darwin-x64: "npm:1.4.2"
+    glob-hasher-linux-x64-gnu: "npm:1.4.2"
+    glob-hasher-win32-arm64-msvc: "npm:1.4.2"
+    glob-hasher-win32-x64-msvc: "npm:1.4.2"
+  dependenciesMeta:
+    glob-hasher-darwin-arm64:
+      optional: true
+    glob-hasher-darwin-x64:
+      optional: true
+    glob-hasher-linux-x64-gnu:
+      optional: true
+    glob-hasher-win32-arm64-msvc:
+      optional: true
+    glob-hasher-win32-x64-msvc:
+      optional: true
+  checksum: 10/7d21697e63cc43f6edcec52b88ed0cc877011edaca1446c0fb1fb2efb3b7bd26f9900dfde7a7ab62ee425c6bd8da359c0a3d34997c9916de6b887029ca2995d8
+  languageName: node
+  linkType: hard
+
 "glob-parent@npm:6.0.2, glob-parent@npm:^6.0.2":
   version: 6.0.2
   resolution: "glob-parent@npm:6.0.2"
@@ -5348,6 +5418,22 @@ __metadata:
   version: 6.0.3
   resolution: "kind-of@npm:6.0.3"
   checksum: 10/5873d303fb36aad875b7538798867da2ae5c9e328d67194b0162a3659a627d22f742fc9c4ae95cd1704132a24b00cae5041fc00c0f6ef937dc17080dc4dbb962
+  languageName: node
+  linkType: hard
+
+"lage@npm:^2.12.6":
+  version: 2.12.6
+  resolution: "lage@npm:2.12.6"
+  dependencies:
+    fsevents: "npm:~2.3.2"
+    glob-hasher: "npm:^1.4.2"
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    lage: dist/lage.js
+    lage-server: dist/lage-server.js
+  checksum: 10/1b22aaab3170a1a6c83ddddf5ab6569e73e24c66e349abffcc12f812071517d32fd4860f7eb530c6db9e9aac56348ebe29415367dfb45377f8b93c3c514c91b5
   languageName: node
   linkType: hard
 
