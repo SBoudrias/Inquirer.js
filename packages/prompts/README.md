@@ -15,7 +15,7 @@ Give it a try in your own terminal!
 npx @inquirer/demo@latest
 ```
 
-# Special Thanks 
+# Special Thanks
 
 <div align="center">
 <br>
