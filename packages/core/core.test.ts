@@ -2,7 +2,7 @@ import { AsyncResource } from 'node:async_hooks';
 import { Stream } from 'node:stream';
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
-import stripAnsi from 'strip-ansi';
+import { stripVTControlCharacters } from 'node:util';
 import ansiEscapes from 'ansi-escapes';
 import {
   createPrompt,
@@ -744,7 +744,7 @@ describe('Separator', () => {
   });
 
   it('renders separator', () => {
-    expect(stripAnsi(new Separator().separator)).toMatchInlineSnapshot(
+    expect(stripVTControlCharacters(new Separator().separator)).toMatchInlineSnapshot(
       '"──────────────"',
     );
     expect(new Separator('===').separator).toEqual('===');

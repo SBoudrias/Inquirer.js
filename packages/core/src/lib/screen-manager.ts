@@ -1,4 +1,4 @@
-import stripAnsi from 'strip-ansi';
+import { stripVTControlCharacters } from 'node:util';
 import ansiEscapes from 'ansi-escapes';
 import { breakLines, readlineWidth } from './utils.js';
 import type { InquirerReadline } from '@inquirer/type';
@@ -33,7 +33,7 @@ export default class ScreenManager {
   render(content: string, bottomContent: string = '') {
     // Write message to screen and setPrompt to control backspace
     const promptLine = lastLine(content);
-    const rawPromptLine = stripAnsi(promptLine);
+    const rawPromptLine = stripVTControlCharacters(promptLine);
 
     // Remove the rl.line from our prompt. We can't rely on the content of
     // rl.line (mainly because of the password prompt), so just rely on it's

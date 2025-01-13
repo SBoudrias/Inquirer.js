@@ -79,8 +79,7 @@
   "dependencies": {
     "@inquirer/type": "^3.0.2",
     "ansi-escapes": "^4.3.2",
-    "mute-stream": "^2.0.0",
-    "strip-ansi": "^6.0.1"
+    "mute-stream": "^2.0.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.2",

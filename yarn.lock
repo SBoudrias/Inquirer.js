@@ -551,7 +551,6 @@ __metadata:
     cli-width: "npm:^4.1.0"
     mute-stream: "npm:^2.0.0"
     signal-exit: "npm:^4.1.0"
-    strip-ansi: "npm:^6.0.1"
     tshy: "npm:^3.0.2"
     wrap-ansi: "npm:^6.2.0"
     yoctocolors-cjs: "npm:^2.1.2"
@@ -789,7 +788,6 @@ __metadata:
     "@types/node": "npm:^22.10.5"
     ansi-escapes: "npm:^4.3.2"
     mute-stream: "npm:^2.0.0"
-    strip-ansi: "npm:^6.0.1"
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
