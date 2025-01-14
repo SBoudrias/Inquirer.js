@@ -1,6 +1,6 @@
 import { Stream } from 'node:stream';
+import { stripVTControlCharacters } from 'node:util';
 import MuteStream from 'mute-stream';
-import stripAnsi from 'strip-ansi';
 import ansiEscapes from 'ansi-escapes';
 import type { Prompt, Context } from '@inquirer/type';
 
@@ -25,7 +25,7 @@ class BufferedStream extends Stream.Writable {
     // Stripping the ANSI codes here because Inquirer will push commands ANSI (like cursor move.)
     // This is probably fine since we don't care about those for testing; but this could become
     // an issue if we ever want to test for those.
-    if (stripAnsi(str).trim().length > 0) {
+    if (stripVTControlCharacters(str).trim().length > 0) {
       this.#_chunks.push(str);
     }
     callback();
@@ -89,7 +89,7 @@ export async function render<const Props, const Value>(
     events,
     getScreen: ({ raw }: { raw?: boolean } = {}): string => {
       const lastScreen = output.getLastChunk({ raw });
-      return raw ? lastScreen : stripAnsi(lastScreen).trim();
+      return raw ? lastScreen : stripVTControlCharacters(lastScreen).trim();
     },
     getFullOutput: (): string => {
       return output.getFullOutput();
