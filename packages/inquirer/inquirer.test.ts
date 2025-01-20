@@ -16,6 +16,8 @@ import inquirer from './src/index.js';
 import type { QuestionMap, Answers, Question, DistinctQuestion } from './src/index.js';
 import { _ } from './src/ui/prompt.js';
 
+const actualCreateInterface = readline.createInterface;
+
 declare module './src/index.js' {
   interface QuestionMap {
     stub: { answer?: string | boolean; message: string; default?: string };
@@ -78,6 +80,8 @@ beforeEach(() => {
   inquirer.restoreDefaultPrompts();
   inquirer.registerPrompt('stub', StubPrompt);
   inquirer.registerPrompt('failing', StubFailingPrompt);
+
+  vi.resetAllMocks();
 });
 
 describe('exported types', () => {
@@ -264,7 +268,6 @@ describe('inquirer.prompt(...)', () => {
   });
 
   it('should close readline instance on rejected promise', async () => {
-    const actualCreateInterface = readline.createInterface;
     vi.spyOn(readline, 'createInterface').mockImplementation((opts) => {
       const rl = actualCreateInterface(opts);
       vi.spyOn(rl, 'close');
@@ -280,12 +283,12 @@ describe('inquirer.prompt(...)', () => {
       },
     ]);
 
-    await promise.catch(() => {
-      const rl = vi.mocked(readline.createInterface).mock.results[0]!
-        .value as InquirerReadline;
-      expect(rl.close).toHaveBeenCalledTimes(1);
-      expect(rl.output.end).toHaveBeenCalledTimes(1);
-    });
+    await expect(promise).rejects.toThrow();
+
+    const rl = vi.mocked(readline.createInterface).mock.results[0]!
+      .value as InquirerReadline;
+    expect(rl.close).toHaveBeenCalledTimes(1);
+    expect(rl.output.end).toHaveBeenCalledTimes(1);
   });
 
   it('should take a prompts array with nested names', async () => {
