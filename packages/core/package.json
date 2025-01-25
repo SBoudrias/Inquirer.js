@@ -84,11 +84,11 @@
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.17.2",
+    "@arethetypeswrong/cli": "^0.17.3",
     "@inquirer/testing": "^2.1.41",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
-    "@types/node": "^22.10.5",
+    "@types/node": "^22.10.10",
     "@types/wrap-ansi": "^3.0.0",
     "tshy": "^3.0.2"
   },
