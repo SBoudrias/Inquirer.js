@@ -6,10 +6,12 @@ Prompt that'll open the user preferred editor with default content and allow for
 
 <div align="center" markdown="1">
 
-[![Warp](https://github.com/user-attachments/assets/2bda420d-4211-4900-a37e-e3c7056d799c)](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
-**[Warp, the intelligent terminal for developers](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)**<br>
+[![Warp](https://github.com/user-attachments/assets/0c3b132c-8984-49cf-918a-db6f6abe2c01)](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
+
+### [Warp, the intelligent terminal for developers](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)
+
+[Inquirer's terminal of choice!](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
 [Available for MacOS and Linux](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
-[Visit warp.dev to learn more](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)
 
 </div>
 

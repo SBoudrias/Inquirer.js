@@ -19,8 +19,10 @@ npx @inquirer/demo@latest
 
 <div align="center" markdown="1">
 
-[![Twitter Banner - 1500x500](https://github.com/user-attachments/assets/0c3b132c-8984-49cf-918a-db6f6abe2c01)](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
+[![Warp](https://github.com/user-attachments/assets/0c3b132c-8984-49cf-918a-db6f6abe2c01)](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
+
 ### [Warp, the intelligent terminal for developers](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)
+
 [Inquirer's terminal of choice!](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
 [Available for MacOS and Linux](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
 
