@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/rawlist",
-  "version": "4.0.6",
+  "version": "4.0.7",
   "description": "Inquirer rawlist prompt",
   "keywords": [
     "answer",
@@ -74,13 +74,13 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.1.4",
-    "@inquirer/type": "^3.0.2",
+    "@inquirer/core": "^10.1.5",
+    "@inquirer/type": "^3.0.3",
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.3",
-    "@inquirer/testing": "^2.1.41",
+    "@inquirer/testing": "^2.1.42",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },
