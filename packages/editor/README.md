@@ -2,6 +2,8 @@
 
 Prompt that'll open the user preferred editor with default content and allow for a convenient multi-line input controlled through the command line.
 
+The editor launched is the one [defined by the user's `EDITOR` environment variable](https://dev.to/jonasbn/til-integrate-visual-studio-code-with-shell--cli-2l1l).
+
 # Special Thanks
 
 <div align="center" markdown="1">
