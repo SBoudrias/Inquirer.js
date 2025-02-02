@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/confirm",
-  "version": "5.1.4",
+  "version": "5.1.5",
   "description": "Inquirer confirm prompt",
   "keywords": [
     "answer",
@@ -74,12 +74,12 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.1.5",
-    "@inquirer/type": "^3.0.3"
+    "@inquirer/core": "^10.1.6",
+    "@inquirer/type": "^3.0.4"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.3",
-    "@inquirer/testing": "^2.1.42",
+    "@inquirer/testing": "^2.1.43",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },
