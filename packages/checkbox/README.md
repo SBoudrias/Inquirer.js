@@ -86,15 +86,16 @@ const answer = await checkbox({
 
 ## Options
 
-| Property | Type                                    | Required | Description                                                                                                                                                                                           |
-| -------- | --------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| message  | `string`                                | yes      | The question to ask                                                                                                                                                                                   |
-| choices  | `Choice[]`                              | yes      | List of the available choices.                                                                                                                                                                        |
-| pageSize | `number`                                | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                           |
-| loop     | `boolean`                               | no       | Defaults to `true`. When set to `false`, the cursor will be constrained to the top and bottom of the choice list without looping.                                                                     |
-| required | `boolean`                               | no       | When set to `true`, ensures at least one choice must be selected.                                                                                                                                     |
-| validate | `async (Choice[]) => boolean \| string` | no       | On submit, validate the choices. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
-| theme    | [See Theming](#Theming)                 | no       | Customize look of the prompt.                                                                                                                                                                         |
+| Property  | Type                                    | Required | Description                                                                                                                                                                                           |
+| --------- | --------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message   | `string`                                | yes      | The question to ask                                                                                                                                                                                   |
+| choices   | `Choice[]`                              | yes      | List of the available choices.                                                                                                                                                                        |
+| pageSize  | `number`                                | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                           |
+| loop      | `boolean`                               | no       | Defaults to `true`. When set to `false`, the cursor will be constrained to the top and bottom of the choice list without looping.                                                                     |
+| required  | `boolean`                               | no       | When set to `true`, ensures at least one choice must be selected.                                                                                                                                     |
+| validate  | `async (Choice[]) => boolean \| string` | no       | On submit, validate the choices. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
+| shortcuts | [See Shortcuts](#Shortcuts)             | no       | Customize shortcut keys for `all` and `invert`.                                                                                                                                                       |
+| theme     | [See Theming](#Theming)                 | no       | Customize look of the prompt.                                                                                                                                                                         |
 
 `Separator` objects can be used in the `choices` array to render non-selectable lines in the choice list. By default it'll render a line, but you can provide the text as argument (`new Separator('-- Dependencies --')`). This option is often used to add labels to groups within long list of options.
 
@@ -125,6 +126,17 @@ Here's each property:
 Also note the `choices` array can contain `Separator`s to help organize long lists.
 
 `choices` can also be an array of string, in which case the string will be used both as the `value` and the `name`.
+
+## Shortcuts
+
+You can customize the shortcut keys for `all` and `invert` or disable them by setting them to `null`.
+
+```ts
+type Shortcuts = {
+  all?: string | null; // default: 'a'
+  invert?: string | null; // default: 'i'
+};
+```
 
 ## Theming
 
