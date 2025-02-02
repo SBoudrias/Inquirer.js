@@ -481,6 +481,9 @@ __metadata:
     yoctocolors-cjs: "npm:^2.1.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -507,6 +510,9 @@ __metadata:
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -531,6 +537,9 @@ __metadata:
     yoctocolors-cjs: "npm:^2.1.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -547,6 +556,9 @@ __metadata:
     yoctocolors-cjs: "npm:^2.1.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   bin:
     inquirer-demo: ./dist/esm/index.js
   languageName: unknown
@@ -565,6 +577,9 @@ __metadata:
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -592,6 +607,9 @@ __metadata:
     yoctocolors-cjs: "npm:^2.1.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -617,6 +635,9 @@ __metadata:
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -632,6 +653,9 @@ __metadata:
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -648,6 +672,9 @@ __metadata:
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -671,6 +698,9 @@ __metadata:
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -687,6 +717,9 @@ __metadata:
     yoctocolors-cjs: "npm:^2.1.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -733,6 +766,9 @@ __metadata:
     yoctocolors-cjs: "npm:^2.1.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -751,6 +787,9 @@ __metadata:
     yoctocolors-cjs: "npm:^2.1.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -768,6 +807,9 @@ __metadata:
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -780,6 +822,9 @@ __metadata:
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -4622,6 +4667,9 @@ __metadata:
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 

@@ -82,6 +82,11 @@
   "peerDependencies": {
     "@types/node": ">=18"
   },
+  "peerDependenciesMeta": {
+    "@types/node": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": ">=18"
   },
