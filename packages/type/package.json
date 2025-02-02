@@ -77,10 +77,8 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.3",
     "@repo/tsconfig": "workspace:*",
+    "@types/node": "^18",
     "tshy": "^3.0.2"
-  },
-  "peerDependencies": {
-    "@types/node": ">=18"
   },
   "engines": {
     "node": ">=18"

@@ -86,6 +86,7 @@
     "@arethetypeswrong/cli": "^0.17.3",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
+    "@types/node": "^18",
     "tshy": "^3.0.2"
   },
   "engines": {
@@ -99,8 +100,5 @@
       "./package.json": "./package.json",
       ".": "./src/index.ts"
     }
-  },
-  "peerDependencies": {
-    "@types/node": ">=18"
   }
 }

@@ -515,11 +515,10 @@ __metadata:
     "@inquirer/testing": "npm:^2.1.42"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -543,9 +542,8 @@ __metadata:
     "@inquirer/testing": "npm:^2.1.42"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     tshy: "npm:^3.0.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -582,8 +580,6 @@ __metadata:
     "@types/node": "npm:^22.10.10"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
-  peerDependencies:
-    "@types/node": ">=18"
   bin:
     inquirer-demo: ./dist/esm/index.js
   languageName: unknown
@@ -598,10 +594,9 @@ __metadata:
     "@inquirer/testing": "npm:^2.1.42"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     external-editor: "npm:^3.1.0"
     tshy: "npm:^3.0.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -625,10 +620,9 @@ __metadata:
     "@inquirer/testing": "npm:^2.1.42"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -651,9 +645,8 @@ __metadata:
     "@inquirer/testing": "npm:^2.1.42"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     tshy: "npm:^3.0.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -666,9 +659,8 @@ __metadata:
     "@inquirer/testing": "npm:^2.1.42"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     tshy: "npm:^3.0.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -681,10 +673,9 @@ __metadata:
     "@inquirer/testing": "npm:^2.1.42"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -705,9 +696,8 @@ __metadata:
     "@inquirer/select": "npm:^4.0.7"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     tshy: "npm:^3.0.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -720,10 +710,9 @@ __metadata:
     "@inquirer/testing": "npm:^2.1.42"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -766,10 +755,9 @@ __metadata:
     "@inquirer/testing": "npm:^2.1.42"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -783,11 +771,10 @@ __metadata:
     "@inquirer/testing": "npm:^2.1.42"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -803,8 +790,6 @@ __metadata:
     ansi-escapes: "npm:^4.3.2"
     mute-stream: "npm:^2.0.0"
     tshy: "npm:^3.0.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -814,9 +799,8 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.3"
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^18"
     tshy: "npm:^3.0.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -1847,6 +1831,15 @@ __metadata:
   dependencies:
     undici-types: "npm:~6.20.0"
   checksum: 10/64cde1c2f5e5f7d597d3bd462f52c3c2d688a66623eb75d25e1d1d63d384ef553a27100635ad0dbb7d74da517048aa636947863eb624cf85f25d2f22370ce474
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^18":
+  version: 18.19.74
+  resolution: "@types/node@npm:18.19.74"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 10/2306bd0b41cdd528b890b210b96f287a5b5035c128f62636057d6616bd612b3f53d32d77f7e76ef41a9f130ea691e6980e6d5942dd625df05d3a641764fddb78
   languageName: node
   linkType: hard
 
@@ -4855,13 +4848,12 @@ __metadata:
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
+    "@types/node": "npm:^18"
     ansi-escapes: "npm:^4.3.2"
     mute-stream: "npm:^2.0.0"
     run-async: "npm:^3.0.0"
     rxjs: "npm:^7.8.1"
     tshy: "npm:^3.0.2"
-  peerDependencies:
-    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -8603,6 +8595,13 @@ __metadata:
   bin:
     uglifyjs: bin/uglifyjs
   checksum: 10/4c0b800e0ff192079d2c3ce8414fd3b656a570028c7c79af5c29c53d5c532b68bbcae4ad47307f89c2ee124d11826fff7a136b59d5c5bb18422bcdf5568afe1e
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 10/0097779d94bc0fd26f0418b3a05472410408877279141ded2bd449167be1aed7ea5b76f756562cb3586a07f251b90799bab22d9019ceba49c037c76445f7cddd
   languageName: node
   linkType: hard
 

@@ -82,6 +82,7 @@
     "@arethetypeswrong/cli": "^0.17.3",
     "@inquirer/testing": "^2.1.42",
     "@repo/tsconfig": "workspace:*",
+    "@types/node": "^18",
     "tshy": "^3.0.2"
   },
   "engines": {
@@ -98,8 +99,5 @@
       "./package.json": "./package.json",
       ".": "./src/index.ts"
     }
-  },
-  "peerDependencies": {
-    "@types/node": ">=18"
   }
 }
