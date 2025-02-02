@@ -1,6 +1,6 @@
 {
   "name": "inquirer",
-  "version": "12.3.3",
+  "version": "12.4.0",
   "description": "A collection of common interactive command line user interfaces.",
   "keywords": [
     "answer",
@@ -75,7 +75,7 @@
   },
   "dependencies": {
     "@inquirer/core": "^10.1.5",
-    "@inquirer/prompts": "^7.2.4",
+    "@inquirer/prompts": "^7.3.0",
     "@inquirer/type": "^3.0.3",
     "ansi-escapes": "^4.3.2",
     "mute-stream": "^2.0.0",

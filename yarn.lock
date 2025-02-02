@@ -505,7 +505,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@inquirer/checkbox@npm:^4.0.7, @inquirer/checkbox@workspace:packages/checkbox":
+"@inquirer/checkbox@npm:^4.1.0, @inquirer/checkbox@workspace:packages/checkbox":
   version: 0.0.0-use.local
   resolution: "@inquirer/checkbox@workspace:packages/checkbox"
   dependencies:
@@ -577,7 +577,7 @@ __metadata:
   dependencies:
     "@inquirer/core": "npm:^10.1.5"
     "@inquirer/figures": "npm:^1.0.10"
-    "@inquirer/prompts": "npm:^7.2.4"
+    "@inquirer/prompts": "npm:^7.3.0"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^22.10.10"
     tshy: "npm:^3.0.2"
@@ -589,7 +589,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/editor@npm:^4.2.4, @inquirer/editor@workspace:packages/editor":
+"@inquirer/editor@npm:^4.2.5, @inquirer/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@inquirer/editor@workspace:packages/editor"
   dependencies:
@@ -688,14 +688,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/prompts@npm:^7.2.4, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
+"@inquirer/prompts@npm:^7.3.0, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
   version: 0.0.0-use.local
   resolution: "@inquirer/prompts@workspace:packages/prompts"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.3"
-    "@inquirer/checkbox": "npm:^4.0.7"
+    "@inquirer/checkbox": "npm:^4.1.0"
     "@inquirer/confirm": "npm:^5.1.4"
-    "@inquirer/editor": "npm:^4.2.4"
+    "@inquirer/editor": "npm:^4.2.5"
     "@inquirer/expand": "npm:^4.0.7"
     "@inquirer/input": "npm:^4.1.4"
     "@inquirer/number": "npm:^3.0.7"
@@ -4851,7 +4851,7 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.3"
     "@inquirer/core": "npm:^10.1.5"
-    "@inquirer/prompts": "npm:^7.2.4"
+    "@inquirer/prompts": "npm:^7.3.0"
     "@inquirer/type": "npm:^3.0.3"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"

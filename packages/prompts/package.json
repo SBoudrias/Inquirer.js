@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/prompts",
-  "version": "7.2.4",
+  "version": "7.3.0",
   "description": "Inquirer prompts, combined in a single package",
   "keywords": [
     "answer",
@@ -76,9 +76,9 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/checkbox": "^4.0.7",
+    "@inquirer/checkbox": "^4.1.0",
     "@inquirer/confirm": "^5.1.4",
-    "@inquirer/editor": "^4.2.4",
+    "@inquirer/editor": "^4.2.5",
     "@inquirer/expand": "^4.0.7",
     "@inquirer/input": "^4.1.4",
     "@inquirer/number": "^3.0.7",
