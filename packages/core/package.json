@@ -88,9 +88,12 @@
     "@inquirer/testing": "^2.1.42",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
-    "@types/node": "^22.10.10",
+    "@types/node": "^22.13.0",
     "@types/wrap-ansi": "^3.0.0",
     "tshy": "^3.0.2"
+  },
+  "peerDependencies": {
+    "@types/node": ">=18"
   },
   "engines": {
     "node": ">=18"
