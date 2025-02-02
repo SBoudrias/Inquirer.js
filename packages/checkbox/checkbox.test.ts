@@ -1124,4 +1124,120 @@ describe('checkbox prompt', () => {
       expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
     });
   });
+
+  describe('shortcuts', () => {
+    it('allow select all with customized key', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        shortcuts: {
+          all: 'b',
+        },
+      });
+
+      events.keypress('4');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number (Press <space> to select, <b> to toggle all, <i> to invert
+        selection, and <enter> to proceed)
+         ◯ 1
+         ◯ 2
+         ◯ 3
+        ❯◉ 4
+         ◯ 5
+         ◯ 6
+         ◯ 7"
+      `);
+
+      events.keypress('b');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number (Press <space> to select, <b> to toggle all, <i> to invert
+        selection, and <enter> to proceed)
+         ◉ 1
+         ◉ 2
+         ◉ 3
+        ❯◉ 4
+         ◉ 5
+         ◉ 6
+         ◉ 7"
+      `);
+
+      events.keypress('b');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number (Press <space> to select, <b> to toggle all, <i> to invert
+        selection, and <enter> to proceed)
+         ◯ 1
+         ◯ 2
+         ◯ 3
+        ❯◯ 4
+         ◯ 5
+         ◯ 6
+         ◯ 7"
+      `);
+
+      events.keypress('b');
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(numberedChoices.map(({ value }) => value));
+    });
+  });
+
+  it('allow inverting selection with customized key', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      shortcuts: {
+        invert: 'j',
+      },
+    });
+
+    const unselect = [2, 4, 6, 7, 8, 11];
+    unselect.forEach((value) => {
+      events.keypress(String(value));
+    });
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number (Press <space> to select, <a> to toggle all, <j> to invert
+      selection, and <enter> to proceed)
+       ◯ 5
+       ◉ 6
+       ◉ 7
+      ❯◉ 8
+       ◯ 9
+       ◯ 10
+       ◯ 11"
+    `);
+
+    events.keypress('j');
+    events.keypress('enter');
+    await expect(answer).resolves.not.toContain(unselect);
+  });
+
+  it('disable `all` and `invert` keys', async () => {
+    const { events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      shortcuts: {
+        all: null,
+        invert: null,
+      },
+    });
+
+    // All options are deselected and should not change if default shortcuts are pressed
+    const expectedScreen = getScreen();
+    expect(expectedScreen).toMatchInlineSnapshot(`
+      "? Select a number (Press <space> to select, and <enter> to proceed)
+      ❯◯ 1
+       ◯ 2
+       ◯ 3
+       ◯ 4
+       ◯ 5
+       ◯ 6
+       ◯ 7
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('a');
+    expect(getScreen()).toBe(expectedScreen);
+
+    events.keypress('i');
+    expect(getScreen()).toBe(expectedScreen);
+  });
 });

@@ -39,6 +39,11 @@ type CheckboxTheme = {
   helpMode: 'always' | 'never' | 'auto';
 };
 
+type CheckboxShortcuts = {
+  all?: string | null;
+  invert?: string | null;
+};
+
 const checkboxTheme: CheckboxTheme = {
   icon: {
     checked: colors.green(figures.circleFilled),
@@ -92,6 +97,7 @@ type CheckboxConfig<
     choices: ReadonlyArray<Choice<Value>>,
   ) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme<CheckboxTheme>>;
+  shortcuts?: CheckboxShortcuts;
 };
 
 type Item<Value> = NormalizedChoice<Value> | Separator;
@@ -151,6 +157,7 @@ export default createPrompt(
       required,
       validate = () => true,
     } = config;
+    const shortcuts = { all: 'a', invert: 'i', ...config.shortcuts };
     const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme);
     const firstRender = useRef(true);
     const [status, setStatus] = useState<Status>('idle');
@@ -205,10 +212,10 @@ export default createPrompt(
         setError(undefined);
         setShowHelpTip(false);
         setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
-      } else if (key.name === 'a') {
+      } else if (key.name === shortcuts.all) {
         const selectAll = items.some((choice) => isSelectable(choice) && !choice.checked);
         setItems(items.map(check(selectAll)));
-      } else if (key.name === 'i') {
+      } else if (key.name === shortcuts.invert) {
         setItems(items.map(toggle));
       } else if (isNumberKey(key)) {
         // Adjust index to start at 1
@@ -273,11 +280,13 @@ export default createPrompt(
       } else {
         const keys = [
           `${theme.style.key('space')} to select`,
-          `${theme.style.key('a')} to toggle all`,
-          `${theme.style.key('i')} to invert selection`,
+          shortcuts.all ? `${theme.style.key(shortcuts.all)} to toggle all` : '',
+          shortcuts.invert
+            ? `${theme.style.key(shortcuts.invert)} to invert selection`
+            : '',
           `and ${theme.style.key('enter')} to proceed`,
         ];
-        helpTipTop = ` (Press ${keys.join(', ')})`;
+        helpTipTop = ` (Press ${keys.filter((key) => key !== '').join(', ')})`;
       }
 
       if (
