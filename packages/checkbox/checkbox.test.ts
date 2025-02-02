@@ -1220,7 +1220,9 @@ describe('checkbox prompt', () => {
       },
     });
 
-    const expectedScreen = `
+    // All options are deselected and should not change if default shortcuts are pressed
+    const expectedScreen = getScreen();
+    expect(expectedScreen).toMatchInlineSnapshot(`
       "? Select a number (Press <space> to select, and <enter> to proceed)
       ❯◯ 1
        ◯ 2
@@ -1230,14 +1232,12 @@ describe('checkbox prompt', () => {
        ◯ 6
        ◯ 7
       (Use arrow keys to reveal more choices)"
-    `;
-
-    expect(getScreen()).toMatchInlineSnapshot(expectedScreen);
+    `);
 
     events.keypress('a');
-    expect(getScreen()).toMatchInlineSnapshot(expectedScreen);
+    expect(getScreen()).toBe(expectedScreen);
 
     events.keypress('i');
-    expect(getScreen()).toMatchInlineSnapshot(expectedScreen);
+    expect(getScreen()).toBe(expectedScreen);
   });
 });
