@@ -24,7 +24,7 @@ npx @inquirer/demo@latest
 ### [Warp, the intelligent terminal for developers](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)
 
 [Inquirer's terminal of choice!](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
-[Available for MacOS and Linux](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
+[Available for macOS, Linux and Windows in beta](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
 
 </div>
 
