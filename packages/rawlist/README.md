@@ -4,19 +4,6 @@ Simple interactive command line prompt to display a raw list of choices (single 
 
 ![rawlist prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/rawlist.svg)
 
-# Special Thanks
-
-<div align="center" markdown="1">
-
-[![Warp](https://github.com/user-attachments/assets/0c3b132c-8984-49cf-918a-db6f6abe2c01)](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
-
-### [Warp, the intelligent terminal for developers](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)
-
-[Inquirer's terminal of choice!](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
-[Available for MacOS and Linux](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
-
-</div>
-
 # Installation
 
 <table>

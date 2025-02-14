@@ -44,19 +44,6 @@ A collection of common interactive command line user interfaces.
 
 > **Note:** **`Inquirer.js`** provides the user interface and the inquiry session flow. If you're searching for a full blown command line program utility, then check out [commander](https://github.com/visionmedia/commander.js), [vorpal](https://github.com/dthree/vorpal) or [args](https://github.com/leo/args).
 
-# Special Thanks
-
-<div align="center" markdown="1">
-
-[![Warp](https://github.com/user-attachments/assets/0c3b132c-8984-49cf-918a-db6f6abe2c01)](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
-
-### [Warp, the intelligent terminal for developers](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)
-
-[Inquirer's terminal of choice!](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
-[Available for MacOS and Linux](https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=inquirer)<br>
-
-</div>
-
 ## [Documentation](#documentation)
 
 <a name="documentation"></a>
