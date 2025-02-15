@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/search",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "description": "Inquirer search prompt",
   "keywords": [
     "answer",
@@ -74,14 +74,14 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.1.6",
+    "@inquirer/core": "^10.1.7",
     "@inquirer/figures": "^1.0.10",
     "@inquirer/type": "^3.0.4",
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.3",
-    "@inquirer/testing": "^2.1.43",
+    "@inquirer/testing": "^2.1.44",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },
