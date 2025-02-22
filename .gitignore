@@ -12,4 +12,6 @@ coverage
 !.yarn/versions
 .turbo
 .DS_Store
-publish.env
+
+# tshy build temporary package.json files while building which end up throwing turbo watch in an infinite loop.
+**/src/package.json
