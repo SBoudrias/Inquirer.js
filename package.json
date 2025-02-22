@@ -74,6 +74,7 @@
   "devDependencies": {
     "@eslint/js": "^9.20.0",
     "@repo/hoist-peer-dependencies": "workspace:*",
+    "@repo/lage-workers": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@types/node": "^22.13.4",
     "@vitest/coverage-v8": "^3.0.5",
@@ -86,6 +87,7 @@
     "globals": "^15.15.0",
     "globby": "^14.1.0",
     "husky": "^9.1.7",
+    "lage": "^2.12.6",
     "lerna": "^8.1.9",
     "nano-staged": "^0.8.0",
     "prettier": "^3.5.1",
