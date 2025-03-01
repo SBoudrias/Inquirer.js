@@ -88,7 +88,7 @@
     "@inquirer/select": "^4.0.9"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.17.3",
+    "@arethetypeswrong/cli": "^0.17.4",
     "@inquirer/type": "^3.0.4",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"

@@ -2,6 +2,7 @@
   "extends": "@repo/tsconfig",
   "include": ["vitest.*.ts", "**/*.test.ts", "**/*.d.ts"],
   "compilerOptions": {
+    "erasableSyntaxOnly": true,
     "skipLibCheck": true,
     "noEmit": true
   }

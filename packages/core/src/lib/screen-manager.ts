@@ -18,8 +18,9 @@ export default class ScreenManager {
     rows: number;
     cols: number;
   };
+  private readonly rl: InquirerReadline;
 
-  constructor(private readonly rl: InquirerReadline) {
+  constructor(rl: InquirerReadline) {
     this.rl = rl;
     this.cursorPos = rl.getCursorPos();
   }
