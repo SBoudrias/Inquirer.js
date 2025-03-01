@@ -9,20 +9,20 @@ const { createPromptModule } = require('inquirer');
 
 describe('CommonJS Integration', () => {
   it('@inquirer/prompts should be exported', () => {
-    assert(input instanceof Function);
+    assert(typeof input === 'function');
   });
 
   it('@inquirer/input should be exported', () => {
-    assert(defaultInput instanceof Function);
+    assert(typeof defaultInput === 'function');
   });
 
   it('@inquirer/core should export createPrompt', () => {
-    assert(createPrompt instanceof Function);
+    assert(typeof createPrompt === 'function');
   });
 
   it('inquirer should be exported', () => {
-    assert(inquirer.prompt instanceof Function);
-    assert(inquirer.createPromptModule instanceof Function);
-    assert(createPromptModule instanceof Function);
+    assert(typeof inquirer.prompt === 'function');
+    assert(typeof inquirer.createPromptModule === 'function');
+    assert(typeof createPromptModule === 'function');
   });
 });

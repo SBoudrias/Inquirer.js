@@ -17,7 +17,7 @@ import {
   Separator,
 } from '@inquirer/prompts';
 import type { Prettify } from '@inquirer/type';
-import { default as PromptsRunner } from './ui/prompt.js';
+import PromptsRunner from './ui/prompt.js';
 import type { PromptCollection, LegacyPromptConstructor, PromptFn } from './ui/prompt.js';
 import type {
   Answers,

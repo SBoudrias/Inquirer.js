@@ -8,20 +8,20 @@ import inquirer, { createPromptModule } from 'inquirer';
 
 describe('ESM Integration', () => {
   it('@inquirer/prompts should be exported', () => {
-    assert(input instanceof Function);
+    assert.ok(typeof input === 'function');
   });
 
   it('@inquirer/input should be exported', () => {
-    assert(defaultInput instanceof Function);
+    assert.ok(typeof defaultInput === 'function');
   });
 
   it('@inquirer/core should export createPrompt', () => {
-    assert(createPrompt instanceof Function);
+    assert.ok(typeof createPrompt === 'function');
   });
 
   it('inquirer should be exported', () => {
-    assert(inquirer.prompt instanceof Function);
-    assert(inquirer.createPromptModule instanceof Function);
-    assert(createPromptModule instanceof Function);
+    assert.ok(typeof inquirer.prompt === 'function');
+    assert.ok(typeof inquirer.createPromptModule === 'function');
+    assert.ok(typeof createPromptModule === 'function');
   });
 });
