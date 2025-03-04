@@ -3,6 +3,7 @@
 # Inquirer
 
 [![npm](https://badge.fury.io/js/@inquirer%2Fprompts.svg)](https://www.npmjs.com/package/@inquirer/prompts)
+[![@inquirer/prompts downloads](https://img.shields.io/npm/dm/@inquirer/prompts.svg)](https://npm-compare.com/@inquirer/prompts/#timeRange=THREE_YEARS)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js?ref=badge_shield)
 
 A collection of common interactive command line user interfaces.
