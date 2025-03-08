@@ -36,7 +36,6 @@ function getCallSites() {
 
 export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
   const callSites = getCallSites();
-  const callerFilename = callSites[1]?.getFileName?.();
 
   const prompt: Prompt<Value, Config> = (config, context = {}) => {
     // Default `input` to stdin
@@ -100,6 +99,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           // Typescript won't allow this, but not all users rely on typescript.
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (nextView === undefined) {
+            const callerFilename = callSites[1]?.getFileName?.();
             throw new Error(
               `Prompt functions must return a string.\n    at ${callerFilename}`,
             );
