@@ -103,7 +103,7 @@ jobs:
       - run: yarn install --immutable --immutable-cache
       - run: yarn tsc
       - name: Integration tests
-        run: yarn node --test integration/
+        run: yarn node --test integration/**/*.test.*
 
   e2e:
     name: End to End build tests

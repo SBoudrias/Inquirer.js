@@ -16,25 +16,26 @@ type ViewFunction<Value, Config> = (
 
 function getCallSites() {
   const _prepareStackTrace = Error.prepareStackTrace;
+  let result: NodeJS.CallSite[] = [];
   try {
-    let result: NodeJS.CallSite[] = [];
     Error.prepareStackTrace = (_, callSites) => {
       const callSitesWithoutCurrent = callSites.slice(1);
       result = callSitesWithoutCurrent;
       return callSitesWithoutCurrent;
     };
-
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions, unicorn/error-message
     new Error().stack;
+  } catch {
+    // An error will occur if the Node flag --frozen-intrinsics is used.
+    // https://nodejs.org/api/cli.html#--frozen-intrinsics
     return result;
-  } finally {
-    Error.prepareStackTrace = _prepareStackTrace;
   }
+  Error.prepareStackTrace = _prepareStackTrace;
+  return result;
 }
 
 export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
   const callSites = getCallSites();
-  const callerFilename = callSites[1]?.getFileName?.();
 
   const prompt: Prompt<Value, Config> = (config, context = {}) => {
     // Default `input` to stdin
@@ -98,6 +99,7 @@ export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
           // Typescript won't allow this, but not all users rely on typescript.
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (nextView === undefined) {
+            const callerFilename = callSites[1]?.getFileName?.();
             throw new Error(
               `Prompt functions must return a string.\n    at ${callerFilename}`,
             );
