@@ -104,7 +104,7 @@ describe('select prompt', () => {
       choices: numberedChoices,
     });
 
-    events.keypress('4');
+    events.type('4');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         1
@@ -120,6 +120,30 @@ describe('select prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 4"');
 
     await expect(answer).resolves.toEqual(4);
+  });
+
+  it('use 2-digits number to select an option', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a number',
+      choices: numberedChoices,
+    });
+
+    events.type('12');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+      ❯ 12
+        1
+        2
+        3
+        4
+        5
+        6"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 12"');
+
+    await expect(answer).resolves.toEqual(12);
   });
 
   it('allow setting a smaller page size', async () => {
