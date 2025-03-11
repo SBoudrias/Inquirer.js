@@ -72,6 +72,7 @@ type SelectConfig<
   loop?: boolean;
   default?: unknown;
   theme?: PartialDeep<Theme<SelectTheme>>;
+  showIndex?: boolean;
 };
 
 function isSelectable<Value>(
@@ -108,7 +109,7 @@ function normalizeChoices<Value>(
 
 export default createPrompt(
   <Value>(config: SelectConfig<Value>, done: (value: Value) => void) => {
-    const { loop = true, pageSize = 7 } = config;
+    const { loop = true, pageSize = 7, showIndex = false } = config;
     const firstRender = useRef(true);
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
     const [status, setStatus] = useState<Status>('idle');
@@ -219,7 +220,7 @@ export default createPrompt(
     const page = usePagination({
       items,
       active,
-      renderItem({ item, isActive }) {
+      renderItem({ item, isActive, index }) {
         if (Separator.isSeparator(item)) {
           return ` ${item.separator}`;
         }
@@ -232,7 +233,7 @@ export default createPrompt(
 
         const color = isActive ? theme.style.highlight : (x: string) => x;
         const cursor = isActive ? theme.icon.cursor : ` `;
-        return color(`${cursor} ${item.name}`);
+        return color(`${cursor}${showIndex ? `${index + 1}.` : ''} ${item.name}`);
       },
       pageSize,
       loop,
