@@ -24,7 +24,7 @@ export const isSpaceKey = (key: KeypressEvent): boolean => key.name === 'space';
 export const isBackspaceKey = (key: KeypressEvent): boolean => key.name === 'backspace';
 
 export const isNumberKey = (key: KeypressEvent): boolean =>
-  '123456789'.includes(key.name);
+  '1234567890'.includes(key.name);
 
 export const isEnterKey = (key: KeypressEvent): boolean =>
   key.name === 'enter' || key.name === 'return';
