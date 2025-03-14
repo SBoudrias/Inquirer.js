@@ -18,6 +18,21 @@ const numberedChoices = [
   { value: 12 },
 ] as const;
 
+const complexStringChoices = [
+  { name: '1 a', value: '1 a' },
+  { name: '1 b', value: '1 b' },
+  { name: '2', value: '2' },
+  { name: '3', value: '3' },
+  { name: '4 a', value: '4 a' },
+  { name: '4 b', value: '4 b' },
+  { name: '4 c', value: '4 c' },
+  { name: '5', value: '5' },
+  { name: '6', value: '6' },
+  { name: '7.1', value: '7.1' },
+  { name: '7.2', value: '7.2' },
+  { name: '8', value: '8' },
+] as const;
+
 afterEach(() => {
   vi.useRealTimers();
 });
@@ -144,6 +159,54 @@ describe('select prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 12"');
 
     await expect(answer).resolves.toEqual(12);
+  });
+
+  it('select an option with a mix of letters and digits by index (7th option)', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select an option',
+      choices: complexStringChoices,
+    });
+
+    events.type('7');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select an option
+        3
+        4 a
+        4 b
+      ❯ 4 c
+        5
+        6
+        7.1"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select an option 4 c"');
+
+    await expect(answer).resolves.toEqual('4 c');
+  });
+
+  it('select an option with a mix of letters and digits by text starting with a number (7.)', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select an option',
+      choices: complexStringChoices,
+    });
+
+    events.type('7.');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select an option
+        4 c
+        5
+        6
+      ❯ 7.1
+        7.2
+        8
+        1 a"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select an option 7.1"');
+
+    await expect(answer).resolves.toEqual('7.1');
   });
 
   it('allow setting a smaller page size', async () => {

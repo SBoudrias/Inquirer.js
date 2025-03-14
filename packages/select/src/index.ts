@@ -164,7 +164,7 @@ export default createPrompt(
           } while (!isSelectable(items[next]!));
           setActive(next);
         }
-      } else if (isNumberKey(key)) {
+      } else if (isNumberKey(key) && !Number.isNaN(Number(rl.line))) {
         const position = Number(rl.line) - 1;
         const item = items[position];
         if (item != null && isSelectable(item)) {
