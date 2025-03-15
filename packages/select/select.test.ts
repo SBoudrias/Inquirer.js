@@ -740,7 +740,7 @@ describe('select prompt', () => {
     const { answer, events, getScreen } = await render(select, {
       message: 'Select a number',
       choices: numberedChoices,
-      theme: { showIndex: true },
+      theme: { indexMode: 'number' },
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`

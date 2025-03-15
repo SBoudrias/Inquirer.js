@@ -144,7 +144,7 @@ type Theme = {
     cursor: string;
   };
   helpMode: 'always' | 'never' | 'auto';
-  showIndex: boolean;
+  indexMode: 'hidden' | 'number';
 };
 ```
 
@@ -154,9 +154,12 @@ type Theme = {
 - `always`: The help tips will always show and never hide.
 - `never`: The help tips will never show.
 
-### `theme.showIndex`
+### `theme.indexMode`
 
-If `true`, display a number before each choice showing its index in the list (e.g. "1. Option A"). Defaults to `false`.
+Controls how indices are displayed before each choice:
+
+- `hidden` (default): No indices are shown
+- `number`: Display a number before each choice (e.g. "1. Option A")
 
 # License
 

@@ -30,7 +30,7 @@ type SelectTheme = {
     description: (text: string) => string;
   };
   helpMode: 'always' | 'never' | 'auto';
-  showIndex: boolean;
+  indexMode: 'hidden' | 'number';
 };
 
 const selectTheme: SelectTheme = {
@@ -40,7 +40,7 @@ const selectTheme: SelectTheme = {
     description: (text: string) => colors.cyan(text),
   },
   helpMode: 'auto',
-  showIndex: false,
+  indexMode: 'hidden',
 };
 
 type Choice<Value> = {
@@ -226,7 +226,7 @@ export default createPrompt(
           return ` ${item.separator}`;
         }
 
-        const indexLabel = theme.showIndex ? `${index + 1}. ` : '';
+        const indexLabel = theme.indexMode === 'number' ? `${index + 1}. ` : '';
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
