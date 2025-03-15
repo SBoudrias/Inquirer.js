@@ -30,6 +30,7 @@ type SelectTheme = {
     description: (text: string) => string;
   };
   helpMode: 'always' | 'never' | 'auto';
+  indexMode: 'hidden' | 'number';
 };
 
 const selectTheme: SelectTheme = {
@@ -39,6 +40,7 @@ const selectTheme: SelectTheme = {
     description: (text: string) => colors.cyan(text),
   },
   helpMode: 'auto',
+  indexMode: 'hidden',
 };
 
 type Choice<Value> = {
@@ -222,20 +224,21 @@ export default createPrompt(
     const page = usePagination({
       items,
       active,
-      renderItem({ item, isActive }) {
+      renderItem({ item, isActive, index }) {
         if (Separator.isSeparator(item)) {
           return ` ${item.separator}`;
         }
 
+        const indexLabel = theme.indexMode === 'number' ? `${index + 1}. ` : '';
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
-          return theme.style.disabled(`${item.name} ${disabledLabel}`);
+          return theme.style.disabled(`${indexLabel}${item.name} ${disabledLabel}`);
         }
 
         const color = isActive ? theme.style.highlight : (x: string) => x;
         const cursor = isActive ? theme.icon.cursor : ` `;
-        return color(`${cursor} ${item.name}`);
+        return color(`${cursor} ${indexLabel}${item.name}`);
       },
       pageSize,
       loop,
