@@ -164,13 +164,16 @@ export default createPrompt(
           } while (!isSelectable(items[next]!));
           setActive(next);
         }
-      } else if (isNumberKey(key)) {
-        rl.clearLine(0);
-        const position = Number(key.name) - 1;
+      } else if (isNumberKey(key) && !Number.isNaN(Number(rl.line))) {
+        const position = Number(rl.line) - 1;
         const item = items[position];
         if (item != null && isSelectable(item)) {
           setActive(position);
         }
+
+        searchTimeoutRef.current = setTimeout(() => {
+          rl.clearLine(0);
+        }, 700);
       } else if (isBackspaceKey(key)) {
         rl.clearLine(0);
       } else {
