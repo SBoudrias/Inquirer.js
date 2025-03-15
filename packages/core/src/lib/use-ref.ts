@@ -1,4 +1,4 @@
-import { useState } from './use-state.js';
+import { useState } from './use-state.ts';
 
 export function useRef<Value>(val: Value): { current: Value };
 export function useRef<Value>(val?: Value): { current: Value | undefined };

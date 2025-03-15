@@ -12,9 +12,9 @@ import { vi, expect, beforeEach, afterEach, describe, it, expectTypeOf } from 'v
 import { of } from 'rxjs';
 import { AbortPromptError, createPrompt } from '@inquirer/core';
 import type { InquirerReadline } from '@inquirer/type';
-import inquirer from './src/index.js';
-import type { QuestionMap, Answers, Question, DistinctQuestion } from './src/index.js';
-import { _ } from './src/ui/prompt.js';
+import inquirer from './src/index.ts';
+import type { QuestionMap, Answers, Question, DistinctQuestion } from './src/index.ts';
+import { _ } from './src/ui/prompt.ts';
 
 const actualCreateInterface = readline.createInterface;
 

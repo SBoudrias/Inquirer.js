@@ -3,7 +3,6 @@ import { stripVTControlCharacters } from 'node:util';
 import MuteStream from 'mute-stream';
 import ansiEscapes from 'ansi-escapes';
 import type { Prompt, Context } from '@inquirer/type';
-
 const ignoredAnsi = new Set([ansiEscapes.cursorHide, ansiEscapes.cursorShow]);
 
 class BufferedStream extends Stream.Writable {
@@ -47,7 +46,10 @@ export async function render<const Props, const Value>(
   props: Props,
   options?: Context,
 ): Promise<{
-  answer: Promise<Value>;
+  answer: Promise<Value> & {
+    /** @deprecated pass an AbortSignal in the context options instead. See {@link https://github.com/SBoudrias/Inquirer.js#canceling-prompt} */
+    cancel: () => void;
+  };
   input: MuteStream;
   events: {
     keypress: (

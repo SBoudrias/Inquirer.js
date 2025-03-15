@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import { editAsync } from 'external-editor';
-import editor from './src/index.js';
+import editor from './src/index.ts';
 
 vi.mock('external-editor');
 afterEach(() => {

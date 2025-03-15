@@ -1,5 +1,5 @@
 import type { Prettify, PartialDeep } from '@inquirer/type';
-import { defaultTheme, type Theme } from './theme.js';
+import { defaultTheme, type Theme } from './theme.ts';
 
 function isPlainObject(value: unknown): value is object {
   if (typeof value !== 'object' || value === null) return false;

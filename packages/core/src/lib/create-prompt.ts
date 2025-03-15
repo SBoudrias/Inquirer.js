@@ -3,11 +3,11 @@ import { AsyncResource } from 'node:async_hooks';
 import { type Prompt, type Prettify } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import { onExit as onSignalExit } from 'signal-exit';
-import ScreenManager from './screen-manager.js';
-import { PromisePolyfill } from './promise-polyfill.js';
+import ScreenManager from './screen-manager.ts';
+import { PromisePolyfill } from './promise-polyfill.ts';
 import { type InquirerReadline } from '@inquirer/type';
-import { withHooks, effectScheduler } from './hook-engine.js';
-import { AbortPromptError, CancelPromptError, ExitPromptError } from './errors.js';
+import { withHooks, effectScheduler } from './hook-engine.ts';
+import { AbortPromptError, CancelPromptError, ExitPromptError } from './errors.ts';
 
 type ViewFunction<Value, Config> = (
   config: Prettify<Config>,

@@ -1,9 +1,9 @@
 import type { Prettify } from '@inquirer/type';
-import { useRef } from '../use-ref.js';
-import { readlineWidth } from '../utils.js';
-import { type Theme } from '../theme.js';
-import { lines, type Layout } from './lines.js';
-import { finite, infinite } from './position.js';
+import { useRef } from '../use-ref.ts';
+import { readlineWidth } from '../utils.ts';
+import { type Theme } from '../theme.ts';
+import { lines, type Layout } from './lines.ts';
+import { finite, infinite } from './position.ts';
 
 export function usePagination<T>({
   items,

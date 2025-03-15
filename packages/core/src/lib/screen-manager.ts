@@ -1,6 +1,6 @@
 import { stripVTControlCharacters } from 'node:util';
 import ansiEscapes from 'ansi-escapes';
-import { breakLines, readlineWidth } from './utils.js';
+import { breakLines, readlineWidth } from './utils.ts';
 import type { InquirerReadline } from '@inquirer/type';
 
 const height = (content: string): number => content.split('\n').length;

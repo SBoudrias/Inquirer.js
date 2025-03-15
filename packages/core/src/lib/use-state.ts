@@ -1,4 +1,4 @@
-import { withPointer, handleChange } from './hook-engine.js';
+import { withPointer, handleChange } from './hook-engine.ts';
 
 type NotFunction<T> = T extends (...args: never) => unknown ? never : T;
 

@@ -19,7 +19,7 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   nodePlugin.configs['flat/recommended-module'],
-  eslintPluginUnicorn.configs['flat/recommended'],
+  eslintPluginUnicorn.configs.recommended,
   {
     languageOptions: {
       globals: {

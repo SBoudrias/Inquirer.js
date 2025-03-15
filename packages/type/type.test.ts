@@ -1,5 +1,5 @@
 import { test, expectTypeOf } from 'vitest';
-import type { DistributiveMerge, PartialDeep, UnionToIntersection } from './src/index.js';
+import type { DistributiveMerge, PartialDeep, UnionToIntersection } from './src/index.ts';
 
 test('DistributiveMerge', () => {
   expectTypeOf<

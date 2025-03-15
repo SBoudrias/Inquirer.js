@@ -17,8 +17,8 @@ import {
   Separator,
 } from '@inquirer/prompts';
 import type { Prettify } from '@inquirer/type';
-import PromptsRunner from './ui/prompt.js';
-import type { PromptCollection, LegacyPromptConstructor, PromptFn } from './ui/prompt.js';
+import PromptsRunner from './ui/prompt.ts';
+import type { PromptCollection, LegacyPromptConstructor, PromptFn } from './ui/prompt.ts';
 import type {
   Answers,
   CustomQuestion,
@@ -26,7 +26,7 @@ import type {
   StreamOptions,
   QuestionMap,
   PromptSession,
-} from './types.js';
+} from './types.ts';
 import { Observable } from 'rxjs';
 
 export type {
@@ -35,7 +35,7 @@ export type {
   DistinctQuestion,
   Answers,
   PromptSession,
-} from './types.js';
+} from './types.ts';
 
 const builtInPrompts: PromptCollection = {
   input,
