@@ -89,7 +89,6 @@
     "lerna": "^8.2.1",
     "nano-staged": "^0.8.0",
     "prettier": "^3.5.3",
-    "ts-node": "^10.9.2",
     "turbo": "^2.4.4",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.0",
