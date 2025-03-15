@@ -10,7 +10,7 @@ import {
   search,
   select,
   Separator,
-} from './src/index.js';
+} from './src/index.ts';
 
 describe('@inquirer/prompts', () => {
   it('export prompt functions', () => {

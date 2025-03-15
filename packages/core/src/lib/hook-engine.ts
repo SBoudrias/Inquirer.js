@@ -2,7 +2,7 @@
 
 import { AsyncLocalStorage, AsyncResource } from 'node:async_hooks';
 import type { InquirerReadline } from '@inquirer/type';
-import { HookError, ValidationError } from './errors.js';
+import { HookError, ValidationError } from './errors.ts';
 
 type HookStore = {
   rl: InquirerReadline;
@@ -120,12 +120,12 @@ export function withPointer<Value, ReturnValue>(
   return returnValue;
 }
 
-export function handleChange() {
+export function handleChange(): void {
   getStore().handleChange();
 }
 
 export const effectScheduler = {
-  queue(cb: (readline: InquirerReadline) => void | (() => void)) {
+  queue(cb: (readline: InquirerReadline) => void | (() => void)): void {
     const store = getStore();
     const { index } = store;
 
@@ -141,7 +141,7 @@ export const effectScheduler = {
       store.hooksCleanup[index] = cleanFn;
     });
   },
-  run() {
+  run(): void {
     const store = getStore();
     withUpdates(() => {
       store.hooksEffect.forEach((effect) => {
@@ -152,7 +152,7 @@ export const effectScheduler = {
       store.hooksEffect.length = 0;
     })();
   },
-  clearAll() {
+  clearAll(): void {
     const store = getStore();
     store.hooksCleanup.forEach((cleanFn) => {
       cleanFn?.();

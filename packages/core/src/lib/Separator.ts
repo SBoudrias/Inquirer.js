@@ -7,8 +7,8 @@ import figures from '@inquirer/figures';
  */
 
 export class Separator {
-  readonly separator = colors.dim(Array.from({ length: 15 }).join(figures.line));
-  readonly type = 'separator';
+  readonly separator: string = colors.dim(Array.from({ length: 15 }).join(figures.line));
+  readonly type: string = 'separator';
 
   constructor(separator?: string) {
     if (separator) {

@@ -1,2 +1,2 @@
-export * from './inquirer.js';
-export * from './utils.js';
+export * from './inquirer.ts';
+export * from './utils.ts';

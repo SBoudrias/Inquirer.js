@@ -1,12 +1,12 @@
 import { type InquirerReadline } from '@inquirer/type';
-import { type KeypressEvent } from './key.js';
-import { useRef } from './use-ref.js';
-import { useEffect } from './use-effect.js';
-import { withUpdates } from './hook-engine.js';
+import { type KeypressEvent } from './key.ts';
+import { useRef } from './use-ref.ts';
+import { useEffect } from './use-effect.ts';
+import { withUpdates } from './hook-engine.ts';
 
 export function useKeypress(
   userHandler: (event: KeypressEvent, rl: InquirerReadline) => void | Promise<void>,
-) {
+): void {
   const signal = useRef(userHandler);
   signal.current = userHandler;
 

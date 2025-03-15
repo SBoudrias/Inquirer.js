@@ -23,7 +23,7 @@ import type {
   AsyncGetterFunction,
   PromptSession,
   StreamOptions,
-} from '../types.js';
+} from '../types.ts';
 
 export const _ = {
   set: (obj: Record<string, unknown>, path: string = '', value: unknown): void => {

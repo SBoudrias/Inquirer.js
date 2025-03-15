@@ -3,18 +3,18 @@
 import { select } from '@inquirer/prompts';
 import colors from 'yoctocolors-cjs';
 import figures from '@inquirer/figures';
-import checkboxDemo from './demos/checkbox.js';
-import confirmDemo from './demos/confirm.js';
-import editorDemo from './demos/editor.js';
-import expandDemo from './demos/expand.js';
-import inputDemo from './demos/input.js';
-import loaderDemo from './demos/loader.js';
-import numberDemo from './demos/number.js';
-import passwordDemo from './demos/password.js';
-import rawlistDemo from './demos/rawlist.js';
-import searchDemo from './demos/search.js';
-import selectDemo from './demos/select.js';
-import timeoutDemo from './demos/timeout.js';
+import checkboxDemo from './demos/checkbox.ts';
+import confirmDemo from './demos/confirm.ts';
+import editorDemo from './demos/editor.ts';
+import expandDemo from './demos/expand.ts';
+import inputDemo from './demos/input.ts';
+import loaderDemo from './demos/loader.ts';
+import numberDemo from './demos/number.ts';
+import passwordDemo from './demos/password.ts';
+import rawlistDemo from './demos/rawlist.ts';
+import searchDemo from './demos/search.ts';
+import selectDemo from './demos/select.ts';
+import timeoutDemo from './demos/timeout.ts';
 
 const demos = {
   checkbox: checkboxDemo,

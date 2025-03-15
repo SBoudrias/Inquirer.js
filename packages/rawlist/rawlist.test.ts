@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import rawlist, { Separator } from './src/index.js';
+import rawlist, { Separator } from './src/index.ts';
 
 const numberedChoices = [
   { value: 1 },

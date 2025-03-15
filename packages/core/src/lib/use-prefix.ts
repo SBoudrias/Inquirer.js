@@ -1,8 +1,8 @@
 import { AsyncResource } from 'node:async_hooks';
-import { useState } from './use-state.js';
-import { useEffect } from './use-effect.js';
-import { makeTheme } from './make-theme.js';
-import type { Theme, Status } from './theme.js';
+import { useState } from './use-state.ts';
+import { useEffect } from './use-effect.ts';
+import { makeTheme } from './make-theme.ts';
+import type { Theme, Status } from './theme.ts';
 
 export function usePrefix({
   status = 'idle',

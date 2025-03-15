@@ -1,6 +1,6 @@
 import { stripVTControlCharacters } from 'node:util';
 import ansiEscapes from 'ansi-escapes';
-import { breakLines, readlineWidth } from './utils.js';
+import { breakLines, readlineWidth } from './utils.ts';
 import type { InquirerReadline } from '@inquirer/type';
 
 const height = (content: string): number => content.split('\n').length;
@@ -25,13 +25,13 @@ export default class ScreenManager {
     this.cursorPos = rl.getCursorPos();
   }
 
-  write(content: string) {
+  write(content: string): void {
     this.rl.output.unmute();
     this.rl.output.write(content);
     this.rl.output.mute();
   }
 
-  render(content: string, bottomContent: string = '') {
+  render(content: string, bottomContent: string = ''): void {
     // Write message to screen and setPrompt to control backspace
     const promptLine = lastLine(content);
     const rawPromptLine = stripVTControlCharacters(promptLine);
@@ -92,7 +92,7 @@ export default class ScreenManager {
     this.height = height(output);
   }
 
-  checkCursorPos() {
+  checkCursorPos(): void {
     const cursorPos = this.rl.getCursorPos();
     if (cursorPos.cols !== this.cursorPos.cols) {
       this.write(ansiEscapes.cursorTo(cursorPos.cols));
@@ -100,7 +100,7 @@ export default class ScreenManager {
     }
   }
 
-  done({ clearContent }: { clearContent: boolean }) {
+  done({ clearContent }: { clearContent: boolean }): void {
     this.rl.setPrompt('');
 
     let output = cursorDown(this.extraLinesUnderPrompt);

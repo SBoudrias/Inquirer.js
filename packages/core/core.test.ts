@@ -24,7 +24,7 @@ import {
   type KeypressEvent,
   makeTheme,
   type Status,
-} from './src/index.js';
+} from './src/index.ts';
 
 describe('createPrompt()', () => {
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
@@ -449,6 +449,7 @@ describe('createPrompt()', () => {
       message: 'Question',
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     answer.cancel();
     events.keypress('enter');
 
@@ -578,8 +579,10 @@ it('allow cancelling the prompt multiple times', async () => {
   const prompt = createPrompt(Prompt);
   const { answer, events } = await render(prompt, { message: 'Question' });
 
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
   answer.cancel();
 
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
   answer.cancel();
   events.keypress('enter');
 

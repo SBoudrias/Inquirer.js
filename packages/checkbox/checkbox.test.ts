@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
 import { ValidationError } from '@inquirer/core';
-import checkbox, { Separator } from './src/index.js';
+import checkbox, { Separator } from './src/index.ts';
 
 const numberedChoices = [
   { value: 1 },

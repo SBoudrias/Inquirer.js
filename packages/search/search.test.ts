@@ -1,6 +1,6 @@
 import { describe, it, expect, expectTypeOf } from 'vitest';
 import { render } from '@inquirer/testing';
-import search, { Separator } from './src/index.js';
+import search, { Separator } from './src/index.ts';
 
 // Array of all countries names as string
 const PROVINCES = [

@@ -1,4 +1,4 @@
-import { withPointer, effectScheduler } from './hook-engine.js';
+import { withPointer, effectScheduler } from './hook-engine.ts';
 import type { InquirerReadline } from '@inquirer/type';
 
 export function useEffect(

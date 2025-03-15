@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import number from './src/index.js';
+import number from './src/index.ts';
 
 describe('number prompt', () => {
   it('handle simple use case', async () => {
