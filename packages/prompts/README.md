@@ -192,7 +192,7 @@ const allowEmail = await confirm(
 
 ## Canceling prompt
 
-This can preferably be done with either an `AbortController` or `AbortSignal`.
+This can be done with either an `AbortController` or `AbortSignal`.
 
 ```js
 // Example 1: using built-in AbortSignal utilities
@@ -202,7 +202,7 @@ const answer = await confirm({ ... }, { signal: AbortSignal.timeout(5000) });
 ```
 
 ```js
-// Example 1: implementing custom cancellation logic
+// Example 2: implementing custom cancellation with an AbortController
 import { confirm } from '@inquirer/prompts';
 
 const controller = new AbortController();
@@ -211,18 +211,6 @@ setTimeout(() => {
 }, 5000);
 
 const answer = await confirm({ ... }, { signal: controller.signal });
-```
-
-Alternatively, all prompt functions are returning a cancelable promise. This special promise type has a `cancel` method that'll cancel and cleanup the prompt.
-
-On calling `cancel`, the answer promise will become rejected.
-
-```js
-import { confirm } from '@inquirer/prompts';
-
-const promise = confirm(...); // Warning: for this pattern to work, `await` cannot be used.
-
-promise.cancel();
 ```
 
 # Recipes
