@@ -6,7 +6,7 @@ import { withUpdates } from './hook-engine.js';
 
 export function useKeypress(
   userHandler: (event: KeypressEvent, rl: InquirerReadline) => void | Promise<void>,
-) {
+): void {
   const signal = useRef(userHandler);
   signal.current = userHandler;
 

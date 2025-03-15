@@ -34,7 +34,9 @@ function getCallSites() {
   return result;
 }
 
-export function createPrompt<Value, Config>(view: ViewFunction<Value, Config>) {
+export function createPrompt<Value, Config>(
+  view: ViewFunction<Value, Config>,
+): Prompt<Value, Config> {
   const callSites = getCallSites();
 
   const prompt: Prompt<Value, Config> = (config, context = {}) => {

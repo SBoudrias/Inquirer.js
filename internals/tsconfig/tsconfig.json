@@ -6,6 +6,11 @@
   "compilerOptions": {
     "lib": ["es2023"],
     "skipLibCheck": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+
+    //========== Use filename extension .ts in imports ==========
+    "allowImportingTsExtensions": true,
+    // Only needed if compiling to JavaScript
+    "rewriteRelativeImportExtensions": true // from .ts to .js
   }
 }

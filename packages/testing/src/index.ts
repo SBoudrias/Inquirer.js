@@ -46,7 +46,18 @@ export async function render<const Props, const Value>(
   prompt: Prompt<Value, Props>,
   props: Props,
   options?: Context,
-) {
+): Promise<{
+  answer: Promise<Value>;
+  input: MuteStream;
+  events: {
+    keypress: (
+      key: string | { name?: string; ctrl?: boolean; meta?: boolean; shift?: boolean },
+    ) => void;
+    type: (text: string) => void;
+  };
+  getScreen: ({ raw }?: { raw?: boolean }) => string;
+  getFullOutput: () => string;
+}> {
   const input = new MuteStream();
   input.unmute();
 
@@ -63,10 +74,10 @@ export async function render<const Props, const Value>(
       key:
         | string
         | {
-            name?: string | undefined;
-            ctrl?: boolean | undefined;
-            meta?: boolean | undefined;
-            shift?: boolean | undefined;
+            name?: string;
+            ctrl?: boolean;
+            meta?: boolean;
+            shift?: boolean;
           },
     ) {
       if (typeof key === 'string') {
@@ -88,7 +99,7 @@ export async function render<const Props, const Value>(
     input,
     events,
     getScreen: ({ raw }: { raw?: boolean } = {}): string => {
-      const lastScreen = output.getLastChunk({ raw });
+      const lastScreen = output.getLastChunk({ raw: Boolean(raw) });
       return raw ? lastScreen : stripVTControlCharacters(lastScreen).trim();
     },
     getFullOutput: (): string => {
