@@ -30,6 +30,7 @@ type SelectTheme = {
     description: (text: string) => string;
   };
   helpMode: 'always' | 'never' | 'auto';
+  showIndex: boolean;
 };
 
 const selectTheme: SelectTheme = {
@@ -39,6 +40,7 @@ const selectTheme: SelectTheme = {
     description: (text: string) => colors.cyan(text),
   },
   helpMode: 'auto',
+  showIndex: false,
 };
 
 type Choice<Value> = {
@@ -72,7 +74,6 @@ type SelectConfig<
   loop?: boolean;
   default?: unknown;
   theme?: PartialDeep<Theme<SelectTheme>>;
-  showIndex?: boolean;
 };
 
 function isSelectable<Value>(
@@ -109,7 +110,7 @@ function normalizeChoices<Value>(
 
 export default createPrompt(
   <Value>(config: SelectConfig<Value>, done: (value: Value) => void) => {
-    const { loop = true, pageSize = 7, showIndex = false } = config;
+    const { loop = true, pageSize = 7 } = config;
     const firstRender = useRef(true);
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
     const [status, setStatus] = useState<Status>('idle');
@@ -225,15 +226,16 @@ export default createPrompt(
           return ` ${item.separator}`;
         }
 
+        const indexLabel = theme.showIndex ? `${index + 1}. ` : '';
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
-          return theme.style.disabled(`${item.name} ${disabledLabel}`);
+          return theme.style.disabled(`${indexLabel}${item.name} ${disabledLabel}`);
         }
 
         const color = isActive ? theme.style.highlight : (x: string) => x;
         const cursor = isActive ? theme.icon.cursor : ` `;
-        return color(`${cursor}${showIndex ? `${index + 1}.` : ''} ${item.name}`);
+        return color(`${cursor} ${indexLabel}${item.name}`);
       },
       pageSize,
       loop,

@@ -740,18 +740,18 @@ describe('select prompt', () => {
     const { answer, events, getScreen } = await render(select, {
       message: 'Select a number',
       choices: numberedChoices,
-      showIndex: true,
+      theme: { showIndex: true },
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ❯1. 1
-       2. 2
-       3. 3
-       4. 4
-       5. 5
-       6. 6
-       7. 7
+      ❯ 1. 1
+        2. 2
+        3. 3
+        4. 4
+        5. 5
+        6. 6
+        7. 7
       (Use arrow keys to reveal more choices)"
     `);
 
