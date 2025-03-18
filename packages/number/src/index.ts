@@ -11,14 +11,16 @@ import {
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
 
-type NumberConfig = {
+type NumberConfig<Required extends boolean = boolean> = {
   message: string;
   default?: number;
   min?: number;
   max?: number;
   step?: number | 'any';
-  required?: boolean;
-  validate?: (value: number | undefined) => boolean | string | Promise<string | boolean>;
+  required?: Required;
+  validate?: (
+    value: Required extends true ? number : number | undefined,
+  ) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme>;
 };
 
@@ -53,91 +55,96 @@ function validateNumber(
   return true;
 }
 
-export default createPrompt<number | undefined, NumberConfig>((config, done) => {
-  const {
-    validate = () => true,
-    min = -Infinity,
-    max = Infinity,
-    step = 1,
-    required = false,
-  } = config;
-  const theme = makeTheme(config.theme);
-  const [status, setStatus] = useState<Status>('idle');
-  const [value, setValue] = useState<string>(''); // store the input value as string and convert to number on "Enter"
+export default createPrompt(
+  <Required extends boolean>(
+    config: NumberConfig<Required>,
+    done: (value: Required extends true ? number : number | undefined) => void,
+  ) => {
+    const {
+      validate = () => true,
+      min = -Infinity,
+      max = Infinity,
+      step = 1,
+      required = false,
+    } = config;
+    const theme = makeTheme(config.theme);
+    const [status, setStatus] = useState<Status>('idle');
+    const [value, setValue] = useState<string>(''); // store the input value as string and convert to number on "Enter"
 
-  // Ignore default if not valid.
-  const validDefault =
-    validateNumber(config.default, { min, max, step }) === true
-      ? config.default?.toString()
-      : undefined;
-  const [defaultValue = '', setDefaultValue] = useState<string>(validDefault);
-  const [errorMsg, setError] = useState<string>();
+    // Ignore default if not valid.
+    const validDefault =
+      validateNumber(config.default, { min, max, step }) === true
+        ? config.default?.toString()
+        : undefined;
+    const [defaultValue = '', setDefaultValue] = useState<string>(validDefault);
+    const [errorMsg, setError] = useState<string>();
 
-  const prefix = usePrefix({ status, theme });
+    const prefix = usePrefix({ status, theme });
 
-  useKeypress(async (key, rl) => {
-    // Ignore keypress while our prompt is doing other processing.
-    if (status !== 'idle') {
-      return;
-    }
-
-    if (isEnterKey(key)) {
-      const input = value || defaultValue;
-      const answer = input === '' ? undefined : Number(input);
-      setStatus('loading');
-
-      let isValid: string | boolean = true;
-      if (required || answer != null) {
-        isValid = validateNumber(answer, { min, max, step });
-      }
-      if (isValid === true) {
-        isValid = await validate(answer);
+    useKeypress(async (key, rl) => {
+      // Ignore keypress while our prompt is doing other processing.
+      if (status !== 'idle') {
+        return;
       }
 
-      if (isValid === true) {
-        setValue(String(answer ?? ''));
-        setStatus('done');
-        done(answer);
+      if (isEnterKey(key)) {
+        const input = value || defaultValue;
+        const answer = input === '' ? undefined : Number(input);
+        setStatus('loading');
+
+        let isValid: string | boolean = true;
+        if (required || answer != null) {
+          isValid = validateNumber(answer, { min, max, step });
+        }
+        if (isValid === true) {
+          isValid = await validate(answer as number);
+        }
+
+        if (isValid === true) {
+          setValue(String(answer ?? ''));
+          setStatus('done');
+          done(answer as number);
+        } else {
+          // Reset the readline line value to the previous value. On line event, the value
+          // get cleared, forcing the user to re-enter the value instead of fixing it.
+          rl.write(value);
+          setError(isValid || 'You must provide a valid numeric value');
+          setStatus('idle');
+        }
+      } else if (isBackspaceKey(key) && !value) {
+        setDefaultValue(undefined);
+      } else if (key.name === 'tab' && !value) {
+        setDefaultValue(undefined);
+        rl.clearLine(0); // Remove the tab character.
+        rl.write(defaultValue);
+        setValue(defaultValue);
       } else {
-        // Reset the readline line value to the previous value. On line event, the value
-        // get cleared, forcing the user to re-enter the value instead of fixing it.
-        rl.write(value);
-        setError(isValid || 'You must provide a valid numeric value');
-        setStatus('idle');
+        setValue(rl.line);
+        setError(undefined);
       }
-    } else if (isBackspaceKey(key) && !value) {
-      setDefaultValue(undefined);
-    } else if (key.name === 'tab' && !value) {
-      setDefaultValue(undefined);
-      rl.clearLine(0); // Remove the tab character.
-      rl.write(defaultValue);
-      setValue(defaultValue);
-    } else {
-      setValue(rl.line);
-      setError(undefined);
+    });
+
+    const message = theme.style.message(config.message, status);
+    let formattedValue = value;
+    if (status === 'done') {
+      formattedValue = theme.style.answer(value);
     }
-  });
 
-  const message = theme.style.message(config.message, status);
-  let formattedValue = value;
-  if (status === 'done') {
-    formattedValue = theme.style.answer(value);
-  }
+    let defaultStr;
+    if (defaultValue && status !== 'done' && !value) {
+      defaultStr = theme.style.defaultAnswer(defaultValue);
+    }
 
-  let defaultStr;
-  if (defaultValue && status !== 'done' && !value) {
-    defaultStr = theme.style.defaultAnswer(defaultValue);
-  }
+    let error = '';
+    if (errorMsg) {
+      error = theme.style.error(errorMsg);
+    }
 
-  let error = '';
-  if (errorMsg) {
-    error = theme.style.error(errorMsg);
-  }
-
-  return [
-    [prefix, message, defaultStr, formattedValue]
-      .filter((v) => v !== undefined)
-      .join(' '),
-    error,
-  ];
-});
+    return [
+      [prefix, message, defaultStr, formattedValue]
+        .filter((v) => v !== undefined)
+        .join(' '),
+      error,
+    ];
+  },
+);
