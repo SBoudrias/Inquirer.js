@@ -6,10 +6,27 @@
 version: 2
 updates:
   - package-ecosystem: 'npm'
+    auto-merge: true
     directory: '/'
     schedule:
       interval: 'weekly'
+    groups:
+      # Group all testing related packages
+      testing:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+      # Group all linting related packages
+      linting:
+        patterns:
+          - 'eslint'
+          - '@eslint/*'
+          - 'eslint-*'
+          - 'typescript-eslint'
+          - 'globals'
+          - 'prettier'
   - package-ecosystem: 'github-actions'
+    auto-merge: true
     directory: '/'
     schedule:
       interval: 'weekly'
