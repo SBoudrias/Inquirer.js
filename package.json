@@ -94,7 +94,7 @@
     "typescript-eslint": "^8.26.0",
     "vitest": "^3.0.8"
   },
-  "packageManager": "yarn@4.5.3+sha512.3003a14012e2987072d244c720506549c1aab73ee728208f1b2580a9fd67b92d61ba6b08fe93f6dce68fd771e3af1e59a0afa28dd242dd0940d73b95fedd4e90",
+  "packageManager": "yarn@4.7.0+sha512.5a0afa1d4c1d844b3447ee3319633797bcd6385d9a44be07993ae52ff4facabccafb4af5dcd1c2f9a94ac113e5e9ff56f6130431905884414229e284e37bb7c9",
   "engines": {
     "node": ">=18"
   }

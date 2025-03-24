@@ -12,6 +12,7 @@ export default tseslint.config(
       '.git',
       'node_modules',
       'coverage',
+      '.yarn',
       'packages/*/dist/**',
       'packages/*/node_modules/**',
       'packages/*/__snapshots__/**',
