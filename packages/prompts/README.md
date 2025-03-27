@@ -348,7 +348,8 @@ A community library, [@inquirer-cli](https://github.com/fishballapp/inquirer-cli
 For example, to prompt for input:
 
 ```bash
-$ npx @inquirer-cli/input 'Enter your name'
+name=$(npx -y @inquirer-cli/input -r "What is your name?")
+echo "Hello, $name!"
 ```
 
 Or to create an interactive version bump:
