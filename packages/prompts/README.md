@@ -51,6 +51,26 @@ import { input } from '@inquirer/prompts';
 const answer = await input({ message: 'Enter your name' });
 ```
 
+## Usage with `npx`
+
+You can use Inquirer prompts directly in the shell via [`npx`](https://docs.npmjs.com/cli/v8/commands/npx), which is useful for quick scripts or `package.json` commands.
+
+A community library, [@inquirer-cli](https://github.com/fishballapp/inquirer-cli), exposes each prompt as a standalone CLI.
+
+For example, to prompt for input:
+
+```bash
+$ npx @inquirer-cli/input 'Enter your name'
+```
+
+Or to create an interactive version bump:
+
+```bash
+$ npm version $(npx @inquirer-cli/select -c patch -c minor -c major 'Select Version')
+```
+
+Find out more: [@inquirer-cli](https://github.com/fishballapp/inquirer-cli).
+
 # Prompts
 
 ## [Input](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/input)
