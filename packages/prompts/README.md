@@ -339,7 +339,7 @@ import { confirm } from '@inquirer/prompts';
 const answer = await confirm({ message: await getMessage() });
 ```
 
-## Usage with `npx`
+## Usage with `npx` within bash scripts
 
 You can use Inquirer prompts directly in the shell via [`npx`](https://docs.npmjs.com/cli/v8/commands/npx), which is useful for quick scripts or `package.json` commands.
 
