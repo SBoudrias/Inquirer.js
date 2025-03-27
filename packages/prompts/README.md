@@ -66,7 +66,7 @@ $ npx @inquirer-cli/input 'Enter your name'
 Or to create an interactive version bump:
 
 ```bash
-$ npm version $(npx @inquirer-cli/select -c patch -c minor -c major 'Select Version')
+$ npm version $(npx -y @inquirer-cli/select -c patch -c minor -c major 'Select Version')
 ```
 
 Find out more: [@inquirer-cli](https://github.com/fishballapp/inquirer-cli).
