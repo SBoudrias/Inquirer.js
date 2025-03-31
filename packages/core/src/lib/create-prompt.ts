@@ -101,7 +101,7 @@ export function createPrompt<Value, Config>(
           // Typescript won't allow this, but not all users rely on typescript.
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (nextView === undefined) {
-            const callerFilename = callSites[1]?.getFileName?.();
+            const callerFilename = callSites[1]?.getFileName();
             throw new Error(
               `Prompt functions must return a string.\n    at ${callerFilename}`,
             );
