@@ -86,7 +86,7 @@ beforeEach(() => {
 
 describe('exported types', () => {
   it('Question type is not any', () => {
-    expectTypeOf({}).not.toMatchTypeOf<Question>();
+    expectTypeOf({}).not.toExtend<Question>();
   });
 
   it('exported Question type requires type, name and message', () => {
@@ -95,11 +95,11 @@ describe('exported types', () => {
       name: 'q1',
       message: 'message',
     } as const;
-    expectTypeOf(question).toMatchTypeOf<Question>();
-    expectTypeOf(question).toMatchTypeOf<DistinctQuestion>();
-    expectTypeOf({ name: 'q1', message: 'message' }).not.toMatchTypeOf<Question>();
-    expectTypeOf({ type: 'stub', message: 'message' }).not.toMatchTypeOf<Question>();
-    expectTypeOf({ type: 'stub', name: 'q1' }).not.toMatchTypeOf<Question>();
+    expectTypeOf(question).toExtend<Question>();
+    expectTypeOf(question).toExtend<DistinctQuestion>();
+    expectTypeOf({ name: 'q1', message: 'message' }).not.toExtend<Question>();
+    expectTypeOf({ type: 'stub', message: 'message' }).not.toExtend<Question>();
+    expectTypeOf({ type: 'stub', name: 'q1' }).not.toExtend<Question>();
   });
 
   it('Exported types can be used with "as const satisfies Question" to keep prompt type inference', async () => {
@@ -142,12 +142,12 @@ describe('exported types', () => {
   });
 
   it('exported Answers type is not any', () => {
-    expectTypeOf(false).not.toMatchTypeOf<Answers>();
+    expectTypeOf(false).not.toExtend<Answers>();
   });
 
   it('exported Answers type matches any object', () => {
-    expectTypeOf({}).toMatchTypeOf<Answers>();
-    expectTypeOf({ foo: 'bar' }).toMatchTypeOf<Answers>();
+    expectTypeOf({}).toExtend<Answers>();
+    expectTypeOf({ foo: 'bar' }).toExtend<Answers>();
   });
 });
 
