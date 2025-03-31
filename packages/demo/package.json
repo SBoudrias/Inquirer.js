@@ -77,7 +77,7 @@
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "@types/node": "^22.13.10",
+    "@types/node": "^22.14.0",
     "tshy": "^3.0.2"
   },
   "engines": {

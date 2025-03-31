@@ -82,6 +82,23 @@ export default tseslint.config(
           allowModules: ['vitest'],
         },
       ],
+      'n/no-unsupported-features/node-builtins': [
+        'error',
+        {
+          version: '>=22.0.0',
+        },
+      ],
+    },
+  },
+  {
+    files: ['tools/**'],
+    rules: {
+      'n/no-unsupported-features/node-builtins': [
+        'error',
+        {
+          version: '>=22.0.0',
+        },
+      ],
     },
   },
   eslintPluginPrettierRecommended,
