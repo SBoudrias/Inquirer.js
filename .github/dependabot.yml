@@ -6,7 +6,6 @@
 version: 2
 updates:
   - package-ecosystem: 'npm'
-    auto-merge: true
     directory: '/'
     schedule:
       interval: 'weekly'
@@ -26,7 +25,6 @@ updates:
           - 'globals'
           - 'prettier'
   - package-ecosystem: 'github-actions'
-    auto-merge: true
     directory: '/'
     schedule:
       interval: 'weekly'
