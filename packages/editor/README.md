@@ -4,6 +4,16 @@ Prompt that'll open the user preferred editor with default content and allow for
 
 The editor launched is the one [defined by the user's `EDITOR` environment variable](https://dev.to/jonasbn/til-integrate-visual-studio-code-with-shell--cli-2l1l).
 
+# Special Thanks
+
+<div align="center" markdown="1">
+
+[![Graphite](https://github.com/user-attachments/assets/53db40ca-2254-481a-a094-6597f8716e29)](https://graphite.dev/?utm_source=github&utm_medium=repo&utm_campaign=inquirerjs)<br>
+
+### [Graphite is the AI developer productivity platform helping teams on GitHub ship higher quality software, faster](https://graphite.dev/?utm_source=github&utm_medium=repo&utm_campaign=inquirerjs)
+
+</div>
+
 # Installation
 
 <table>

@@ -5,6 +5,16 @@ Compact single select prompt. Every option is assigned a shortcut key, and selec
 ![Expand prompt closed](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-y.svg)
 ![Expand prompt expanded](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/expand-d.svg)
 
+# Special Thanks
+
+<div align="center" markdown="1">
+
+[![Graphite](https://github.com/user-attachments/assets/53db40ca-2254-481a-a094-6597f8716e29)](https://graphite.dev/?utm_source=github&utm_medium=repo&utm_campaign=inquirerjs)<br>
+
+### [Graphite is the AI developer productivity platform helping teams on GitHub ship higher quality software, faster](https://graphite.dev/?utm_source=github&utm_medium=repo&utm_campaign=inquirerjs)
+
+</div>
+
 # Installation
 
 <table>
