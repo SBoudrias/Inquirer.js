@@ -474,15 +474,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@inquirer/checkbox@npm:^4.1.4, @inquirer/checkbox@workspace:packages/checkbox":
+"@inquirer/checkbox@npm:^4.1.5, @inquirer/checkbox@workspace:packages/checkbox":
   version: 0.0.0-use.local
   resolution: "@inquirer/checkbox@workspace:packages/checkbox"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/core": "npm:^10.1.9"
+    "@inquirer/core": "npm:^10.1.10"
     "@inquirer/figures": "npm:^1.0.11"
-    "@inquirer/testing": "npm:^2.1.45"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/testing": "npm:^2.1.46"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
@@ -506,14 +506,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/confirm@npm:^5.1.8, @inquirer/confirm@workspace:packages/confirm":
+"@inquirer/confirm@npm:^5.1.9, @inquirer/confirm@workspace:packages/confirm":
   version: 0.0.0-use.local
   resolution: "@inquirer/confirm@workspace:packages/confirm"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/core": "npm:^10.1.9"
-    "@inquirer/testing": "npm:^2.1.45"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/core": "npm:^10.1.10"
+    "@inquirer/testing": "npm:^2.1.46"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
   peerDependencies:
@@ -524,14 +524,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/core@npm:^10.1.9, @inquirer/core@workspace:*, @inquirer/core@workspace:packages/core":
+"@inquirer/core@npm:^10.1.10, @inquirer/core@workspace:*, @inquirer/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@inquirer/core@workspace:packages/core"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
     "@inquirer/figures": "npm:^1.0.11"
-    "@inquirer/testing": "npm:^2.1.45"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/testing": "npm:^2.1.46"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^22.14.0"
@@ -555,9 +555,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@inquirer/demo@workspace:packages/demo"
   dependencies:
-    "@inquirer/core": "npm:^10.1.9"
+    "@inquirer/core": "npm:^10.1.10"
     "@inquirer/figures": "npm:^1.0.11"
-    "@inquirer/prompts": "npm:^7.4.0"
+    "@inquirer/prompts": "npm:^7.4.1"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^22.14.0"
     tshy: "npm:^3.0.2"
@@ -572,14 +572,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/editor@npm:^4.2.9, @inquirer/editor@workspace:packages/editor":
+"@inquirer/editor@npm:^4.2.10, @inquirer/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@inquirer/editor@workspace:packages/editor"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/core": "npm:^10.1.9"
-    "@inquirer/testing": "npm:^2.1.45"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/core": "npm:^10.1.10"
+    "@inquirer/testing": "npm:^2.1.46"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     external-editor: "npm:^3.1.0"
     tshy: "npm:^3.0.2"
@@ -602,14 +602,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/expand@npm:^4.0.11, @inquirer/expand@workspace:packages/expand":
+"@inquirer/expand@npm:^4.0.12, @inquirer/expand@workspace:packages/expand":
   version: 0.0.0-use.local
   resolution: "@inquirer/expand@workspace:packages/expand"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/core": "npm:^10.1.9"
-    "@inquirer/testing": "npm:^2.1.45"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/core": "npm:^10.1.10"
+    "@inquirer/testing": "npm:^2.1.46"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
@@ -631,14 +631,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/input@npm:^4.1.8, @inquirer/input@workspace:*, @inquirer/input@workspace:packages/input":
+"@inquirer/input@npm:^4.1.9, @inquirer/input@workspace:*, @inquirer/input@workspace:packages/input":
   version: 0.0.0-use.local
   resolution: "@inquirer/input@workspace:packages/input"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/core": "npm:^10.1.9"
-    "@inquirer/testing": "npm:^2.1.45"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/core": "npm:^10.1.10"
+    "@inquirer/testing": "npm:^2.1.46"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
   peerDependencies:
@@ -649,14 +649,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/number@npm:^3.0.11, @inquirer/number@workspace:packages/number":
+"@inquirer/number@npm:^3.0.12, @inquirer/number@workspace:packages/number":
   version: 0.0.0-use.local
   resolution: "@inquirer/number@workspace:packages/number"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/core": "npm:^10.1.9"
-    "@inquirer/testing": "npm:^2.1.45"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/core": "npm:^10.1.10"
+    "@inquirer/testing": "npm:^2.1.46"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
   peerDependencies:
@@ -667,14 +667,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/password@npm:^4.0.11, @inquirer/password@workspace:packages/password":
+"@inquirer/password@npm:^4.0.12, @inquirer/password@workspace:packages/password":
   version: 0.0.0-use.local
   resolution: "@inquirer/password@workspace:packages/password"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/core": "npm:^10.1.9"
-    "@inquirer/testing": "npm:^2.1.45"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/core": "npm:^10.1.10"
+    "@inquirer/testing": "npm:^2.1.46"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
@@ -686,22 +686,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/prompts@npm:^7.4.0, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
+"@inquirer/prompts@npm:^7.4.1, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
   version: 0.0.0-use.local
   resolution: "@inquirer/prompts@workspace:packages/prompts"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/checkbox": "npm:^4.1.4"
-    "@inquirer/confirm": "npm:^5.1.8"
-    "@inquirer/editor": "npm:^4.2.9"
-    "@inquirer/expand": "npm:^4.0.11"
-    "@inquirer/input": "npm:^4.1.8"
-    "@inquirer/number": "npm:^3.0.11"
-    "@inquirer/password": "npm:^4.0.11"
-    "@inquirer/rawlist": "npm:^4.0.11"
-    "@inquirer/search": "npm:^3.0.11"
-    "@inquirer/select": "npm:^4.1.0"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/checkbox": "npm:^4.1.5"
+    "@inquirer/confirm": "npm:^5.1.9"
+    "@inquirer/editor": "npm:^4.2.10"
+    "@inquirer/expand": "npm:^4.0.12"
+    "@inquirer/input": "npm:^4.1.9"
+    "@inquirer/number": "npm:^3.0.12"
+    "@inquirer/password": "npm:^4.0.12"
+    "@inquirer/rawlist": "npm:^4.0.12"
+    "@inquirer/search": "npm:^3.0.12"
+    "@inquirer/select": "npm:^4.1.1"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
   peerDependencies:
@@ -712,14 +712,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/rawlist@npm:^4.0.11, @inquirer/rawlist@workspace:packages/rawlist":
+"@inquirer/rawlist@npm:^4.0.12, @inquirer/rawlist@workspace:packages/rawlist":
   version: 0.0.0-use.local
   resolution: "@inquirer/rawlist@workspace:packages/rawlist"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/core": "npm:^10.1.9"
-    "@inquirer/testing": "npm:^2.1.45"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/core": "npm:^10.1.10"
+    "@inquirer/testing": "npm:^2.1.46"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
@@ -759,15 +759,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/search@npm:^3.0.11, @inquirer/search@workspace:packages/search":
+"@inquirer/search@npm:^3.0.12, @inquirer/search@workspace:packages/search":
   version: 0.0.0-use.local
   resolution: "@inquirer/search@workspace:packages/search"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/core": "npm:^10.1.9"
+    "@inquirer/core": "npm:^10.1.10"
     "@inquirer/figures": "npm:^1.0.11"
-    "@inquirer/testing": "npm:^2.1.45"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/testing": "npm:^2.1.46"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
@@ -779,15 +779,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/select@npm:^4.1.0, @inquirer/select@workspace:packages/select":
+"@inquirer/select@npm:^4.1.1, @inquirer/select@workspace:packages/select":
   version: 0.0.0-use.local
   resolution: "@inquirer/select@workspace:packages/select"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/core": "npm:^10.1.9"
+    "@inquirer/core": "npm:^10.1.10"
     "@inquirer/figures": "npm:^1.0.11"
-    "@inquirer/testing": "npm:^2.1.45"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/testing": "npm:^2.1.46"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
@@ -800,12 +800,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/testing@npm:^2.1.45, @inquirer/testing@workspace:packages/testing":
+"@inquirer/testing@npm:^2.1.46, @inquirer/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@inquirer/testing@workspace:packages/testing"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^22.14.0"
@@ -820,7 +820,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/type@npm:^3.0.5, @inquirer/type@workspace:packages/type":
+"@inquirer/type@npm:^3.0.6, @inquirer/type@workspace:packages/type":
   version: 0.0.0-use.local
   resolution: "@inquirer/type@workspace:packages/type"
   dependencies:
@@ -4601,9 +4601,9 @@ __metadata:
   resolution: "inquirer@workspace:packages/inquirer"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
-    "@inquirer/core": "npm:^10.1.9"
-    "@inquirer/prompts": "npm:^7.4.0"
-    "@inquirer/type": "npm:^3.0.5"
+    "@inquirer/core": "npm:^10.1.10"
+    "@inquirer/prompts": "npm:^7.4.1"
+    "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
     ansi-escapes: "npm:^4.3.2"

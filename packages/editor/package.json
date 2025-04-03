@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/editor",
-  "version": "4.2.9",
+  "version": "4.2.10",
   "description": "Inquirer multiline editor prompt",
   "keywords": [
     "answer",
@@ -74,13 +74,13 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.1.9",
-    "@inquirer/type": "^3.0.5",
+    "@inquirer/core": "^10.1.10",
+    "@inquirer/type": "^3.0.6",
     "external-editor": "^3.1.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.4",
-    "@inquirer/testing": "^2.1.45",
+    "@inquirer/testing": "^2.1.46",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },
