@@ -914,9 +914,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/create@npm:8.2.1":
-  version: 8.2.1
-  resolution: "@lerna/create@npm:8.2.1"
+"@lerna/create@npm:8.2.2":
+  version: 8.2.2
+  resolution: "@lerna/create@npm:8.2.2"
   dependencies:
     "@npmcli/arborist": "npm:7.5.4"
     "@npmcli/package-json": "npm:5.2.0"
@@ -988,7 +988,7 @@ __metadata:
     write-pkg: "npm:4.0.0"
     yargs: "npm:17.7.2"
     yargs-parser: "npm:21.1.1"
-  checksum: 10/802db88edad8967afcbf499f68491139965209137ec92f402ac838452079f143701d6f9abd9832b3506a7e1c56e01ea9c09ffd6f8782b1d9202413756fcfd708
+  checksum: 10/bd4a8b2db004668f23d44068e2e7624a642a7dd1e7834fd6afdc9932216b04468fbfdf35c6b7b2a6336bb02c5cd4104e97359c2c7cbec3c9336daefdc8c9af1b
   languageName: node
   linkType: hard
 
@@ -5079,10 +5079,10 @@ __metadata:
   linkType: hard
 
 "lerna@npm:^8.2.1":
-  version: 8.2.1
-  resolution: "lerna@npm:8.2.1"
+  version: 8.2.2
+  resolution: "lerna@npm:8.2.2"
   dependencies:
-    "@lerna/create": "npm:8.2.1"
+    "@lerna/create": "npm:8.2.2"
     "@npmcli/arborist": "npm:7.5.4"
     "@npmcli/package-json": "npm:5.2.0"
     "@npmcli/run-script": "npm:8.1.0"
@@ -5164,7 +5164,7 @@ __metadata:
     yargs-parser: "npm:21.1.1"
   bin:
     lerna: dist/cli.js
-  checksum: 10/ebf9fd1af102a8b7e89dcf05e32f92dfa2ce13e77c9788a86eb4828e6a5269e7bf85edf1bcdb4e4ea383f42d872880ad61fc26d304276715b3757fb54cd60d94
+  checksum: 10/a21e9a5f7c7538698c83c320463fc098312cd9d0b192786472a81551023595de0b0727ce851fbf1d4eb7aca41f29b8d11bf7e07258c1e0ca023283c5939b83ee
   languageName: node
   linkType: hard
 
