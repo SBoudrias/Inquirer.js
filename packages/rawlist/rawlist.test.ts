@@ -116,6 +116,136 @@ describe('rawlist prompt', () => {
     await expect(answer).resolves.toEqual('pepperoni');
   });
 
+  it('allow using arrow keys', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a topping',
+      choices: [
+        { name: 'Ham', value: 'ham' },
+        new Separator(),
+        { name: 'Pepperoni', value: 'pepperoni' },
+        { name: 'Pineapple', value: 'pineapple' },
+      ],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping
+        1) Ham
+       ──────────────
+        2) Pepperoni
+        3) Pineapple"
+    `);
+
+    // Test up/down
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping 1
+        1) Ham
+       ──────────────
+        2) Pepperoni
+        3) Pineapple"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping 2
+        1) Ham
+       ──────────────
+        2) Pepperoni
+        3) Pineapple"
+    `);
+
+    events.keypress('up');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping 1
+        1) Ham
+       ──────────────
+        2) Pepperoni
+        3) Pineapple"
+    `);
+
+    events.keypress('backspace');
+
+    // Test the loop option
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping 1
+        1) Ham
+       ──────────────
+        2) Pepperoni
+        3) Pineapple"
+    `);
+
+    events.keypress('backspace');
+    events.keypress('up');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping 3
+        1) Ham
+       ──────────────
+        2) Pepperoni
+        3) Pineapple"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a topping Pineapple"`);
+
+    await expect(answer).resolves.toEqual('pineapple');
+  });
+
+  it('allow using arrow keys with loop: false option', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a topping',
+      choices: [
+        { name: 'Ham', value: 'ham' },
+        new Separator(),
+        { name: 'Pepperoni', value: 'pepperoni' },
+        { name: 'Pineapple', value: 'pineapple' },
+      ],
+      loop: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping
+        1) Ham
+       ──────────────
+        2) Pepperoni
+        3) Pineapple"
+    `);
+
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping 3
+        1) Ham
+       ──────────────
+        2) Pepperoni
+        3) Pineapple"
+    `);
+
+    events.keypress('backspace');
+
+    events.keypress('up');
+    events.keypress('up');
+    events.keypress('up');
+    events.keypress('up');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping 1
+        1) Ham
+       ──────────────
+        2) Pepperoni
+        3) Pineapple"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a topping Ham"`);
+
+    await expect(answer).resolves.toEqual('ham');
+  });
+
   it('errors when no selected options', async () => {
     const abortController = new AbortController();
     const { answer, events, getScreen } = await render(
