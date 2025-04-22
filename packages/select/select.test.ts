@@ -821,6 +821,54 @@ describe('select prompt', () => {
       await expect(answer).resolves.toEqual(2);
       expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
     });
+
+    it('localized simple navigation', async () => {
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a letter',
+        choices: ['a', 'b'],
+        theme: { helpMode: 'always' },
+        instructions: {
+          navigation: 'Utilisez les flèches',
+          pager: 'Utilisez les flèches pour révéler plus de choix',
+        },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a letter (Utilisez les flèches)
+        ❯ a
+          b"
+      `);
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual('a');
+    });
+
+    it('localized paged navigation', async () => {
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        theme: { helpMode: 'always' },
+        instructions: {
+          navigation: 'Utilisez les flèches',
+          pager: 'Utilisez les flèches pour révéler plus de choix',
+        },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        ❯ 1
+          2
+          3
+          4
+          5
+          6
+          7
+        (Utilisez les flèches pour révéler plus de choix)"
+      `);
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(1);
+    });
   });
 
   it('Displays the element index', async () => {
