@@ -576,7 +576,7 @@ __metadata:
   dependencies:
     "@inquirer/core": "npm:^10.1.10"
     "@inquirer/figures": "npm:^1.0.11"
-    "@inquirer/prompts": "npm:^7.4.1"
+    "@inquirer/prompts": "npm:^7.5.0"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^22.14.0"
     tshy: "npm:^3.0.2"
@@ -705,7 +705,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/prompts@npm:^7.4.1, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
+"@inquirer/prompts@npm:^7.5.0, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
   version: 0.0.0-use.local
   resolution: "@inquirer/prompts@workspace:packages/prompts"
   dependencies:
@@ -717,9 +717,9 @@ __metadata:
     "@inquirer/input": "npm:^4.1.9"
     "@inquirer/number": "npm:^3.0.12"
     "@inquirer/password": "npm:^4.0.12"
-    "@inquirer/rawlist": "npm:^4.0.12"
+    "@inquirer/rawlist": "npm:^4.1.0"
     "@inquirer/search": "npm:^3.0.12"
-    "@inquirer/select": "npm:^4.1.1"
+    "@inquirer/select": "npm:^4.2.0"
     "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
@@ -731,7 +731,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/rawlist@npm:^4.0.12, @inquirer/rawlist@workspace:packages/rawlist":
+"@inquirer/rawlist@npm:^4.1.0, @inquirer/rawlist@workspace:packages/rawlist":
   version: 0.0.0-use.local
   resolution: "@inquirer/rawlist@workspace:packages/rawlist"
   dependencies:
@@ -798,7 +798,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/select@npm:^4.1.1, @inquirer/select@workspace:packages/select":
+"@inquirer/select@npm:^4.2.0, @inquirer/select@workspace:packages/select":
   version: 0.0.0-use.local
   resolution: "@inquirer/select@workspace:packages/select"
   dependencies:
@@ -4612,7 +4612,7 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.17.4"
     "@inquirer/core": "npm:^10.1.10"
-    "@inquirer/prompts": "npm:^7.4.1"
+    "@inquirer/prompts": "npm:^7.5.0"
     "@inquirer/type": "npm:^3.0.6"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"

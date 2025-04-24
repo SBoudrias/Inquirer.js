@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/select",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Inquirer select/list prompt",
   "keywords": [
     "answer",

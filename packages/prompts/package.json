@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/prompts",
-  "version": "7.4.1",
+  "version": "7.5.0",
   "description": "Inquirer prompts, combined in a single package",
   "keywords": [
     "answer",
@@ -83,9 +83,9 @@
     "@inquirer/input": "^4.1.9",
     "@inquirer/number": "^3.0.12",
     "@inquirer/password": "^4.0.12",
-    "@inquirer/rawlist": "^4.0.12",
+    "@inquirer/rawlist": "^4.1.0",
     "@inquirer/search": "^3.0.12",
-    "@inquirer/select": "^4.1.1"
+    "@inquirer/select": "^4.2.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.4",
