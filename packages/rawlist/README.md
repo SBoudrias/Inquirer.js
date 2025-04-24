@@ -77,11 +77,12 @@ const answer = await rawlist({
 
 ## Options
 
-| Property | Type                    | Required | Description                    |
-| -------- | ----------------------- | -------- | ------------------------------ |
-| message  | `string`                | yes      | The question to ask            |
-| choices  | `Choice[]`              | yes      | List of the available choices. |
-| theme    | [See Theming](#Theming) | no       | Customize look of the prompt.  |
+| Property | Type                    | Required | Description                                                                                                                       |
+| -------- | ----------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| message  | `string`                | yes      | The question to ask                                                                                                               |
+| choices  | `Choice[]`              | yes      | List of the available choices.                                                                                                    |
+| loop     | `boolean`               | no       | Defaults to `true`. When set to `false`, the cursor will be constrained to the top and bottom of the choice list without looping. |
+| theme    | [See Theming](#Theming) | no       | Customize look of the prompt.                                                                                                     |
 
 `Separator` objects can be used in the `choices` array to render non-selectable lines in the choice list. By default it'll render a line, but you can provide the text as argument (`new Separator('-- Dependencies --')`). This option is often used to add labels to groups within long list of options.
 
