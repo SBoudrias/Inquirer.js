@@ -73,6 +73,10 @@ type SelectConfig<
   pageSize?: number;
   loop?: boolean;
   default?: unknown;
+  instructions?: {
+    navigation: string;
+    pager: string;
+  };
   theme?: PartialDeep<Theme<SelectTheme>>;
 };
 
@@ -220,9 +224,11 @@ export default createPrompt(
       firstRender.current = false;
 
       if (items.length > pageSize) {
-        helpTipBottom = `\n${theme.style.help('(Use arrow keys to reveal more choices)')}`;
+        helpTipBottom = `\n${theme.style.help(`(${config.instructions?.pager ?? 'Use arrow keys to reveal more choices'})`)}`;
       } else {
-        helpTipTop = theme.style.help('(Use arrow keys)');
+        helpTipTop = theme.style.help(
+          `(${config.instructions?.navigation ?? 'Use arrow keys'})`,
+        );
       }
     }
 
