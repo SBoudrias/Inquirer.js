@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/prompts",
-  "version": "7.5.0",
+  "version": "7.5.1",
   "description": "Inquirer prompts, combined in a single package",
   "keywords": [
     "answer",
@@ -76,16 +76,16 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/checkbox": "^4.1.5",
-    "@inquirer/confirm": "^5.1.9",
-    "@inquirer/editor": "^4.2.10",
-    "@inquirer/expand": "^4.0.12",
-    "@inquirer/input": "^4.1.9",
-    "@inquirer/number": "^3.0.12",
-    "@inquirer/password": "^4.0.12",
-    "@inquirer/rawlist": "^4.1.0",
-    "@inquirer/search": "^3.0.12",
-    "@inquirer/select": "^4.2.0"
+    "@inquirer/checkbox": "^4.1.6",
+    "@inquirer/confirm": "^5.1.10",
+    "@inquirer/editor": "^4.2.11",
+    "@inquirer/expand": "^4.0.13",
+    "@inquirer/input": "^4.1.10",
+    "@inquirer/number": "^3.0.13",
+    "@inquirer/password": "^4.0.13",
+    "@inquirer/rawlist": "^4.1.1",
+    "@inquirer/search": "^3.0.13",
+    "@inquirer/select": "^4.2.1"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.4",

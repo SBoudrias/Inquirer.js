@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/rawlist",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Inquirer rawlist prompt",
   "keywords": [
     "answer",
@@ -74,7 +74,7 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.1.10",
+    "@inquirer/core": "^10.1.11",
     "@inquirer/type": "^3.0.6",
     "yoctocolors-cjs": "^2.1.2"
   },

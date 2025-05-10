@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/core",
-  "version": "10.1.10",
+  "version": "10.1.11",
   "description": "Core Inquirer prompt API",
   "keywords": [
     "answer",
