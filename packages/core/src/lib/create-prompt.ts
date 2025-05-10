@@ -76,6 +76,14 @@ export function createPrompt<Value, Config>(
       }),
     );
 
+    // SIGINT must be explicitly handled by the prompt so the ExitPromptError can be handled.
+    // Otherwise, the prompt will stop and in some scenarios never resolve.
+    // Ref issue #1741
+    const sigint = () =>
+      reject(new ExitPromptError(`User force closed the prompt with SIGINT`));
+    rl.on('SIGINT', sigint);
+    cleanups.add(() => rl.removeListener('SIGINT', sigint));
+
     // Re-renders only happen when the state change; but the readline cursor could change position
     // and that also requires a re-render (and a manual one because we mute the streams).
     // We set the listener after the initial workLoop to avoid a double render if render triggered
