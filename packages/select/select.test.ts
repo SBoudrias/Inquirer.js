@@ -893,4 +893,54 @@ describe('select prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual(1);
   });
+
+  it('displays multi-line choices correctly', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a recipe',
+      choices: [
+        {
+          name: 'Spaghetti Carbonara\n    Eggs, Pecorino Romano, Pancetta\n    30 minutes',
+          short: 'Spaghetti Carbonara',
+          value: 'carbonara',
+        },
+        {
+          name: 'Margherita Pizza\n    Tomatoes, Mozzarella, Basil\n    45 minutes',
+          short: 'Margherita Pizza',
+          value: 'pizza',
+        },
+        {
+          name: 'Caesar Salad\n    Romaine, Croutons, Parmesan\n    15 minutes',
+          short: 'Caesar Salad',
+          value: 'salad',
+        },
+      ],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a recipe (Use arrow keys)
+      ❯ Spaghetti Carbonara
+          Eggs, Pecorino Romano, Pancetta
+          30 minutes
+        Margherita Pizza
+          Tomatoes, Mozzarella, Basil
+          45 minutes
+        Caesar Salad"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a recipe
+          30 minutes
+      ❯ Margherita Pizza
+          Tomatoes, Mozzarella, Basil
+          45 minutes
+        Caesar Salad
+          Romaine, Croutons, Parmesan
+          15 minutes"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('pizza');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a recipe Margherita Pizza"`);
+  });
 });
