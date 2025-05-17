@@ -314,7 +314,8 @@ describe('search prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a country France
        ~ Europe ~
-      - France Cannot be selected during the Olympics"
+      - France Cannot be selected during the Olympics
+       ~ Americas ~"
     `);
 
     // This event will be ignored;
