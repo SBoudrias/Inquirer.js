@@ -313,9 +313,9 @@ describe('search prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a country France
+       ~ Americas ~
        ~ Europe ~
-      - France Cannot be selected during the Olympics
-       ~ Americas ~"
+      - France Cannot be selected during the Olympics"
     `);
 
     // This event will be ignored;
