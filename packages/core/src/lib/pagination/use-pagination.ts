@@ -14,44 +14,73 @@ import { breakLines } from '../utils.ts';
 function finite({
   active,
   pageSize,
-  total,
+  renderedItems,
 }: {
   active: number;
   pageSize: number;
-  total: number;
+  renderedItems: string[][];
 }): number {
   const middle = Math.floor(pageSize / 2);
-  if (total <= pageSize || active < middle) return active;
-  if (active >= total - middle) return active + pageSize - total;
-  return middle;
+  const renderedLength = renderedItems.reduce((acc, item) => acc + item.length, 0);
+  const defaultPointerPosition = renderedItems
+    .slice(0, active)
+    .reduce((acc, item) => acc + item.length, 0);
+
+  // If the whole rendered list fit within a single page, place the pointer where the item is rendered.
+  if (renderedLength <= pageSize) return defaultPointerPosition;
+
+  // If the active item is near the end of the list, progressively move the cursor towards the end.
+  if (active >= renderedItems.length - middle)
+    return defaultPointerPosition + pageSize - renderedItems.length;
+
+  return Math.min(defaultPointerPosition, middle);
 }
 
 /**
- * Creates the next position for the active item considering an infinitely
+ * Creates the next position for the pointer considering an infinitely
  * looping list of items to be rendered on the page.
  */
 function infinite({
   active,
   lastActive,
-  total,
+  renderedItems,
   pageSize,
-  pointer,
+  lastPointer,
 }: {
   active: number;
   lastActive: number | undefined;
-  total: number;
+  renderedItems: string[][];
   pageSize: number;
-  pointer: number;
+  lastPointer: number;
 }): number {
-  if (total <= pageSize) return active;
+  const middle = Math.floor(pageSize / 2);
+  const renderedLength = renderedItems.reduce((acc, item) => acc + item.length, 0);
+  const defaultPointerPosition = renderedItems
+    .slice(0, active)
+    .reduce((acc, item) => acc + item.length, 0);
 
-  // Move the position only when the user moves down, and when the
-  // navigation fits within a single page
-  if (lastActive != null && lastActive < active && active - lastActive < pageSize) {
-    // Limit it to the middle of the list
-    return Math.min(Math.floor(pageSize / 2), pointer + active - lastActive);
+  // If the whole rendered list fit within a single page, place the pointer where the item is rendered.
+  if (renderedLength <= pageSize) return defaultPointerPosition;
+
+  if (
+    // If we don't have a previous selection, skip this logic.
+    lastActive != null &&
+    // Only progressively move the pointer down if the user is moving down.
+    lastActive < active &&
+    active - lastActive < pageSize
+  ) {
+    return Math.min(
+      // Furthest allowed position for the pointer is the middle of the list
+      middle,
+      Math.abs(active - lastActive) === 1
+        ? // If the user moved by one item, move the pointer down by the size of this previous item.
+          defaultPointerPosition
+        : // Otherwise, move the pointer down by the difference between the active and last active item.
+          lastPointer + active - lastActive,
+    );
   }
-  return pointer;
+
+  return lastPointer;
 }
 
 export function usePagination<T>({
@@ -79,33 +108,33 @@ export function usePagination<T>({
   theme?: Theme;
 }): string {
   const width = readlineWidth();
-  const state = useRef<{ pointer: number; lastActive: number | undefined }>({
-    pointer: active,
+  const state = useRef<{ lastPointer: number; lastActive: number | undefined }>({
+    lastPointer: active,
     lastActive: undefined,
   });
 
   const bound = (num: number) => ((num % items.length) + items.length) % items.length;
 
-  const renderItemAtIndex = (index: number): string[] => {
-    const item = items[index];
+  const renderedItems: string[][] = items.map((item, index) => {
     if (item == null) return [];
     return breakLines(
       renderItem({ item, index, isActive: index === active }),
       width,
     ).split('\n');
-  };
+  });
+  const renderItemAtIndex = (index: number): string[] => renderedItems[index] ?? [];
 
   const pointer = loop
     ? infinite({
         active,
         lastActive: state.current.lastActive,
-        total: items.length,
+        lastPointer: state.current.lastPointer,
+        renderedItems,
         pageSize,
-        pointer: state.current.pointer,
       })
     : finite({
         active,
-        total: items.length,
+        renderedItems,
         pageSize,
       });
 
@@ -164,7 +193,7 @@ export function usePagination<T>({
   }
 
   // Save state for the next render
-  state.current.pointer = pointer;
+  state.current.lastPointer = pointer;
   state.current.lastActive = active;
 
   return pageBuffer.filter((line) => typeof line === 'string').join('\n');

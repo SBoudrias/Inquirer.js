@@ -339,7 +339,7 @@ describe('select prompt', () => {
     const { answer, events, getScreen } = await render(select, {
       message: 'Select a number',
       choices: numberedChoices,
-      pageSize: 2,
+      pageSize: 5,
       loop: false,
     });
 
@@ -347,15 +347,148 @@ describe('select prompt', () => {
       "? Select a number
       ❯ 1
         2
+        3
+        4
+        5
       (Use arrow keys to reveal more choices)"
     `);
 
-    numberedChoices.forEach(() => events.keypress('down'));
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
+        7
+        8
+      ❯ 9
+        10
+        11"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        8
+        9
+      ❯ 10
+        11
+        12"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        8
+        9
+        10
+      ❯ 11
+        12"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        8
+        9
+        10
         11
       ❯ 12"
+    `);
+
+    events.keypress('down');
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        8
+        9
+        10
+        11
+      ❯ 12"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(numberedChoices.length);
+  });
+
+  it('does not scroll down beyond last item when not looping with separators', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a number',
+      choices: [new Separator(), ...numberedChoices, new Separator()],
+      pageSize: 5,
+      loop: false,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+       ──────────────
+      ❯ 1
+        2
+        3
+        4
+      (Use arrow keys to reveal more choices)"
+    `);
+
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        7
+        8
+      ❯ 9
+        10
+        11"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        8
+        9
+      ❯ 10
+        11
+        12"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        9
+        10
+      ❯ 11
+        12
+       ──────────────"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        9
+        10
+        11
+      ❯ 12
+       ──────────────"
+    `);
+
+    events.keypress('down');
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        9
+        10
+        11
+      ❯ 12
+       ──────────────"
     `);
 
     events.keypress('enter');
