@@ -1160,7 +1160,7 @@ describe('select prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a recipe Spaghetti Carbonara"`);
   });
 
-  it('displays multi-line choices with pageSize & no loop correctly', async () => {
+  it('displays multi-line choices when fitting within the pageSize & no loop correctly', async () => {
     const { answer, events, getScreen } = await render(select, {
       message: 'Select a recipe',
       choices: [
@@ -1242,5 +1242,92 @@ describe('select prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual('salad');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a recipe Caesar Salad"`);
+  });
+
+  it('displays multi-line choices with a smaller pageSize', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a recipe',
+      choices: [
+        {
+          name: 'Spaghetti Carbonara\n    Eggs, Pecorino Romano, Pancetta\n    30 minutes',
+          short: 'Spaghetti Carbonara',
+          value: 'carbonara',
+        },
+        {
+          name: 'Margherita Pizza\n    Tomatoes, Mozzarella, Basil\n    45 minutes',
+          short: 'Margherita Pizza',
+          value: 'pizza',
+        },
+        {
+          name: 'Caesar Salad\n    Romaine, Croutons, Parmesan\n    15 minutes',
+          short: 'Caesar Salad',
+          value: 'salad',
+        },
+      ],
+      pageSize: 7,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a recipe (Use arrow keys)
+      ❯ Spaghetti Carbonara
+          Eggs, Pecorino Romano, Pancetta
+          30 minutes
+        Margherita Pizza
+          Tomatoes, Mozzarella, Basil
+          45 minutes
+        Caesar Salad"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a recipe
+        Spaghetti Carbonara
+          Eggs, Pecorino Romano, Pancetta
+          30 minutes
+      ❯ Margherita Pizza
+          Tomatoes, Mozzarella, Basil
+          45 minutes
+        Caesar Salad"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a recipe
+          30 minutes
+        Margherita Pizza
+          Tomatoes, Mozzarella, Basil
+          45 minutes
+      ❯ Caesar Salad
+          Romaine, Croutons, Parmesan
+          15 minutes"
+    `);
+
+    events.keypress('up');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a recipe
+        Spaghetti Carbonara
+          Eggs, Pecorino Romano, Pancetta
+          30 minutes
+      ❯ Margherita Pizza
+          Tomatoes, Mozzarella, Basil
+          45 minutes
+        Caesar Salad"
+    `);
+
+    events.keypress('up');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a recipe
+      ❯ Spaghetti Carbonara
+          Eggs, Pecorino Romano, Pancetta
+          30 minutes
+        Margherita Pizza
+          Tomatoes, Mozzarella, Basil
+          45 minutes
+        Caesar Salad"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('carbonara');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a recipe Spaghetti Carbonara"`);
   });
 });
