@@ -372,7 +372,7 @@ Find out more: [@inquirer-cli](https://github.com/fishballapp/inquirer-cli).
 
 # Community prompts
 
-If you created a cool prompt, [send us a PR adding it](https://github.com/SBoudrias/Inquirer.js/edit/main/README.md) to the list below!
+If you created a cool prompt, [send us a PR adding it](https://github.com/SBoudrias/Inquirer.js/edit/main/packages/prompts/README.md) to the list below!
 
 [**Interactive List Prompt**](https://github.com/pgibler/inquirer-interactive-list-prompt)<br/>
 Select a choice either with arrow keys + Enter or by pressing a key associated with a choice.
@@ -459,6 +459,29 @@ A file selector, you can navigate freely between directories, choose what type o
 Use ↑↓ to navigate through the list
 Press <esc> to navigate to the parent directory
 Press <enter> to select a file or navigate to a directory
+```
+
+[**Select Prompt with Stateful Banner**](https://github.com/patik/inquirer-select-with-state)<br/>
+The same as built-in select prompt, but it also displays a banner above the prompt which can be updated with a `setState` function. For example, it can display the results of a long-running command without making the user wait to see the prompt.
+
+Initial display:
+
+```
+Directory size: loading...
+? Choose an option
+❯ Rename
+  Copy
+  Delete
+```
+
+A moment later:
+
+```
+Directory size: 123M
+? Choose an option
+❯ Rename
+  Copy
+  Delete
 ```
 
 # License
