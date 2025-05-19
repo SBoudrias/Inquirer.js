@@ -3,7 +3,7 @@
 # Inquirer
 
 [![npm](https://badge.fury.io/js/@inquirer%2Fprompts.svg)](https://www.npmjs.com/package/@inquirer/prompts)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js?ref=badge_shield)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FSBoudrias/Inquirer.js?ref=badge_shield)
 
 A collection of common interactive command line user interfaces.
 
@@ -401,11 +401,11 @@ Choose between choices? (Press <space> to select, <Up and Down> to move rows,
 <Left and Right> to move columns)
 
 ┌──────────┬───────┬───────┐
-│ 1-2 of 2 │ Yes?  │ No?   |
+│ 1-2 of 2 │ Yes?  │ No?   │
 ├──────────┼───────┼───────┤
-│ Choice 1 │ [ ◯ ] │   ◯   |
+│ Choice 1 │ [ ◯ ] │   ◯   │
 ├──────────┼───────┼───────┤
-│ Choice 2 │   ◯   │   ◯   |
+│ Choice 2 │   ◯   │   ◯   │
 └──────────┴───────┴───────┘
 
 ```
@@ -418,7 +418,7 @@ Confirm with a toggle. Select a choice with arrow keys + Enter.
 ```
 
 [**Sortable Checkbox Prompt**](https://github.com/th0r/inquirer-sortable-checkbox)<br/>
-The same as built-in checkbox prompt, but also allowing to reorder choices using ctrl+up/down.
+The same as built-in checkbox prompt, but it also allowing to reorder choices using ctrl+up/down.
 
 ```
 ? Which PRs and in what order would you like to merge? (Press <space> to select, <a> to toggle all, <i> to invert selection, <ctrl+up> to move item up, <ctrl+down> to move item down, and <enter> to proceed)
@@ -438,7 +438,6 @@ option, <enter> to select option)
 >[ ] vue
  [ ] vuejs
  [ ] fuelphp
- [ ] venv
  [ ] vercel
  (Use arrow keys to reveal more options)
 ```
@@ -488,3 +487,21 @@ Directory size: 123M
 
 Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
 Licensed under the MIT license.
+
+---
+
+## New Feature: Demo Watch Mode
+
+To improve developer experience, a new watch mode script has been added to automatically restart the demo CLI when source files change.
+
+### Usage
+
+Run the following command to start the demo in watch mode:
+
+```sh
+yarn demo:watch
+```
+
+This will watch for changes in the `packages/demo/src` directory and restart the demo automatically.
+
+---

@@ -122,7 +122,7 @@ describe('checkbox prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
     expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
-  });
+  }, 1000);
 
   it('does not scroll up beyond first selectable item when not looping', async () => {
     const { answer, events, getScreen } = await render(checkbox, {

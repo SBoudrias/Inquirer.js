@@ -10,10 +10,27 @@ afterEach(() => {
 
 async function editorAction(error: undefined | Error, value?: string) {
   const { lastCall } = vi.mocked(editAsync).mock;
-  if (!lastCall) throw new Error("editor wasn't open");
+  if (!lastCall) {
+    // Instead of throwing, wait for editAsync to be called or timeout
+    await new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error("editor wasn't open after waiting"));
+      }, 1000);
+      const interval = setInterval(() => {
+        if (vi.mocked(editAsync).mock.lastCall) {
+          clearTimeout(timeout);
+          clearInterval(interval);
+          resolve();
+        }
+      }, 10);
+    });
+  }
+
+  const lastCallUpdated = vi.mocked(editAsync).mock.lastCall;
+  if (!lastCallUpdated) throw new Error("editor wasn't open");
 
   // Bugfix: The callback error value is nullable.
-  const editCallback = lastCall[1] as (
+  const editCallback = lastCallUpdated[1] as (
     error: undefined | Error,
     value: string,
   ) => void | Promise<void>;

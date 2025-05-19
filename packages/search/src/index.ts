@@ -230,7 +230,6 @@ export default createPrompt(
           : `\n${theme.style.help('(Use arrow keys)')}`;
     }
 
-    // TODO: What to do if no results are found? Should we display a message?
     const page = usePagination({
       items: searchResults,
       active,

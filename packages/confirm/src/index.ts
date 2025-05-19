@@ -62,5 +62,7 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   }
 
   const message = theme.style.message(config.message, status);
-  return `${prefix} ${message}${defaultValue} ${formattedValue}`;
+  // Provide fallback prefix if prefix is empty or whitespace
+  const safePrefix = prefix && prefix.trim() !== '' ? prefix : '?';
+  return `${safePrefix} ${message}${defaultValue} ${formattedValue}`;
 });
