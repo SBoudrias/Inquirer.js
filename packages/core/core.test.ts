@@ -1,5 +1,5 @@
 import { AsyncResource } from 'node:async_hooks';
-import { Stream } from 'node:stream';
+import { EventEmitter, Stream } from 'node:stream';
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import { stripVTControlCharacters } from 'node:util';
@@ -230,6 +230,40 @@ describe('createPrompt()', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('up');
+  });
+
+  it('useState: set state is always bound to the async context', async () => {
+    const eventEmitter = new EventEmitter();
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      const [value, setValue] = useState('default');
+
+      useEffect(() => {
+        const listener = () => {
+          setValue('updated');
+        };
+
+        eventEmitter.addListener('update', listener);
+        return () => {
+          eventEmitter.removeListener('update', listener);
+        };
+      }, []);
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(value);
+        }
+      });
+
+      return `${config.message} ${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+
+    eventEmitter.emit('update');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual('updated');
   });
 
   it('useKeypress: only re-render once on state changes', async () => {
