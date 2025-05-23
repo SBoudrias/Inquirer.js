@@ -1,4 +1,3 @@
-import { AsyncResource } from 'node:async_hooks';
 import { EventEmitter, Stream } from 'node:stream';
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
@@ -419,12 +418,9 @@ describe('createPrompt()', () => {
       totalDuration = interval * theme.spinner.frames.length;
 
       useEffect(() => {
-        setTimeout(
-          AsyncResource.bind(() => {
-            setStatus('done');
-          }),
-          totalDuration,
-        );
+        setTimeout(() => {
+          setStatus('done');
+        }, totalDuration);
       }, []);
 
       useKeypress((event: KeypressEvent) => {
