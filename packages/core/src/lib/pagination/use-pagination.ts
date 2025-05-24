@@ -27,12 +27,19 @@ function finite({
     .reduce((acc, item) => acc + item.length, 0);
 
   // If the whole rendered list fit within a single page, place the pointer where the item is rendered.
-  if (renderedLength <= pageSize) return defaultPointerPosition;
+  if (renderedLength <= pageSize) {
+    return defaultPointerPosition;
+  }
 
   // If the active item is near the end of the list, progressively move the cursor towards the end.
-  if (active >= renderedItems.length - middle)
-    return defaultPointerPosition + pageSize - renderedItems.length;
+  const spaceUnderActive = renderedItems
+    .slice(active)
+    .reduce((acc, item) => acc + item.length, 0);
+  if (spaceUnderActive < pageSize - middle) {
+    return pageSize - spaceUnderActive;
+  }
 
+  // Otherwise, progressively move the pointer to the middle of the list.
   return Math.min(defaultPointerPosition, middle);
 }
 
@@ -73,8 +80,9 @@ function infinite({
       // Furthest allowed position for the pointer is the middle of the list
       middle,
       Math.abs(active - lastActive) === 1
-        ? // If the user moved by one item, move the pointer down by the size of this previous item.
-          defaultPointerPosition
+        ? // If the user moved by one item, move the pointer to the natural position of the active item as
+          // long as it doesn't move the cursor up.
+          Math.max(defaultPointerPosition, lastPointer)
         : // Otherwise, move the pointer down by the difference between the active and last active item.
           lastPointer + active - lastActive,
     );
@@ -122,6 +130,7 @@ export function usePagination<T>({
       width,
     ).split('\n');
   });
+  const renderedLength = renderedItems.reduce((acc, item) => acc + item.length, 0);
   const renderItemAtIndex = (index: number): string[] => renderedItems[index] ?? [];
 
   const pointer = loop
@@ -158,7 +167,7 @@ export function usePagination<T>({
   while (
     bufferPointer < pageSize &&
     !itemVisited.has(itemPointer) &&
-    (loop && items.length > pageSize ? itemPointer !== active : itemPointer > active)
+    (loop && renderedLength > pageSize ? itemPointer !== active : itemPointer > active)
   ) {
     const lines = renderItemAtIndex(itemPointer);
     const linesToAdd = lines.slice(0, pageSize - bufferPointer);
@@ -176,7 +185,7 @@ export function usePagination<T>({
   while (
     bufferPointer >= 0 &&
     !itemVisited.has(itemPointer) &&
-    (loop && items.length > pageSize ? itemPointer !== active : itemPointer < active)
+    (loop && renderedLength > pageSize ? itemPointer !== active : itemPointer < active)
   ) {
     const lines = renderItemAtIndex(itemPointer);
     const linesToAdd = lines.slice(Math.max(0, lines.length - bufferPointer - 1));
