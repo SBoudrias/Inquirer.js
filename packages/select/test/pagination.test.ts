@@ -576,6 +576,57 @@ describe('select() prompt pagination', () => {
         await expect(answer).resolves.toEqual(2);
       });
     });
+
+    it('single line choices, going up a while and down', async () => {
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        pageSize: 7,
+        loop: true,
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+          "? Select a number
+          ❯ 1
+            2
+            3
+            4
+            5
+            6
+            7
+          (Use arrow keys to reveal more choices)"
+        `);
+
+      events.keypress('up');
+      events.keypress('up');
+      events.keypress('up');
+      events.keypress('up');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        ❯ 9
+          10
+          11
+          12
+          1
+          2
+          3"
+      `);
+
+      events.keypress('down');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+          9
+        ❯ 10
+          11
+          12
+          1
+          2
+          3"
+      `);
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(10);
+    });
   });
 
   describe('loop: false', () => {

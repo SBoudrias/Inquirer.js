@@ -52,9 +52,13 @@ function usePointerPosition({
           // Furthest allowed position for the pointer is the middle of the list
           middle,
           Math.abs(active - lastActive) === 1
-            ? // If the user moved by one item, move the pointer to the natural position of the active item as
-              // long as it doesn't move the cursor up.
-              Math.max(defaultPointerPosition, lastPointer)
+            ? Math.min(
+                // Move the pointer at most the height of the last active item.
+                lastPointer + (renderedItems[lastActive]?.length ?? 0),
+                // If the user moved by one item, move the pointer to the natural position of the active item as
+                // long as it doesn't move the cursor up.
+                Math.max(defaultPointerPosition, lastPointer),
+              )
             : // Otherwise, move the pointer down by the difference between the active and last active item.
               lastPointer + active - lastActive,
         );
