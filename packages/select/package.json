@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/select",
-  "version": "4.2.2",
+  "version": "4.2.3",
   "description": "Inquirer select/list prompt",
   "keywords": [
     "answer",
@@ -74,7 +74,7 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.1.12",
+    "@inquirer/core": "^10.1.13",
     "@inquirer/figures": "^1.0.12",
     "@inquirer/type": "^3.0.7",
     "ansi-escapes": "^4.3.2",

@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/search",
-  "version": "3.0.14",
+  "version": "3.0.15",
   "description": "Inquirer search prompt",
   "keywords": [
     "answer",
@@ -74,7 +74,7 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.1.12",
+    "@inquirer/core": "^10.1.13",
     "@inquirer/figures": "^1.0.12",
     "@inquirer/type": "^3.0.7",
     "yoctocolors-cjs": "^2.1.2"
