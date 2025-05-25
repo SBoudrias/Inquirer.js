@@ -313,6 +313,7 @@ describe('search prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a country France
+       ~ Americas ~
        ~ Europe ~
       - France Cannot be selected during the Olympics"
     `);
