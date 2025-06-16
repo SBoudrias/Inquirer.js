@@ -85,7 +85,7 @@
     "@arethetypeswrong/cli": "^0.18.1",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
-    "@types/node": "^22.14.0",
+    "@types/node": "^24.0.1",
     "tshy": "^3.0.2"
   },
   "engines": {
