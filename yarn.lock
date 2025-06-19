@@ -4567,7 +4567,7 @@ __metadata:
     "@types/mute-stream": "npm:^0.0.4"
     ansi-escapes: "npm:^4.3.2"
     mute-stream: "npm:^2.0.0"
-    run-async: "npm:^3.0.0"
+    run-async: "npm:^4.0.4"
     rxjs: "npm:^7.8.2"
     tshy: "npm:^3.0.2"
   peerDependencies:
@@ -7136,10 +7136,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"run-async@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "run-async@npm:3.0.0"
-  checksum: 10/97fb8747f7765b77ebcd311d3a33548099336f04c6434e0763039b98c1de0f1b4421000695aff8751f309c0b995d8dfd620c1f1e4c35572da38c101488165305
+"run-async@npm:^4.0.4":
+  version: 4.0.4
+  resolution: "run-async@npm:4.0.4"
+  dependencies:
+    oxlint: "npm:^1.2.0"
+    prettier: "npm:^3.5.3"
+  checksum: 10/23b1b3cd17c76d50360ed31a78cb388cadb7b1e7efdec813b6512cfac396e4bb00dba8d0cf28663fe52f27bedb1872f925c2142c6a18b6870e33aed99f66536f
   languageName: node
   linkType: hard
 

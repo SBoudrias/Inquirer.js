@@ -79,7 +79,7 @@
     "@inquirer/type": "^3.0.7",
     "ansi-escapes": "^4.3.2",
     "mute-stream": "^2.0.0",
-    "run-async": "^3.0.0",
+    "run-async": "^4.0.4",
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
