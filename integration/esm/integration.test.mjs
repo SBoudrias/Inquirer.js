@@ -1,4 +1,3 @@
-/* eslint-disable n/no-unsupported-features/node-builtins */
 import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
