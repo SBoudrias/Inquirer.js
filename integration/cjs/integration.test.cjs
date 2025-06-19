@@ -1,4 +1,3 @@
-/* eslint-disable n/no-unsupported-features/node-builtins */
 const { describe, it } = require('node:test');
 const assert = require('node:assert');
 const { input } = require('@inquirer/prompts');

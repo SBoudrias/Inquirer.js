@@ -91,7 +91,12 @@ export default tseslint.config(
     },
   },
   {
-    files: ['tools/**'],
+    files: [
+      'tools/**',
+      'integration/**',
+      'packages/inquirer/examples/**',
+      'packages/demo/**',
+    ],
     rules: {
       'n/no-unsupported-features/node-builtins': [
         'error',

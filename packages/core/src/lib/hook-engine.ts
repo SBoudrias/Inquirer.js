@@ -6,7 +6,7 @@ import { HookError, ValidationError } from './errors.ts';
 
 type HookStore = {
   rl: InquirerReadline;
-  hooks: any[];
+  hooks: unknown[];
   hooksCleanup: Array<void | (() => void)>;
   hooksEffect: Array<() => void>;
   index: number;
@@ -63,10 +63,10 @@ export function readline(): InquirerReadline {
 }
 
 // Merge state updates happening within the callback function to avoid multiple renders.
-export function withUpdates<R, T extends (...args: any[]) => R>(
-  fn: T,
-): (...args: Parameters<T>) => R {
-  const wrapped = (...args: Parameters<T>): R => {
+export function withUpdates<Args extends unknown[], R>(
+  fn: (...args: Args) => R,
+): (...args: Args) => R {
+  const wrapped = (...args: Args): R => {
     const store = getStore();
     let shouldUpdate = false as boolean;
     const oldHandleChange = store.handleChange;
@@ -105,10 +105,10 @@ export function withPointer<Value, ReturnValue>(
 
   const { index } = store;
   const pointer: Pointer<Value> = {
-    get(): any {
-      return store.hooks[index];
+    get(): Value {
+      return store.hooks[index] as Value;
     },
-    set(value: unknown) {
+    set(value: Value) {
       store.hooks[index] = value;
     },
     initialized: index in store.hooks,
