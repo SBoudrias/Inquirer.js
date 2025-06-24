@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
 import input from './src/index.ts';
 
-describe.only('input prompt', () => {
+describe('input prompt', () => {
   it('handle simple use case', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
