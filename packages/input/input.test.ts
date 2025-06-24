@@ -183,11 +183,11 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mikey"`);
   });
 
-  it('handle editing the default option when prefill is set to \'tab\'', async () => {
+  it("handle editing the default option when prefill is set to 'tab'", async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
       default: 'Mike',
-      prefill: 'tab'
+      prefill: 'tab',
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`"? What is your name (Mike)"`);
@@ -201,7 +201,7 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mikey"`);
   });
 
-  it('handle default option as initial value when prefill is set to \'editable\'', async () => {
+  it("handle default option as initial value when prefill is set to 'editable'", async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
       default: 'Mike',
@@ -219,7 +219,7 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mikey"`);
   });
 
-  it('show normal behaviour when prefill is \'editable\' and no default value is provided', async () => {
+  it("show normal behaviour when prefill is 'editable' and no default value is provided", async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
       prefill: 'editable',
@@ -236,7 +236,7 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mikey"`);
   });
 
-  it('show normal behaviour when prefill is \'tab\' and no default value is provided', async () => {
+  it("show normal behaviour when prefill is 'tab' and no default value is provided", async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
       prefill: 'tab',
