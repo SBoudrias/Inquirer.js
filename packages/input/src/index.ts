@@ -2,6 +2,7 @@ import {
   createPrompt,
   useState,
   useKeypress,
+  useEffect,
   usePrefix,
   isEnterKey,
   isBackspaceKey,
@@ -22,6 +23,7 @@ const inputTheme: InputTheme = {
 type InputConfig = {
   message: string;
   default?: string;
+  prefill?: 'tab' | 'editable';
   required?: boolean;
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
@@ -29,7 +31,7 @@ type InputConfig = {
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {
-  const { required, validate = () => true } = config;
+  const { required, validate = () => true, prefill = 'tab' } = config;
   const theme = makeTheme<InputTheme>(inputTheme, config.theme);
   const [status, setStatus] = useState<Status>('idle');
   const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
@@ -77,6 +79,14 @@ export default createPrompt<string, InputConfig>((config, done) => {
       setError(undefined);
     }
   });
+
+  // If prefill is set to 'editable' cut out the default value and paste into current state and the user's cli buffer
+  // They can edit the value immediately instead of needing to press 'tab'
+  useEffect((rl) => {
+    if (prefill !== 'editable' || !defaultValue) return;
+    rl.write(defaultValue);
+    setValue(defaultValue);
+  }, []);
 
   const message = theme.style.message(config.message, status);
   let formattedValue = value;

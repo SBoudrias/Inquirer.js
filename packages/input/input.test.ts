@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
 import input from './src/index.ts';
 
-describe('input prompt', () => {
+describe.only('input prompt', () => {
   it('handle simple use case', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
@@ -166,7 +166,7 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name"`);
   });
 
-  it('handle editing the default option', async () => {
+  it('handle editing the default option when prefill is omitted (BWC)', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
       default: 'Mike',
@@ -178,6 +178,76 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike"`);
 
     events.type('y');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('Mikey');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mikey"`);
+  });
+
+  it('handle editing the default option when prefill is set to \'tab\'', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'What is your name',
+      default: 'Mike',
+      prefill: 'tab'
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name (Mike)"`);
+
+    events.keypress('tab');
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike"`);
+
+    events.type('y');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('Mikey');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mikey"`);
+  });
+
+  it('handle default option as initial value when prefill is set to \'editable\'', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'What is your name',
+      default: 'Mike',
+      prefill: 'editable',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike"`);
+
+    events.keypress('tab'); // Does nothing when prefill = 'editable'
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike"`);
+
+    events.type('y');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('Mikey');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mikey"`);
+  });
+
+  it('show normal behaviour when prefill is \'editable\' and no default value is provided', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'What is your name',
+      prefill: 'editable',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name"`);
+
+    events.keypress('tab'); // Does nothing when prefill = 'editable' or no default value
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name"`);
+
+    events.type('Mikey');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('Mikey');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mikey"`);
+  });
+
+  it('show normal behaviour when prefill is \'tab\' and no default value is provided', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'What is your name',
+      prefill: 'tab',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name"`);
+
+    events.keypress('tab'); // Does nothing when prefill = 'editable' or no default value
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name"`);
+
+    events.type('Mikey');
     events.keypress('enter');
     await expect(answer).resolves.toEqual('Mikey');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mikey"`);
