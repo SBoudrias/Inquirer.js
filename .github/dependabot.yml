@@ -21,9 +21,17 @@ updates:
           - 'eslint'
           - '@eslint/*'
           - 'eslint-*'
+          - 'oxlint'
           - 'typescript-eslint'
           - 'globals'
           - 'prettier'
+          - '@arethetypeswrong/cli'
+          - '@types/node'
+      build:
+        patterns:
+          - 'lerna'
+          - 'turbo'
+          - 'typescript'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
