@@ -83,9 +83,10 @@ export default createPrompt<string, InputConfig>((config, done) => {
   // If prefill is set to 'editable' cut out the default value and paste into current state and the user's cli buffer
   // They can edit the value immediately instead of needing to press 'tab'
   useEffect((rl) => {
-    if (prefill !== 'editable' || !defaultValue) return;
-    rl.write(defaultValue);
-    setValue(defaultValue);
+    if (prefill === 'editable' && defaultValue) {
+      rl.write(defaultValue);
+      setValue(defaultValue);
+    }
   }, []);
 
   const message = theme.style.message(config.message, status);
