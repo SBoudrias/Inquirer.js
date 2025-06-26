@@ -166,7 +166,7 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name"`);
   });
 
-  it('handle editing the default option when prefill is omitted (BWC)', async () => {
+  it('handle editing the default option when prefill is omitted (backwards compatible)', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
       default: 'Mike',
