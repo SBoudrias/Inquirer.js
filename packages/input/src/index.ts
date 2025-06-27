@@ -28,6 +28,7 @@ type InputConfig = {
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme<InputTheme>>;
+  multiline?: boolean;
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {
@@ -46,8 +47,8 @@ export default createPrompt<string, InputConfig>((config, done) => {
       return;
     }
 
-    if (isEnterKey(key)) {
-      const answer = value || defaultValue;
+    if (isEnterKey(key) && !key.shift) {
+      const answer = value.replaceAll('\r', '\n') || defaultValue;
       setStatus('loading');
 
       const isValid =
@@ -67,6 +68,9 @@ export default createPrompt<string, InputConfig>((config, done) => {
         setError(isValid || 'You must provide a valid value');
         setStatus('idle');
       }
+    } else if (isEnterKey(key) && key.shift && config.multiline) {
+      setValue(value + '\r');
+      rl.write('\r');
     } else if (isBackspaceKey(key) && !value) {
       setDefaultValue(undefined);
     } else if (key.name === 'tab' && !value) {
@@ -90,7 +94,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
   }, []);
 
   const message = theme.style.message(config.message, status);
-  let formattedValue = value;
+  let formattedValue = value.replaceAll('\r', '\n');
   if (typeof config.transformer === 'function') {
     formattedValue = config.transformer(value, { isFinal: status === 'done' });
   } else if (status === 'done') {
