@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/expand",
-  "version": "4.0.15",
+  "version": "4.0.16",
   "description": "Inquirer checkbox prompt",
   "keywords": [
     "answer",
@@ -74,13 +74,13 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.1.13",
+    "@inquirer/core": "^10.1.14",
     "@inquirer/type": "^3.0.7",
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.1",
-    "@inquirer/testing": "^2.1.47",
+    "@inquirer/testing": "^2.1.48",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },
