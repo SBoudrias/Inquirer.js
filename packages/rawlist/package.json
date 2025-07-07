@@ -79,7 +79,7 @@
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.1",
+    "@arethetypeswrong/cli": "^0.18.2",
     "@inquirer/testing": "^2.1.48",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"

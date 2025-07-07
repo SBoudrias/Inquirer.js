@@ -82,10 +82,10 @@
     "mute-stream": "^2.0.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.1",
+    "@arethetypeswrong/cli": "^0.18.2",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
-    "@types/node": "^24.0.1",
+    "@types/node": "^24.0.15",
     "tshy": "^3.0.2"
   },
   "engines": {

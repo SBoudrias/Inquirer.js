@@ -673,33 +673,30 @@ describe('Error handling', () => {
   });
 
   it('surface errors in render functions', async () => {
-    const Prompt = () => {
+    const prompt = createPrompt(() => {
       throw new Error('Error in render function');
-    };
-
-    const prompt = createPrompt(Prompt);
+    });
     const { answer } = await render(prompt, { message: 'Question' });
 
     await expect(answer).rejects.toThrowError('Error in render function');
   });
 
   it('surface errors in useEffect', async () => {
-    const Prompt = () => {
+    const prompt = createPrompt(() => {
       useEffect(() => {
         throw new Error('Error in useEffect');
       }, []);
 
       return '';
-    };
+    });
 
-    const prompt = createPrompt(Prompt);
     const { answer } = await render(prompt, { message: 'Question' });
 
     await expect(answer).rejects.toThrowError('Error in useEffect');
   });
 
   it('surface errors in useEffect cleanup functions', async () => {
-    const Prompt = (_config: object, done: (value: string) => void) => {
+    const prompt = createPrompt((_config: object, done: (value: string) => void) => {
       useEffect(() => {
         done('done');
 
@@ -709,16 +706,15 @@ describe('Error handling', () => {
       }, []);
 
       return '';
-    };
+    });
 
-    const prompt = createPrompt(Prompt);
     const { answer } = await render(prompt, { message: 'Question' });
 
     await expect(answer).rejects.toThrowError('Error in useEffect cleanup');
   });
 
   it('prevent returning promises from useEffect hook', async () => {
-    const Prompt = (_config: object, done: (value: string) => void) => {
+    const prompt = createPrompt((_config: object, done: (value: string) => void) => {
       // @ts-expect-error: Testing an invalid behavior.
       // eslint-disable-next-line @typescript-eslint/require-await
       useEffect(async () => {
@@ -726,9 +722,8 @@ describe('Error handling', () => {
       }, []);
 
       return '';
-    };
+    });
 
-    const prompt = createPrompt(Prompt);
     const { answer } = await render(prompt, { message: 'Question' });
 
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
