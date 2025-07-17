@@ -231,7 +231,7 @@ export default createPrompt(
         );
       }
     }
-
+    let visibleIndex = 0;
     const page = usePagination({
       items,
       active,
@@ -240,7 +240,7 @@ export default createPrompt(
           return ` ${item.separator}`;
         }
 
-        const indexLabel = theme.indexMode === 'number' ? `${index + 1}. ` : '';
+        const indexLabel = theme.indexMode === 'number' ? `${++visibleIndex}. ` : '';
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
