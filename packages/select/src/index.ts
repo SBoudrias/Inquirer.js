@@ -141,16 +141,12 @@ export default createPrompt(
       return { first, last };
     }, [items]);
 
-    const defaultItemIndex = useMemo(() => {
-      if (!('default' in config)) return -1;
-      return items.findIndex(
-        (item) => isSelectable(item) && item.value === config.default,
-      );
-    }, [config.default, items]);
-
-    const [active, setActive] = useState(
-      defaultItemIndex === -1 ? bounds.first : defaultItemIndex,
-    );
+    const [active, setActive] = useState(() => {
+      const index = 'default' in config
+        ? items.findIndex((item) => isSelectable(item) && item.value === config.default)
+        : -1;
+      return index !== -1 ? index : bounds.first;
+    });
 
     // Safe to assume the cursor position always point to a Choice.
     const selectedChoice = items[active] as NormalizedChoice<Value>;
@@ -231,7 +227,7 @@ export default createPrompt(
         );
       }
     }
-    let visibleIndex = 0;
+
     const page = usePagination({
       items,
       active,
@@ -240,7 +236,7 @@ export default createPrompt(
           return ` ${item.separator}`;
         }
 
-        const indexLabel = theme.indexMode === 'number' ? `${++visibleIndex}. ` : '';
+        const indexLabel = theme.indexMode === 'number' ? `${index + 1}. ` : '';
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
