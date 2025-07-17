@@ -142,9 +142,10 @@ export default createPrompt(
     }, [items]);
 
     const [active, setActive] = useState(() => {
-      const index = 'default' in config
-        ? items.findIndex((item) => isSelectable(item) && item.value === config.default)
-        : -1;
+      const index =
+        'default' in config
+          ? items.findIndex((item) => isSelectable(item) && item.value === config.default)
+          : -1;
       return index !== -1 ? index : bounds.first;
     });
 
