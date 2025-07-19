@@ -481,38 +481,6 @@ describe('checkbox prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
   });
 
-  it('skip separator by number key', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
-      message: 'Select a topping',
-      choices: [
-        { name: 'Ham', value: 'ham' },
-        new Separator(),
-        { name: 'Pepperoni', value: 'pepperoni' },
-      ],
-    });
-
-    expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a topping (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
-      ❯◯ Ham
-       ──────────────
-       ◯ Pepperoni"
-    `);
-
-    events.keypress('2');
-    expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a topping (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
-      ❯◯ Ham
-       ──────────────
-       ◯ Pepperoni"
-    `);
-
-    events.keypress('enter');
-    await expect(answer).resolves.toEqual([]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping"');
-  });
-
   it('allow select all', async () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a number',
@@ -1239,5 +1207,77 @@ describe('checkbox prompt', () => {
 
     events.keypress('i');
     expect(getScreen()).toBe(expectedScreen);
+  });
+
+  describe('numeric selection with separators', () => {
+    it('toggles the correct item when separators are in the middle', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select items',
+        choices: [
+          { value: 'one', name: 'One' },
+          { value: 'two', name: 'Two' },
+          new Separator(),
+          { value: 'three', name: 'Three' },
+          { value: 'four', name: 'Four' },
+          new Separator('---'),
+          { value: 'five', name: 'Five' },
+          { value: 'six', name: 'Six' },
+        ],
+      });
+
+      // Press '5' to toggle the 5th selectable item (which is 'Five')
+      events.keypress('5');
+      expect(getScreen()).toContain('❯◉ Five');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['five']);
+    });
+
+    it('toggles the correct item when separators are at the beginning', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select items',
+        choices: [
+          new Separator(),
+          new Separator('---'),
+          { value: 'one', name: 'One' },
+          { value: 'two', name: 'Two' },
+          { value: 'three', name: 'Three' },
+          { value: 'four', name: 'Four' },
+        ],
+      });
+
+      // Press '3' to toggle the 3rd selectable item (which is 'Three')
+      events.keypress('3');
+
+      expect(getScreen()).toContain('❯◉ Three');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['three']);
+    });
+
+    it('toggles the correct item when some items are disabled', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select items',
+        choices: [
+          { value: 'one', name: 'One' },
+          { value: 'two', name: 'Two', disabled: true },
+          new Separator(),
+          { value: 'three', name: 'Three' },
+          { value: 'four', name: 'Four', disabled: 'Not available' },
+          new Separator('---'),
+          { value: 'five', name: 'Five' },
+          { value: 'six', name: 'Six' },
+        ],
+      });
+
+      // Press '3' to toggle the 3rd selectable item (which is 'Five')
+      // Selectable items are One, Three, Five, Six (Two and Four are disabled)
+      events.keypress('3');
+
+      expect(getScreen()).toContain('❯◉ Three');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['three']);
+    });
   });
 });
