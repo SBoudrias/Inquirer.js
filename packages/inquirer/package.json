@@ -71,7 +71,8 @@
   ],
   "scripts": {
     "attw": "attw --pack",
-    "tsc": "tshy"
+    "tsc": "tshy",
+    "lint": "oxlint --config=../../.oxlintrc.json && eslint . && prettier . --check --config=../../.prettierrc.mjs --ignore-path=../../.prettierignore"
   },
   "dependencies": {
     "@inquirer/core": "^10.1.14",
@@ -84,6 +85,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
+    "@repo/eslint-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
     "tshy": "^3.0.2"

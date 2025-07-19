@@ -2,3 +2,4 @@
 .yarn
 .tshy
 coverage
+dist

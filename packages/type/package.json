@@ -72,10 +72,12 @@
   ],
   "scripts": {
     "attw": "attw --pack",
-    "tsc": "tshy"
+    "tsc": "tshy",
+    "lint": "oxlint --config=../../.oxlintrc.json && eslint . && prettier . --check --config=../../.prettierrc.mjs --ignore-path=../../.prettierignore"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
+    "@repo/eslint-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },

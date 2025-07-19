@@ -481,6 +481,7 @@ __metadata:
     "@inquirer/figures": "npm:^1.0.12"
     "@inquirer/testing": "npm:^2.1.48"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
@@ -512,6 +513,7 @@ __metadata:
     "@inquirer/core": "npm:^10.1.14"
     "@inquirer/testing": "npm:^2.1.48"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
   peerDependencies:
@@ -530,6 +532,7 @@ __metadata:
     "@inquirer/figures": "npm:^1.0.12"
     "@inquirer/testing": "npm:^2.1.48"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^24.0.15"
@@ -556,6 +559,7 @@ __metadata:
     "@inquirer/core": "npm:^10.1.14"
     "@inquirer/figures": "npm:^1.0.12"
     "@inquirer/prompts": "npm:^7.6.0"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.15"
     tshy: "npm:^3.0.2"
@@ -578,6 +582,7 @@ __metadata:
     "@inquirer/core": "npm:^10.1.14"
     "@inquirer/testing": "npm:^2.1.48"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     external-editor: "npm:^3.1.0"
     tshy: "npm:^3.0.2"
@@ -608,6 +613,7 @@ __metadata:
     "@inquirer/core": "npm:^10.1.14"
     "@inquirer/testing": "npm:^2.1.48"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
@@ -624,6 +630,7 @@ __metadata:
   resolution: "@inquirer/figures@workspace:packages/figures"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
   languageName: unknown
@@ -637,6 +644,7 @@ __metadata:
     "@inquirer/core": "npm:^10.1.14"
     "@inquirer/testing": "npm:^2.1.48"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
   peerDependencies:
@@ -655,6 +663,7 @@ __metadata:
     "@inquirer/core": "npm:^10.1.14"
     "@inquirer/testing": "npm:^2.1.48"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
   peerDependencies:
@@ -673,6 +682,7 @@ __metadata:
     "@inquirer/core": "npm:^10.1.14"
     "@inquirer/testing": "npm:^2.1.48"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
@@ -700,6 +710,7 @@ __metadata:
     "@inquirer/search": "npm:^3.0.16"
     "@inquirer/select": "npm:^4.2.4"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
   peerDependencies:
@@ -718,6 +729,7 @@ __metadata:
     "@inquirer/core": "npm:^10.1.14"
     "@inquirer/testing": "npm:^2.1.48"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
@@ -733,17 +745,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@inquirer/root@workspace:."
   dependencies:
-    "@eslint/js": "npm:^9.31.0"
+    "@repo/eslint-config": "workspace:*"
     "@repo/hoist-peer-dependencies": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.15"
     "@vitest/coverage-v8": "npm:^3.2.4"
     "@vitest/ui": "npm:^3.2.4"
     eslint: "npm:^9.31.0"
-    eslint-config-prettier: "npm:^10.1.8"
-    eslint-plugin-n: "npm:^17.21.0"
-    eslint-plugin-oxlint: "npm:^1.7.0"
-    globals: "npm:^16.3.0"
     globby: "npm:^14.1.0"
     husky: "npm:^9.1.7"
     lerna: "npm:^8.2.3"
@@ -752,7 +760,6 @@ __metadata:
     prettier: "npm:^3.6.2"
     turbo: "npm:^2.5.5"
     typescript: "npm:^5.8.3"
-    typescript-eslint: "npm:^8.37.0"
     vitest: "npm:^3.2.4"
   languageName: unknown
   linkType: soft
@@ -766,6 +773,7 @@ __metadata:
     "@inquirer/figures": "npm:^1.0.12"
     "@inquirer/testing": "npm:^2.1.48"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
     yoctocolors-cjs: "npm:^2.1.2"
@@ -786,6 +794,7 @@ __metadata:
     "@inquirer/figures": "npm:^1.0.12"
     "@inquirer/testing": "npm:^2.1.48"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     ansi-escapes: "npm:^4.3.2"
     tshy: "npm:^3.0.2"
@@ -804,6 +813,7 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^24.0.15"
@@ -823,6 +833,7 @@ __metadata:
   resolution: "@inquirer/type@workspace:packages/type"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.2"
   peerDependencies:
@@ -1570,6 +1581,19 @@ __metadata:
   checksum: 10/00baec4458ac86ca27edf7ce807ccfad97cd1d4b67bdedaf3401a9e755757588f3331e891290d1deea52d88df2bf2387caf8d94a6835b614d5b37b638a688273
   languageName: node
   linkType: hard
+
+"@repo/eslint-config@workspace:*, @repo/eslint-config@workspace:internals/eslint-config":
+  version: 0.0.0-use.local
+  resolution: "@repo/eslint-config@workspace:internals/eslint-config"
+  dependencies:
+    "@eslint/js": "npm:^9.31.0"
+    eslint-config-prettier: "npm:^10.1.8"
+    eslint-plugin-n: "npm:^17.21.0"
+    eslint-plugin-oxlint: "npm:^1.7.0"
+    globals: "npm:^16.3.0"
+    typescript-eslint: "npm:^8.37.0"
+  languageName: unknown
+  linkType: soft
 
 "@repo/hoist-peer-dependencies@workspace:*, @repo/hoist-peer-dependencies@workspace:internals/hoist-peer-dependencies":
   version: 0.0.0-use.local
@@ -4619,6 +4643,7 @@ __metadata:
     "@inquirer/core": "npm:^10.1.14"
     "@inquirer/prompts": "npm:^7.6.0"
     "@inquirer/type": "npm:^3.0.7"
+    "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
     ansi-escapes: "npm:^4.3.2"
