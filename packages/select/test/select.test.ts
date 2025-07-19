@@ -1026,4 +1026,50 @@ describe('select prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual(1);
   });
+
+  describe('numeric selection with separators', () => {
+    it('selects the correct item when separators are in the middle', async () => {
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+          new Separator(),
+          { value: 3, name: 'Three' },
+          { value: 4, name: 'Four' },
+          new Separator('---'),
+          { value: 5, name: 'Five' },
+          { value: 6, name: 'Six' },
+        ],
+      });
+
+      events.type('5');
+      expect(getScreen()).toContain('❯ Five');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(5);
+    });
+
+    it('selects the correct item when separators are at the beginning', async () => {
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          new Separator(),
+          new Separator('---'),
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+          { value: 3, name: 'Three' },
+          { value: 4, name: 'Four' },
+        ],
+      });
+
+      // Type '3' to select the 3rd selectable item (which is 'Three')
+      events.type('3');
+
+      expect(getScreen()).toContain('❯ Three');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(3);
+    });
+  });
 });
