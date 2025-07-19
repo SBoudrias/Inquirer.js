@@ -176,7 +176,17 @@ export default createPrompt(
           setActive(next);
         }
       } else if (isNumberKey(key) && !Number.isNaN(Number(rl.line))) {
-        const position = Number(rl.line) - 1;
+        const selectedIndex = Number(rl.line) - 1;
+
+        // Find the nth item (ignoring separators)
+        let selectableIndex = -1;
+        const position = items.findIndex((item) => {
+          if (Separator.isSeparator(item)) return false;
+
+          selectableIndex++;
+          return selectableIndex === selectedIndex;
+        });
+
         const item = items[position];
         if (item != null && isSelectable(item)) {
           setActive(position);
