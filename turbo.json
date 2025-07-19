@@ -8,7 +8,15 @@
     "tsc": {
       "dependsOn": ["^tsc"],
       "outputs": ["dist/**"],
-      "inputs": ["$TURBO_DEFAULT$", "../../package.json"]
+      "inputs": ["tsconfig.json", ".tshy/**", "src/**"]
+    },
+    "lint": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/.oxlintrc.json",
+        "$TURBO_ROOT$/.prettierrc.mjs",
+        "$TURBO_ROOT$/.prettierignore"
+      ]
     }
   }
 }

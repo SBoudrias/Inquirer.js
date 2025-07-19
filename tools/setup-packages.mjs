@@ -28,6 +28,10 @@ const versions = {};
 const rootPkg = await readJSONFile(path.join(import.meta.dirname, '../package.json'));
 const paths = await globby(['packages/**/package.json', '!**/node_modules']);
 
+const eslintConfig = await readFile(
+  path.join(import.meta.dirname, '../eslint.config.js'),
+);
+
 Promise.all(
   paths.map(async (pkgPath) => {
     const pkg = await readJSONFile(pkgPath);
@@ -46,28 +50,41 @@ Promise.all(
     const hasReadme = await fileExists(path.join(dir, 'README.md'));
 
     // Replicate configs that should always be the same.
-    pkg.engines = rootPkg.engines;
     pkg.author = rootPkg.author;
     pkg.license = rootPkg.license;
     pkg.repository = rootPkg.repository;
     pkg.keywords = [...new Set([...rootPkg.keywords, ...(pkg.keywords ?? [])])];
     pkg.sideEffects = pkg.sideEffects ?? false;
 
+    if (pkg.name !== '@inquirer/demo') {
+      pkg.engines = rootPkg.engines;
+    }
+
     if (hasReadme) {
       const repoPath = dir.split('/').slice(-2).join('/');
       pkg.homepage = `https://github.com/SBoudrias/Inquirer.js/blob/main/${repoPath}/README.md`;
     }
 
+    pkg.devDependencies = pkg.devDependencies ?? {};
+    pkg.scripts = pkg.scripts ?? {};
+
+    // Setup linting
+    pkg.devDependencies['oxlint'] = versions['oxlint'];
+    pkg.devDependencies['eslint'] = versions['eslint'];
+    pkg.devDependencies['prettier'] = versions['prettier'];
+    pkg.devDependencies['@repo/eslint-config'] = 'workspace:*';
+    pkg.scripts.lint =
+      'oxlint --config=../../.oxlintrc.json && eslint . && prettier . --check --config=../../.prettierrc.mjs --ignore-path=../../.prettierignore';
+    writeFile(path.join(dir, 'eslint.config.js'), eslintConfig);
+
     if (isTS) {
       pkg.files = ['dist'];
 
-      pkg.devDependencies = pkg.devDependencies ?? {};
       pkg.devDependencies['tshy'] = versions['tshy'];
 
       pkg.tshy = pkg.tshy ?? {};
       pkg.tshy.exclude = ['src/**/*.test.ts'];
 
-      pkg.scripts = pkg.scripts ?? {};
       pkg.scripts.tsc = 'tshy';
 
       // Only set attw if the package is using commonjs

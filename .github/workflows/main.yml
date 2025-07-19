@@ -49,14 +49,11 @@ jobs:
           node-version: 20
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
-      - run: yarn tsc
-      - run: yarn oxlint .
-      - run: yarn prettier --check .
-      - run: yarn eslint .
+      - run: yarn turbo tsc lint
       - name: Validate package setup
         run: |
           yarn setup
-          yarn prettier --write .
+          yarn nano-staged
           git diff --exit-code -- . :^.yarn
 
   Unit:
