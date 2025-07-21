@@ -1041,10 +1041,25 @@ describe('select prompt', () => {
           { value: 5, name: 'Five' },
           { value: 6, name: 'Six' },
         ],
+        theme: {
+          indexMode: 'number',
+        },
       });
 
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        ❯ 1. One
+          2. Two
+         ──────────────
+          3. Three
+          4. Four
+         ---
+          5. Five
+        (Use arrow keys to reveal more choices)"
+      `);
+
       events.type('5');
-      expect(getScreen()).toContain('❯ Five');
+      expect(getScreen()).toContain('❯ 5. Five');
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual(5);
@@ -1061,12 +1076,25 @@ describe('select prompt', () => {
           { value: 3, name: 'Three' },
           { value: 4, name: 'Four' },
         ],
+        theme: {
+          indexMode: 'number',
+        },
       });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number (Use arrow keys)
+         ──────────────
+         ---
+        ❯ 1. One
+          2. Two
+          3. Three
+          4. Four"
+      `);
 
       // Type '3' to select the 3rd selectable item (which is 'Three')
       events.type('3');
 
-      expect(getScreen()).toContain('❯ Three');
+      expect(getScreen()).toContain('❯ 3. Three');
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual(3);

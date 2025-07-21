@@ -242,15 +242,18 @@ export default createPrompt(
       }
     }
 
+    let separatorCount = 0;
     const page = usePagination({
       items,
       active,
       renderItem({ item, isActive, index }) {
         if (Separator.isSeparator(item)) {
+          separatorCount++;
           return ` ${item.separator}`;
         }
 
-        const indexLabel = theme.indexMode === 'number' ? `${index + 1}. ` : '';
+        const indexLabel =
+          theme.indexMode === 'number' ? `${index + 1 - separatorCount}. ` : '';
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
