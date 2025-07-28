@@ -555,7 +555,7 @@ __metadata:
   dependencies:
     "@inquirer/core": "npm:^10.1.15"
     "@inquirer/figures": "npm:^1.0.13"
-    "@inquirer/prompts": "npm:^7.7.1"
+    "@inquirer/prompts": "npm:^7.8.0"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.15"
     tshy: "npm:^3.0.2"
@@ -684,7 +684,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/prompts@npm:^7.7.1, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
+"@inquirer/prompts@npm:^7.8.0, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
   version: 0.0.0-use.local
   resolution: "@inquirer/prompts@workspace:packages/prompts"
   dependencies:
@@ -697,7 +697,7 @@ __metadata:
     "@inquirer/number": "npm:^3.0.17"
     "@inquirer/password": "npm:^4.0.17"
     "@inquirer/rawlist": "npm:^4.1.5"
-    "@inquirer/search": "npm:^3.0.17"
+    "@inquirer/search": "npm:^3.1.0"
     "@inquirer/select": "npm:^4.3.1"
     "@inquirer/type": "npm:^3.0.8"
     "@repo/tsconfig": "workspace:*"
@@ -757,7 +757,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/search@npm:^3.0.17, @inquirer/search@workspace:packages/search":
+"@inquirer/search@npm:^3.1.0, @inquirer/search@workspace:packages/search":
   version: 0.0.0-use.local
   resolution: "@inquirer/search@workspace:packages/search"
   dependencies:
@@ -4679,7 +4679,7 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
     "@inquirer/core": "npm:^10.1.15"
-    "@inquirer/prompts": "npm:^7.7.1"
+    "@inquirer/prompts": "npm:^7.8.0"
     "@inquirer/type": "npm:^3.0.8"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
