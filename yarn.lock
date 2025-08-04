@@ -527,10 +527,10 @@ __metadata:
     "@types/wrap-ansi": "npm:^3.0.0"
     ansi-escapes: "npm:^4.3.2"
     cli-width: "npm:^4.1.0"
+    fast-wrap-ansi: "npm:^0.1.3"
     mute-stream: "npm:^2.0.0"
     signal-exit: "npm:^4.1.0"
     tshy: "npm:^3.0.2"
-    wrap-ansi: "npm:^6.2.0"
     yoctocolors-cjs: "npm:^2.1.2"
   peerDependencies:
     "@types/node": ">=18"
@@ -3789,6 +3789,31 @@ __metadata:
   version: 2.0.6
   resolution: "fast-levenshtein@npm:2.0.6"
   checksum: 10/eb7e220ecf2bab5159d157350b81d01f75726a4382f5a9266f42b9150c4523b9795f7f5d9fbbbeaeac09a441b2369f05ee02db48ea938584205530fe5693cfe1
+  languageName: node
+  linkType: hard
+
+"fast-string-truncated-width@npm:^1.2.0":
+  version: 1.2.1
+  resolution: "fast-string-truncated-width@npm:1.2.1"
+  checksum: 10/062ef2137af59da5717efee18797961974e8b73bc69a16dea286bf56a5cb11e1d8089cd704c6eb0a5eca35fb9ffb1454b37e6dbd40a705a03f41a7d685df908c
+  languageName: node
+  linkType: hard
+
+"fast-string-width@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "fast-string-width@npm:1.1.0"
+  dependencies:
+    fast-string-truncated-width: "npm:^1.2.0"
+  checksum: 10/0ea18158bf754e3fb613258e5a7f3adc8dced823180bda25b756b8d6849e31b4bea72175606836d64c8b2c2ce876fc02981361744742c56cac9a547be4fbefb4
+  languageName: node
+  linkType: hard
+
+"fast-wrap-ansi@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "fast-wrap-ansi@npm:0.1.3"
+  dependencies:
+    fast-string-width: "npm:^1.1.0"
+  checksum: 10/862daa5c718abf00703fb55c88e3cb2c8defad072b7749eed58d686aaba5a3dd022c6e1eac2890b7515872fc9e072f9e2835fcbe16e7525490a70c449088d9bd
   languageName: node
   linkType: hard
 
@@ -8462,17 +8487,6 @@ __metadata:
     string-width: "npm:^4.1.0"
     strip-ansi: "npm:^6.0.0"
   checksum: 10/cebdaeca3a6880da410f75209e68cd05428580de5ad24535f22696d7d9cab134d1f8498599f344c3cf0fb37c1715807a183778d8c648d6cc0cb5ff2bb4236540
-  languageName: node
-  linkType: hard
-
-"wrap-ansi@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "wrap-ansi@npm:6.2.0"
-  dependencies:
-    ansi-styles: "npm:^4.0.0"
-    string-width: "npm:^4.1.0"
-    strip-ansi: "npm:^6.0.0"
-  checksum: 10/0d64f2d438e0b555e693b95aee7b2689a12c3be5ac458192a1ce28f542a6e9e59ddfecc37520910c2c88eb1f82a5411260566dba5064e8f9895e76e169e76187
   languageName: node
   linkType: hard
 
