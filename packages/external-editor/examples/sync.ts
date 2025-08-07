@@ -1,23 +1,23 @@
-var ExternalEditor = require('./main').ExternalEditor;
-var readline = require('readline');
+import { ExternalEditor } from '@inquirer/external-editor';
+import readline from 'node:readline';
 
-var rl = readline.createInterface({
+const rl = readline.createInterface({
   input: process.stdin,
-  output: null,
+  output: process.stdout,
 });
 
-var message = '\n\n# Please Write a message\n# Any line starting with # is ignored';
+const message = '\n\n# Please Write a message\n# Any line starting with # is ignored';
 
 process.stdout.write(
-  'Please write a message. (press enter to launch your preferred editor)',
+  'Please write a message. (press enter to launch your preferred editor)\n',
 );
 
-editor = new ExternalEditor(message);
+const editor = new ExternalEditor(message);
 
-rl.on('line', function () {
+rl.on('line', () => {
   try {
     // Get response, remove all lines starting with #, remove any trailing newlines.
-    var response = editor
+    const response = editor
       .run()
       .replace(/^#.*\n?/gm, '')
       .replace(/\n+$/g, '')
@@ -30,7 +30,7 @@ rl.on('line', function () {
     if (response.length === 0) {
       readline.moveCursor(process.stdout, 0, -1);
       process.stdout.write(
-        'Your message was empty, please try again. (press enter to launch your preferred editor)',
+        'Your message was empty, please try again. (press enter to launch your preferred editor)\n',
       );
     } else {
       process.stdout.write('Your Message:\n');
@@ -39,7 +39,7 @@ rl.on('line', function () {
       rl.close();
     }
   } catch (err) {
-    process.stderr.write(err.message);
+    process.stderr.write((err as Error).message);
     process.stdout.write('\n');
     rl.close();
   }

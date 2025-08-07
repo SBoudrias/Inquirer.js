@@ -1,15 +1,3 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "target": "es5",
-    "noImplicitAny": true,
-    "removeComments": false,
-    "preserveConstEnums": true,
-    "outDir": "main/",
-    "sourceMap": false,
-    "declaration": true
-  },
-  "include": ["src/**/*", "types/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "extends": "@repo/tsconfig"
 }

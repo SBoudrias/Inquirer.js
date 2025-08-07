@@ -7,13 +7,6 @@
 
 export class ReadFileError extends Error {
   constructor(public originalError: Error) {
-    super('Failed to read temporary file');
-
-    const proto = new.target.prototype;
-    if ((Object as any).setPrototypeOf) {
-      (Object as any).setPrototypeOf(this, proto);
-    } else {
-      (this as any).__proto__ = new.target.prototype;
-    }
+    super(`Failed to read temporary file. ${originalError.message}`);
   }
 }

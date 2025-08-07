@@ -1,66 +1,82 @@
-# External Editor
+# `@inquirer/external-editor`
 
-[![ExternalEditor on Travis CI](https://img.shields.io/travis/mrkmg/node-external-editor.svg?style=flat-square)](https://travis-ci.org/mrkmg/node-external-editor/branches)
-[![ExternalEditor on NPM](https://img.shields.io/npm/v/external-editor.svg?style=flat-square)](https://www.npmjs.com/package/external-editor)
-[![ExternalEditor uses the MIT](https://img.shields.io/npm/l/external-editor.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+A Node.js module to edit a string with the user's preferred text editor using $VISUAL or $EDITOR.
 
-A node module to edit a string with a users preferred text editor using $VISUAL or $ENVIRONMENT.
+# Installation
 
-Version: 3.1.0
+<table>
+<tr>
+  <th>npm</th>
+  <th>yarn</th>
+</tr>
+<tr>
+<td>
 
-As of version 3.0.0, the minimum version of node supported is 4.
+```sh
+npm install @inquirer/external-editor
+```
 
-## Install
+</td>
+<td>
 
-`npm install external-editor --save`
+```sh
+yarn add @inquirer/external-editor
+```
+
+</td>
+</tr>
+</table>
 
 ## Usage
 
-A simple example using the `.edit` convenience method
+A simple example using the `edit` function
 
-    import {edit} from "external-editor";
-    const data = edit('\n\n# Please write your text above');
-    console.log(data);
+```ts
+import { edit } from '@inquirer/external-editor';
 
-A full featured example
+const data = edit('\n\n# Please write your text above');
+console.log(data);
+```
 
-    import {ExternalEditor, CreateFileError, ReadFileError, RemoveFileError} from "external-editor"
+Example relying on the class construct
 
-    try {
-        const editor = new ExternalEditor();
-        const text = editor.run() // the text is also available in editor.text
+```ts
+import {
+  ExternalEditor,
+  CreateFileError,
+  ReadFileError,
+  RemoveFileError,
+  LaunchEditorError,
+} from '@inquirer/external-editor';
 
-        if (editor.last_exit_status !== 0) {
-            console.log("The editor exited with a non-zero code");
-        }
-    } catch (err) {
-        if (err instanceOf CreateFileError) {
-            console.log('Failed to create the temporary file');
-        } else if (err instanceOf ReadFileError) {
-            console.log('Failed to read the temporary file');
-        } else if (err instanceOf LaunchEditorError) {
-            console.log('Failed to launch your editor');
-        } else {
-            throw err;
-        }
-    }
+try {
+  const editor = new ExternalEditor();
+  const text = editor.run(); // the text is also available in editor.text
 
-    // Do things with the text
+  if (editor.lastExitStatus !== 0) {
+    console.log('The editor exited with a non-zero code');
+  }
 
-    // Eventually call the cleanup to remove the temporary file
-    try {
-        editor.cleanup();
-    } catch (err) {
-         if (err instanceOf RemoveFileError) {
-             console.log('Failed to remove the temporary file');
-         } else {
-            throw err
-        }
-    }
+  // Do things with the text
+  editor.cleanup();
+} catch (err) {
+  if (err instanceof CreateFileError) {
+    console.log('Failed to create the temporary file');
+  } else if (err instanceof ReadFileError) {
+    console.log('Failed to read the temporary file');
+  } else if (err instanceof LaunchEditorError) {
+    console.log('Failed to launch your editor');
+  } else if (err instanceof RemoveFileError) {
+    console.log('Failed to remove the temporary file');
+  } else {
+    throw err;
+  }
+}
+```
 
 #### API
 
-**Convenience Methods**
+**Convenience Functions**
 
 - `edit(text, config)`
   - `text` (string) _Optional_ Defaults to empty string
@@ -69,9 +85,9 @@ A full featured example
   - Could throw `CreateFileError`, `ReadFileError`, or `LaunchEditorError`, or `RemoveFileError`
 - `editAsync(text, callback, config)`
   - `text` (string) _Optional_ Defaults to empty string
-  - `callback` (function (error, text))
-    - `error` could be of type `CreateFileError`, `ReadFileError`, or `LaunchEditorError`, or `RemoveFileError`
-    - `text`(string) The contents of the file
+  - `callback` (function (error?, text?))
+    - `error` could be of type `CreateFileError`, `ReadFileError`, `LaunchEditorError`, or `RemoveFileError`
+    - `text` (string) The contents of the file
   - `config` (Config) _Optional_ Options for temporary file creation
 
 **Errors**
@@ -91,9 +107,9 @@ A full featured example
   - **Returns** (string) The contents of the file
   - Could throw `LaunchEditorError` or `ReadFileError`
 - `runAsync(callback)` Launches the editor in an async way
-  - `callback` (function (error, text))
+  - `callback` (function (error?, text?))
     - `error` could be of type `ReadFileError` or `LaunchEditorError`
-    - `text`(string) The contents of the file
+    - `text` (string) The contents of the file
 - `cleanup()` Removes the temporary file.
   - Could throw `RemoveFileError`
 
@@ -109,15 +125,9 @@ A full featured example
 **Config Options**
 
 - `prefix` (string) _Optional_ A prefix for the file name.
-- `postfix` (string; _Optional_ A postfix for the file name. Useful if you want to provide an extension.
+- `postfix` (string) _Optional_ A postfix for the file name. Useful if you want to provide an extension.
 - `mode` (number) _Optional_ Which mode to create the file with. e.g. 644
-- `template` (string) _Optional_ A template for the filename. See [tmp](https://www.npmjs.com/package/tmp).
 - `dir` (string) _Optional_ Which path to store the file.
-
-## Errors
-
-All errors have a simple message explaining what went wrong. They all also have an `originalError` property containing
-the original error thrown for debugging purposes.
 
 ## Why Synchronous?
 
@@ -135,35 +145,7 @@ listeners on stdin, stdout, or stderr.
 
 [![asciicast](https://asciinema.org/a/a1qh9lypbe65mj0ivfuoslz2s.png)](https://asciinema.org/a/a1qh9lypbe65mj0ivfuoslz2s)
 
-## Breaking Changes from v2 to v3
+# License
 
-- NodeJS 0.12 support dropped.
-- Switched to named imports.
-- All "snake_cased" variables and properties are now "camelCased".
-  - `ExternalEditor.temp_file` is now `ExternalEditor.tempFile`.
-  - `ExternalEditor.last_exit_status` is now `ExternalEditor.lastExitStatus`.
-  - `Error.original_error` is now `Error.originalError`.
-
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2016-2018 Kevin Gravier
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Copyright (c) 2025 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
+Licensed under the MIT license.

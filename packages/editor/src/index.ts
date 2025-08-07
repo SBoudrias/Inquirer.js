@@ -1,4 +1,4 @@
-import { editAsync, IFileOptions } from 'external-editor';
+import { editAsync, IFileOptions } from '@inquirer/external-editor';
 import {
   createPrompt,
   useEffect,
@@ -47,22 +47,23 @@ export default createPrompt<string, EditorConfig>((config, done) => {
   function startEditor(rl: InquirerReadline) {
     rl.pause();
 
-    const editCallback = async (error: Error | undefined, answer: string) => {
+    const editCallback = async (error: Error | undefined, answer: string | undefined) => {
       rl.resume();
       if (error) {
         setError(error.toString());
       } else {
         setStatus('loading');
-        const isValid = await validate(answer);
+        const finalAnswer = answer ?? '';
+        const isValid = await validate(finalAnswer);
         if (isValid === true) {
           setError(undefined);
           setStatus('done');
-          done(answer);
+          done(finalAnswer);
         } else {
           if (theme.validationFailureMode === 'clear') {
             setValue(config.default);
           } else {
-            setValue(answer);
+            setValue(finalAnswer);
           }
 
           setError(isValid || 'You must provide a valid value');
