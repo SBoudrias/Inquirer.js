@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/prompts",
-  "version": "7.8.0",
+  "version": "7.8.1",
   "description": "Inquirer prompts, combined in a single package",
   "keywords": [
     "answer",
@@ -78,7 +78,7 @@
   "dependencies": {
     "@inquirer/checkbox": "^4.2.0",
     "@inquirer/confirm": "^5.1.14",
-    "@inquirer/editor": "^4.2.15",
+    "@inquirer/editor": "^4.2.16",
     "@inquirer/expand": "^4.0.17",
     "@inquirer/input": "^4.2.1",
     "@inquirer/number": "^3.0.17",
