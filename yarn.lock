@@ -567,10 +567,10 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
     "@inquirer/core": "npm:^10.1.15"
+    "@inquirer/external-editor": "npm:^0.0.0"
     "@inquirer/testing": "npm:^2.1.49"
     "@inquirer/type": "npm:^3.0.8"
     "@repo/tsconfig": "workspace:*"
-    external-editor: "npm:^3.1.0"
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
@@ -607,6 +607,21 @@ __metadata:
   peerDependenciesMeta:
     "@types/node":
       optional: true
+  languageName: unknown
+  linkType: soft
+
+"@inquirer/external-editor@npm:^0.0.0, @inquirer/external-editor@workspace:packages/external-editor":
+  version: 0.0.0-use.local
+  resolution: "@inquirer/external-editor@workspace:packages/external-editor"
+  dependencies:
+    "@arethetypeswrong/cli": "npm:^0.18.2"
+    "@repo/tsconfig": "workspace:*"
+    "@types/chardet": "npm:^1.0.0"
+    chardet: "npm:^2.1.0"
+    iconv-lite: "npm:^0.6.3"
+    tshy: "npm:^3.0.2"
+  peerDependencies:
+    "@types/node": ">=18"
   languageName: unknown
   linkType: soft
 
@@ -1788,6 +1803,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/chardet@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@types/chardet@npm:1.0.0"
+  dependencies:
+    chardet: "npm:*"
+  checksum: 10/02ce0557be37fd233c6abe695d8722d822c523701bef355e7df33199296f7bb2f02322de4a1a4af9f4604b475f01da4a1b8ac4dd7e57e7532a884d3bdc745580
+  languageName: node
+  linkType: hard
+
 "@types/deep-eql@npm:*":
   version: 4.0.2
   resolution: "@types/deep-eql@npm:4.0.2"
@@ -2668,6 +2692,13 @@ __metadata:
   version: 1.0.2
   resolution: "char-regex@npm:1.0.2"
   checksum: 10/1ec5c2906adb9f84e7f6732a40baef05d7c85401b82ffcbc44b85fbd0f7a2b0c2a96f2eb9cf55cae3235dc12d4023003b88f09bcae8be9ae894f52ed746f4d48
+  languageName: node
+  linkType: hard
+
+"chardet@npm:*, chardet@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "chardet@npm:2.1.0"
+  checksum: 10/8085fd8e5b1234fafacb279b4dab84dc127f512f953441daf09fc71ade70106af0dff28e86bfda00bab0de61fb475fa9003c87f82cbad3da02a4f299bfd427da
   languageName: node
   linkType: hard
 
@@ -3747,7 +3778,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"external-editor@npm:^3.0.3, external-editor@npm:^3.1.0":
+"external-editor@npm:^3.0.3":
   version: 3.1.0
   resolution: "external-editor@npm:3.1.0"
   dependencies:
@@ -4525,7 +4556,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:^0.6.2":
+"iconv-lite@npm:^0.6.2, iconv-lite@npm:^0.6.3":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
   dependencies:

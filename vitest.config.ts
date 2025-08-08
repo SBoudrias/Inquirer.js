@@ -12,7 +12,7 @@ export default defineConfig({
         'tools/**',
         'internals/**',
         'packages/*/dist/**',
-        'packages/inquirer/examples/**',
+        'packages/*/examples/**',
         'packages/demo/**',
         '.yarn/**',
       ],
