@@ -4,7 +4,7 @@
  */
 
 const chalk = require('chalk');
-const { editAsync } = require('external-editor');
+const { editAsync } = require('@inquirer/external-editor');
 const Base = require('./base');
 const observe = require('../utils/events');
 const { Subject } = require('rxjs');

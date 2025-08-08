@@ -39,11 +39,11 @@
   "repository": "SBoudrias/Inquirer.js",
   "license": "MIT",
   "dependencies": {
+    "@inquirer/external-editor": "^1.0.0",
     "ansi-escapes": "^4.2.1",
     "chalk": "^4.1.1",
     "cli-cursor": "^3.1.0",
     "cli-width": "^3.0.0",
-    "external-editor": "^3.0.3",
     "figures": "^3.0.0",
     "lodash": "^4.17.21",
     "mute-stream": "0.0.8",
