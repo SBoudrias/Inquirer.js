@@ -107,7 +107,7 @@ function isSelectable<Value>(item: Item<Value>): item is NormalizedChoice<Value>
 }
 
 function isChecked<Value>(item: Item<Value>): item is NormalizedChoice<Value> {
-  return isSelectable(item) && Boolean(item.checked);
+  return isSelectable(item) && item.checked;
 }
 
 function toggle<Value>(item: Item<Value>): Item<Value> {
