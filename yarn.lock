@@ -7282,9 +7282,9 @@ __metadata:
   linkType: hard
 
 "run-async@npm:^4.0.5":
-  version: 4.0.5
-  resolution: "run-async@npm:4.0.5"
-  checksum: 10/afe403262e66e53ae5727013f43854de4042c6772293561ce69f48b1a444a7cd7905ece869ec9bb57d4295b02fdf8f82558aadcb2194a4dd5eb9e1fb075e62bf
+  version: 4.0.6
+  resolution: "run-async@npm:4.0.6"
+  checksum: 10/d23929e36d0422b871a8964d5cfcb1b88295950ea5f72e1dfed458d4c3f3a33a7395e08167d8a4446f2110cfaac7d7653d9c804d2becab8afa8a63e16b97da81
   languageName: node
   linkType: hard
 
