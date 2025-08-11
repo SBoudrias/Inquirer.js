@@ -6,7 +6,10 @@
  */
 
 export class LaunchEditorError extends Error {
-  constructor(public originalError: Error) {
+  originalError: Error;
+
+  constructor(originalError: Error) {
     super(`Failed to launch editor. ${originalError.message}`);
+    this.originalError = originalError;
   }
 }

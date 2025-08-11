@@ -6,7 +6,10 @@
  */
 
 export class ReadFileError extends Error {
-  constructor(public originalError: Error) {
+  originalError: Error;
+
+  constructor(originalError: Error) {
     super(`Failed to read temporary file. ${originalError.message}`);
+    this.originalError = originalError;
   }
 }
