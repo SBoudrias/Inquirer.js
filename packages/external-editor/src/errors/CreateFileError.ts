@@ -6,7 +6,10 @@
  */
 
 export class CreateFileError extends Error {
-  constructor(public originalError: Error) {
+  originalError: Error;
+
+  constructor(originalError: Error) {
     super(`Failed to create temporary file. ${originalError.message}`);
+    this.originalError = originalError;
   }
 }
