@@ -2,6 +2,9 @@
 
 A Node.js module to edit a string with the user's preferred text editor using $VISUAL or $EDITOR.
 
+> [!NOTE]
+> This package is a replacement for the unmaintained `external-editor`. It includes security fixes.
+
 # Special Thanks
 
 <div align="center" markdown="1">
