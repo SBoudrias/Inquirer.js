@@ -622,6 +622,9 @@ __metadata:
     tshy: "npm:^3.0.2"
   peerDependencies:
     "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
