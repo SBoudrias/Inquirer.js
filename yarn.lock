@@ -463,7 +463,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@inquirer/checkbox@npm:^4.2.0, @inquirer/checkbox@workspace:packages/checkbox":
+"@inquirer/checkbox@npm:^4.2.1, @inquirer/checkbox@workspace:packages/checkbox":
   version: 0.0.0-use.local
   resolution: "@inquirer/checkbox@workspace:packages/checkbox"
   dependencies:
@@ -546,7 +546,7 @@ __metadata:
   dependencies:
     "@inquirer/core": "npm:^10.1.15"
     "@inquirer/figures": "npm:^1.0.13"
-    "@inquirer/prompts": "npm:^7.8.1"
+    "@inquirer/prompts": "npm:^7.8.2"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.15"
     tshy: "npm:^3.0.2"
@@ -561,13 +561,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/editor@npm:^4.2.16, @inquirer/editor@workspace:packages/editor":
+"@inquirer/editor@npm:^4.2.17, @inquirer/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@inquirer/editor@workspace:packages/editor"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
     "@inquirer/core": "npm:^10.1.15"
-    "@inquirer/external-editor": "npm:^1.0.0"
+    "@inquirer/external-editor": "npm:^1.0.1"
     "@inquirer/testing": "npm:^2.1.49"
     "@inquirer/type": "npm:^3.0.8"
     "@repo/tsconfig": "workspace:*"
@@ -610,7 +610,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/external-editor@npm:^1.0.0, @inquirer/external-editor@workspace:packages/external-editor":
+"@inquirer/external-editor@npm:^1.0.1, @inquirer/external-editor@workspace:packages/external-editor":
   version: 0.0.0-use.local
   resolution: "@inquirer/external-editor@workspace:packages/external-editor"
   dependencies:
@@ -693,14 +693,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/prompts@npm:^7.8.1, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
+"@inquirer/prompts@npm:^7.8.2, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
   version: 0.0.0-use.local
   resolution: "@inquirer/prompts@workspace:packages/prompts"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
-    "@inquirer/checkbox": "npm:^4.2.0"
+    "@inquirer/checkbox": "npm:^4.2.1"
     "@inquirer/confirm": "npm:^5.1.14"
-    "@inquirer/editor": "npm:^4.2.16"
+    "@inquirer/editor": "npm:^4.2.17"
     "@inquirer/expand": "npm:^4.0.17"
     "@inquirer/input": "npm:^4.2.1"
     "@inquirer/number": "npm:^3.0.17"
@@ -4744,7 +4744,7 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
     "@inquirer/core": "npm:^10.1.15"
-    "@inquirer/prompts": "npm:^7.8.1"
+    "@inquirer/prompts": "npm:^7.8.2"
     "@inquirer/type": "npm:^3.0.8"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
