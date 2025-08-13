@@ -92,6 +92,11 @@
   "peerDependencies": {
     "@types/node": ">=18"
   },
+  "peerDependenciesMeta": {
+    "@types/node": {
+      "optional": true
+    }
+  },
   "tshy": {
     "exclude": [
       "src/**/*.test.ts"
