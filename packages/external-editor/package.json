@@ -63,6 +63,7 @@
     "zsh",
     "editor",
     "external",
+    "external-editor",
     "user",
     "visual"
   ],
