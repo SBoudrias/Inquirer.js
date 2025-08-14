@@ -1,5 +1,4 @@
-import { AsyncResource } from 'node:async_hooks';
-import { Stream } from 'node:stream';
+import { EventEmitter, Stream } from 'node:stream';
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import { stripVTControlCharacters } from 'node:util';
@@ -232,6 +231,40 @@ describe('createPrompt()', () => {
     await expect(answer).resolves.toEqual('up');
   });
 
+  it('useState: set state is always bound to the async context', async () => {
+    const eventEmitter = new EventEmitter();
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      const [value, setValue] = useState('default');
+
+      useEffect(() => {
+        const listener = () => {
+          setValue('updated');
+        };
+
+        eventEmitter.addListener('update', listener);
+        return () => {
+          eventEmitter.removeListener('update', listener);
+        };
+      }, []);
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(value);
+        }
+      });
+
+      return `${config.message} ${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+
+    eventEmitter.emit('update');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual('updated');
+  });
+
   it('useKeypress: only re-render once on state changes', async () => {
     const renderSpy = vi.fn();
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
@@ -385,12 +418,9 @@ describe('createPrompt()', () => {
       totalDuration = interval * theme.spinner.frames.length;
 
       useEffect(() => {
-        setTimeout(
-          AsyncResource.bind(() => {
-            setStatus('done');
-          }),
-          totalDuration,
-        );
+        setTimeout(() => {
+          setStatus('done');
+        }, totalDuration);
       }, []);
 
       useKeypress((event: KeypressEvent) => {
@@ -643,33 +673,30 @@ describe('Error handling', () => {
   });
 
   it('surface errors in render functions', async () => {
-    const Prompt = () => {
+    const prompt = createPrompt(() => {
       throw new Error('Error in render function');
-    };
-
-    const prompt = createPrompt(Prompt);
+    });
     const { answer } = await render(prompt, { message: 'Question' });
 
     await expect(answer).rejects.toThrowError('Error in render function');
   });
 
   it('surface errors in useEffect', async () => {
-    const Prompt = () => {
+    const prompt = createPrompt(() => {
       useEffect(() => {
         throw new Error('Error in useEffect');
       }, []);
 
       return '';
-    };
+    });
 
-    const prompt = createPrompt(Prompt);
     const { answer } = await render(prompt, { message: 'Question' });
 
     await expect(answer).rejects.toThrowError('Error in useEffect');
   });
 
   it('surface errors in useEffect cleanup functions', async () => {
-    const Prompt = (_config: object, done: (value: string) => void) => {
+    const prompt = createPrompt((_config: object, done: (value: string) => void) => {
       useEffect(() => {
         done('done');
 
@@ -679,16 +706,15 @@ describe('Error handling', () => {
       }, []);
 
       return '';
-    };
+    });
 
-    const prompt = createPrompt(Prompt);
     const { answer } = await render(prompt, { message: 'Question' });
 
     await expect(answer).rejects.toThrowError('Error in useEffect cleanup');
   });
 
   it('prevent returning promises from useEffect hook', async () => {
-    const Prompt = (_config: object, done: (value: string) => void) => {
+    const prompt = createPrompt((_config: object, done: (value: string) => void) => {
       // @ts-expect-error: Testing an invalid behavior.
       // eslint-disable-next-line @typescript-eslint/require-await
       useEffect(async () => {
@@ -696,9 +722,8 @@ describe('Error handling', () => {
       }, []);
 
       return '';
-    };
+    });
 
-    const prompt = createPrompt(Prompt);
     const { answer } = await render(prompt, { message: 'Question' });
 
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(

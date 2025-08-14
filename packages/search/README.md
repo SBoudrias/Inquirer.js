@@ -86,13 +86,14 @@ const answer = await search({
 
 ## Options
 
-| Property | Type                                                       | Required | Description                                                                                                                                                                                          |
-| -------- | ---------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| message  | `string`                                                   | yes      | The question to ask                                                                                                                                                                                  |
-| source   | `(term: string \| void) => Promise<Choice[]>`              | yes      | This function returns the choices relevant to the search term.                                                                                                                                       |
-| pageSize | `number`                                                   | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                          |
-| validate | `Value => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the answer. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
-| theme    | [See Theming](#Theming)                                    | no       | Customize look of the prompt.                                                                                                                                                                        |
+| Property     | Type                                                       | Required | Description                                                                                                                                                                                          |
+| ------------ | ---------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message      | `string`                                                   | yes      | The question to ask                                                                                                                                                                                  |
+| source       | `(term: string \| void) => Promise<Choice[]>`              | yes      | This function returns the choices relevant to the search term.                                                                                                                                       |
+| pageSize     | `number`                                                   | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                          |
+| validate     | `Value => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the answer. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
+| instructions | `{ navigation: string; pager: string }`                    | no       | Customize the help instructions shown at the bottom of the prompt.                                                                                                                                   |
+| theme        | [See Theming](#Theming)                                    | no       | Customize look of the prompt.                                                                                                                                                                        |
 
 ### `source` function
 
@@ -135,6 +136,13 @@ Here's each property:
 - `disabled`: Disallow the option from being selected. If `disabled` is a string, it'll be used as a help tip explaining why the choice isn't available.
 
 Choices can also be an array of string, in which case the string will be used both as the `value` and the `name`.
+
+### `instructions` object
+
+The `instructions` option allows you to customize the help text displayed at the bottom of the prompt:
+
+- `navigation`: The instruction text shown when all choices fit within the page size (default: "Use arrow keys")
+- `pager`: The instruction text shown when there are more choices than the page size (default: "Use arrow keys to reveal more choices")
 
 ### Validation & autocomplete interaction
 

@@ -3,8 +3,7 @@ import eslint from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import nodePlugin from 'eslint-plugin-n';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import eslintPluginUnicorn from 'eslint-plugin-unicorn';
+import oxlint from 'eslint-plugin-oxlint';
 
 export default tseslint.config(
   {
@@ -20,7 +19,6 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   nodePlugin.configs['flat/recommended-module'],
-  eslintPluginUnicorn.configs.recommended,
   {
     languageOptions: {
       globals: {
@@ -91,7 +89,12 @@ export default tseslint.config(
     },
   },
   {
-    files: ['tools/**'],
+    files: [
+      'tools/**',
+      'integration/**',
+      'packages/inquirer/examples/**',
+      'packages/demo/**',
+    ],
     rules: {
       'n/no-unsupported-features/node-builtins': [
         'error',
@@ -101,5 +104,5 @@ export default tseslint.config(
       ],
     },
   },
-  eslintPluginPrettierRecommended,
+  ...oxlint.configs['flat/recommended'],
 );

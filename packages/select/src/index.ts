@@ -176,7 +176,17 @@ export default createPrompt(
           setActive(next);
         }
       } else if (isNumberKey(key) && !Number.isNaN(Number(rl.line))) {
-        const position = Number(rl.line) - 1;
+        const selectedIndex = Number(rl.line) - 1;
+
+        // Find the nth item (ignoring separators)
+        let selectableIndex = -1;
+        const position = items.findIndex((item) => {
+          if (Separator.isSeparator(item)) return false;
+
+          selectableIndex++;
+          return selectableIndex === selectedIndex;
+        });
+
         const item = items[position];
         if (item != null && isSelectable(item)) {
           setActive(position);
@@ -232,15 +242,18 @@ export default createPrompt(
       }
     }
 
+    let separatorCount = 0;
     const page = usePagination({
       items,
       active,
       renderItem({ item, isActive, index }) {
         if (Separator.isSeparator(item)) {
+          separatorCount++;
           return ` ${item.separator}`;
         }
 
-        const indexLabel = theme.indexMode === 'number' ? `${index + 1}. ` : '';
+        const indexLabel =
+          theme.indexMode === 'number' ? `${index + 1 - separatorCount}. ` : '';
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';

@@ -1,4 +1,3 @@
-import { AsyncResource } from 'node:async_hooks';
 import { useState } from './use-state.ts';
 import { useEffect } from './use-effect.ts';
 import { makeTheme } from './make-theme.ts';
@@ -20,20 +19,14 @@ export function usePrefix({
       let tickInterval: NodeJS.Timeout | undefined;
       let inc = -1;
       // Delay displaying spinner by 300ms, to avoid flickering
-      const delayTimeout = setTimeout(
-        AsyncResource.bind(() => {
-          setShowLoader(true);
+      const delayTimeout = setTimeout(() => {
+        setShowLoader(true);
 
-          tickInterval = setInterval(
-            AsyncResource.bind(() => {
-              inc = inc + 1;
-              setTick(inc % spinner.frames.length);
-            }),
-            spinner.interval,
-          );
-        }),
-        300,
-      );
+        tickInterval = setInterval(() => {
+          inc = inc + 1;
+          setTick(inc % spinner.frames.length);
+        }, spinner.interval);
+      }, 300);
 
       return () => {
         clearTimeout(delayTimeout);

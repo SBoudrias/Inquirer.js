@@ -484,6 +484,20 @@ Directory size: 123M
   Delete
 ```
 
+[**Ordered Checkbox Prompt**](https://github.com/kyou-izumi/inquirer-ordered-checkbox)<br/>
+A sortable checkbox prompt that maintains the order of selection. Perfect for prioritizing tasks or ranking options.
+
+```
+? Configure your development workflow:
+  [1] Set up CI/CD pipeline
+❯ [3] Code quality tools
+  [ ] Documentation
+  [2] Performance monitoring
+ ──────────────
+- Legacy system (disabled)
+(Linting, formatting, and analysis)
+```
+
 # License
 
 Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>

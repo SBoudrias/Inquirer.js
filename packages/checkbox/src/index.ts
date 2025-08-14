@@ -107,7 +107,7 @@ function isSelectable<Value>(item: Item<Value>): item is NormalizedChoice<Value>
 }
 
 function isChecked<Value>(item: Item<Value>): item is NormalizedChoice<Value> {
-  return isSelectable(item) && Boolean(item.checked);
+  return isSelectable(item) && item.checked;
 }
 
 function toggle<Value>(item: Item<Value>): Item<Value> {
@@ -223,10 +223,19 @@ export default createPrompt(
       } else if (key.name === shortcuts.invert) {
         setItems(items.map(toggle));
       } else if (isNumberKey(key)) {
-        // Adjust index to start at 1
-        const position = Number(key.name) - 1;
-        const item = items[position];
-        if (item != null && isSelectable(item)) {
+        const selectedIndex = Number(key.name) - 1;
+
+        // Find the nth item (ignoring separators)
+        let selectableIndex = -1;
+        const position = items.findIndex((item) => {
+          if (Separator.isSeparator(item)) return false;
+
+          selectableIndex++;
+          return selectableIndex === selectedIndex;
+        });
+
+        const selectedItem = items[position];
+        if (selectedItem && isSelectable(selectedItem)) {
           setActive(position);
           setItems(items.map((choice, i) => (i === position ? toggle(choice) : choice)));
         }

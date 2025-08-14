@@ -1,5 +1,4 @@
-import { AsyncResource } from 'node:async_hooks';
-import { editAsync, IFileOptions } from 'external-editor';
+import { editAsync, IFileOptions } from '@inquirer/external-editor';
 import {
   createPrompt,
   useEffect,
@@ -48,32 +47,30 @@ export default createPrompt<string, EditorConfig>((config, done) => {
   function startEditor(rl: InquirerReadline) {
     rl.pause();
 
-    // Note: The bind call isn't strictly required. But we need it for our mocks to work as expected.
-    const editCallback = AsyncResource.bind(
-      async (error: Error | undefined, answer: string) => {
-        rl.resume();
-        if (error) {
-          setError(error.toString());
+    const editCallback = async (error: Error | undefined, answer: string | undefined) => {
+      rl.resume();
+      if (error) {
+        setError(error.toString());
+      } else {
+        setStatus('loading');
+        const finalAnswer = answer ?? '';
+        const isValid = await validate(finalAnswer);
+        if (isValid === true) {
+          setError(undefined);
+          setStatus('done');
+          done(finalAnswer);
         } else {
-          setStatus('loading');
-          const isValid = await validate(answer);
-          if (isValid === true) {
-            setError(undefined);
-            setStatus('done');
-            done(answer);
+          if (theme.validationFailureMode === 'clear') {
+            setValue(config.default);
           } else {
-            if (theme.validationFailureMode === 'clear') {
-              setValue(config.default);
-            } else {
-              setValue(answer);
-            }
-
-            setError(isValid || 'You must provide a valid value');
-            setStatus('idle');
+            setValue(finalAnswer);
           }
+
+          setError(isValid || 'You must provide a valid value');
+          setStatus('idle');
         }
-      },
-    );
+      }
+    };
 
     editAsync(value, (error, answer) => void editCallback(error, answer), {
       postfix,

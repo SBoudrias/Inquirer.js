@@ -28,7 +28,6 @@ const demo = async () => {
   answer = await search({
     message: 'Select an npm package',
     source: async (input = 'inquirer', { signal }) => {
-      // eslint-disable-next-line n/no-unsupported-features/node-builtins
       const response = await fetch(
         `https://registry.npmjs.org/-/v1/search?text=${encodeURIComponent(input)}&size=20`,
         { signal },

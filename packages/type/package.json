@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/type",
-  "version": "3.0.6",
+  "version": "3.0.8",
   "description": "Inquirer core TS types",
   "keywords": [
     "answer",
@@ -75,7 +75,7 @@
     "tsc": "tshy"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.1",
+    "@arethetypeswrong/cli": "^0.18.2",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.2"
   },

@@ -4,7 +4,7 @@
   "private": true,
   "main": "tsconfig.json",
   "dependencies": {
-    "@sindresorhus/tsconfig": "^7.0.0"
+    "@sindresorhus/tsconfig": "^8.0.1"
   },
   "engines": {
     "node": ">=18"

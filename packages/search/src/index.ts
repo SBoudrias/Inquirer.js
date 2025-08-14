@@ -71,6 +71,10 @@ type SearchConfig<
         | Promise<ReadonlyArray<Choice<Value> | Separator>>;
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
+  instructions?: {
+    navigation: string;
+    pager: string;
+  };
   theme?: PartialDeep<Theme<SearchTheme>>;
 };
 
@@ -226,8 +230,8 @@ export default createPrompt(
     ) {
       helpTip =
         searchResults.length > pageSize
-          ? `\n${theme.style.help('(Use arrow keys to reveal more choices)')}`
-          : `\n${theme.style.help('(Use arrow keys)')}`;
+          ? `\n${theme.style.help(`(${config.instructions?.pager ?? 'Use arrow keys to reveal more choices'})`)}`
+          : `\n${theme.style.help(`(${config.instructions?.navigation ?? 'Use arrow keys'})`)}`;
     }
 
     // TODO: What to do if no results are found? Should we display a message?
