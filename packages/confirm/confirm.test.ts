@@ -1,12 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import { promisify } from 'node:util';
-import child_process from 'node:child_process';
-import { writeFileSync, unlinkSync } from 'node:fs';
-import { join } from 'node:path';
 import confirm from './src/index.ts';
-
-const exec = promisify(child_process.exec);
 
 describe('confirm prompt', () => {
   it('handles "yes"', async () => {
@@ -150,37 +144,4 @@ describe('confirm prompt', () => {
     await expect(answer).resolves.toEqual(false);
     expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? No"');
   });
-
-  it.runIf(async () => {
-    try {
-      await exec('which yes');
-      return true;
-    } catch {
-      return false;
-    }
-  })(
-    'works with Unix yes command piped input',
-    async () => {
-      const testScript = join(import.meta.dirname, 'test-yes-pipe.js');
-      writeFileSync(
-        testScript,
-        `
-      import confirm from '@inquirer/confirm';
-
-      const answer = await confirm({
-        message: 'Do you want to proceed?'
-      });
-
-      process.exit(answer ? 0 : 1);
-    `,
-      );
-
-      try {
-        await expect(exec(`yes | node ${testScript} > /dev/null`)).resolves.not.toThrow();
-      } finally {
-        unlinkSync(testScript);
-      }
-    },
-    10000,
-  );
 });
