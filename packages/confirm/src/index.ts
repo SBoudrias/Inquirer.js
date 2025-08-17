@@ -36,6 +36,8 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   const prefix = usePrefix({ status, theme });
 
   useKeypress((key, rl) => {
+    if (status !== 'idle') return;
+
     if (isEnterKey(key)) {
       const answer = getBooleanValue(value, config.default);
       setValue(transformer(answer));

@@ -24,7 +24,7 @@ jobs:
       - run: corepack enable
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
       - name: Typescript - packages
@@ -46,7 +46,7 @@ jobs:
       - run: corepack enable
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
       - run: yarn tsc
@@ -65,9 +65,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version:
-          - 20
-          - 18
+        node-version: [18, 20, 22]
     steps:
       - uses: actions/checkout@v4
       - run: corepack enable
@@ -83,12 +81,6 @@ jobs:
     name: Integration Tests
     runs-on: ubuntu-latest
     needs: Compile
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version:
-          - 20
-          - 18
     steps:
       - uses: actions/checkout@v4
       - name: Cache turbo build setup
@@ -100,7 +92,7 @@ jobs:
       - run: corepack enable
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
       - run: yarn tsc
@@ -124,7 +116,7 @@ jobs:
       - run: corepack enable
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
       - run: yarn tsc
@@ -168,7 +160,7 @@ jobs:
       - run: corepack enable
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
       - run: yarn turbo attw
