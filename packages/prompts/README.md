@@ -181,6 +181,11 @@ The context options are:
 | clearPromptOnDone | `boolean`               | no       | If true, we'll clear the screen after the prompt is answered |
 | signal            | `AbortSignal`           | no       | An AbortSignal to cancel prompts asynchronously              |
 
+> [!WARNING]
+> When providing an input stream or piping `process.stdin`, it's very likely you need to call `process.stdin.setRawMode(true)`
+> before calling inquirer functions. Node.js usually does it automatically, but when we shadow the stdin, Node can loss track
+> and not know it has to. If the prompt isn't interactive (arrows don't work, etc), it's likely due to this.
+
 Example:
 
 ```js
