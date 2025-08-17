@@ -495,7 +495,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/confirm@npm:^5.1.14, @inquirer/confirm@workspace:packages/confirm":
+"@inquirer/confirm@npm:^5.1.15, @inquirer/confirm@workspace:packages/confirm":
   version: 0.0.0-use.local
   resolution: "@inquirer/confirm@workspace:packages/confirm"
   dependencies:
@@ -546,7 +546,7 @@ __metadata:
   dependencies:
     "@inquirer/core": "npm:^10.1.15"
     "@inquirer/figures": "npm:^1.0.13"
-    "@inquirer/prompts": "npm:^7.8.2"
+    "@inquirer/prompts": "npm:^7.8.3"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^24.0.15"
     tshy: "npm:^3.0.2"
@@ -693,13 +693,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/prompts@npm:^7.8.2, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
+"@inquirer/prompts@npm:^7.8.3, @inquirer/prompts@workspace:*, @inquirer/prompts@workspace:packages/prompts":
   version: 0.0.0-use.local
   resolution: "@inquirer/prompts@workspace:packages/prompts"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
     "@inquirer/checkbox": "npm:^4.2.1"
-    "@inquirer/confirm": "npm:^5.1.14"
+    "@inquirer/confirm": "npm:^5.1.15"
     "@inquirer/editor": "npm:^4.2.17"
     "@inquirer/expand": "npm:^4.0.17"
     "@inquirer/input": "npm:^4.2.1"
@@ -4744,7 +4744,7 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18.2"
     "@inquirer/core": "npm:^10.1.15"
-    "@inquirer/prompts": "npm:^7.8.2"
+    "@inquirer/prompts": "npm:^7.8.3"
     "@inquirer/type": "npm:^3.0.8"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"

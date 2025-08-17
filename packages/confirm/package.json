@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/confirm",
-  "version": "5.1.14",
+  "version": "5.1.15",
   "description": "Inquirer confirm prompt",
   "keywords": [
     "answer",
