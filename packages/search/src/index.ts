@@ -7,7 +7,10 @@ import {
   useRef,
   useEffect,
   useMemo,
+  isDownKey,
   isEnterKey,
+  isTabKey,
+  isUpKey,
   Separator,
   makeTheme,
   type Theme,
@@ -195,17 +198,17 @@ export default createPrompt(
           // get cleared, forcing the user to re-enter the value instead of fixing it.
           rl.write(searchTerm);
         }
-      } else if (key.name === 'tab' && selectedChoice) {
+      } else if (isTabKey(key) && selectedChoice) {
         rl.clearLine(0); // Remove the tab character.
         rl.write(selectedChoice.name);
         setSearchTerm(selectedChoice.name);
-      } else if (status !== 'loading' && (key.name === 'up' || key.name === 'down')) {
+      } else if (status !== 'loading' && (isUpKey(key) || isDownKey(key))) {
         rl.clearLine(0);
         if (
-          (key.name === 'up' && active !== bounds.first) ||
-          (key.name === 'down' && active !== bounds.last)
+          (isUpKey(key) && active !== bounds.first) ||
+          (isDownKey(key) && active !== bounds.last)
         ) {
-          const offset = key.name === 'up' ? -1 : 1;
+          const offset = isUpKey(key) ? -1 : 1;
           let next = active;
           do {
             next = (next + offset + searchResults.length) % searchResults.length;
