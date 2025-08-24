@@ -4,8 +4,9 @@ import {
   useKeypress,
   useEffect,
   usePrefix,
-  isEnterKey,
   isBackspaceKey,
+  isEnterKey,
+  isTabKey,
   makeTheme,
   type Theme,
   type Status,
@@ -69,7 +70,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
       }
     } else if (isBackspaceKey(key) && !value) {
       setDefaultValue(undefined);
-    } else if (key.name === 'tab' && !value) {
+    } else if (isTabKey(key) && !value) {
       setDefaultValue(undefined);
       rl.clearLine(0); // Remove the tab character.
       rl.write(defaultValue);

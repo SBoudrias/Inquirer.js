@@ -3,6 +3,7 @@ import {
   useState,
   useKeypress,
   isEnterKey,
+  isTabKey,
   usePrefix,
   makeTheme,
   type Theme,
@@ -43,7 +44,7 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
       setValue(transformer(answer));
       setStatus('done');
       done(answer);
-    } else if (key.name === 'tab') {
+    } else if (isTabKey(key)) {
       const answer = boolToString(!getBooleanValue(value, config.default));
       rl.clearLine(0); // Remove the tab character.
       rl.write(answer);

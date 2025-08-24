@@ -4,7 +4,9 @@ import {
   useState,
   useKeypress,
   usePrefix,
+  isDownKey,
   isEnterKey,
+  isUpKey,
   Separator,
   makeTheme,
   type Theme,
@@ -131,22 +133,21 @@ export default createPrompt(
         } else {
           setError(`"${colors.red(value)}" isn't an available option`);
         }
-      } else if (key.name === 'up' || key.name === 'down') {
+      } else if (isUpKey(key) || isDownKey(key)) {
         rl.clearLine(0);
 
         const [selectedChoice, active] = getSelectedChoice(value, choices);
         if (!selectedChoice) {
-          const firstChoice =
-            key.name === 'down'
-              ? choices.find(isSelectableChoice)!
-              : choices.findLast(isSelectableChoice)!;
+          const firstChoice = isDownKey(key)
+            ? choices.find(isSelectableChoice)!
+            : choices.findLast(isSelectableChoice)!;
           setValue(firstChoice.key);
         } else if (
           loop ||
-          (key.name === 'up' && active !== bounds.first) ||
-          (key.name === 'down' && active !== bounds.last)
+          (isUpKey(key) && active !== bounds.first) ||
+          (isDownKey(key) && active !== bounds.last)
         ) {
-          const offset = key.name === 'up' ? -1 : 1;
+          const offset = isUpKey(key) ? -1 : 1;
           let next = active;
           do {
             next = (next + offset + choices.length) % choices.length;
