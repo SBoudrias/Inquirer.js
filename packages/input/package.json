@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/input",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "description": "Inquirer input text prompt",
   "keywords": [
     "answer",
@@ -74,7 +74,7 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.1.15",
+    "@inquirer/core": "^10.2.0",
     "@inquirer/type": "^3.0.8"
   },
   "devDependencies": {
