@@ -82,7 +82,7 @@
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/external-editor/README.md",
   "dependencies": {
     "chardet": "^2.1.0",
-    "iconv-lite": "^0.6.3"
+    "iconv-lite": "^0.7.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
