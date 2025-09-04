@@ -87,7 +87,7 @@ const answer = await select({
     {
       name: 'pnpm',
       value: 'pnpm',
-      disabled: '(pnpm is not available)',
+      description: '(pnpm is not available)',
     },
   ],
 });
