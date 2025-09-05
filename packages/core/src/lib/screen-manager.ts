@@ -1,6 +1,6 @@
 import stripAnsi from 'strip-ansi';
 import { breakLines, readlineWidth } from './utils.js';
-import { cursorDown, cursorUp, cursorTo, cursorShow, eraseLines } from './ansi.js';
+import { cursorDown, cursorUp, cursorToX, cursorShow, eraseLines } from './ansi.js';
 import type { InquirerReadline } from '@inquirer/type';
 
 const height = (content: string): number => content.split('\n').length;
@@ -69,10 +69,10 @@ export default class ScreenManager {
       promptLineUpDiff + (bottomContent ? height(bottomContent) : 0);
 
     // Return cursor to the input position (on top of the bottomContent)
-    if (bottomContentHeight > 0) output += cursorUp(bottomContentHeight);
+    output += cursorUp(bottomContentHeight);
 
     // Return cursor to the initial left offset.
-    output += cursorTo(this.cursorPos.cols);
+    output += cursorToX(this.cursorPos.cols);
 
     /**
      * Render and store state for future re-rendering
@@ -86,7 +86,7 @@ export default class ScreenManager {
   checkCursorPos() {
     const cursorPos = this.rl.getCursorPos();
     if (cursorPos.cols !== this.cursorPos.cols) {
-      this.write(cursorTo(cursorPos.cols));
+      this.write(cursorToX(cursorPos.cols));
       this.cursorPos = cursorPos;
     }
   }
