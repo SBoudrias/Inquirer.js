@@ -1,4 +1,54 @@
 {
+  "description": "Stub package.json that fixes attw NoResolution error by package-json-redirects strategy",
   "main": "../dist/commonjs/lib/ansi.js",
-  "types": "../dist/commonjs/lib/ansi.d.ts"
+  "types": "../dist/commonjs/lib/ansi.d.ts",
+  "engines": {
+    "node": ">=18"
+  },
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
+  "keywords": [
+    "answer",
+    "answers",
+    "ask",
+    "base",
+    "cli",
+    "command",
+    "command-line",
+    "confirm",
+    "enquirer",
+    "generate",
+    "generator",
+    "hyper",
+    "input",
+    "inquire",
+    "inquirer",
+    "interface",
+    "iterm",
+    "javascript",
+    "menu",
+    "node",
+    "nodejs",
+    "prompt",
+    "promptly",
+    "prompts",
+    "question",
+    "readline",
+    "scaffold",
+    "scaffolder",
+    "scaffolding",
+    "stdin",
+    "stdout",
+    "terminal",
+    "tty",
+    "ui",
+    "yeoman",
+    "yo",
+    "zsh"
+  ],
+  "sideEffects": false
 }
