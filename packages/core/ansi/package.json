@@ -1,0 +1,4 @@
+{
+  "main": "../dist/commonjs/lib/ansi.js",
+  "types": "../dist/commonjs/lib/ansi.d.ts"
+}
