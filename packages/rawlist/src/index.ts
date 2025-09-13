@@ -85,11 +85,14 @@ function getSelectedChoice<Value>(
 ): [NormalizedChoice<Value>, number] | [undefined, undefined] {
   let selectedChoice: NormalizedChoice<Value> | undefined;
   const selectableChoices = choices.filter(isSelectableChoice);
-  if (numberRegex.test(input)) {
+
+  // First, try to match by custom key (exact match)
+  selectedChoice = selectableChoices.find((choice) => choice.key === input);
+
+  // If no custom key match and input is numeric, try 1-based index
+  if (!selectedChoice && numberRegex.test(input)) {
     const answer = Number.parseInt(input, 10) - 1;
     selectedChoice = selectableChoices[answer];
-  } else {
-    selectedChoice = selectableChoices.find((choice) => choice.key === input);
   }
 
   return selectedChoice

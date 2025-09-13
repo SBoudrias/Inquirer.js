@@ -346,4 +346,47 @@ describe('rawlist prompt', () => {
 
     await expect(answer).resolves.toEqual('no');
   });
+
+  it('allow using numeric keys (0, 1, 2)', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select an option',
+      choices: [
+        {
+          key: '0',
+          name: 'First option',
+          value: 'first',
+        },
+        {
+          key: '1',
+          name: 'Second option',
+          value: 'second',
+        },
+        {
+          key: '2',
+          name: 'Third option',
+          value: 'third',
+        },
+      ],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select an option
+        0) First option
+        1) Second option
+        2) Third option"
+    `);
+
+    events.type('1');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select an option 1
+        0) First option
+        1) Second option
+        2) Third option"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select an option Second option"');
+
+    await expect(answer).resolves.toEqual('second');
+  });
 });
