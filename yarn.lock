@@ -816,7 +816,6 @@ __metadata:
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^24.0.15"
-    ansi-escapes: "npm:^4.3.2"
     mute-stream: "npm:^2.0.0"
     tshy: "npm:^3.0.2"
   peerDependencies:

@@ -1,9 +1,7 @@
 import { Stream } from 'node:stream';
 import { stripVTControlCharacters } from 'node:util';
 import MuteStream from 'mute-stream';
-import ansiEscapes from 'ansi-escapes';
 import type { Prompt, Context } from '@inquirer/type';
-const ignoredAnsi = new Set([ansiEscapes.cursorHide, ansiEscapes.cursorShow]);
 
 class BufferedStream extends Stream.Writable {
   #_fullOutput: string = '';
@@ -15,11 +13,8 @@ class BufferedStream extends Stream.Writable {
 
     this.#_fullOutput += str;
 
-    // There's some ANSI Inquirer just send to keep state of the terminal clear; we'll ignore those since they're
-    // unlikely to be used by end users or part of prompt code.
-    if (!ignoredAnsi.has(str)) {
-      this.#_rawChunks.push(str);
-    }
+    // Keep track of every chunk send through.
+    this.#_rawChunks.push(str);
 
     // Stripping the ANSI codes here because Inquirer will push commands ANSI (like cursor move.)
     // This is probably fine since we don't care about those for testing; but this could become
