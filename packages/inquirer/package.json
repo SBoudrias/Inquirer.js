@@ -107,5 +107,8 @@
     "@types/node": {
       "optional": true
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

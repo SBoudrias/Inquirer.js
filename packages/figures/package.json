@@ -90,5 +90,8 @@
       "./package.json": "./package.json",
       ".": "./src/index.ts"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -52,6 +52,7 @@ Promise.all(
     pkg.repository = rootPkg.repository;
     pkg.keywords = [...new Set([...rootPkg.keywords, ...(pkg.keywords ?? [])])];
     pkg.sideEffects = pkg.sideEffects ?? false;
+    pkg.publishConfig = { access: 'public' };
 
     if (hasReadme) {
       const repoPath = dir.split('/').slice(-2).join('/');
