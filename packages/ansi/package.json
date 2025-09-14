@@ -73,6 +73,9 @@
     "attw": "attw --pack"
   },
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     "./package.json": "./package.json",
     ".": {
