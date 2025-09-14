@@ -3,7 +3,7 @@
  */
 
 import colors from 'yoctocolors-cjs';
-import { editAsync } from 'external-editor';
+import { editAsync } from '@inquirer/external-editor';
 import { Subject } from 'rxjs';
 import observe from '../utils/events.js';
 import Base from './base.js';
