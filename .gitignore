@@ -1,6 +1,7 @@
 node_modules
 dist
 coverage
+.tshy-build
 .idea
 .yarn/*
 !.yarn/cache
@@ -10,3 +11,11 @@ coverage
 !.yarn/sdks
 !.yarn/versions
 .turbo
+.DS_Store
+.cursor/mcp.json
+
+# tshy build temporary package.json files while building which end up throwing turbo watch in an infinite loop.
+**/src/package.json
+
+# AI tools
+.claude/settings.local.json
