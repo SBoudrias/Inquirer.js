@@ -80,7 +80,7 @@
     "cli-width": "^4.1.0",
     "mute-stream": "^2.0.0",
     "signal-exit": "^4.1.0",
-    "wrap-ansi": "^6.2.0",
+    "wrap-ansi": "^9.0.2",
     "yoctocolors-cjs": "^2.1.2"
   },
   "devDependencies": {
