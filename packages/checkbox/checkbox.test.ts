@@ -1280,4 +1280,33 @@ describe('checkbox prompt', () => {
       await expect(answer).resolves.toEqual(['three']);
     });
   });
+
+  describe('vim emacs bindings', async () => {
+    it('allows for navigation', async () => {
+      const { events, getScreen } = await render(checkbox, {
+        message: 'Select items',
+        choices: [
+          { value: 'one', name: 'One' },
+          { value: 'two', name: 'Two' },
+        ],
+        vimEmacsBindings: true,
+      });
+
+      // Down
+      events.keypress('j');
+      expect(getScreen()).toContain('❯◯ Two');
+
+      // Up
+      events.keypress('k');
+      expect(getScreen()).toContain('❯◯ One');
+
+      // Down
+      events.keypress({ name: 'n', ctrl: true });
+      expect(getScreen()).toContain('❯◯ Two');
+
+      // Up
+      events.keypress({ name: 'p', ctrl: true });
+      expect(getScreen()).toContain('❯◯ One');
+    });
+  });
 });

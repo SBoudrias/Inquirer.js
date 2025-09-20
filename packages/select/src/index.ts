@@ -201,7 +201,7 @@ export default createPrompt(
         }, 700);
       } else if (isBackspaceKey(key)) {
         rl.clearLine(0);
-      } else {
+      } else if (!config.vimEmacsBindings) {
         // Default to search
         const searchTerm = rl.line.toLowerCase();
         const matchIndex = items.findIndex((item) => {

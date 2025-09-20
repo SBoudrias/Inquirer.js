@@ -1141,5 +1141,35 @@ describe('select prompt', () => {
       events.keypress({ name: 'p', ctrl: true });
       expect(getScreen()).toContain('❯ 1. One');
     });
+
+    it('disables the search feature if vimEmacsBindings option is set', async () => {
+      vi.useFakeTimers();
+      const { events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          { name: 'Canada', value: 'CA' },
+          { name: 'China', value: 'ZH' },
+          { name: 'United States', value: 'US' },
+        ],
+        vimEmacsBindings: true,
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number (Use arrow keys)
+        ❯ Canada
+          China
+          United States"
+      `);
+
+      // No-op since search is disabled, due to vim and ema bindings
+      events.type('China');
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number (Use arrow keys)
+        ❯ Canada
+          China
+          United States"
+      `);
+    });
   });
 });
