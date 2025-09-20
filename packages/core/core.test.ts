@@ -772,22 +772,22 @@ describe('Separator', () => {
 
 describe('vim emacs bindings', () => {
   it('supports vim and emac bindings when option passed in', () => {
-    expect(isUpKey({ name: 'up' }, true)).toBeTruthy();
-    expect(isUpKey({ name: 'k' }, true)).toBeTruthy();
+    expect(isUpKey({ name: 'up', ctrl: false }, true)).toBeTruthy();
+    expect(isUpKey({ name: 'k', ctrl: false }, true)).toBeTruthy();
     expect(isUpKey({ name: 'p', ctrl: true }, true)).toBeTruthy();
 
-    expect(isDownKey({ name: 'down' }, true)).toBeTruthy();
-    expect(isDownKey({ name: 'j' }, true)).toBeTruthy();
+    expect(isDownKey({ name: 'down', ctrl: false }, true)).toBeTruthy();
+    expect(isDownKey({ name: 'j', ctrl: false }, true)).toBeTruthy();
     expect(isDownKey({ name: 'n', ctrl: true }, true)).toBeTruthy();
   });
 
   it('does not support vim and emac bindings by default', () => {
-    expect(isUpKey({ name: 'up' })).toBeTruthy();
-    expect(isUpKey({ name: 'k' })).toBeFalsy();
+    expect(isUpKey({ name: 'up', ctrl: false })).toBeTruthy();
+    expect(isUpKey({ name: 'k', ctrl: false })).toBeFalsy();
     expect(isUpKey({ name: 'p', ctrl: true })).toBeFalsy();
 
-    expect(isDownKey({ name: 'down' })).toBeTruthy();
-    expect(isDownKey({ name: 'j' })).toBeFalsy();
+    expect(isDownKey({ name: 'down', ctrl: false })).toBeTruthy();
+    expect(isDownKey({ name: 'j', ctrl: false })).toBeFalsy();
     expect(isDownKey({ name: 'n', ctrl: true })).toBeFalsy();
   });
 });
