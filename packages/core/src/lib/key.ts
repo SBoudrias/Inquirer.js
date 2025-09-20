@@ -11,7 +11,10 @@ export const isUpKey = (key: KeypressEvent, vimEmacsBindings: boolean = false): 
   // Emacs keybinding
   (vimEmacsBindings && key.ctrl && key.name === 'p');
 
-export const isDownKey = (key: KeypressEvent, vimEmacsBindings: boolean = false): boolean =>
+export const isDownKey = (
+  key: KeypressEvent,
+  vimEmacsBindings: boolean = false,
+): boolean =>
   // The down key
   key.name === 'down' ||
   // Vim keybinding
