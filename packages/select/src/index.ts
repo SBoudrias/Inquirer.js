@@ -60,7 +60,13 @@ type NormalizedChoice<Value> = {
   disabled: boolean | string;
 };
 
-type SelectConfig<Value, ChoicesObject = ReadonlyArray<string | Separator>> = {
+
+type SelectConfig<
+  Value,
+  ChoicesObject =
+    | ReadonlyArray<string | Separator>
+    | ReadonlyArray<Choice<Value> | Separator>,
+> = {
   message: string;
   choices: ChoicesObject extends ReadonlyArray<string | Separator>
     ? ChoicesObject
@@ -83,7 +89,7 @@ function isSelectable<Value>(
 }
 
 function normalizeChoices<Value>(
-  choices: ReadonlyArray<string | Separator>,
+  choices: ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
 ): Array<NormalizedChoice<Value> | Separator> {
   return choices.map((choice) => {
     if (Separator.isSeparator(choice)) return choice;
@@ -171,7 +177,7 @@ export default createPrompt(
           let next = active;
           do {
             next = (next + offset + items.length) % items.length;
-          } while (!isSelectable(items[next]));
+          } while (!isSelectable(items[next]!));
           setActive(next);
         }
       } else if (isNumberKey(key) && !Number.isNaN(Number(rl.line))) {
