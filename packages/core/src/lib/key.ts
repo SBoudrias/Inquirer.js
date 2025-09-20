@@ -3,9 +3,21 @@ export type KeypressEvent = {
   ctrl: boolean;
 };
 
-export const isUpKey = (key: KeypressEvent): boolean => key.name === 'up';
+export const isUpKey = (key: KeypressEvent, vimEmacsBindings: boolean = false): boolean =>
+  // The up key
+  key.name === 'up' ||
+  // Vim keybinding
+  (vimEmacsBindings && key.name === 'k') ||
+  // Emacs keybinding
+  (vimEmacsBindings && key.ctrl && key.name === 'p');
 
-export const isDownKey = (key: KeypressEvent): boolean => key.name === 'down';
+export const isDownKey = (key: KeypressEvent, vimEmacsBindings: boolean = false): boolean =>
+  // The down key
+  key.name === 'down' ||
+  // Vim keybinding
+  (vimEmacsBindings && key.name === 'j') ||
+  // Emacs keybinding
+  (vimEmacsBindings && key.ctrl && key.name === 'n');
 
 export const isSpaceKey = (key: KeypressEvent): boolean => key.name === 'space';
 

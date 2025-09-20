@@ -60,12 +60,7 @@ type NormalizedChoice<Value> = {
   disabled: boolean | string;
 };
 
-type SelectConfig<
-  Value,
-  ChoicesObject =
-    | ReadonlyArray<string | Separator>
-    | ReadonlyArray<Choice<Value> | Separator>,
-> = {
+type SelectConfig<Value, ChoicesObject = ReadonlyArray<string | Separator>> = {
   message: string;
   choices: ChoicesObject extends ReadonlyArray<string | Separator>
     ? ChoicesObject
@@ -78,6 +73,7 @@ type SelectConfig<
     pager: string;
   };
   theme?: PartialDeep<Theme<SelectTheme>>;
+  vimEmacsBindings?: boolean;
 };
 
 function isSelectable<Value>(
@@ -87,7 +83,7 @@ function isSelectable<Value>(
 }
 
 function normalizeChoices<Value>(
-  choices: ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
+  choices: ReadonlyArray<string | Separator>,
 ): Array<NormalizedChoice<Value> | Separator> {
   return choices.map((choice) => {
     if (Separator.isSeparator(choice)) return choice;
@@ -161,18 +157,21 @@ export default createPrompt(
       if (isEnterKey(key)) {
         setStatus('done');
         done(selectedChoice.value);
-      } else if (isUpKey(key) || isDownKey(key)) {
+      } else if (
+        isUpKey(key, config.vimEmacsBindings) ||
+        isDownKey(key, config.vimEmacsBindings)
+      ) {
         rl.clearLine(0);
         if (
           loop ||
-          (isUpKey(key) && active !== bounds.first) ||
-          (isDownKey(key) && active !== bounds.last)
+          (isUpKey(key, config.vimEmacsBindings) && active !== bounds.first) ||
+          (isDownKey(key, config.vimEmacsBindings) && active !== bounds.last)
         ) {
-          const offset = isUpKey(key) ? -1 : 1;
+          const offset = isUpKey(key, config.vimEmacsBindings) ? -1 : 1;
           let next = active;
           do {
             next = (next + offset + items.length) % items.length;
-          } while (!isSelectable(items[next]!));
+          } while (!isSelectable(items[next]));
           setActive(next);
         }
       } else if (isNumberKey(key) && !Number.isNaN(Number(rl.line))) {

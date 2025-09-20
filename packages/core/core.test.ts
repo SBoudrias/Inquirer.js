@@ -479,7 +479,6 @@ describe('createPrompt()', () => {
       message: 'Question',
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
     answer.cancel();
     events.keypress('enter');
 
@@ -600,10 +599,8 @@ it('allow cancelling the prompt multiple times', async () => {
   const prompt = createPrompt(Prompt);
   const { answer, events } = await render(prompt, { message: 'Question' });
 
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
   answer.cancel();
 
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
   answer.cancel();
   events.keypress('enter');
 
@@ -767,5 +764,27 @@ describe('Separator', () => {
       '"──────────────"',
     );
     expect(new Separator('===').separator).toEqual('===');
+  });
+});
+
+describe('vim emacs bindings', () => {
+  it('supports vim and emac bindings when option passed in', () => {
+    expect(isUpKey({ name: 'up' }, true)).toBeTruthy();
+    expect(isUpKey({ name: 'k' }, true)).toBeTruthy();
+    expect(isUpKey({ name: 'p', ctrl: true }, true)).toBeTruthy();
+
+    expect(isDownKey({ name: 'down' }, true)).toBeTruthy();
+    expect(isDownKey({ name: 'j' }, true)).toBeTruthy();
+    expect(isDownKey({ name: 'n', ctrl: true }, true)).toBeTruthy();
+  });
+
+  it('does not support vim and emac bindings by default', () => {
+    expect(isUpKey({ name: 'up' })).toBeTruthy();
+    expect(isUpKey({ name: 'k' })).toBeFalsy();
+    expect(isUpKey({ name: 'p', ctrl: true })).toBeFalsy();
+
+    expect(isDownKey({ name: 'down' })).toBeTruthy();
+    expect(isDownKey({ name: 'j' })).toBeFalsy();
+    expect(isDownKey({ name: 'n', ctrl: true })).toBeFalsy();
   });
 });
