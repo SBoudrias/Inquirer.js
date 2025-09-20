@@ -60,7 +60,6 @@ type NormalizedChoice<Value> = {
   disabled: boolean | string;
 };
 
-
 type SelectConfig<
   Value,
   ChoicesObject =
