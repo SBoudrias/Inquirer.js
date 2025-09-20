@@ -1103,7 +1103,7 @@ describe('select prompt', () => {
 
   describe('vimEmacsBindings', () => {
     it('supports vim and emac bindings when config option is passed in', async () => {
-      const { answer, events, getScreen } = await render(select, {
+      const { events, getScreen } = await render(select, {
         message: 'Select a number',
         choices: [
           new Separator(),
