@@ -1281,7 +1281,7 @@ describe('checkbox prompt', () => {
     });
   });
 
-  describe('vim emacs bindings', async () => {
+  describe('vim emacs bindings', () => {
     it('allows for navigation', async () => {
       const { events, getScreen } = await render(checkbox, {
         message: 'Select items',
