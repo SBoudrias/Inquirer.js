@@ -53,6 +53,7 @@ type Choice<Value> = {
   value: Value;
   disabled?: boolean | string;
   checked?: boolean;
+  checkedName?: string;
   type?: never;
 };
 
@@ -182,7 +183,7 @@ export default createPrompt(
           return ` ${item.separator}`;
         }
 
-        const line = item.name || item.value;
+        const line = item.checked ? item.checkedName || item.name || item.value : item.name || item.value;
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';

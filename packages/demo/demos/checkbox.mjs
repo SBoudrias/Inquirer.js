@@ -53,6 +53,17 @@ const demo = async () => {
     ],
   });
   console.log('Answer:', answer);
+
+  answer = await checkbox({
+    message: 'Select fruits',
+    choices: [
+      new Separator('== Fruits with checkedName (changes when selected) =='),
+      { name: 'Apple', value: 'apple', checkedName: 'Apple selected' },
+      { name: 'Banana', value: 'banana', checkedName: 'Banana selected' },
+      { name: 'Cherry', value: 'cherry' },
+    ],
+  });
+  console.log('Answer:', answer);
 };
 
 if (import.meta.url.startsWith('file:')) {
