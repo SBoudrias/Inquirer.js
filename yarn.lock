@@ -930,9 +930,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/create@npm:8.2.3":
-  version: 8.2.3
-  resolution: "@lerna/create@npm:8.2.3"
+"@lerna/create@npm:8.2.4":
+  version: 8.2.4
+  resolution: "@lerna/create@npm:8.2.4"
   dependencies:
     "@npmcli/arborist": "npm:7.5.4"
     "@npmcli/package-json": "npm:5.2.0"
@@ -967,7 +967,6 @@ __metadata:
     js-yaml: "npm:4.1.0"
     libnpmpublish: "npm:9.0.9"
     load-json-file: "npm:6.2.0"
-    lodash: "npm:^4.17.21"
     make-dir: "npm:4.0.0"
     minimatch: "npm:3.0.5"
     multimatch: "npm:5.0.0"
@@ -1004,7 +1003,7 @@ __metadata:
     write-pkg: "npm:4.0.0"
     yargs: "npm:17.7.2"
     yargs-parser: "npm:21.1.1"
-  checksum: 10/1264bf324de2c83377dbc0b49c6731b9e27401c552c34601846b012c46aee496c9a3bcdeba87e59cfaf8b54d3c82f7f3ece62ff4c77ca7b3a85acfc021b7cbb2
+  checksum: 10/7d789b8df8f82901c26ae24c5573805303446cacba41fae9b78223aa18cb6d6efeb9dcfbe3d19ad504afbef0da05d85d85f0746d3745776c94a5ea3626d99093
   languageName: node
   linkType: hard
 
@@ -5172,10 +5171,10 @@ __metadata:
   linkType: hard
 
 "lerna@npm:^8.2.3":
-  version: 8.2.3
-  resolution: "lerna@npm:8.2.3"
+  version: 8.2.4
+  resolution: "lerna@npm:8.2.4"
   dependencies:
-    "@lerna/create": "npm:8.2.3"
+    "@lerna/create": "npm:8.2.4"
     "@npmcli/arborist": "npm:7.5.4"
     "@npmcli/package-json": "npm:5.2.0"
     "@npmcli/run-script": "npm:8.1.0"
@@ -5215,7 +5214,6 @@ __metadata:
     libnpmaccess: "npm:8.0.6"
     libnpmpublish: "npm:9.0.9"
     load-json-file: "npm:6.2.0"
-    lodash: "npm:^4.17.21"
     make-dir: "npm:4.0.0"
     minimatch: "npm:3.0.5"
     multimatch: "npm:5.0.0"
@@ -5257,7 +5255,7 @@ __metadata:
     yargs-parser: "npm:21.1.1"
   bin:
     lerna: dist/cli.js
-  checksum: 10/3ef9e5c6e2ee20cad0c750817cf628dffa0056f9b87ee4956f641833ac3b06a8fdf50d4cd6ba63a818427c7e6c1482568c9e184f0535fd23239ed55e5eae57a7
+  checksum: 10/53f436c6e5a28811ecc3fed96522517b2f6c7c1b6b70a580cd05f108823d3b89e40a0bf40e57ac6db269f9089d7ea832e47f57a8ddfca68d8a171fe92fa3a06e
   languageName: node
   linkType: hard
 
