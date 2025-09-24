@@ -63,6 +63,7 @@ type Choice<Value> = {
   value: Value;
   name?: string;
   description?: string;
+  checkedName?: string;
   short?: string;
   disabled?: boolean | string;
   checked?: boolean;
@@ -73,6 +74,7 @@ type NormalizedChoice<Value> = {
   value: Value;
   name: string;
   description?: string;
+  checkedName?: string;
   short: string;
   disabled: boolean | string;
   checked: boolean;
@@ -131,6 +133,7 @@ function normalizeChoices<Value>(
         value: choice as Value,
         name: choice,
         short: choice,
+        checkedName: choice,
         disabled: false,
         checked: false,
       };
@@ -141,6 +144,7 @@ function normalizeChoices<Value>(
       value: choice.value,
       name,
       short: choice.short ?? name,
+      checkedName: choice.checkedName ?? name,
       disabled: choice.disabled ?? false,
       checked: choice.checked ?? false,
     };
@@ -264,9 +268,10 @@ export default createPrompt(
         }
 
         const checkbox = item.checked ? theme.icon.checked : theme.icon.unchecked;
+        const name = item.checked ? item.checkedName || item.name : item.name;
         const color = isActive ? theme.style.highlight : (x: string) => x;
         const cursor = isActive ? theme.icon.cursor : ' ';
-        return color(`${cursor}${checkbox} ${item.name}`);
+        return color(`${cursor}${checkbox} ${name}`);
       },
       pageSize,
       loop,
