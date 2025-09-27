@@ -98,6 +98,7 @@ type CheckboxConfig<
   ) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme<CheckboxTheme>>;
   shortcuts?: CheckboxShortcuts;
+  vimEmacsBindings?: boolean;
 };
 
 type Item<Value> = NormalizedChoice<Value> | Separator;
@@ -200,13 +201,16 @@ export default createPrompt(
         } else {
           setError(isValid || 'You must select a valid value');
         }
-      } else if (isUpKey(key) || isDownKey(key)) {
+      } else if (
+        isUpKey(key, config.vimEmacsBindings) ||
+        isDownKey(key, config.vimEmacsBindings)
+      ) {
         if (
           loop ||
-          (isUpKey(key) && active !== bounds.first) ||
-          (isDownKey(key) && active !== bounds.last)
+          (isUpKey(key, config.vimEmacsBindings) && active !== bounds.first) ||
+          (isDownKey(key, config.vimEmacsBindings) && active !== bounds.last)
         ) {
-          const offset = isUpKey(key) ? -1 : 1;
+          const offset = isUpKey(key, config.vimEmacsBindings) ? -1 : 1;
           let next = active;
           do {
             next = (next + offset + items.length) % items.length;
