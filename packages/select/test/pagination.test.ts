@@ -47,7 +47,8 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
+          ↑↓ navigate • ⏎ select
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -62,6 +63,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -76,6 +78,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -90,6 +93,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -104,6 +108,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -118,6 +123,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -132,6 +138,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -146,6 +153,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -170,7 +178,8 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -187,6 +196,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -203,6 +213,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -219,6 +230,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -235,6 +247,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -251,6 +264,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -267,6 +281,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -283,6 +298,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -311,7 +327,8 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
+          ↑↓ navigate • ⏎ select
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -324,6 +341,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -336,6 +354,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
@@ -348,6 +367,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
@@ -360,6 +380,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
@@ -372,6 +393,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -384,6 +406,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
@@ -406,7 +429,8 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -419,6 +443,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -431,6 +456,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
@@ -443,6 +469,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
               15 minutes
            ──────────────
            ──────────────
@@ -455,6 +482,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
@@ -467,6 +495,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -479,6 +508,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
               15 minutes
            ──────────────
            ──────────────
@@ -502,19 +532,20 @@ describe('select() prompt pagination', () => {
 
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a number
+          ↑↓ navigate • ⏎ select
           ❯ 1
             2
             3
             4
             5
             6
-            7
-          (Use arrow keys to reveal more choices)"
+            7"
         `);
 
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a number
+          ↑↓ navigate • ⏎ select
             1
           ❯ 2
             3
@@ -527,6 +558,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a number
+          ↑↓ navigate • ⏎ select
             1
             2
           ❯ 3
@@ -539,6 +571,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a number
+          ↑↓ navigate • ⏎ select
             12
             1
           ❯ 2
@@ -551,6 +584,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a number
+          ↑↓ navigate • ⏎ select
             11
             12
           ❯ 1
@@ -563,6 +597,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a number
+          ↑↓ navigate • ⏎ select
             12
             1
           ❯ 2
@@ -586,16 +621,16 @@ describe('select() prompt pagination', () => {
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a number
-          ❯ 1
-            2
-            3
-            4
-            5
-            6
-            7
-          (Use arrow keys to reveal more choices)"
-        `);
+        "? Select a number
+        ↑↓ navigate • ⏎ select
+        ❯ 1
+          2
+          3
+          4
+          5
+          6
+          7"
+      `);
 
       events.keypress('up');
       events.keypress('up');
@@ -603,6 +638,7 @@ describe('select() prompt pagination', () => {
       events.keypress('up');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
+        ↑↓ navigate • ⏎ select
         ❯ 9
           10
           11
@@ -615,6 +651,7 @@ describe('select() prompt pagination', () => {
       events.keypress('down');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
+        ↑↓ navigate • ⏎ select
           9
         ❯ 10
           11
@@ -640,7 +677,8 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
+          ↑↓ navigate • ⏎ select
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -655,6 +693,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -670,6 +709,7 @@ describe('select() prompt pagination', () => {
         const bottomScreen = getScreen();
         expect(bottomScreen).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -687,6 +727,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -702,6 +743,7 @@ describe('select() prompt pagination', () => {
         const topScreen = getScreen();
         expect(topScreen).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -729,7 +771,8 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -746,6 +789,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -762,6 +806,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -778,6 +823,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -794,6 +840,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -811,6 +858,7 @@ describe('select() prompt pagination', () => {
         const topScreen = getScreen();
         expect(topScreen).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -842,7 +890,8 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
+          ↑↓ navigate • ⏎ select
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -855,6 +904,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -868,6 +918,7 @@ describe('select() prompt pagination', () => {
         const bottomScreen = getScreen();
         expect(bottomScreen).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
               30 minutes
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
@@ -883,6 +934,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -896,6 +948,7 @@ describe('select() prompt pagination', () => {
         const topScreen = getScreen();
         expect(topScreen).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -921,7 +974,8 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -934,6 +988,7 @@ describe('select() prompt pagination', () => {
         events.keypress('down');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -947,6 +1002,7 @@ describe('select() prompt pagination', () => {
         const bottomScreen = getScreen();
         expect(bottomScreen).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
@@ -962,6 +1018,7 @@ describe('select() prompt pagination', () => {
         events.keypress('up');
         expect(getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -975,6 +1032,7 @@ describe('select() prompt pagination', () => {
         const topScreen = getScreen();
         expect(topScreen).toMatchInlineSnapshot(`
           "? Select a recipe
+          ↑↓ navigate • ⏎ select
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta

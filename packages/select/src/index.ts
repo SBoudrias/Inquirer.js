@@ -120,7 +120,6 @@ function normalizeChoices<Value>(
 export default createPrompt(
   <Value>(config: SelectConfig<Value>, done: (value: Value) => void) => {
     const { loop = true, pageSize = 7 } = config;
-    const firstRender = useRef(true);
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
     const [status, setStatus] = useState<Status>('idle');
     const prefix = usePrefix({ status, theme });
@@ -225,21 +224,21 @@ export default createPrompt(
 
     const message = theme.style.message(config.message, status);
 
-    let helpTipTop = '';
-    let helpTipBottom = '';
-    if (
-      theme.helpMode === 'always' ||
-      (theme.helpMode === 'auto' && firstRender.current)
-    ) {
-      firstRender.current = false;
+    let helpLine: string | undefined;
+    if (theme.helpMode !== 'never') {
+      const defaultHelp = [
+        `↑↓ ${colors.bold('navigate')}`,
+        `⏎ ${colors.bold('select')}`,
+      ].join(' • ');
 
-      if (items.length > pageSize) {
-        helpTipBottom = `\n${theme.style.help(`(${config.instructions?.pager ?? 'Use arrow keys to reveal more choices'})`)}`;
-      } else {
-        helpTipTop = theme.style.help(
-          `(${config.instructions?.navigation ?? 'Use arrow keys'})`,
-        );
-      }
+      const customHelp = config.instructions
+        ? items.length > pageSize
+          ? (config.instructions.pager ?? config.instructions.navigation)
+          : (config.instructions.navigation ?? config.instructions.pager)
+        : undefined;
+
+      const helpContent = customHelp ?? defaultHelp;
+      helpLine = theme.style.help(helpContent);
     }
 
     let separatorCount = 0;
@@ -276,7 +275,11 @@ export default createPrompt(
       ? `\n${theme.style.description(selectedChoice.description)}`
       : ``;
 
-    return `${[prefix, message, helpTipTop].filter(Boolean).join(' ')}\n${page}${helpTipBottom}${choiceDescription}${cursorHide}`;
+    const header = [prefix, message].filter(Boolean).join(' ');
+    const lines = [header];
+    if (helpLine) lines.push(helpLine);
+
+    return `${lines.join('\n')}\n${page}${choiceDescription}${cursorHide}`;
   },
 );
 
