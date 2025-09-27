@@ -11,13 +11,16 @@ import {
   type Status,
 } from '@inquirer/core';
 import type { PartialDeep, InquirerReadline } from '@inquirer/type';
+import colors from 'yoctocolors-cjs';
 
 type EditorTheme = {
   validationFailureMode: 'keep' | 'clear';
+  helpMode: 'always' | 'never' | 'auto';
 };
 
 const editorTheme: EditorTheme = {
   validationFailureMode: 'keep',
+  helpMode: 'auto',
 };
 
 type EditorConfig = {
@@ -96,12 +99,13 @@ export default createPrompt<string, EditorConfig>((config, done) => {
   });
 
   const message = theme.style.message(config.message, status);
-  let helpTip = '';
-  if (status === 'loading') {
-    helpTip = theme.style.help('Received');
-  } else if (status === 'idle') {
-    const enterKey = theme.style.key('enter');
-    helpTip = theme.style.help(`Press ${enterKey} to launch your preferred editor.`);
+  let helpLine: string | undefined;
+  if (theme.helpMode !== 'never') {
+    if (status === 'loading') {
+      helpLine = theme.style.help('Received');
+    } else if (status === 'idle') {
+      helpLine = theme.style.help(`⏎ ${colors.bold('launch editor')}`);
+    }
   }
 
   let error = '';
@@ -109,5 +113,9 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     error = theme.style.error(errorMsg);
   }
 
-  return [[prefix, message, helpTip].filter(Boolean).join(' '), error];
+  const header = [prefix, message].filter(Boolean).join(' ');
+  const lines = [header];
+  if (helpLine) lines.push(helpLine);
+
+  return [lines.join('\n'), error];
 });
