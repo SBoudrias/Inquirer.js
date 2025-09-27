@@ -9,12 +9,18 @@ describe('password prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(
-      '"? Enter your password [input is masked]"',
+      `
+      "? Enter your password
+      input is masked"
+    `,
     );
 
     events.type('J');
     expect(getScreen()).toMatchInlineSnapshot(
-      '"? Enter your password [input is masked]"',
+      `
+      "? Enter your password
+      input is masked"
+    `,
     );
 
     events.type('ohn');
@@ -84,5 +90,14 @@ describe('password prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('12345678');
+  });
+
+  it('respects helpMode: never', async () => {
+    const { getScreen } = await render(password, {
+      message: 'Enter your password',
+      theme: { helpMode: 'never' },
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot('"? Enter your password"');
   });
 });
