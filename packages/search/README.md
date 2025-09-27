@@ -139,10 +139,12 @@ Choices can also be an array of string, in which case the string will be used bo
 
 ### `instructions` object
 
-The `instructions` option allows you to customize the help text displayed at the bottom of the prompt:
+The `instructions` option allows you to customize the help line rendered under the prompt message:
 
-- `navigation`: The instruction text shown when all choices fit within the page size (default: "Use arrow keys")
-- `pager`: The instruction text shown when there are more choices than the page size (default: "Use arrow keys to reveal more choices")
+- `navigation`: Text shown when all choices fit within the page size (default: `↑↓ navigate • ⏎ select`)
+- `pager`: Text shown when there are more choices than the page size (default: `↑↓ navigate • ⏎ select`)
+
+Use the prompt `theme.helpMode` option (`'always' | 'auto' | 'never'`) to keep or hide this line entirely. By default (`'auto'`), the help line stays visible.
 
 ### Validation & autocomplete interaction
 

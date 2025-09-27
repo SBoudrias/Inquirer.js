@@ -4,7 +4,6 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
-  useRef,
   useEffect,
   useMemo,
   isDownKey,
@@ -122,7 +121,6 @@ export default createPrompt(
   <Value>(config: SearchConfig<Value>, done: (value: Value) => void) => {
     const { pageSize = 7, validate = () => true } = config;
     const theme = makeTheme<SearchTheme>(searchTheme, config.theme);
-    const firstRender = useRef(true);
     const [status, setStatus] = useState<Status>('loading');
 
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -222,19 +220,21 @@ export default createPrompt(
 
     const message = theme.style.message(config.message, status);
 
-    if (active > 0) {
-      firstRender.current = false;
-    }
+    let helpLine: string | undefined;
+    if (theme.helpMode !== 'never') {
+      const defaultHelp = [
+        `↑↓ ${colors.bold('navigate')}`,
+        `⏎ ${colors.bold('select')}`,
+      ].join(' • ');
 
-    let helpTip = '';
-    if (
-      searchResults.length > 1 &&
-      (theme.helpMode === 'always' || (theme.helpMode === 'auto' && firstRender.current))
-    ) {
-      helpTip =
-        searchResults.length > pageSize
-          ? `\n${theme.style.help(`(${config.instructions?.pager ?? 'Use arrow keys to reveal more choices'})`)}`
-          : `\n${theme.style.help(`(${config.instructions?.navigation ?? 'Use arrow keys'})`)}`;
+      const customHelp = config.instructions
+        ? searchResults.length > pageSize
+          ? (config.instructions.pager ?? config.instructions.navigation)
+          : (config.instructions.navigation ?? config.instructions.pager)
+        : undefined;
+
+      const helpContent = customHelp ?? defaultHelp;
+      helpLine = theme.style.help(helpContent);
     }
 
     // TODO: What to do if no results are found? Should we display a message?
@@ -279,10 +279,13 @@ export default createPrompt(
       ? `\n${theme.style.description(selectedChoice.description)}`
       : ``;
 
-    return [
-      [prefix, message, searchStr].filter(Boolean).join(' '),
-      `${error ?? page}${helpTip}${choiceDescription}`,
-    ];
+    const header = [prefix, message, searchStr].filter(Boolean).join(' ');
+    const lines = [header];
+    if (helpLine) lines.push(helpLine);
+
+    lines.push(`${error ?? page}${choiceDescription}`);
+
+    return lines;
   },
 );
 
