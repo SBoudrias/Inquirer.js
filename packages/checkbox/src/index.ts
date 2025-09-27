@@ -4,7 +4,6 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
-  useRef,
   useMemo,
   makeTheme,
   isUpKey,
@@ -164,7 +163,6 @@ export default createPrompt(
     } = config;
     const shortcuts = { all: 'a', invert: 'i', ...config.shortcuts };
     const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme);
-    const firstRender = useRef(true);
     const [status, setStatus] = useState<Status>('idle');
     const prefix = usePrefix({ status, theme });
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
@@ -185,7 +183,6 @@ export default createPrompt(
     }, [items]);
 
     const [active, setActive] = useState(bounds.first);
-    const [showHelpTip, setShowHelpTip] = useState(true);
     const [errorMsg, setError] = useState<string>();
 
     useKeypress(async (key) => {
@@ -215,7 +212,6 @@ export default createPrompt(
         }
       } else if (isSpaceKey(key)) {
         setError(undefined);
-        setShowHelpTip(false);
         setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
       } else if (key.name === shortcuts.all) {
         const selectAll = items.some((choice) => isSelectable(choice) && !choice.checked);
@@ -281,36 +277,20 @@ export default createPrompt(
       return `${prefix} ${message} ${answer}`;
     }
 
-    let helpTipTop = '';
-    let helpTipBottom = '';
-    if (
-      theme.helpMode === 'always' ||
-      (theme.helpMode === 'auto' &&
-        showHelpTip &&
-        (instructions === undefined || instructions))
-    ) {
+    let helpLine: string | undefined;
+    if (theme.helpMode !== 'never' && instructions !== false) {
       if (typeof instructions === 'string') {
-        helpTipTop = instructions;
+        helpLine = theme.style.help(instructions);
       } else {
-        const keys = [
-          `${theme.style.key('space')} to select`,
-          shortcuts.all ? `${theme.style.key(shortcuts.all)} to toggle all` : '',
-          shortcuts.invert
-            ? `${theme.style.key(shortcuts.invert)} to invert selection`
-            : '',
-          `and ${theme.style.key('enter')} to proceed`,
+        const segments = [
+          `↑↓ ${colors.bold('navigate')}`,
+          `space ${colors.bold('select')}`,
         ];
-        helpTipTop = ` (Press ${keys.filter((key) => key !== '').join(', ')})`;
-      }
-
-      if (
-        items.length > pageSize &&
-        (theme.helpMode === 'always' ||
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          (theme.helpMode === 'auto' && firstRender.current))
-      ) {
-        helpTipBottom = `\n${theme.style.help('(Use arrow keys to reveal more choices)')}`;
-        firstRender.current = false;
+        if (shortcuts.all) segments.push(`${shortcuts.all} ${colors.bold('all')}`);
+        if (shortcuts.invert)
+          segments.push(`${shortcuts.invert} ${colors.bold('invert')}`);
+        segments.push(`⏎ ${colors.bold('submit')}`);
+        helpLine = theme.style.help(segments.join(' • '));
       }
     }
 
@@ -323,7 +303,11 @@ export default createPrompt(
       error = `\n${theme.style.error(errorMsg)}`;
     }
 
-    return `${prefix} ${message}${helpTipTop}\n${page}${helpTipBottom}${choiceDescription}${error}${cursorHide}`;
+    const header = [prefix, message].filter(Boolean).join(' ');
+    const lines = [header];
+    if (helpLine) lines.push(helpLine);
+
+    return `${lines.join('\n')}\n${page}${choiceDescription}${error}${cursorHide}`;
   },
 );
 
