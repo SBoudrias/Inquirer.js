@@ -3,9 +3,11 @@ import { readFileSync, statSync, writeFileSync } from 'node:fs';
 import iconv from 'iconv-lite';
 import { dirname } from 'node:path';
 import { edit, editAsync, ExternalEditor } from '../src/index.ts';
+import { fileURLToPath } from 'node:url';
 
 const testingInput = 'aAbBcCdDeEfFgG';
 const expectedResult = 'aAbBcCdDeE';
+const escapeSpaces = (value: string) => value.replace(/ /g, '\\ ');
 
 describe('main', () => {
   let previousVisual: string | undefined;
@@ -13,7 +15,11 @@ describe('main', () => {
 
   beforeAll(() => {
     previousVisual = process.env['VISUAL'];
-    process.env['VISUAL'] = 'truncate --size 10';
+    const truncateEditorPath = fileURLToPath(
+      new URL('./truncate-editor.js', import.meta.url),
+    );
+    process.env['VISUAL'] =
+      `${escapeSpaces(process.execPath)} ${escapeSpaces(truncateEditorPath)}`;
   });
 
   beforeEach(() => {
