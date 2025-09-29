@@ -86,7 +86,7 @@
     "eslint-plugin-n": "^17.21.0",
     "eslint-plugin-oxlint": "^1.7.0",
     "globals": "^16.3.0",
-    "globby": "^14.1.0",
+    "globby": "^15.0.0",
     "husky": "^9.1.7",
     "lerna": "^8.2.3",
     "nano-staged": "^0.8.0",
