@@ -11,7 +11,6 @@ import {
   type Status,
 } from '@inquirer/core';
 import type { PartialDeep, InquirerReadline } from '@inquirer/type';
-import colors from 'yoctocolors-cjs';
 
 type EditorTheme = {
   validationFailureMode: 'keep' | 'clear';
@@ -104,7 +103,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     if (status === 'loading') {
       helpLine = theme.style.help('Received');
     } else if (status === 'idle') {
-      helpLine = theme.style.help(`⏎ ${colors.bold('launch editor')}`);
+      helpLine = `${theme.style.help('⏎ ')}${theme.style.highlight('launch editor')}`;
     }
   }
 

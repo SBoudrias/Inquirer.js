@@ -227,11 +227,11 @@ export default createPrompt(
         `⏎ ${colors.bold('select')}`,
       ].join(' • ');
 
-      const customHelp = config.instructions
-        ? searchResults.length > pageSize
-          ? (config.instructions.pager ?? config.instructions.navigation)
-          : (config.instructions.navigation ?? config.instructions.pager)
-        : undefined;
+      let customHelp: string | undefined;
+      if (config.instructions) {
+        const { pager, navigation } = config.instructions;
+        customHelp = searchResults.length > pageSize ? pager : navigation;
+      }
 
       const helpContent = customHelp ?? defaultHelp;
       helpLine = theme.style.help(helpContent);
