@@ -280,12 +280,12 @@ export default createPrompt(
       : ``;
 
     const header = [prefix, message, searchStr].filter(Boolean).join(' ');
-    const lines = [header];
-    if (helpLine) lines.push(helpLine);
+    let body = `${error ?? page}${choiceDescription}`;
+    if (helpLine) {
+      body = `${helpLine}\n${body}`;
+    }
 
-    lines.push(`${error ?? page}${choiceDescription}`);
-
-    return lines;
+    return [header, body];
   },
 );
 
