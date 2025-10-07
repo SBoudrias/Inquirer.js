@@ -156,16 +156,16 @@ jobs:
           yarn set resolution @inquirer/external-editor@npm:* file:/tmp/artifacts/external-editor.tgz
           yarn set resolution @inquirer/type@npm:* file:/tmp/artifacts/inquirer-type.tgz
           yarn set resolution @inquirer/prompts@npm:* file:/tmp/artifacts/inquirer-prompts.tgz
-          yarn set resolution @inquirer/prompts@npm:*/@inquirer/checkbox file:/tmp/artifacts/inquirer-checkbox.tgz
-          yarn set resolution @inquirer/prompts@npm:*/@inquirer/confirm file:/tmp/artifacts/inquirer-confirm.tgz
-          yarn set resolution @inquirer/prompts@npm:*/@inquirer/editor file:/tmp/artifacts/inquirer-editor.tgz
-          yarn set resolution @inquirer/prompts@npm:*/@inquirer/expand file:/tmp/artifacts/inquirer-expand.tgz
-          yarn set resolution @inquirer/prompts@npm:*/@inquirer/input file:/tmp/artifacts/inquirer-input.tgz
-          yarn set resolution @inquirer/prompts@npm:*/@inquirer/number file:/tmp/artifacts/inquirer-number.tgz
-          yarn set resolution @inquirer/prompts@npm:*/@inquirer/password file:/tmp/artifacts/inquirer-password.tgz
-          yarn set resolution @inquirer/prompts@npm:*/@inquirer/rawlist file:/tmp/artifacts/inquirer-rawlist.tgz
-          yarn set resolution @inquirer/prompts@npm:*/@inquirer/search file:/tmp/artifacts/inquirer-search.tgz
-          yarn set resolution @inquirer/prompts@npm:*/@inquirer/select file:/tmp/artifacts/inquirer-select.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/checkbox@npm:* file:/tmp/artifacts/inquirer-checkbox.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/confirm@npm:* file:/tmp/artifacts/inquirer-confirm.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/editor@npm:* file:/tmp/artifacts/inquirer-editor.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/expand@npm:* file:/tmp/artifacts/inquirer-expand.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/input@npm:* file:/tmp/artifacts/inquirer-input.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/number@npm:* file:/tmp/artifacts/inquirer-number.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/password@npm:* file:/tmp/artifacts/inquirer-password.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/rawlist@npm:* file:/tmp/artifacts/inquirer-rawlist.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/search@npm:* file:/tmp/artifacts/inquirer-search.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/select@npm:* file:/tmp/artifacts/inquirer-select.tgz
           yarn install
           yarn tsc
 
