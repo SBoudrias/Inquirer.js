@@ -62,8 +62,8 @@ const checkboxTheme: CheckboxTheme = {
 type Choice<Value> = {
   value: Value;
   name?: string;
-  description?: string;
   checkedName?: string;
+  description?: string;
   short?: string;
   disabled?: boolean | string;
   checked?: boolean;
@@ -73,8 +73,8 @@ type Choice<Value> = {
 type NormalizedChoice<Value> = {
   value: Value;
   name: string;
+  checkedName: string;
   description?: string;
-  checkedName?: string;
   short: string;
   disabled: boolean | string;
   checked: boolean;
@@ -268,7 +268,7 @@ export default createPrompt(
         }
 
         const checkbox = item.checked ? theme.icon.checked : theme.icon.unchecked;
-        const name = item.checked ? item.checkedName || item.name : item.name;
+        const name = item.checked ? item.checkedName : item.name;
         const color = isActive ? theme.style.highlight : (x: string) => x;
         const cursor = isActive ? theme.icon.cursor : ' ';
         return color(`${cursor}${checkbox} ${name}`);

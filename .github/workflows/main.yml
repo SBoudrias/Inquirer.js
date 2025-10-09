@@ -124,12 +124,23 @@ jobs:
       - name: Pack the monorepo modules
         run: |
           mkdir -p /tmp/artifacts
+          yarn workspace @repo/tsconfig pack --out /tmp/artifacts/tsconfig.tgz
           yarn workspace @inquirer/core pack --out /tmp/artifacts/inquirer-core.tgz
-          yarn workspace @inquirer/prompts pack --out /tmp/artifacts/inquirer-prompts.tgz
           yarn workspace @inquirer/figures pack --out /tmp/artifacts/inquirer-figures.tgz
           yarn workspace @inquirer/type pack --out /tmp/artifacts/inquirer-type.tgz
           yarn workspace @inquirer/ansi pack --out /tmp/artifacts/inquirer-ansi.tgz
-          yarn workspace @repo/tsconfig pack --out /tmp/artifacts/tsconfig.tgz
+          yarn workspace @inquirer/external-editor pack --out /tmp/artifacts/external-editor.tgz
+          yarn workspace @inquirer/prompts pack --out /tmp/artifacts/inquirer-prompts.tgz
+          yarn workspace @inquirer/checkbox pack --out /tmp/artifacts/inquirer-checkbox.tgz
+          yarn workspace @inquirer/confirm pack --out /tmp/artifacts/inquirer-confirm.tgz
+          yarn workspace @inquirer/editor pack --out /tmp/artifacts/inquirer-editor.tgz
+          yarn workspace @inquirer/expand pack --out /tmp/artifacts/inquirer-expand.tgz
+          yarn workspace @inquirer/input pack --out /tmp/artifacts/inquirer-input.tgz
+          yarn workspace @inquirer/number pack --out /tmp/artifacts/inquirer-number.tgz
+          yarn workspace @inquirer/password pack --out /tmp/artifacts/inquirer-password.tgz
+          yarn workspace @inquirer/rawlist pack --out /tmp/artifacts/inquirer-rawlist.tgz
+          yarn workspace @inquirer/search pack --out /tmp/artifacts/inquirer-search.tgz
+          yarn workspace @inquirer/select pack --out /tmp/artifacts/inquirer-select.tgz
       - name: Extract @inquirer/demo to an isolated project & build
         run: |
           cur_dir=$(pwd)
@@ -140,10 +151,21 @@ jobs:
           yarn set version stable
           yarn add --dev @repo/tsconfig@file:/tmp/artifacts/tsconfig.tgz
           yarn set resolution @inquirer/core@npm:* file:/tmp/artifacts/inquirer-core.tgz
-          yarn set resolution @inquirer/prompts@npm:* file:/tmp/artifacts/inquirer-prompts.tgz
           yarn set resolution @inquirer/figures@npm:* file:/tmp/artifacts/inquirer-figures.tgz
           yarn set resolution @inquirer/ansi@npm:* file:/tmp/artifacts/inquirer-ansi.tgz
+          yarn set resolution @inquirer/external-editor@npm:* file:/tmp/artifacts/external-editor.tgz
           yarn set resolution @inquirer/type@npm:* file:/tmp/artifacts/inquirer-type.tgz
+          yarn set resolution @inquirer/prompts@npm:* file:/tmp/artifacts/inquirer-prompts.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/checkbox@npm:* file:/tmp/artifacts/inquirer-checkbox.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/confirm@npm:* file:/tmp/artifacts/inquirer-confirm.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/editor@npm:* file:/tmp/artifacts/inquirer-editor.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/expand@npm:* file:/tmp/artifacts/inquirer-expand.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/input@npm:* file:/tmp/artifacts/inquirer-input.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/number@npm:* file:/tmp/artifacts/inquirer-number.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/password@npm:* file:/tmp/artifacts/inquirer-password.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/rawlist@npm:* file:/tmp/artifacts/inquirer-rawlist.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/search@npm:* file:/tmp/artifacts/inquirer-search.tgz
+          yarn set resolution @inquirer/prompts/@inquirer/select@npm:* file:/tmp/artifacts/inquirer-select.tgz
           yarn install
           yarn tsc
 
