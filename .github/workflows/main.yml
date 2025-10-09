@@ -119,6 +119,8 @@ jobs:
           node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
+      - name: Run full build before packing
+        run: yarn build
       - run: yarn tsc
       - run: yarn workspaces focus --all --production
       - name: Pack the monorepo modules
