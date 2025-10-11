@@ -46,28 +46,30 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 1
         2
         3
         4
         5
         6
-        7"
+        7
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         1
         2
       ❯ 3
         4
         5
         6
-        7"
+        7
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -84,10 +86,11 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 1
         2
-        3"
+        3
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -104,10 +107,11 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select one
-      ↑↓ navigate • ⏎ select
       ❯ Option A
         Option B
-        Option C"
+        Option C
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -125,14 +129,15 @@ describe('select prompt', () => {
     events.type('4');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         1
         2
         3
       ❯ 4
         5
         6
-        7"
+        7
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -150,14 +155,15 @@ describe('select prompt', () => {
     events.type('12');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 12
         1
         2
         3
         4
         5
-        6"
+        6
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -175,14 +181,15 @@ describe('select prompt', () => {
     events.type('7');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select an option
-      ↑↓ navigate • ⏎ select
         3
         4 a
         4 b
       ❯ 4 c
         5
         6
-        7.1"
+        7.1
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -200,14 +207,15 @@ describe('select prompt', () => {
     events.type('7.');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select an option
-      ↑↓ navigate • ⏎ select
         4 c
         5
         6
       ❯ 7.1
         7.2
         8
-        1 a"
+        1 a
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -225,9 +233,10 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 1
-        2"
+        2
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -243,7 +252,6 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 1
         2
         3
@@ -253,7 +261,9 @@ describe('select prompt', () => {
         7
         8
         9
-        10"
+        10
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -269,18 +279,20 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 1
-        2"
+        2
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('up');
     events.keypress('up');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 11
-        12"
+        12
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -297,18 +309,20 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 1
-        2"
+        2
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('up');
     events.keypress('up');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 1
-        2"
+        2
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -325,18 +339,20 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
        ──────────────
-      ❯ 1"
+      ❯ 1
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('up');
     events.keypress('up');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
        ──────────────
-      ❯ 1"
+      ❯ 1
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -353,12 +369,13 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 1
         2
         3
         4
-        5"
+        5
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
@@ -371,57 +388,62 @@ describe('select prompt', () => {
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         7
         8
       ❯ 9
         10
-        11"
+        11
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         8
         9
       ❯ 10
         11
-        12"
+        12
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         8
         9
         10
       ❯ 11
-        12"
+        12
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         8
         9
         10
         11
-      ❯ 12"
+      ❯ 12
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         8
         9
         10
         11
-      ❯ 12"
+      ❯ 12
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -438,12 +460,13 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
        ──────────────
       ❯ 1
         2
         3
-        4"
+        4
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
@@ -456,57 +479,62 @@ describe('select prompt', () => {
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         7
         8
       ❯ 9
         10
-        11"
+        11
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         8
         9
       ❯ 10
         11
-        12"
+        12
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         9
         10
       ❯ 11
         12
-       ──────────────"
+       ──────────────
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         9
         10
         11
       ❯ 12
-       ──────────────"
+       ──────────────
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         9
         10
         11
       ❯ 12
-       ──────────────"
+       ──────────────
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -523,20 +551,22 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 1
         2
-        3"
+        3
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     numberedChoices.forEach(() => events.keypress('down'));
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         11
       ❯ 12
-       ──────────────"
+       ──────────────
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -555,19 +585,21 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • ⏎ select
       ❯ Ham
       - Pineapple (disabled)
-        Pepperoni"
+        Pepperoni
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • ⏎ select
         Ham
       - Pineapple (disabled)
-      ❯ Pepperoni"
+      ❯ Pepperoni
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -588,19 +620,21 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • ⏎ select
       ❯ Ham
       - Pineapple (disabled)
-        Pepperoni"
+        Pepperoni
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('2');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • ⏎ select
       ❯ Ham
       - Pineapple (disabled)
-        Pepperoni"
+        Pepperoni
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -625,9 +659,10 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • ⏎ select
       ❯ Ham
-      - Pineapple *premium*"
+      - Pineapple *premium*
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     abortController.abort();
@@ -658,10 +693,11 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a commit
-      ↑↓ navigate • ⏎ select
       ❯ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
         3272b94a (origin/main) Fix(inquirer): Fix close method not required
-        e4e10545 Chore(dev-deps): Bump dev-deps"
+        e4e10545 Chore(dev-deps): Bump dev-deps
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -696,19 +732,21 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • ⏎ select
       ❯ Ham
        ──────────────
-        Pepperoni"
+        Pepperoni
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • ⏎ select
         Ham
        ──────────────
-      ❯ Pepperoni"
+      ❯ Pepperoni
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -729,19 +767,21 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • ⏎ select
       ❯ Ham
        ──────────────
-        Pepperoni"
+        Pepperoni
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('2');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • ⏎ select
       ❯ Ham
        ──────────────
-        Pepperoni"
+        Pepperoni
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -761,19 +801,23 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • ⏎ select
       ❯ Ham
         Pineapple
-      Our classic toping"
+
+      Our classic toping
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • ⏎ select
         Ham
       ❯ Pineapple
-      A Canadian delicacy"
+
+      A Canadian delicacy
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -791,14 +835,15 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         1
         2
         3
       ❯ 4
         5
         6
-        7"
+        7
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -820,10 +865,11 @@ describe('select prompt', () => {
     events.type('UNIT');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         Canada
         China
-      ❯ United States"
+      ❯ United States
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     vi.advanceTimersByTime(700);
@@ -832,20 +878,22 @@ describe('select prompt', () => {
     events.type('c');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ Canada
         China
-        United States"
+        United States
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     vi.advanceTimersByTime(400);
     events.type('h');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         Canada
       ❯ China
-        United States"
+        United States
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     vi.advanceTimersByTime(400);
@@ -853,20 +901,22 @@ describe('select prompt', () => {
     events.type('u');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         Canada
       ❯ China
-        United States"
+        United States
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('backspace');
     events.type('u');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
         Canada
         China
-      ❯ United States"
+      ❯ United States
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -886,28 +936,30 @@ describe('select prompt', () => {
 
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • ⏎ select
         ❯ 1
           2
           3
           4
           5
           6
-          7"
+          7
+
+        ↑↓ navigate • ⏎ select"
       `);
       expect(getScreen()).toContain(scrollTip);
 
       events.keypress('down');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • ⏎ select
           1
         ❯ 2
           3
           4
           5
           6
-          7"
+          7
+
+        ↑↓ navigate • ⏎ select"
       `);
       expect(getScreen()).toContain(scrollTip);
 
@@ -925,28 +977,30 @@ describe('select prompt', () => {
 
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • ⏎ select
         ❯ 1
           2
           3
           4
           5
           6
-          7"
+          7
+
+        ↑↓ navigate • ⏎ select"
       `);
       expect(getScreen()).toContain(scrollTip);
 
       events.keypress('down');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • ⏎ select
           1
         ❯ 2
           3
           4
           5
           6
-          7"
+          7
+
+        ↑↓ navigate • ⏎ select"
       `);
       expect(getScreen()).toContain(scrollTip);
 
@@ -1005,9 +1059,10 @@ describe('select prompt', () => {
 
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a letter
-        Utilisez les flèches
         ❯ a
-          b"
+          b
+
+        Utilisez les flèches"
       `);
 
       events.keypress('enter');
@@ -1027,14 +1082,15 @@ describe('select prompt', () => {
 
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        Utilisez les flèches pour révéler plus de choix
         ❯ 1
           2
           3
           4
           5
           6
-          7"
+          7
+
+        Utilisez les flèches pour révéler plus de choix"
       `);
 
       events.keypress('enter');
@@ -1051,14 +1107,15 @@ describe('select prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • ⏎ select
       ❯ 1. 1
         2. 2
         3. 3
         4. 4
         5. 5
         6. 6
-        7. 7"
+        7. 7
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -1086,14 +1143,15 @@ describe('select prompt', () => {
 
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • ⏎ select
         ❯ 1. One
           2. Two
          ──────────────
           3. Three
           4. Four
          ---
-          5. Five"
+          5. Five
+
+        ↑↓ navigate • ⏎ select"
       `);
 
       events.type('5');
@@ -1121,13 +1179,14 @@ describe('select prompt', () => {
 
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • ⏎ select
          ──────────────
          ---
         ❯ 1. One
           2. Two
           3. Three
-          4. Four"
+          4. Four
+
+        ↑↓ navigate • ⏎ select"
       `);
 
       // Type '3' to select the 3rd selectable item (which is 'Three')

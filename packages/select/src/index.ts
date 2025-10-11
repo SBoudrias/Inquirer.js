@@ -29,7 +29,11 @@ type SelectTheme = {
     disabled: (text: string) => string;
     description: (text: string) => string;
   };
-  helpMode: 'always' | 'never' | 'auto';
+  helpMode:
+    | 'always'
+    | 'never'
+    /** @deprecated 'auto' is an alias to 'always' */
+    | 'auto';
   indexMode: 'hidden' | 'number';
 };
 
@@ -39,7 +43,7 @@ const selectTheme: SelectTheme = {
     disabled: (text: string) => colors.dim(`- ${text}`),
     description: (text: string) => colors.cyan(text),
   },
-  helpMode: 'auto',
+  helpMode: 'always',
   indexMode: 'hidden',
 };
 
@@ -226,19 +230,18 @@ export default createPrompt(
 
     let helpLine: string | undefined;
     if (theme.helpMode !== 'never') {
-      const defaultHelp = [
-        `↑↓ ${colors.bold('navigate')}`,
-        `⏎ ${colors.bold('select')}`,
-      ].join(' • ');
-
-      let customHelp: string | undefined;
       if (config.instructions) {
         const { pager, navigation } = config.instructions;
-        customHelp = items.length > pageSize ? pager : navigation;
+        helpLine = theme.style.help(items.length > pageSize ? pager : navigation);
+      } else {
+        const keys: [string, string][] = [
+          ['↑↓', 'navigate'],
+          ['⏎', 'select'],
+        ];
+        helpLine = keys
+          .map(([key, action]) => `${colors.bold(key)} ${theme.style.help(action)}`)
+          .join(theme.style.help(' • '));
       }
-
-      const helpContent = customHelp ?? defaultHelp;
-      helpLine = theme.style.help(helpContent);
     }
 
     let separatorCount = 0;
@@ -275,11 +278,16 @@ export default createPrompt(
       ? `\n${theme.style.description(selectedChoice.description)}`
       : ``;
 
-    const header = [prefix, message].filter(Boolean).join(' ');
-    const lines = [header];
-    if (helpLine) lines.push(helpLine);
+    const lines = [
+      [prefix, message].filter(Boolean).join(' '),
+      page,
+      choiceDescription,
+      helpLine ? `\n${helpLine}` : '',
+    ]
+      .filter(Boolean)
+      .join('\n');
 
-    return `${lines.join('\n')}\n${page}${choiceDescription}${cursorHide}`;
+    return `${lines}${cursorHide}`;
   },
 );
 
