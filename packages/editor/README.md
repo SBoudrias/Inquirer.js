@@ -82,8 +82,6 @@ const answer = await editor({
 | waitForUseInput | `boolean`                                                                      | no (default to `true`) | Open the editor automatically without waiting for the user to press enter. Note that this mean the user will not see the question! So make sure you have a default value that provide guidance if it's unclear what input is expected. |
 | theme           | [See Theming](#Theming)                                                        | no                     | Customize look of the prompt.                                                                                                                                                                                                          |
 
-While idle the prompt displays a dim help line (`⏎ launch editor`) under the question. Set `theme.helpMode = 'never'` to hide it.
-
 ## Theming
 
 You can theme a prompt by passing a `theme` object option. The theme object only need to includes the keys you wish to modify, we'll fallback on the defaults for the rest.
@@ -99,9 +97,9 @@ type Theme = {
     message: (text: string, status: 'idle' | 'done' | 'loading') => string;
     error: (text: string) => string;
     help: (text: string) => string;
+    key: (text: string) => string;
   };
   validationFailureMode: 'keep' | 'clear';
-  helpMode: 'always' | 'never' | 'auto';
 };
 ```
 

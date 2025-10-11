@@ -27,10 +27,7 @@ describe('editor prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(
-      `
-      "? Add a description
-      ⏎ launch editor"
-    `,
+      `"? Add a description Press <enter> to launch your preferred editor."`,
     );
     expect(editAsync).not.toHaveBeenCalled();
 
@@ -133,8 +130,7 @@ describe('editor prompt', () => {
     events.type('foo'); // Ignored events while validation runs
     await editPromise;
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Add a description
-      ⏎ launch editor
+      "? Add a description Press <enter> to launch your preferred editor.
       > You must provide a valid value"
     `);
 
@@ -149,8 +145,7 @@ describe('editor prompt', () => {
     // Test user defined error message
     await editorAction(undefined, '2');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Add a description
-      ⏎ launch editor
+      "? Add a description Press <enter> to launch your preferred editor.
       > "2" is not an allowed value"
     `);
 
@@ -192,8 +187,7 @@ describe('editor prompt', () => {
     });
     await editorAction(undefined, 'foo bar');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Add a description
-      ⏎ launch editor
+      "? Add a description Press <enter> to launch your preferred editor.
       > You must provide a valid value"
     `);
 
@@ -240,8 +234,7 @@ describe('editor prompt', () => {
     });
     await editorAction(undefined, 'foo bar');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Add a description
-      ⏎ launch editor
+      "? Add a description Press <enter> to launch your preferred editor.
       > You must provide a valid value"
     `);
 
@@ -267,8 +260,7 @@ describe('editor prompt', () => {
 
     await editorAction(new Error('$EDITOR failed!'), '');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Add a description
-      ⏎ launch editor
+      "? Add a description Press <enter> to launch your preferred editor.
       > Error: $EDITOR failed!"
     `);
 
@@ -281,14 +273,5 @@ describe('editor prompt', () => {
 
     await expect(answer).resolves.toEqual('new value');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
-  });
-
-  it('respects helpMode: never', async () => {
-    const { getScreen } = await render(editor, {
-      message: 'Add a description',
-      theme: { helpMode: 'never' },
-    });
-
-    expect(getScreen()).toMatchInlineSnapshot('"? Add a description"');
   });
 });
