@@ -461,7 +461,7 @@ option, <enter> to select option)
  [ ] fuelphp
  [ ] venv
  [ ] vercel
- ↑↓ navigate • ⏎ select
+ (Use arrow keys to reveal more options)
 ```
 
 [**File Selector Prompt**](https://github.com/br14n-sol/inquirer-file-selector)<br/>
