@@ -26,7 +26,11 @@ type SearchTheme = {
     searchTerm: (text: string) => string;
     description: (text: string) => string;
   };
-  helpMode: 'always' | 'never' | 'auto';
+  helpMode:
+    | 'always'
+    | 'never'
+    /** @deprecated 'auto' is an alias to 'always' */
+    | 'auto';
 };
 
 const searchTheme: SearchTheme = {
@@ -36,7 +40,7 @@ const searchTheme: SearchTheme = {
     searchTerm: (text: string) => colors.cyan(text),
     description: (text: string) => colors.cyan(text),
   },
-  helpMode: 'auto',
+  helpMode: 'always',
 };
 
 type Choice<Value> = {
