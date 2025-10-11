@@ -66,7 +66,7 @@ const demo = async () => {
         value: 'pnpm',
         disabled: '(pnpm is not available)',
       },
-    ] as any[],
+    ],
   });
   console.log('Answer:', answer);
 };
