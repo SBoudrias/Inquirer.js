@@ -4,7 +4,6 @@ import {
   useKeypress,
   usePrefix,
   usePagination,
-  useRef,
   useEffect,
   useMemo,
   isDownKey,
@@ -27,7 +26,11 @@ type SearchTheme = {
     searchTerm: (text: string) => string;
     description: (text: string) => string;
   };
-  helpMode: 'always' | 'never' | 'auto';
+  helpMode:
+    | 'always'
+    | 'never'
+    /** @deprecated 'auto' is an alias to 'always' */
+    | 'auto';
 };
 
 const searchTheme: SearchTheme = {
@@ -37,7 +40,7 @@ const searchTheme: SearchTheme = {
     searchTerm: (text: string) => colors.cyan(text),
     description: (text: string) => colors.cyan(text),
   },
-  helpMode: 'auto',
+  helpMode: 'always',
 };
 
 type Choice<Value> = {
@@ -122,7 +125,6 @@ export default createPrompt(
   <Value>(config: SearchConfig<Value>, done: (value: Value) => void) => {
     const { pageSize = 7, validate = () => true } = config;
     const theme = makeTheme<SearchTheme>(searchTheme, config.theme);
-    const firstRender = useRef(true);
     const [status, setStatus] = useState<Status>('loading');
 
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -222,22 +224,23 @@ export default createPrompt(
 
     const message = theme.style.message(config.message, status);
 
-    if (active > 0) {
-      firstRender.current = false;
+    let helpLine: string | undefined;
+    if (theme.helpMode !== 'never') {
+      if (config.instructions) {
+        const { pager, navigation } = config.instructions;
+        helpLine = theme.style.help(searchResults.length > pageSize ? pager : navigation);
+      } else {
+        const keys: [string, string][] = [
+          ['↑↓', 'navigate'],
+          ['⏎', 'select'],
+        ];
+
+        helpLine = keys
+          .map(([key, action]) => `${colors.bold(key)} ${theme.style.help(action)}`)
+          .join(theme.style.help(' • '));
+      }
     }
 
-    let helpTip = '';
-    if (
-      searchResults.length > 1 &&
-      (theme.helpMode === 'always' || (theme.helpMode === 'auto' && firstRender.current))
-    ) {
-      helpTip =
-        searchResults.length > pageSize
-          ? `\n${theme.style.help(`(${config.instructions?.pager ?? 'Use arrow keys to reveal more choices'})`)}`
-          : `\n${theme.style.help(`(${config.instructions?.navigation ?? 'Use arrow keys'})`)}`;
-    }
-
-    // TODO: What to do if no results are found? Should we display a message?
     const page = usePagination({
       items: searchResults,
       active,
@@ -269,20 +272,27 @@ export default createPrompt(
 
     let searchStr;
     if (status === 'done' && selectedChoice) {
-      const answer = selectedChoice.short;
-      return `${prefix} ${message} ${theme.style.answer(answer)}`;
+      return [prefix, message, theme.style.answer(selectedChoice.short)]
+        .filter(Boolean)
+        .join(' ')
+        .trimEnd();
     } else {
       searchStr = theme.style.searchTerm(searchTerm);
     }
 
-    const choiceDescription = selectedChoice?.description
-      ? `\n${theme.style.description(selectedChoice.description)}`
-      : ``;
+    const description = selectedChoice?.description;
+    const header = [prefix, message, searchStr].filter(Boolean).join(' ').trimEnd();
+    const body = [
+      error ?? page,
+      ' ',
+      description ? theme.style.description(description) : '',
+      helpLine,
+    ]
+      .filter(Boolean)
+      .join('\n')
+      .trimEnd();
 
-    return [
-      [prefix, message, searchStr].filter(Boolean).join(' '),
-      `${error ?? page}${helpTip}${choiceDescription}`,
-    ];
+    return [header, body];
   },
 );
 

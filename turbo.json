@@ -8,7 +8,13 @@
     "tsc": {
       "dependsOn": ["^tsc"],
       "outputs": ["dist/**"],
-      "inputs": ["$TURBO_DEFAULT$", "../../package.json"]
+      "inputs": [
+        "../../package.json",
+        "package.json",
+        ".tshy/*",
+        "src/*",
+        "!**/*.test.ts"
+      ]
     }
   }
 }

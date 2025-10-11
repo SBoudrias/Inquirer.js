@@ -83,16 +83,17 @@ const answer = await checkbox({
 
 ## Options
 
-| Property  | Type                                    | Required | Description                                                                                                                                                                                           |
-| --------- | --------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| message   | `string`                                | yes      | The question to ask                                                                                                                                                                                   |
-| choices   | `Choice[]`                              | yes      | List of the available choices.                                                                                                                                                                        |
-| pageSize  | `number`                                | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                           |
-| loop      | `boolean`                               | no       | Defaults to `true`. When set to `false`, the cursor will be constrained to the top and bottom of the choice list without looping.                                                                     |
-| required  | `boolean`                               | no       | When set to `true`, ensures at least one choice must be selected.                                                                                                                                     |
-| validate  | `async (Choice[]) => boolean \| string` | no       | On submit, validate the choices. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
-| shortcuts | [See Shortcuts](#Shortcuts)             | no       | Customize shortcut keys for `all` and `invert`.                                                                                                                                                       |
-| theme     | [See Theming](#Theming)                 | no       | Customize look of the prompt.                                                                                                                                                                         |
+| Property     | Type                                    | Required | Description                                                                                                                                                                                           |
+| ------------ | --------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message      | `string`                                | yes      | The question to ask                                                                                                                                                                                   |
+| choices      | `Choice[]`                              | yes      | List of the available choices.                                                                                                                                                                        |
+| pageSize     | `number`                                | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                           |
+| loop         | `boolean`                               | no       | Defaults to `true`. When set to `false`, the cursor will be constrained to the top and bottom of the choice list without looping.                                                                     |
+| required     | `boolean`                               | no       | When set to `true`, ensures at least one choice must be selected.                                                                                                                                     |
+| validate     | `async (Choice[]) => boolean \| string` | no       | On submit, validate the choices. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
+| shortcuts    | [See Shortcuts](#Shortcuts)             | no       | Customize shortcut keys for `all` and `invert`.                                                                                                                                                       |
+| instructions | `string \| boolean`                     | no       | Customize the under-prompt help line. Use `false` to remove it or provide a string to replace the default `↑↓ navigate • space select • a all • i invert • ⏎ submit`.                                 |
+| theme        | [See Theming](#Theming)                 | no       | Customize look of the prompt.                                                                                                                                                                         |
 
 `Separator` objects can be used in the `choices` array to render non-selectable lines in the choice list. By default it'll render a line, but you can provide the text as argument (`new Separator('-- Dependencies --')`). This option is often used to add labels to groups within long list of options.
 
@@ -168,15 +169,14 @@ type Theme = {
     unchecked: string;
     cursor: string;
   };
-  helpMode: 'always' | 'never' | 'auto';
+  helpMode: 'always' | 'never';
 };
 ```
 
 ### `theme.helpMode`
 
-- `auto` (default): Hide the help tips after an interaction occurs. The scroll tip will hide after any interactions, the selection tip will hide as soon as a first selection is done.
-- `always`: The help tips will always show and never hide.
-- `never`: The help tips will never show.
+- `always` (default): Help line is visible.
+- `never`: Hide the help line entirely.
 
 # License
 

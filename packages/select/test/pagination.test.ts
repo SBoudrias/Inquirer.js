@@ -47,7 +47,7 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -56,7 +56,9 @@ describe('select() prompt pagination', () => {
               45 minutes
             Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -70,7 +72,9 @@ describe('select() prompt pagination', () => {
               45 minutes
             Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -84,7 +88,9 @@ describe('select() prompt pagination', () => {
               45 minutes
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -98,7 +104,9 @@ describe('select() prompt pagination', () => {
               45 minutes
             Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -112,7 +120,9 @@ describe('select() prompt pagination', () => {
               45 minutes
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -126,7 +136,9 @@ describe('select() prompt pagination', () => {
               45 minutes
             Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -140,7 +152,9 @@ describe('select() prompt pagination', () => {
               45 minutes
             Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -154,7 +168,9 @@ describe('select() prompt pagination', () => {
               45 minutes
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('enter');
@@ -170,7 +186,7 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -181,7 +197,9 @@ describe('select() prompt pagination', () => {
             Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -197,7 +215,9 @@ describe('select() prompt pagination', () => {
             Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -213,7 +233,9 @@ describe('select() prompt pagination', () => {
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -229,7 +251,9 @@ describe('select() prompt pagination', () => {
             Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -245,7 +269,9 @@ describe('select() prompt pagination', () => {
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -261,7 +287,9 @@ describe('select() prompt pagination', () => {
             Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -277,7 +305,9 @@ describe('select() prompt pagination', () => {
             Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -293,7 +323,9 @@ describe('select() prompt pagination', () => {
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('enter');
@@ -311,14 +343,16 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
-            Caesar Salad"
+            Caesar Salad
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -330,7 +364,9 @@ describe('select() prompt pagination', () => {
           ❯ Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
-            Caesar Salad"
+            Caesar Salad
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -342,7 +378,9 @@ describe('select() prompt pagination', () => {
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-            Spaghetti Carbonara"
+            Spaghetti Carbonara
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -354,7 +392,9 @@ describe('select() prompt pagination', () => {
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
-            Margherita Pizza"
+            Margherita Pizza
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -366,7 +406,9 @@ describe('select() prompt pagination', () => {
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-            Spaghetti Carbonara"
+            Spaghetti Carbonara
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -378,7 +420,9 @@ describe('select() prompt pagination', () => {
           ❯ Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
-            Caesar Salad"
+            Caesar Salad
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -390,7 +434,9 @@ describe('select() prompt pagination', () => {
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
-            Margherita Pizza"
+            Margherita Pizza
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('enter');
@@ -406,14 +452,16 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
-              45 minutes"
+              45 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -425,7 +473,9 @@ describe('select() prompt pagination', () => {
           ❯ Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
-            Caesar Salad"
+            Caesar Salad
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -437,7 +487,9 @@ describe('select() prompt pagination', () => {
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -449,7 +501,9 @@ describe('select() prompt pagination', () => {
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
-            Margherita Pizza"
+            Margherita Pizza
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -461,7 +515,9 @@ describe('select() prompt pagination', () => {
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -473,7 +529,9 @@ describe('select() prompt pagination', () => {
           ❯ Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
-            Caesar Salad"
+            Caesar Salad
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -485,7 +543,9 @@ describe('select() prompt pagination', () => {
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
-            Margherita Pizza"
+            Margherita Pizza
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('enter');
@@ -509,7 +569,8 @@ describe('select() prompt pagination', () => {
             5
             6
             7
-          (Use arrow keys to reveal more choices)"
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -521,7 +582,9 @@ describe('select() prompt pagination', () => {
             4
             5
             6
-            7"
+            7
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -533,7 +596,9 @@ describe('select() prompt pagination', () => {
             4
             5
             6
-            7"
+            7
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -545,7 +610,9 @@ describe('select() prompt pagination', () => {
             3
             4
             5
-            6"
+            6
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -557,7 +624,9 @@ describe('select() prompt pagination', () => {
             2
             3
             4
-            5"
+            5
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -569,7 +638,9 @@ describe('select() prompt pagination', () => {
             3
             4
             5
-            6"
+            6
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('enter');
@@ -586,16 +657,17 @@ describe('select() prompt pagination', () => {
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a number
-          ❯ 1
-            2
-            3
-            4
-            5
-            6
-            7
-          (Use arrow keys to reveal more choices)"
-        `);
+        "? Select a number
+        ❯ 1
+          2
+          3
+          4
+          5
+          6
+          7
+
+        ↑↓ navigate • ⏎ select"
+      `);
 
       events.keypress('up');
       events.keypress('up');
@@ -609,7 +681,9 @@ describe('select() prompt pagination', () => {
           12
           1
           2
-          3"
+          3
+
+        ↑↓ navigate • ⏎ select"
       `);
 
       events.keypress('down');
@@ -621,7 +695,9 @@ describe('select() prompt pagination', () => {
           12
           1
           2
-          3"
+          3
+
+        ↑↓ navigate • ⏎ select"
       `);
 
       events.keypress('enter');
@@ -640,7 +716,7 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
@@ -649,7 +725,9 @@ describe('select() prompt pagination', () => {
               45 minutes
             Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -663,7 +741,9 @@ describe('select() prompt pagination', () => {
               45 minutes
             Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -678,7 +758,9 @@ describe('select() prompt pagination', () => {
               45 minutes
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -695,7 +777,9 @@ describe('select() prompt pagination', () => {
               45 minutes
             Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -710,7 +794,9 @@ describe('select() prompt pagination', () => {
               45 minutes
             Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -729,7 +815,7 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -740,7 +826,9 @@ describe('select() prompt pagination', () => {
             Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -756,7 +844,9 @@ describe('select() prompt pagination', () => {
             Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -772,7 +862,9 @@ describe('select() prompt pagination', () => {
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -788,7 +880,9 @@ describe('select() prompt pagination', () => {
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -804,7 +898,9 @@ describe('select() prompt pagination', () => {
             Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -821,7 +917,9 @@ describe('select() prompt pagination', () => {
             Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -842,14 +940,16 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
-            Caesar Salad"
+            Caesar Salad
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -861,7 +961,9 @@ describe('select() prompt pagination', () => {
           ❯ Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
-            Caesar Salad"
+            Caesar Salad
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -874,7 +976,9 @@ describe('select() prompt pagination', () => {
               45 minutes
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
-              15 minutes"
+              15 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -889,7 +993,9 @@ describe('select() prompt pagination', () => {
           ❯ Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
-            Caesar Salad"
+            Caesar Salad
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -902,7 +1008,9 @@ describe('select() prompt pagination', () => {
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
-            Caesar Salad"
+            Caesar Salad
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -921,14 +1029,16 @@ describe('select() prompt pagination', () => {
         });
 
         expect(getScreen()).toMatchInlineSnapshot(`
-          "? Select a recipe (Use arrow keys)
+          "? Select a recipe
            ──────────────
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
               30 minutes
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
-              45 minutes"
+              45 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -940,7 +1050,9 @@ describe('select() prompt pagination', () => {
           ❯ Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
-            Caesar Salad"
+            Caesar Salad
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -953,7 +1065,9 @@ describe('select() prompt pagination', () => {
           ❯ Caesar Salad
               Romaine, Croutons, Parmesan
               15 minutes
-           ──────────────"
+           ──────────────
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('down');
@@ -968,7 +1082,9 @@ describe('select() prompt pagination', () => {
           ❯ Margherita Pizza
               Tomatoes, Mozzarella, Basil
               45 minutes
-            Caesar Salad"
+            Caesar Salad
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
@@ -981,7 +1097,9 @@ describe('select() prompt pagination', () => {
               30 minutes
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
-              45 minutes"
+              45 minutes
+
+          ↑↓ navigate • ⏎ select"
         `);
 
         events.keypress('up');
