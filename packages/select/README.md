@@ -102,7 +102,7 @@ const answer = await select({
 | default      | `string`                                 | no       | Defines in front of which item the cursor will initially appear. When omitted, the cursor will appear on the first selectable item.         |
 | pageSize     | `number`                                 | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once. |
 | loop         | `boolean`                                | no       | Defaults to `true`. When set to `false`, the cursor will be constrained to the top and bottom of the choice list without looping.           |
-| instructions | `{ navigation: string; pager: string; }` | no       | Defines the under-prompt help line (default: `↑↓ navigate • ⏎ select`).                                                                     |
+| instructions | `{ navigation: string; pager: string; }` | no       | Defines the help tip content.                                                                                                               |
 | theme        | [See Theming](#Theming)                  | no       | Customize look of the prompt.                                                                                                               |
 
 `Separator` objects can be used in the `choices` array to render non-selectable lines in the choice list. By default it'll render a line, but you can provide the text as argument (`new Separator('-- Dependencies --')`). This option is often used to add labels to groups within long list of options.
@@ -130,8 +130,6 @@ Here's each property:
 - `disabled`: Disallow the option from being selected. If `disabled` is a string, it'll be used as a help tip explaining why the choice isn't available.
 
 `choices` can also be an array of string, in which case the string will be used both as the `value` and the `name`.
-
-By default the help line is visible and rendered under the prompt message. Set `theme.helpMode` to `'never'` to hide it entirely, or provide `instructions.navigation` / `instructions.pager` to customize the displayed text.
 
 ## Theming
 
@@ -163,9 +161,8 @@ type Theme = {
 
 ### `theme.helpMode`
 
-- `auto` (default): Hide the help tips after an interaction occurs.
-- `always`: The help tips will always show and never hide.
-- `never`: The help tips will never show.
+- `always` (default): Help line is visible.
+- `never`: Hide the help line entirely.
 
 ### `theme.indexMode`
 
