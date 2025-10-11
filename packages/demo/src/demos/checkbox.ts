@@ -53,22 +53,6 @@ const demo = async () => {
     ],
   });
   console.log('Answer:', answer);
-
-  answer = await checkbox({
-    message: 'Select a package manager (custom checked name)',
-    choices: [
-      { name: 'npm', value: 'npm', checkedName: 'Node Package Manager' },
-      { name: 'yarn', value: 'yarn', checkedName: 'Yet Another Resource Negotiator' },
-      new Separator(),
-      { name: 'jspm', value: 'jspm' },
-      {
-        name: 'pnpm',
-        value: 'pnpm',
-        disabled: '(pnpm is not available)',
-      },
-    ],
-  });
-  console.log('Answer:', answer);
 };
 
 if (import.meta.url.startsWith('file:')) {
