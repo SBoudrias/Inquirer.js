@@ -805,7 +805,6 @@ describe('select prompt', () => {
         Pineapple
 
       Our classic toping
-
       ↑↓ navigate • ⏎ select"
     `);
 
@@ -816,7 +815,6 @@ describe('select prompt', () => {
       ❯ Pineapple
 
       A Canadian delicacy
-
       ↑↓ navigate • ⏎ select"
     `);
 

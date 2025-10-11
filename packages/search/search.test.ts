@@ -47,23 +47,25 @@ describe('search prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province 
-      ↑↓ navigate • ⏎ select
       ❯ Alberta
         British Columbia
         Manitoba
         New Brunswick
         Newfoundland and Labrador
         Nova Scotia
-        Ontario"
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.type('New');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
-      ↑↓ navigate • ⏎ select
       ❯ New Brunswick
-        Newfoundland and Labrador"
+        Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -95,35 +97,38 @@ describe('search prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a family 
-      ↑↓ navigate • ⏎ select
       ❯ Stark
         Lannister
         Targaryen
         Baratheon
         Greyjoy
         Martell
-        Tyrell"
+        Tyrell
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a family 
-      ↑↓ navigate • ⏎ select
         Stark
       ❯ Lannister
         Targaryen
         Baratheon
         Greyjoy
         Martell
-        Tyrell"
+        Tyrell
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.type('Targ');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a family Targ
-      ↑↓ navigate • ⏎ select
-      ❯ Targaryen"
+      ❯ Targaryen
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -138,42 +143,45 @@ describe('search prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province 
-      ↑↓ navigate • ⏎ select
       ❯ Alberta
         British Columbia
         Manitoba
         New Brunswick
         Newfoundland and Labrador
         Nova Scotia
-        Ontario"
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.type('N');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province N
-      ↑↓ navigate • ⏎ select
       ❯ Manitoba
         New Brunswick
         Newfoundland and Labrador
         Nova Scotia
         Ontario
         Prince Edward Island
-        Saskatchewan"
+        Saskatchewan
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province N
-      ↑↓ navigate • ⏎ select
         Manitoba
         New Brunswick
       ❯ Newfoundland and Labrador
         Nova Scotia
         Ontario
         Prince Edward Island
-        Saskatchewan"
+        Saskatchewan
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -193,35 +201,39 @@ describe('search prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
-      ↑↓ navigate • ⏎ select
       ❯ New Brunswick
-        Newfoundland and Labrador"
+        Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('up');
     events.keypress('up');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
-      ↑↓ navigate • ⏎ select
       ❯ New Brunswick
-        Newfoundland and Labrador"
+        Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
     `);
     events.keypress('down');
     events.keypress('down');
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
-      ↑↓ navigate • ⏎ select
         New Brunswick
-      ❯ Newfoundland and Labrador"
+      ❯ Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('up');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
-      ↑↓ navigate • ⏎ select
       ❯ New Brunswick
-        Newfoundland and Labrador"
+        Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -248,6 +260,7 @@ describe('search prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province 
+
       ↑↓ navigate • ⏎ select"
     `);
 
@@ -255,8 +268,9 @@ describe('search prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
-      ↑↓ navigate • ⏎ select
-      > You're being rate limited"
+      > You're being rate limited
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     abortController.abort();
@@ -276,6 +290,7 @@ describe('search prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province 
+
       ↑↓ navigate • ⏎ select"
     `);
 
@@ -283,13 +298,15 @@ describe('search prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province N
-      ↑↓ navigate • ⏎ select
-      > No results found"
+      > No results found
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('backspace');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province 
+
       ↑↓ navigate • ⏎ select"
     `);
 
@@ -316,24 +333,26 @@ describe('search prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a country 
-      ↑↓ navigate • ⏎ select
        ~ Americas ~
       ❯ Canada
         United States
         Mexico
        ~ Europe ~
       - France Cannot be selected during the Olympics
-      - Germany (disabled)"
+      - Germany (disabled)
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.type('France');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a country France
-      ↑↓ navigate • ⏎ select
        ~ Americas ~
        ~ Europe ~
-      - France Cannot be selected during the Olympics"
+      - France Cannot be selected during the Olympics
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     // This event will be ignored;
@@ -343,14 +362,15 @@ describe('search prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a country 
-      ↑↓ navigate • ⏎ select
        ~ Americas ~
       ❯ Canada
         United States
         Mexico
        ~ Europe ~
       - France Cannot be selected during the Olympics
-      - Germany (disabled)"
+      - Germany (disabled)
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.type('United');
@@ -375,30 +395,33 @@ describe('search prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a family 
-      ↑↓ navigate • ⏎ select
       ❯ Stark
         Lannister
         Targaryen
-      Winter is coming"
+
+      Winter is coming
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a family 
-      ↑↓ navigate • ⏎ select
         Stark
       ❯ Lannister
         Targaryen
-      Hear me roar"
+
+      Hear me roar
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.type('Targ');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a family Targ
-      ↑↓ navigate • ⏎ select
       ❯ Targaryen
-      Fire and blood"
+
+      Fire and blood
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -431,14 +454,15 @@ describe('search prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province 
-      ↑↓ navigate • ⏎ select
       ❯ Alberta
         British Columbia
         Manitoba
         New Brunswick
         Newfoundland and Labrador
         Nova Scotia
-        Ontario"
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.type('New');
@@ -446,17 +470,19 @@ describe('search prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
-      ↑↓ navigate • ⏎ select
       ❯ New Brunswick
-        Newfoundland and Labrador"
+        Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('tab');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New Brunswick
-      ↑↓ navigate • ⏎ select
       ❯ New Brunswick
-        Newfoundland and Labrador"
+        Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -489,17 +515,19 @@ describe('search prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a file 
-      ↑↓ navigate • ⏎ select
       ❯ src
-        dist"
+        dist
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.type('di');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a file di
-      ↑↓ navigate • ⏎ select
-      ❯ dist"
+      ❯ dist
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -507,8 +535,9 @@ describe('search prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a file dist
-      ↑↓ navigate • ⏎ select
-      ❯ dist/index.js"
+      ❯ dist/index.js
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -528,14 +557,15 @@ describe('search prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province 
-      ↑↓ navigate • ⏎ select
       ❯ Alberta
         British Columbia
         Manitoba
         New Brunswick
         Newfoundland and Labrador
         Nova Scotia
-        Ontario"
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
@@ -543,16 +573,18 @@ describe('search prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province Alberta
-      ↑↓ navigate • ⏎ select
-      ❯ Alberta"
+      ❯ Alberta
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province Alberta
-      ↑↓ navigate • ⏎ select
-      > You must provide a valid value"
+      > You must provide a valid value
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress({ name: 'backspace', ctrl: true });
@@ -560,24 +592,27 @@ describe('search prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New Brun
-      ↑↓ navigate • ⏎ select
-      ❯ New Brunswick"
+      ❯ New Brunswick
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New Brunswick
-      ↑↓ navigate • ⏎ select
-      ❯ New Brunswick"
+      ❯ New Brunswick
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New Brunswick
-      ↑↓ navigate • ⏎ select
-      > New Brunswick is unavailable at the moment."
+      > New Brunswick is unavailable at the moment.
+
+      ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress({ name: 'backspace', ctrl: true });
@@ -601,10 +636,11 @@ describe('search prompt', () => {
     // Test custom pager instruction when results exceed pageSize
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province 
-      Utiliser les flèches pour révéler plus de choix
       ❯ Alberta
         British Columbia
-        Manitoba"
+        Manitoba
+
+      Utiliser les flèches pour révéler plus de choix"
     `);
 
     // Test custom navigation instruction when results fit in pageSize
@@ -612,9 +648,10 @@ describe('search prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
-      Utiliser les flèches directionnelles
       ❯ New Brunswick
-        Newfoundland and Labrador"
+        Newfoundland and Labrador
+
+      Utiliser les flèches directionnelles"
     `);
 
     events.keypress('enter');

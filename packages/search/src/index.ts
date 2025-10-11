@@ -222,22 +222,21 @@ export default createPrompt(
 
     let helpLine: string | undefined;
     if (theme.helpMode !== 'never') {
-      const defaultHelp = [
-        `↑↓ ${colors.bold('navigate')}`,
-        `⏎ ${colors.bold('select')}`,
-      ].join(' • ');
-
-      let customHelp: string | undefined;
       if (config.instructions) {
         const { pager, navigation } = config.instructions;
-        customHelp = searchResults.length > pageSize ? pager : navigation;
-      }
+        helpLine = theme.style.help(searchResults.length > pageSize ? pager : navigation);
+      } else {
+        const keys: [string, string][] = [
+          ['↑↓', 'navigate'],
+          ['⏎', 'select'],
+        ];
 
-      const helpContent = customHelp ?? defaultHelp;
-      helpLine = theme.style.help(helpContent);
+        helpLine = keys
+          .map(([key, action]) => `${colors.bold(key)} ${theme.style.help(action)}`)
+          .join(theme.style.help(' • '));
+      }
     }
 
-    // TODO: What to do if no results are found? Should we display a message?
     const page = usePagination({
       items: searchResults,
       active,
@@ -269,21 +268,26 @@ export default createPrompt(
 
     let searchStr;
     if (status === 'done' && selectedChoice) {
-      const answer = selectedChoice.short;
-      return `${prefix} ${message} ${theme.style.answer(answer)}`;
+      return [prefix, message, theme.style.answer(selectedChoice.short)]
+        .filter(Boolean)
+        .join(' ')
+        .trimEnd();
     } else {
       searchStr = theme.style.searchTerm(searchTerm);
     }
 
-    const choiceDescription = selectedChoice?.description
-      ? `\n${theme.style.description(selectedChoice.description)}`
-      : ``;
-
-    const header = [prefix, message, searchStr].filter(Boolean).join(' ');
-    let body = `${error ?? page}${choiceDescription}`;
-    if (helpLine) {
-      body = `${helpLine}\n${body}`;
-    }
+    const header = [prefix, message, searchStr].filter(Boolean).join(' ').trimEnd();
+    const body = [
+      error ?? page,
+      ' ',
+      selectedChoice?.description
+        ? theme.style.description(selectedChoice.description)
+        : '',
+      helpLine,
+    ]
+      .filter(Boolean)
+      .join('\n')
+      .trimEnd();
 
     return [header, body];
   },

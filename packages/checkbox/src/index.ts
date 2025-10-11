@@ -278,7 +278,7 @@ export default createPrompt(
         theme.style.renderSelectedChoices(selection, items),
       );
 
-      return `${prefix} ${message} ${answer}`;
+      return [prefix, message, answer].filter(Boolean).join(' ');
     }
 
     let helpLine: string | undefined;
@@ -299,24 +299,17 @@ export default createPrompt(
       }
     }
 
-    const choiceDescription = description
-      ? `\n${theme.style.description(description)}`
-      : ``;
-
-    let error = undefined;
-    if (errorMsg) {
-      error = theme.style.error(errorMsg);
-    }
-
     const lines = [
       [prefix, message].filter(Boolean).join(' '),
       page,
-      choiceDescription,
-      error,
+      ' ',
+      description ? theme.style.description(description) : '',
+      errorMsg ? theme.style.error(errorMsg) : '',
       helpLine ? `\n${helpLine}` : '',
     ]
       .filter(Boolean)
-      .join('\n');
+      .join('\n')
+      .trimEnd();
 
     return `${lines}${cursorHide}`;
   },

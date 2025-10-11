@@ -271,21 +271,23 @@ export default createPrompt(
     });
 
     if (status === 'done') {
-      return `${prefix} ${message} ${theme.style.answer(selectedChoice.short)}`;
+      return [prefix, message, theme.style.answer(selectedChoice.short)]
+        .filter(Boolean)
+        .join(' ');
     }
-
-    const choiceDescription = selectedChoice.description
-      ? `\n${theme.style.description(selectedChoice.description)}`
-      : ``;
 
     const lines = [
       [prefix, message].filter(Boolean).join(' '),
       page,
-      choiceDescription,
-      helpLine ? `\n${helpLine}` : '',
+      ' ',
+      selectedChoice.description
+        ? theme.style.description(selectedChoice.description)
+        : '',
+      helpLine,
     ]
       .filter(Boolean)
-      .join('\n');
+      .join('\n')
+      .trimEnd();
 
     return `${lines}${cursorHide}`;
   },
