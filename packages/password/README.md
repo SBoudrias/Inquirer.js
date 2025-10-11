@@ -73,7 +73,7 @@ const answer = await password({ message: 'Enter your name' });
 | Property | Type                                                        | Required | Description                                                                                                                                                                                                             |
 | -------- | ----------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | message  | `string`                                                    | yes      | The question to ask                                                                                                                                                                                                     |
-| mask     | `boolean`                                                   | no       | Show a `*` mask over the input or keep it transparent. When transparent, a dim help line (`input is masked`) is displayed under the prompt.                                                                             |
+| mask     | `boolean`                                                   | no       | Show a `*` mask over the input or keep it transparent                                                                                                                                                                   |
 | validate | `string => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the filtered answered content. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
 | theme    | [See Theming](#Theming)                                     | no       | Customize look of the prompt.                                                                                                                                                                                           |
 
@@ -94,11 +94,8 @@ type Theme = {
     error: (text: string) => string;
     help: (text: string) => string;
   };
-  helpMode: 'always' | 'never' | 'auto';
 };
 ```
-
-Set `theme.helpMode = 'never'` to suppress the help line entirely.
 
 # License
 

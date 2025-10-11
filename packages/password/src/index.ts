@@ -11,21 +11,16 @@ import {
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
 
-type PasswordTheme = {
-  helpMode: 'always' | 'never' | 'auto';
-};
-
 type PasswordConfig = {
   message: string;
   mask?: boolean | string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
-  theme?: PartialDeep<Theme<PasswordTheme>>;
+  theme?: PartialDeep<Theme>;
 };
 
 export default createPrompt<string, PasswordConfig>((config, done) => {
   const { validate = () => true } = config;
-  const passwordTheme: PasswordTheme = { helpMode: 'auto' };
-  const theme = makeTheme<PasswordTheme>(passwordTheme, config.theme);
+  const theme = makeTheme(config.theme);
 
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setError] = useState<string>();
@@ -63,12 +58,12 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
   const message = theme.style.message(config.message, status);
 
   let formattedValue = '';
-  let helpLine: string | undefined;
+  let helpTip;
   if (config.mask) {
     const maskChar = typeof config.mask === 'string' ? config.mask : '*';
     formattedValue = maskChar.repeat(value.length);
-  } else if (status !== 'done' && theme.helpMode !== 'never') {
-    helpLine = `${theme.style.help('input is masked')}${cursorHide}`;
+  } else if (status !== 'done') {
+    helpTip = `${theme.style.help('[input is masked]')}${cursorHide}`;
   }
 
   if (status === 'done') {
@@ -80,11 +75,5 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     error = theme.style.error(errorMsg);
   }
 
-  const header = [prefix, message, config.mask ? formattedValue : undefined]
-    .filter(Boolean)
-    .join(' ');
-  const lines = [header];
-  if (helpLine) lines.push(helpLine);
-
-  return [lines.join('\n'), error];
+  return [[prefix, message, config.mask ? formattedValue : helpTip].join(' '), error];
 });
