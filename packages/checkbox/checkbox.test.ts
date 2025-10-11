@@ -27,14 +27,15 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ 1
        ◯ 2
        ◯ 3
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('down');
@@ -43,14 +44,15 @@ describe('checkbox prompt', () => {
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ 1
        ◉ 2
       ❯◉ 3
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -66,20 +68,22 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ Option A
        ◯ Option B
-       ◯ Option C"
+       ◯ Option C
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('down');
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ Option A
       ❯◉ Option B
-       ◯ Option C"
+       ◯ Option C
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -96,28 +100,30 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ 1
        ◯ 2
        ◯ 3
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('up');
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◉ 1
        ◯ 2
        ◯ 3
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -134,28 +140,30 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ──────────────
       ❯◯ 1
        ◯ 2
        ◯ 3
        ◯ 4
        ◯ 5
-       ◯ 6"
+       ◯ 6
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('up');
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ──────────────
       ❯◉ 1
        ◯ 2
        ◯ 3
        ◯ 4
        ◯ 5
-       ◯ 6"
+       ◯ 6
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -172,14 +180,15 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ 1
        ◯ 2
        ◯ 3
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     numberedChoices.forEach(() => events.keypress('down'));
@@ -187,14 +196,15 @@ describe('checkbox prompt', () => {
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ 6
        ◯ 7
        ◯ 8
        ◯ 9
        ◯ 10
        ◯ 11
-      ❯◉ 12"
+      ❯◉ 12
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -211,14 +221,15 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ 1
        ◯ 2
        ◯ 3
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     numberedChoices.forEach(() => events.keypress('down'));
@@ -226,14 +237,15 @@ describe('checkbox prompt', () => {
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ 7
        ◯ 8
        ◯ 9
        ◯ 10
        ◯ 11
       ❯◉ 12
-       ──────────────"
+       ──────────────
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -250,14 +262,15 @@ describe('checkbox prompt', () => {
     events.keypress('4');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ 1
        ◯ 2
        ◯ 3
       ❯◉ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -273,9 +286,10 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ 1
-       ◉ 2"
+       ◉ 2
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -291,9 +305,10 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ 1
-       ◉ 2"
+       ◉ 2
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('space');
@@ -302,9 +317,10 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◉ 1
-      ❯◯ 2"
+      ❯◯ 2
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -321,9 +337,10 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ 1
-       ◯ 2"
+       ◯ 2
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -339,7 +356,6 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -349,7 +365,9 @@ describe('checkbox prompt', () => {
        ◯ 7
        ◯ 8
        ◯ 9
-       ◯ 10"
+       ◯ 10
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -365,9 +383,10 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ 1
-       ◯ 2"
+       ◯ 2
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('up');
@@ -376,9 +395,10 @@ describe('checkbox prompt', () => {
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◉ 11
-       ◉ 12"
+       ◉ 12
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -397,20 +417,22 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ Ham
       - Pineapple (disabled)
-       ◯ Pepperoni"
+       ◯ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('down');
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ Ham
       - Pineapple (disabled)
-      ❯◉ Pepperoni"
+      ❯◉ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -430,19 +452,21 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ Ham
       - Pineapple (disabled)
-       ◯ Pepperoni"
+       ◯ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('2');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ Ham
       - Pineapple (disabled)
-       ◯ Pepperoni"
+       ◯ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -462,20 +486,22 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ Ham
        ──────────────
-       ◯ Pepperoni"
+       ◯ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('down');
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ Ham
        ──────────────
-      ❯◉ Pepperoni"
+      ❯◉ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -492,40 +518,43 @@ describe('checkbox prompt', () => {
     events.keypress('4');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ 1
        ◯ 2
        ◯ 3
       ❯◉ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('a');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◉ 1
        ◉ 2
        ◉ 3
       ❯◉ 4
        ◉ 5
        ◉ 6
-       ◉ 7"
+       ◉ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('a');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ 1
        ◯ 2
        ◯ 3
       ❯◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('a');
@@ -542,14 +571,15 @@ describe('checkbox prompt', () => {
     events.keypress('4');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ 1
        ◯ 2
        ◯ 3
       ❯◉ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('a');
@@ -570,14 +600,15 @@ describe('checkbox prompt', () => {
     });
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ 5
        ◉ 6
        ◉ 7
       ❯◉ 8
        ◯ 9
        ◯ 10
-       ◯ 11"
+       ◯ 11
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('i');
@@ -618,15 +649,16 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-       (Pulse <space> para seleccionar, <a> para alternar todos, <i> para invertir 
-      selección, y <enter> para continuar)
       ❯◯ 1
        ◯ 2
        ◯ 3
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+       (Pulse <space> para seleccionar, <a> para alternar todos, <i> para invertir
+      selección, y <enter> para continuar)"
     `);
 
     events.keypress('enter');
@@ -657,7 +689,6 @@ describe('checkbox prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -665,20 +696,23 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      > At least one choice must be selected"
+      > At least one choice must be selected
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◉ 1
        ◯ 2
        ◯ 3
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -699,31 +733,37 @@ describe('checkbox prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a family
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ Stark
        ◯ Lannister
        ◯ Targaryen
-      Winter is coming"
+
+      Winter is coming
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a family
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ Stark
       ❯◯ Lannister
        ◯ Targaryen
-      Hear me roar"
+
+      Hear me roar
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a family
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
        ◯ Stark
       ❯◉ Lannister
        ◯ Targaryen
-      Hear me roar"
+
+      Hear me roar
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -746,7 +786,6 @@ describe('checkbox prompt', () => {
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • i invert • ⏎ submit
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -754,7 +793,9 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      > Please select only one choice"
+      > Please select only one choice
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('space');
@@ -777,14 +818,15 @@ describe('checkbox prompt', () => {
       events.keypress('space');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit
         ❯√ 1
          x 2
          x 3
          x 4
          x 5
          x 6
-         x 7"
+         x 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       events.keypress('enter');
       await answer;
@@ -803,14 +845,15 @@ describe('checkbox prompt', () => {
       events.keypress('space');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit
         >◉ 1
          ◯ 2
          ◯ 3
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       events.keypress('enter');
       await answer;
@@ -874,10 +917,11 @@ describe('checkbox prompt', () => {
 
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a commit
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit
         ❯◯ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
          ◯ 3272b94a (origin/main) Fix(inquirer): Fix close method not required
-         ◯ e4e10545 Chore(dev-deps): Bump dev-deps"
+         ◯ e4e10545 Chore(dev-deps): Bump dev-deps
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
 
       events.keypress('space');
@@ -885,10 +929,11 @@ describe('checkbox prompt', () => {
       events.keypress('space');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a commit
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit
          ◉ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
         ❯◉ 3272b94a (origin/main) Fix(inquirer): Fix close method not required
-         ◯ e4e10545 Chore(dev-deps): Bump dev-deps"
+         ◯ e4e10545 Chore(dev-deps): Bump dev-deps
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
 
       events.keypress('enter');
@@ -939,42 +984,45 @@ describe('checkbox prompt', () => {
 
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit
         ❯◯ 1
          ◯ 2
          ◯ 3
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
 
       events.keypress('down');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit
          ◯ 1
         ❯◯ 2
          ◯ 3
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
 
       events.keypress('space');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit
          ◯ 1
         ❯◉ 2
          ◯ 3
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
 
@@ -992,42 +1040,45 @@ describe('checkbox prompt', () => {
 
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit
         ❯◯ 1
          ◯ 2
          ◯ 3
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
 
       events.keypress('down');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit
          ◯ 1
         ❯◯ 2
          ◯ 3
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
 
       events.keypress('space');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit
          ◯ 1
         ❯◉ 2
          ◯ 3
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
 
@@ -1100,40 +1151,43 @@ describe('checkbox prompt', () => {
       events.keypress('4');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • space select • b all • i invert • ⏎ submit
          ◯ 1
          ◯ 2
          ◯ 3
         ❯◉ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
 
       events.keypress('b');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • space select • b all • i invert • ⏎ submit
          ◉ 1
          ◉ 2
          ◉ 3
         ❯◉ 4
          ◉ 5
          ◉ 6
-         ◉ 7"
+         ◉ 7
+
+        ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
 
       events.keypress('b');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
-        ↑↓ navigate • space select • b all • i invert • ⏎ submit
          ◯ 1
          ◯ 2
          ◯ 3
         ❯◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
 
       events.keypress('b');
@@ -1157,14 +1211,15 @@ describe('checkbox prompt', () => {
     });
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • a all • j invert • ⏎ submit
        ◯ 5
        ◉ 6
        ◉ 7
       ❯◉ 8
        ◯ 9
        ◯ 10
-       ◯ 11"
+       ◯ 11
+
+      ↑↓ navigate • space select • a all • j invert • ⏎ submit"
     `);
 
     events.keypress('j');
@@ -1186,14 +1241,15 @@ describe('checkbox prompt', () => {
     const expectedScreen = getScreen();
     expect(expectedScreen).toMatchInlineSnapshot(`
       "? Select a number
-      ↑↓ navigate • space select • ⏎ submit
       ❯◯ 1
        ◯ 2
        ◯ 3
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • ⏎ submit"
     `);
 
     events.keypress('a');

@@ -35,7 +35,11 @@ type CheckboxTheme = {
     ) => string;
     description: (text: string) => string;
   };
-  helpMode: 'always' | 'never' | 'auto';
+  helpMode:
+    | 'always'
+    | 'never'
+    /** @deprecated 'auto' is an alias to 'always' */
+    | 'auto';
 };
 
 type CheckboxShortcuts = {
@@ -55,7 +59,7 @@ const checkboxTheme: CheckboxTheme = {
       selectedChoices.map((choice) => choice.short).join(', '),
     description: (text: string) => colors.cyan(text),
   },
-  helpMode: 'auto',
+  helpMode: 'always',
 };
 
 type Choice<Value> = {
@@ -280,17 +284,21 @@ export default createPrompt(
     let helpLine: string | undefined;
     if (theme.helpMode !== 'never' && instructions !== false) {
       if (typeof instructions === 'string') {
-        helpLine = theme.style.help(instructions);
+        helpLine = instructions;
       } else {
-        const segments = [
-          `↑↓ ${colors.bold('navigate')}`,
-          `space ${colors.bold('select')}`,
+        const segments: [string, string][] = [
+          ['↑↓', 'navigate'],
+          ['space', 'select'],
         ];
-        if (shortcuts.all) segments.push(`${shortcuts.all} ${colors.bold('all')}`);
-        if (shortcuts.invert)
-          segments.push(`${shortcuts.invert} ${colors.bold('invert')}`);
-        segments.push(`⏎ ${colors.bold('submit')}`);
-        helpLine = theme.style.help(segments.join(' • '));
+        if (shortcuts.all) segments.push([shortcuts.all, 'all']);
+        if (shortcuts.invert) segments.push([shortcuts.invert, 'invert']);
+        segments.push(['⏎', 'submit']);
+        helpLine = segments
+          .map(
+            ([key, description]) =>
+              `${colors.bold(key)} ${theme.style.help(description)}`,
+          )
+          .join(theme.style.help(' • '));
       }
     }
 
@@ -298,16 +306,22 @@ export default createPrompt(
       ? `\n${theme.style.description(description)}`
       : ``;
 
-    let error = '';
+    let error = undefined;
     if (errorMsg) {
-      error = `\n${theme.style.error(errorMsg)}`;
+      error = theme.style.error(errorMsg);
     }
 
-    const header = [prefix, message].filter(Boolean).join(' ');
-    const lines = [header];
-    if (helpLine) lines.push(helpLine);
+    const lines = [
+      [prefix, message].filter(Boolean).join(' '),
+      page,
+      choiceDescription,
+      error,
+      helpLine ? `\n${helpLine}` : '',
+    ]
+      .filter(Boolean)
+      .join('\n');
 
-    return `${lines.join('\n')}\n${page}${choiceDescription}${error}${cursorHide}`;
+    return `${lines}${cursorHide}`;
   },
 );
 

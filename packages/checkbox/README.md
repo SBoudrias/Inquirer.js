@@ -173,8 +173,7 @@ type Theme = {
 
 ### `theme.helpMode`
 
-- `auto` (default): Display the help line by default.
-- `always`: Force the help line to remain visible (matches the default).
+- `always` (default): Help line is visible.
 - `never`: Hide the help line entirely.
 
 # License
