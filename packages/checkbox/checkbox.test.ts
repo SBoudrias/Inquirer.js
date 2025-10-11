@@ -1326,5 +1326,58 @@ describe('checkbox prompt', () => {
       events.keypress('enter');
       await expect(answer).resolves.toEqual(['three']);
     });
+
+    it('displays checkedName when option is selected', async () => {
+      const choices = [
+        { name: 'npm', value: 'npm', checkedName: 'Node Package Manager' },
+        { name: 'yarn', value: 'yarn', checkedName: 'Yet Another Resource Negotiator' },
+        new Separator(),
+        { name: 'jspm', value: 'jspm' },
+        { name: 'pnpm', value: 'pnpm', disabled: '(pnpm is not available)' },
+      ];
+
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select package managers',
+        choices,
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select package managers
+        ❯◯ npm
+         ◯ yarn
+         ──────────────
+         ◯ jspm
+        - pnpm (pnpm is not available)
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+      `);
+
+      events.keypress('space');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select package managers
+        ❯◉ Node Package Manager
+         ◯ yarn
+         ──────────────
+         ◯ jspm
+        - pnpm (pnpm is not available)
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+      `);
+      events.keypress('down');
+      events.keypress('space');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select package managers
+         ◉ Node Package Manager
+        ❯◉ Yet Another Resource Negotiator
+         ──────────────
+         ◯ jspm
+        - pnpm (pnpm is not available)
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+      `);
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['npm', 'yarn']);
+      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select package managers npm, yarn"`);
+    });
   });
 });

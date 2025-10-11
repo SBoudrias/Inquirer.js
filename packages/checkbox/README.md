@@ -105,6 +105,7 @@ The `Choice` object is typed as
 type Choice<Value> = {
   value: Value;
   name?: string;
+  checkedName?: string;
   description?: string;
   short?: string;
   checked?: boolean;
@@ -116,6 +117,7 @@ Here's each property:
 
 - `value`: The value is what will be returned by `await checkbox()`.
 - `name`: This is the string displayed in the choice list.
+- `checkedName`: Alternative `name` (or format) displayed when the choice is checked.
 - `description`: Option for a longer description string that'll appear under the list when the cursor highlight a given choice.
 - `short`: Once the prompt is done (press enter), we'll use `short` if defined to render next to the question. By default we'll use `name`.
 - `checked`: If `true`, the option will be checked by default.
