@@ -141,10 +141,10 @@ Choices can also be an array of string, in which case the string will be used bo
 
 The `instructions` option allows you to customize the help line rendered under the prompt message:
 
-- `navigation`: Text shown when all choices fit within the page size (default: `↑↓ navigate • ⏎ select`)
-- `pager`: Text shown when there are more choices than the page size (default: `↑↓ navigate • ⏎ select`)
+- `navigation`: Text shown when all choices fit within the page size
+- `pager`: Text shown when there are more choices than the page size
 
-Use the prompt `theme.helpMode` option (`'always' | 'auto' | 'never'`) to keep or hide this line entirely. By default (`'auto'`), the help line stays visible.
+Use the prompt `theme.helpMode` option (`'always' | 'never'`) to keep or hide this line entirely.
 
 ### Validation & autocomplete interaction
 
@@ -182,15 +182,14 @@ type Theme = {
   icon: {
     cursor: string;
   };
-  helpMode: 'always' | 'never' | 'auto';
+  helpMode: 'always' | 'never';
 };
 ```
 
 ### `theme.helpMode`
 
-- `auto` (default): Hide the help tips after an interaction occurs.
-- `always`: The help tips will always show and never hide.
-- `never`: The help tips will never show.
+- `always` (default): Help line is visible.
+- `never`: Hide the help line entirely.
 
 ## Recipes
 

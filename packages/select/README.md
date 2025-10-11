@@ -154,7 +154,7 @@ type Theme = {
   icon: {
     cursor: string;
   };
-  helpMode: 'always' | 'never' | 'auto';
+  helpMode: 'always' | 'never';
   indexMode: 'hidden' | 'number';
 };
 ```

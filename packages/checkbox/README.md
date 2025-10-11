@@ -167,7 +167,7 @@ type Theme = {
     unchecked: string;
     cursor: string;
   };
-  helpMode: 'always' | 'never' | 'auto';
+  helpMode: 'always' | 'never';
 };
 ```
 
