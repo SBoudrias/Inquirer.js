@@ -35,7 +35,6 @@ describe('checkbox prompt', () => {
        ◯ 6
        ◯ 7
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -52,7 +51,6 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -74,7 +72,6 @@ describe('checkbox prompt', () => {
        ◯ Option B
        ◯ Option C
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -85,7 +82,6 @@ describe('checkbox prompt', () => {
        ◯ Option A
       ❯◉ Option B
        ◯ Option C
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -112,7 +108,6 @@ describe('checkbox prompt', () => {
        ◯ 6
        ◯ 7
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -127,7 +122,6 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -154,7 +148,6 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -169,7 +162,6 @@ describe('checkbox prompt', () => {
        ◯ 4
        ◯ 5
        ◯ 6
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -196,7 +188,6 @@ describe('checkbox prompt', () => {
        ◯ 6
        ◯ 7
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -212,7 +203,6 @@ describe('checkbox prompt', () => {
        ◯ 10
        ◯ 11
       ❯◉ 12
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -239,7 +229,6 @@ describe('checkbox prompt', () => {
        ◯ 6
        ◯ 7
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -255,7 +244,6 @@ describe('checkbox prompt', () => {
        ◯ 11
       ❯◉ 12
        ──────────────
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -282,7 +270,6 @@ describe('checkbox prompt', () => {
        ◯ 6
        ◯ 7
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -301,7 +288,6 @@ describe('checkbox prompt', () => {
       "? Select a number
       ❯◯ 1
        ◉ 2
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -322,7 +308,6 @@ describe('checkbox prompt', () => {
       ❯◯ 1
        ◉ 2
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -334,7 +319,6 @@ describe('checkbox prompt', () => {
       "? Select a number
        ◉ 1
       ❯◯ 2
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -355,7 +339,6 @@ describe('checkbox prompt', () => {
       "? Select a number
       ❯◯ 1
        ◯ 2
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -384,7 +367,6 @@ describe('checkbox prompt', () => {
        ◯ 9
        ◯ 10
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -404,7 +386,6 @@ describe('checkbox prompt', () => {
       ❯◯ 1
        ◯ 2
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -416,7 +397,6 @@ describe('checkbox prompt', () => {
       "? Select a number
       ❯◉ 11
        ◉ 12
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -441,7 +421,6 @@ describe('checkbox prompt', () => {
       - Pineapple (disabled)
        ◯ Pepperoni
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -452,7 +431,6 @@ describe('checkbox prompt', () => {
        ◯ Ham
       - Pineapple (disabled)
       ❯◉ Pepperoni
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -478,7 +456,6 @@ describe('checkbox prompt', () => {
       - Pineapple (disabled)
        ◯ Pepperoni
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -488,7 +465,6 @@ describe('checkbox prompt', () => {
       ❯◯ Ham
       - Pineapple (disabled)
        ◯ Pepperoni
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -514,7 +490,6 @@ describe('checkbox prompt', () => {
        ──────────────
        ◯ Pepperoni
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -525,7 +500,6 @@ describe('checkbox prompt', () => {
        ◯ Ham
        ──────────────
       ❯◉ Pepperoni
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -552,7 +526,6 @@ describe('checkbox prompt', () => {
        ◯ 6
        ◯ 7
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -567,7 +540,6 @@ describe('checkbox prompt', () => {
        ◉ 6
        ◉ 7
 
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -581,7 +553,6 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -607,7 +578,6 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -637,7 +607,6 @@ describe('checkbox prompt', () => {
        ◯ 9
        ◯ 10
        ◯ 11
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -688,7 +657,6 @@ describe('checkbox prompt', () => {
        ◯ 6
        ◯ 7
 
-
        (Pulse <space> para seleccionar, <a> para alternar todos, <i> para invertir
       selección, y <enter> para continuar)"
     `);
@@ -730,7 +698,6 @@ describe('checkbox prompt', () => {
        ◯ 7
 
       > At least one choice must be selected
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -744,7 +711,6 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
@@ -772,7 +738,6 @@ describe('checkbox prompt', () => {
        ◯ Targaryen
 
       Winter is coming
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -784,7 +749,6 @@ describe('checkbox prompt', () => {
        ◯ Targaryen
 
       Hear me roar
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -796,7 +760,6 @@ describe('checkbox prompt', () => {
        ◯ Targaryen
 
       Hear me roar
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -829,7 +792,6 @@ describe('checkbox prompt', () => {
        ◯ 7
 
       > Please select only one choice
-
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
@@ -861,7 +823,6 @@ describe('checkbox prompt', () => {
          x 6
          x 7
 
-
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       events.keypress('enter');
@@ -888,7 +849,6 @@ describe('checkbox prompt', () => {
          ◯ 5
          ◯ 6
          ◯ 7
-
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
@@ -958,7 +918,6 @@ describe('checkbox prompt', () => {
          ◯ 3272b94a (origin/main) Fix(inquirer): Fix close method not required
          ◯ e4e10545 Chore(dev-deps): Bump dev-deps
 
-
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
 
@@ -970,7 +929,6 @@ describe('checkbox prompt', () => {
          ◉ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
         ❯◉ 3272b94a (origin/main) Fix(inquirer): Fix close method not required
          ◯ e4e10545 Chore(dev-deps): Bump dev-deps
-
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
@@ -1031,7 +989,6 @@ describe('checkbox prompt', () => {
          ◯ 6
          ◯ 7
 
-
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
@@ -1047,7 +1004,6 @@ describe('checkbox prompt', () => {
          ◯ 6
          ◯ 7
 
-
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
@@ -1062,7 +1018,6 @@ describe('checkbox prompt', () => {
          ◯ 5
          ◯ 6
          ◯ 7
-
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
@@ -1090,7 +1045,6 @@ describe('checkbox prompt', () => {
          ◯ 6
          ◯ 7
 
-
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
@@ -1106,7 +1060,6 @@ describe('checkbox prompt', () => {
          ◯ 6
          ◯ 7
 
-
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
@@ -1121,7 +1074,6 @@ describe('checkbox prompt', () => {
          ◯ 5
          ◯ 6
          ◯ 7
-
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
@@ -1204,7 +1156,6 @@ describe('checkbox prompt', () => {
          ◯ 6
          ◯ 7
 
-
         ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
 
@@ -1219,7 +1170,6 @@ describe('checkbox prompt', () => {
          ◉ 6
          ◉ 7
 
-
         ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
 
@@ -1233,7 +1183,6 @@ describe('checkbox prompt', () => {
          ◯ 5
          ◯ 6
          ◯ 7
-
 
         ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
@@ -1267,7 +1216,6 @@ describe('checkbox prompt', () => {
        ◯ 10
        ◯ 11
 
-
       ↑↓ navigate • space select • a all • j invert • ⏎ submit"
     `);
 
@@ -1297,7 +1245,6 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-
 
       ↑↓ navigate • space select • ⏎ submit"
     `);

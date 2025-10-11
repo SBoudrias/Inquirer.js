@@ -305,7 +305,7 @@ export default createPrompt(
       ' ',
       description ? theme.style.description(description) : '',
       errorMsg ? theme.style.error(errorMsg) : '',
-      helpLine ? `\n${helpLine}` : '',
+      helpLine,
     ]
       .filter(Boolean)
       .join('\n')

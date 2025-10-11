@@ -276,13 +276,12 @@ export default createPrompt(
         .join(' ');
     }
 
+    const { description } = selectedChoice;
     const lines = [
       [prefix, message].filter(Boolean).join(' '),
       page,
       ' ',
-      selectedChoice.description
-        ? theme.style.description(selectedChoice.description)
-        : '',
+      description ? theme.style.description(description) : '',
       helpLine,
     ]
       .filter(Boolean)

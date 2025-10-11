@@ -280,13 +280,12 @@ export default createPrompt(
       searchStr = theme.style.searchTerm(searchTerm);
     }
 
+    const description = selectedChoice?.description;
     const header = [prefix, message, searchStr].filter(Boolean).join(' ').trimEnd();
     const body = [
       error ?? page,
       ' ',
-      selectedChoice?.description
-        ? theme.style.description(selectedChoice.description)
-        : '',
+      description ? theme.style.description(description) : '',
       helpLine,
     ]
       .filter(Boolean)
