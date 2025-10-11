@@ -294,10 +294,7 @@ export default createPrompt(
         if (shortcuts.invert) segments.push([shortcuts.invert, 'invert']);
         segments.push(['⏎', 'submit']);
         helpLine = segments
-          .map(
-            ([key, description]) =>
-              `${colors.bold(key)} ${theme.style.help(description)}`,
-          )
+          .map(([key, action]) => `${colors.bold(key)} ${theme.style.help(action)}`)
           .join(theme.style.help(' • '));
       }
     }
