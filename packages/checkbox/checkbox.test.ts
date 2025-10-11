@@ -1342,13 +1342,14 @@ describe('checkbox prompt', () => {
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select package managers (Press <space> to select, <a> to toggle all, <i> to
-        invert selection, and <enter> to proceed)
+        "? Select package managers
         ❯◯ npm
          ◯ yarn
          ──────────────
          ◯ jspm
-        - pnpm (pnpm is not available)"
+        - pnpm (pnpm is not available)
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
 
       events.keypress('space');
@@ -1358,7 +1359,9 @@ describe('checkbox prompt', () => {
          ◯ yarn
          ──────────────
          ◯ jspm
-        - pnpm (pnpm is not available)"
+        - pnpm (pnpm is not available)
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       events.keypress('down');
       events.keypress('space');
@@ -1368,7 +1371,9 @@ describe('checkbox prompt', () => {
         ❯◉ Yet Another Resource Negotiator
          ──────────────
          ◯ jspm
-        - pnpm (pnpm is not available)"
+        - pnpm (pnpm is not available)
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       events.keypress('enter');
       await expect(answer).resolves.toEqual(['npm', 'yarn']);
