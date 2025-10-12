@@ -154,16 +154,15 @@ type Theme = {
   icon: {
     cursor: string;
   };
-  helpMode: 'always' | 'never' | 'auto';
+  helpMode: 'always' | 'never';
   indexMode: 'hidden' | 'number';
 };
 ```
 
 ### `theme.helpMode`
 
-- `auto` (default): Hide the help tips after an interaction occurs.
-- `always`: The help tips will always show and never hide.
-- `never`: The help tips will never show.
+- `always` (default): Help line is visible.
+- `never`: Hide the help line entirely.
 
 ### `theme.indexMode`
 

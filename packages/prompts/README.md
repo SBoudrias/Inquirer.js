@@ -31,6 +31,8 @@ npx @inquirer/demo@latest
 <tr>
   <th>npm</th>
   <th>yarn</th>
+  <th>pnpm</th>
+  <th>bun</th>
 </tr>
 <tr>
 <td>
@@ -44,6 +46,20 @@ npm install @inquirer/prompts
 
 ```sh
 yarn add @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+pnpm add @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+bun add @inquirer/prompts
 ```
 
 </td>

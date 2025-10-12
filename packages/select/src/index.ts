@@ -30,7 +30,11 @@ type SelectTheme = {
     disabled: (text: string) => string;
     description: (text: string) => string;
   };
-  helpMode: 'always' | 'never' | 'auto';
+  helpMode:
+    | 'always'
+    | 'never'
+    /** @deprecated 'auto' is an alias to 'always' */
+    | 'auto';
   indexMode: 'hidden' | 'number';
   keybindings: ReadonlyArray<Keybinding>;
 };
@@ -41,7 +45,7 @@ const selectTheme: SelectTheme = {
     disabled: (text: string) => colors.dim(`- ${text}`),
     description: (text: string) => colors.cyan(text),
   },
-  helpMode: 'auto',
+  helpMode: 'always',
   indexMode: 'hidden',
   keybindings: [],
 };
@@ -123,7 +127,6 @@ function normalizeChoices<Value>(
 export default createPrompt(
   <Value>(config: SelectConfig<Value>, done: (value: Value) => void) => {
     const { loop = true, pageSize = 7 } = config;
-    const firstRender = useRef(true);
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
     const { keybindings } = theme;
     const [status, setStatus] = useState<Status>('idle');
@@ -232,20 +235,19 @@ export default createPrompt(
 
     const message = theme.style.message(config.message, status);
 
-    let helpTipTop = '';
-    let helpTipBottom = '';
-    if (
-      theme.helpMode === 'always' ||
-      (theme.helpMode === 'auto' && firstRender.current)
-    ) {
-      firstRender.current = false;
-
-      if (items.length > pageSize) {
-        helpTipBottom = `\n${theme.style.help(`(${config.instructions?.pager ?? 'Use arrow keys to reveal more choices'})`)}`;
+    let helpLine: string | undefined;
+    if (theme.helpMode !== 'never') {
+      if (config.instructions) {
+        const { pager, navigation } = config.instructions;
+        helpLine = theme.style.help(items.length > pageSize ? pager : navigation);
       } else {
-        helpTipTop = theme.style.help(
-          `(${config.instructions?.navigation ?? 'Use arrow keys'})`,
-        );
+        const keys: [string, string][] = [
+          ['↑↓', 'navigate'],
+          ['⏎', 'select'],
+        ];
+        helpLine = keys
+          .map(([key, action]) => `${colors.bold(key)} ${theme.style.help(action)}`)
+          .join(theme.style.help(' • '));
       }
     }
 
@@ -276,14 +278,24 @@ export default createPrompt(
     });
 
     if (status === 'done') {
-      return `${prefix} ${message} ${theme.style.answer(selectedChoice.short)}`;
+      return [prefix, message, theme.style.answer(selectedChoice.short)]
+        .filter(Boolean)
+        .join(' ');
     }
 
-    const choiceDescription = selectedChoice.description
-      ? `\n${theme.style.description(selectedChoice.description)}`
-      : ``;
+    const { description } = selectedChoice;
+    const lines = [
+      [prefix, message].filter(Boolean).join(' '),
+      page,
+      ' ',
+      description ? theme.style.description(description) : '',
+      helpLine,
+    ]
+      .filter(Boolean)
+      .join('\n')
+      .trimEnd();
 
-    return `${[prefix, message, helpTipTop].filter(Boolean).join(' ')}\n${page}${helpTipBottom}${choiceDescription}${cursorHide}`;
+    return `${lines}${cursorHide}`;
   },
 );
 

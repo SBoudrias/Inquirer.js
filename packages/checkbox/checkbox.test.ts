@@ -26,8 +26,7 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -35,7 +34,8 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Use arrow keys to reveal more choices)"
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('down');
@@ -50,7 +50,9 @@ describe('checkbox prompt', () => {
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -65,11 +67,12 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ Option A
        ◯ Option B
-       ◯ Option C"
+       ◯ Option C
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('down');
@@ -78,7 +81,9 @@ describe('checkbox prompt', () => {
       "? Select a number
        ◯ Option A
       ❯◉ Option B
-       ◯ Option C"
+       ◯ Option C
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -94,8 +99,7 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -103,7 +107,8 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Use arrow keys to reveal more choices)"
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('up');
@@ -116,7 +121,9 @@ describe('checkbox prompt', () => {
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -132,8 +139,7 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
        ──────────────
       ❯◯ 1
        ◯ 2
@@ -141,7 +147,8 @@ describe('checkbox prompt', () => {
        ◯ 4
        ◯ 5
        ◯ 6
-      (Use arrow keys to reveal more choices)"
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('up');
@@ -154,7 +161,9 @@ describe('checkbox prompt', () => {
        ◯ 3
        ◯ 4
        ◯ 5
-       ◯ 6"
+       ◯ 6
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -170,8 +179,7 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -179,7 +187,8 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Use arrow keys to reveal more choices)"
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     numberedChoices.forEach(() => events.keypress('down'));
@@ -193,7 +202,9 @@ describe('checkbox prompt', () => {
        ◯ 9
        ◯ 10
        ◯ 11
-      ❯◉ 12"
+      ❯◉ 12
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -209,8 +220,7 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -218,7 +228,8 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Use arrow keys to reveal more choices)"
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     numberedChoices.forEach(() => events.keypress('down'));
@@ -232,7 +243,9 @@ describe('checkbox prompt', () => {
        ◯ 10
        ◯ 11
       ❯◉ 12
-       ──────────────"
+       ──────────────
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -248,15 +261,16 @@ describe('checkbox prompt', () => {
 
     events.keypress('4');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
        ◯ 1
        ◯ 2
        ◯ 3
       ❯◉ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -271,10 +285,11 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
-       ◉ 2"
+       ◉ 2
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -289,10 +304,11 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
-       ◉ 2"
+       ◉ 2
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('space');
@@ -302,7 +318,9 @@ describe('checkbox prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◉ 1
-      ❯◯ 2"
+      ❯◯ 2
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -318,11 +336,11 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
        ◯ 2
-      (Use arrow keys to reveal more choices)"
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -337,8 +355,7 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -349,7 +366,8 @@ describe('checkbox prompt', () => {
        ◯ 8
        ◯ 9
        ◯ 10
-      (Use arrow keys to reveal more choices)"
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -364,11 +382,11 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
        ◯ 2
-      (Use arrow keys to reveal more choices)"
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('up');
@@ -378,7 +396,9 @@ describe('checkbox prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◉ 11
-       ◉ 12"
+       ◉ 12
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -396,11 +416,12 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a topping (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a topping
       ❯◯ Ham
       - Pineapple (disabled)
-       ◯ Pepperoni"
+       ◯ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('down');
@@ -409,7 +430,9 @@ describe('checkbox prompt', () => {
       "? Select a topping
        ◯ Ham
       - Pineapple (disabled)
-      ❯◉ Pepperoni"
+      ❯◉ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -428,20 +451,22 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a topping (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a topping
       ❯◯ Ham
       - Pineapple (disabled)
-       ◯ Pepperoni"
+       ◯ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('2');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a topping (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a topping
       ❯◯ Ham
       - Pineapple (disabled)
-       ◯ Pepperoni"
+       ◯ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -460,11 +485,12 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a topping (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a topping
       ❯◯ Ham
        ──────────────
-       ◯ Pepperoni"
+       ◯ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('down');
@@ -473,7 +499,9 @@ describe('checkbox prompt', () => {
       "? Select a topping
        ◯ Ham
        ──────────────
-      ❯◉ Pepperoni"
+      ❯◉ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -489,41 +517,44 @@ describe('checkbox prompt', () => {
 
     events.keypress('4');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
        ◯ 1
        ◯ 2
        ◯ 3
       ❯◉ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('a');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
        ◉ 1
        ◉ 2
        ◉ 3
       ❯◉ 4
        ◉ 5
        ◉ 6
-       ◉ 7"
+       ◉ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('a');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
        ◯ 1
        ◯ 2
        ◯ 3
       ❯◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('a');
@@ -539,15 +570,16 @@ describe('checkbox prompt', () => {
 
     events.keypress('4');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
        ◯ 1
        ◯ 2
        ◯ 3
       ❯◉ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('a');
@@ -567,15 +599,16 @@ describe('checkbox prompt', () => {
       events.keypress(String(value));
     });
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
        ◯ 5
        ◉ 6
        ◉ 7
       ❯◉ 8
        ◯ 9
        ◯ 10
-       ◯ 11"
+       ◯ 11
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('i');
@@ -615,8 +648,7 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Pulse <space> para seleccionar, <a> para alternar todos, <i>
-      para invertir selección, y <enter> para continuar)
+      "? Select a number
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -624,7 +656,9 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Use arrow keys to reveal more choices)"
+
+       (Pulse <space> para seleccionar, <a> para alternar todos, <i> para invertir
+      selección, y <enter> para continuar)"
     `);
 
     events.keypress('enter');
@@ -654,8 +688,7 @@ describe('checkbox prompt', () => {
     events.keypress('enter');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -663,7 +696,9 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      > At least one choice must be selected"
+
+      > At least one choice must be selected
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('space');
@@ -675,7 +710,9 @@ describe('checkbox prompt', () => {
        ◯ 4
        ◯ 5
        ◯ 6
-       ◯ 7"
+       ◯ 7
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -695,22 +732,24 @@ describe('checkbox prompt', () => {
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a family (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a family
       ❯◯ Stark
        ◯ Lannister
        ◯ Targaryen
-      Winter is coming"
+
+      Winter is coming
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('down');
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a family (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a family
        ◯ Stark
       ❯◯ Lannister
        ◯ Targaryen
-      Hear me roar"
+
+      Hear me roar
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('space');
@@ -719,7 +758,9 @@ describe('checkbox prompt', () => {
        ◯ Stark
       ❯◉ Lannister
        ◯ Targaryen
-      Hear me roar"
+
+      Hear me roar
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
@@ -741,8 +782,7 @@ describe('checkbox prompt', () => {
     events.keypress('enter');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -750,7 +790,9 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      > Please select only one choice"
+
+      > Please select only one choice
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('space');
@@ -779,7 +821,9 @@ describe('checkbox prompt', () => {
          x 4
          x 5
          x 6
-         x 7"
+         x 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       events.keypress('enter');
       await answer;
@@ -804,7 +848,9 @@ describe('checkbox prompt', () => {
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       events.keypress('enter');
       await answer;
@@ -867,11 +913,12 @@ describe('checkbox prompt', () => {
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a commit (Press <space> to select, <a> to toggle all, <i> to invert
-        selection, and <enter> to proceed)
+        "? Select a commit
         ❯◯ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
          ◯ 3272b94a (origin/main) Fix(inquirer): Fix close method not required
-         ◯ e4e10545 Chore(dev-deps): Bump dev-deps"
+         ◯ e4e10545 Chore(dev-deps): Bump dev-deps
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
 
       events.keypress('space');
@@ -881,7 +928,9 @@ describe('checkbox prompt', () => {
         "? Select a commit
          ◉ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
         ❯◉ 3272b94a (origin/main) Fix(inquirer): Fix close method not required
-         ◯ e4e10545 Chore(dev-deps): Bump dev-deps"
+         ◯ e4e10545 Chore(dev-deps): Bump dev-deps
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
 
       events.keypress('enter');
@@ -921,8 +970,7 @@ describe('checkbox prompt', () => {
   });
 
   describe('theme: helpMode', () => {
-    const scrollTip = '(Use arrow keys to reveal more choices)';
-    const selectTip = 'Press <space> to select';
+    const scrollTip = '↑↓ navigate • space select • a all • i invert • ⏎ submit';
 
     it('helpMode: auto', async () => {
       const { answer, events, getScreen } = await render(checkbox, {
@@ -932,8 +980,7 @@ describe('checkbox prompt', () => {
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-        selection, and <enter> to proceed)
+        "? Select a number
         ❯◯ 1
          ◯ 2
          ◯ 3
@@ -941,25 +988,25 @@ describe('checkbox prompt', () => {
          ◯ 5
          ◯ 6
          ◯ 7
-        (Use arrow keys to reveal more choices)"
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
-      expect(getScreen()).toContain(selectTip);
 
       events.keypress('down');
       expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-        selection, and <enter> to proceed)
+        "? Select a number
          ◯ 1
         ❯◯ 2
          ◯ 3
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
-      expect(getScreen()).not.toContain(scrollTip);
-      expect(getScreen()).toContain(selectTip);
+      expect(getScreen()).toContain(scrollTip);
 
       events.keypress('space');
       expect(getScreen()).toMatchInlineSnapshot(`
@@ -970,10 +1017,11 @@ describe('checkbox prompt', () => {
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
-      expect(getScreen()).not.toContain(scrollTip);
-      expect(getScreen()).not.toContain(selectTip);
+      expect(getScreen()).toContain(scrollTip);
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual([2]);
@@ -988,8 +1036,7 @@ describe('checkbox prompt', () => {
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-        selection, and <enter> to proceed)
+        "? Select a number
         ❯◯ 1
          ◯ 2
          ◯ 3
@@ -997,15 +1044,14 @@ describe('checkbox prompt', () => {
          ◯ 5
          ◯ 6
          ◯ 7
-        (Use arrow keys to reveal more choices)"
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
-      expect(getScreen()).toContain(selectTip);
 
       events.keypress('down');
       expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-        selection, and <enter> to proceed)
+        "? Select a number
          ◯ 1
         ❯◯ 2
          ◯ 3
@@ -1013,15 +1059,14 @@ describe('checkbox prompt', () => {
          ◯ 5
          ◯ 6
          ◯ 7
-        (Use arrow keys to reveal more choices)"
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
-      expect(getScreen()).toContain(selectTip);
 
       events.keypress('space');
       expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number (Press <space> to select, <a> to toggle all, <i> to invert
-        selection, and <enter> to proceed)
+        "? Select a number
          ◯ 1
         ❯◉ 2
          ◯ 3
@@ -1029,10 +1074,10 @@ describe('checkbox prompt', () => {
          ◯ 5
          ◯ 6
          ◯ 7
-        (Use arrow keys to reveal more choices)"
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
       expect(getScreen()).toContain(scrollTip);
-      expect(getScreen()).toContain(selectTip);
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual([2]);
@@ -1057,7 +1102,6 @@ describe('checkbox prompt', () => {
          ◯ 7"
       `);
       expect(getScreen()).not.toContain(scrollTip);
-      expect(getScreen()).not.toContain(selectTip);
 
       events.keypress('down');
       expect(getScreen()).toMatchInlineSnapshot(`
@@ -1071,7 +1115,6 @@ describe('checkbox prompt', () => {
          ◯ 7"
       `);
       expect(getScreen()).not.toContain(scrollTip);
-      expect(getScreen()).not.toContain(selectTip);
 
       events.keypress('space');
       expect(getScreen()).toMatchInlineSnapshot(`
@@ -1085,7 +1128,6 @@ describe('checkbox prompt', () => {
          ◯ 7"
       `);
       expect(getScreen()).not.toContain(scrollTip);
-      expect(getScreen()).not.toContain(selectTip);
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual([2]);
@@ -1105,41 +1147,44 @@ describe('checkbox prompt', () => {
 
       events.keypress('4');
       expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number (Press <space> to select, <b> to toggle all, <i> to invert
-        selection, and <enter> to proceed)
+        "? Select a number
          ◯ 1
          ◯ 2
          ◯ 3
         ❯◉ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
 
       events.keypress('b');
       expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number (Press <space> to select, <b> to toggle all, <i> to invert
-        selection, and <enter> to proceed)
+        "? Select a number
          ◉ 1
          ◉ 2
          ◉ 3
         ❯◉ 4
          ◉ 5
          ◉ 6
-         ◉ 7"
+         ◉ 7
+
+        ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
 
       events.keypress('b');
       expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number (Press <space> to select, <b> to toggle all, <i> to invert
-        selection, and <enter> to proceed)
+        "? Select a number
          ◯ 1
          ◯ 2
          ◯ 3
         ❯◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7"
+         ◯ 7
+
+        ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
 
       events.keypress('b');
@@ -1162,15 +1207,16 @@ describe('checkbox prompt', () => {
       events.keypress(String(value));
     });
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, <a> to toggle all, <j> to invert
-      selection, and <enter> to proceed)
+      "? Select a number
        ◯ 5
        ◉ 6
        ◉ 7
       ❯◉ 8
        ◯ 9
        ◯ 10
-       ◯ 11"
+       ◯ 11
+
+      ↑↓ navigate • space select • a all • j invert • ⏎ submit"
     `);
 
     events.keypress('j');
@@ -1191,7 +1237,7 @@ describe('checkbox prompt', () => {
     // All options are deselected and should not change if default shortcuts are pressed
     const expectedScreen = getScreen();
     expect(expectedScreen).toMatchInlineSnapshot(`
-      "? Select a number (Press <space> to select, and <enter> to proceed)
+      "? Select a number
       ❯◯ 1
        ◯ 2
        ◯ 3
@@ -1199,7 +1245,8 @@ describe('checkbox prompt', () => {
        ◯ 5
        ◯ 6
        ◯ 7
-      (Use arrow keys to reveal more choices)"
+
+      ↑↓ navigate • space select • ⏎ submit"
     `);
 
     events.keypress('a');
@@ -1278,6 +1325,59 @@ describe('checkbox prompt', () => {
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual(['three']);
+    });
+
+    it('displays checkedName when option is selected', async () => {
+      const choices = [
+        { name: 'npm', value: 'npm', checkedName: 'Node Package Manager' },
+        { name: 'yarn', value: 'yarn', checkedName: 'Yet Another Resource Negotiator' },
+        new Separator(),
+        { name: 'jspm', value: 'jspm' },
+        { name: 'pnpm', value: 'pnpm', disabled: '(pnpm is not available)' },
+      ];
+
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select package managers',
+        choices,
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select package managers
+        ❯◯ npm
+         ◯ yarn
+         ──────────────
+         ◯ jspm
+        - pnpm (pnpm is not available)
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+      `);
+
+      events.keypress('space');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select package managers
+        ❯◉ Node Package Manager
+         ◯ yarn
+         ──────────────
+         ◯ jspm
+        - pnpm (pnpm is not available)
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+      `);
+      events.keypress('down');
+      events.keypress('space');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select package managers
+         ◉ Node Package Manager
+        ❯◉ Yet Another Resource Negotiator
+         ──────────────
+         ◯ jspm
+        - pnpm (pnpm is not available)
+
+        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+      `);
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['npm', 'yarn']);
+      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select package managers npm, yarn"`);
     });
   });
 
