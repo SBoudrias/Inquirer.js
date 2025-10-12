@@ -16,6 +16,7 @@ import {
   Separator,
   type Theme,
   type Status,
+  type Keybinding,
 } from '@inquirer/core';
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
@@ -37,6 +38,7 @@ type CheckboxTheme = {
     description: (text: string) => string;
   };
   helpMode: 'always' | 'never' | 'auto';
+  keybindings: ReadonlyArray<Keybinding>;
 };
 
 type CheckboxShortcuts = {
@@ -57,6 +59,7 @@ const checkboxTheme: CheckboxTheme = {
     description: (text: string) => colors.cyan(text),
   },
   helpMode: 'auto',
+  keybindings: [],
 };
 
 type Choice<Value> = {
@@ -98,7 +101,6 @@ type CheckboxConfig<
   ) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme<CheckboxTheme>>;
   shortcuts?: CheckboxShortcuts;
-  vimEmacsBindings?: boolean;
 };
 
 type Item<Value> = NormalizedChoice<Value> | Separator;
@@ -165,6 +167,7 @@ export default createPrompt(
     } = config;
     const shortcuts = { all: 'a', invert: 'i', ...config.shortcuts };
     const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme);
+    const { keybindings } = theme;
     const firstRender = useRef(true);
     const [status, setStatus] = useState<Status>('idle');
     const prefix = usePrefix({ status, theme });
@@ -201,16 +204,13 @@ export default createPrompt(
         } else {
           setError(isValid || 'You must select a valid value');
         }
-      } else if (
-        isUpKey(key, config.vimEmacsBindings) ||
-        isDownKey(key, config.vimEmacsBindings)
-      ) {
+      } else if (isUpKey(key, keybindings) || isDownKey(key, keybindings)) {
         if (
           loop ||
-          (isUpKey(key, config.vimEmacsBindings) && active !== bounds.first) ||
-          (isDownKey(key, config.vimEmacsBindings) && active !== bounds.last)
+          (isUpKey(key, keybindings) && active !== bounds.first) ||
+          (isDownKey(key, keybindings) && active !== bounds.last)
         ) {
-          const offset = isUpKey(key, config.vimEmacsBindings) ? -1 : 1;
+          const offset = isUpKey(key, keybindings) ? -1 : 1;
           let next = active;
           do {
             next = (next + offset + items.length) % items.length;

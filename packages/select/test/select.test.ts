@@ -1101,8 +1101,8 @@ describe('select prompt', () => {
     });
   });
 
-  describe('vimEmacsBindings', () => {
-    it('supports vim and emac bindings when config option is passed in', async () => {
+  describe('keybindings', () => {
+    it('supports vim bindings when vim is in the keybindings array', async () => {
       const { events, getScreen } = await render(select, {
         message: 'Select a number',
         choices: [
@@ -1115,8 +1115,76 @@ describe('select prompt', () => {
         ],
         theme: {
           indexMode: 'number',
+          keybindings: ['vim'],
         },
-        vimEmacsBindings: true,
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number (Use arrow keys)
+         ──────────────
+         ---
+        ❯ 1. One
+          2. Two
+          3. Three
+          4. Four"
+      `);
+
+      // Vim bindings
+      events.keypress('j');
+      expect(getScreen()).toContain('❯ 2. Two');
+      events.keypress('k');
+      expect(getScreen()).toContain('❯ 1. One');
+    });
+
+    it('supports emacs bindings when emacs is in the keybindings array', async () => {
+      const { events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          new Separator(),
+          new Separator('---'),
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+          { value: 3, name: 'Three' },
+          { value: 4, name: 'Four' },
+        ],
+        theme: {
+          indexMode: 'number',
+          keybindings: ['emacs'],
+        },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number (Use arrow keys)
+         ──────────────
+         ---
+        ❯ 1. One
+          2. Two
+          3. Three
+          4. Four"
+      `);
+
+      // Emacs bindings
+      events.keypress({ name: 'n', ctrl: true });
+      expect(getScreen()).toContain('❯ 2. Two');
+      events.keypress({ name: 'p', ctrl: true });
+      expect(getScreen()).toContain('❯ 1. One');
+    });
+
+    it('supports both vim and emacs bindings when both are in the keybindings array', async () => {
+      const { events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          new Separator(),
+          new Separator('---'),
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+          { value: 3, name: 'Three' },
+          { value: 4, name: 'Four' },
+        ],
+        theme: {
+          indexMode: 'number',
+          keybindings: ['vim', 'emacs'],
+        },
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
@@ -1135,14 +1203,14 @@ describe('select prompt', () => {
       events.keypress('k');
       expect(getScreen()).toContain('❯ 1. One');
 
-      // Emac bindings
+      // Emacs bindings
       events.keypress({ name: 'n', ctrl: true });
       expect(getScreen()).toContain('❯ 2. Two');
       events.keypress({ name: 'p', ctrl: true });
       expect(getScreen()).toContain('❯ 1. One');
     });
 
-    it('disables the search feature if vimEmacsBindings option is set', async () => {
+    it('disables the search feature when vim keybindings are enabled', async () => {
       vi.useFakeTimers();
       const { events, getScreen } = await render(select, {
         message: 'Select a number',
@@ -1151,7 +1219,9 @@ describe('select prompt', () => {
           { name: 'China', value: 'ZH' },
           { name: 'United States', value: 'US' },
         ],
-        vimEmacsBindings: true,
+        theme: {
+          keybindings: ['vim'],
+        },
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
@@ -1161,7 +1231,7 @@ describe('select prompt', () => {
           United States"
       `);
 
-      // No-op since search is disabled, due to vim and ema bindings
+      // No-op since search is disabled when vim bindings are enabled
       events.type('China');
 
       expect(getScreen()).toMatchInlineSnapshot(`
@@ -1170,6 +1240,41 @@ describe('select prompt', () => {
           China
           United States"
       `);
+    });
+
+    it('keeps search feature enabled when only emacs keybindings are enabled', async () => {
+      vi.useFakeTimers();
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          { name: 'Canada', value: 'CA' },
+          { name: 'China', value: 'ZH' },
+          { name: 'United States', value: 'US' },
+        ],
+        theme: {
+          keybindings: ['emacs'],
+        },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number (Use arrow keys)
+        ❯ Canada
+          China
+          United States"
+      `);
+
+      // Search still works with emacs bindings
+      events.type('ch');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+          Canada
+        ❯ China
+          United States"
+      `);
+
+      events.keypress('enter');
+      vi.runAllTimers();
+      await expect(answer).resolves.toEqual('ZH');
     });
   });
 });

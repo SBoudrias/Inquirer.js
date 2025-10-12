@@ -17,6 +17,7 @@ import {
   makeTheme,
   type Theme,
   type Status,
+  type Keybinding,
 } from '@inquirer/core';
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
@@ -31,6 +32,7 @@ type SelectTheme = {
   };
   helpMode: 'always' | 'never' | 'auto';
   indexMode: 'hidden' | 'number';
+  keybindings: ReadonlyArray<Keybinding>;
 };
 
 const selectTheme: SelectTheme = {
@@ -41,6 +43,7 @@ const selectTheme: SelectTheme = {
   },
   helpMode: 'auto',
   indexMode: 'hidden',
+  keybindings: [],
 };
 
 type Choice<Value> = {
@@ -78,7 +81,6 @@ type SelectConfig<
     pager: string;
   };
   theme?: PartialDeep<Theme<SelectTheme>>;
-  vimEmacsBindings?: boolean;
 };
 
 function isSelectable<Value>(
@@ -123,9 +125,14 @@ export default createPrompt(
     const { loop = true, pageSize = 7 } = config;
     const firstRender = useRef(true);
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
+    const { keybindings } = theme;
     const [status, setStatus] = useState<Status>('idle');
     const prefix = usePrefix({ status, theme });
     const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+    // Vim keybindings (j/k) conflict with typing those letters in search,
+    // so search must be disabled when vim bindings are enabled
+    const searchEnabled = !keybindings.includes('vim');
 
     const items = useMemo(() => normalizeChoices(config.choices), [config.choices]);
 
@@ -162,17 +169,14 @@ export default createPrompt(
       if (isEnterKey(key)) {
         setStatus('done');
         done(selectedChoice.value);
-      } else if (
-        isUpKey(key, config.vimEmacsBindings) ||
-        isDownKey(key, config.vimEmacsBindings)
-      ) {
+      } else if (isUpKey(key, keybindings) || isDownKey(key, keybindings)) {
         rl.clearLine(0);
         if (
           loop ||
-          (isUpKey(key, config.vimEmacsBindings) && active !== bounds.first) ||
-          (isDownKey(key, config.vimEmacsBindings) && active !== bounds.last)
+          (isUpKey(key, keybindings) && active !== bounds.first) ||
+          (isDownKey(key, keybindings) && active !== bounds.last)
         ) {
-          const offset = isUpKey(key, config.vimEmacsBindings) ? -1 : 1;
+          const offset = isUpKey(key, keybindings) ? -1 : 1;
           let next = active;
           do {
             next = (next + offset + items.length) % items.length;
@@ -201,8 +205,7 @@ export default createPrompt(
         }, 700);
       } else if (isBackspaceKey(key)) {
         rl.clearLine(0);
-      } else if (!config.vimEmacsBindings) {
-        // Default to search
+      } else if (searchEnabled) {
         const searchTerm = rl.line.toLowerCase();
         const matchIndex = items.findIndex((item) => {
           if (Separator.isSeparator(item) || !isSelectable(item)) return false;

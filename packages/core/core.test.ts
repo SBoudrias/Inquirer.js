@@ -770,15 +770,35 @@ describe('Separator', () => {
   });
 });
 
-describe('vim emacs bindings', () => {
-  it('supports vim and emac bindings when option passed in', () => {
-    expect(isUpKey({ name: 'up', ctrl: false }, true)).toBeTruthy();
-    expect(isUpKey({ name: 'k', ctrl: false }, true)).toBeTruthy();
-    expect(isUpKey({ name: 'p', ctrl: true }, true)).toBeTruthy();
+describe('keybindings', () => {
+  it('supports vim keybindings when vim is in the keybindings array', () => {
+    expect(isUpKey({ name: 'up', ctrl: false }, ['vim'])).toBeTruthy();
+    expect(isUpKey({ name: 'k', ctrl: false }, ['vim'])).toBeTruthy();
+    expect(isUpKey({ name: 'p', ctrl: true }, ['vim'])).toBeFalsy(); // Ctrl+P is emacs, not vim
 
-    expect(isDownKey({ name: 'down', ctrl: false }, true)).toBeTruthy();
-    expect(isDownKey({ name: 'j', ctrl: false }, true)).toBeTruthy();
-    expect(isDownKey({ name: 'n', ctrl: true }, true)).toBeTruthy();
+    expect(isDownKey({ name: 'down', ctrl: false }, ['vim'])).toBeTruthy();
+    expect(isDownKey({ name: 'j', ctrl: false }, ['vim'])).toBeTruthy();
+    expect(isDownKey({ name: 'n', ctrl: true }, ['vim'])).toBeFalsy(); // Ctrl+N is emacs, not vim
+  });
+
+  it('supports emacs keybindings when emacs is in the keybindings array', () => {
+    expect(isUpKey({ name: 'up', ctrl: false }, ['emacs'])).toBeTruthy();
+    expect(isUpKey({ name: 'k', ctrl: false }, ['emacs'])).toBeFalsy(); // k is vim, not emacs
+    expect(isUpKey({ name: 'p', ctrl: true }, ['emacs'])).toBeTruthy();
+
+    expect(isDownKey({ name: 'down', ctrl: false }, ['emacs'])).toBeTruthy();
+    expect(isDownKey({ name: 'j', ctrl: false }, ['emacs'])).toBeFalsy(); // j is vim, not emacs
+    expect(isDownKey({ name: 'n', ctrl: true }, ['emacs'])).toBeTruthy();
+  });
+
+  it('supports both vim and emacs keybindings when both are in the keybindings array', () => {
+    expect(isUpKey({ name: 'up', ctrl: false }, ['vim', 'emacs'])).toBeTruthy();
+    expect(isUpKey({ name: 'k', ctrl: false }, ['vim', 'emacs'])).toBeTruthy();
+    expect(isUpKey({ name: 'p', ctrl: true }, ['vim', 'emacs'])).toBeTruthy();
+
+    expect(isDownKey({ name: 'down', ctrl: false }, ['vim', 'emacs'])).toBeTruthy();
+    expect(isDownKey({ name: 'j', ctrl: false }, ['vim', 'emacs'])).toBeTruthy();
+    expect(isDownKey({ name: 'n', ctrl: true }, ['vim', 'emacs'])).toBeTruthy();
   });
 
   it('does not support vim and emac bindings by default', () => {

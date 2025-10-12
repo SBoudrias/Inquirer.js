@@ -3,24 +3,29 @@ export type KeypressEvent = {
   ctrl: boolean;
 };
 
-export const isUpKey = (key: KeypressEvent, vimEmacsBindings: boolean = false): boolean =>
+export type Keybinding = 'emacs' | 'vim';
+
+export const isUpKey = (
+  key: KeypressEvent,
+  keybindings: ReadonlyArray<Keybinding> = [],
+): boolean =>
   // The up key
   key.name === 'up' ||
-  // Vim keybinding
-  (vimEmacsBindings && key.name === 'k') ||
-  // Emacs keybinding
-  (vimEmacsBindings && key.ctrl && key.name === 'p');
+  // Vim keybinding: hjkl keys map to left/down/up/right
+  (keybindings.includes('vim') && key.name === 'k') ||
+  // Emacs keybinding: Ctrl+P means "previous" in Emacs navigation conventions
+  (keybindings.includes('emacs') && key.ctrl && key.name === 'p');
 
 export const isDownKey = (
   key: KeypressEvent,
-  vimEmacsBindings: boolean = false,
+  keybindings: ReadonlyArray<Keybinding> = [],
 ): boolean =>
   // The down key
   key.name === 'down' ||
-  // Vim keybinding
-  (vimEmacsBindings && key.name === 'j') ||
-  // Emacs keybinding
-  (vimEmacsBindings && key.ctrl && key.name === 'n');
+  // Vim keybinding: hjkl keys map to left/down/up/right
+  (keybindings.includes('vim') && key.name === 'j') ||
+  // Emacs keybinding: Ctrl+N means "next" in Emacs navigation conventions
+  (keybindings.includes('emacs') && key.ctrl && key.name === 'n');
 
 export const isSpaceKey = (key: KeypressEvent): boolean => key.name === 'space';
 
