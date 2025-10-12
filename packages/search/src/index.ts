@@ -25,12 +25,10 @@ type SearchTheme = {
     disabled: (text: string) => string;
     searchTerm: (text: string) => string;
     description: (text: string) => string;
+    keysHelpTip: (keys: [key: string, action: string][]) => string | undefined;
   };
-  helpMode:
-    | 'always'
-    | 'never'
-    /** @deprecated 'auto' is an alias to 'always' */
-    | 'auto';
+  /** @deprecated Use theme.style.keysHelpTip instead */
+  helpMode: 'always' | 'never' | 'auto';
 };
 
 const searchTheme: SearchTheme = {
@@ -39,6 +37,10 @@ const searchTheme: SearchTheme = {
     disabled: (text: string) => colors.dim(`- ${text}`),
     searchTerm: (text: string) => colors.cyan(text),
     description: (text: string) => colors.cyan(text),
+    keysHelpTip: (keys: [string, string][]) =>
+      keys
+        .map(([key, action]) => `${colors.bold(key)} ${colors.dim(action)}`)
+        .join(colors.dim(' • ')),
   },
   helpMode: 'always',
 };
@@ -77,6 +79,7 @@ type SearchConfig<
         | Promise<ReadonlyArray<Choice<Value> | Separator>>;
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
+  /** @deprecated Use theme.style.keysHelpTip instead */
   instructions?: {
     navigation: string;
     pager: string;
@@ -225,19 +228,18 @@ export default createPrompt(
     const message = theme.style.message(config.message, status);
 
     let helpLine: string | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     if (theme.helpMode !== 'never') {
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       if (config.instructions) {
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
         const { pager, navigation } = config.instructions;
         helpLine = theme.style.help(searchResults.length > pageSize ? pager : navigation);
       } else {
-        const keys: [string, string][] = [
+        helpLine = theme.style.keysHelpTip([
           ['↑↓', 'navigate'],
           ['⏎', 'select'],
-        ];
-
-        helpLine = keys
-          .map(([key, action]) => `${colors.bold(key)} ${theme.style.help(action)}`)
-          .join(theme.style.help(' • '));
+        ]);
       }
     }
 

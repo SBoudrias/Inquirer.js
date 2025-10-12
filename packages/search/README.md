@@ -86,14 +86,13 @@ const answer = await search({
 
 ## Options
 
-| Property     | Type                                                       | Required | Description                                                                                                                                                                                          |
-| ------------ | ---------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| message      | `string`                                                   | yes      | The question to ask                                                                                                                                                                                  |
-| source       | `(term: string \| void) => Promise<Choice[]>`              | yes      | This function returns the choices relevant to the search term.                                                                                                                                       |
-| pageSize     | `number`                                                   | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                          |
-| validate     | `Value => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the answer. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
-| instructions | `{ navigation: string; pager: string }`                    | no       | Customize the help instructions shown at the bottom of the prompt.                                                                                                                                   |
-| theme        | [See Theming](#Theming)                                    | no       | Customize look of the prompt.                                                                                                                                                                        |
+| Property | Type                                                       | Required | Description                                                                                                                                                                                          |
+| -------- | ---------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message  | `string`                                                   | yes      | The question to ask                                                                                                                                                                                  |
+| source   | `(term: string \| void) => Promise<Choice[]>`              | yes      | This function returns the choices relevant to the search term.                                                                                                                                       |
+| pageSize | `number`                                                   | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                          |
+| validate | `Value => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the answer. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
+| theme    | [See Theming](#Theming)                                    | no       | Customize look of the prompt.                                                                                                                                                                        |
 
 ### `source` function
 
@@ -137,15 +136,6 @@ Here's each property:
 
 Choices can also be an array of string, in which case the string will be used both as the `value` and the `name`.
 
-### `instructions` object
-
-The `instructions` option allows you to customize the help line rendered under the prompt message:
-
-- `navigation`: Text shown when all choices fit within the page size
-- `pager`: Text shown when there are more choices than the page size
-
-Use the prompt `theme.helpMode` option (`'always' | 'never'`) to keep or hide this line entirely.
-
 ### Validation & autocomplete interaction
 
 The validation within the search prompt acts as a signal for the autocomplete feature.
@@ -178,18 +168,33 @@ type Theme = {
     description: (text: string) => string;
     disabled: (text: string) => string;
     searchTerm: (text: string) => string;
+    keysHelpTip: (keys: [key: string, action: string][]) => string | undefined;
   };
   icon: {
     cursor: string;
   };
-  helpMode: 'always' | 'never';
 };
 ```
 
-### `theme.helpMode`
+### `theme.style.keysHelpTip`
 
-- `always` (default): Help line is visible.
-- `never`: Hide the help line entirely.
+This function allows you to customize the keyboard shortcuts help tip displayed below the prompt. It receives an array of key-action pairs and should return a formatted string. You can also hook here to localize the labels to different languages.
+
+It can also returns `undefined` to hide the help tip entirely. This is the replacement for the deprecated theme option `helpMode: 'never'`.
+
+```js
+theme: {
+  style: {
+    keysHelpTip: (keys) => {
+      // Return undefined to hide the help tip completely.
+      return undefined;
+
+      // Or customize the formatting. Or localize the labels.
+      return keys.map(([key, action]) => `${key}: ${action}`).join(' | ');
+    };
+  }
+}
+```
 
 ## Recipes
 

@@ -35,12 +35,10 @@ type CheckboxTheme = {
       allChoices: ReadonlyArray<NormalizedChoice<T> | Separator>,
     ) => string;
     description: (text: string) => string;
+    keysHelpTip: (keys: [key: string, action: string][]) => string | undefined;
   };
-  helpMode:
-    | 'always'
-    | 'never'
-    /** @deprecated 'auto' is an alias to 'always' */
-    | 'auto';
+  /** @deprecated Use theme.style.keysHelpTip instead */
+  helpMode: 'always' | 'never' | 'auto';
   keybindings: ReadonlyArray<Keybinding>;
 };
 
@@ -60,6 +58,10 @@ const checkboxTheme: CheckboxTheme = {
     renderSelectedChoices: (selectedChoices) =>
       selectedChoices.map((choice) => choice.short).join(', '),
     description: (text: string) => colors.cyan(text),
+    keysHelpTip: (keys: [string, string][]) =>
+      keys
+        .map(([key, action]) => `${colors.bold(key)} ${colors.dim(action)}`)
+        .join(colors.dim(' • ')),
   },
   helpMode: 'always',
   keybindings: [],
@@ -95,6 +97,7 @@ type CheckboxConfig<
   message: string;
   prefix?: string;
   pageSize?: number;
+  /** @deprecated Use theme.style.keysHelpTip instead */
   instructions?: string | boolean;
   choices: ChoicesObject extends ReadonlyArray<string | Separator>
     ? ChoicesObject
@@ -166,6 +169,7 @@ function normalizeChoices<Value>(
 export default createPrompt(
   <Value>(config: CheckboxConfig<Value>, done: (value: Array<Value>) => void) => {
     const {
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       instructions,
       pageSize = 7,
       loop = true,
@@ -291,20 +295,20 @@ export default createPrompt(
     }
 
     let helpLine: string | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     if (theme.helpMode !== 'never' && instructions !== false) {
       if (typeof instructions === 'string') {
         helpLine = instructions;
       } else {
-        const segments: [string, string][] = [
+        const keys: [string, string][] = [
           ['↑↓', 'navigate'],
           ['space', 'select'],
         ];
-        if (shortcuts.all) segments.push([shortcuts.all, 'all']);
-        if (shortcuts.invert) segments.push([shortcuts.invert, 'invert']);
-        segments.push(['⏎', 'submit']);
-        helpLine = segments
-          .map(([key, action]) => `${colors.bold(key)} ${theme.style.help(action)}`)
-          .join(theme.style.help(' • '));
+        if (shortcuts.all) keys.push([shortcuts.all, 'all']);
+        if (shortcuts.invert) keys.push([shortcuts.invert, 'invert']);
+        keys.push(['⏎', 'submit']);
+
+        helpLine = theme.style.keysHelpTip(keys);
       }
     }
 
