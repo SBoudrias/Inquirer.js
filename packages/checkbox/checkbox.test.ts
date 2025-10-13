@@ -1380,4 +1380,77 @@ describe('checkbox prompt', () => {
       expect(getScreen()).toMatchInlineSnapshot(`"✔ Select package managers npm, yarn"`);
     });
   });
+
+  describe('keybindings', () => {
+    it('supports vim keybindings when vim is in the keybindings array', async () => {
+      const { events, getScreen } = await render(checkbox, {
+        message: 'Select items',
+        choices: [
+          { value: 'one', name: 'One' },
+          { value: 'two', name: 'Two' },
+        ],
+        theme: {
+          keybindings: ['vim'],
+        },
+      });
+
+      // Down
+      events.keypress('j');
+      expect(getScreen()).toContain('❯◯ Two');
+
+      // Up
+      events.keypress('k');
+      expect(getScreen()).toContain('❯◯ One');
+    });
+
+    it('supports emacs keybindings when emacs is in the keybindings array', async () => {
+      const { events, getScreen } = await render(checkbox, {
+        message: 'Select items',
+        choices: [
+          { value: 'one', name: 'One' },
+          { value: 'two', name: 'Two' },
+        ],
+        theme: {
+          keybindings: ['emacs'],
+        },
+      });
+
+      // Down
+      events.keypress({ name: 'n', ctrl: true });
+      expect(getScreen()).toContain('❯◯ Two');
+
+      // Up
+      events.keypress({ name: 'p', ctrl: true });
+      expect(getScreen()).toContain('❯◯ One');
+    });
+
+    it('supports both vim and emacs keybindings when both are in the keybindings array', async () => {
+      const { events, getScreen } = await render(checkbox, {
+        message: 'Select items',
+        choices: [
+          { value: 'one', name: 'One' },
+          { value: 'two', name: 'Two' },
+        ],
+        theme: {
+          keybindings: ['vim', 'emacs'],
+        },
+      });
+
+      // Vim: Down
+      events.keypress('j');
+      expect(getScreen()).toContain('❯◯ Two');
+
+      // Vim: Up
+      events.keypress('k');
+      expect(getScreen()).toContain('❯◯ One');
+
+      // Emacs: Down
+      events.keypress({ name: 'n', ctrl: true });
+      expect(getScreen()).toContain('❯◯ Two');
+
+      // Emacs: Up
+      events.keypress({ name: 'p', ctrl: true });
+      expect(getScreen()).toContain('❯◯ One');
+    });
+  });
 });

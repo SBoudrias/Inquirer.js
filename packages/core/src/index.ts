@@ -1,4 +1,14 @@
-export * from './lib/key.ts';
+export {
+  isUpKey,
+  isDownKey,
+  isSpaceKey,
+  isBackspaceKey,
+  isTabKey,
+  isNumberKey,
+  isEnterKey,
+  type KeypressEvent,
+  type Keybinding,
+} from './lib/key.ts';
 export * from './lib/errors.ts';
 export { usePrefix } from './lib/use-prefix.ts';
 export { useState } from './lib/use-state.ts';

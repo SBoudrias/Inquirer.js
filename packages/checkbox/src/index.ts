@@ -15,6 +15,7 @@ import {
   Separator,
   type Theme,
   type Status,
+  type Keybinding,
 } from '@inquirer/core';
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
@@ -40,6 +41,7 @@ type CheckboxTheme = {
     | 'never'
     /** @deprecated 'auto' is an alias to 'always' */
     | 'auto';
+  keybindings: ReadonlyArray<Keybinding>;
 };
 
 type CheckboxShortcuts = {
@@ -60,6 +62,7 @@ const checkboxTheme: CheckboxTheme = {
     description: (text: string) => colors.cyan(text),
   },
   helpMode: 'always',
+  keybindings: [],
 };
 
 type Choice<Value> = {
@@ -171,6 +174,7 @@ export default createPrompt(
     } = config;
     const shortcuts = { all: 'a', invert: 'i', ...config.shortcuts };
     const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme);
+    const { keybindings } = theme;
     const [status, setStatus] = useState<Status>('idle');
     const prefix = usePrefix({ status, theme });
     const [items, setItems] = useState<ReadonlyArray<Item<Value>>>(
@@ -205,13 +209,13 @@ export default createPrompt(
         } else {
           setError(isValid || 'You must select a valid value');
         }
-      } else if (isUpKey(key) || isDownKey(key)) {
+      } else if (isUpKey(key, keybindings) || isDownKey(key, keybindings)) {
         if (
           loop ||
-          (isUpKey(key) && active !== bounds.first) ||
-          (isDownKey(key) && active !== bounds.last)
+          (isUpKey(key, keybindings) && active !== bounds.first) ||
+          (isDownKey(key, keybindings) && active !== bounds.last)
         ) {
-          const offset = isUpKey(key) ? -1 : 1;
+          const offset = isUpKey(key, keybindings) ? -1 : 1;
           let next = active;
           do {
             next = (next + offset + items.length) % items.length;

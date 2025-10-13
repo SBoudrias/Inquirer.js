@@ -1196,4 +1196,195 @@ describe('select prompt', () => {
       await expect(answer).resolves.toEqual(3);
     });
   });
+
+  describe('keybindings', () => {
+    it('supports vim bindings when vim is in the keybindings array', async () => {
+      const { events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          new Separator(),
+          new Separator('---'),
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+          { value: 3, name: 'Three' },
+          { value: 4, name: 'Four' },
+        ],
+        theme: {
+          indexMode: 'number',
+          keybindings: ['vim'],
+        },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+         ──────────────
+         ---
+        ❯ 1. One
+          2. Two
+          3. Three
+          4. Four
+
+        ↑↓ navigate • ⏎ select"
+      `);
+
+      // Vim bindings
+      events.keypress('j');
+      expect(getScreen()).toContain('❯ 2. Two');
+      events.keypress('k');
+      expect(getScreen()).toContain('❯ 1. One');
+    });
+
+    it('supports emacs bindings when emacs is in the keybindings array', async () => {
+      const { events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          new Separator(),
+          new Separator('---'),
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+          { value: 3, name: 'Three' },
+          { value: 4, name: 'Four' },
+        ],
+        theme: {
+          indexMode: 'number',
+          keybindings: ['emacs'],
+        },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+         ──────────────
+         ---
+        ❯ 1. One
+          2. Two
+          3. Three
+          4. Four
+
+        ↑↓ navigate • ⏎ select"
+      `);
+
+      // Emacs bindings
+      events.keypress({ name: 'n', ctrl: true });
+      expect(getScreen()).toContain('❯ 2. Two');
+      events.keypress({ name: 'p', ctrl: true });
+      expect(getScreen()).toContain('❯ 1. One');
+    });
+
+    it('supports both vim and emacs bindings when both are in the keybindings array', async () => {
+      const { events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          new Separator(),
+          new Separator('---'),
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+          { value: 3, name: 'Three' },
+          { value: 4, name: 'Four' },
+        ],
+        theme: {
+          indexMode: 'number',
+          keybindings: ['vim', 'emacs'],
+        },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+         ──────────────
+         ---
+        ❯ 1. One
+          2. Two
+          3. Three
+          4. Four
+
+        ↑↓ navigate • ⏎ select"
+      `);
+
+      // Vim bindings
+      events.keypress('j');
+      expect(getScreen()).toContain('❯ 2. Two');
+      events.keypress('k');
+      expect(getScreen()).toContain('❯ 1. One');
+
+      // Emacs bindings
+      events.keypress({ name: 'n', ctrl: true });
+      expect(getScreen()).toContain('❯ 2. Two');
+      events.keypress({ name: 'p', ctrl: true });
+      expect(getScreen()).toContain('❯ 1. One');
+    });
+
+    it('disables the search feature when vim keybindings are enabled', async () => {
+      vi.useFakeTimers();
+      const { events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          { name: 'Canada', value: 'CA' },
+          { name: 'China', value: 'ZH' },
+          { name: 'United States', value: 'US' },
+        ],
+        theme: {
+          keybindings: ['vim'],
+        },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        ❯ Canada
+          China
+          United States
+
+        ↑↓ navigate • ⏎ select"
+      `);
+
+      // No-op since search is disabled when vim bindings are enabled
+      events.type('China');
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        ❯ Canada
+          China
+          United States
+
+        ↑↓ navigate • ⏎ select"
+      `);
+    });
+
+    it('keeps search feature enabled when only emacs keybindings are enabled', async () => {
+      vi.useFakeTimers();
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          { name: 'Canada', value: 'CA' },
+          { name: 'China', value: 'ZH' },
+          { name: 'United States', value: 'US' },
+        ],
+        theme: {
+          keybindings: ['emacs'],
+        },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        ❯ Canada
+          China
+          United States
+
+        ↑↓ navigate • ⏎ select"
+      `);
+
+      // Search still works with emacs bindings
+      events.type('ch');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+          Canada
+        ❯ China
+          United States
+
+        ↑↓ navigate • ⏎ select"
+      `);
+
+      events.keypress('enter');
+      vi.runAllTimers();
+      await expect(answer).resolves.toEqual('ZH');
+    });
+  });
 });
