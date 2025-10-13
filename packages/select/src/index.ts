@@ -29,12 +29,10 @@ type SelectTheme = {
   style: {
     disabled: (text: string) => string;
     description: (text: string) => string;
+    keysHelpTip: (keys: [key: string, action: string][]) => string | undefined;
   };
-  helpMode:
-    | 'always'
-    | 'never'
-    /** @deprecated 'auto' is an alias to 'always' */
-    | 'auto';
+  /** @deprecated Use theme.style.keysHelpTip instead */
+  helpMode: 'always' | 'never' | 'auto';
   indexMode: 'hidden' | 'number';
   keybindings: ReadonlyArray<Keybinding>;
 };
@@ -44,6 +42,10 @@ const selectTheme: SelectTheme = {
   style: {
     disabled: (text: string) => colors.dim(`- ${text}`),
     description: (text: string) => colors.cyan(text),
+    keysHelpTip: (keys: [string, string][]) =>
+      keys
+        .map(([key, action]) => `${colors.bold(key)} ${colors.dim(action)}`)
+        .join(colors.dim(' • ')),
   },
   helpMode: 'always',
   indexMode: 'hidden',
@@ -80,6 +82,7 @@ type SelectConfig<
   pageSize?: number;
   loop?: boolean;
   default?: unknown;
+  /** @deprecated Use theme.style.keysHelpTip instead. */
   instructions?: {
     navigation: string;
     pager: string;
@@ -236,18 +239,18 @@ export default createPrompt(
     const message = theme.style.message(config.message, status);
 
     let helpLine: string | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     if (theme.helpMode !== 'never') {
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       if (config.instructions) {
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
         const { pager, navigation } = config.instructions;
         helpLine = theme.style.help(items.length > pageSize ? pager : navigation);
       } else {
-        const keys: [string, string][] = [
+        helpLine = theme.style.keysHelpTip([
           ['↑↓', 'navigate'],
           ['⏎', 'select'],
-        ];
-        helpLine = keys
-          .map(([key, action]) => `${colors.bold(key)} ${theme.style.help(action)}`)
-          .join(theme.style.help(' • '));
+        ]);
       }
     }
 
