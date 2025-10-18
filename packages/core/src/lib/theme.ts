@@ -1,4 +1,4 @@
-import colors from 'yoctocolors-cjs';
+import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 import type { Prettify } from '@inquirer/type';
 
@@ -25,8 +25,8 @@ type DefaultTheme = {
    *
    * @defaultValue
    * ```ts
-   * // import colors from 'yoctocolors-cjs';
-   * (status) => status === 'done' ? colors.green('✔') : colors.blue('?')
+   * // import { styleText } from 'node:util';
+   * (status) => status === 'done' ? styleText('green', '✔') : styleText('blue', '?')
    * ```
    */
   prefix: string | Prettify<Omit<Record<Status, string>, 'loading'>>;
@@ -70,8 +70,8 @@ type DefaultTheme = {
      *
      * @defaultValue
      * ```ts
-     * // import colors from 'yoctocolors-cjs';
-     * (text) => colors.cyan(text)
+     * // import { styleText } from 'node:util';
+     * (text) => styleText('cyan', text)
      * ```
      */
     answer: (text: string) => string;
@@ -85,8 +85,8 @@ type DefaultTheme = {
      *
      * @defaultValue
      * ```ts
-     * // import colors from 'yoctocolors-cjs';
-     * (text, status) => colors.bold(text)
+     * // import { styleText } from 'node:util';
+     * (text, status) => styleText('bold', text)
      * ```
      */
     message: (text: string, status: Status) => string;
@@ -99,8 +99,8 @@ type DefaultTheme = {
      *
      * @defaultValue
      * ```ts
-     * // import colors from 'yoctocolors-cjs';
-     * (text) => colors.red(`> ${text}`)
+     * // import { styleText } from 'node:util';
+     * (text) => styleText('red', `> ${text}`)
      * ```
      */
     error: (text: string) => string;
@@ -113,8 +113,8 @@ type DefaultTheme = {
      *
      * @defaultValue
      * ```ts
-     * // import colors from 'yoctocolors-cjs';
-     * (text) => colors.dim(`(${text})`)
+     * // import { styleText } from 'node:util';
+     * (text) => styleText('dim', `(${text})`)
      * ```
      */
     defaultAnswer: (text: string) => string;
@@ -127,8 +127,8 @@ type DefaultTheme = {
      *
      * @defaultValue
      * ```ts
-     * // import colors from 'yoctocolors-cjs';
-     * (text) => colors.dim(text)
+     * // import { styleText } from 'node:util';
+     * (text) => styleText('dim', text)
      * ```
      */
     help: (text: string) => string;
@@ -141,8 +141,8 @@ type DefaultTheme = {
      *
      * @defaultValue
      * ```ts
-     * // import colors from 'yoctocolors-cjs';
-     * (text) => colors.cyan(text)
+     * // import { styleText } from 'node:util';
+     * (text) => styleText('cyan', text)
      * ```
      */
     highlight: (text: string) => string;
@@ -155,8 +155,8 @@ type DefaultTheme = {
      *
      * @defaultValue
      * ```ts
-     * // import colors from 'yoctocolors-cjs';
-     * (text) => colors.cyan(colors.bold(`<${text}>`))
+     * // import { styleText } from 'node:util';
+     * (text) => styleText('cyan', styleText('bold', `<${text}>`))
      * ```
      */
     key: (text: string) => string;
@@ -167,22 +167,22 @@ export type Theme<Extension extends object = object> = Prettify<Extension & Defa
 
 export const defaultTheme: DefaultTheme = {
   prefix: {
-    idle: colors.blue('?'),
-    done: colors.green(figures.tick),
+    idle: styleText('blue', '?'),
+    done: styleText('green', figures.tick),
   },
   spinner: {
     interval: 80,
     frames: ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'].map((frame) =>
-      colors.yellow(frame),
+      styleText('yellow', frame),
     ),
   },
   style: {
-    answer: colors.cyan,
-    message: colors.bold,
-    error: (text) => colors.red(`> ${text}`),
-    defaultAnswer: (text) => colors.dim(`(${text})`),
-    help: colors.dim,
-    highlight: colors.cyan,
-    key: (text: string) => colors.cyan(colors.bold(`<${text}>`)),
+    answer: (text: string) => styleText('cyan', text),
+    message: (text: string) => styleText('bold', text),
+    error: (text) => styleText('red', `> ${text}`),
+    defaultAnswer: (text) => styleText('dim', `(${text})`),
+    help: (text: string) => styleText('dim', text),
+    highlight: (text: string) => styleText('cyan', text),
+    key: (text: string) => styleText('cyan', styleText('bold', `<${text}>`)),
   },
 };
