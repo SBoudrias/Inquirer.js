@@ -331,7 +331,7 @@ You can refer to any `@inquirer/prompts` prompts for real examples:
 - [Expand Prompt](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/expand/src/index.ts)
 
 ```ts
-import colors from 'yoctocolors';
+import { styleText } from 'node:util';
 import {
   createPrompt,
   useState,
@@ -361,12 +361,12 @@ const confirm = createPrompt<boolean, { message: string; default?: boolean }>(
     let formattedValue = value;
     let defaultValue = '';
     if (status === 'done') {
-      formattedValue = colors.cyan(value);
+      formattedValue = styleText('cyan', value);
     } else {
-      defaultValue = colors.dim(config.default === false ? ' (y/N)' : ' (Y/n)');
+      defaultValue = styleText('dim', config.default === false ? ' (y/N)' : ' (Y/n)');
     }
 
-    const message = colors.bold(config.message);
+    const message = styleText('bold', config.message);
     return `${prefix} ${message}${defaultValue} ${formattedValue}`;
   },
 );

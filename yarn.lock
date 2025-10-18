@@ -487,7 +487,6 @@ __metadata:
     "@inquirer/type": "npm:^3.0.9"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.3"
-    yoctocolors-cjs: "npm:^2.1.3"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -543,7 +542,6 @@ __metadata:
     signal-exit: "npm:^4.1.0"
     tshy: "npm:^3.0.3"
     wrap-ansi: "npm:^6.2.0"
-    yoctocolors-cjs: "npm:^2.1.3"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -562,7 +560,6 @@ __metadata:
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^24.10.0"
     tshy: "npm:^3.0.3"
-    yoctocolors-cjs: "npm:^2.1.3"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -613,7 +610,6 @@ __metadata:
     "@inquirer/type": "npm:^3.0.9"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.3"
-    yoctocolors-cjs: "npm:^2.1.3"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -741,7 +737,6 @@ __metadata:
     "@inquirer/type": "npm:^3.0.9"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.3"
-    yoctocolors-cjs: "npm:^2.1.3"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -790,7 +785,6 @@ __metadata:
     "@inquirer/type": "npm:^3.0.9"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.3"
-    yoctocolors-cjs: "npm:^2.1.3"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -811,7 +805,6 @@ __metadata:
     "@inquirer/type": "npm:^3.0.9"
     "@repo/tsconfig": "workspace:*"
     tshy: "npm:^3.0.3"
-    yoctocolors-cjs: "npm:^2.1.3"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -8995,12 +8988,5 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: 10/f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
-  languageName: node
-  linkType: hard
-
-"yoctocolors-cjs@npm:^2.1.3":
-  version: 2.1.3
-  resolution: "yoctocolors-cjs@npm:2.1.3"
-  checksum: 10/b2144b38807673a4254dae06fe1a212729550609e606289c305e45c585b36fab1dbba44fe6cde90db9b28be465ec63f4c2a50867aeec6672f6bc36b6c9a361a0
   languageName: node
   linkType: hard

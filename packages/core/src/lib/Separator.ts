@@ -1,4 +1,4 @@
-import colors from 'yoctocolors-cjs';
+import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 
 /**
@@ -7,7 +7,10 @@ import figures from '@inquirer/figures';
  */
 
 export class Separator {
-  readonly separator: string = colors.dim(Array.from({ length: 15 }).join(figures.line));
+  readonly separator: string = styleText(
+    'dim',
+    Array.from({ length: 15 }).join(figures.line),
+  );
   readonly type: string = 'separator';
 
   constructor(separator?: string) {
