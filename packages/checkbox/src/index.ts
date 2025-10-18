@@ -19,7 +19,7 @@ import {
 } from '@inquirer/core';
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
-import colors from 'yoctocolors-cjs';
+import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 
 type CheckboxTheme = {
@@ -49,19 +49,19 @@ type CheckboxShortcuts = {
 
 const checkboxTheme: CheckboxTheme = {
   icon: {
-    checked: colors.green(figures.circleFilled),
+    checked: styleText('green', figures.circleFilled),
     unchecked: figures.circle,
     cursor: figures.pointer,
   },
   style: {
-    disabledChoice: (text: string) => colors.dim(`- ${text}`),
+    disabledChoice: (text: string) => styleText('dim', `- ${text}`),
     renderSelectedChoices: (selectedChoices) =>
       selectedChoices.map((choice) => choice.short).join(', '),
-    description: (text: string) => colors.cyan(text),
+    description: (text: string) => styleText('cyan', text),
     keysHelpTip: (keys: [string, string][]) =>
       keys
-        .map(([key, action]) => `${colors.bold(key)} ${colors.dim(action)}`)
-        .join(colors.dim(' • ')),
+        .map(([key, action]) => `${styleText('bold', key)} ${styleText('dim', action)}`)
+        .join(styleText('dim', ' • ')),
   },
   helpMode: 'always',
   keybindings: [],

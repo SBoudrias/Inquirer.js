@@ -75,8 +75,7 @@
   },
   "dependencies": {
     "@inquirer/core": "^10.3.0",
-    "@inquirer/type": "^3.0.9",
-    "yoctocolors-cjs": "^2.1.2"
+    "@inquirer/type": "^3.0.9"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",

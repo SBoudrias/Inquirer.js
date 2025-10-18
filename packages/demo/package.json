@@ -72,8 +72,7 @@
   "dependencies": {
     "@inquirer/core": "^10.3.0",
     "@inquirer/figures": "^1.0.14",
-    "@inquirer/prompts": "^7.9.0",
-    "yoctocolors-cjs": "^2.1.2"
+    "@inquirer/prompts": "^7.9.0"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
