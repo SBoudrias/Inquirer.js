@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { select } from '@inquirer/prompts';
-import colors from 'yoctocolors-cjs';
+import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 import checkboxDemo from './demos/checkbox.ts';
 import confirmDemo from './demos/confirm.ts';
@@ -52,7 +52,7 @@ async function askNextDemo() {
     ],
     theme: {
       prefix: {
-        done: colors.magenta(figures.play),
+        done: styleText('magenta', figures.play),
       },
     },
   });

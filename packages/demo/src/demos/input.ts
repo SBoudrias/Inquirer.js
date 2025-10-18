@@ -1,5 +1,5 @@
 import * as url from 'node:url';
-import colors from 'yoctocolors-cjs';
+import { styleText } from 'node:util';
 import { input } from '@inquirer/prompts';
 
 const hexRegEx = /(\d|[a-f])/gim;
@@ -19,7 +19,7 @@ const demo = async () => {
   answer = await input({
     message: 'Enter an hex color?',
     transformer(value = '', { isFinal }) {
-      return isFinal ? colors.underline(value) : value;
+      return isFinal ? styleText('underline', value) : value;
     },
     validate: (value = '') => isHex(value) || 'Pass a valid hex value',
   });
