@@ -739,6 +739,62 @@ describe('inquirer.prompt(...)', () => {
       ]);
       expect(answers).toEqual({ q: 'foo' });
     });
+
+    it('should display skipped question when `when` returns { ask: false, display: true }', async () => {
+      const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+
+      const answers = await inquirer.prompt([
+        {
+          type: 'stub',
+          name: 'q1',
+          message: 'Question 1',
+        },
+        {
+          type: 'stub',
+          name: 'q2',
+          message: 'Question 2',
+          when() {
+            return { ask: false, display: true };
+          },
+        },
+      ]);
+
+      const output = writeSpy.mock.calls.map(([text]) => text).join('');
+      expect(output).toMatch(/Question 2/);
+      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(answers).toEqual({ q1: 'bar' });
+      writeSpy.mockRestore();
+    });
+
+    it('should skip question entirely when `when` returns { ask: false, display: false }', async () => {
+      const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+
+      const answers = await inquirer.prompt([
+        {
+          type: 'stub',
+          name: 'q1',
+          message: 'Question 1',
+        },
+        {
+          type: 'stub',
+          name: 'q2',
+          message: 'Question 2',
+          when() {
+            return { ask: false, display: false };
+          },
+        },
+        {
+          type: 'stub',
+          name: 'q3',
+          message: 'Question 3',
+        },
+      ]);
+
+      const output = writeSpy.mock.calls.map(([text]) => text).join('');
+      expect(output).not.toMatch(/Question 2/);
+      expect(answers).toEqual({ q1: 'bar', q3: 'bar' });
+      writeSpy.mockRestore();
+    });
   });
 
   describe('Prefilling answers', () => {
