@@ -1,5 +1,5 @@
 import cliWidth from 'cli-width';
-import wrapAnsi from 'wrap-ansi';
+import { wrapAnsi } from 'fast-wrap-ansi';
 import { readline } from './hook-engine.ts';
 
 /**
