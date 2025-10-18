@@ -1,11 +1,12 @@
 // @ts-check
+import { defineConfig } from 'eslint/config';
 import eslint from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import nodePlugin from 'eslint-plugin-n';
 import oxlint from 'eslint-plugin-oxlint';
 
-export default tseslint.config(
+export default defineConfig(
   {
     ignores: [
       '.git',
@@ -18,6 +19,7 @@ export default tseslint.config(
     ],
   },
   eslint.configs.recommended,
+  tseslint.configs.recommended,
   nodePlugin.configs['flat/recommended-module'],
   {
     languageOptions: {
@@ -62,6 +64,9 @@ export default tseslint.config(
       globals: {
         ...globals.node,
       },
+    },
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
     },
   },
   {

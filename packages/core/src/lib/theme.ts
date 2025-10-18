@@ -168,7 +168,6 @@ export type Theme<Extension extends object = object> = Prettify<Extension & Defa
 export const defaultTheme: DefaultTheme = {
   prefix: {
     idle: colors.blue('?'),
-    // TODO: use figure
     done: colors.green(figures.tick),
   },
   spinner: {
