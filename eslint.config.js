@@ -101,7 +101,7 @@ export default defineConfig(
       'n/no-unsupported-features/node-builtins': [
         'error',
         {
-          version: '>=22.16.0',
+          version: '^20.12.0',
         },
       ],
     },
@@ -117,7 +117,7 @@ export default defineConfig(
       'n/no-unsupported-features/node-builtins': [
         'error',
         {
-          version: '>=22.16.0',
+          version: '^24.0.0',
         },
       ],
     },
