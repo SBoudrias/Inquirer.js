@@ -4720,6 +4720,7 @@ __metadata:
     run-async: "npm:^4.0.5"
     rxjs: "npm:^7.8.2"
     tshy: "npm:^3.0.2"
+    yoctocolors-cjs: "npm:^2.1.3"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -8663,7 +8664,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yoctocolors-cjs@npm:^2.1.2":
+"yoctocolors-cjs@npm:^2.1.2, yoctocolors-cjs@npm:^2.1.3":
   version: 2.1.3
   resolution: "yoctocolors-cjs@npm:2.1.3"
   checksum: 10/b2144b38807673a4254dae06fe1a212729550609e606289c305e45c585b36fab1dbba44fe6cde90db9b28be465ec63f4c2a50867aeec6672f6bc36b6c9a361a0

@@ -80,7 +80,8 @@
     "@inquirer/type": "^3.0.9",
     "mute-stream": "^2.0.0",
     "run-async": "^4.0.5",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "yoctocolors-cjs": "^2.1.3"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
