@@ -795,6 +795,173 @@ describe('inquirer.prompt(...)', () => {
       expect(answers).toEqual({ q1: 'bar', q3: 'bar' });
       writeSpy.mockRestore();
     });
+
+    it('should display skipped confirm question with default true', async () => {
+      const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+      const answers = await inquirer.prompt([
+        { type: 'stub', name: 'q1', message: 'Question 1' },
+        {
+          type: 'confirm',
+          name: 'confirmQ',
+          message: 'Are you sure?',
+          default: true,
+          when() {
+            return { ask: false, display: true };
+          },
+        },
+      ]);
+
+      const output = writeSpy.mock.calls.map(([text]) => text).join('');
+      expect(output).toMatch(/Are you sure\?.*Yes/);
+      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(answers).toEqual({ q1: 'bar' });
+      writeSpy.mockRestore();
+    });
+
+    it('should display skipped select question', async () => {
+      const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+      const answers = await inquirer.prompt([
+        { type: 'stub', name: 'q1', message: 'Question 1' },
+        {
+          type: 'select',
+          name: 'fruit',
+          message: 'Select fruit',
+          choices: [
+            { name: 'Apple', value: 'a' },
+            { name: 'Banana', value: 'b' },
+          ],
+          default: 'b',
+          when() {
+            return { ask: false, display: true };
+          },
+        },
+      ]);
+
+      const output = writeSpy.mock.calls.map(([text]) => text).join('');
+      expect(output).toMatch(/Select fruit.*Banana/);
+      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(answers).toEqual({ q1: 'bar' });
+      writeSpy.mockRestore();
+    });
+
+    it('should display skipped checkbox question', async () => {
+      const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+
+      const answers = await inquirer.prompt([
+        { type: 'stub', name: 'q1', message: 'Question 1' },
+        {
+          type: 'checkbox',
+          name: 'foods',
+          message: 'Pick foods',
+          choices: [
+            { name: 'Pizza', value: 'p' },
+            { name: 'Burger', value: 'b' },
+          ],
+          default: ['p', 'b'],
+          when() {
+            return { ask: false, display: true };
+          },
+        },
+      ]);
+
+      const output = writeSpy.mock.calls.map(([text]) => text).join('');
+      expect(output).toMatch(/Pick foods.*Pizza, Burger/);
+      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(answers).toEqual({ q1: 'bar' });
+      writeSpy.mockRestore();
+    });
+
+    it('should display skipped password question', async () => {
+      const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+
+      const answers = await inquirer.prompt([
+        { type: 'stub', name: 'q1', message: 'Question 1' },
+        {
+          type: 'password',
+          name: 'pwd',
+          message: 'Enter password',
+          default: 'secret',
+          when() {
+            return { ask: false, display: true };
+          },
+        },
+      ]);
+
+      const output = writeSpy.mock.calls.map(([text]) => text).join('');
+      expect(output).toMatch(/Enter password.*\[PASSWORD SET\]/);
+      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(answers).toEqual({ q1: 'bar' });
+      writeSpy.mockRestore();
+    });
+
+    it('should display skipped editor question', async () => {
+      const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+
+      const answers = await inquirer.prompt([
+        { type: 'stub', name: 'q1', message: 'Question 1' },
+        {
+          type: 'editor',
+          name: 'ed',
+          message: 'Write content',
+          default: 'notes...',
+          when() {
+            return { ask: false, display: true };
+          },
+        },
+      ]);
+
+      const output = writeSpy.mock.calls.map(([text]) => text).join('');
+      expect(output).toMatch(/Write content.*\[Default Content\]/);
+      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(answers).toEqual({ q1: 'bar' });
+      writeSpy.mockRestore();
+    });
+
+    it('should display skipped input question', async () => {
+      const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+
+      const answers = await inquirer.prompt([
+        { type: 'stub', name: 'q1', message: 'Question 1' },
+        {
+          type: 'input',
+          name: 'name',
+          message: 'Enter name',
+          default: 'John',
+          when() {
+            return { ask: false, display: true };
+          },
+        },
+      ]);
+
+      const output = writeSpy.mock.calls.map(([text]) => text).join('');
+      expect(output).toMatch(/Enter name.*John/);
+      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(answers).toEqual({ q1: 'bar' });
+      writeSpy.mockRestore();
+    });
+
+    it('should display skipped number question', async () => {
+      const writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+
+      const answers = await inquirer.prompt([
+        { type: 'stub', name: 'q1', message: 'Question 1' },
+        {
+          type: 'number',
+          name: 'age',
+          message: 'Enter age',
+          default: 25,
+          when() {
+            return { ask: false, display: true };
+          },
+        },
+      ]);
+
+      const output = writeSpy.mock.calls.map(([text]) => text).join('');
+      expect(output).toMatch(/Enter age.*25/);
+      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(answers).toEqual({ q1: 'bar' });
+      writeSpy.mockRestore();
+    });
   });
 
   describe('Prefilling answers', () => {
