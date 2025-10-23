@@ -519,6 +519,19 @@ A sortable checkbox prompt that maintains the order of selection. Perfect for pr
 (Linting, formatting, and analysis)
 ```
 
+[**Checkbox Plus Plus Prompt**](https://github.com/behnamazimi/inquirer-checkbox-plus-plus)<br/>
+A modern multiselect checkbox prompt with search and filter capabilities, highlighting, autocomplete, and improved UX. Supports both ESM and CommonJS and is compatible with @inquirer/core v10+.
+
+```
+? Select colors [searching: "re"]
+❯ ◉ The red color
+  ◯ The green color
+  ◉ The purple color
+  ◯ The orange color
+
+↑↓ navigate • space de/select • type search • 2 selected  • ⏎ submit
+```
+
 # License
 
 Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
