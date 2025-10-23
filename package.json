@@ -1,0 +1,104 @@
+{
+  "name": "@inquirer/root",
+  "private": true,
+  "keywords": [
+    "answer",
+    "answers",
+    "ask",
+    "base",
+    "cli",
+    "command",
+    "command-line",
+    "confirm",
+    "enquirer",
+    "generate",
+    "generator",
+    "hyper",
+    "input",
+    "inquire",
+    "inquirer",
+    "interface",
+    "iterm",
+    "javascript",
+    "menu",
+    "node",
+    "nodejs",
+    "prompt",
+    "promptly",
+    "prompts",
+    "question",
+    "readline",
+    "scaffold",
+    "scaffolder",
+    "scaffolding",
+    "stdin",
+    "stdout",
+    "terminal",
+    "tty",
+    "ui",
+    "yeoman",
+    "yo",
+    "zsh"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
+  "license": "MIT",
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "integration/*",
+    "internals/*"
+  ],
+  "scripts": {
+    "demo": "node --watch-path=packages/ packages/demo/dist/esm/index.js",
+    "dev": "turbo watch tsc",
+    "prepare": "husky && turbo tsc attw",
+    "prepack": "find packages/* -maxdepth 1 -type f -name 'README*' -exec sed -i '' -e 's/utm_source=github/utm_source=npmjs/g' {} + && find packages/* -maxdepth 1  -type f -name package.json -exec sh -c 'jq \".devDependencies |= with_entries(select(.value != \\\"workspace:*\\\"))\" \"$1\" > \"$1.tmp\" && mv \"$1.tmp\" \"$1\"' _ {} \\;",
+    "postpack": "git restore packages/*/package.json packages/*/README.md",
+    "setup": "node ./tools/setup-packages.mjs",
+    "pretest": "turbo tsc && oxlint && prettier --check . && eslint . && yarn tsc:test",
+    "test": "vitest --run packages && node --test integration/**/*.test.*",
+    "tsc": "turbo tsc",
+    "tsc:test": "tsc -p tsconfig.json"
+  },
+  "nano-staged": {
+    "*": "yarn prettier --write --ignore-unknown",
+    "*.m?[jt]sx?": [
+      "yarn oxlint --fix",
+      "yarn eslint --fix"
+    ]
+  },
+  "resolutions": {
+    "type-fest": "^4.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@repo/hoist-peer-dependencies": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@types/node": "^24.0.15",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-n": "^17.21.0",
+    "eslint-plugin-oxlint": "^1.7.0",
+    "globals": "^16.3.0",
+    "globby": "^15.0.0",
+    "husky": "^9.1.7",
+    "lerna": "^8.2.3",
+    "nano-staged": "^0.8.0",
+    "oxlint": "^1.7.0",
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.5",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.37.0",
+    "vitest": "^3.2.4"
+  },
+  "packageManager": "yarn@4.9.4+sha512.7b1cb0b62abba6a537b3a2ce00811a843bea02bcf53138581a6ae5b1bf563f734872bd47de49ce32a9ca9dcaff995aa789577ffb16811da7c603dcf69e73750b",
+  "engines": {
+    "node": ">=18"
+  }
+}

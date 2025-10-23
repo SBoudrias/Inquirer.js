@@ -1,0 +1,6 @@
+{
+  "extends": "@repo/tsconfig",
+  "compilerOptions": {
+    "isolatedDeclarations": true
+  }
+}

@@ -1,0 +1,1 @@
+CI=true yarn pretest && yarn test

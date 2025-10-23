@@ -1,0 +1,20 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "attw": {
+      "dependsOn": ["tsc"],
+      "outputs": []
+    },
+    "tsc": {
+      "dependsOn": ["^tsc"],
+      "outputs": ["dist/**"],
+      "inputs": [
+        "../../package.json",
+        "package.json",
+        ".tshy/*",
+        "src/*",
+        "!**/*.test.ts"
+      ]
+    }
+  }
+}
