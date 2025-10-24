@@ -1,27 +1,40 @@
-import { Observable } from 'rxjs';
-import inquirer from '../dist/esm/index.js';
+/**
+ * Input prompt example
+ */
 
-const observe = new Observable((subscriber) => {
-  subscriber.next({
+import inquirer, { type DistinctQuestion } from 'inquirer';
+
+const answers = await inquirer.prompt([
+  {
     type: 'input',
     name: 'first_name',
     message: "What's your first name",
-  });
-
-  subscriber.next({
+  },
+  {
     type: 'input',
     name: 'last_name',
     message: "What's your last name",
     default() {
       return 'Doe';
     },
-  });
+  },
+  {
+    type: 'input',
+    name: 'fav_color',
+    message: "What's your favorite color",
+    transformer(color: string, { isFinal }: { isFinal: boolean }) {
+      if (isFinal) {
+        return color + '!';
+      }
 
-  subscriber.next({
+      return color;
+    },
+  },
+  {
     type: 'input',
     name: 'phone',
     message: "What's your phone number",
-    validate(value) {
+    validate(value: string) {
       const pass = value.match(
         /^([01])?[\s.-]?\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?)(?:\d+)?)?$/i,
       );
@@ -31,10 +44,7 @@ const observe = new Observable((subscriber) => {
 
       return 'Please enter a valid phone number';
     },
-  });
-  subscriber.complete();
-});
+  },
+] satisfies DistinctQuestion[]);
 
-inquirer.prompt(observe).then((answers) => {
-  console.log(JSON.stringify(answers, null, '  '));
-});
+console.log(JSON.stringify(answers, null, '  '));

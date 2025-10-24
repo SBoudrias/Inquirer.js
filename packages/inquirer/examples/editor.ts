@@ -2,31 +2,29 @@
  * Editor prompt example
  */
 
-import inquirer from '../dist/esm/index.js';
+import inquirer, { type DistinctQuestion } from 'inquirer';
 
-const questions = [
+const answers = await inquirer.prompt([
   {
     type: 'editor',
     name: 'bio',
     message: 'Please write a short bio of at least 3 lines.',
-    validate(text) {
+    validate(text: string) {
       if (text.split('\n').length < 3) {
         return 'Must be at least 3 lines.';
       }
 
       return true;
     },
-    waitUserInput: true,
+    waitForUseInput: true,
   },
   {
     type: 'editor',
     name: 'edition',
     message: 'Edit the following content.',
     default: 'Hello, World!',
-    waitUserInput: false,
+    waitForUseInput: false,
   },
-];
+] satisfies DistinctQuestion[]);
 
-inquirer.prompt(questions).then((answers) => {
-  console.log(JSON.stringify(answers, null, '  '));
-});
+console.log(JSON.stringify(answers, null, '  '));

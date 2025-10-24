@@ -3,23 +3,23 @@
  * run example by writing `node pizza.mjs` in your console
  */
 
-import inquirer from '../dist/esm/index.js';
+import inquirer from 'inquirer';
 
 console.log('Hi, welcome to Node Pizza');
 
-const questions = [
+const answers = await inquirer.prompt([
   {
     type: 'confirm',
     name: 'toBeDelivered',
     message: 'Is this for delivery?',
     default: false,
-    transformer: (answer) => (answer ? '👍' : '👎'),
+    transformer: (answer: boolean) => (answer ? '👍' : '👎'),
   },
   {
     type: 'input',
     name: 'phone',
     message: "What's your phone number?",
-    validate(value) {
+    validate(value: string) {
       const pass = value.match(
         /^([01])?[\s.-]?\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?)(?:\d+)?)?$/i,
       );
@@ -35,7 +35,7 @@ const questions = [
     name: 'size',
     message: 'What size do you need?',
     choices: ['Large', 'Medium', 'Small'],
-    filter(val) {
+    filter(val: string) {
       return val.toLowerCase();
     },
   },
@@ -43,7 +43,7 @@ const questions = [
     type: 'input',
     name: 'quantity',
     message: 'How many do you need?',
-    validate(value) {
+    validate(value: string) {
       const valid = !Number.isNaN(Number.parseFloat(value));
       return valid || 'Please enter a number';
     },
@@ -92,9 +92,7 @@ const questions = [
       return answers.comments !== 'Nope, all good!';
     },
   },
-];
+]);
 
-inquirer.prompt(questions).then((answers) => {
-  console.log('\nOrder receipt:');
-  console.log(JSON.stringify(answers, null, '  '));
-});
+console.log('\nOrder receipt:');
+console.log(JSON.stringify(answers, null, '  '));
