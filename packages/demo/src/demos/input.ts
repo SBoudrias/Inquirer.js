@@ -11,6 +11,14 @@ const demo = async () => {
   let answer;
 
   answer = await input({
+    message: 'Enter your favorite float:',
+    pattern: /^[0-9]*\.?[0-9]*$/,
+    patternError: 'Only numbers and a decimal point are allowed',
+  });
+
+  console.log('Answer:', answer);
+
+  answer = await input({
     message: "What's your favorite food?",
     default: 'Croissant',
   });

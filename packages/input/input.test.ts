@@ -327,4 +327,54 @@ describe('input prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`"Q: Answer must be: 2 === _2_"`);
   });
+
+  it('handles pattern validation on the fly', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'Enter a number',
+      pattern: /^[0-9]*\.?[0-9]*$/,
+      patternError: 'Only numbers and a decimal point are allowed',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a number"`);
+
+    events.type('123');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a number 123"`);
+
+    events.type('a');
+    expect(getScreen()).toMatchInlineSnapshot(`
+    "? Enter a number 123a
+    > Only numbers and a decimal point are allowed"
+  `);
+
+    events.keypress('backspace');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a number 123"`);
+
+    events.type('.45');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a number 123.45"`);
+
+    events.type('abc');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Enter a number 123.45abc
+      > Only numbers and a decimal point are allowed"
+    `);
+
+    events.keypress('backspace');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Enter a number 123.45ab
+      > Only numbers and a decimal point are allowed"
+    `);
+    events.keypress('backspace');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Enter a number 123.45a
+      > Only numbers and a decimal point are allowed"
+    `);
+    events.keypress('backspace');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Enter a number 123.45"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('123.45');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a number 123.45"`);
+  });
 });
