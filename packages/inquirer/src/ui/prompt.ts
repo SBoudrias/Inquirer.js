@@ -162,7 +162,7 @@ function setupReadlineOptions(opt: StreamOptions) {
 
 function isQuestionArray<A extends Answers>(
   questions: PromptSession<A>,
-): questions is Question<A>[] {
+): questions is readonly Question<A>[] {
   return Array.isArray(questions);
 }
 

@@ -1,8 +1,7 @@
-/**
- * Input prompt example
- */
+import { Observable, from } from 'rxjs';
+import inquirer from 'inquirer';
 
-import inquirer from '../dist/esm/index.js';
+type IObs = Extract<Parameters<typeof inquirer.prompt>[0], Observable<unknown>>;
 
 const questions = [
   {
@@ -20,21 +19,9 @@ const questions = [
   },
   {
     type: 'input',
-    name: 'fav_color',
-    message: "What's your favorite color",
-    transformer(color, answers, flags) {
-      if (flags.isFinal) {
-        return color + '!';
-      }
-
-      return color;
-    },
-  },
-  {
-    type: 'input',
     name: 'phone',
     message: "What's your phone number",
-    validate(value) {
+    validate(value: string) {
       const pass = value.match(
         /^([01])?[\s.-]?\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?)(?:\d+)?)?$/i,
       );
@@ -47,6 +34,16 @@ const questions = [
   },
 ];
 
-inquirer.prompt(questions).then((answers) => {
-  console.log(JSON.stringify(answers, null, '  '));
+const observable = from(questions) as IObs;
+
+inquirer.prompt(observable).ui.process.subscribe({
+  next: (ans) => {
+    console.log('Answer is:', ans);
+  },
+  error: (err) => {
+    console.log('Error:', err);
+  },
+  complete: () => {
+    console.log('Completed');
+  },
 });

@@ -2,9 +2,9 @@
  * Filter and validate progress example
  */
 
-import inquirer from '../dist/esm/index.js';
+import inquirer, { type DistinctQuestion } from 'inquirer';
 
-const questions = [
+const answers = await inquirer.prompt([
   {
     type: 'input',
     name: 'first_question',
@@ -13,12 +13,10 @@ const questions = [
       await new Promise((r) => setTimeout(r, 3000));
       return true;
     },
-    async filter(answer) {
+    async filter(answer: string) {
       await new Promise((r) => setTimeout(r, 3000));
       return `filtered${answer}`;
     },
-    filteringText: 'Filtering your answer...',
-    validatingText: 'Validating what you wrote...',
   },
   {
     type: 'input',
@@ -28,13 +26,11 @@ const questions = [
       await new Promise((r) => setTimeout(r, 3000));
       return true;
     },
-    async filter(answer) {
+    async filter(answer: string) {
       await new Promise((r) => setTimeout(r, 3000));
       return `filtered${answer}`;
     },
   },
-];
+] satisfies DistinctQuestion[]);
 
-inquirer.prompt(questions).then((answers) => {
-  console.log(JSON.stringify(answers, null, '  '));
-});
+console.log(JSON.stringify(answers, null, '  '));

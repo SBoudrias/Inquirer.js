@@ -109,6 +109,6 @@ export type CustomQuestion<
 export type PromptSession<
   A extends Answers = Answers,
   Q extends Question<A> = Question<A>,
-> = Q[] | Record<string, Omit<Q, 'name'>> | Observable<Q> | Q;
+> = readonly Q[] | Record<string, Omit<Q, 'name'>> | Observable<Q> | Q;
 
 export type StreamOptions = Prettify<Context & { skipTTYChecks?: boolean }>;

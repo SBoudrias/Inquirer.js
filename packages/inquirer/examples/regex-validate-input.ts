@@ -2,9 +2,9 @@
  * Filter and validate progress example
  */
 
-import inquirer from '../dist/esm/index.js';
+import inquirer from 'inquirer';
 
-const questions = [
+const answers = await inquirer.prompt([
   {
     type: 'input',
     name: 'api_key',
@@ -17,8 +17,6 @@ const questions = [
       throw new Error('Please provide a valid API key secret.');
     },
   },
-];
+]);
 
-inquirer.prompt(questions).then((answers) => {
-  console.log(JSON.stringify(answers, null, '  '));
-});
+console.log(JSON.stringify(answers, null, '  '));
