@@ -5,9 +5,9 @@ afterAll(() => {
 });
 
 it('falls back to ascii figures when unicode is not supported', async () => {
-  const { default: unicodeFigures } = await import('./src/index.js');
+  const { default: unicodeFigures } = await import('@inquirer/figures');
   vi.resetModules().stubEnv('TERM', 'linux');
-  const { default: asciiFigures } = await import('./src/index.js');
+  const { default: asciiFigures } = await import('@inquirer/figures');
 
   expect(asciiFigures.checkboxOn).not.toEqual(unicodeFigures.checkboxOn);
 
