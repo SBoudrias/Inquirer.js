@@ -88,7 +88,7 @@
     "@arethetypeswrong/cli": "^0.18.2",
     "@repo/tsconfig": "workspace:*",
     "@types/chardet": "^1.0.0",
-    "tshy": "^3.0.2"
+    "tshy": "^3.0.3"
   },
   "peerDependencies": {
     "@types/node": ">=18"

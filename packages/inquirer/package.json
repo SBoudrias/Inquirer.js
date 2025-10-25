@@ -79,14 +79,14 @@
     "@inquirer/prompts": "^7.9.0",
     "@inquirer/type": "^3.0.9",
     "mute-stream": "^2.0.0",
-    "run-async": "^4.0.5",
+    "run-async": "^4.0.6",
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
-    "tshy": "^3.0.2"
+    "tshy": "^3.0.3"
   },
   "engines": {
     "node": ">=18"

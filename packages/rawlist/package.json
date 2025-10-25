@@ -76,13 +76,13 @@
   "dependencies": {
     "@inquirer/core": "^10.3.0",
     "@inquirer/type": "^3.0.9",
-    "yoctocolors-cjs": "^2.1.2"
+    "yoctocolors-cjs": "^2.1.3"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
     "@inquirer/testing": "^2.1.51",
     "@repo/tsconfig": "workspace:*",
-    "tshy": "^3.0.2"
+    "tshy": "^3.0.3"
   },
   "engines": {
     "node": ">=18"
