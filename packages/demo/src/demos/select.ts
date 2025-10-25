@@ -1,6 +1,6 @@
 import * as url from 'node:url';
 import { select, Separator } from '@inquirer/prompts';
-import colors from 'yoctocolors-cjs';
+import { styleText } from 'node:util';
 
 const alphabet = [
   { value: 'A' },
@@ -77,17 +77,17 @@ const demo = async () => {
     message: 'Select a recipe',
     choices: [
       {
-        name: `${colors.bold('Spaghetti Carbonara')}\n    Eggs, Pecorino Romano, Pancetta\n    30 minutes`,
+        name: `${styleText('bold', 'Spaghetti Carbonara')}\n    Eggs, Pecorino Romano, Pancetta\n    30 minutes`,
         short: 'Spaghetti Carbonara',
         value: 'carbonara',
       },
       {
-        name: `${colors.bold('Margherita Pizza')}\n    Tomatoes, Mozzarella, Basil\n    45 minutes`,
+        name: `${styleText('bold', 'Margherita Pizza')}\n    Tomatoes, Mozzarella, Basil\n    45 minutes`,
         short: 'Margherita Pizza',
         value: 'pizza',
       },
       {
-        name: `${colors.bold('Caesar Salad')}\n    Romaine, Croutons, Parmesan\n    15 minutes`,
+        name: `${styleText('bold', 'Caesar Salad')}\n    Romaine, Croutons, Parmesan\n    15 minutes`,
         short: 'Caesar Salad',
         value: 'salad',
       },

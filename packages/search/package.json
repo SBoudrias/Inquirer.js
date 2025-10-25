@@ -76,8 +76,7 @@
   "dependencies": {
     "@inquirer/core": "^10.3.0",
     "@inquirer/figures": "^1.0.14",
-    "@inquirer/type": "^3.0.9",
-    "yoctocolors-cjs": "^2.1.2"
+    "@inquirer/type": "^3.0.9"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
@@ -86,7 +85,7 @@
     "tshy": "^3.0.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=23 ^22.13.0 ^21.7.0 ^20.12.0"
   },
   "publishConfig": {
     "access": "public"
