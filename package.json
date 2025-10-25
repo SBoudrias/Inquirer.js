@@ -65,7 +65,7 @@
     "tsc:test": "tsc -p tsconfig.json"
   },
   "nano-staged": {
-    "*": "yarn prettier --write --ignore-unknown",
+    "*": "yarn prettier --write --ignore-unknown --no-error-on-unmatched-pattern",
     "*.m?[jt]sx?": [
       "yarn oxlint --fix",
       "yarn eslint --fix"
