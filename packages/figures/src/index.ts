@@ -293,20 +293,29 @@ const specialFallbackSymbols = {
   oneTenth: '1/10',
 };
 
-export const mainSymbols = { ...common, ...specialMainSymbols };
-export const fallbackSymbols: Record<string, string> = {
+export const mainSymbols: typeof common & typeof specialMainSymbols = {
+  ...common,
+  ...specialMainSymbols,
+};
+export const fallbackSymbols: (typeof common & typeof specialFallbackSymbols) &
+  Record<string, string> = {
   ...common,
   ...specialFallbackSymbols,
 };
 
 const shouldUseMain = isUnicodeSupported();
-const figures = shouldUseMain ? mainSymbols : fallbackSymbols;
+const figures: typeof mainSymbols | typeof fallbackSymbols = shouldUseMain
+  ? mainSymbols
+  : fallbackSymbols;
 export default figures;
 
 const replacements = Object.entries(specialMainSymbols);
 
 // On terminals which do not support Unicode symbols, substitute them to other symbols
-export const replaceSymbols = (string: string, { useFallback = !shouldUseMain } = {}) => {
+export const replaceSymbols = (
+  string: string,
+  { useFallback = !shouldUseMain }: { useFallback?: boolean } = {},
+): string => {
   if (useFallback) {
     for (const [key, mainSymbol] of replacements) {
       const fallbackSymbol = fallbackSymbols[key];

@@ -105,7 +105,7 @@ type CheckboxConfig<
   loop?: boolean;
   required?: boolean;
   validate?: (
-    choices: ReadonlyArray<Choice<Value>>,
+    choices: readonly NormalizedChoice<Value>[],
   ) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme<CheckboxTheme>>;
   shortcuts?: CheckboxShortcuts;

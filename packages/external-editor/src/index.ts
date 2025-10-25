@@ -5,10 +5,10 @@ import path from 'node:path';
 import os from 'node:os';
 import { randomUUID } from 'node:crypto';
 import iconv from 'iconv-lite';
-import { CreateFileError } from './errors/CreateFileError.js';
-import { LaunchEditorError } from './errors/LaunchEditorError.js';
-import { ReadFileError } from './errors/ReadFileError.js';
-import { RemoveFileError } from './errors/RemoveFileError.js';
+import { CreateFileError } from './errors/CreateFileError.ts';
+import { LaunchEditorError } from './errors/LaunchEditorError.ts';
+import { ReadFileError } from './errors/ReadFileError.ts';
+import { RemoveFileError } from './errors/RemoveFileError.ts';
 
 export interface IEditorParams {
   args: string[];
@@ -27,7 +27,7 @@ export type StringCallback = (err: Error | undefined, result: string | undefined
 export type VoidCallback = () => void;
 export { CreateFileError, LaunchEditorError, ReadFileError, RemoveFileError };
 
-export function edit(text: string = '', fileOptions?: IFileOptions) {
+export function edit(text: string = '', fileOptions?: IFileOptions): string {
   const editor = new ExternalEditor(text, fileOptions);
   editor.run();
   editor.cleanup();
@@ -38,7 +38,7 @@ export function editAsync(
   text: string = '',
   callback: StringCallback,
   fileOptions?: IFileOptions,
-) {
+): void {
   const editor = new ExternalEditor(text, fileOptions);
   editor.runAsync((err: Error | undefined, result: string | undefined) => {
     if (err) {
@@ -89,12 +89,12 @@ export class ExternalEditor {
   public lastExitStatus: number = 0;
   private fileOptions: IFileOptions = {};
 
-  public get temp_file() {
+  public get temp_file(): string {
     console.log('DEPRECATED: temp_file. Use tempFile moving forward.');
     return this.tempFile;
   }
 
-  public get last_exit_status() {
+  public get last_exit_status(): number {
     console.log('DEPRECATED: last_exit_status. Use lastExitStatus moving forward.');
     return this.lastExitStatus;
   }
@@ -110,13 +110,13 @@ export class ExternalEditor {
     this.createTemporaryFile();
   }
 
-  public run() {
+  public run(): string {
     this.launchEditor();
     this.readTemporaryFile();
     return this.text;
   }
 
-  public runAsync(callback: StringCallback) {
+  public runAsync(callback: StringCallback): void {
     try {
       this.launchEditorAsync(() => {
         try {
@@ -131,7 +131,7 @@ export class ExternalEditor {
     }
   }
 
-  public cleanup() {
+  public cleanup(): void {
     this.removeTemporaryFile();
   }
 
