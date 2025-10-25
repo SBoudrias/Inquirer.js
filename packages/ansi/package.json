@@ -57,7 +57,7 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
     "@repo/tsconfig": "workspace:*",
-    "tshy": "^3.0.2"
+    "tshy": "^3.0.3"
   },
   "tshy": {
     "exclude": [

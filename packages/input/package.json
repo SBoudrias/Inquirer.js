@@ -81,7 +81,7 @@
     "@arethetypeswrong/cli": "^0.18.2",
     "@inquirer/testing": "^2.1.51",
     "@repo/tsconfig": "workspace:*",
-    "tshy": "^3.0.2"
+    "tshy": "^3.0.3"
   },
   "engines": {
     "node": ">=18"
