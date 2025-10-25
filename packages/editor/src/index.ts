@@ -24,7 +24,7 @@ type EditorConfig = {
   message: string;
   default?: string;
   postfix?: string;
-  waitForUseInput?: boolean;
+  waitForUserInput?: boolean;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
   file?: IFileOptions;
   theme?: PartialDeep<Theme<EditorTheme>>;
@@ -32,7 +32,7 @@ type EditorConfig = {
 
 export default createPrompt<string, EditorConfig>((config, done) => {
   const {
-    waitForUseInput = true,
+    waitForUserInput = true,
     file: { postfix = config.postfix ?? '.txt', ...fileProps } = {},
     validate = () => true,
   } = config;
@@ -79,7 +79,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
   }
 
   useEffect((rl) => {
-    if (!waitForUseInput) {
+    if (!waitForUserInput) {
       startEditor(rl);
     }
   }, []);

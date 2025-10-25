@@ -45,7 +45,7 @@ describe('editor prompt', () => {
   it('open editor immediately', async () => {
     const { answer, getScreen } = await render(editor, {
       message: 'Add a description',
-      waitForUseInput: false,
+      waitForUserInput: false,
     });
     expect(editAsync).toHaveBeenLastCalledWith('', expect.any(Function), {
       postfix: '.txt',

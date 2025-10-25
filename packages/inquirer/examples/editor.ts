@@ -16,14 +16,14 @@ const answers = await inquirer.prompt([
 
       return true;
     },
-    waitForUseInput: true,
+    waitForUserInput: true,
   },
   {
     type: 'editor',
     name: 'edition',
     message: 'Edit the following content.',
     default: 'Hello, World!',
-    waitForUseInput: false,
+    waitForUserInput: false,
   },
 ] satisfies DistinctQuestion[]);
 

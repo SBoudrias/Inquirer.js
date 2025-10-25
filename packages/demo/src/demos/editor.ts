@@ -21,7 +21,7 @@ const demo = async () => {
     await editor({
       message: 'Automatically opened editor',
       default: '# This prompt was automatically opened. You can write anything:\n\n',
-      waitForUseInput: false,
+      waitForUserInput: false,
     }),
   );
 };
