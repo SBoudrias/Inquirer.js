@@ -47,6 +47,11 @@ export interface QuestionMap {
 type KeyValueOrAsyncGetterFunction<T, k extends string, A extends Answers> =
   T extends Record<string, any> ? T[k] | AsyncGetterFunction<T[k], A> : never;
 
+export type CustomWhenResult = {
+  display: boolean;
+  ask: boolean;
+};
+
 export type Question<A extends Answers = Answers, Type extends string = string> = {
   type: Type;
   name: string;
@@ -55,7 +60,7 @@ export type Question<A extends Answers = Answers, Type extends string = string> 
   choices?: any;
   filter?: (answer: any, answers: Partial<A>) => any;
   askAnswered?: boolean;
-  when?: boolean | AsyncGetterFunction<boolean, A>;
+  when?: boolean | CustomWhenResult | AsyncGetterFunction<boolean | CustomWhenResult, A>;
 };
 
 type QuestionWithGetters<
@@ -67,7 +72,7 @@ type QuestionWithGetters<
   {
     type: Type;
     askAnswered?: boolean;
-    when?: boolean | AsyncGetterFunction<boolean, A>;
+    when?: boolean | AsyncGetterFunction<boolean | CustomWhenResult, A>;
     filter?(input: any, answers: A): any;
     message: KeyValueOrAsyncGetterFunction<Q, 'message', A>;
     default?: KeyValueOrAsyncGetterFunction<Q, 'default', A>;
