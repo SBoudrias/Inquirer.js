@@ -5,10 +5,10 @@ import path from 'node:path';
 import os from 'node:os';
 import { randomUUID } from 'node:crypto';
 import iconv from 'iconv-lite';
-import { CreateFileError } from './errors/CreateFileError.js';
-import { LaunchEditorError } from './errors/LaunchEditorError.js';
-import { ReadFileError } from './errors/ReadFileError.js';
-import { RemoveFileError } from './errors/RemoveFileError.js';
+import { CreateFileError } from './errors/CreateFileError.ts';
+import { LaunchEditorError } from './errors/LaunchEditorError.ts';
+import { ReadFileError } from './errors/ReadFileError.ts';
+import { RemoveFileError } from './errors/RemoveFileError.ts';
 
 export interface IEditorParams {
   args: string[];

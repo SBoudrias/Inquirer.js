@@ -4,12 +4,7 @@ import { globby } from 'globby';
 import { fixPeerDeps } from '@repo/hoist-peer-dependencies';
 import type { PackageJson, TsConfigJson } from 'type-fest';
 
-type TshyPackageJson = PackageJson & {
-  tshy?: {
-    dialects?: string[];
-    exclude?: string[];
-  };
-};
+type ExportDef = Exclude<PackageJson['exports'], undefined | null>;
 
 function readFile(filepath: string) {
   return fs.readFile(filepath, 'utf8');
@@ -33,14 +28,14 @@ async function writeFile(filepath: string, content: string) {
 }
 
 const versions: Record<string, string> = {};
-const rootPkg = await readJSONFile<TshyPackageJson>(
+const rootPkg = await readJSONFile<PackageJson>(
   path.join(import.meta.dirname, '../package.json'),
 );
 const paths = await globby(['packages/**/package.json', '!**/node_modules']);
 
 const packages = await Promise.all(
-  paths.map(async (pkgPath: string): Promise<[string, TshyPackageJson]> => {
-    const pkg = await readJSONFile<TshyPackageJson>(pkgPath);
+  paths.map(async (pkgPath: string): Promise<[string, PackageJson]> => {
+    const pkg = await readJSONFile<PackageJson>(pkgPath);
 
     // Collect all dependencies versions
     Object.assign(versions, pkg.devDependencies, pkg.dependencies);
@@ -73,34 +68,62 @@ for (const [pkgPath, pkg] of packages) {
   if (isTS) {
     pkg.files = ['dist'];
 
-    pkg.devDependencies = pkg.devDependencies ?? {};
-    pkg.devDependencies['tshy'] = versions['tshy'];
-
-    pkg.tshy = pkg.tshy ?? {};
-    pkg.tshy.exclude = ['src/**/*.test.ts'];
-
-    pkg.scripts = pkg.scripts ?? {};
-    pkg.scripts['tsc'] = 'tshy';
-
-    // Only set attw if the package is using commonjs
-    const shouldUseAttw =
-      !Array.isArray(pkg.tshy.dialects) || pkg.tshy.dialects.includes('commonjs');
-    pkg.scripts['attw'] = shouldUseAttw ? 'attw --pack' : undefined;
-    if (shouldUseAttw) {
-      pkg.devDependencies['@arethetypeswrong/cli'] = versions['@arethetypeswrong/cli'];
-    }
+    pkg.scripts ??= {};
+    pkg.scripts['tsc'] = 'tsc -p tsconfig.json';
 
     const tsconfig: TsConfigJson = (await fileExists(path.join(dir, 'tsconfig.json')))
       ? await readJSONFile<TsConfigJson>(path.join(dir, 'tsconfig.json'))
       : { extends: '@repo/tsconfig' };
+
+    tsconfig.include = ['src'];
+    tsconfig.exclude = ['src/**/*.test.ts'];
+    tsconfig.compilerOptions = tsconfig.compilerOptions ?? {};
+    tsconfig.compilerOptions.outDir = 'dist';
+
+    const exports: ExportDef = {
+      ...(typeof pkg.exports === 'object' && !Array.isArray(pkg.exports)
+        ? pkg.exports
+        : {}),
+      './package.json': './package.json',
+      '.': './src/index.ts',
+    };
+    pkg.exports = exports;
+
+    const publishExports: ExportDef = {};
+    for (const [exportName, value] of Object.entries(exports)) {
+      if (typeof value === 'string') {
+        const { dir, name, ext } = path.parse(value);
+        const distDir = dir.replace(/^\.\/src/, './dist');
+
+        if (ext === '.ts') {
+          publishExports[exportName] = {
+            types: path.join(distDir, name + '.d.ts'),
+            default: path.join(distDir, name + '.js'),
+          };
+        } else {
+          publishExports[exportName] = path.join(distDir, name + ext);
+        }
+      }
+    }
+
+    pkg.publishConfig ??= {};
+    pkg.publishConfig['exports'] = publishExports;
+
+    // Remove legacy exports definitions
+    delete pkg.main;
+    delete pkg.types;
+    delete pkg.module;
+    delete pkg['tshy'];
+
+    if (tsconfig.extends === '@repo/tsconfig') {
+      pkg.devDependencies ??= {};
+      pkg.devDependencies['@repo/tsconfig'] = 'workspace:*';
+    }
+
     await writeFile(
       path.join(dir, 'tsconfig.json'),
       JSON.stringify(tsconfig, null, 2) + '\n',
     );
-
-    if (tsconfig.extends === '@repo/tsconfig') {
-      pkg.devDependencies['@repo/tsconfig'] = 'workspace:*';
-    }
   }
 
   await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
