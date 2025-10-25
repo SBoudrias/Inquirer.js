@@ -29,10 +29,18 @@ type InputConfig = {
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme<InputTheme>>;
+  pattern?: RegExp;
+  patternError?: string;
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {
-  const { required, validate = () => true, prefill = 'tab' } = config;
+  const {
+    required,
+    validate = () => true,
+    prefill = 'tab',
+    pattern = null,
+    patternError = null,
+  } = config;
   const theme = makeTheme<InputTheme>(inputTheme, config.theme);
   const [status, setStatus] = useState<Status>('idle');
   const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
@@ -50,7 +58,11 @@ export default createPrompt<string, InputConfig>((config, done) => {
     if (isEnterKey(key)) {
       const answer = value || defaultValue;
       setStatus('loading');
-
+      if (pattern && !pattern.test(answer)) {
+        setError(patternError || 'Invalid input update');
+        setStatus('idle');
+        return;
+      }
       const isValid =
         required && !answer ? 'You must provide a value' : await validate(answer);
       if (isValid === true) {
@@ -68,8 +80,17 @@ export default createPrompt<string, InputConfig>((config, done) => {
         setError(isValid || 'You must provide a valid value');
         setStatus('idle');
       }
-    } else if (isBackspaceKey(key) && !value) {
-      setDefaultValue(undefined);
+    } else if (isBackspaceKey(key)) {
+      const newValue = rl.line;
+      if (!newValue) {
+        setDefaultValue(undefined);
+      }
+      setValue(newValue);
+      if (pattern && !pattern.test(newValue)) {
+        setError(patternError || 'Invalid input');
+      } else {
+        setError(undefined);
+      }
     } else if (isTabKey(key) && !value) {
       setDefaultValue(undefined);
       rl.clearLine(0); // Remove the tab character.
@@ -77,7 +98,11 @@ export default createPrompt<string, InputConfig>((config, done) => {
       setValue(defaultValue);
     } else {
       setValue(rl.line);
-      setError(undefined);
+      if (pattern && !pattern.test(rl.line)) {
+        setError(patternError || 'Invalid input');
+      } else {
+        setError(undefined);
+      }
     }
   });
 
