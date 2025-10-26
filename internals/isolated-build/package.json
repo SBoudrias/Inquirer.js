@@ -4,9 +4,7 @@
   "private": true,
   "description": "Tool for testing package isolation in Yarn workspace monorepo",
   "type": "module",
-  "bin": {
-    "isolated-build": "./bin/index.js"
-  },
+  "bin": "./bin/index.js",
   "scripts": {
     "build": "tsc && chmod +x bin/index.js",
     "dev": "tsc --watch",
