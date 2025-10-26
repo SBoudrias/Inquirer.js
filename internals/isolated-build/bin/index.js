@@ -9,7 +9,8 @@ class IsolatedBuild {
   workspaceMap = new Map();
   verbose = false;
   artifactsDir;
-  constructor() {
+  constructor(packageName, verbose = false) {
+    this.verbose = verbose;
     // Find the root directory by looking for .yarnrc.yml
     this.rootDir = this.findRootDir();
     // Create a unique temp directory for artifacts with restricted permissions
@@ -17,7 +18,18 @@ class IsolatedBuild {
       path.join(os.tmpdir(), 'isolated-build-artifacts-'),
     );
     fs.chmodSync(this.artifactsDir, 0o700);
-    this.parseArgs();
+    this.run(packageName);
+  }
+  static main() {
+    const args = process.argv.slice(2);
+    const verbose = args.includes('-v') || args.includes('--verbose');
+    const packageArg = args.find((arg) => !arg.startsWith('-'));
+    if (!packageArg) {
+      IsolatedBuild.printUsage();
+      throw new Error('No package name provided');
+    }
+    // Instantiate to run the tool (constructor executes the build)
+    void new IsolatedBuild(packageArg, verbose);
   }
   findRootDir() {
     let currentDir = path.resolve(process.cwd());
@@ -29,19 +41,7 @@ class IsolatedBuild {
     }
     throw new Error('Could not find yarn workspace root (.yarnrc.yml not found)');
   }
-  parseArgs() {
-    const args = process.argv.slice(2);
-    if (args.includes('-v') || args.includes('--verbose')) {
-      this.verbose = true;
-    }
-    const packageArg = args.find((arg) => !arg.startsWith('-'));
-    if (!packageArg) {
-      this.printUsage();
-      throw new Error('No package name provided');
-    }
-    this.run(packageArg);
-  }
-  printUsage() {
+  static printUsage() {
     console.error(colors.red('Error: No package name provided'));
     console.error('');
     console.error('Usage: isolated-build <package-name> [-v|--verbose]');
@@ -69,7 +69,7 @@ class IsolatedBuild {
       try {
         const workspace = JSON.parse(line);
         workspaceNames.add(workspace.name);
-      } catch (e) {
+      } catch {
         // Skip invalid lines
       }
     }
@@ -111,7 +111,7 @@ class IsolatedBuild {
           });
           this.log(`  Found workspace: ${workspace.name} at ${workspace.location}`);
         }
-      } catch (e) {
+      } catch {
         // Skip invalid lines
       }
     }
@@ -164,7 +164,7 @@ class IsolatedBuild {
         }
         packMap.set(dep, tarballPath);
       } catch (error) {
-        throw new Error(`Failed to pack ${dep}: ${error}`);
+        throw new Error(`Failed to pack ${dep}`, { cause: error });
       }
     }
     return packMap;
@@ -265,8 +265,8 @@ class IsolatedBuild {
 }
 // Run the tool
 try {
-  new IsolatedBuild();
-} catch (error) {
+  IsolatedBuild.main();
+} catch {
   // eslint-disable-next-line n/no-process-exit
   process.exit(1);
 }
