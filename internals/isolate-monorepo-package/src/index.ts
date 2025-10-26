@@ -2,11 +2,14 @@
  * Core functions for the isolate-monorepo-package tool
  */
 
-import { execSync, spawnSync } from 'node:child_process';
-import fs from 'node:fs';
+import { exec, spawn } from 'node:child_process';
+import { promisify } from 'node:util';
+import fsPromises from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import type { PackageJson } from 'type-fest';
+
+const execAsync = promisify(exec);
 
 type YarnWorkspaceInfo = {
   name: string;
@@ -27,13 +30,18 @@ export class IsolatedBuildError extends Error {
 /**
  * Find the workspace root directory by looking for .yarnrc.yml
  */
-export function findWorkspaceRoot(startDir: string = process.cwd()): string {
+export async function findWorkspaceRoot(
+  startDir: string = process.cwd(),
+): Promise<string> {
   let currentDir = path.resolve(startDir);
   const { root } = path.parse(currentDir);
 
   while (currentDir !== root) {
-    if (fs.existsSync(path.join(currentDir, '.yarnrc.yml'))) {
+    try {
+      await fsPromises.access(path.join(currentDir, '.yarnrc.yml'));
       return currentDir;
+    } catch {
+      // File doesn't exist, continue searching
     }
     const parentDir = path.dirname(currentDir);
     if (parentDir === currentDir) break;
@@ -41,33 +49,34 @@ export function findWorkspaceRoot(startDir: string = process.cwd()): string {
   }
 
   // Check the root directory as well
-  if (fs.existsSync(path.join(currentDir, '.yarnrc.yml'))) {
+  try {
+    await fsPromises.access(path.join(currentDir, '.yarnrc.yml'));
     return currentDir;
+  } catch {
+    throw new IsolatedBuildError(
+      'Could not find yarn workspace root (.yarnrc.yml not found)',
+    );
   }
-
-  throw new IsolatedBuildError(
-    'Could not find yarn workspace root (.yarnrc.yml not found)',
-  );
 }
 
 /**
  * Discover all workspaces in the monorepo
  */
-export function discoverWorkspaces(
+export async function discoverWorkspaces(
   rootDir: string,
   verbose: boolean = false,
-): Map<string, WorkspaceInfo> {
+): Promise<Map<string, WorkspaceInfo>> {
   if (verbose) {
     console.error('[isolate-monorepo-package] Discovering workspace packages...');
   }
 
   // Get all workspace locations using yarn
-  const output = execSync('yarn workspaces list --json', {
+  const { stdout } = await execAsync('yarn workspaces list --json', {
     cwd: rootDir,
     encoding: 'utf-8',
   });
 
-  const lines = output.trim().split('\n').filter(Boolean);
+  const lines = stdout.trim().split('\n').filter(Boolean);
   const workspaceMap = new Map<string, WorkspaceInfo>();
   const workspaceNames = new Set<string>();
 
@@ -81,14 +90,16 @@ export function discoverWorkspaces(
     }
   }
 
-  // Second pass: build workspace map with dependencies
-  for (const line of lines) {
+  // Second pass: build workspace map with dependencies (in parallel)
+  const workspacePromises = lines.map(async (line) => {
     try {
       const workspace = JSON.parse(line) as YarnWorkspaceInfo;
       const packageJsonPath = path.join(rootDir, workspace.location, 'package.json');
 
-      if (fs.existsSync(packageJsonPath)) {
-        const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8')) as PackageJson;
+      try {
+        await fsPromises.access(packageJsonPath);
+        const packageContent = await fsPromises.readFile(packageJsonPath, 'utf-8');
+        const pkg = JSON.parse(packageContent) as PackageJson;
         const dependencies = new Set<string>();
 
         // Extract workspace dependencies
@@ -109,20 +120,34 @@ export function discoverWorkspaces(
           }
         }
 
-        workspaceMap.set(workspace.name, {
+        const workspaceInfo: WorkspaceInfo = {
           name: workspace.name,
           location: path.join(rootDir, workspace.location),
           dependencies,
-        });
+        };
 
         if (verbose) {
           console.error(
             `[isolate-monorepo-package]   Found workspace: ${workspace.name} at ${workspace.location}`,
           );
         }
+
+        return workspaceInfo;
+      } catch {
+        // Package.json doesn't exist or can't be read
+        return null;
       }
     } catch {
-      // Skip invalid entries
+      // Invalid JSON line
+      return null;
+    }
+  });
+
+  const results = await Promise.all(workspacePromises);
+
+  for (const workspace of results) {
+    if (workspace) {
+      workspaceMap.set(workspace.name, workspace);
     }
   }
 
@@ -225,50 +250,63 @@ export function collectWorkspaceDependencies(
 /**
  * Pack a single workspace package into a tarball
  */
-function packWorkspace(
+async function packWorkspace(
   workspace: WorkspaceInfo,
   rootDir: string,
   artifactsDir: string,
-): string {
+): Promise<string> {
   // Create a safe filename for the tarball
   const safeFileName = workspace.name.replace('@', '').replace('/', '-') + '.tgz';
   const tarballPath = path.join(artifactsDir, safeFileName);
 
-  const result = spawnSync(
-    'yarn',
-    ['workspace', workspace.name, 'pack', '--out', tarballPath],
-    {
-      cwd: rootDir,
-      stdio: 'pipe',
-      encoding: 'utf-8',
-    },
-  );
+  return new Promise((resolve, reject) => {
+    const child = spawn(
+      'yarn',
+      ['workspace', workspace.name, 'pack', '--out', tarballPath],
+      {
+        cwd: rootDir,
+        stdio: 'pipe',
+      },
+    );
 
-  if (result.status !== 0) {
-    const errorMessage = result.stderr || 'Unknown error';
-    throw new IsolatedBuildError(`Failed to pack ${workspace.name}: ${errorMessage}`);
-  }
+    let stderr = '';
+    child.stderr?.on('data', (data) => {
+      stderr += data.toString();
+    });
 
-  return tarballPath;
+    child.on('error', reject);
+
+    child.on('close', (code) => {
+      if (code !== 0) {
+        const errorMessage = stderr || 'Unknown error';
+        reject(
+          new IsolatedBuildError(`Failed to pack ${workspace.name}: ${errorMessage}`),
+        );
+      } else {
+        resolve(tarballPath);
+      }
+    });
+  });
 }
 
 /**
  * Pack all workspace dependencies and return a map of package names to tarball paths
  */
-export function packAllDependencies(
+export async function packAllDependencies(
   dependencies: Set<string>,
   workspaceMap: Map<string, WorkspaceInfo>,
   rootDir: string,
   artifactsDir: string,
   verbose: boolean = false,
-): Map<string, string> {
+): Promise<Map<string, string>> {
   if (verbose) {
     console.error(
       `[isolate-monorepo-package] Packing ${dependencies.size} workspace dependencies...`,
     );
   }
 
-  const packMap = new Map<string, string>();
+  // Pack all dependencies in parallel
+  const packPromises: Promise<{ name: string; path: string } | null>[] = [];
 
   for (const dep of dependencies) {
     const workspace = workspaceMap.get(dep);
@@ -281,11 +319,28 @@ export function packAllDependencies(
       console.error(`[isolate-monorepo-package]   Packing ${dep}...`);
     }
 
-    const tarballPath = packWorkspace(workspace, rootDir, artifactsDir);
-    packMap.set(dep, tarballPath);
+    packPromises.push(
+      packWorkspace(workspace, rootDir, artifactsDir).then(
+        (tarballPath) => {
+          if (verbose) {
+            console.error(`[isolate-monorepo-package]   Packed ${dep} to ${tarballPath}`);
+          }
+          return { name: dep, path: tarballPath };
+        },
+        (error) => {
+          // Let the error propagate
+          throw error;
+        },
+      ),
+    );
+  }
 
-    if (verbose) {
-      console.error(`[isolate-monorepo-package]   Packed ${dep} to ${tarballPath}`);
+  const results = await Promise.all(packPromises);
+  const packMap = new Map<string, string>();
+
+  for (const result of results) {
+    if (result) {
+      packMap.set(result.name, result.path);
     }
   }
 
@@ -295,28 +350,30 @@ export function packAllDependencies(
 /**
  * Set up the isolated environment
  */
-export function setupIsolatedEnvironment(
+export async function setupIsolatedEnvironment(
   _packageName: string,
   workspace: WorkspaceInfo,
   packMap: Map<string, string>,
   rootDir: string,
   verbose: boolean = false,
-): string {
+): Promise<string> {
   if (verbose) {
     console.error('[isolate-monorepo-package] Creating isolated environment...');
   }
 
   // Create temp directory
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'isolate-monorepo-package-'));
-  fs.chmodSync(tempDir, 0o700);
+  const tempDir = await fsPromises.mkdtemp(
+    path.join(os.tmpdir(), 'isolate-monorepo-package-'),
+  );
+  await fsPromises.chmod(tempDir, 0o700);
   if (verbose) {
     console.error(`[isolate-monorepo-package]   Created temp directory: ${tempDir}`);
   }
 
   // Copy the package to temp directory
   const packageDestDir = path.join(tempDir, path.basename(workspace.location));
-  // eslint-disable-next-line n/no-unsupported-features/node-builtins
-  fs.cpSync(workspace.location, packageDestDir, {
+  // Use async cp for better performance
+  await fsPromises.cp(workspace.location, packageDestDir, {
     recursive: true,
     errorOnExist: false,
   });
@@ -327,7 +384,7 @@ export function setupIsolatedEnvironment(
   }
 
   // Copy yarn configuration
-  fs.copyFileSync(
+  await fsPromises.copyFile(
     path.join(rootDir, '.yarnrc.yml'),
     path.join(packageDestDir, '.yarnrc.yml'),
   );
@@ -337,7 +394,8 @@ export function setupIsolatedEnvironment(
 
   // Modify package.json to use local tarballs
   const packageJsonPath = path.join(packageDestDir, 'package.json');
-  const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8')) as PackageJson;
+  const packageContent = await fsPromises.readFile(packageJsonPath, 'utf-8');
+  const pkg = JSON.parse(packageContent) as PackageJson;
 
   // Update direct dependencies to use file: protocol
   for (const deps of [pkg.dependencies, pkg.devDependencies]) {
@@ -373,7 +431,7 @@ export function setupIsolatedEnvironment(
   }
 
   // Write the modified package.json
-  fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2));
+  await fsPromises.writeFile(packageJsonPath, JSON.stringify(pkg, null, 2));
   if (verbose) {
     console.error('[isolate-monorepo-package]   Modified package.json written');
   }
@@ -384,75 +442,65 @@ export function setupIsolatedEnvironment(
 /**
  * Main orchestration function
  */
-export function createIsolatedEnvironment(
+export async function createIsolatedEnvironment(
   packageName: string,
   verbose: boolean = false,
-): string {
-  try {
-    if (verbose) {
-      console.error(
-        `[isolate-monorepo-package] Starting isolated build for ${packageName}`,
-      );
-    }
-
-    // Step 1: Find the workspace root
-    const rootDir = findWorkspaceRoot();
-    if (verbose) {
-      console.error(`[isolate-monorepo-package] Root directory: ${rootDir}`);
-    }
-
-    // Step 2: Discover all workspaces
-    const workspaceMap = discoverWorkspaces(rootDir, verbose);
-
-    // Step 3: Validate that the package exists
-    validatePackageExists(packageName, workspaceMap);
-
-    // Step 4: Collect all dependencies
-    const dependencies = collectWorkspaceDependencies(packageName, workspaceMap, verbose);
-
-    // Step 5: Create artifacts directory and pack all dependencies
-    const artifactsDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), 'isolate-monorepo-artifacts-'),
+): Promise<string> {
+  if (verbose) {
+    console.error(
+      `[isolate-monorepo-package] Starting isolated build for ${packageName}`,
     );
-    fs.chmodSync(artifactsDir, 0o700);
-
-    const packMap = packAllDependencies(
-      dependencies,
-      workspaceMap,
-      rootDir,
-      artifactsDir,
-      verbose,
-    );
-
-    // Step 6: Get the target workspace info
-    const targetWorkspace = workspaceMap.get(packageName);
-    if (!targetWorkspace) {
-      throw new IsolatedBuildError(
-        `Unexpected error: workspace ${packageName} not found`,
-      );
-    }
-
-    // Step 7: Create isolated environment
-    const isolatedDir = setupIsolatedEnvironment(
-      packageName,
-      targetWorkspace,
-      packMap,
-      rootDir,
-      verbose,
-    );
-
-    if (verbose) {
-      console.error(
-        '[isolate-monorepo-package] Isolated build environment created successfully!',
-      );
-    }
-
-    return isolatedDir;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new IsolatedBuildError(error.message);
-    } else {
-      throw new IsolatedBuildError(`Unknown error: ${error}`);
-    }
   }
+
+  // Step 1: Find the workspace root
+  const rootDir = await findWorkspaceRoot();
+  if (verbose) {
+    console.error(`[isolate-monorepo-package] Root directory: ${rootDir}`);
+  }
+
+  // Step 2: Discover all workspaces
+  const workspaceMap = await discoverWorkspaces(rootDir, verbose);
+
+  // Step 3: Validate that the package exists
+  validatePackageExists(packageName, workspaceMap);
+
+  // Step 4: Collect all dependencies
+  const dependencies = collectWorkspaceDependencies(packageName, workspaceMap, verbose);
+
+  // Step 5: Create artifacts directory and pack all dependencies
+  const artifactsDir = await fsPromises.mkdtemp(
+    path.join(os.tmpdir(), 'isolate-monorepo-artifacts-'),
+  );
+  await fsPromises.chmod(artifactsDir, 0o700);
+
+  const packMap = await packAllDependencies(
+    dependencies,
+    workspaceMap,
+    rootDir,
+    artifactsDir,
+    verbose,
+  );
+
+  // Step 6: Get the target workspace info
+  const targetWorkspace = workspaceMap.get(packageName);
+  if (!targetWorkspace) {
+    throw new IsolatedBuildError(`Unexpected error: workspace ${packageName} not found`);
+  }
+
+  // Step 7: Create isolated environment
+  const isolatedDir = await setupIsolatedEnvironment(
+    packageName,
+    targetWorkspace,
+    packMap,
+    rootDir,
+    verbose,
+  );
+
+  if (verbose) {
+    console.error(
+      '[isolate-monorepo-package] Isolated build environment created successfully!',
+    );
+  }
+
+  return isolatedDir;
 }

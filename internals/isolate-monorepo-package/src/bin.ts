@@ -42,26 +42,27 @@ function parseArguments(): CliOptions {
 /**
  * Main function
  */
-function main(options: CliOptions): void {
-  try {
-    // Create the isolated environment
-    const isolatedDir = createIsolatedEnvironment(options.packageName, options.verbose);
+async function main(options: CliOptions): Promise<void> {
+  // Create the isolated environment
+  const isolatedDir = await createIsolatedEnvironment(
+    options.packageName,
+    options.verbose,
+  );
 
-    // Output only the directory path to stdout (for script consumption)
-    console.log(isolatedDir);
-  } catch (error) {
+  // Output only the directory path to stdout (for script consumption)
+  console.log(isolatedDir);
+}
+
+// Run the CLI tool
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main(parseArguments()).catch((error) => {
     if (error instanceof IsolatedBuildError || error instanceof Error) {
       console.error(`Error: ${error.message}`);
     } else {
       console.error(`Error: ${error}`);
     }
-    throw error;
-  }
-}
-
-// Run the CLI tool
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main(parseArguments());
+    process.exit(1);
+  });
 }
 
 export { main, parseArguments };
