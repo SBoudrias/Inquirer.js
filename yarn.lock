@@ -5148,7 +5148,7 @@ __metadata:
     type-fest: "npm:^5.1.0"
     typescript: "npm:^5.9.3"
   bin:
-    isolate-monorepo-package: ./dist/bin.js
+    isolate-monorepo-package: ./src/bin.ts
   languageName: unknown
   linkType: soft
 
