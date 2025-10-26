@@ -4,7 +4,11 @@
  */
 
 import { createIsolatedEnvironment, IsolatedBuildError } from './index.js';
-import type { CliOptions } from './types.js';
+
+type CliOptions = {
+  packageName: string;
+  verbose: boolean;
+};
 
 /**
  * Parse command line arguments
@@ -56,15 +60,8 @@ function main(options: CliOptions): void {
 }
 
 // Run the CLI tool
-/* eslint-disable n/no-process-exit */
 if (import.meta.url === `file://${process.argv[1]}`) {
-  try {
-    main(parseArguments());
-    process.exit(0);
-  } catch {
-    process.exit(1);
-  }
+  main(parseArguments());
 }
-/* eslint-enable n/no-process-exit */
 
 export { main, parseArguments };

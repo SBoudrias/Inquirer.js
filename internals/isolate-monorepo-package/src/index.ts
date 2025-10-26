@@ -6,9 +6,17 @@ import { execSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import type { WorkspaceInfo, YarnWorkspaceInfo, PackageJson } from './types.js';
+import type { PackageJson } from 'type-fest';
 
-// Simple error class
+type YarnWorkspaceInfo = {
+  name: string;
+  location: string;
+};
+
+type WorkspaceInfo = YarnWorkspaceInfo & {
+  dependencies: Set<string>;
+};
+
 export class IsolatedBuildError extends Error {
   constructor(message: string) {
     super(message);
@@ -21,7 +29,7 @@ export class IsolatedBuildError extends Error {
  */
 export function findWorkspaceRoot(startDir: string = process.cwd()): string {
   let currentDir = path.resolve(startDir);
-  const root = path.parse(currentDir).root;
+  const { root } = path.parse(currentDir);
 
   while (currentDir !== root) {
     if (fs.existsSync(path.join(currentDir, '.yarnrc.yml'))) {
