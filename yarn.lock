@@ -1698,7 +1698,7 @@ __metadata:
     typescript: "npm:^5.9.3"
     yoctocolors-cjs: "npm:^2.1.3"
   bin:
-    isolated-build: ./bin/index.js
+    isolated-build: ./dist/cli.js
   languageName: unknown
   linkType: soft
 
