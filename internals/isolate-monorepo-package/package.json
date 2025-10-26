@@ -1,20 +1,21 @@
 {
-  "name": "@repo/isolated-build",
+  "name": "@repo/isolate-monorepo-package",
   "version": "1.0.0",
   "private": true,
   "description": "Tool for testing package isolation in Yarn workspace monorepo",
   "type": "module",
-  "bin": "./dist/cli.js",
+  "bin": "./dist/bin.js",
   "scripts": {
-    "build": "tsc && chmod +x dist/cli.js",
+    "build": "tsc && chmod +x dist/bin.js",
     "tsc": "tsc",
     "dev": "tsc --watch",
-    "start": "node dist/cli.js"
+    "start": "node dist/bin.js"
   },
   "dependencies": {
-    "yoctocolors-cjs": "^2.1.3"
+    "type-fest": "^4.30.0"
   },
   "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
     "@types/node": "^24.9.1",
     "typescript": "^5.9.3"
   },

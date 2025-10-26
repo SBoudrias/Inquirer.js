@@ -119,7 +119,7 @@ jobs:
       - run: yarn tsc
       - name: Test isolated build of @inquirer/demo
         run: |
-          TEST_DIR=$(yarn workspace @repo/isolated-build node dist/cli.js @inquirer/demo)
+          TEST_DIR=$(yarn workspace @repo/isolate-monorepo-package node dist/bin.js @inquirer/demo)
           cd "$TEST_DIR"
           yarn set version stable
           yarn install
