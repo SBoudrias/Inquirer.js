@@ -19,19 +19,19 @@ This tool is automatically available in the workspace. No separate installation 
 
 ```bash
 # Basic usage - outputs the path to isolated directory
-node internals/isolate-monorepo-package/dist/bin.js @inquirer/demo
+yarn isolate-monorepo-package @inquirer/demo
 
 # With verbose output
-node internals/isolate-monorepo-package/dist/bin.js @inquirer/core -v
+yarn isolate-monorepo-package @inquirer/core -v
 
 # Two-step approach (traditional for scripts/CI)
-TEST_DIR=$(node internals/isolate-monorepo-package/dist/bin.js @inquirer/demo)
+TEST_DIR=$(yarn isolate-monorepo-package @inquirer/demo)
 cd "$TEST_DIR"
 yarn install
 yarn tsc
 
 # One-liner approach - CD directly into the isolated directory
-cd $(node internals/isolate-monorepo-package/dist/bin.js @inquirer/demo)
+cd $(yarn isolate-monorepo-package @inquirer/demo)
 yarn install
 yarn tsc
 ```
@@ -44,7 +44,7 @@ For frequent interactive use, add this to your shell configuration (`~/.bashrc`,
 # Shell function for isolate-monorepo-package with automatic cd
 isolate() {
   local dir
-  dir=$(node internals/isolate-monorepo-package/dist/bin.js "$@")
+  dir=$(yarn isolate-monorepo-package "$@")
   if [ $? -eq 0 ] && [ -n "$dir" ]; then
     cd "$dir"
     echo "Changed to isolated build directory: $dir"
@@ -78,10 +78,10 @@ The tool outputs only the path to the isolated directory to stdout. All other me
 
 ```bash
 # Capture path in variable
-TEST_DIR=$(node internals/isolate-monorepo-package/dist/bin.js @inquirer/demo)
+TEST_DIR=$(yarn isolate-monorepo-package @inquirer/demo)
 
 # Or CD directly
-cd $(node internals/isolate-monorepo-package/dist/bin.js @inquirer/demo)
+cd $(yarn isolate-monorepo-package @inquirer/demo)
 ```
 
 ## Implementation Details
