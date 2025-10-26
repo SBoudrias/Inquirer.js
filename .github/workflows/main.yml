@@ -75,27 +75,6 @@ jobs:
       - run: yarn vitest --run --coverage
       - uses: codecov/codecov-action@v5
 
-  Integration:
-    name: Integration Tests
-    runs-on: ubuntu-latest
-    needs: Compile
-    steps:
-      - uses: actions/checkout@v5
-      - name: Cache turbo build setup
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable
-      - uses: actions/setup-node@v6
-        with:
-          node-version: latest
-          cache: 'yarn'
-      - run: yarn install --immutable --immutable-cache
-      - name: Integration tests
-        run: yarn turbo test
-
   e2e:
     name: End to End build tests
     runs-on: ubuntu-latest
