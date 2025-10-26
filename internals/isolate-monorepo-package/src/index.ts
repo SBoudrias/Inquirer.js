@@ -7,7 +7,11 @@ import { promisify } from 'node:util';
 import fsPromises from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import type { PackageJson } from 'type-fest';
+import type { PackageJson as _PackageJson } from 'type-fest';
+
+type PackageJson = _PackageJson & {
+  overrides?: _PackageJson['resolutions'];
+};
 
 const execAsync = promisify(exec);
 
@@ -416,9 +420,8 @@ export async function setupIsolatedEnvironment(
 
   // Add resolutions/overrides for transitive workspace dependencies
   // Yarn uses 'resolutions', npm uses 'overrides'
-  pkg.resolutions = pkg.resolutions || {};
-  (pkg as Record<string, unknown>)['overrides'] =
-    (pkg as Record<string, unknown>)['overrides'] || {};
+  pkg.resolutions ??= {};
+  pkg.overrides ??= {};
   for (const [depName, tarballPath] of packMap) {
     // Don't add resolution if it's already a direct dependency
     const isDirectDep =
@@ -428,8 +431,7 @@ export async function setupIsolatedEnvironment(
     if (!isDirectDep) {
       const fileUrl = `file:${tarballPath}`;
       pkg.resolutions[depName] = fileUrl;
-      ((pkg as Record<string, unknown>)['overrides'] as Record<string, string>)[depName] =
-        fileUrl;
+      pkg.overrides[depName] = fileUrl;
       if (verbose) {
         console.error(
           `[isolate-monorepo-package]   Added resolution/override for ${depName}`,
