@@ -27,10 +27,8 @@ jobs:
           node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
-      - name: Typescript - packages
+      - name: Typescript
         run: yarn tsc
-      - name: Typescript - test files
-        run: yarn tsc:test
 
   Linting:
     runs-on: ubuntu-latest
@@ -95,9 +93,8 @@ jobs:
           node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
-      - run: yarn tsc
       - name: Integration tests
-        run: yarn node --test integration/**/*.test.*
+        run: yarn turbo test
 
   e2e:
     name: End to End build tests
