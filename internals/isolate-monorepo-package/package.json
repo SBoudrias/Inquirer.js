@@ -4,7 +4,7 @@
   "private": true,
   "description": "Tool for testing package isolation in Yarn workspace monorepo",
   "type": "module",
-  "bin": "./dist/bin.js",
+  "bin": "./src/bin.ts",
   "scripts": {
     "tsc": "tsc && chmod +x dist/bin.js"
   },
@@ -18,5 +18,8 @@
   },
   "engines": {
     "node": ">=22.3.0"
+  },
+  "publishConfig": {
+    "bin": "./dist/bin.js"
   }
 }
