@@ -3,7 +3,7 @@
  * CLI entry point for the isolate-monorepo-package tool
  */
 
-import { createIsolatedEnvironment, IsolatedBuildError } from './index.js';
+import { createIsolatedEnvironment } from './index.js';
 
 type CliOptions = {
   packageName: string;
@@ -55,14 +55,7 @@ async function main(options: CliOptions): Promise<void> {
 
 // Run the CLI tool
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main(parseArguments()).catch((error) => {
-    if (error instanceof IsolatedBuildError || error instanceof Error) {
-      console.error(`Error: ${error.message}`);
-    } else {
-      console.error(`Error: ${error}`);
-    }
-    process.exit(1);
-  });
+  await main(parseArguments());
 }
 
 export { main, parseArguments };

@@ -270,7 +270,7 @@ async function packWorkspace(
     );
 
     let stderr = '';
-    child.stderr?.on('data', (data) => {
+    child.stderr.on('data', (data: Buffer) => {
       stderr += data.toString();
     });
 
@@ -327,7 +327,7 @@ export async function packAllDependencies(
           }
           return { name: dep, path: tarballPath };
         },
-        (error) => {
+        (error: unknown) => {
           // Let the error propagate
           throw error;
         },
