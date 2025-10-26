@@ -7,6 +7,7 @@
   "bin": "./dist/cli.js",
   "scripts": {
     "build": "tsc && chmod +x dist/cli.js",
+    "tsc": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/cli.js"
   },
