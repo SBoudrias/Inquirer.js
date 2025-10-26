@@ -12,7 +12,7 @@
     "start": "node dist/bin.js"
   },
   "dependencies": {
-    "type-fest": "^4.30.0"
+    "type-fest": "^5.1.0"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",

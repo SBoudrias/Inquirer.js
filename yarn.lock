@@ -1696,7 +1696,7 @@ __metadata:
   dependencies:
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^24.9.1"
-    type-fest: "npm:^4.30.0"
+    type-fest: "npm:^5.1.0"
     typescript: "npm:^5.9.3"
   bin:
     isolate-monorepo-package: ./dist/bin.js
@@ -8533,13 +8533,6 @@ __metadata:
   version: 0.8.1
   resolution: "type-fest@npm:0.8.1"
   checksum: 10/fd4a91bfb706aeeb0d326ebd2e9a8ea5263979e5dec8d16c3e469a5bd3a946e014a062ef76c02e3086d3d1c7209a56a20a4caafd0e9f9a5c2ab975084ea3d388
-  languageName: node
-  linkType: hard
-
-"type-fest@npm:^4.30.0":
-  version: 4.41.0
-  resolution: "type-fest@npm:4.41.0"
-  checksum: 10/617ace794ac0893c2986912d28b3065ad1afb484cad59297835a0807dc63286c39e8675d65f7de08fafa339afcb8fe06a36e9a188b9857756ae1e92ee8bda212
   languageName: node
   linkType: hard
 
