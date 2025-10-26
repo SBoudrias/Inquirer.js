@@ -15,6 +15,10 @@
         "src/*",
         "!**/*.test.ts"
       ]
+    },
+    "test": {
+      "dependsOn": ["^tsc"],
+      "outputs": []
     }
   }
 }
