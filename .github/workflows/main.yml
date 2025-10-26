@@ -123,6 +123,21 @@ jobs:
           yarn set version stable
           yarn install
           yarn tsc
+          cd -
+      - name: Run esm integration tests
+        run: |
+          cd $(yarn isolate-monorepo-package @inquirer/esm-integration-tests)
+          yarn set version stable
+          yarn install
+          yarn test
+          cd -
+      - name: Run cjs integration tests
+        run: |
+          cd $(yarn isolate-monorepo-package @inquirer/cjs-integration-tests)
+          yarn set version stable
+          yarn install
+          yarn test
+          cd -
 
   Package:
     name: Are the types wrong?
