@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 import { execSync, spawnSync } from 'node:child_process';
-import fs, { cpSync } from 'node:fs';
+import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-// @ts-ignore - no types for yoctocolors-cjs
 import colors from 'yoctocolors-cjs';
 class IsolatedBuild {
   rootDir;
@@ -38,7 +37,7 @@ class IsolatedBuild {
     const packageArg = args.find((arg) => !arg.startsWith('-'));
     if (!packageArg) {
       this.printUsage();
-      process.exit(1);
+      throw new Error('No package name provided');
     }
     this.run(packageArg);
   }
@@ -165,8 +164,7 @@ class IsolatedBuild {
         }
         packMap.set(dep, tarballPath);
       } catch (error) {
-        console.error(colors.red(`Failed to pack ${dep}: ${error}`));
-        process.exit(1);
+        throw new Error(`Failed to pack ${dep}: ${error}`);
       }
     }
     return packMap;
@@ -184,7 +182,12 @@ class IsolatedBuild {
     // Copy the package to temp directory
     const packageDestDir = path.join(tempDir, path.basename(workspace.location));
     this.log(`  Copying ${workspace.location} to ${packageDestDir}`);
-    cpSync(workspace.location, packageDestDir, { recursive: true });
+    // Use fs.cpSync with recursive option (available in Node 16.7+, works in Node 18+)
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    fs.cpSync(workspace.location, packageDestDir, {
+      recursive: true,
+      errorOnExist: false,
+    });
     // Copy .yarnrc.yml from root
     const yarnrcSource = path.join(this.rootDir, '.yarnrc.yml');
     const yarnrcDest = path.join(packageDestDir, '.yarnrc.yml');
@@ -256,9 +259,14 @@ class IsolatedBuild {
       this.log(colors.green('Isolated build environment created successfully!'));
     } catch (error) {
       console.error(colors.red(`Error: ${error}`));
-      process.exit(1);
+      throw error;
     }
   }
 }
 // Run the tool
-new IsolatedBuild();
+try {
+  new IsolatedBuild();
+} catch (error) {
+  // eslint-disable-next-line n/no-process-exit
+  process.exit(1);
+}

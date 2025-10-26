@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 import { execSync, spawnSync } from 'node:child_process';
-import fs, { cpSync } from 'node:fs';
+import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-// @ts-ignore - no types for yoctocolors-cjs
 import colors from 'yoctocolors-cjs';
 
 // No need for __dirname in this implementation
@@ -16,13 +15,18 @@ interface PackageJson {
   devDependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
   resolutions?: Record<string, string>;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface WorkspaceInfo {
   name: string;
   location: string;
   dependencies: Set<string>;
+}
+
+interface YarnWorkspaceInfo {
+  name: string;
+  location: string;
 }
 
 class IsolatedBuild {
@@ -66,7 +70,7 @@ class IsolatedBuild {
 
     if (!packageArg) {
       this.printUsage();
-      process.exit(1);
+      throw new Error('No package name provided');
     }
 
     this.run(packageArg);
@@ -104,7 +108,7 @@ class IsolatedBuild {
 
     for (const line of lines) {
       try {
-        const workspace = JSON.parse(line);
+        const workspace = JSON.parse(line) as YarnWorkspaceInfo;
         workspaceNames.add(workspace.name);
       } catch (e) {
         // Skip invalid lines
@@ -114,7 +118,7 @@ class IsolatedBuild {
     // Second pass: build workspace map with dependencies
     for (const line of lines) {
       try {
-        const workspace = JSON.parse(line);
+        const workspace = JSON.parse(line) as YarnWorkspaceInfo;
         const packageJsonPath = path.join(
           this.rootDir,
           workspace.location,
@@ -122,7 +126,9 @@ class IsolatedBuild {
         );
 
         if (fs.existsSync(packageJsonPath)) {
-          const pkg: PackageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+          const pkg = JSON.parse(
+            fs.readFileSync(packageJsonPath, 'utf-8'),
+          ) as PackageJson;
 
           const dependencies = new Set<string>();
 
@@ -226,8 +232,7 @@ class IsolatedBuild {
 
         packMap.set(dep, tarballPath);
       } catch (error) {
-        console.error(colors.red(`Failed to pack ${dep}: ${error}`));
-        process.exit(1);
+        throw new Error(`Failed to pack ${dep}: ${error}`);
       }
     }
 
@@ -254,7 +259,12 @@ class IsolatedBuild {
     const packageDestDir = path.join(tempDir, path.basename(workspace.location));
     this.log(`  Copying ${workspace.location} to ${packageDestDir}`);
 
-    cpSync(workspace.location, packageDestDir, { recursive: true });
+    // Use fs.cpSync with recursive option (available in Node 16.7+, works in Node 18+)
+    // eslint-disable-next-line n/no-unsupported-features/node-builtins
+    fs.cpSync(workspace.location, packageDestDir, {
+      recursive: true,
+      errorOnExist: false,
+    });
 
     // Copy .yarnrc.yml from root
     const yarnrcSource = path.join(this.rootDir, '.yarnrc.yml');
@@ -264,7 +274,7 @@ class IsolatedBuild {
 
     // Read and modify package.json
     const packageJsonPath = path.join(packageDestDir, 'package.json');
-    const pkg: PackageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+    const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8')) as PackageJson;
 
     // Update direct dependencies
     for (const deps of [pkg.dependencies, pkg.devDependencies]) {
@@ -344,10 +354,15 @@ class IsolatedBuild {
       this.log(colors.green('Isolated build environment created successfully!'));
     } catch (error) {
       console.error(colors.red(`Error: ${error}`));
-      process.exit(1);
+      throw error;
     }
   }
 }
 
 // Run the tool
-new IsolatedBuild();
+try {
+  new IsolatedBuild();
+} catch (error) {
+  // eslint-disable-next-line n/no-process-exit
+  process.exit(1);
+}
