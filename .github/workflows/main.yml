@@ -75,27 +75,6 @@ jobs:
       - run: yarn vitest --run --coverage
       - uses: codecov/codecov-action@v5
 
-  Integration:
-    name: Integration Tests
-    runs-on: ubuntu-latest
-    needs: Compile
-    steps:
-      - uses: actions/checkout@v5
-      - name: Cache turbo build setup
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable
-      - uses: actions/setup-node@v6
-        with:
-          node-version: latest
-          cache: 'yarn'
-      - run: yarn install --immutable --immutable-cache
-      - name: Integration tests
-        run: yarn turbo test
-
   e2e:
     name: End to End build tests
     runs-on: ubuntu-latest
@@ -117,32 +96,33 @@ jobs:
           cache: 'yarn'
       - run: yarn install --immutable --immutable-cache
       - run: yarn tsc
-      - run: yarn workspaces focus --all --production
-      - name: Pack the monorepo modules
+      - name: Test isolated build of @inquirer/demo
         run: |
-          mkdir -p /tmp/artifacts
-          yarn workspace @inquirer/core pack --out /tmp/artifacts/inquirer-core.tgz
-          yarn workspace @inquirer/prompts pack --out /tmp/artifacts/inquirer-prompts.tgz
-          yarn workspace @inquirer/figures pack --out /tmp/artifacts/inquirer-figures.tgz
-          yarn workspace @inquirer/type pack --out /tmp/artifacts/inquirer-type.tgz
-          yarn workspace @inquirer/ansi pack --out /tmp/artifacts/inquirer-ansi.tgz
-          yarn workspace @repo/tsconfig pack --out /tmp/artifacts/tsconfig.tgz
-      - name: Extract @inquirer/demo to an isolated project & build
-        run: |
-          cur_dir=$(pwd)
-          temp_dir=$(mktemp -d)
-          cp -r packages/demo $temp_dir
-          cp .yarnrc.yml $temp_dir/demo
-          cd $temp_dir/demo
+          cd $(yarn isolate-monorepo-package @inquirer/demo)
           yarn set version stable
-          yarn add --dev @repo/tsconfig@file:/tmp/artifacts/tsconfig.tgz
-          yarn set resolution @inquirer/core@npm:* file:/tmp/artifacts/inquirer-core.tgz
-          yarn set resolution @inquirer/prompts@npm:* file:/tmp/artifacts/inquirer-prompts.tgz
-          yarn set resolution @inquirer/figures@npm:* file:/tmp/artifacts/inquirer-figures.tgz
-          yarn set resolution @inquirer/ansi@npm:* file:/tmp/artifacts/inquirer-ansi.tgz
-          yarn set resolution @inquirer/type@npm:* file:/tmp/artifacts/inquirer-type.tgz
           yarn install
           yarn tsc
+          cd -
+      - name: Test isolated build of @inquirer/demo (with npm)
+        run: |
+          cd $(yarn isolate-monorepo-package @inquirer/demo)
+          npm install
+          npm run tsc
+          cd -
+      - name: Run esm integration tests
+        run: |
+          cd $(yarn isolate-monorepo-package @inquirer/esm-integration-tests)
+          yarn set version stable
+          yarn install
+          yarn test
+          cd -
+      - name: Run cjs integration tests
+        run: |
+          cd $(yarn isolate-monorepo-package @inquirer/cjs-integration-tests)
+          yarn set version stable
+          yarn install
+          yarn test
+          cd -
 
   Package:
     name: Are the types wrong?

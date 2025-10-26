@@ -84,6 +84,7 @@
     "globals": "^16.4.0",
     "globby": "^15.0.0",
     "husky": "^9.1.7",
+    "isolate-monorepo-package": "workspace:*",
     "lerna": "^9.0.0",
     "nano-staged": "^0.8.0",
     "oxlint": "^1.7.0",

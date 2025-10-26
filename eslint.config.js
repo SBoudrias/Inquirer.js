@@ -60,6 +60,14 @@ export default defineConfig(
       '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-unnecessary-type-parameters': 'off',
       'n/no-missing-import': ['error', { ignoreTypeImport: true }],
+      'n/no-unpublished-bin': [
+        'error',
+        {
+          convertPath: {
+            'src/bin.ts': ['^src/bin.ts$', 'dist/bin.js'],
+          },
+        },
+      ],
     },
   },
   {

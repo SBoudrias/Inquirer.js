@@ -1,0 +1,7 @@
+{
+  "extends": "@repo/tsconfig",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*"]
+}

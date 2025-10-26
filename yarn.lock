@@ -767,6 +767,7 @@ __metadata:
     globals: "npm:^16.4.0"
     globby: "npm:^15.0.0"
     husky: "npm:^9.1.7"
+    isolate-monorepo-package: "workspace:*"
     lerna: "npm:^9.0.0"
     nano-staged: "npm:^0.8.0"
     oxlint: "npm:^1.7.0"
@@ -5137,6 +5138,19 @@ __metadata:
   checksum: 10/7fe1931ee4e88eb5aa524cd3ceb8c882537bc3a81b02e438b240e47012eef49c86904d0f0e593ea7c3a9996d18d0f1f3be8d3eaa92333977b0c3a9d353d5563e
   languageName: node
   linkType: hard
+
+"isolate-monorepo-package@workspace:*, isolate-monorepo-package@workspace:internals/isolate-monorepo-package":
+  version: 0.0.0-use.local
+  resolution: "isolate-monorepo-package@workspace:internals/isolate-monorepo-package"
+  dependencies:
+    "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^24.9.1"
+    type-fest: "npm:^5.1.0"
+    typescript: "npm:^5.9.3"
+  bin:
+    isolate-monorepo-package: ./src/bin.ts
+  languageName: unknown
+  linkType: soft
 
 "istanbul-lib-coverage@npm:^3.0.0, istanbul-lib-coverage@npm:^3.2.2":
   version: 3.2.2
