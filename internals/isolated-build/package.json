@@ -4,11 +4,11 @@
   "private": true,
   "description": "Tool for testing package isolation in Yarn workspace monorepo",
   "type": "module",
-  "bin": "./bin/index.js",
+  "bin": "./dist/cli.js",
   "scripts": {
-    "build": "tsc && chmod +x bin/index.js",
+    "build": "tsc && chmod +x dist/cli.js",
     "dev": "tsc --watch",
-    "start": "node bin/index.js"
+    "start": "node dist/cli.js"
   },
   "dependencies": {
     "yoctocolors-cjs": "^2.1.3"

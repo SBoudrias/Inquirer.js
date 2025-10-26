@@ -4,7 +4,7 @@
     "module": "Node16",
     "moduleResolution": "Node16",
     "lib": ["ES2022"],
-    "outDir": "./bin",
+    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
@@ -18,5 +18,5 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "bin"]
+  "exclude": ["node_modules", "dist"]
 }
