@@ -103,6 +103,12 @@ jobs:
           yarn install
           yarn tsc
           cd -
+      - name: Test isolated build of @inquirer/demo (with npm)
+        run: |
+          cd $(yarn isolate-monorepo-package @inquirer/demo)
+          npm install
+          npm run tsc
+          cd -
       - name: Run esm integration tests
         run: |
           cd $(yarn isolate-monorepo-package @inquirer/esm-integration-tests)
