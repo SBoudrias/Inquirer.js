@@ -13,7 +13,7 @@ fi
 
 # Use isolated-build tool to set up isolated environment
 echo "Setting up isolated build environment for @inquirer/demo..."
-TEST_DIR=$(yarn workspace @repo/isolated-build node bin/index.js @inquirer/demo -v)
+TEST_DIR=$(yarn workspace @repo/isolated-build node dist/cli.js @inquirer/demo -v)
 
 echo "Using test directory: $TEST_DIR"
 
