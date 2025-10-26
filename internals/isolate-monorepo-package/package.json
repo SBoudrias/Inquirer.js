@@ -1,15 +1,12 @@
 {
-  "name": "@repo/isolate-monorepo-package",
+  "name": "isolate-monorepo-package",
   "version": "1.0.0",
   "private": true,
   "description": "Tool for testing package isolation in Yarn workspace monorepo",
   "type": "module",
   "bin": "./dist/bin.js",
   "scripts": {
-    "build": "tsc && chmod +x dist/bin.js",
-    "tsc": "tsc",
-    "dev": "tsc --watch",
-    "start": "node dist/bin.js"
+    "tsc": "tsc && chmod +x dist/bin.js"
   },
   "dependencies": {
     "type-fest": "^5.1.0"
