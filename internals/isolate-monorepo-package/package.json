@@ -2,9 +2,22 @@
   "name": "isolate-monorepo-package",
   "version": "1.0.0",
   "private": true,
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
   "description": "Tool for testing package isolation in Yarn workspace monorepo",
   "type": "module",
   "bin": "./src/bin.ts",
+  "exports": {
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "tsc": "tsc && chmod +x dist/bin.js"
   },
@@ -20,6 +33,7 @@
     "node": ">=22.3.0"
   },
   "publishConfig": {
+    "access": "public",
     "bin": "./dist/bin.js"
   }
 }
