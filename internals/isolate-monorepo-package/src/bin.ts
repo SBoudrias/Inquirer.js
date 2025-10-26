@@ -3,7 +3,7 @@
  * CLI entry point for the isolate-monorepo-package tool
  */
 
-import { createIsolatedEnvironment } from './index.js';
+import { createIsolatedEnvironment } from './index.ts';
 
 type CliOptions = {
   packageName: string;
