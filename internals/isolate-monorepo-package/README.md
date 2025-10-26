@@ -18,37 +18,33 @@ This tool is automatically available in the workspace. No separate installation 
 ## Usage
 
 ```bash
-# From the monorepo root (using the direct node command)
-TEST_DIR=$(node internals/isolate-monorepo-package/dist/cli.js @inquirer/demo)
-cd "$TEST_DIR"
+# Basic usage - outputs the path to isolated directory
+node internals/isolate-monorepo-package/dist/bin.js @inquirer/demo
 
 # With verbose output
-node internals/isolate-monorepo-package/dist/cli.js @inquirer/core -v
+node internals/isolate-monorepo-package/dist/bin.js @inquirer/core -v
 
-# Output cd command (for interactive use with eval)
-eval $(node internals/isolate-monorepo-package/dist/cli.js @inquirer/demo --cd)
-
-# Example with @inquirer/demo (traditional approach for scripts/CI)
-TEST_DIR=$(node internals/isolate-monorepo-package/dist/cli.js @inquirer/demo)
+# Two-step approach (traditional for scripts/CI)
+TEST_DIR=$(node internals/isolate-monorepo-package/dist/bin.js @inquirer/demo)
 cd "$TEST_DIR"
 yarn install
 yarn tsc
 
-# Example with --cd flag (convenient for interactive use)
-eval $(node internals/isolate-monorepo-package/dist/cli.js @inquirer/demo --cd)
+# One-liner approach - CD directly into the isolated directory
+cd $(node internals/isolate-monorepo-package/dist/bin.js @inquirer/demo)
 yarn install
 yarn tsc
 ```
 
-### Convenience Shell Function
+### Convenience Shell Function (Optional)
 
-Add this to your shell configuration file (`~/.bashrc`, `~/.zshrc`, etc.) for easier interactive use:
+For frequent interactive use, add this to your shell configuration (`~/.bashrc`, `~/.zshrc`, etc.):
 
 ```bash
 # Shell function for isolate-monorepo-package with automatic cd
 isolate() {
   local dir
-  dir=$(node internals/isolate-monorepo-package/dist/cli.js "$@")
+  dir=$(node internals/isolate-monorepo-package/dist/bin.js "$@")
   if [ $? -eq 0 ] && [ -n "$dir" ]; then
     cd "$dir"
     echo "Changed to isolated build directory: $dir"
@@ -60,13 +56,6 @@ isolate() {
 # Usage:
 # isolate @inquirer/demo
 # isolate @inquirer/core -v
-```
-
-Alternatively, you can use the `--cd` flag with eval:
-
-```bash
-# One-liner to build and enter the isolated environment
-eval $(node internals/isolate-monorepo-package/dist/cli.js @inquirer/demo --cd) && yarn install
 ```
 
 ## How it works
@@ -82,20 +71,17 @@ eval $(node internals/isolate-monorepo-package/dist/cli.js @inquirer/demo --cd) 
 
 - `<package-name>`: The workspace package to isolate (required)
 - `-v, --verbose`: Show detailed progress information
-- `--cd`: Output a `cd` command instead of just the path (for use with `eval`)
 
 ## Output
 
-The tool outputs only the path to the isolated directory to stdout (or a `cd` command when using `--cd`). All other messages go to stderr, making it easy to capture the path in scripts:
+The tool outputs only the path to the isolated directory to stdout. All other messages go to stderr, making it easy to capture the path in scripts:
 
 ```bash
-TEST_DIR=$(node internals/isolate-monorepo-package/dist/cli.js @inquirer/demo)
-```
+# Capture path in variable
+TEST_DIR=$(node internals/isolate-monorepo-package/dist/bin.js @inquirer/demo)
 
-When using the `--cd` flag, the tool outputs a complete cd command:
-
-```bash
-eval $(node internals/isolate-monorepo-package/dist/cli.js @inquirer/demo --cd)
+# Or CD directly
+cd $(node internals/isolate-monorepo-package/dist/bin.js @inquirer/demo)
 ```
 
 ## Implementation Details

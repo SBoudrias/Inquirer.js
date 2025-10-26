@@ -18,7 +18,6 @@ export interface YarnWorkspaceInfo {
 export interface CliOptions {
   packageName: string;
   verbose: boolean;
-  cdCommand: boolean;
 }
 
 export type { PackageJson };
