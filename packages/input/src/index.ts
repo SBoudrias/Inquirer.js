@@ -58,13 +58,11 @@ export default createPrompt<string, InputConfig>((config, done) => {
     if (isEnterKey(key)) {
       const answer = value || defaultValue;
       setStatus('loading');
-      if (pattern && !pattern.test(answer)) {
-        setError(patternError || 'Invalid input update');
-        setStatus('idle');
-        return;
-      }
-      const isValid =
+      let isValid =
         required && !answer ? 'You must provide a value' : await validate(answer);
+      if (pattern && !pattern.test(answer)) {
+        isValid = patternError || 'Invalid input update';
+      }
       if (isValid === true) {
         setValue(answer);
         setStatus('done');
@@ -80,17 +78,8 @@ export default createPrompt<string, InputConfig>((config, done) => {
         setError(isValid || 'You must provide a valid value');
         setStatus('idle');
       }
-    } else if (isBackspaceKey(key)) {
-      const newValue = rl.line;
-      if (!newValue) {
-        setDefaultValue(undefined);
-      }
-      setValue(newValue);
-      if (pattern && !pattern.test(newValue)) {
-        setError(patternError || 'Invalid input');
-      } else {
-        setError(undefined);
-      }
+    } else if (isBackspaceKey(key) && !value) {
+      setDefaultValue(undefined);
     } else if (isTabKey(key) && !value) {
       setDefaultValue(undefined);
       rl.clearLine(0); // Remove the tab character.
