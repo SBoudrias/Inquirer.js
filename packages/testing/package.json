@@ -78,7 +78,7 @@
   },
   "dependencies": {
     "@inquirer/type": "^3.0.9",
-    "mute-stream": "^2.0.0"
+    "mute-stream": "^3.0.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
