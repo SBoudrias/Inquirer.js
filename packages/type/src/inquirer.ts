@@ -29,10 +29,4 @@ export type Context = {
   signal?: AbortSignal;
 };
 
-export type Prompt<Value, Config> = (
-  config: Config,
-  context?: Context,
-) => Promise<Value> & {
-  /** @deprecated pass an AbortSignal in the context options instead. See {@link https://github.com/SBoudrias/Inquirer.js#canceling-prompt} */
-  cancel: () => void;
-};
+export type Prompt<Value, Config> = (config: Config, context?: Context) => Promise<Value>;

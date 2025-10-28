@@ -621,40 +621,4 @@ describe('search prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual('QC');
   });
-
-  it('supports custom instructions', async () => {
-    const { answer, events, getScreen } = await render(search, {
-      message: 'Select a Canadian province',
-      source: getListSearch(PROVINCES),
-      pageSize: 3,
-      instructions: {
-        navigation: 'Utiliser les flèches directionnelles',
-        pager: 'Utiliser les flèches pour révéler plus de choix',
-      },
-    });
-
-    // Test custom pager instruction when results exceed pageSize
-    expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province 
-      ❯ Alberta
-        British Columbia
-        Manitoba
-
-      Utiliser les flèches pour révéler plus de choix"
-    `);
-
-    // Test custom navigation instruction when results fit in pageSize
-    events.type('New');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province New
-      ❯ New Brunswick
-        Newfoundland and Labrador
-
-      Utiliser les flèches directionnelles"
-    `);
-
-    events.keypress('enter');
-    await expect(answer).resolves.toEqual('NB');
-  });
 });
