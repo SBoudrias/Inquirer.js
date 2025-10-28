@@ -26,15 +26,24 @@ describe('@inquirer/prompts', () => {
     expect(Separator).toBeTypeOf('function');
   });
 
-  it('checkbox, search and select have matching helpMode', () => {
-    type CheckboxHelpMode = NonNullable<
-      Parameters<typeof checkbox>[0]['theme']
-    >['helpMode'];
-    type SearchHelpMode = NonNullable<Parameters<typeof search>[0]['theme']>['helpMode'];
-    type SelectHelpMode = NonNullable<Parameters<typeof select>[0]['theme']>['helpMode'];
+  it('checkbox, search and select have matching keysHelpTip type', () => {
+    type CheckboxTheme = NonNullable<Parameters<typeof checkbox>[0]['theme']>;
+    type SearchTheme = NonNullable<Parameters<typeof search>[0]['theme']>;
+    type SelectTheme = NonNullable<Parameters<typeof select>[0]['theme']>;
 
-    expectTypeOf<CheckboxHelpMode>().toEqualTypeOf<SelectHelpMode>();
-    expectTypeOf<SelectHelpMode>().toEqualTypeOf<SearchHelpMode>();
-    expectTypeOf<SearchHelpMode>().toEqualTypeOf<CheckboxHelpMode>();
+    // Check that if style exists, keysHelpTip has the same type
+    type CheckboxKeysHelpTip = CheckboxTheme['style'] extends { keysHelpTip?: infer K }
+      ? K
+      : never;
+    type SearchKeysHelpTip = SearchTheme['style'] extends { keysHelpTip?: infer K }
+      ? K
+      : never;
+    type SelectKeysHelpTip = SelectTheme['style'] extends { keysHelpTip?: infer K }
+      ? K
+      : never;
+
+    expectTypeOf<CheckboxKeysHelpTip>().toEqualTypeOf<SelectKeysHelpTip>();
+    expectTypeOf<SelectKeysHelpTip>().toEqualTypeOf<SearchKeysHelpTip>();
+    expectTypeOf<SearchKeysHelpTip>().toEqualTypeOf<CheckboxKeysHelpTip>();
   });
 });

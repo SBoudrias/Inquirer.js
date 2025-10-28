@@ -41,10 +41,7 @@ export async function render<const Props, const Value>(
   props: Props,
   options?: Context,
 ): Promise<{
-  answer: Promise<Value> & {
-    /** @deprecated pass an AbortSignal in the context options instead. See {@link https://github.com/SBoudrias/Inquirer.js#canceling-prompt} */
-    cancel: () => void;
-  };
+  answer: Promise<Value>;
   input: MuteStream;
   events: {
     keypress: (
