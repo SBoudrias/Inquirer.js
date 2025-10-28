@@ -31,8 +31,6 @@ type SelectTheme = {
     description: (text: string) => string;
     keysHelpTip: (keys: [key: string, action: string][]) => string | undefined;
   };
-  /** @deprecated Use theme.style.keysHelpTip instead */
-  helpMode: 'always' | 'never' | 'auto';
   indexMode: 'hidden' | 'number';
   keybindings: ReadonlyArray<Keybinding>;
 };
@@ -47,7 +45,6 @@ const selectTheme: SelectTheme = {
         .map(([key, action]) => `${styleText('bold', key)} ${styleText('dim', action)}`)
         .join(styleText('dim', ' • ')),
   },
-  helpMode: 'always',
   indexMode: 'hidden',
   keybindings: [],
 };
@@ -82,11 +79,6 @@ type SelectConfig<
   pageSize?: number;
   loop?: boolean;
   default?: unknown;
-  /** @deprecated Use theme.style.keysHelpTip instead. */
-  instructions?: {
-    navigation: string;
-    pager: string;
-  };
   theme?: PartialDeep<Theme<SelectTheme>>;
 };
 
@@ -238,21 +230,10 @@ export default createPrompt(
 
     const message = theme.style.message(config.message, status);
 
-    let helpLine: string | undefined;
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
-    if (theme.helpMode !== 'never') {
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
-      if (config.instructions) {
-        // eslint-disable-next-line @typescript-eslint/no-deprecated
-        const { pager, navigation } = config.instructions;
-        helpLine = theme.style.help(items.length > pageSize ? pager : navigation);
-      } else {
-        helpLine = theme.style.keysHelpTip([
-          ['↑↓', 'navigate'],
-          ['⏎', 'select'],
-        ]);
-      }
-    }
+    const helpLine = theme.style.keysHelpTip([
+      ['↑↓', 'navigate'],
+      ['⏎', 'select'],
+    ]);
 
     let separatorCount = 0;
     const page = usePagination({

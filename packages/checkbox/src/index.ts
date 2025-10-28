@@ -37,8 +37,6 @@ type CheckboxTheme = {
     description: (text: string) => string;
     keysHelpTip: (keys: [key: string, action: string][]) => string | undefined;
   };
-  /** @deprecated Use theme.style.keysHelpTip instead */
-  helpMode: 'always' | 'never' | 'auto';
   keybindings: ReadonlyArray<Keybinding>;
 };
 
@@ -63,7 +61,6 @@ const checkboxTheme: CheckboxTheme = {
         .map(([key, action]) => `${styleText('bold', key)} ${styleText('dim', action)}`)
         .join(styleText('dim', ' • ')),
   },
-  helpMode: 'always',
   keybindings: [],
 };
 
@@ -97,8 +94,6 @@ type CheckboxConfig<
   message: string;
   prefix?: string;
   pageSize?: number;
-  /** @deprecated Use theme.style.keysHelpTip instead */
-  instructions?: string | boolean;
   choices: ChoicesObject extends ReadonlyArray<string | Separator>
     ? ChoicesObject
     : ReadonlyArray<Choice<Value> | Separator>;
@@ -168,14 +163,7 @@ function normalizeChoices<Value>(
 
 export default createPrompt(
   <Value>(config: CheckboxConfig<Value>, done: (value: Array<Value>) => void) => {
-    const {
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
-      instructions,
-      pageSize = 7,
-      loop = true,
-      required,
-      validate = () => true,
-    } = config;
+    const { pageSize = 7, loop = true, required, validate = () => true } = config;
     const shortcuts = { all: 'a', invert: 'i', ...config.shortcuts };
     const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme);
     const { keybindings } = theme;
@@ -294,23 +282,15 @@ export default createPrompt(
       return [prefix, message, answer].filter(Boolean).join(' ');
     }
 
-    let helpLine: string | undefined;
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
-    if (theme.helpMode !== 'never' && instructions !== false) {
-      if (typeof instructions === 'string') {
-        helpLine = instructions;
-      } else {
-        const keys: [string, string][] = [
-          ['↑↓', 'navigate'],
-          ['space', 'select'],
-        ];
-        if (shortcuts.all) keys.push([shortcuts.all, 'all']);
-        if (shortcuts.invert) keys.push([shortcuts.invert, 'invert']);
-        keys.push(['⏎', 'submit']);
+    const keys: [string, string][] = [
+      ['↑↓', 'navigate'],
+      ['space', 'select'],
+    ];
+    if (shortcuts.all) keys.push([shortcuts.all, 'all']);
+    if (shortcuts.invert) keys.push([shortcuts.invert, 'invert']);
+    keys.push(['⏎', 'submit']);
 
-        helpLine = theme.style.keysHelpTip(keys);
-      }
-    }
+    const helpLine = theme.style.keysHelpTip(keys);
 
     const lines = [
       [prefix, message].filter(Boolean).join(' '),
