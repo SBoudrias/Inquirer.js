@@ -616,56 +616,6 @@ describe('checkbox prompt', () => {
     await expect(answer).resolves.not.toContain(unselect);
   });
 
-  it('allow disabling help tip', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
-      message: 'Select a number',
-      choices: numberedChoices,
-      instructions: false,
-    });
-
-    expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number
-      ❯◯ 1
-       ◯ 2
-       ◯ 3
-       ◯ 4
-       ◯ 5
-       ◯ 6
-       ◯ 7"
-    `);
-
-    events.keypress('enter');
-    await expect(answer).resolves.toEqual([]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number"');
-  });
-
-  it('allow customizing help tip', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
-      message: 'Select a number',
-      choices: numberedChoices,
-      instructions:
-        ' (Pulse <space> para seleccionar, <a> para alternar todos, <i> para invertir selección, y <enter> para continuar)',
-    });
-
-    expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a number
-      ❯◯ 1
-       ◯ 2
-       ◯ 3
-       ◯ 4
-       ◯ 5
-       ◯ 6
-       ◯ 7
-
-       (Pulse <space> para seleccionar, <a> para alternar todos, <i> para invertir
-      selección, y <enter> para continuar)"
-    `);
-
-    events.keypress('enter');
-    await expect(answer).resolves.toEqual([]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number"');
-  });
-
   it('throws if all choices are disabled', async () => {
     const { answer } = await render(checkbox, {
       message: 'Select a number',
@@ -969,14 +919,13 @@ describe('checkbox prompt', () => {
     });
   });
 
-  describe('theme: helpMode', () => {
+  describe('theme: keysHelpTip', () => {
     const scrollTip = '↑↓ navigate • space select • a all • i invert • ⏎ submit';
 
-    it('helpMode: auto', async () => {
+    it('keysHelpTip: show help by default', async () => {
       const { answer, events, getScreen } = await render(checkbox, {
         message: 'Select a number',
         choices: numberedChoices,
-        theme: { helpMode: 'auto' },
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
@@ -994,6 +943,36 @@ describe('checkbox prompt', () => {
       expect(getScreen()).toContain(scrollTip);
 
       events.keypress('down');
+      events.keypress('space');
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual([2]);
+      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
+    });
+
+    it('keysHelpTip: hide help when returning undefined', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        theme: {
+          style: {
+            keysHelpTip: () => undefined,
+          },
+        },
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+        ❯◯ 1
+         ◯ 2
+         ◯ 3
+         ◯ 4
+         ◯ 5
+         ◯ 6
+         ◯ 7"
+      `);
+      expect(getScreen()).not.toContain(scrollTip);
+
+      events.keypress('down');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number
          ◯ 1
@@ -1002,11 +981,9 @@ describe('checkbox prompt', () => {
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7
-
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+         ◯ 7"
       `);
-      expect(getScreen()).toContain(scrollTip);
+      expect(getScreen()).not.toContain(scrollTip);
 
       events.keypress('space');
       expect(getScreen()).toMatchInlineSnapshot(`
@@ -1017,22 +994,25 @@ describe('checkbox prompt', () => {
          ◯ 4
          ◯ 5
          ◯ 6
-         ◯ 7
-
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+         ◯ 7"
       `);
-      expect(getScreen()).toContain(scrollTip);
+      expect(getScreen()).not.toContain(scrollTip);
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual([2]);
       expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
     });
 
-    it('helpMode: always', async () => {
+    it('keysHelpTip: custom help text', async () => {
+      const customHelpText = 'Pulse <space> para seleccionar, y <enter> para continuar';
       const { answer, events, getScreen } = await render(checkbox, {
         message: 'Select a number',
         choices: numberedChoices,
-        theme: { helpMode: 'always' },
+        theme: {
+          style: {
+            keysHelpTip: () => customHelpText,
+          },
+        },
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
@@ -1045,90 +1025,12 @@ describe('checkbox prompt', () => {
          ◯ 6
          ◯ 7
 
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+        Pulse <space> para seleccionar, y <enter> para continuar"
       `);
-      expect(getScreen()).toContain(scrollTip);
+      expect(getScreen()).toContain(customHelpText);
 
       events.keypress('down');
-      expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number
-         ◯ 1
-        ❯◯ 2
-         ◯ 3
-         ◯ 4
-         ◯ 5
-         ◯ 6
-         ◯ 7
-
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
-      `);
-      expect(getScreen()).toContain(scrollTip);
-
       events.keypress('space');
-      expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number
-         ◯ 1
-        ❯◉ 2
-         ◯ 3
-         ◯ 4
-         ◯ 5
-         ◯ 6
-         ◯ 7
-
-        ↑↓ navigate • space select • a all • i invert • ⏎ submit"
-      `);
-      expect(getScreen()).toContain(scrollTip);
-
-      events.keypress('enter');
-      await expect(answer).resolves.toEqual([2]);
-      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
-    });
-
-    it('helpMode: never', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
-        message: 'Select a number',
-        choices: numberedChoices,
-        theme: { helpMode: 'never' },
-      });
-
-      expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number
-        ❯◯ 1
-         ◯ 2
-         ◯ 3
-         ◯ 4
-         ◯ 5
-         ◯ 6
-         ◯ 7"
-      `);
-      expect(getScreen()).not.toContain(scrollTip);
-
-      events.keypress('down');
-      expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number
-         ◯ 1
-        ❯◯ 2
-         ◯ 3
-         ◯ 4
-         ◯ 5
-         ◯ 6
-         ◯ 7"
-      `);
-      expect(getScreen()).not.toContain(scrollTip);
-
-      events.keypress('space');
-      expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number
-         ◯ 1
-        ❯◉ 2
-         ◯ 3
-         ◯ 4
-         ◯ 5
-         ◯ 6
-         ◯ 7"
-      `);
-      expect(getScreen()).not.toContain(scrollTip);
-
       events.keypress('enter');
       await expect(answer).resolves.toEqual([2]);
       expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);

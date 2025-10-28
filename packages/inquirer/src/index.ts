@@ -83,8 +83,6 @@ export type {
 const builtInPrompts: PromptCollection = {
   input,
   select,
-  /** @deprecated `list` is now named `select` */
-  list: select,
   number,
   confirm,
   rawlist,

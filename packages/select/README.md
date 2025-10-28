@@ -152,7 +152,7 @@ type Theme = {
 
 This function allows you to customize the keyboard shortcuts help tip displayed below the prompt. It receives an array of key-action pairs and should return a formatted string. You can also hook here to localize the labels to different languages.
 
-It can also returns `undefined` to hide the help tip entirely. This is the replacement for the deprecated theme option `helpMode: 'never'`.
+It can also returns `undefined` to hide the help tip entirely.
 
 ```js
 theme: {
