@@ -54,7 +54,6 @@ jobs:
       - name: Validate package setup
         run: |
           yarn setup
-          yarn nano-staged
           git diff --exit-code -- . :^.yarn
 
   Unit:
