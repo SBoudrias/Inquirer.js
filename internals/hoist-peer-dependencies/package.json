@@ -9,5 +9,6 @@
   },
   "dependencies": {
     "type-fest": "^5.1.0"
-  }
+  },
+  "sideEffects": false
 }
