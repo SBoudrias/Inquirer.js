@@ -16,7 +16,12 @@ function readFile(filepath: string) {
 }
 
 function readJSONFile<T>(filepath: string): Promise<T> {
-  return readFile(filepath).then(JSON.parse);
+  return readFile(filepath)
+    .then(JSON.parse)
+    .catch((error: unknown) => {
+      console.error(`Error reading ${filepath}: ${error}`);
+      throw error;
+    });
 }
 
 function fileExists(filepath: string) {
@@ -36,7 +41,7 @@ const versions: Record<string, string> = {};
 const rootPkg = await readJSONFile<TshyPackageJson>(
   path.join(import.meta.dirname, '../package.json'),
 );
-const paths = await globby(['packages/**/package.json', '!**/node_modules']);
+const paths = await globby(['*/*/package.json', '!**/node_modules']);
 
 const packages = await Promise.all(
   paths.map(async (pkgPath: string): Promise<[string, TshyPackageJson]> => {
@@ -53,33 +58,47 @@ for (const [pkgPath, pkg] of packages) {
   const dir = path.dirname(pkgPath);
   fixPeerDeps(path.resolve(path.join(dir)));
 
-  const isTS = await fileExists(path.join(dir, 'src/index.ts'));
+  const isTS =
+    (await fileExists(path.join(dir, 'src/index.ts'))) ||
+    (await fileExists(path.join(dir, 'tsconfig.json')));
   const hasReadme = await fileExists(path.join(dir, 'README.md'));
+  const isPrivate = pkg.private === true;
 
-  // Replicate configs that should always be the same.
-  pkg.engines = rootPkg.engines;
-  pkg.author = rootPkg.author;
-  pkg.license = rootPkg.license;
-  pkg.repository = rootPkg.repository;
-  pkg.keywords = [...new Set([...(rootPkg.keywords ?? []), ...(pkg.keywords ?? [])])];
-  pkg.sideEffects = pkg.sideEffects ?? false;
-  pkg.publishConfig = { access: 'public' };
+  pkg.sideEffects ??= false;
 
-  if (hasReadme) {
-    const repoPath = dir.split('/').slice(-2).join('/');
-    pkg.homepage = `https://github.com/SBoudrias/Inquirer.js/blob/main/${repoPath}/README.md`;
+  // Replicate configs that should always be the same on public package.
+  if (!isPrivate) {
+    pkg.author = rootPkg.author;
+    pkg.license = rootPkg.license;
+    pkg.repository = rootPkg.repository;
+    pkg.keywords = [...new Set([...(rootPkg.keywords ?? []), ...(pkg.keywords ?? [])])];
+    pkg.publishConfig = { access: 'public' };
+
+    if (hasReadme) {
+      const repoPath = dir.split('/').slice(-2).join('/');
+      pkg.homepage = `https://github.com/SBoudrias/Inquirer.js/blob/main/${repoPath}/README.md`;
+    }
+  } else {
+    // Remove publishing metadata for private packages
+    delete pkg.author;
+    delete pkg.license;
+    delete pkg.repository;
+    delete pkg.keywords;
+    delete pkg.homepage;
+    delete pkg.publishConfig;
+    delete pkg.files;
   }
 
-  if (isTS) {
+  if (isTS && !isPrivate) {
     pkg.files = ['dist'];
 
-    pkg.devDependencies = pkg.devDependencies ?? {};
+    pkg.devDependencies ??= {};
     pkg.devDependencies['tshy'] = versions['tshy'];
 
-    pkg.tshy = pkg.tshy ?? {};
+    pkg.tshy ??= {};
     pkg.tshy.exclude = ['src/**/*.test.ts'];
 
-    pkg.scripts = pkg.scripts ?? {};
+    pkg.scripts ??= {};
     pkg.scripts['tsc'] = 'tshy';
 
     // Only set attw if the package is using commonjs
