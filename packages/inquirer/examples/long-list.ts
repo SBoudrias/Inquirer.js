@@ -23,7 +23,7 @@ const multiLineChoices = [
   },
 ];
 
-const answers = await inquirer.prompt([
+const answers = await inquirer.prompt<{ letter: string; name: string[] }>([
   {
     type: 'list',
     loop: false,

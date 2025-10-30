@@ -21,8 +21,10 @@ import PromptsRunner from './ui/prompt.ts';
 import type { PromptCollection, LegacyPromptConstructor, PromptFn } from './ui/prompt.ts';
 import type {
   Answers,
+  AsyncGetterFunction,
   CustomQuestion,
   UnnamedDistinctQuestion,
+  DistinctQuestion,
   StreamOptions,
   QuestionMap,
   PromptSession,
@@ -62,12 +64,65 @@ type PromptReturnType<T> = Promise<Prettify<T>> & {
 export function createPromptModule<
   Prompts extends Record<string, Record<string, unknown>> = never,
 >(opt?: StreamOptions) {
+  // Broad public question type to improve DX for simple usage and examples,
+  // while preserving strict overloads below.
+  type PublicDistinctQuestion<A extends Answers> = {
+    type:
+      | 'input'
+      | 'confirm'
+      | 'editor'
+      | 'password'
+      | 'number'
+      | 'rawlist'
+      | 'expand'
+      | 'checkbox'
+      | 'search'
+      | 'select'
+      | 'list';
+    name: Extract<keyof A, string>;
+    message: string | AsyncGetterFunction<string, A>;
+    default?: unknown;
+    choices?: unknown;
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    filter?: (input: any, answers: A) => any;
+    askAnswered?: boolean;
+    when?: boolean | AsyncGetterFunction<boolean, A>;
+    // Allow prompt-specific extra properties like validate, loop, etc.
+  } & Record<string, unknown>;
   type SpecificQuestion<A extends Answers> =
     | UnnamedDistinctQuestion<A>
     | CustomQuestion<A, Prompts>;
   type NamedQuestion<A extends Answers> = SpecificQuestion<A> & {
     name: Extract<keyof A, string>;
   };
+  function promptModule<
+    const A extends Answers,
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: PublicDistinctQuestion<Prettify<PrefilledAnswers & A>>[],
+    answers?: PrefilledAnswers,
+  ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
+  function promptModule<
+    const A extends Answers,
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: PublicDistinctQuestion<A & PrefilledAnswers>,
+    answers?: PrefilledAnswers,
+  ): PromptReturnType<PrefilledAnswers & A>;
+  function promptModule<
+    const A extends Answers,
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: Observable<PublicDistinctQuestion<Prettify<PrefilledAnswers & A>>>,
+    answers?: PrefilledAnswers,
+  ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
+  function promptModule<
+    const A extends Answers,
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: DistinctQuestion<Prettify<PrefilledAnswers & A>>[],
+    answers?: PrefilledAnswers,
+  ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
   function promptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
@@ -91,6 +146,13 @@ export function createPromptModule<
     questions: Observable<NamedQuestion<Prettify<PrefilledAnswers & A>>>,
     answers?: PrefilledAnswers,
   ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
+  function promptModule<
+    const A extends Answers,
+    PrefilledAnswers extends Answers = object,
+  >(
+    questions: DistinctQuestion<A & PrefilledAnswers>,
+    answers?: PrefilledAnswers,
+  ): PromptReturnType<PrefilledAnswers & A>;
   function promptModule<
     const A extends Answers,
     PrefilledAnswers extends Answers = object,
