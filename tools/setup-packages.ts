@@ -1,5 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import semver from 'semver';
 import { globby } from 'globby';
 import { fixPeerDeps } from '@repo/hoist-peer-dependencies';
 import type { PackageJson, TsConfigJson } from 'type-fest';
@@ -41,7 +42,15 @@ const versions: Record<string, string> = {};
 const rootPkg = await readJSONFile<TshyPackageJson>(
   path.join(import.meta.dirname, '../package.json'),
 );
-const paths = await globby(['*/*/package.json', '!**/node_modules']);
+if (!Array.isArray(rootPkg.workspaces) || !rootPkg.engines.node) {
+  throw new Error(
+    '[Inquirer] The scaffolding tool requires `workspaces` and `engines.node` in the root package.json',
+  );
+}
+const paths = await globby([
+  ...rootPkg.workspaces.map((workspace) => path.join(workspace, 'package.json')),
+  '!**/node_modules',
+]);
 
 const packages = await Promise.all(
   paths.map(async (pkgPath: string): Promise<[string, TshyPackageJson]> => {
@@ -66,8 +75,17 @@ for (const [pkgPath, pkg] of packages) {
 
   pkg.sideEffects ??= false;
 
-  // Replicate configs that should always be the same on public package.
+  // Set min engines version.
+  if (
+    !pkg.engines?.node ||
+    semver.lt(semver.coerce(pkg.engines.node), semver.coerce(rootPkg.engines.node))
+  ) {
+    pkg.engines ??= {};
+    pkg.engines.node = rootPkg.engines.node;
+  }
+
   if (!isPrivate) {
+    // Only set publishing metadata for public packages
     pkg.author = rootPkg.author;
     pkg.license = rootPkg.license;
     pkg.repository = rootPkg.repository;

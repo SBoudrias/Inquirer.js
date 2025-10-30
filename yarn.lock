@@ -758,6 +758,7 @@ __metadata:
     "@repo/hoist-peer-dependencies": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^24.9.1"
+    "@types/semver": "npm:^7"
     "@vitest/coverage-v8": "npm:^3.2.4"
     "@vitest/ui": "npm:^3.2.4"
     eslint: "npm:^9.38.0"
@@ -772,6 +773,7 @@ __metadata:
     nano-staged: "npm:^0.8.0"
     oxlint: "npm:^1.7.0"
     prettier: "npm:^3.6.2"
+    semver: "npm:^7.7.3"
     turbo: "npm:^2.5.8"
     type-fest: "npm:^5.1.0"
     typescript: "npm:^5.9.3"
@@ -2110,6 +2112,13 @@ __metadata:
   version: 2.4.4
   resolution: "@types/normalize-package-data@npm:2.4.4"
   checksum: 10/65dff72b543997b7be8b0265eca7ace0e34b75c3e5fee31de11179d08fa7124a7a5587265d53d0409532ecb7f7fba662c2012807963e1f9b059653ec2c83ee05
+  languageName: node
+  linkType: hard
+
+"@types/semver@npm:^7":
+  version: 7.7.1
+  resolution: "@types/semver@npm:7.7.1"
+  checksum: 10/8f09e7e6ca3ded67d78ba7a8f7535c8d9cf8ced83c52e7f3ac3c281fe8c689c3fe475d199d94390dc04fc681d51f2358b430bb7b2e21c62de24f2bee2c719068
   languageName: node
   linkType: hard
 
@@ -7698,7 +7707,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.7.2":
+"semver@npm:^7.7.2, semver@npm:^7.7.3":
   version: 7.7.3
   resolution: "semver@npm:7.7.3"
   bin:
