@@ -41,7 +41,15 @@ const versions: Record<string, string> = {};
 const rootPkg = await readJSONFile<TshyPackageJson>(
   path.join(import.meta.dirname, '../package.json'),
 );
-const paths = await globby(['*/*/package.json', '!**/node_modules']);
+if (!Array.isArray(rootPkg.workspaces)) {
+  throw new Error(
+    '[Inquirer] setup tooling only work with workspaces defined as an array',
+  );
+}
+const paths = await globby([
+  ...rootPkg.workspaces.map((workspace) => path.join(workspace, 'package.json')),
+  '!**/node_modules',
+]);
 
 const packages = await Promise.all(
   paths.map(async (pkgPath: string): Promise<[string, TshyPackageJson]> => {
@@ -65,9 +73,10 @@ for (const [pkgPath, pkg] of packages) {
   const isPrivate = pkg.private === true;
 
   pkg.sideEffects ??= false;
+  pkg.engines = rootPkg.engines;
 
-  // Replicate configs that should always be the same on public package.
   if (!isPrivate) {
+    // Only set publishing metadata for public packages
     pkg.author = rootPkg.author;
     pkg.license = rootPkg.license;
     pkg.repository = rootPkg.repository;
