@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "main": "index.ts",
-  "engines": {
-    "node": ">=18"
-  },
   "dependencies": {
     "type-fest": "^5.1.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  }
 }

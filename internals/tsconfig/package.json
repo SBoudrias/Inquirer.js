@@ -6,8 +6,8 @@
   "dependencies": {
     "@sindresorhus/tsconfig": "^8.0.1"
   },
+  "sideEffects": false,
   "engines": {
     "node": ">=18"
-  },
-  "sideEffects": false
+  }
 }
