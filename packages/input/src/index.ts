@@ -29,10 +29,18 @@ type InputConfig = {
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme<InputTheme>>;
+  pattern?: RegExp;
+  patternError?: string;
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {
-  const { required, validate = () => true, prefill = 'tab' } = config;
+  const {
+    required,
+    validate = () => true,
+    prefill = 'tab',
+    pattern = null,
+    patternError = null,
+  } = config;
   const theme = makeTheme<InputTheme>(inputTheme, config.theme);
   const [status, setStatus] = useState<Status>('idle');
   const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
@@ -50,9 +58,11 @@ export default createPrompt<string, InputConfig>((config, done) => {
     if (isEnterKey(key)) {
       const answer = value || defaultValue;
       setStatus('loading');
-
-      const isValid =
+      let isValid =
         required && !answer ? 'You must provide a value' : await validate(answer);
+      if (pattern && !pattern.test(answer)) {
+        isValid = patternError || 'Invalid input update';
+      }
       if (isValid === true) {
         setValue(answer);
         setStatus('done');
@@ -77,7 +87,11 @@ export default createPrompt<string, InputConfig>((config, done) => {
       setValue(defaultValue);
     } else {
       setValue(rl.line);
-      setError(undefined);
+      if (pattern && !pattern.test(rl.line)) {
+        setError(patternError || 'Invalid input');
+      } else {
+        setError(undefined);
+      }
     }
   });
 
