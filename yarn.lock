@@ -755,10 +755,8 @@ __metadata:
   resolution: "@inquirer/root@workspace:."
   dependencies:
     "@eslint/js": "npm:^9.38.0"
-    "@repo/hoist-peer-dependencies": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^24.9.1"
-    "@types/semver": "npm:^7"
     "@vitest/coverage-v8": "npm:^3.2.4"
     "@vitest/ui": "npm:^3.2.4"
     eslint: "npm:^9.38.0"
@@ -766,14 +764,13 @@ __metadata:
     eslint-plugin-n: "npm:^17.23.1"
     eslint-plugin-oxlint: "npm:^1.7.0"
     globals: "npm:^16.4.0"
-    globby: "npm:^15.0.0"
     husky: "npm:^9.1.7"
     isolate-monorepo-package: "workspace:*"
     lerna: "npm:^9.0.0"
     nano-staged: "npm:^0.8.0"
     oxlint: "npm:^1.7.0"
     prettier: "npm:^3.6.2"
-    semver: "npm:^7.7.3"
+    setup-packages: "workspace:*"
     turbo: "npm:^2.5.8"
     type-fest: "npm:^5.1.0"
     typescript: "npm:^5.9.3"
@@ -1685,14 +1682,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@repo/hoist-peer-dependencies@workspace:*, @repo/hoist-peer-dependencies@workspace:internals/hoist-peer-dependencies":
-  version: 0.0.0-use.local
-  resolution: "@repo/hoist-peer-dependencies@workspace:internals/hoist-peer-dependencies"
-  dependencies:
-    type-fest: "npm:^5.1.0"
-  languageName: unknown
-  linkType: soft
-
 "@repo/tsconfig@workspace:*, @repo/tsconfig@workspace:internals/tsconfig":
   version: 0.0.0-use.local
   resolution: "@repo/tsconfig@workspace:internals/tsconfig"
@@ -2115,7 +2104,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^7":
+"@types/semver@npm:^7.7.1":
   version: 7.7.1
   resolution: "@types/semver@npm:7.7.1"
   checksum: 10/8f09e7e6ca3ded67d78ba7a8f7535c8d9cf8ced83c52e7f3ac3c281fe8c689c3fe475d199d94390dc04fc681d51f2358b430bb7b2e21c62de24f2bee2c719068
@@ -7722,6 +7711,19 @@ __metadata:
   checksum: 10/8980ebf7ae9eb945bb036b6e283c547ee783a1ad557a82babf758a065e2fb6ea337fd82cac30dd565c1e606e423f30024a19fff7afbf4977d784720c4026a8ef
   languageName: node
   linkType: hard
+
+"setup-packages@workspace:*, setup-packages@workspace:internals/setup-packages":
+  version: 0.0.0-use.local
+  resolution: "setup-packages@workspace:internals/setup-packages"
+  dependencies:
+    "@types/semver": "npm:^7.7.1"
+    globby: "npm:^15.0.0"
+    semver: "npm:^7.7.3"
+    type-fest: "npm:^5.1.0"
+  bin:
+    setup-packages: ./src/index.ts
+  languageName: unknown
+  linkType: soft
 
 "shebang-command@npm:^2.0.0":
   version: 2.0.0

@@ -1,9 +1,10 @@
+#!/usr/bin/env node
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import semver from 'semver';
 import { globby } from 'globby';
-import { fixPeerDeps } from '@repo/hoist-peer-dependencies';
 import type { PackageJson, TsConfigJson } from 'type-fest';
+import { fixPeerDeps } from './hoist-peer-dependencies.ts';
 
 type TshyPackageJson = PackageJson & {
   tshy?: {
@@ -40,7 +41,7 @@ async function writeFile(filepath: string, content: string) {
 
 const versions: Record<string, string> = {};
 const rootPkg = await readJSONFile<TshyPackageJson>(
-  path.join(import.meta.dirname, '../package.json'),
+  path.join(process.cwd(), 'package.json'),
 );
 if (!Array.isArray(rootPkg.workspaces) || !rootPkg.engines.node) {
   throw new Error(
