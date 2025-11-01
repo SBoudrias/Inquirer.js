@@ -15,7 +15,7 @@ import {
   type Theme,
   type Status,
 } from '@inquirer/core';
-import colors from 'yoctocolors-cjs';
+import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 import type { PartialDeep } from '@inquirer/type';
 
@@ -34,13 +34,13 @@ type SearchTheme = {
 const searchTheme: SearchTheme = {
   icon: { cursor: figures.pointer },
   style: {
-    disabled: (text: string) => colors.dim(`- ${text}`),
-    searchTerm: (text: string) => colors.cyan(text),
-    description: (text: string) => colors.cyan(text),
+    disabled: (text: string) => styleText('dim', `- ${text}`),
+    searchTerm: (text: string) => styleText('cyan', text),
+    description: (text: string) => styleText('cyan', text),
     keysHelpTip: (keys: [string, string][]) =>
       keys
-        .map(([key, action]) => `${colors.bold(key)} ${colors.dim(action)}`)
-        .join(colors.dim(' • ')),
+        .map(([key, action]) => `${styleText('bold', key)} ${styleText('dim', action)}`)
+        .join(styleText('dim', ' • ')),
   },
   helpMode: 'always',
 };

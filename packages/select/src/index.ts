@@ -21,7 +21,7 @@ import {
 } from '@inquirer/core';
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
-import colors from 'yoctocolors-cjs';
+import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 
 type SelectTheme = {
@@ -40,12 +40,12 @@ type SelectTheme = {
 const selectTheme: SelectTheme = {
   icon: { cursor: figures.pointer },
   style: {
-    disabled: (text: string) => colors.dim(`- ${text}`),
-    description: (text: string) => colors.cyan(text),
+    disabled: (text: string) => styleText('dim', `- ${text}`),
+    description: (text: string) => styleText('cyan', text),
     keysHelpTip: (keys: [string, string][]) =>
       keys
-        .map(([key, action]) => `${colors.bold(key)} ${colors.dim(action)}`)
-        .join(colors.dim(' • ')),
+        .map(([key, action]) => `${styleText('bold', key)} ${styleText('dim', action)}`)
+        .join(styleText('dim', ' • ')),
   },
   helpMode: 'always',
   indexMode: 'hidden',
