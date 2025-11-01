@@ -31,6 +31,33 @@ export class IsolatedBuildError extends Error {
   }
 }
 
+async function copyRecursive(src: string, dest: string): Promise<void> {
+  const stat = await fsPromises.stat(src);
+  if (stat.isDirectory()) {
+    await fsPromises.mkdir(dest, { recursive: true });
+    const entries = await fsPromises.readdir(src, { withFileTypes: true });
+    for (const entry of entries) {
+      const srcPath = path.join(src, entry.name);
+      const destPath = path.join(dest, entry.name);
+      if (entry.isDirectory()) {
+        await copyRecursive(srcPath, destPath);
+      } else if (entry.isSymbolicLink()) {
+        const linkTarget = await fsPromises.readlink(srcPath);
+        try {
+          await fsPromises.symlink(linkTarget, destPath);
+        } catch {
+          // Ignore if symlink cannot be created
+        }
+      } else {
+        await fsPromises.copyFile(srcPath, destPath);
+      }
+    }
+  } else {
+    await fsPromises.mkdir(path.dirname(dest), { recursive: true });
+    await fsPromises.copyFile(src, dest);
+  }
+}
+
 /**
  * Find the workspace root directory by looking for .yarnrc.yml
  */
@@ -376,11 +403,8 @@ export async function setupIsolatedEnvironment(
 
   // Copy the package to temp directory
   const packageDestDir = path.join(tempDir, path.basename(workspace.location));
-  // Use async cp for better performance
-  await fsPromises.cp(workspace.location, packageDestDir, {
-    recursive: true,
-    errorOnExist: false,
-  });
+  // Recursively copy without using experimental fs.promises.cp
+  await copyRecursive(workspace.location, packageDestDir);
   if (verbose) {
     console.error(
       `[isolate-monorepo-package]   Copied ${workspace.location} to ${packageDestDir}`,
