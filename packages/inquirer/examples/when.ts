@@ -1,5 +1,5 @@
 /**
- * When example
+ * When prompt example
  */
 
 import inquirer from 'inquirer';
@@ -7,31 +7,28 @@ import inquirer from 'inquirer';
 const answers = await inquirer.prompt([
   {
     type: 'confirm',
-    name: 'bacon',
-    message: 'Do you like bacon?',
+    name: 'toBeDelivered',
+    message: 'Is this for delivery?',
   },
   {
     type: 'input',
-    name: 'favorite',
-    message: 'Bacon lover, what is your favorite type of bacon?',
-    when(answers) {
-      return Boolean(answers.bacon);
+    name: 'phone',
+    message: "What's your phone number",
+    when(answers: Record<string, unknown>) {
+      return answers['toBeDelivered'] === true;
     },
   },
   {
     type: 'confirm',
     name: 'pizza',
-    message: 'Ok... Do you like pizza?',
-    when(answers) {
-      return !answers.bacon;
-    },
+    message: 'Do you like pizza?',
   },
   {
     type: 'input',
-    name: 'favorite',
-    message: 'Whew! What is your favorite type of pizza?',
-    when(answers) {
-      return Boolean(answers.pizza);
+    name: 'fav',
+    message: 'What is your favorite flavour?',
+    when(answers: Record<string, unknown>) {
+      return answers['pizza'] === true;
     },
   },
 ]);

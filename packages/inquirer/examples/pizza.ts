@@ -7,7 +7,16 @@ import inquirer from 'inquirer';
 
 console.log('Hi, welcome to Node Pizza');
 
-const answers = await inquirer.prompt([
+const answers = await inquirer.prompt<{
+  toBeDelivered: boolean;
+  phone: string;
+  size: string;
+  quantity: number;
+  toppings: string;
+  beverage: string;
+  comments: string;
+  prize?: string;
+}>([
   {
     type: 'confirm',
     name: 'toBeDelivered',
@@ -88,8 +97,8 @@ const answers = await inquirer.prompt([
     name: 'prize',
     message: 'For leaving a comment, you get a freebie',
     choices: ['cake', 'fries'],
-    when(answers) {
-      return answers.comments !== 'Nope, all good!';
+    when(answers: Record<string, unknown>) {
+      return answers['comments'] !== 'Nope, all good!';
     },
   },
 ]);

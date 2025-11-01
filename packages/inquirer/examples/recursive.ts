@@ -5,28 +5,20 @@
 
 import inquirer from 'inquirer';
 
-const output: string[] = [];
-async function ask() {
-  const answers = await inquirer.prompt([
+function ask() {
+  return inquirer.prompt([
     {
       type: 'input',
-      name: 'tvShow',
-      message: "What's your favorite TV show?",
+      name: 'name',
+      message: 'Enter a name',
     },
     {
       type: 'confirm',
       name: 'askAgain',
-      message: 'Want to enter another TV show favorite (just hit enter for YES)?',
-      default: true,
+      message: 'Enter another name?',
     },
   ]);
-
-  output.push(String(answers.tvShow));
-  if (answers.askAgain) {
-    await ask();
-  } else {
-    console.log('Your favorite TV Shows:', output.join(', '));
-  }
 }
 
-await ask();
+const answers = await ask();
+console.log(JSON.stringify(answers, null, '  '));

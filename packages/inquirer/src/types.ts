@@ -75,6 +75,7 @@ type QuestionWithGetters<
   }
 >;
 
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents, @typescript-eslint/no-duplicate-type-constituents */
 export type UnnamedDistinctQuestion<A extends Answers = object> =
   | QuestionWithGetters<
       'checkbox',
@@ -92,6 +93,7 @@ export type UnnamedDistinctQuestion<A extends Answers = object> =
   // Alias list type to select; it's been renamed.
   | QuestionWithGetters<'list', Parameters<typeof select>[0], A>
   | QuestionWithGetters<'select', Parameters<typeof select>[0], A>;
+/* eslint-enable @typescript-eslint/no-redundant-type-constituents, @typescript-eslint/no-duplicate-type-constituents */
 
 export type DistinctQuestion<A extends Answers = Answers> = Prettify<
   UnnamedDistinctQuestion<A> & {
