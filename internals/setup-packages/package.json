@@ -1,10 +1,13 @@
 {
-  "name": "@repo/hoist-peer-dependencies",
+  "name": "setup-packages",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "index.ts",
+  "bin": "./src/index.ts",
   "dependencies": {
+    "@types/semver": "^7.7.1",
+    "globby": "^15.0.0",
+    "semver": "^7.7.3",
     "type-fest": "^5.1.0"
   },
   "sideEffects": false,
