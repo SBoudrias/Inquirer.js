@@ -4,20 +4,18 @@
 
 import inquirer from 'inquirer';
 
-const directionsPrompt: Parameters<typeof inquirer.prompt>[0] = {
-  type: 'list',
-  name: 'direction',
-  message: 'Which direction would you like to go?',
-  choices: ['Forward', 'Right', 'Left', 'Back'],
-};
-
 async function main() {
   console.log('You find youself in a small room, there is a door in front of you.');
   await exitHouse();
 }
 
 async function exitHouse() {
-  const answers = await inquirer.prompt(directionsPrompt);
+  const answers = await inquirer.prompt<{ direction: string }>({
+    type: 'list',
+    name: 'direction',
+    message: 'Which direction would you like to go?',
+    choices: ['Forward', 'Right', 'Left', 'Back'],
+  });
   if (answers['direction'] === 'Forward') {
     console.log('You find yourself in a forest');
     console.log(
@@ -31,7 +29,12 @@ async function exitHouse() {
 }
 
 async function encounter1() {
-  const answers = await inquirer.prompt(directionsPrompt);
+  const answers = await inquirer.prompt<{ direction: string }>({
+    type: 'list',
+    name: 'direction',
+    message: 'Which direction would you like to go?',
+    choices: ['Forward', 'Right', 'Left', 'Back'],
+  });
   if (answers['direction'] === 'Forward') {
     console.log('You attempt to fight the wolf');
     console.log('Theres a stick and some stones lying around you could use as a weapon');
@@ -47,7 +50,12 @@ async function encounter1() {
 }
 
 async function encounter2a() {
-  const answers = await inquirer.prompt(directionsPrompt);
+  const answers = await inquirer.prompt<{ direction: string }>({
+    type: 'list',
+    name: 'direction',
+    message: 'Which direction would you like to go?',
+    choices: ['Forward', 'Right', 'Left', 'Back'],
+  });
   if (answers['direction'] === 'Forward') {
     let output = 'You find a painted wooden sign that says:';
     output += ' \n';
@@ -63,7 +71,7 @@ async function encounter2a() {
 }
 
 async function encounter2b() {
-  await inquirer.prompt({
+  await inquirer.prompt<{ weapon: string }>({
     type: 'list',
     name: 'weapon',
     message: 'Pick one',

@@ -2,9 +2,9 @@
  * Checkbox list examples
  */
 
-import inquirer, { type DistinctQuestion } from 'inquirer';
+import inquirer from 'inquirer';
 
-const answers = await inquirer.prompt([
+const answers = await inquirer.prompt<{ toppings: string[] }>([
   {
     type: 'checkbox',
     message: 'Select toppings',
@@ -27,7 +27,7 @@ const answers = await inquirer.prompt([
       { name: 'Olives', value: 'olives', disabled: true },
       { name: 'Extra cheese', value: 'extra_cheese' },
     ],
-    validate(answer) {
+    validate(answer: string[]) {
       if (answer.length === 0) {
         return 'You must choose at least one topping.';
       }
@@ -35,6 +35,6 @@ const answers = await inquirer.prompt([
       return true;
     },
   },
-] satisfies DistinctQuestion[]);
+]);
 
 console.log(JSON.stringify(answers, null, '  '));

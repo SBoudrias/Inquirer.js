@@ -709,6 +709,7 @@ describe('inquirer.prompt(...)', () => {
           answer: 'answer from running',
           when(answers) {
             expect(answers).toEqual({ q1: 'bar' });
+            expectTypeOf(answers).not.toBeAny();
             expectTypeOf(answers).toEqualTypeOf<Partial<{ q1: any; q2: any }>>();
 
             goesInWhen = true;
@@ -758,6 +759,7 @@ describe('inquirer.prompt(...)', () => {
         prefilled: true,
       });
       expectTypeOf(answers).toEqualTypeOf<{ q1: any; prefilled: boolean }>();
+      expectTypeOf(answers).not.toBeAny();
     });
 
     it('should not run prompt if answer exists for question', async () => {
@@ -777,6 +779,8 @@ describe('inquirer.prompt(...)', () => {
       );
 
       expect(answers).toEqual({ prefilled: 'prefilled' });
+      expectTypeOf(answers).not.toBeAny();
+      expectTypeOf(answers).toEqualTypeOf<{ prefilled: string }>();
     });
 
     it('should not run prompt if nested answer exists for question', async () => {
@@ -797,8 +801,10 @@ describe('inquirer.prompt(...)', () => {
         },
       );
       expect(answers.prefilled.nested).toEqual('prefilled');
-      // @ts-expect-error TODO fix types around nested types.
+      expectTypeOf(answers).not.toBeAny();
       expectTypeOf(answers).toEqualTypeOf<{ prefilled: { nested: string } }>();
+      expectTypeOf(answers.prefilled).not.toBeAny();
+      expectTypeOf(answers.prefilled).toEqualTypeOf<{ nested: string }>();
     });
 
     it('should run prompt if answer exists for question and askAnswered is set', async () => {
@@ -815,6 +821,8 @@ describe('inquirer.prompt(...)', () => {
         { prefilled: 'prefilled' },
       );
       expect(answers).toEqual({ prefilled: 'bar' });
+      expectTypeOf(answers.prefilled).not.toBeAny();
+      expectTypeOf(answers.prefilled).toEqualTypeOf<string>();
     });
 
     it('should run prompt if nested answer exists for question and askAnswered is set', async () => {
@@ -833,8 +841,10 @@ describe('inquirer.prompt(...)', () => {
         },
       );
       expect(answers).toEqual({ prefilled: { nested: 'newValue' } });
-      // @ts-expect-error TODO fix types around nested types.
+      expectTypeOf(answers.prefilled.nested).toEqualTypeOf<string>();
       expectTypeOf(answers).toEqualTypeOf<{ prefilled: { nested: string } }>();
+      expectTypeOf(answers.prefilled).toEqualTypeOf<{ nested: string }>();
+      expectTypeOf(answers.prefilled).not.toBeAny();
     });
   });
 
@@ -1045,9 +1055,9 @@ describe('Non-TTY checks', () => {
     await expect(promise).rejects.toHaveProperty('isTtyError', true);
   });
 
-  const itSkipWindows =
-    os.type() === 'Windows_NT' || process.env['GITHUB_ACTIONS'] ? it.skip : it;
-  itSkipWindows('No exception when using tty other than process.stdin', async () => {
+  it.skipIf(
+    os.type() === 'Windows_NT' || process.env['GITHUB_ACTIONS'] || !process.stdout.isTTY,
+  )('No exception when using tty other than process.stdin', async () => {
     const input = new tty.ReadStream(fs.openSync('/dev/tty', 'r+'));
 
     // Uses manually opened tty as input instead of process.stdin

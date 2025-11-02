@@ -4,7 +4,7 @@
 
 import inquirer from 'inquirer';
 
-const answers = await inquirer.prompt([
+const answers = await inquirer.prompt<{ theme: string; size: string }>([
   {
     type: 'rawlist',
     name: 'theme',

@@ -2,35 +2,25 @@
  * Filter and validate progress example
  */
 
-import inquirer, { type DistinctQuestion } from 'inquirer';
+import inquirer from 'inquirer';
 
 const answers = await inquirer.prompt([
   {
     type: 'input',
-    name: 'first_question',
-    message: 'Question with filtering and validating text',
-    async validate() {
-      await new Promise((r) => setTimeout(r, 3000));
-      return true;
-    },
-    async filter(answer: string) {
-      await new Promise((r) => setTimeout(r, 3000));
-      return `filtered${answer}`;
+    name: 'name',
+    message: 'Enter your name',
+    transformer(input: string, { isFinal }: { isFinal: boolean }) {
+      if (isFinal) {
+        return input + '!';
+      }
+      return input;
     },
   },
   {
     type: 'input',
-    name: 'second_question',
-    message: 'Question without filtering and validating text',
-    async validate() {
-      await new Promise((r) => setTimeout(r, 3000));
-      return true;
-    },
-    async filter(answer: string) {
-      await new Promise((r) => setTimeout(r, 3000));
-      return `filtered${answer}`;
-    },
+    name: 'age',
+    message: 'Enter your age',
   },
-] satisfies DistinctQuestion[]);
+]);
 
 console.log(JSON.stringify(answers, null, '  '));

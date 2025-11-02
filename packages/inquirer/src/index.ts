@@ -21,13 +21,56 @@ import PromptsRunner from './ui/prompt.ts';
 import type { PromptCollection, LegacyPromptConstructor, PromptFn } from './ui/prompt.ts';
 import type {
   Answers,
-  CustomQuestion,
-  UnnamedDistinctQuestion,
   StreamOptions,
   QuestionMap,
   PromptSession,
+  PromptModulePublicQuestion,
+  PromptModuleSpecificQuestion,
+  PromptModuleNamedQuestion,
+  QuestionSequence,
+  MergedAnswers,
+  DictionaryAnswers,
 } from './types.ts';
-import { Observable } from 'rxjs';
+
+type PublicQuestions<A extends Answers, Prefilled extends Answers> = QuestionSequence<
+  PromptModulePublicQuestion<MergedAnswers<A, Prefilled>, A>
+>;
+
+type InternalQuestions<
+  A extends Answers,
+  Prefilled extends Answers,
+  Prompts extends Record<string, Record<string, unknown>>,
+> = QuestionSequence<PromptModuleNamedQuestion<MergedAnswers<A, Prefilled>, Prompts, A>>;
+
+type QuestionsDictionary<
+  A extends Answers,
+  Prefilled extends Answers,
+  Prompts extends Record<string, Record<string, unknown>>,
+> = {
+  [name in keyof A]: PromptModuleSpecificQuestion<MergedAnswers<A, Prefilled>, Prompts>;
+};
+
+type PromptModuleApi<Prompts extends Record<string, Record<string, unknown>> = never> = {
+  <const A extends Answers, const Prefilled extends Answers = object>(
+    questions: PublicQuestions<A, Prefilled> | InternalQuestions<A, Prefilled, Prompts>,
+    answers?: Prefilled,
+  ): PromptReturnType<MergedAnswers<A, Prefilled>>;
+  <const A extends Answers, const Prefilled extends Answers = object>(
+    questions: QuestionsDictionary<A, Prefilled, Prompts>,
+    answers?: Prefilled,
+  ): PromptReturnType<DictionaryAnswers<A, Prefilled>>;
+  <A extends Answers>(
+    questions: PromptSession<A>,
+    answers?: Partial<A>,
+  ): PromptReturnType<A>;
+} & {
+  prompts: PromptCollection;
+  registerPrompt(
+    name: string,
+    prompt: LegacyPromptConstructor | PromptFn,
+  ): PromptModuleApi<Prompts>;
+  restoreDefaultPrompts(): void;
+};
 
 export type {
   QuestionMap,
@@ -61,43 +104,23 @@ type PromptReturnType<T> = Promise<Prettify<T>> & {
  */
 export function createPromptModule<
   Prompts extends Record<string, Record<string, unknown>> = never,
->(opt?: StreamOptions) {
-  type SpecificQuestion<A extends Answers> =
-    | UnnamedDistinctQuestion<A>
-    | CustomQuestion<A, Prompts>;
-  type NamedQuestion<A extends Answers> = SpecificQuestion<A> & {
-    name: Extract<keyof A, string>;
-  };
+>(opt?: StreamOptions): PromptModuleApi<Prompts> {
   function promptModule<
     const A extends Answers,
-    PrefilledAnswers extends Answers = object,
+    const PrefilledAnswers extends Answers = object,
   >(
-    questions: NamedQuestion<Prettify<PrefilledAnswers & A>>[],
+    questions:
+      | PublicQuestions<A, PrefilledAnswers>
+      | InternalQuestions<A, PrefilledAnswers, Prompts>,
     answers?: PrefilledAnswers,
-  ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
+  ): PromptReturnType<MergedAnswers<A, PrefilledAnswers>>;
   function promptModule<
     const A extends Answers,
-    PrefilledAnswers extends Answers = object,
+    const PrefilledAnswers extends Answers = object,
   >(
-    questions: {
-      [name in keyof A]: SpecificQuestion<Prettify<PrefilledAnswers & A>>;
-    },
+    questions: QuestionsDictionary<A, PrefilledAnswers, Prompts>,
     answers?: PrefilledAnswers,
-  ): PromptReturnType<Prettify<PrefilledAnswers & Answers<Extract<keyof A, string>>>>;
-  function promptModule<
-    const A extends Answers,
-    PrefilledAnswers extends Answers = object,
-  >(
-    questions: Observable<NamedQuestion<Prettify<PrefilledAnswers & A>>>,
-    answers?: PrefilledAnswers,
-  ): PromptReturnType<Prettify<PrefilledAnswers & A>>;
-  function promptModule<
-    const A extends Answers,
-    PrefilledAnswers extends Answers = object,
-  >(
-    questions: NamedQuestion<A & PrefilledAnswers>,
-    answers?: PrefilledAnswers,
-  ): PromptReturnType<PrefilledAnswers & A>;
+  ): PromptReturnType<DictionaryAnswers<A, PrefilledAnswers>>;
   function promptModule<A extends Answers>(
     questions: PromptSession<A>,
     answers?: Partial<A>,
@@ -128,7 +151,7 @@ export function createPromptModule<
     promptModule.prompts = { ...builtInPrompts };
   };
 
-  return promptModule;
+  return promptModule as unknown as PromptModuleApi<Prompts>;
 }
 
 /**
