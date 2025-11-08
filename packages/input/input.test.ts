@@ -50,6 +50,7 @@ describe('input prompt', () => {
 
     events.keypress('enter');
     await Promise.resolve();
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Answer 2 === 1
       > You must provide a valid value"
@@ -78,6 +79,7 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 1"`);
 
     events.keypress('enter');
+    await Promise.resolve();
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Answer 2 ===
@@ -111,6 +113,7 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 1"`);
 
     events.keypress('enter');
+    await Promise.resolve();
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Answer 2 === 1
@@ -315,6 +318,7 @@ describe('input prompt', () => {
 
     events.keypress('enter');
     await Promise.resolve();
+    await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "Q: Answer must be: 2 === 1
       !! You must provide a valid value !!"
@@ -326,5 +330,48 @@ describe('input prompt', () => {
     await expect(answer).resolves.toEqual('2');
 
     expect(getScreen()).toMatchInlineSnapshot(`"Q: Answer must be: 2 === _2_"`);
+  });
+
+  it('supports pattern validation', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'Enter a number',
+      pattern: /^[0-9]*\.?[0-9]*$/,
+    });
+
+    events.type('123a');
+    events.keypress('enter');
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Enter a number 123a
+      > Invalid input"
+    `);
+
+    events.keypress('backspace');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('123');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a number 123"`);
+  });
+
+  it('supports pattern validation with custom error message', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'Enter a number',
+      pattern: /^[0-9]*\.?[0-9]*$/,
+      patternError: 'Only numbers and a decimal point are allowed',
+    });
+
+    events.type('123a');
+    events.keypress('enter');
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+    "? Enter a number 123a
+    > Only numbers and a decimal point are allowed"
+  `);
+
+    events.keypress('backspace');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('123');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a number 123"`);
   });
 });
