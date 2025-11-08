@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@types/semver": "^7.7.1",
-    "type-fest": "^5.1.0"
+    "type-fest": "^5.2.0"
   },
   "sideEffects": false,
   "engines": {
