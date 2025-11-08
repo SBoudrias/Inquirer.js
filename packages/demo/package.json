@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/demo",
-  "version": "1.1.25",
+  "version": "1.1.26",
   "description": "Inquirer demos",
   "keywords": [
     "answer",
@@ -70,9 +70,9 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.3.0",
-    "@inquirer/figures": "^1.0.14",
-    "@inquirer/prompts": "^7.9.0",
+    "@inquirer/core": "^10.3.1",
+    "@inquirer/figures": "^1.0.15",
+    "@inquirer/prompts": "^7.10.0",
     "yoctocolors-cjs": "^2.1.3"
   },
   "devDependencies": {

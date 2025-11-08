@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/input",
-  "version": "4.2.5",
+  "version": "4.3.0",
   "description": "Inquirer input text prompt",
   "keywords": [
     "answer",
@@ -74,12 +74,12 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.3.0",
-    "@inquirer/type": "^3.0.9"
+    "@inquirer/core": "^10.3.1",
+    "@inquirer/type": "^3.0.10"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
-    "@inquirer/testing": "^2.1.51",
+    "@inquirer/testing": "^2.1.52",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.3"
   },

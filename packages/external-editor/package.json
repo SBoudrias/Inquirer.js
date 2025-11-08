@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/external-editor",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Edit a string with the users preferred text editor using $VISUAL or $ENVIRONMENT",
   "type": "module",
   "exports": {
