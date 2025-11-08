@@ -7,10 +7,11 @@
   "type": "module",
   "bin": "./src/bin.ts",
   "exports": {
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    ".": "./src/index.ts"
   },
   "scripts": {
-    "tsc": "tsc && chmod +x dist/bin.js"
+    "tsc": "tsc && chmod +x ./dist/bin.js"
   },
   "dependencies": {
     "type-fest": "^5.2.0"

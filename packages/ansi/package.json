@@ -55,42 +55,26 @@
     "dist"
   ],
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.2",
     "@repo/tsconfig": "workspace:*",
-    "tshy": "^3.0.3"
-  },
-  "tshy": {
-    "exclude": [
-      "src/**/*.test.ts"
-    ],
-    "exports": {
-      "./package.json": "./package.json",
-      ".": "./src/index.ts"
-    }
+    "typescript": "^5.9.3"
   },
   "scripts": {
-    "tsc": "tshy",
-    "attw": "attw --pack"
+    "tsc": "tsc"
   },
   "type": "module",
   "publishConfig": {
-    "access": "public"
-  },
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
-      },
-      "require": {
-        "types": "./dist/commonjs/index.d.ts",
-        "default": "./dist/commonjs/index.js"
+    "access": "public",
+    "exports": {
+      "./package.json": "./package.json",
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     }
   },
-  "main": "./dist/commonjs/index.js",
-  "types": "./dist/commonjs/index.d.ts",
-  "module": "./dist/esm/index.js",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./src/index.ts"
+  },
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/ansi/README.md"
 }
