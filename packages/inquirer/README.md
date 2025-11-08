@@ -10,16 +10,6 @@ A collection of common interactive command line user interfaces.
 > [!IMPORTANT]
 > This is the legacy version of Inquirer.js. While it still receives maintenance, it is not actively developed. For the new Inquirer, see [@inquirer/prompts](https://www.npmjs.com/package/@inquirer/prompts).
 
-# Special Thanks
-
-<div align="center" markdown="1">
-
-[![Graphite](https://github.com/user-attachments/assets/53db40ca-2254-481a-a094-6597f8716e29)](https://graphite.dev/?utm_source=github&utm_medium=repo&utm_campaign=inquirerjs)<br>
-
-### [Graphite is the AI developer productivity platform helping teams on GitHub ship higher quality software, faster](https://graphite.dev/?utm_source=github&utm_medium=repo&utm_campaign=inquirerjs)
-
-</div>
-
 ## Table of Contents
 
 1.  [Documentation](#documentation)
