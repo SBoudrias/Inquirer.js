@@ -5,7 +5,7 @@
   "type": "module",
   "bin": "./src/bin.ts",
   "dependencies": {
-    "globby": "^15.0.0",
+    "globby": "^16.0.0",
     "semver": "^7.7.3"
   },
   "devDependencies": {

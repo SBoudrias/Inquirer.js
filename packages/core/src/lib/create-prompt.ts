@@ -24,6 +24,7 @@ function getCallSites() {
       result = callSitesWithoutCurrent;
       return callSitesWithoutCurrent;
     };
+    // oxlint-disable-next-line no-unused-expressions
     new Error().stack;
   } catch {
     // An error will occur if the Node flag --frozen-intrinsics is used.
