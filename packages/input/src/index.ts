@@ -34,13 +34,7 @@ type InputConfig = {
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {
-  const {
-    required,
-    validate = () => true,
-    prefill = 'tab',
-    pattern = null,
-    patternError = null,
-  } = config;
+  const { prefill = 'tab' } = config;
   const theme = makeTheme<InputTheme>(inputTheme, config.theme);
   const [status, setStatus] = useState<Status>('idle');
   const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
@@ -48,6 +42,23 @@ export default createPrompt<string, InputConfig>((config, done) => {
   const [value, setValue] = useState<string>('');
 
   const prefix = usePrefix({ status, theme });
+
+  async function validate(value: string): Promise<true | string> {
+    const { required, pattern, patternError = 'Invalid input' } = config;
+    if (required && !value) {
+      return 'You must provide a value';
+    }
+
+    if (pattern && !pattern.test(value)) {
+      return patternError;
+    }
+
+    if (typeof config.validate === 'function') {
+      return (await config.validate(value)) || 'You must provide a valid value';
+    }
+
+    return true;
+  }
 
   useKeypress(async (key, rl) => {
     // Ignore keypress while our prompt is doing other processing.
@@ -58,11 +69,8 @@ export default createPrompt<string, InputConfig>((config, done) => {
     if (isEnterKey(key)) {
       const answer = value || defaultValue;
       setStatus('loading');
-      let isValid =
-        required && !answer ? 'You must provide a value' : await validate(answer);
-      if (pattern && !pattern.test(answer)) {
-        isValid = patternError || 'Invalid input update';
-      }
+
+      const isValid = await validate(answer);
       if (isValid === true) {
         setValue(answer);
         setStatus('done');
@@ -75,7 +83,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
           // get cleared, forcing the user to re-enter the value instead of fixing it.
           rl.write(value);
         }
-        setError(isValid || 'You must provide a valid value');
+        setError(isValid);
         setStatus('idle');
       }
     } else if (isBackspaceKey(key) && !value) {
@@ -87,11 +95,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
       setValue(defaultValue);
     } else {
       setValue(rl.line);
-      if (pattern && !pattern.test(rl.line)) {
-        setError(patternError || 'Invalid input');
-      } else {
-        setError(undefined);
-      }
+      setError(undefined);
     }
   });
 
