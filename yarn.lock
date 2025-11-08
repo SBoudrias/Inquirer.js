@@ -7728,7 +7728,7 @@ __metadata:
     semver: "npm:^7.7.3"
     type-fest: "npm:^5.1.0"
   bin:
-    setup-packages: ./src/index.ts
+    setup-packages: ./src/bin.ts
   languageName: unknown
   linkType: soft
 
