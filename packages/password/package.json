@@ -52,26 +52,13 @@
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
-    ".": {
-      "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
-      },
-      "require": {
-        "types": "./dist/commonjs/index.d.ts",
-        "default": "./dist/commonjs/index.js"
-      }
-    }
+    ".": "./src/index.ts"
   },
-  "main": "./dist/commonjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/commonjs/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "attw": "attw --pack",
-    "tsc": "tshy"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@inquirer/ansi": "^1.0.2",
@@ -79,24 +66,21 @@
     "@inquirer/type": "^3.0.10"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.2",
     "@inquirer/testing": "^2.1.53",
     "@repo/tsconfig": "workspace:*",
-    "tshy": "^3.0.3"
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
   },
   "publishConfig": {
-    "access": "public"
-  },
-  "tshy": {
-    "exclude": [
-      "src/**/*.test.ts"
-    ],
+    "access": "public",
     "exports": {
       "./package.json": "./package.json",
-      ".": "./src/index.ts"
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     }
   },
   "peerDependencies": {

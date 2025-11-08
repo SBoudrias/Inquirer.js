@@ -24,7 +24,6 @@ function getCallSites() {
       result = callSitesWithoutCurrent;
       return callSitesWithoutCurrent;
     };
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     new Error().stack;
   } catch {
     // An error will occur if the Node flag --frozen-intrinsics is used.

@@ -5,20 +5,8 @@
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
-    ".": {
-      "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
-      },
-      "require": {
-        "types": "./dist/commonjs/index.d.ts",
-        "default": "./dist/commonjs/index.js"
-      }
-    }
+    ".": "./src/index.ts"
   },
-  "module": "./dist/esm/index.js",
-  "main": "./dist/commonjs/index.js",
-  "types": "./dist/commonjs/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/SBoudrias/Inquirer.js.git"
@@ -68,7 +56,14 @@
     "visual"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "exports": {
+      "./package.json": "./package.json",
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
   },
   "files": [
     "dist"
@@ -85,10 +80,9 @@
     "iconv-lite": "^0.7.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.2",
     "@repo/tsconfig": "workspace:*",
     "@types/chardet": "^1.0.0",
-    "tshy": "^3.0.3"
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "@types/node": ">=18"
@@ -98,17 +92,7 @@
       "optional": true
     }
   },
-  "tshy": {
-    "exclude": [
-      "src/**/*.test.ts"
-    ],
-    "exports": {
-      "./package.json": "./package.json",
-      ".": "./src/index.ts"
-    }
-  },
   "scripts": {
-    "tsc": "tshy",
-    "attw": "attw --pack"
+    "tsc": "tsc"
   }
 }

@@ -3,15 +3,10 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 import semver from 'semver';
 import { globby } from 'globby';
-import type { PackageJson as FestPackageJson, TsConfigJson } from 'type-fest';
+import type { PackageJson, TsConfigJson } from 'type-fest';
 import { fixPeerDeps } from './hoist-peer-dependencies.ts';
 
-type PackageJson = FestPackageJson & {
-  tshy?: {
-    dialects?: string[];
-    exclude?: string[];
-  };
-};
+type ExportDef = Exclude<PackageJson['exports'], undefined | null>;
 
 function readFile(filepath: string) {
   return fs.readFile(filepath, 'utf8');
@@ -74,7 +69,6 @@ for (const [pkgPath, pkg] of packages) {
   pkg.publishConfig ??= {};
   pkg.scripts ??= {};
   pkg.exports ??= {};
-  pkg.tshy ??= {};
   pkg.sideEffects ??= false;
 
   // Set min engines version.
@@ -111,20 +105,91 @@ for (const [pkgPath, pkg] of packages) {
       ? await readJSONFile<TsConfigJson>(path.join(dir, 'tsconfig.json'))
       : { extends: '@repo/tsconfig' };
 
-    pkg.files = ['dist'];
-    pkg.devDependencies['tshy'] = versions['tshy'];
-    pkg.tshy.exclude = ['src/**/*.test.ts'];
-    pkg.scripts['tsc'] = 'tshy';
+    tsconfig.include = ['src'];
+    tsconfig.exclude = ['src/**/*.test.ts'];
+    tsconfig.compilerOptions ??= {};
+    tsconfig.compilerOptions.outDir = 'dist';
 
-    // Only set attw if the package is using commonjs
-    const shouldUseAttw =
-      !Array.isArray(pkg.tshy.dialects) || pkg.tshy.dialects.includes('commonjs');
-    pkg.scripts['attw'] = shouldUseAttw ? 'attw --pack' : undefined;
-    if (shouldUseAttw) {
-      pkg.devDependencies['@arethetypeswrong/cli'] = versions['@arethetypeswrong/cli'];
+    pkg.files = ['dist'];
+
+    const exports: ExportDef =
+      pkg.exports && typeof pkg.exports === 'object' && !Array.isArray(pkg.exports)
+        ? pkg.exports
+        : {};
+
+    exports['./package.json'] = './package.json';
+    // Only add index.ts export if the file exists
+    if (await fileExists(path.join(dir, 'src/index.ts'))) {
+      exports['.'] = './src/index.ts';
+    }
+
+    pkg.exports = exports;
+
+    const publishExports: ExportDef = {};
+    for (const [exportName, value] of Object.entries(exports)) {
+      if (typeof value === 'string') {
+        const { dir, name, ext } = path.parse(value);
+        const distDir = dir.replace(/^\.\/src/, 'dist');
+
+        if (ext === '.ts') {
+          publishExports[exportName] = {
+            types: './' + path.join(distDir, name + '.d.ts'),
+            default: './' + path.join(distDir, name + '.js'),
+          };
+        } else {
+          publishExports[exportName] = value;
+        }
+      }
+    }
+    pkg.publishConfig['exports'] = publishExports;
+
+    // Build tsc command with chmod for bin files if needed
+    let tscCommand = 'tsc';
+
+    // Handle bin field in publishConfig
+    if (pkg.bin) {
+      if (!pkg.name) throw new Error(`Package name in ${pkgPath} is required`);
+
+      const publishBin: Record<string, string> = {};
+      const binEntries = typeof pkg.bin === 'string' ? { [pkg.name]: pkg.bin } : pkg.bin;
+
+      for (const [binName, binPath] of Object.entries(binEntries)) {
+        if (typeof binPath !== 'string') continue;
+
+        const { dir, name, ext } = path.parse(binPath);
+        const distDir = dir.replace(/^\.\/src/, 'dist');
+
+        if (ext === '.ts') {
+          publishBin[binName] = './' + path.join(distDir, name + '.js');
+        } else {
+          publishBin[binName] = binPath;
+        }
+      }
+
+      if (Object.values(publishBin).length > 0) {
+        tscCommand += ` && chmod +x ${Object.values(publishBin).join(' ')}`;
+        pkg.publishConfig['bin'] = publishBin;
+      }
+    }
+
+    pkg.scripts['tsc'] = tscCommand;
+    pkg.devDependencies['typescript'] = versions['typescript'];
+
+    // Remove legacy exports definitions
+    delete pkg.main;
+    delete pkg.types;
+    delete pkg.module;
+    delete pkg['tshy'];
+    delete pkg.scripts['attw'];
+    delete pkg.devDependencies['@arethetypeswrong/cli'];
+
+    if (tsconfig.extends === '@repo/tsconfig') {
+      pkg.devDependencies['@repo/tsconfig'] = 'workspace:*';
     }
 
     await writeJSONFile(path.join(dir, 'tsconfig.json'), tsconfig);
+  } else {
+    delete pkg.scripts['tsc'];
   }
 
   if (isPrivate) {
