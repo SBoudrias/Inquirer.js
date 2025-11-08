@@ -65,7 +65,7 @@
     "@inquirer/core": "^10.3.2",
     "@inquirer/prompts": "^7.10.1",
     "@inquirer/type": "^3.0.10",
-    "mute-stream": "^2.0.0",
+    "mute-stream": "^3.0.0",
     "run-async": "^4.0.6",
     "rxjs": "^7.8.2"
   },
