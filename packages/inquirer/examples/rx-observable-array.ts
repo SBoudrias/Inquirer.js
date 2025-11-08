@@ -1,46 +1,31 @@
-import { Observable, from } from 'rxjs';
+/**
+ * Rx observable array example
+ */
+
 import inquirer from 'inquirer';
+import { of } from 'rxjs';
 
-type IObs = Extract<Parameters<typeof inquirer.prompt>[0], Observable<unknown>>;
+const q1 = {
+  type: 'input',
+  name: 'first_name',
+  message: "What's your first name",
+} as const;
+const q2 = {
+  type: 'input',
+  name: 'last_name',
+  message: "What's your last name",
+} as const;
+const q3 = {
+  type: 'input',
+  name: 'phone',
+  message: "What's your phone number",
+} as const;
 
-const questions = [
-  {
-    type: 'input',
-    name: 'first_name',
-    message: "What's your first name",
-  },
-  {
-    type: 'input',
-    name: 'last_name',
-    message: "What's your last name",
-    default() {
-      return 'Doe';
-    },
-  },
-  {
-    type: 'input',
-    name: 'phone',
-    message: "What's your phone number",
-    validate(value: string) {
-      const pass = value.match(
-        /^([01])?[\s.-]?\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?)(?:\d+)?)?$/i,
-      );
-      if (pass) {
-        return true;
-      }
-
-      return 'Please enter a valid phone number';
-    },
-  },
-];
-
-const observable = from(questions) as IObs;
-
-inquirer.prompt(observable).ui.process.subscribe({
-  next: (ans) => {
+inquirer.prompt(of(q1, q2, q3)).ui.process.subscribe({
+  next: (ans: unknown) => {
     console.log('Answer is:', ans);
   },
-  error: (err) => {
+  error: (err: unknown) => {
     console.log('Error:', err);
   },
   complete: () => {

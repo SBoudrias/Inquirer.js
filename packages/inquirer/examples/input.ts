@@ -2,7 +2,7 @@
  * Input prompt example
  */
 
-import inquirer, { type DistinctQuestion } from 'inquirer';
+import inquirer from 'inquirer';
 
 const answers = await inquirer.prompt([
   {
@@ -45,6 +45,6 @@ const answers = await inquirer.prompt([
       return 'Please enter a valid phone number';
     },
   },
-] satisfies DistinctQuestion[]);
+]);
 
 console.log(JSON.stringify(answers, null, '  '));

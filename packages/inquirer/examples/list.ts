@@ -2,9 +2,9 @@
  * List prompt example
  */
 
-import inquirer, { type DistinctQuestion } from 'inquirer';
+import inquirer from 'inquirer';
 
-const answers = await inquirer.prompt([
+const answers = await inquirer.prompt<{ theme: string; size: string }>([
   {
     type: 'list',
     name: 'theme',
@@ -14,11 +14,7 @@ const answers = await inquirer.prompt([
       { name: 'Make a reservation', value: 'reservation' },
       new inquirer.Separator(),
       { name: 'Ask for opening hours', value: 'hours' },
-      {
-        name: 'Contact support',
-        value: 'support',
-        disabled: true,
-      },
+      { name: 'Contact support', value: 'support', disabled: true },
       { name: 'Talk to the receptionist', value: 'receptionist' },
     ],
   },
@@ -38,6 +34,6 @@ const answers = await inquirer.prompt([
       return val.toLowerCase();
     },
   },
-] satisfies DistinctQuestion[]);
+]);
 
 console.log(JSON.stringify(answers, null, '  '));

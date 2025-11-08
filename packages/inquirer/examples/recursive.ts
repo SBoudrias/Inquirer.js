@@ -23,10 +23,10 @@ async function ask() {
 
   output.push(String(answers.tvShow));
   if (answers.askAgain) {
-    await ask();
-  } else {
-    console.log('Your favorite TV Shows:', output.join(', '));
+    return await ask();
   }
+  return output;
 }
 
-await ask();
+const answers = await ask();
+console.log(JSON.stringify(answers, null, '  '));
