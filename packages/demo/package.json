@@ -52,22 +52,16 @@
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
-    ".": {
-      "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
-      }
-    }
+    ".": "./src/index.ts"
   },
-  "module": "./dist/esm/index.js",
   "bin": {
-    "inquirer-demo": "./dist/esm/index.js"
+    "inquirer-demo": "./src/index.ts"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "tsc": "tshy"
+    "tsc": "tsc && chmod +x ./dist/index.js"
   },
   "dependencies": {
     "@inquirer/core": "^10.3.2",
@@ -77,24 +71,22 @@
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
     "@types/node": "^24.10.0",
-    "tshy": "^3.0.3"
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
   },
   "publishConfig": {
-    "access": "public"
-  },
-  "tshy": {
-    "dialects": [
-      "esm"
-    ],
-    "exclude": [
-      "src/**/*.test.ts"
-    ],
+    "access": "public",
     "exports": {
       "./package.json": "./package.json",
-      ".": "./src/index.ts"
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "bin": {
+      "inquirer-demo": "./dist/index.js"
     }
   },
   "peerDependencies": {

@@ -122,23 +122,3 @@ jobs:
           yarn install
           yarn test
           cd -
-
-  Package:
-    name: Are the types wrong?
-    runs-on: ubuntu-latest
-    needs: Compile
-    steps:
-      - uses: actions/checkout@v5
-      - name: Cache turbo build setup
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable
-      - uses: actions/setup-node@v6
-        with:
-          node-version: latest
-          cache: 'yarn'
-      - run: yarn install --immutable --immutable-cache
-      - run: yarn turbo attw

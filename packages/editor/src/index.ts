@@ -1,4 +1,4 @@
-import { editAsync, IFileOptions } from '@inquirer/external-editor';
+import { editAsync, type IFileOptions } from '@inquirer/external-editor';
 import {
   createPrompt,
   useEffect,
