@@ -67,14 +67,13 @@
     "cli-width": "^4.1.0",
     "mute-stream": "^2.0.0",
     "signal-exit": "^4.1.0",
-    "wrap-ansi": "^6.2.0"
+    "wrap-ansi": "^9.0.2"
   },
   "devDependencies": {
     "@inquirer/testing": "^2.1.53",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
     "@types/node": "^24.10.0",
-    "@types/wrap-ansi": "^3.0.0",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {

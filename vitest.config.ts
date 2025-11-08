@@ -6,7 +6,6 @@ export default defineConfig({
     exclude: ['integration/**', ...defaultExclude],
     coverage: {
       provider: 'v8',
-      all: true,
       exclude: [
         ...coverageConfigDefaults.exclude,
         'tools/**',
