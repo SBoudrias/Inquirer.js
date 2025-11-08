@@ -3,11 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "bin": "./src/index.ts",
+  "bin": "./src/bin.ts",
   "dependencies": {
-    "@types/semver": "^7.7.1",
     "globby": "^15.0.0",
-    "semver": "^7.7.3",
+    "semver": "^7.7.3"
+  },
+  "devDependencies": {
+    "@types/semver": "^7.7.1",
     "type-fest": "^5.1.0"
   },
   "sideEffects": false,
