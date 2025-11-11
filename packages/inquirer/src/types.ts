@@ -69,7 +69,13 @@ type WidenAnswerLiterals<T> = T extends string
             : T extends Array<infer U>
               ? Array<WidenAnswerLiterals<U>>
               : T extends Record<string, unknown>
-                ? { [K in keyof Mutable<T>]: WidenAnswerLiterals<Mutable<T>[K]> }
+                ? {
+                    [K in keyof Mutable<T>]: Mutable<T>[K] extends infer V
+                      ? V extends undefined
+                        ? never
+                        : WidenAnswerLiterals<V>
+                      : never;
+                  }
                 : T;
 
 type MergeAnswerObjects<Base, Override> = Prettify<Omit<Base, keyof Override> & Override>;

@@ -124,6 +124,10 @@ export function createPromptModule<
   function promptModule<A extends Answers>(
     questions: PromptSession<A>,
     answers?: Partial<A>,
+  ): PromptReturnType<A>;
+  function promptModule<A extends Answers>(
+    questions: PromptSession<A>,
+    answers?: Partial<A>,
   ): PromptReturnType<A> {
     const runner = new PromptsRunner<A>(promptModule.prompts, opt);
 
