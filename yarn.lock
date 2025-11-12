@@ -796,6 +796,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@inquirer/prompts-i18n@workspace:packages/prompts-i18n":
+  version: 0.0.0-use.local
+  resolution: "@inquirer/prompts-i18n@workspace:packages/prompts-i18n"
+  dependencies:
+    "@inquirer/core": "npm:^11.0.0"
+    "@inquirer/prompts": "npm:^8.0.0"
+    "@inquirer/testing": "npm:^3.0.0"
+    "@repo/tsconfig": "workspace:*"
+    typescript: "npm:^5.9.3"
+  peerDependencies:
+    "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@inquirer/prompts@npm:^7.8.6":
   version: 7.10.1
   resolution: "@inquirer/prompts@npm:7.10.1"
