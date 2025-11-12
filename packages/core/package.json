@@ -78,7 +78,7 @@
     "@inquirer/figures": "^1.0.15",
     "@inquirer/type": "^3.0.10",
     "cli-width": "^4.1.0",
-    "mute-stream": "^3.0.0",
+    "mute-stream": "^2.0.0",
     "signal-exit": "^4.1.0",
     "wrap-ansi": "^6.2.0",
     "yoctocolors-cjs": "^2.1.3"
