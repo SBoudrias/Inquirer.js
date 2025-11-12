@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/number",
-  "version": "3.0.22",
+  "version": "3.0.23",
   "description": "Inquirer number prompt",
   "keywords": [
     "answer",
@@ -74,12 +74,12 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/core": "^10.3.1",
+    "@inquirer/core": "^10.3.2",
     "@inquirer/type": "^3.0.10"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
-    "@inquirer/testing": "^2.1.52",
+    "@inquirer/testing": "^2.1.53",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.3"
   },
