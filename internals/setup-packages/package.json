@@ -1,0 +1,19 @@
+{
+  "name": "setup-packages",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": "./src/bin.ts",
+  "dependencies": {
+    "globby": "^15.0.0",
+    "semver": "^7.7.3"
+  },
+  "devDependencies": {
+    "@types/semver": "^7.7.1",
+    "type-fest": "^5.2.0"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  }
+}

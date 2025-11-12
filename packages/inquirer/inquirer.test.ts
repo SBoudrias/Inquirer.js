@@ -709,6 +709,7 @@ describe('inquirer.prompt(...)', () => {
           answer: 'answer from running',
           when(answers) {
             expect(answers).toEqual({ q1: 'bar' });
+            expectTypeOf(answers).not.toBeAny();
             expectTypeOf(answers).toEqualTypeOf<Partial<{ q1: any; q2: any }>>();
 
             goesInWhen = true;
@@ -981,6 +982,7 @@ describe('inquirer.prompt(...)', () => {
         prefilled: true,
       });
       expectTypeOf(answers).toEqualTypeOf<{ q1: any; prefilled: boolean }>();
+      expectTypeOf(answers).not.toBeAny();
     });
 
     it('should not run prompt if answer exists for question', async () => {
@@ -1000,6 +1002,8 @@ describe('inquirer.prompt(...)', () => {
       );
 
       expect(answers).toEqual({ prefilled: 'prefilled' });
+      expectTypeOf(answers).not.toBeAny();
+      expectTypeOf(answers).toEqualTypeOf<{ prefilled: string }>();
     });
 
     it('should not run prompt if nested answer exists for question', async () => {
@@ -1020,8 +1024,10 @@ describe('inquirer.prompt(...)', () => {
         },
       );
       expect(answers.prefilled.nested).toEqual('prefilled');
-      // @ts-expect-error TODO fix types around nested types.
+      expectTypeOf(answers).not.toBeAny();
       expectTypeOf(answers).toEqualTypeOf<{ prefilled: { nested: string } }>();
+      expectTypeOf(answers.prefilled).not.toBeAny();
+      expectTypeOf(answers.prefilled).toEqualTypeOf<{ nested: string }>();
     });
 
     it('should run prompt if answer exists for question and askAnswered is set', async () => {
@@ -1038,6 +1044,8 @@ describe('inquirer.prompt(...)', () => {
         { prefilled: 'prefilled' },
       );
       expect(answers).toEqual({ prefilled: 'bar' });
+      expectTypeOf(answers.prefilled).not.toBeAny();
+      expectTypeOf(answers.prefilled).toEqualTypeOf<string>();
     });
 
     it('should run prompt if nested answer exists for question and askAnswered is set', async () => {
@@ -1056,8 +1064,124 @@ describe('inquirer.prompt(...)', () => {
         },
       );
       expect(answers).toEqual({ prefilled: { nested: 'newValue' } });
-      // @ts-expect-error TODO fix types around nested types.
+      expectTypeOf(answers.prefilled.nested).toEqualTypeOf<string>();
       expectTypeOf(answers).toEqualTypeOf<{ prefilled: { nested: string } }>();
+      expectTypeOf(answers.prefilled).toEqualTypeOf<{ nested: string }>();
+      expectTypeOf(answers.prefilled).not.toBeAny();
+    });
+
+    describe('Partial<T> prefilled answers (issue #1888)', () => {
+      it('should accept Partial-like objects and strip undefined from types', async () => {
+        // Use a partial object without explicit Partial<T> type annotation
+        const partial = {
+          displayName: 'Custom Widget',
+          technology: 'vue',
+        };
+
+        const result = await inquirer.prompt(
+          [
+            {
+              name: 'displayName',
+              type: 'stub',
+              message: 'Widget Display Name',
+              answer: 'My Widget',
+            },
+            {
+              name: 'technology',
+              type: 'stub',
+              message: 'Technology',
+              answer: 'react',
+            },
+            {
+              name: 'iconUrl',
+              type: 'stub',
+              message: 'Icon URL',
+              answer: 'https://example.com/icon.png',
+            },
+          ],
+          partial,
+        );
+
+        // Runtime behavior: prefilled values are used
+        expect(result.displayName).toEqual('Custom Widget');
+        expect(result.technology).toEqual('vue');
+        expect(result.iconUrl).toEqual('https://example.com/icon.png');
+
+        // Type checks: result properties are string, not string | undefined
+        expectTypeOf(result.displayName).toEqualTypeOf<string>();
+        expectTypeOf(result.technology).toEqualTypeOf<string>();
+        expectTypeOf(result).not.toBeAny();
+      });
+
+      it('should handle prefilled answers with some fields undefined', async () => {
+        const partial = {
+          field1: 'value1',
+          field2: undefined as string | undefined,
+        };
+
+        const result = await inquirer.prompt(
+          [
+            {
+              name: 'field1',
+              type: 'stub',
+              message: 'Field 1',
+              answer: 'default1',
+            },
+            {
+              name: 'field2',
+              type: 'stub',
+              message: 'Field 2',
+              answer: 'default2',
+            },
+          ],
+          partial,
+        );
+
+        // field1 should be prefilled, field2 should be prompted
+        expect(result.field1).toEqual('value1');
+        expect(result.field2).toEqual('default2');
+        expectTypeOf(result.field1).toEqualTypeOf<string>();
+        expectTypeOf(result.field2).toEqualTypeOf<string>();
+        expectTypeOf(result).not.toBeAny();
+      });
+
+      it('should handle multiple prefilled fields of same type', async () => {
+        const partial = {
+          name: 'Custom Name',
+          description: 'Custom Description',
+        };
+
+        const result = await inquirer.prompt(
+          [
+            {
+              name: 'name',
+              type: 'stub',
+              message: 'Name',
+              answer: 'Default Name',
+            },
+            {
+              name: 'description',
+              type: 'stub',
+              message: 'Description',
+              answer: 'Default Description',
+            },
+            {
+              name: 'email',
+              type: 'stub',
+              message: 'Email',
+              answer: 'default@example.com',
+            },
+          ],
+          partial,
+        );
+
+        expect(result.name).toEqual('Custom Name');
+        expect(result.description).toEqual('Custom Description');
+        expect(result.email).toEqual('default@example.com');
+        expectTypeOf(result.name).toEqualTypeOf<string>();
+        expectTypeOf(result.description).toEqualTypeOf<string>();
+        expectTypeOf(result).not.toBeAny();
+      });
     });
   });
 
@@ -1268,9 +1392,9 @@ describe('Non-TTY checks', () => {
     await expect(promise).rejects.toHaveProperty('isTtyError', true);
   });
 
-  const itSkipWindows =
-    os.type() === 'Windows_NT' || process.env['GITHUB_ACTIONS'] ? it.skip : it;
-  itSkipWindows('No exception when using tty other than process.stdin', async () => {
+  it.skipIf(
+    os.type() === 'Windows_NT' || process.env['GITHUB_ACTIONS'] || !process.stdout.isTTY,
+  )('No exception when using tty other than process.stdin', async () => {
     const input = new tty.ReadStream(fs.openSync('/dev/tty', 'r+'));
 
     // Uses manually opened tty as input instead of process.stdin

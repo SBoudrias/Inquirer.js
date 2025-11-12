@@ -9,7 +9,7 @@ const answers = await inquirer.prompt([
     type: 'input',
     name: 'api_key',
     message: 'Please enter a valid API key.',
-    validate(input) {
+    validate(input: string) {
       if (/([\da-f]{40})/g.test(input)) {
         return true;
       }

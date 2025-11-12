@@ -418,25 +418,19 @@ export async function setupIsolatedEnvironment(
     }
   }
 
-  // Add resolutions/overrides for transitive workspace dependencies
+  // Add resolutions/overrides for all workspace dependencies
   // Yarn uses 'resolutions', npm uses 'overrides'
+  // Include direct dependencies to ensure consistent versions across the entire dependency tree
   pkg.resolutions ??= {};
   pkg.overrides ??= {};
   for (const [depName, tarballPath] of packMap) {
-    // Don't add resolution if it's already a direct dependency
-    const isDirectDep =
-      (pkg.dependencies && pkg.dependencies[depName]) ||
-      (pkg.devDependencies && pkg.devDependencies[depName]);
-
-    if (!isDirectDep) {
-      const fileUrl = `file:${tarballPath}`;
-      pkg.resolutions[depName] = fileUrl;
-      pkg.overrides[depName] = fileUrl;
-      if (verbose) {
-        console.error(
-          `[isolate-monorepo-package]   Added resolution/override for ${depName}`,
-        );
-      }
+    const fileUrl = `file:${tarballPath}`;
+    pkg.resolutions[depName] = fileUrl;
+    pkg.overrides[depName] = fileUrl;
+    if (verbose) {
+      console.error(
+        `[isolate-monorepo-package]   Added resolution/override for ${depName}`,
+      );
     }
   }
 

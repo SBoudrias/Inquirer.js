@@ -2,7 +2,7 @@
  * Editor prompt example
  */
 
-import inquirer, { type DistinctQuestion } from 'inquirer';
+import inquirer from 'inquirer';
 
 const answers = await inquirer.prompt([
   {
@@ -25,6 +25,6 @@ const answers = await inquirer.prompt([
     default: 'Hello, World!',
     waitForUserInput: false,
   },
-] satisfies DistinctQuestion[]);
+]);
 
 console.log(JSON.stringify(answers, null, '  '));

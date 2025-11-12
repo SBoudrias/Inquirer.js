@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/select",
-  "version": "4.4.0",
+  "version": "4.4.1",
   "description": "Inquirer select/list prompt",
   "keywords": [
     "answer",
@@ -74,15 +74,15 @@
     "tsc": "tshy"
   },
   "dependencies": {
-    "@inquirer/ansi": "^1.0.1",
-    "@inquirer/core": "^10.3.0",
-    "@inquirer/figures": "^1.0.14",
-    "@inquirer/type": "^3.0.9",
+    "@inquirer/ansi": "^1.0.2",
+    "@inquirer/core": "^10.3.1",
+    "@inquirer/figures": "^1.0.15",
+    "@inquirer/type": "^3.0.10",
     "yoctocolors-cjs": "^2.1.3"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
-    "@inquirer/testing": "^2.1.51",
+    "@inquirer/testing": "^2.1.52",
     "@repo/tsconfig": "workspace:*",
     "tshy": "^3.0.3"
   },

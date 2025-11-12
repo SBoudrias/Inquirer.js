@@ -11,6 +11,7 @@
     "@inquirer/prompts": "workspace:*",
     "inquirer": "workspace:*"
   },
+  "sideEffects": false,
   "engines": {
     "node": ">=18"
   }

@@ -4,16 +4,6 @@ Interactive free text input component for command line interfaces. Supports vali
 
 ![Input prompt](https://cdn.rawgit.com/SBoudrias/Inquirer.js/28ae8337ba51d93e359ef4f7ee24e79b69898962/assets/screenshots/input.svg)
 
-# Special Thanks
-
-<div align="center" markdown="1">
-
-[![Graphite](https://github.com/user-attachments/assets/53db40ca-2254-481a-a094-6597f8716e29)](https://graphite.dev/?utm_source=github&utm_medium=repo&utm_campaign=inquirerjs)<br>
-
-### [Graphite is the AI developer productivity platform helping teams on GitHub ship higher quality software, faster](https://graphite.dev/?utm_source=github&utm_medium=repo&utm_campaign=inquirerjs)
-
-</div>
-
 # Installation
 
 <table>
@@ -70,15 +60,17 @@ const answer = await input({ message: 'Enter your name' });
 
 ## Options
 
-| Property    | Type                                                        | Required | Description                                                                                                                                                                                                             |
-| ----------- | ----------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| message     | `string`                                                    | yes      | The question to ask                                                                                                                                                                                                     |
-| default     | `string`                                                    | no       | Default value if no answer is provided; see the prefill option below for governing it's behaviour.                                                                                                                      |
-| prefill     | `'tab' \| 'editable'`                                       | no       | Defaults to `'tab'`. If set to `'tab'`, pressing `backspace` will clear the default and pressing `tab` will inline the value for edits; If set to `'editable'`, the default value will already be inlined to edit.      |
-| required    | `boolean`                                                   | no       | Defaults to `false`. If set to true, `undefined` (empty) will not be accepted for this.                                                                                                                                 |
-| transformer | `(string, { isFinal: boolean }) => string`                  | no       | Transform/Format the raw value entered by the user. Once the prompt is completed, `isFinal` will be `true`. This function is purely visual, modify the answer in your code if needed.                                   |
-| validate    | `string => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the filtered answered content. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
-| theme       | [See Theming](#Theming)                                     | no       | Customize look of the prompt.                                                                                                                                                                                           |
+| Property     | Type                                                        | Required | Description                                                                                                                                                                                                             |
+| ------------ | ----------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message      | `string`                                                    | yes      | The question to ask                                                                                                                                                                                                     |
+| default      | `string`                                                    | no       | Default value if no answer is provided; see the prefill option below for governing it's behaviour.                                                                                                                      |
+| prefill      | `'tab' \| 'editable'`                                       | no       | Defaults to `'tab'`. If set to `'tab'`, pressing `backspace` will clear the default and pressing `tab` will inline the value for edits; If set to `'editable'`, the default value will already be inlined to edit.      |
+| required     | `boolean`                                                   | no       | Defaults to `false`. If set to true, `undefined` (empty) will not be accepted for this.                                                                                                                                 |
+| transformer  | `(string, { isFinal: boolean }) => string`                  | no       | Transform/Format the raw value entered by the user. Once the prompt is completed, `isFinal` will be `true`. This function is purely visual, modify the answer in your code if needed.                                   |
+| validate     | `string => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the filtered answered content. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
+| pattern      | `RegExp`                                                    | no       | Regular expression to validate the input against. If the input doesn't match the pattern, validation will fail with the error message specified in `patternError`.                                                      |
+| patternError | `string`                                                    | no       | Error message to display when the input doesn't match the `pattern`. Defaults to `'Invalid input'`.                                                                                                                     |
+| theme        | [See Theming](#Theming)                                     | no       | Customize look of the prompt.                                                                                                                                                                                           |
 
 ## Theming
 
