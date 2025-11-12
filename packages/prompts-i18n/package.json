@@ -1,0 +1,124 @@
+{
+  "name": "@inquirer/prompts-i18n",
+  "version": "0.0.0",
+  "description": "Internationalized Inquirer prompts - drop-in package with i18n support",
+  "keywords": [
+    "answer",
+    "answers",
+    "ask",
+    "base",
+    "cli",
+    "command",
+    "command-line",
+    "confirm",
+    "enquirer",
+    "generate",
+    "generator",
+    "hyper",
+    "input",
+    "inquire",
+    "inquirer",
+    "interface",
+    "iterm",
+    "javascript",
+    "menu",
+    "node",
+    "nodejs",
+    "prompt",
+    "promptly",
+    "prompts",
+    "question",
+    "readline",
+    "scaffold",
+    "scaffolder",
+    "scaffolding",
+    "stdin",
+    "stdout",
+    "terminal",
+    "tty",
+    "ui",
+    "yeoman",
+    "yo",
+    "zsh",
+    "internationalization",
+    "i18n",
+    "localization",
+    "l10n",
+    "types",
+    "typescript"
+  ],
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/prompts-i18n/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
+  "license": "MIT",
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./src/index.ts",
+    "./en": "./src/locales/en.ts",
+    "./fr": "./src/locales/fr.ts",
+    "./zh": "./src/locales/zh.ts",
+    "./pr": "./src/locales/pr.ts",
+    "./es": "./src/locales/es.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@inquirer/core": "^10.3.0",
+    "@inquirer/prompts": "^7.10.0"
+  },
+  "devDependencies": {
+    "@inquirer/testing": "^2.1.52",
+    "@repo/tsconfig": "workspace:*",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
+  },
+  "peerDependencies": {
+    "@types/node": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "@types/node": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      "./package.json": "./package.json",
+      "./en": {
+        "types": "./dist/locales/en.d.ts",
+        "default": "./dist/locales/en.js"
+      },
+      "./fr": {
+        "types": "./dist/locales/fr.d.ts",
+        "default": "./dist/locales/fr.js"
+      },
+      "./zh": {
+        "types": "./dist/locales/zh.d.ts",
+        "default": "./dist/locales/zh.js"
+      },
+      "./pr": {
+        "types": "./dist/locales/pr.d.ts",
+        "default": "./dist/locales/pr.js"
+      },
+      "./es": {
+        "types": "./dist/locales/es.d.ts",
+        "default": "./dist/locales/es.js"
+      },
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "scripts": {
+    "tsc": "tsc"
+  }
+}
