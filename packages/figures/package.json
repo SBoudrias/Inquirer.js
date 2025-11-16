@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/figures",
-  "version": "1.0.15",
+  "version": "2.0.0",
   "description": "Vendored version of figures, for CJS compatibility",
   "keywords": [
     "answer",

@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/core",
-  "version": "10.3.2",
+  "version": "11.0.0",
   "description": "Core Inquirer prompt API",
   "keywords": [
     "answer",
@@ -61,16 +61,16 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/ansi": "^1.0.2",
-    "@inquirer/figures": "^1.0.15",
-    "@inquirer/type": "^3.0.10",
+    "@inquirer/ansi": "^2.0.0",
+    "@inquirer/figures": "^2.0.0",
+    "@inquirer/type": "^4.0.0",
     "cli-width": "^4.1.0",
     "mute-stream": "^3.0.0",
     "signal-exit": "^4.1.0",
     "wrap-ansi": "^9.0.2"
   },
   "devDependencies": {
-    "@inquirer/testing": "^2.1.53",
+    "@inquirer/testing": "^3.0.0",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
     "@types/node": "^24.10.1",
