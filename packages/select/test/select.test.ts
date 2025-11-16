@@ -922,14 +922,13 @@ describe('select prompt', () => {
     await expect(answer).resolves.toEqual('US');
   });
 
-  describe('theme: helpMode', () => {
+  describe('theme: keysHelpTip', () => {
     const scrollTip = '↑↓ navigate • ⏎ select';
 
-    it('helpMode: auto', async () => {
+    it('keysHelpTip: show help by default', async () => {
       const { answer, events, getScreen } = await render(select, {
         message: 'Select a number',
         choices: numberedChoices,
-        theme: { helpMode: 'auto' },
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
@@ -947,134 +946,61 @@ describe('select prompt', () => {
       expect(getScreen()).toContain(scrollTip);
 
       events.keypress('down');
-      expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number
-          1
-        ❯ 2
-          3
-          4
-          5
-          6
-          7
-
-        ↑↓ navigate • ⏎ select"
-      `);
-      expect(getScreen()).toContain(scrollTip);
-
       events.keypress('enter');
       await expect(answer).resolves.toEqual(2);
       expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
     });
 
-    it('helpMode: always', async () => {
+    it('keysHelpTip: hide help when returning undefined', async () => {
       const { answer, events, getScreen } = await render(select, {
         message: 'Select a number',
         choices: numberedChoices,
-        theme: { helpMode: 'always' },
-      });
-
-      expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number
-        ❯ 1
-          2
-          3
-          4
-          5
-          6
-          7
-
-        ↑↓ navigate • ⏎ select"
-      `);
-      expect(getScreen()).toContain(scrollTip);
-
-      events.keypress('down');
-      expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number
-          1
-        ❯ 2
-          3
-          4
-          5
-          6
-          7
-
-        ↑↓ navigate • ⏎ select"
-      `);
-      expect(getScreen()).toContain(scrollTip);
-
-      events.keypress('enter');
-      await expect(answer).resolves.toEqual(2);
-      expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
-    });
-
-    it('helpMode: never', async () => {
-      const { answer, events, getScreen } = await render(select, {
-        message: 'Select a number',
-        choices: numberedChoices,
-        theme: { helpMode: 'never' },
-      });
-
-      expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number
-        ❯ 1
-          2
-          3
-          4
-          5
-          6
-          7"
-      `);
-      expect(getScreen()).not.toContain(scrollTip);
-
-      events.keypress('down');
-      expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a number
-          1
-        ❯ 2
-          3
-          4
-          5
-          6
-          7"
-      `);
-      expect(getScreen()).not.toContain(scrollTip);
-
-      events.keypress('enter');
-      await expect(answer).resolves.toEqual(2);
-      expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
-    });
-
-    it('localized simple navigation', async () => {
-      const { answer, events, getScreen } = await render(select, {
-        message: 'Select a letter',
-        choices: ['a', 'b'],
-        theme: { helpMode: 'always' },
-        instructions: {
-          navigation: 'Utilisez les flèches',
-          pager: 'Utilisez les flèches pour révéler plus de choix',
+        theme: {
+          style: {
+            keysHelpTip: () => undefined,
+          },
         },
       });
 
       expect(getScreen()).toMatchInlineSnapshot(`
-        "? Select a letter
-        ❯ a
-          b
-
-        Utilisez les flèches"
+        "? Select a number
+        ❯ 1
+          2
+          3
+          4
+          5
+          6
+          7"
       `);
+      expect(getScreen()).not.toContain(scrollTip);
+
+      events.keypress('down');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+          1
+        ❯ 2
+          3
+          4
+          5
+          6
+          7"
+      `);
+      expect(getScreen()).not.toContain(scrollTip);
 
       events.keypress('enter');
-      await expect(answer).resolves.toEqual('a');
+      await expect(answer).resolves.toEqual(2);
+      expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
     });
 
-    it('localized paged navigation', async () => {
+    it('keysHelpTip: custom help text', async () => {
+      const customHelpText = 'Utilisez les flèches pour révéler plus de choix';
       const { answer, events, getScreen } = await render(select, {
         message: 'Select a number',
         choices: numberedChoices,
-        theme: { helpMode: 'always' },
-        instructions: {
-          navigation: 'Utilisez les flèches',
-          pager: 'Utilisez les flèches pour révéler plus de choix',
+        theme: {
+          style: {
+            keysHelpTip: () => customHelpText,
+          },
         },
       });
 
@@ -1090,9 +1016,12 @@ describe('select prompt', () => {
 
         Utilisez les flèches pour révéler plus de choix"
       `);
+      expect(getScreen()).toContain(customHelpText);
 
+      events.keypress('down');
       events.keypress('enter');
-      await expect(answer).resolves.toEqual(1);
+      await expect(answer).resolves.toEqual(2);
+      expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
     });
   });
 

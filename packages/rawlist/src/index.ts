@@ -14,7 +14,7 @@ import {
   ValidationError,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
-import colors from 'yoctocolors-cjs';
+import { styleText } from 'node:util';
 
 const numberRegex = /\d+/;
 
@@ -134,7 +134,7 @@ export default createPrompt(
         } else if (value === '') {
           setError('Please input a value');
         } else {
-          setError(`"${colors.red(value)}" isn't an available option`);
+          setError(`"${styleText('red', value)}" isn't an available option`);
         }
       } else if (isUpKey(key) || isDownKey(key)) {
         rl.clearLine(0);

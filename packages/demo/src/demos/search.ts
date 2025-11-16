@@ -56,7 +56,7 @@ const demo = async () => {
 
       const files = await fs.readdir(dirPath, { withFileTypes: true });
       return files
-        .sort((a, b) => {
+        .toSorted((a, b) => {
           if (a.isDirectory() === b.isDirectory()) {
             return a.name.localeCompare(b.name);
           }

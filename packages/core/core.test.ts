@@ -16,14 +16,13 @@ import {
   isSpaceKey,
   Separator,
   AbortPromptError,
-  CancelPromptError,
   ValidationError,
   HookError,
   type KeypressEvent,
   makeTheme,
   type Status,
 } from './src/index.ts';
-import { cursorHide, cursorShow, eraseLines } from '@inquirer/ansi';
+import { cursorShow, eraseLines } from '@inquirer/ansi';
 
 describe('createPrompt()', () => {
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
@@ -463,34 +462,6 @@ describe('createPrompt()', () => {
     await expect(answer).resolves.toEqual('');
   });
 
-  it('allow cancelling the prompt', async () => {
-    const Prompt = (config: { message: string }, done: (value: string) => void) => {
-      useKeypress((key: KeypressEvent) => {
-        if (isEnterKey(key)) {
-          done('done');
-        }
-      });
-
-      return `${config.message} ${cursorHide}`;
-    };
-
-    const prompt = createPrompt(Prompt);
-    const { answer, events, getFullOutput } = await render(prompt, {
-      message: 'Question',
-    });
-
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
-    answer.cancel();
-    events.keypress('enter');
-
-    await expect(answer).rejects.toThrow(CancelPromptError);
-
-    const output = getFullOutput();
-    expect(output).toContain(cursorHide);
-    expect(output).toContain(cursorShow);
-    expect(output.lastIndexOf(cursorHide)).toBeLessThan(output.lastIndexOf(cursorShow));
-  });
-
   it('allow cleaning the prompt after completion', async () => {
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
       useKeypress((key: KeypressEvent) => {
@@ -584,30 +555,6 @@ describe('createPrompt()', () => {
 
     expect(warningSpy).not.toHaveBeenCalled();
   });
-});
-
-it('allow cancelling the prompt multiple times', async () => {
-  const Prompt = (config: { message: string }, done: (value: string) => void) => {
-    useKeypress((key: KeypressEvent) => {
-      if (isEnterKey(key)) {
-        done('done');
-      }
-    });
-
-    return config.message;
-  };
-
-  const prompt = createPrompt(Prompt);
-  const { answer, events } = await render(prompt, { message: 'Question' });
-
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
-  answer.cancel();
-
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
-  answer.cancel();
-  events.keypress('enter');
-
-  await expect(answer).rejects.toThrow(CancelPromptError);
 });
 
 it('allow aborting the prompt using signals', async () => {

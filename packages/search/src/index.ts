@@ -15,7 +15,7 @@ import {
   type Theme,
   type Status,
 } from '@inquirer/core';
-import colors from 'yoctocolors-cjs';
+import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 import type { PartialDeep } from '@inquirer/type';
 
@@ -27,22 +27,19 @@ type SearchTheme = {
     description: (text: string) => string;
     keysHelpTip: (keys: [key: string, action: string][]) => string | undefined;
   };
-  /** @deprecated Use theme.style.keysHelpTip instead */
-  helpMode: 'always' | 'never' | 'auto';
 };
 
 const searchTheme: SearchTheme = {
   icon: { cursor: figures.pointer },
   style: {
-    disabled: (text: string) => colors.dim(`- ${text}`),
-    searchTerm: (text: string) => colors.cyan(text),
-    description: (text: string) => colors.cyan(text),
+    disabled: (text: string) => styleText('dim', `- ${text}`),
+    searchTerm: (text: string) => styleText('cyan', text),
+    description: (text: string) => styleText('cyan', text),
     keysHelpTip: (keys: [string, string][]) =>
       keys
-        .map(([key, action]) => `${colors.bold(key)} ${colors.dim(action)}`)
-        .join(colors.dim(' • ')),
+        .map(([key, action]) => `${styleText('bold', key)} ${styleText('dim', action)}`)
+        .join(styleText('dim', ' • ')),
   },
-  helpMode: 'always',
 };
 
 type Choice<Value> = {
@@ -79,11 +76,6 @@ type SearchConfig<
         | Promise<ReadonlyArray<Choice<Value> | Separator>>;
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
-  /** @deprecated Use theme.style.keysHelpTip instead */
-  instructions?: {
-    navigation: string;
-    pager: string;
-  };
   theme?: PartialDeep<Theme<SearchTheme>>;
 };
 
@@ -227,21 +219,10 @@ export default createPrompt(
 
     const message = theme.style.message(config.message, status);
 
-    let helpLine: string | undefined;
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
-    if (theme.helpMode !== 'never') {
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
-      if (config.instructions) {
-        // eslint-disable-next-line @typescript-eslint/no-deprecated
-        const { pager, navigation } = config.instructions;
-        helpLine = theme.style.help(searchResults.length > pageSize ? pager : navigation);
-      } else {
-        helpLine = theme.style.keysHelpTip([
-          ['↑↓', 'navigate'],
-          ['⏎', 'select'],
-        ]);
-      }
-    }
+    const helpLine = theme.style.keysHelpTip([
+      ['↑↓', 'navigate'],
+      ['⏎', 'select'],
+    ]);
 
     const page = usePagination({
       items: searchResults,

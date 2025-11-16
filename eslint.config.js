@@ -33,6 +33,7 @@ export default defineConfig(
     },
     rules: {
       'n/hashbang': 'off',
+      'n/no-unpublished-bin': 'off',
       'unicorn/consistent-function-scoping': 'off',
       'unicorn/filename-case': 'off',
       'unicorn/no-array-callback-reference': 'off',
@@ -60,14 +61,6 @@ export default defineConfig(
       '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-unnecessary-type-parameters': 'off',
       'n/no-missing-import': ['error', { ignoreTypeImport: true }],
-      'n/no-unpublished-bin': [
-        'error',
-        {
-          convertPath: {
-            'src/bin.ts': ['^src/bin.ts$', 'dist/bin.js'],
-          },
-        },
-      ],
     },
   },
   {
@@ -101,23 +94,18 @@ export default defineConfig(
       'n/no-unsupported-features/node-builtins': [
         'error',
         {
-          version: '>=22.16.0',
+          version: '^20.12.0',
         },
       ],
     },
   },
   {
-    files: [
-      'tools/**',
-      'integration/**',
-      'packages/inquirer/examples/**',
-      'packages/demo/**',
-    ],
+    files: ['tools/**', 'integration/**', 'packages/*/examples/**', 'packages/demo/**'],
     rules: {
       'n/no-unsupported-features/node-builtins': [
         'error',
         {
-          version: '>=22.16.0',
+          version: '^24.0.0',
         },
       ],
     },

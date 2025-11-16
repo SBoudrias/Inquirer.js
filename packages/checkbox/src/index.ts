@@ -19,7 +19,7 @@ import {
 } from '@inquirer/core';
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
-import colors from 'yoctocolors-cjs';
+import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 
 type CheckboxTheme = {
@@ -37,8 +37,6 @@ type CheckboxTheme = {
     description: (text: string) => string;
     keysHelpTip: (keys: [key: string, action: string][]) => string | undefined;
   };
-  /** @deprecated Use theme.style.keysHelpTip instead */
-  helpMode: 'always' | 'never' | 'auto';
   keybindings: ReadonlyArray<Keybinding>;
 };
 
@@ -49,21 +47,20 @@ type CheckboxShortcuts = {
 
 const checkboxTheme: CheckboxTheme = {
   icon: {
-    checked: colors.green(figures.circleFilled),
+    checked: styleText('green', figures.circleFilled),
     unchecked: figures.circle,
     cursor: figures.pointer,
   },
   style: {
-    disabledChoice: (text: string) => colors.dim(`- ${text}`),
+    disabledChoice: (text: string) => styleText('dim', `- ${text}`),
     renderSelectedChoices: (selectedChoices) =>
       selectedChoices.map((choice) => choice.short).join(', '),
-    description: (text: string) => colors.cyan(text),
+    description: (text: string) => styleText('cyan', text),
     keysHelpTip: (keys: [string, string][]) =>
       keys
-        .map(([key, action]) => `${colors.bold(key)} ${colors.dim(action)}`)
-        .join(colors.dim(' • ')),
+        .map(([key, action]) => `${styleText('bold', key)} ${styleText('dim', action)}`)
+        .join(styleText('dim', ' • ')),
   },
-  helpMode: 'always',
   keybindings: [],
 };
 
@@ -97,8 +94,6 @@ type CheckboxConfig<
   message: string;
   prefix?: string;
   pageSize?: number;
-  /** @deprecated Use theme.style.keysHelpTip instead */
-  instructions?: string | boolean;
   choices: ChoicesObject extends ReadonlyArray<string | Separator>
     ? ChoicesObject
     : ReadonlyArray<Choice<Value> | Separator>;
@@ -168,14 +163,7 @@ function normalizeChoices<Value>(
 
 export default createPrompt(
   <Value>(config: CheckboxConfig<Value>, done: (value: Array<Value>) => void) => {
-    const {
-      // eslint-disable-next-line @typescript-eslint/no-deprecated
-      instructions,
-      pageSize = 7,
-      loop = true,
-      required,
-      validate = () => true,
-    } = config;
+    const { pageSize = 7, loop = true, required, validate = () => true } = config;
     const shortcuts = { all: 'a', invert: 'i', ...config.shortcuts };
     const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme);
     const { keybindings } = theme;
@@ -294,23 +282,15 @@ export default createPrompt(
       return [prefix, message, answer].filter(Boolean).join(' ');
     }
 
-    let helpLine: string | undefined;
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
-    if (theme.helpMode !== 'never' && instructions !== false) {
-      if (typeof instructions === 'string') {
-        helpLine = instructions;
-      } else {
-        const keys: [string, string][] = [
-          ['↑↓', 'navigate'],
-          ['space', 'select'],
-        ];
-        if (shortcuts.all) keys.push([shortcuts.all, 'all']);
-        if (shortcuts.invert) keys.push([shortcuts.invert, 'invert']);
-        keys.push(['⏎', 'submit']);
+    const keys: [string, string][] = [
+      ['↑↓', 'navigate'],
+      ['space', 'select'],
+    ];
+    if (shortcuts.all) keys.push([shortcuts.all, 'all']);
+    if (shortcuts.invert) keys.push([shortcuts.invert, 'invert']);
+    keys.push(['⏎', 'submit']);
 
-        helpLine = theme.style.keysHelpTip(keys);
-      }
-    }
+    const helpLine = theme.style.keysHelpTip(keys);
 
     const lines = [
       [prefix, message].filter(Boolean).join(' '),
