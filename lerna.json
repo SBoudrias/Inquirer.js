@@ -1,6 +1,6 @@
 {
-  "$schema": "node_modules/@lerna-lite/cli/schemas/lerna-schema.json",
   "npmClient": "yarn",
   "version": "independent",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "syncWorkspaceLock": true
 }
