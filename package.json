@@ -72,6 +72,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@lerna-lite/cli": "^4.9.2",
+    "@lerna-lite/publish": "^4.9.2",
     "@repo/tsconfig": "workspace:*",
     "@types/node": "^24.10.1",
     "@vitest/coverage-v8": "^3.2.4",
@@ -83,7 +85,6 @@
     "globals": "^16.5.0",
     "husky": "^9.1.7",
     "isolate-monorepo-package": "workspace:*",
-    "lerna": "^9.0.1",
     "nano-staged": "^0.8.0",
     "oxlint": "^1.28.0",
     "prettier": "^3.6.2",
