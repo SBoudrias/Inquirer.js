@@ -374,4 +374,118 @@ describe('input prompt', () => {
     await expect(answer).resolves.toEqual('123');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a number 123"`);
   });
+
+  it('handle IME composition for Chinese characters (issue #1901)', async () => {
+    const {
+      answer,
+      events,
+      getScreen,
+      input: inputStream,
+    } = await render(input, {
+      message: 'Enter Chinese text',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter Chinese text"`);
+
+    // Simulate typing "nihao" (你好) using IME
+    // During IME composition, the user types "nihao" in pinyin
+    // which gets converted to Chinese characters "你好"
+
+    // Step 1: User types 'n' - starts composition
+    events.type('n');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter Chinese text n"`);
+
+    // Step 2: User types 'i' - continues composition "ni"
+    events.type('i');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter Chinese text ni"`);
+
+    // Step 3: User selects character from IME - composition updates to "你"
+    // The IME sends backspace keypresses to clear "ni", then inserts "你"
+    // We simulate this by manually clearing the input buffer then writing the character
+    inputStream.write('\x7F\x7F'); // Simulate backspace characters clearing the buffer
+    events.keypress('backspace');
+    events.keypress('backspace');
+    inputStream.write('你');
+    inputStream.emit('keypress', null, { name: '你' });
+
+    // At this point, the display should show "你"
+    expect(getScreen()).toBe('? Enter Chinese text 你');
+
+    // Step 4: User continues typing "hao" for second character
+    events.type('hao');
+
+    // Step 5: User selects second character "好"
+    // Again, IME sends backspaces then the character
+    inputStream.write('\x7F\x7F\x7F'); // Simulate backspace characters
+    events.keypress('backspace');
+    events.keypress('backspace');
+    events.keypress('backspace');
+    inputStream.write('好');
+    inputStream.emit('keypress', null, { name: '好' });
+
+    // The final display should show both Chinese characters
+    expect(getScreen()).toBe('? Enter Chinese text 你好');
+
+    events.keypress('enter');
+    const result = await answer;
+
+    // The answer should be the complete Chinese phrase
+    expect(result).toBe('你好');
+  });
+
+  it('handle IME composition with cursor movement (issue #1901)', async () => {
+    const {
+      answer,
+      events,
+      getScreen,
+      input: inputStream,
+    } = await render(input, {
+      message: 'Enter Chinese text',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter Chinese text"`);
+
+    // First, input "你好" (nihao)
+    events.type('ni');
+    inputStream.write('\x7F\x7F');
+    events.keypress('backspace');
+    events.keypress('backspace');
+    inputStream.write('你');
+    inputStream.emit('keypress', null, { name: '你' });
+
+    events.type('hao');
+    inputStream.write('\x7F\x7F\x7F');
+    events.keypress('backspace');
+    events.keypress('backspace');
+    events.keypress('backspace');
+    inputStream.write('好');
+    inputStream.emit('keypress', null, { name: '好' });
+
+    // Screen should show "你好"
+    expect(getScreen()).toBe('? Enter Chinese text 你好');
+
+    // Move cursor to middle (between 你 and 好)
+    events.keypress('left');
+
+    // Now insert new character "世" in the middle
+    // User types "shi" in pinyin
+    events.type('shi');
+
+    // IME converts to "世"
+    inputStream.write('\x7F\x7F\x7F');
+    events.keypress('backspace');
+    events.keypress('backspace');
+    events.keypress('backspace');
+    inputStream.write('世');
+    inputStream.emit('keypress', null, { name: '世' });
+
+    // Screen should show "你世好" with all three characters
+    expect(getScreen()).toBe('? Enter Chinese text 你世好');
+
+    events.keypress('enter');
+    const result = await answer;
+
+    // The answer should be "你世好"
+    expect(result).toBe('你世好');
+  });
 });
