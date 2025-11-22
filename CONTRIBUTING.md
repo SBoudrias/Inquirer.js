@@ -34,7 +34,7 @@ We're using vitest for all unit tests. And then have a few integration tests wit
 To run everything:
 
 ```sh
-yarn test
+yarn pretest && yarn test
 ```
 
 But during development, you'll have a better time running vitest in watch mode for quicker iteration:
@@ -49,9 +49,12 @@ yarn vitest --ui --coverage
 ## Linting
 
 ```sh
+yarn oxlint . --fix
 yarn eslint . --fix
 yarn prettier --write .
 ```
+
+Or run everything with `yarn pretest`
 
 ## Type checking
 
@@ -62,14 +65,8 @@ yarn tsc
 ## Running demos
 
 ```sh
-# This command will launch tsc in watch mode
-yarn dev
-
-# Then run the demos
 yarn demo
 ```
-
-(PR idea: Adding a watch mode for this flow would be great!)
 
 ## Publishing new versions
 
