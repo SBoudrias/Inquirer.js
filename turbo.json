@@ -3,29 +3,16 @@
   "ui": "tui",
   "tasks": {
     "tsc": {
-      "dependsOn": [
-        "^tsc"
-      ],
-      "outputs": [
-        "dist/**"
-      ],
-      "inputs": [
-        "../../package.json",
-        "package.json",
-        "src/*",
-        "!**/*.test.ts"
-      ]
+      "dependsOn": ["^tsc"],
+      "outputs": ["dist/**"],
+      "inputs": ["../../package.json", "package.json", "src/*", "!**/*.test.ts"]
     },
     "test": {
-      "dependsOn": [
-        "^tsc"
-      ],
+      "dependsOn": ["^tsc"],
       "outputs": []
     },
     "demo": {
-      "dependsOn": [
-        "^tsc"
-      ],
+      "dependsOn": ["^tsc"],
       "persistent": true,
       "cache": false,
       "interruptible": true
