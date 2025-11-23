@@ -61,7 +61,8 @@
     "dist"
   ],
   "scripts": {
-    "tsc": "tsc && chmod +x ./dist/index.js"
+    "tsc": "tsc && chmod +x ./dist/index.js",
+    "demo": "node ./dist/index.js"
   },
   "dependencies": {
     "@inquirer/core": "^11.0.1",
