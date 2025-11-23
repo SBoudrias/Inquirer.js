@@ -15,6 +15,7 @@ import rawlistDemo from './demos/rawlist.ts';
 import searchDemo from './demos/search.ts';
 import selectDemo from './demos/select.ts';
 import timeoutDemo from './demos/timeout.ts';
+import keyLogger from './demos/keys.ts';
 
 const demos = {
   checkbox: checkboxDemo,
@@ -29,6 +30,7 @@ const demos = {
   search: searchDemo,
   select: selectDemo,
   timeout: timeoutDemo,
+  keys: keyLogger,
 } as const;
 
 type Demos = keyof typeof demos | 'advanced' | 'back' | 'exit';
@@ -64,6 +66,7 @@ async function askNextDemo() {
         choices: [
           { name: 'Default value after timeout', value: 'timeout' },
           { name: 'Loader', value: 'loader' },
+          { name: 'Key logger', value: 'keys' },
           { name: 'Go back', value: 'back' },
         ],
       },
