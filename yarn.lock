@@ -650,6 +650,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@inquirer/list@workspace:*, @inquirer/list@workspace:packages/list":
+  version: 0.0.0-use.local
+  resolution: "@inquirer/list@workspace:packages/list"
+  dependencies:
+    "@inquirer/core": "npm:^11.0.1"
+    "@inquirer/figures": "npm:^2.0.1"
+    "@inquirer/testing": "npm:^3.0.1"
+    "@inquirer/type": "npm:^4.0.1"
+    "@repo/tsconfig": "workspace:*"
+    typescript: "npm:^5.9.3"
+  peerDependencies:
+    "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@inquirer/number@npm:^4.0.1, @inquirer/number@workspace:packages/number":
   version: 0.0.0-use.local
   resolution: "@inquirer/number@workspace:packages/number"
@@ -694,6 +712,7 @@ __metadata:
     "@inquirer/editor": "npm:^5.0.1"
     "@inquirer/expand": "npm:^5.0.1"
     "@inquirer/input": "npm:^5.0.1"
+    "@inquirer/list": "workspace:*"
     "@inquirer/number": "npm:^4.0.1"
     "@inquirer/password": "npm:^5.0.1"
     "@inquirer/rawlist": "npm:^5.0.1"

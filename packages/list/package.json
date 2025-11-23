@@ -1,7 +1,7 @@
 {
-  "name": "@inquirer/prompts",
-  "version": "8.0.1",
-  "description": "Inquirer prompts, combined in a single package",
+  "name": "@inquirer/list",
+  "version": "5.0.1",
+  "description": "Inquirer list text prompt",
   "keywords": [
     "answer",
     "answers",
@@ -39,11 +39,9 @@
     "ui",
     "yeoman",
     "yo",
-    "zsh",
-    "types",
-    "typescript"
+    "zsh"
   ],
-  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/prompts/README.md",
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/list/README.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/SBoudrias/Inquirer.js.git"
@@ -63,33 +61,17 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/checkbox": "^5.0.1",
-    "@inquirer/confirm": "^6.0.1",
-    "@inquirer/editor": "^5.0.1",
-    "@inquirer/expand": "^5.0.1",
-    "@inquirer/input": "^5.0.1",
-    "@inquirer/list": "workspace:*",
-    "@inquirer/number": "^4.0.1",
-    "@inquirer/password": "^5.0.1",
-    "@inquirer/rawlist": "^5.0.1",
-    "@inquirer/search": "^4.0.1",
-    "@inquirer/select": "^5.0.1"
+    "@inquirer/core": "^11.0.1",
+    "@inquirer/figures": "^2.0.1",
+    "@inquirer/type": "^4.0.1"
   },
   "devDependencies": {
-    "@inquirer/type": "^4.0.1",
+    "@inquirer/testing": "^3.0.1",
     "@repo/tsconfig": "workspace:*",
     "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
-  },
-  "peerDependencies": {
-    "@types/node": ">=18"
-  },
-  "peerDependenciesMeta": {
-    "@types/node": {
-      "optional": true
-    }
   },
   "publishConfig": {
     "access": "public",
@@ -99,6 +81,14 @@
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
       }
+    }
+  },
+  "peerDependencies": {
+    "@types/node": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "@types/node": {
+      "optional": true
     }
   }
 }

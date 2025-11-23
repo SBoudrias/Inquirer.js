@@ -31,6 +31,7 @@ type InputConfig = {
   theme?: PartialDeep<Theme<InputTheme>>;
   pattern?: RegExp;
   patternError?: string;
+  test?: RegExp;
 };
 
 export default createPrompt<string, InputConfig>((config, done) => {
