@@ -3,7 +3,6 @@ import {
   useState,
   useKeypress,
   usePrefix,
-  isEnterKey,
   makeTheme,
   type Theme,
   type Status,
@@ -135,9 +134,9 @@ export default createPrompt<string[], ListConfig>((config, done) => {
     }
 
     /**
-     * Handle Ctrl + S to submit current entries
+     * Handle Ctrl + Enter/J to submit current entries
      */
-    if (key.ctrl && key.name === 's') {
+    if (key.name === 'enter') {
       const isValid = await validateList(values, { isFinal: true });
 
       if (isValid === true) {
@@ -180,7 +179,7 @@ export default createPrompt<string[], ListConfig>((config, done) => {
     /**
      * Handle input and validation in edit mode
      */
-    if (isEnterKey(key)) {
+    if (key.name === 'return') {
       const answer = input;
       setStatus('loading');
 
@@ -255,15 +254,15 @@ export default createPrompt<string[], ListConfig>((config, done) => {
       ? theme.style.keysHelpTip(
           navigation
             ? [
-                ['↹', 'edit'],
+                ['tab', 'edit'],
                 ['↑↓', 'navigate'],
-                ['⌫', 'delete'],
-                ['⌃S', 'submit'],
+                ['del', 'delete'],
+                ['ctrl+enter', 'done'],
               ]
             : [
-                ['↹', 'navigate'],
-                ['⏎', 'add'],
-                ['⌃S', 'submit'],
+                ['tab', 'navigate'],
+                ['enter', 'add'],
+                ['ctrl+enter', 'done'],
               ],
         )
       : undefined;
@@ -271,9 +270,12 @@ export default createPrompt<string[], ListConfig>((config, done) => {
   const errorMsg = error ? theme.style.error(error) : '';
 
   // Compose final output
-  const header = [prefix, message, formattedInput].filter(Boolean).join(' ');
+  const header = [prefix, message, formattedInput].join(' ');
 
-  const body = [errorMsg, formattedValues, helpline].filter(Boolean).join('\n').trimEnd();
+  const body = [errorMsg, formattedValues, ' ', helpline]
+    .filter(Boolean)
+    .join('\n')
+    .trimEnd();
 
   return [header, body];
 });

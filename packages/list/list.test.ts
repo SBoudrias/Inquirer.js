@@ -13,27 +13,29 @@ describe('list prompt', () => {
     events.type('Item 1');
     expect(getScreen()).toMatchInlineSnapshot(`"? Enter items Item 1"`);
 
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter items
         Item 1
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
     events.type('Item 2');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter items
         Item 1
         Item 2
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1', 'Item 2']);
   });
 
@@ -47,15 +49,16 @@ describe('list prompt', () => {
       "? Enter items
         Default 1
         Default 2
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
     events.type('Item 3');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Default 1', 'Default 2', 'Item 3']);
   });
 
@@ -65,12 +68,12 @@ describe('list prompt', () => {
     });
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
     events.type('Item 2');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
@@ -80,7 +83,8 @@ describe('list prompt', () => {
       "? Enter items
       ❯ Item 1
         Item 2
-      ↹ edit • ↑↓ navigate • ⌫ delete • ⌃S submit"
+
+      tab edit • ↑↓ navigate • del delete • ctrl+enter done"
     `);
 
     // Navigate down
@@ -89,7 +93,8 @@ describe('list prompt', () => {
       "? Enter items
         Item 1
       ❯ Item 2
-      ↹ edit • ↑↓ navigate • ⌫ delete • ⌃S submit"
+
+      tab edit • ↑↓ navigate • del delete • ctrl+enter done"
     `);
 
     // Navigate up
@@ -98,10 +103,11 @@ describe('list prompt', () => {
       "? Enter items
       ❯ Item 1
         Item 2
-      ↹ edit • ↑↓ navigate • ⌫ delete • ⌃S submit"
+
+      tab edit • ↑↓ navigate • del delete • ctrl+enter done"
     `);
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1', 'Item 2']);
   });
 
@@ -111,7 +117,7 @@ describe('list prompt', () => {
     });
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
@@ -120,7 +126,8 @@ describe('list prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter items
       ❯ Item 1
-      ↹ edit • ↑↓ navigate • ⌫ delete • ⌃S submit"
+
+      tab edit • ↑↓ navigate • del delete • ctrl+enter done"
     `);
 
     // Exit navigation mode with tab
@@ -128,16 +135,17 @@ describe('list prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter items
         Item 1
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
     // Can add more items
     events.type('Item 2');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1', 'Item 2']);
   });
 
@@ -147,7 +155,7 @@ describe('list prompt', () => {
     });
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
@@ -156,7 +164,8 @@ describe('list prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter items Item
         Item 1
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
     // Enter navigation mode
@@ -164,7 +173,8 @@ describe('list prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter items Item
       ❯ Item 1
-      ↹ edit • ↑↓ navigate • ⌫ delete • ⌃S submit"
+
+      tab edit • ↑↓ navigate • del delete • ctrl+enter done"
     `);
 
     // Exit navigation mode - input should be restored
@@ -172,16 +182,17 @@ describe('list prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter items Item
         Item 1
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
     // Continue typing
     events.type(' 2');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1', 'Item 2']);
   });
 
@@ -191,19 +202,19 @@ describe('list prompt', () => {
     });
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
 
     await Promise.resolve();
     await Promise.resolve();
 
     events.type('Item 2');
-    events.keypress('enter');
+    events.keypress('return');
 
     await Promise.resolve();
     await Promise.resolve();
 
     events.type('Item 3');
-    events.keypress('enter');
+    events.keypress('return');
 
     await Promise.resolve();
     await Promise.resolve();
@@ -218,10 +229,11 @@ describe('list prompt', () => {
       "? Enter items
         Item 1
       ❯ Item 3
-      ↹ edit • ↑↓ navigate • ⌫ delete • ⌃S submit"
+
+      tab edit • ↑↓ navigate • del delete • ctrl+enter done"
     `);
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1', 'Item 3']);
   });
 
@@ -231,7 +243,7 @@ describe('list prompt', () => {
     });
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
@@ -240,11 +252,11 @@ describe('list prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? Enter items"`);
 
     events.type('New Item');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['New Item']);
   });
 
@@ -254,12 +266,12 @@ describe('list prompt', () => {
     });
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
     events.type('Item 2');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
@@ -271,7 +283,8 @@ describe('list prompt', () => {
       "? Enter items
       ❯ Item 1
         Item 2
-      ↹ edit • ↑↓ navigate • ⌫ delete • ⌃S submit"
+
+      tab edit • ↑↓ navigate • del delete • ctrl+enter done"
     `);
 
     // Go to last item
@@ -281,10 +294,11 @@ describe('list prompt', () => {
       "? Enter items
         Item 1
       ❯ Item 2
-      ↹ edit • ↑↓ navigate • ⌫ delete • ⌃S submit"
+
+      tab edit • ↑↓ navigate • del delete • ctrl+enter done"
     `);
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1', 'Item 2']);
   });
 
@@ -295,7 +309,7 @@ describe('list prompt', () => {
     });
 
     events.type('abc');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
@@ -308,17 +322,18 @@ describe('list prompt', () => {
     events.keypress('backspace');
     events.keypress('backspace');
     events.type('123');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter numbers
         123
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['123']);
   });
 
@@ -337,7 +352,7 @@ describe('list prompt', () => {
     });
 
     events.type('ab');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
@@ -347,17 +362,18 @@ describe('list prompt', () => {
     `);
 
     events.type('c');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter valid items
         abc
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['abc']);
   });
 
@@ -371,7 +387,7 @@ describe('list prompt', () => {
     });
 
     events.type('abc');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
@@ -381,17 +397,18 @@ describe('list prompt', () => {
     `);
 
     events.type('123');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter numbers
         123
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['123']);
   });
 
@@ -402,7 +419,7 @@ describe('list prompt', () => {
     });
 
     events.type('test@');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
@@ -411,16 +428,17 @@ describe('list prompt', () => {
     `);
 
     events.keypress('backspace');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter alphanumeric values
         test
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['test']);
   });
 
@@ -432,7 +450,7 @@ describe('list prompt', () => {
     });
 
     events.type('test@');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
@@ -442,11 +460,11 @@ describe('list prompt', () => {
     `);
 
     events.keypress('backspace');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['test']);
   });
 
@@ -457,18 +475,18 @@ describe('list prompt', () => {
     });
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
     events.type('Item 2');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
     // Try to add duplicate
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
@@ -476,7 +494,8 @@ describe('list prompt', () => {
     > This entry is already in the list
       Item 1
       Item 2
-    ↹ navigate • ⏎ add • ⌃S submit"
+
+    tab navigate • enter add • ctrl+enter done"
   `);
 
     events.keypress('backspace');
@@ -486,11 +505,11 @@ describe('list prompt', () => {
     events.keypress('backspace');
     events.keypress('backspace');
     events.type('Item 3');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1', 'Item 2', 'Item 3']);
   });
 
@@ -502,19 +521,20 @@ describe('list prompt', () => {
     });
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
     "? Enter unique items Item 1
     > Duplicate entry detected
       Item 1
-    ↹ navigate • ⏎ add • ⌃S submit"
+
+    tab navigate • enter add • ctrl+enter done"
   `);
 
     events.keypress('backspace');
@@ -524,11 +544,11 @@ describe('list prompt', () => {
     events.keypress('backspace');
     events.keypress('backspace');
     events.type('Item 2');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1', 'Item 2']);
   });
 
@@ -544,13 +564,13 @@ describe('list prompt', () => {
     });
 
     events.type('good item');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
 
     events.type('forbidden item');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
@@ -559,19 +579,20 @@ describe('list prompt', () => {
     "? Enter items forbidden item
     > List cannot contain forbidden items
       good item
-    ↹ navigate • ⏎ add • ⌃S submit"
+
+    tab navigate • enter add • ctrl+enter done"
   `);
 
     Array.from({ length: 'forbidden item'.length }).forEach(() =>
       events.keypress('backspace'),
     );
     events.type('another good item');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['good item', 'another good item']);
   });
 
@@ -586,14 +607,14 @@ describe('list prompt', () => {
     });
 
     events.type('50');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
 
     events.type('60');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
@@ -603,19 +624,20 @@ describe('list prompt', () => {
     "? Enter numbers 60
     > Sum must not exceed 100
       50
-    ↹ navigate • ⏎ add • ⌃S submit"
+
+    tab navigate • enter add • ctrl+enter done"
   `);
 
     events.keypress('backspace');
     events.keypress('backspace');
     events.type('40');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['50', '40']);
   });
 
@@ -626,26 +648,27 @@ describe('list prompt', () => {
     });
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await Promise.resolve();
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter at least 2 items
       > Please provide at least 2 lines
         Item 1
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
     events.type('Item 2');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1', 'Item 2']);
   });
 
@@ -656,17 +679,17 @@ describe('list prompt', () => {
     });
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
     events.type('Item 2');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
     events.type('Item 3');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
@@ -675,10 +698,11 @@ describe('list prompt', () => {
       > Please provide no more than 2 lines
         Item 1
         Item 2
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1', 'Item 2']);
   });
 
@@ -688,7 +712,7 @@ describe('list prompt', () => {
       min: 1,
     });
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await Promise.resolve();
     expect(getScreen()).toMatchInlineSnapshot(`
     "? Enter at least 1 item
@@ -696,11 +720,11 @@ describe('list prompt', () => {
   `);
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1']);
   });
 
@@ -714,17 +738,18 @@ describe('list prompt', () => {
     events.type('item');
     expect(getScreen()).toMatchInlineSnapshot(`"? Enter items [item]"`);
 
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter items []
         [item]
-      ↹ navigate • ⏎ add • ⌃S submit"
+
+      tab navigate • enter add • ctrl+enter done"
     `);
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['item']);
   });
 
@@ -744,11 +769,11 @@ describe('list prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"Q: Enter items >>>"`);
 
     events.type('Item 1');
-    events.keypress('enter');
+    events.keypress('return');
     await Promise.resolve();
     await Promise.resolve();
 
-    events.keypress({ name: 's', ctrl: true });
+    events.keypress('enter');
     await expect(answer).resolves.toEqual(['Item 1']);
   });
 });
