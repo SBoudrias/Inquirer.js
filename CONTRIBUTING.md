@@ -51,7 +51,7 @@ yarn vitest --ui --coverage
 ```sh
 yarn oxlint . --fix
 yarn eslint . --fix
-yarn prettier --write .
+yarn oxfmt .
 ```
 
 Or run everything with `yarn pretest`

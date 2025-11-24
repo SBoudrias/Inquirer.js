@@ -885,9 +885,7 @@ describe('checkbox prompt', () => {
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual(['2cc9e311', '3272b94a']);
-      expect(getScreen()).toMatchInlineSnapshot(
-        `"✔ Select a commit 2cc9e311, 3272b94a"`,
-      );
+      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a commit 2cc9e311, 3272b94a"`);
     });
 
     it('using allChoices parameter', async () => {
