@@ -1565,58 +1565,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxlint/darwin-arm64@npm:1.29.0":
-  version: 1.29.0
-  resolution: "@oxlint/darwin-arm64@npm:1.29.0"
+"@oxlint/darwin-arm64@npm:1.30.0":
+  version: 1.30.0
+  resolution: "@oxlint/darwin-arm64@npm:1.30.0"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@oxlint/darwin-x64@npm:1.29.0":
-  version: 1.29.0
-  resolution: "@oxlint/darwin-x64@npm:1.29.0"
+"@oxlint/darwin-x64@npm:1.30.0":
+  version: 1.30.0
+  resolution: "@oxlint/darwin-x64@npm:1.30.0"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@oxlint/linux-arm64-gnu@npm:1.29.0":
-  version: 1.29.0
-  resolution: "@oxlint/linux-arm64-gnu@npm:1.29.0"
+"@oxlint/linux-arm64-gnu@npm:1.30.0":
+  version: 1.30.0
+  resolution: "@oxlint/linux-arm64-gnu@npm:1.30.0"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@oxlint/linux-arm64-musl@npm:1.29.0":
-  version: 1.29.0
-  resolution: "@oxlint/linux-arm64-musl@npm:1.29.0"
+"@oxlint/linux-arm64-musl@npm:1.30.0":
+  version: 1.30.0
+  resolution: "@oxlint/linux-arm64-musl@npm:1.30.0"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@oxlint/linux-x64-gnu@npm:1.29.0":
-  version: 1.29.0
-  resolution: "@oxlint/linux-x64-gnu@npm:1.29.0"
+"@oxlint/linux-x64-gnu@npm:1.30.0":
+  version: 1.30.0
+  resolution: "@oxlint/linux-x64-gnu@npm:1.30.0"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@oxlint/linux-x64-musl@npm:1.29.0":
-  version: 1.29.0
-  resolution: "@oxlint/linux-x64-musl@npm:1.29.0"
+"@oxlint/linux-x64-musl@npm:1.30.0":
+  version: 1.30.0
+  resolution: "@oxlint/linux-x64-musl@npm:1.30.0"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@oxlint/win32-arm64@npm:1.29.0":
-  version: 1.29.0
-  resolution: "@oxlint/win32-arm64@npm:1.29.0"
+"@oxlint/win32-arm64@npm:1.30.0":
+  version: 1.30.0
+  resolution: "@oxlint/win32-arm64@npm:1.30.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@oxlint/win32-x64@npm:1.29.0":
-  version: 1.29.0
-  resolution: "@oxlint/win32-x64@npm:1.29.0"
+"@oxlint/win32-x64@npm:1.30.0":
+  version: 1.30.0
+  resolution: "@oxlint/win32-x64@npm:1.30.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -3145,11 +3145,11 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-oxlint@npm:^1.28.0":
-  version: 1.29.0
-  resolution: "eslint-plugin-oxlint@npm:1.29.0"
+  version: 1.30.0
+  resolution: "eslint-plugin-oxlint@npm:1.30.0"
   dependencies:
     jsonc-parser: "npm:^3.3.1"
-  checksum: 10/e3163b6e88fbb14eff63be888d70e29230d718c8cfb8972becb39334cd48e2c13c467edf71b0e66cd5ec37dc4c931ffd81cb6a16bafdcf71aa6b479e81d6192f
+  checksum: 10/fe9113fedfddcd01a5a7fce6cc3e8599f19dfb8a2b6f059de4da809d2c6f87ae0e669287efd3dc4f661520e2b00a24dca077a823bb0915ed65b2c98146258a02
   languageName: node
   linkType: hard
 
@@ -4993,19 +4993,19 @@ __metadata:
   linkType: hard
 
 "oxlint@npm:^1.28.0":
-  version: 1.29.0
-  resolution: "oxlint@npm:1.29.0"
+  version: 1.30.0
+  resolution: "oxlint@npm:1.30.0"
   dependencies:
-    "@oxlint/darwin-arm64": "npm:1.29.0"
-    "@oxlint/darwin-x64": "npm:1.29.0"
-    "@oxlint/linux-arm64-gnu": "npm:1.29.0"
-    "@oxlint/linux-arm64-musl": "npm:1.29.0"
-    "@oxlint/linux-x64-gnu": "npm:1.29.0"
-    "@oxlint/linux-x64-musl": "npm:1.29.0"
-    "@oxlint/win32-arm64": "npm:1.29.0"
-    "@oxlint/win32-x64": "npm:1.29.0"
+    "@oxlint/darwin-arm64": "npm:1.30.0"
+    "@oxlint/darwin-x64": "npm:1.30.0"
+    "@oxlint/linux-arm64-gnu": "npm:1.30.0"
+    "@oxlint/linux-arm64-musl": "npm:1.30.0"
+    "@oxlint/linux-x64-gnu": "npm:1.30.0"
+    "@oxlint/linux-x64-musl": "npm:1.30.0"
+    "@oxlint/win32-arm64": "npm:1.30.0"
+    "@oxlint/win32-x64": "npm:1.30.0"
   peerDependencies:
-    oxlint-tsgolint: ">=0.7.1"
+    oxlint-tsgolint: ">=0.8.1"
   dependenciesMeta:
     "@oxlint/darwin-arm64":
       optional: true
@@ -5029,7 +5029,7 @@ __metadata:
   bin:
     oxc_language_server: bin/oxc_language_server
     oxlint: bin/oxlint
-  checksum: 10/25ada101e54b67e7d670e41b3d00a6fa78a0becece576e16b6b77657da666fd670bee859734d8e5628712b8744d1d9577acd21b7e254f49c7cd14e5345bffc91
+  checksum: 10/84c825be1040203aaf8d8a4e8704d8b6aec5993397cd88d7df10a2dfb521352dbcd6cb3e0fa94b531f00801889bfcb4077be3f89e670804f457c548dd36ae440
   languageName: node
   linkType: hard
 
