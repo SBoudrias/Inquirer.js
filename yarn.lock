@@ -552,7 +552,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/expand@npm:^4.0.21, @inquirer/expand@npm:^4.0.23":
+"@inquirer/expand@npm:^4.0.23":
   version: 4.0.23
   resolution: "@inquirer/expand@npm:4.0.23"
   dependencies:
@@ -618,7 +618,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/input@npm:^4.2.5, @inquirer/input@npm:^4.3.1":
+"@inquirer/input@npm:^4.3.1":
   version: 4.3.1
   resolution: "@inquirer/input@npm:4.3.1"
   dependencies:
@@ -775,7 +775,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/select@npm:^4.4.0, @inquirer/select@npm:^4.4.2":
+"@inquirer/select@npm:^4.4.2":
   version: 4.4.2
   resolution: "@inquirer/select@npm:4.4.2"
   dependencies:
@@ -943,7 +943,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna-lite/cli@npm:4.9.3":
+"@lerna-lite/cli@npm:4.9.3, @lerna-lite/cli@npm:^4.9.2":
   version: 4.9.3
   resolution: "@lerna-lite/cli@npm:4.9.3"
   dependencies:
@@ -971,71 +971,6 @@ __metadata:
   bin:
     lerna: dist/cli.js
   checksum: 10/00839a512eee1c7e325b3f09501d9d214a9ffa8a405b7bd5681d3b171fee1c7b4fc22a0e382771fc59c2c5c2dd497688b5eb8fd98c1347f0df0549f2c5a20d0f
-  languageName: node
-  linkType: hard
-
-"@lerna-lite/cli@npm:^4.9.2":
-  version: 4.9.2
-  resolution: "@lerna-lite/cli@npm:4.9.2"
-  dependencies:
-    "@lerna-lite/core": "npm:4.9.2"
-    "@lerna-lite/init": "npm:4.9.2"
-    "@lerna-lite/npmlog": "npm:4.9.1"
-    dedent: "npm:^1.7.0"
-    dotenv: "npm:^17.2.3"
-    import-local: "npm:^3.2.0"
-    load-json-file: "npm:^7.0.1"
-    yargs: "npm:^18.0.0"
-  peerDependenciesMeta:
-    "@lerna-lite/exec":
-      optional: true
-    "@lerna-lite/list":
-      optional: true
-    "@lerna-lite/publish":
-      optional: true
-    "@lerna-lite/run":
-      optional: true
-    "@lerna-lite/version":
-      optional: true
-    "@lerna-lite/watch":
-      optional: true
-  bin:
-    lerna: dist/cli.js
-  checksum: 10/6602463a43414134aa29766bb9bd76a09b3494361110daed2e620f579f790faa0d8c19e38ba7e59a163fc5e450b4fdeb8f62a2115c8510723e93e050bf6bbeb3
-  languageName: node
-  linkType: hard
-
-"@lerna-lite/core@npm:4.9.2":
-  version: 4.9.2
-  resolution: "@lerna-lite/core@npm:4.9.2"
-  dependencies:
-    "@inquirer/expand": "npm:^4.0.21"
-    "@inquirer/input": "npm:^4.2.5"
-    "@inquirer/select": "npm:^4.4.0"
-    "@lerna-lite/npmlog": "npm:4.9.1"
-    "@npmcli/run-script": "npm:^10.0.2"
-    ci-info: "npm:^4.3.1"
-    config-chain: "npm:^1.1.13"
-    dedent: "npm:^1.7.0"
-    execa: "npm:^9.6.0"
-    fs-extra: "npm:^11.3.2"
-    glob-parent: "npm:^6.0.2"
-    json5: "npm:^2.2.3"
-    lilconfig: "npm:^3.1.3"
-    load-json-file: "npm:^7.0.1"
-    npm-package-arg: "npm:^13.0.1"
-    p-map: "npm:^7.0.3"
-    p-queue: "npm:^9.0.0"
-    semver: "npm:^7.7.3"
-    slash: "npm:^5.1.0"
-    tinyglobby: "npm:^0.2.15"
-    tinyrainbow: "npm:^3.0.3"
-    write-file-atomic: "npm:^7.0.0"
-    write-json-file: "npm:^7.0.0"
-    write-package: "npm:^7.2.0"
-    yaml: "npm:^2.8.1"
-    zeptomatch: "npm:^2.1.0"
-  checksum: 10/ea505bb76162fca2e4680bab2b758f38c1a483ab27cfe7ac53b238a8bfde2707e2f506c747ced4ca49a7041da77b6b5bd75606bcd0c4a61cc989852e6d52485d
   languageName: node
   linkType: hard
 
@@ -1073,18 +1008,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna-lite/init@npm:4.9.2":
-  version: 4.9.2
-  resolution: "@lerna-lite/init@npm:4.9.2"
-  dependencies:
-    "@lerna-lite/core": "npm:4.9.2"
-    fs-extra: "npm:^11.3.2"
-    p-map: "npm:^7.0.3"
-    write-json-file: "npm:^7.0.0"
-  checksum: 10/e578505710abea3e223e3a38c2aa81fbc221a21e3dff2a0470e3f40392933cbbb15e6f884d222a3b712a2cfef5dca7359bd675eb6e92ec0dcea2fe1a07dd7c66
-  languageName: node
-  linkType: hard
-
 "@lerna-lite/init@npm:4.9.3":
   version: 4.9.3
   resolution: "@lerna-lite/init@npm:4.9.3"
@@ -1094,21 +1017,6 @@ __metadata:
     p-map: "npm:^7.0.4"
     write-json-file: "npm:^7.0.0"
   checksum: 10/43d5375392435ee0bf84fda08a33e7cc4a46f5413b88e6615186af32219f585fadac40b455767541e29560e31cce8a653edbdad3aaa9d9aaf9894174ebf4fdff
-  languageName: node
-  linkType: hard
-
-"@lerna-lite/npmlog@npm:4.9.1":
-  version: 4.9.1
-  resolution: "@lerna-lite/npmlog@npm:4.9.1"
-  dependencies:
-    aproba: "npm:^2.1.0"
-    fast-string-width: "npm:^3.0.2"
-    has-unicode: "npm:^2.0.1"
-    set-blocking: "npm:^2.0.0"
-    signal-exit: "npm:^4.1.0"
-    tinyrainbow: "npm:^3.0.3"
-    wide-align: "npm:^1.1.5"
-  checksum: 10/805c79cfb3e334ce9aa6f96a6b074f81e5115625e6fdd838c8bf3687c5e6dc5bb7e6688e3851f04c3905cb18b11ee059b2c24e3e94a882c2757ab7fea82e1495
   languageName: node
   linkType: hard
 
@@ -1420,7 +1328,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@npmcli/run-script@npm:^10.0.0, @npmcli/run-script@npm:^10.0.2, @npmcli/run-script@npm:^10.0.3":
+"@npmcli/run-script@npm:^10.0.0, @npmcli/run-script@npm:^10.0.3":
   version: 10.0.3
   resolution: "@npmcli/run-script@npm:10.0.3"
   dependencies:
@@ -4897,7 +4805,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-package-arg@npm:^13.0.0, npm-package-arg@npm:^13.0.1, npm-package-arg@npm:^13.0.2":
+"npm-package-arg@npm:^13.0.0, npm-package-arg@npm:^13.0.2":
   version: 13.0.2
   resolution: "npm-package-arg@npm:13.0.2"
   dependencies:
@@ -5087,7 +4995,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"p-map@npm:^7.0.2, p-map@npm:^7.0.3, p-map@npm:^7.0.4":
+"p-map@npm:^7.0.2, p-map@npm:^7.0.4":
   version: 7.0.4
   resolution: "p-map@npm:7.0.4"
   checksum: 10/ef48c3b2e488f31c693c9fcc0df0ef76518cf6426a495cf9486ebbb0fd7f31aef7f90e96f72e0070c0ff6e3177c9318f644b512e2c29e3feee8d7153fcb6782e
@@ -5098,16 +5006,6 @@ __metadata:
   version: 4.0.0
   resolution: "p-pipe@npm:4.0.0"
   checksum: 10/d2638c08e15e049e37835f3d999f0063ecd063ccac45a90925701c604f342ca376c8373ecf945e322f5112cc630644ef99ec55084e4eeb70c90cff9237b89296
-  languageName: node
-  linkType: hard
-
-"p-queue@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "p-queue@npm:9.0.0"
-  dependencies:
-    eventemitter3: "npm:^5.0.1"
-    p-timeout: "npm:^7.0.0"
-  checksum: 10/62df9f8bcfc738372b6b64a0398e7388eee3991d979697dd51b61f6b533622ff4e71b05ad516c06355d41858535e59a72e380e20b82a50a53d7fecfaf65d630e
   languageName: node
   linkType: hard
 
