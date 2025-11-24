@@ -24,7 +24,7 @@ updates:
           - 'oxlint'
           - 'typescript-eslint'
           - 'globals'
-          - 'prettier'
+          - 'oxfmt'
           - '@arethetypeswrong/cli'
           - '@types/node'
       build:

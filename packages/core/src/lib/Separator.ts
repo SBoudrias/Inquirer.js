@@ -22,9 +22,9 @@ export class Separator {
   static isSeparator(choice: unknown): choice is Separator {
     return Boolean(
       choice &&
-        typeof choice === 'object' &&
-        'type' in choice &&
-        choice.type === 'separator',
+      typeof choice === 'object' &&
+      'type' in choice &&
+      choice.type === 'separator',
     );
   }
 }

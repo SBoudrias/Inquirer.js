@@ -49,7 +49,7 @@ jobs:
       - run: yarn install --immutable --immutable-cache
       - run: yarn tsc
       - run: yarn oxlint .
-      - run: yarn prettier --check .
+      - run: yarn oxfmt --check .
       - run: yarn eslint .
       - name: Validate package setup
         run: |

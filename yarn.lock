@@ -739,15 +739,14 @@ __metadata:
     "@vitest/coverage-v8": "npm:^3.2.4"
     "@vitest/ui": "npm:^3.2.4"
     eslint: "npm:^9.39.1"
-    eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-n: "npm:^17.23.1"
     eslint-plugin-oxlint: "npm:^1.28.0"
     globals: "npm:^16.5.0"
     husky: "npm:^9.1.7"
     isolate-monorepo-package: "workspace:*"
     nano-staged: "npm:^0.9.0"
+    oxfmt: "npm:^0.13.0"
     oxlint: "npm:^1.28.0"
-    prettier: "npm:^3.6.2"
     setup-packages: "workspace:*"
     turbo: "npm:^2.6.1"
     type-fest: "npm:^5.2.0"
@@ -1470,6 +1469,62 @@ __metadata:
   dependencies:
     "@octokit/openapi-types": "npm:^27.0.0"
   checksum: 10/03d5cfc29556a9b53eae8beb1bf15c0b704dc722db2c51b53f093f3c3ee6c1d8e20b682be8117a3a17034b458be7746d1b22aaefb959ceb5152ad7589b39e2c9
+  languageName: node
+  linkType: hard
+
+"@oxfmt/darwin-arm64@npm:0.13.0":
+  version: 0.13.0
+  resolution: "@oxfmt/darwin-arm64@npm:0.13.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oxfmt/darwin-x64@npm:0.13.0":
+  version: 0.13.0
+  resolution: "@oxfmt/darwin-x64@npm:0.13.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@oxfmt/linux-arm64-gnu@npm:0.13.0":
+  version: 0.13.0
+  resolution: "@oxfmt/linux-arm64-gnu@npm:0.13.0"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@oxfmt/linux-arm64-musl@npm:0.13.0":
+  version: 0.13.0
+  resolution: "@oxfmt/linux-arm64-musl@npm:0.13.0"
+  conditions: os=linux & cpu=arm64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@oxfmt/linux-x64-gnu@npm:0.13.0":
+  version: 0.13.0
+  resolution: "@oxfmt/linux-x64-gnu@npm:0.13.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@oxfmt/linux-x64-musl@npm:0.13.0":
+  version: 0.13.0
+  resolution: "@oxfmt/linux-x64-musl@npm:0.13.0"
+  conditions: os=linux & cpu=x64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@oxfmt/win32-arm64@npm:0.13.0":
+  version: 0.13.0
+  resolution: "@oxfmt/win32-arm64@npm:0.13.0"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oxfmt/win32-x64@npm:0.13.0":
+  version: 0.13.0
+  resolution: "@oxfmt/win32-x64@npm:0.13.0"
+  conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
@@ -3006,17 +3061,6 @@ __metadata:
   peerDependencies:
     eslint: ">=6.0.0"
   checksum: 10/ac65ac1c6107cf19f63f5fc17cea361c9cb1336be7356f23dbb0fac10979974b4622e13e950be43cbf431801f2c07f7dab448573181ccf6edc0b86d5b5304511
-  languageName: node
-  linkType: hard
-
-"eslint-config-prettier@npm:^10.1.8":
-  version: 10.1.8
-  resolution: "eslint-config-prettier@npm:10.1.8"
-  peerDependencies:
-    eslint: ">=7.0.0"
-  bin:
-    eslint-config-prettier: bin/cli.js
-  checksum: 10/03f8e6ea1a6a9b8f9eeaf7c8c52a96499ec4b275b9ded33331a6cc738ed1d56de734097dbd0091f136f0e84bc197388bd8ec22a52a4658105883f8c8b7d8921a
   languageName: node
   linkType: hard
 
@@ -4900,6 +4944,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"oxfmt@npm:^0.13.0":
+  version: 0.13.0
+  resolution: "oxfmt@npm:0.13.0"
+  dependencies:
+    "@oxfmt/darwin-arm64": "npm:0.13.0"
+    "@oxfmt/darwin-x64": "npm:0.13.0"
+    "@oxfmt/linux-arm64-gnu": "npm:0.13.0"
+    "@oxfmt/linux-arm64-musl": "npm:0.13.0"
+    "@oxfmt/linux-x64-gnu": "npm:0.13.0"
+    "@oxfmt/linux-x64-musl": "npm:0.13.0"
+    "@oxfmt/win32-arm64": "npm:0.13.0"
+    "@oxfmt/win32-x64": "npm:0.13.0"
+  dependenciesMeta:
+    "@oxfmt/darwin-arm64":
+      optional: true
+    "@oxfmt/darwin-x64":
+      optional: true
+    "@oxfmt/linux-arm64-gnu":
+      optional: true
+    "@oxfmt/linux-arm64-musl":
+      optional: true
+    "@oxfmt/linux-x64-gnu":
+      optional: true
+    "@oxfmt/linux-x64-musl":
+      optional: true
+    "@oxfmt/win32-arm64":
+      optional: true
+    "@oxfmt/win32-x64":
+      optional: true
+  bin:
+    oxfmt: bin/oxfmt
+  checksum: 10/be3b6fd2ebe319687a84338ea71e979a23102f98e19d97d592f480a159335e523ef987a6313e8f23e4c140269939c09aa4e4e393fcade65d02677908c3b46bf2
+  languageName: node
+  linkType: hard
+
 "oxlint@npm:^1.28.0":
   version: 1.30.0
   resolution: "oxlint@npm:1.30.0"
@@ -5255,15 +5334,6 @@ __metadata:
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
   checksum: 10/0b9d2c76801ca652a7f64892dd37b7e3fab149a37d2424920099bf894acccc62abb4424af2155ab36dea8744843060a2d8ddc983518d0b1e22265a22324b72ed
-  languageName: node
-  linkType: hard
-
-"prettier@npm:^3.6.2":
-  version: 3.6.2
-  resolution: "prettier@npm:3.6.2"
-  bin:
-    prettier: bin/prettier.cjs
-  checksum: 10/1213691706bcef1371d16ef72773c8111106c3533b660b1cc8ec158bd109cdf1462804125f87f981f23c4a3dba053b6efafda30ab0114cc5b4a725606bb9ff26
   languageName: node
   linkType: hard
 

@@ -182,9 +182,9 @@ function isPromptConstructor(
 ): prompt is LegacyPromptConstructor {
   return Boolean(
     prompt.prototype &&
-      'run' in prompt.prototype &&
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      typeof prompt.prototype.run === 'function',
+    'run' in prompt.prototype &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    typeof prompt.prototype.run === 'function',
   );
 }
 
