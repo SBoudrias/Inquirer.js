@@ -745,7 +745,7 @@ __metadata:
     globals: "npm:^16.5.0"
     husky: "npm:^9.1.7"
     isolate-monorepo-package: "workspace:*"
-    nano-staged: "npm:^0.8.0"
+    nano-staged: "npm:^0.9.0"
     oxlint: "npm:^1.28.0"
     prettier: "npm:^3.6.2"
     setup-packages: "workspace:*"
@@ -4634,14 +4634,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nano-staged@npm:^0.8.0":
-  version: 0.8.0
-  resolution: "nano-staged@npm:0.8.0"
+"nano-staged@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "nano-staged@npm:0.9.0"
   dependencies:
     picocolors: "npm:^1.0.0"
   bin:
     nano-staged: lib/bin.js
-  checksum: 10/33051331ee280e42fcb4863662678d9eabb54869282dda4d1425880d1f179a9a720369f9e9b66d551cda334cb41c447209d5884a9172783b0393069f96ae549e
+  checksum: 10/4a9680b10d9dccdcf91c0e043983b425b9f91a2e847392aabdc5e50bbe8c0ecf0d69df8e3f00056708a3e2043635f0af80bf7b61e9d78e6d16260bd806015322
   languageName: node
   linkType: hard
 
