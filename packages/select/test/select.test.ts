@@ -1128,7 +1128,7 @@ describe('select prompt', () => {
 
   describe('keybindings', () => {
     it('supports vim bindings when vim is in the keybindings array', async () => {
-      const { events, getScreen } = await render(select, {
+      const { answer, events, getScreen } = await render(select, {
         message: 'Select a number',
         choices: [
           new Separator(),
@@ -1161,10 +1161,13 @@ describe('select prompt', () => {
       expect(getScreen()).toContain('❯ 2. Two');
       events.keypress('k');
       expect(getScreen()).toContain('❯ 1. One');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(1);
     });
 
     it('supports emacs bindings when emacs is in the keybindings array', async () => {
-      const { events, getScreen } = await render(select, {
+      const { answer, events, getScreen } = await render(select, {
         message: 'Select a number',
         choices: [
           new Separator(),
@@ -1197,10 +1200,13 @@ describe('select prompt', () => {
       expect(getScreen()).toContain('❯ 2. Two');
       events.keypress({ name: 'p', ctrl: true });
       expect(getScreen()).toContain('❯ 1. One');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(1);
     });
 
     it('supports both vim and emacs bindings when both are in the keybindings array', async () => {
-      const { events, getScreen } = await render(select, {
+      const { answer, events, getScreen } = await render(select, {
         message: 'Select a number',
         choices: [
           new Separator(),
@@ -1239,11 +1245,14 @@ describe('select prompt', () => {
       expect(getScreen()).toContain('❯ 2. Two');
       events.keypress({ name: 'p', ctrl: true });
       expect(getScreen()).toContain('❯ 1. One');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(1);
     });
 
     it('disables the search feature when vim keybindings are enabled', async () => {
       vi.useFakeTimers();
-      const { events, getScreen } = await render(select, {
+      const { answer, events, getScreen } = await render(select, {
         message: 'Select a number',
         choices: [
           { name: 'Canada', value: 'CA' },
@@ -1275,6 +1284,10 @@ describe('select prompt', () => {
 
         ↑↓ navigate • ⏎ select"
       `);
+
+      events.keypress('enter');
+      vi.runAllTimers();
+      await expect(answer).resolves.toEqual('CA');
     });
 
     it('keeps search feature enabled when only emacs keybindings are enabled', async () => {

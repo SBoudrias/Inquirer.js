@@ -5,7 +5,7 @@ export default defineConfig({
     exclude: ['integration/**', ...defaultExclude],
     coverage: {
       provider: 'v8',
-      all: true,
+      include: ['packages/**/src/**/*.{ts,tsx,mts}'],
       exclude: [
         ...coverageConfigDefaults.exclude,
         'tools/**',
