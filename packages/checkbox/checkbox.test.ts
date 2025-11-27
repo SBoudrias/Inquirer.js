@@ -1125,7 +1125,7 @@ describe('checkbox prompt', () => {
   });
 
   it('disable `all` and `invert` keys', async () => {
-    const { events, getScreen } = await render(checkbox, {
+    const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a number',
       choices: numberedChoices,
       shortcuts: {
@@ -1154,6 +1154,9 @@ describe('checkbox prompt', () => {
 
     events.keypress('i');
     expect(getScreen()).toBe(expectedScreen);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual([]);
   });
 
   describe('numeric selection with separators', () => {
@@ -1283,7 +1286,7 @@ describe('checkbox prompt', () => {
 
   describe('keybindings', () => {
     it('supports vim keybindings when vim is in the keybindings array', async () => {
-      const { events, getScreen } = await render(checkbox, {
+      const { answer, events, getScreen } = await render(checkbox, {
         message: 'Select items',
         choices: [
           { value: 'one', name: 'One' },
@@ -1301,10 +1304,13 @@ describe('checkbox prompt', () => {
       // Up
       events.keypress('k');
       expect(getScreen()).toContain('❯◯ One');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual([]);
     });
 
     it('supports emacs keybindings when emacs is in the keybindings array', async () => {
-      const { events, getScreen } = await render(checkbox, {
+      const { answer, events, getScreen } = await render(checkbox, {
         message: 'Select items',
         choices: [
           { value: 'one', name: 'One' },
@@ -1322,10 +1328,13 @@ describe('checkbox prompt', () => {
       // Up
       events.keypress({ name: 'p', ctrl: true });
       expect(getScreen()).toContain('❯◯ One');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual([]);
     });
 
     it('supports both vim and emacs keybindings when both are in the keybindings array', async () => {
-      const { events, getScreen } = await render(checkbox, {
+      const { answer, events, getScreen } = await render(checkbox, {
         message: 'Select items',
         choices: [
           { value: 'one', name: 'One' },
@@ -1351,6 +1360,9 @@ describe('checkbox prompt', () => {
       // Emacs: Up
       events.keypress({ name: 'p', ctrl: true });
       expect(getScreen()).toContain('❯◯ One');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual([]);
     });
   });
 });
