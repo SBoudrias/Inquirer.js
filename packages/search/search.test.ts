@@ -622,13 +622,12 @@ describe('search prompt', () => {
     await expect(answer).resolves.toEqual('QC');
   });
 
-  it('displays and applies the default value correctly', async()=>{
+  it('displays and applies the default value correctly', async () => {
     const { answer, events, getScreen } = await render(search, {
       message: 'Select a Canadian province',
       source: getListSearch(PROVINCES),
-      default: 'New'
+      default: 'New',
     });
-
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province (New)
       ❯ Alberta
@@ -654,5 +653,43 @@ describe('search prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('NB');
-  })
+  });
+
+  it('backspace remove the default value', async () => {
+    const { answer, events, getScreen } = await render(search, {
+      message: 'Select a Canadian province',
+      source: getListSearch(PROVINCES),
+      default: 'New',
+    });
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province (New)
+      ❯ Alberta
+        British Columbia
+        Manitoba
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('backspace');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province
+      ❯ Alberta
+        British Columbia
+        Manitoba
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('AB');
+  });
 });
