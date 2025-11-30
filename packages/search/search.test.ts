@@ -621,4 +621,38 @@ describe('search prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual('QC');
   });
+
+  it('displays and applies the default value correctly', async()=>{
+    const { answer, events, getScreen } = await render(search, {
+      message: 'Select a Canadian province',
+      source: getListSearch(PROVINCES),
+      default: 'New'
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province (New)
+      ❯ Alberta
+        British Columbia
+        Manitoba
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('tab');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province New
+      ❯ New Brunswick
+        Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('NB');
+  })
 });
