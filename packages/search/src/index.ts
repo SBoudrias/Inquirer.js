@@ -14,6 +14,7 @@ import {
   makeTheme,
   type Theme,
   type Status,
+  isBackspaceKey,
 } from '@inquirer/core';
 import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
@@ -76,6 +77,7 @@ type SearchConfig<
         | Promise<ReadonlyArray<Choice<Value> | Separator>>;
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
+  default?: string,
   theme?: PartialDeep<Theme<SearchTheme>>;
 };
 
@@ -125,6 +127,7 @@ export default createPrompt(
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<ReadonlyArray<Item<Value>>>([]);
     const [searchError, setSearchError] = useState<string>();
+    const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
 
     const prefix = usePrefix({ status, theme });
 
@@ -195,12 +198,20 @@ export default createPrompt(
           // get cleared, forcing the user to re-enter the value instead of fixing it.
           rl.write(searchTerm);
         }
-      } else if (isTabKey(key) && selectedChoice) {
+      }else if(isTabKey(key) && defaultValue && !searchTerm){
+        rl.clearLine(0);
+        rl.write(defaultValue);
+        setSearchTerm(defaultValue);
+        setDefaultValue(undefined);
+      }else if (isTabKey(key) && selectedChoice) {
         rl.clearLine(0); // Remove the tab character.
         rl.write(selectedChoice.name);
         setSearchTerm(selectedChoice.name);
-      } else if (status !== 'loading' && (isUpKey(key) || isDownKey(key))) {
+      } else if(isBackspaceKey(key) && !searchTerm){
+        setDefaultValue(undefined);
+      }else if (status !== 'loading' && (isUpKey(key) || isDownKey(key))) {
         rl.clearLine(0);
+        setDefaultValue(undefined);
         if (
           (isUpKey(key) && active !== bounds.first) ||
           (isDownKey(key) && active !== bounds.last)
@@ -264,7 +275,11 @@ export default createPrompt(
     }
 
     const description = selectedChoice?.description;
-    const header = [prefix, message, searchStr].filter(Boolean).join(' ').trimEnd();
+    let defaultStr;
+    if (defaultValue && status !== 'done' && !searchTerm) {
+      defaultStr = theme.style.defaultAnswer(defaultValue);
+    }
+    const header = [prefix, message, defaultStr, searchStr].filter(Boolean).join(' ').trimEnd();
     const body = [
       error ?? page,
       ' ',
