@@ -77,7 +77,7 @@ type SearchConfig<
         | Promise<ReadonlyArray<Choice<Value> | Separator>>;
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
-  default?: string,
+  default?: string;
   theme?: PartialDeep<Theme<SearchTheme>>;
 };
 
@@ -198,18 +198,18 @@ export default createPrompt(
           // get cleared, forcing the user to re-enter the value instead of fixing it.
           rl.write(searchTerm);
         }
-      }else if(isTabKey(key) && defaultValue && !searchTerm){
+      } else if (isTabKey(key) && defaultValue && !searchTerm) {
         rl.clearLine(0);
         rl.write(defaultValue);
         setSearchTerm(defaultValue);
         setDefaultValue(undefined);
-      }else if (isTabKey(key) && selectedChoice) {
+      } else if (isTabKey(key) && selectedChoice) {
         rl.clearLine(0); // Remove the tab character.
         rl.write(selectedChoice.name);
         setSearchTerm(selectedChoice.name);
-      } else if(isBackspaceKey(key) && !searchTerm){
+      } else if (isBackspaceKey(key) && !searchTerm) {
         setDefaultValue(undefined);
-      }else if (status !== 'loading' && (isUpKey(key) || isDownKey(key))) {
+      } else if (status !== 'loading' && (isUpKey(key) || isDownKey(key))) {
         rl.clearLine(0);
         setDefaultValue(undefined);
         if (
@@ -279,7 +279,10 @@ export default createPrompt(
     if (defaultValue && status !== 'done' && !searchTerm) {
       defaultStr = theme.style.defaultAnswer(defaultValue);
     }
-    const header = [prefix, message, defaultStr, searchStr].filter(Boolean).join(' ').trimEnd();
+    const header = [prefix, message, defaultStr, searchStr]
+      .filter(Boolean)
+      .join(' ')
+      .trimEnd();
     const body = [
       error ?? page,
       ' ',
