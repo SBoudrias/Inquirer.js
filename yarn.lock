@@ -915,7 +915,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna-lite/cli@npm:4.9.3, @lerna-lite/cli@npm:^4.9.2":
+"@lerna-lite/cli@npm:4.9.3":
   version: 4.9.3
   resolution: "@lerna-lite/cli@npm:4.9.3"
   dependencies:
@@ -943,6 +943,37 @@ __metadata:
   bin:
     lerna: dist/cli.js
   checksum: 10/00839a512eee1c7e325b3f09501d9d214a9ffa8a405b7bd5681d3b171fee1c7b4fc22a0e382771fc59c2c5c2dd497688b5eb8fd98c1347f0df0549f2c5a20d0f
+  languageName: node
+  linkType: hard
+
+"@lerna-lite/cli@npm:^4.9.2":
+  version: 4.9.4
+  resolution: "@lerna-lite/cli@npm:4.9.4"
+  dependencies:
+    "@lerna-lite/core": "npm:4.9.4"
+    "@lerna-lite/init": "npm:4.9.4"
+    "@lerna-lite/npmlog": "npm:4.9.4"
+    dedent: "npm:^1.7.0"
+    dotenv: "npm:^17.2.3"
+    import-local: "npm:^3.2.0"
+    load-json-file: "npm:^7.0.1"
+    yargs: "npm:^18.0.0"
+  peerDependenciesMeta:
+    "@lerna-lite/exec":
+      optional: true
+    "@lerna-lite/list":
+      optional: true
+    "@lerna-lite/publish":
+      optional: true
+    "@lerna-lite/run":
+      optional: true
+    "@lerna-lite/version":
+      optional: true
+    "@lerna-lite/watch":
+      optional: true
+  bin:
+    lerna: dist/cli.js
+  checksum: 10/fe66f29ab6fa0758ce8d98523f531c6debd44e16095f6f2889458c92027f4ad167066ba0406d4c65520ba77038ce426b040b8255e98543cf928437d6a67010c5
   languageName: node
   linkType: hard
 
@@ -980,6 +1011,40 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lerna-lite/core@npm:4.9.4":
+  version: 4.9.4
+  resolution: "@lerna-lite/core@npm:4.9.4"
+  dependencies:
+    "@inquirer/expand": "npm:^4.0.23"
+    "@inquirer/input": "npm:^4.3.1"
+    "@inquirer/select": "npm:^4.4.2"
+    "@lerna-lite/npmlog": "npm:4.9.4"
+    "@npmcli/run-script": "npm:^10.0.3"
+    ci-info: "npm:^4.3.1"
+    config-chain: "npm:^1.1.13"
+    dedent: "npm:^1.7.0"
+    execa: "npm:^9.6.0"
+    fs-extra: "npm:^11.3.2"
+    glob-parent: "npm:^6.0.2"
+    json5: "npm:^2.2.3"
+    lilconfig: "npm:^3.1.3"
+    load-json-file: "npm:^7.0.1"
+    npm-package-arg: "npm:^13.0.2"
+    p-map: "npm:^7.0.4"
+    p-queue: "npm:^9.0.1"
+    semver: "npm:^7.7.3"
+    slash: "npm:^5.1.0"
+    tinyglobby: "npm:^0.2.15"
+    tinyrainbow: "npm:^3.0.3"
+    write-file-atomic: "npm:^7.0.0"
+    write-json-file: "npm:^7.0.0"
+    write-package: "npm:^7.2.0"
+    yaml: "npm:^2.8.1"
+    zeptomatch: "npm:^2.1.0"
+  checksum: 10/425cc6be0f1b18a55196041c1c61ef59fe2038a9c663a761cd20c76271e28c91f8ff2d29d2a10b46f4cc1c6d765f83891d7c5a162bc485b06de9767ecb9ede8f
+  languageName: node
+  linkType: hard
+
 "@lerna-lite/init@npm:4.9.3":
   version: 4.9.3
   resolution: "@lerna-lite/init@npm:4.9.3"
@@ -989,6 +1054,18 @@ __metadata:
     p-map: "npm:^7.0.4"
     write-json-file: "npm:^7.0.0"
   checksum: 10/43d5375392435ee0bf84fda08a33e7cc4a46f5413b88e6615186af32219f585fadac40b455767541e29560e31cce8a653edbdad3aaa9d9aaf9894174ebf4fdff
+  languageName: node
+  linkType: hard
+
+"@lerna-lite/init@npm:4.9.4":
+  version: 4.9.4
+  resolution: "@lerna-lite/init@npm:4.9.4"
+  dependencies:
+    "@lerna-lite/core": "npm:4.9.4"
+    fs-extra: "npm:^11.3.2"
+    p-map: "npm:^7.0.4"
+    write-json-file: "npm:^7.0.0"
+  checksum: 10/4f3c2a882b8954d417c98a06baa625600cbecca24157a4f815516ccbeb942be8159074bb6ed882d0aa4d525fdd3e3fe8a720e8c12d251b49a00b13c0dcb5d813
   languageName: node
   linkType: hard
 
@@ -1004,6 +1081,21 @@ __metadata:
     tinyrainbow: "npm:^3.0.3"
     wide-align: "npm:^1.1.5"
   checksum: 10/39a177faf0e72b02b451b9de205826f63fa79d6c3fc6137671a977c987465f5823d545c177ec9eb7eb677cca534b125abed120fff229f5ee4d456e3b45ce303e
+  languageName: node
+  linkType: hard
+
+"@lerna-lite/npmlog@npm:4.9.4":
+  version: 4.9.4
+  resolution: "@lerna-lite/npmlog@npm:4.9.4"
+  dependencies:
+    aproba: "npm:^2.1.0"
+    fast-string-width: "npm:^3.0.2"
+    has-unicode: "npm:^2.0.1"
+    set-blocking: "npm:^2.0.0"
+    signal-exit: "npm:^4.1.0"
+    tinyrainbow: "npm:^3.0.3"
+    wide-align: "npm:^1.1.5"
+  checksum: 10/49387347024271ea9ee4c390764d6cc52342b37735805a0a7a622e9e9d6d9fb15d2402922ba720d1151ac3719d11de25f1fd777ea320d0d03dd998b1cba1b909
   languageName: node
   linkType: hard
 
