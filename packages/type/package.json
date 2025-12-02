@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/type",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Inquirer core TS types",
   "keywords": [
     "answer",
