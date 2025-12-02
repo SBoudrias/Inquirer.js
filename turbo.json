@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
   "tasks": {
     "tsc": {
       "dependsOn": ["^tsc"],
@@ -9,6 +10,12 @@
     "test": {
       "dependsOn": ["^tsc"],
       "outputs": []
+    },
+    "demo": {
+      "dependsOn": ["^tsc"],
+      "persistent": true,
+      "cache": false,
+      "interruptible": true
     }
   }
 }
