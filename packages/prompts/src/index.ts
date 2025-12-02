@@ -8,3 +8,4 @@ export { default as rawlist } from '@inquirer/rawlist';
 export { default as password } from '@inquirer/password';
 export { default as search } from '@inquirer/search';
 export { default as select } from '@inquirer/select';
+export { default as list } from '@inquirer/list';
