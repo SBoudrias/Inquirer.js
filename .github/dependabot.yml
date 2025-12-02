@@ -20,17 +20,26 @@ updates:
         patterns:
           - 'eslint'
           - '@eslint/*'
-          - 'eslint-*'
+          - 'eslint-plugin-*'
           - 'oxlint'
           - 'typescript-eslint'
           - 'globals'
+      # Group formatting tools
+      formatting:
+        patterns:
           - 'oxfmt'
-          - '@arethetypeswrong/cli'
-          - '@types/node'
+          - 'husky'
+          - 'nano-staged'
+      # Group build and publishing tooling
       build:
         patterns:
-          - 'lerna'
           - 'turbo'
+          - '@lerna-lite/*'
+      # Group TypeScript type definitions and compiler
+      types:
+        patterns:
+          - '@types/*'
+          - 'type-fest'
           - 'typescript'
   - package-ecosystem: 'github-actions'
     directory: '/'
