@@ -125,7 +125,8 @@ for (const [pkgPath, pkg] of packages) {
 
     pkg.exports = exports;
 
-    const publishExports: ExportDef = {};
+    const publishExports: Record<string, { types: string; default: string } | string> =
+      {};
     for (const [exportName, value] of Object.entries(exports)) {
       if (typeof value === 'string') {
         const { dir, name, ext } = path.parse(value);
@@ -141,7 +142,12 @@ for (const [pkgPath, pkg] of packages) {
         }
       }
     }
+
     pkg.publishConfig['exports'] = publishExports;
+    if (typeof publishExports['.'] === 'object') {
+      pkg.publishConfig['main'] = publishExports['.'].default;
+      pkg.publishConfig['types'] = publishExports['.'].types;
+    }
 
     // Build tsc command with chmod for bin files if needed
     let tscCommand = 'tsc';
@@ -174,14 +180,6 @@ for (const [pkgPath, pkg] of packages) {
 
     pkg.scripts['tsc'] = tscCommand;
     pkg.devDependencies['typescript'] = versions['typescript'];
-
-    // Remove legacy exports definitions
-    delete pkg.main;
-    delete pkg.types;
-    delete pkg.module;
-    delete pkg['tshy'];
-    delete pkg.scripts['attw'];
-    delete pkg.devDependencies['@arethetypeswrong/cli'];
 
     if (tsconfig.extends === '@repo/tsconfig') {
       pkg.devDependencies['@repo/tsconfig'] = 'workspace:*';
