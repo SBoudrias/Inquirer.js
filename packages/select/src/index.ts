@@ -66,19 +66,12 @@ type NormalizedChoice<Value> = {
   disabled: boolean | string;
 };
 
-type SelectConfig<
-  Value,
-  ChoicesObject =
-    | ReadonlyArray<string | Separator>
-    | ReadonlyArray<Choice<Value> | Separator>,
-> = {
+type SelectConfig<Value> = {
   message: string;
-  choices: ChoicesObject extends ReadonlyArray<string | Separator>
-    ? ChoicesObject
-    : ReadonlyArray<Choice<Value> | Separator>;
+  choices: ReadonlyArray<Value | Choice<Value> | Separator>;
   pageSize?: number;
   loop?: boolean;
-  default?: unknown;
+  default?: Value;
   theme?: PartialDeep<Theme<SelectTheme>>;
 };
 
@@ -89,16 +82,18 @@ function isSelectable<Value>(
 }
 
 function normalizeChoices<Value>(
-  choices: ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
+  choices: ReadonlyArray<Value | Choice<Value> | Separator>,
 ): Array<NormalizedChoice<Value> | Separator> {
   return choices.map((choice) => {
     if (Separator.isSeparator(choice)) return choice;
 
-    if (typeof choice === 'string') {
+    if (typeof choice !== 'object' || choice === null || !('value' in choice)) {
+      // It's a raw value (string, number, etc.)
+      const name = String(choice);
       return {
-        value: choice as Value,
-        name: choice,
-        short: choice,
+        value: choice,
+        name,
+        short: name,
         disabled: false,
       };
     }
