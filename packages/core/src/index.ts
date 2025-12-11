@@ -6,6 +6,7 @@ export {
   isTabKey,
   isNumberKey,
   isEnterKey,
+  isShiftKey,
   type KeypressEvent,
   type Keybinding,
 } from './lib/key.ts';

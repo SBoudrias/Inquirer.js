@@ -1,6 +1,7 @@
 export type KeypressEvent = {
   name: string;
   ctrl: boolean;
+  shift: boolean;
 };
 
 export type Keybinding = 'emacs' | 'vim';
@@ -38,3 +39,5 @@ export const isNumberKey = (key: KeypressEvent): boolean =>
 
 export const isEnterKey = (key: KeypressEvent): boolean =>
   key.name === 'enter' || key.name === 'return';
+
+export const isShiftKey = (key: KeypressEvent): boolean => key.shift;
