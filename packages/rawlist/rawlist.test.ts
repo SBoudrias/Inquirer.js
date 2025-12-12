@@ -11,6 +11,51 @@ const numberedChoices = [
 ];
 
 describe('rawlist prompt', () => {
+  it('preselects the default index', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a number',
+      choices: numberedChoices,
+      default: 2,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number 2
+        1) 1
+        2) 2
+        3) 3
+        4) 4
+        5) 5"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
+    await expect(answer).resolves.toEqual(2);
+  });
+
+  it('default index skips separators', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a fruit',
+      choices: [
+        { name: 'Apple', value: 'apple' },
+        new Separator(),
+        { name: 'Banana', value: 'banana' },
+        { name: 'Pineapple', value: 'pineapple' },
+      ],
+      default: 2,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a fruit 2
+        1) Apple
+       ──────────────
+        2) Banana
+        3) Pineapple"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a fruit Banana"');
+    await expect(answer).resolves.toEqual('banana');
+  });
   it('use number key to select an option', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select a number',
