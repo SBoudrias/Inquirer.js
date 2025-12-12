@@ -32,18 +32,12 @@ type NormalizedChoice<Value> = {
   key: string;
 };
 
-type RawlistConfig<
-  Value,
-  ChoicesObject =
-    | ReadonlyArray<string | Separator>
-    | ReadonlyArray<Choice<Value> | Separator>,
-> = {
+type RawlistConfig<Value> = {
   message: string;
-  choices: ChoicesObject extends ReadonlyArray<string | Separator>
-    ? ChoicesObject
-    : ReadonlyArray<Choice<Value> | Separator>;
+  choices: ReadonlyArray<Value | Choice<Value> | Separator>;
   loop?: boolean;
   theme?: PartialDeep<Theme>;
+  default?: NoInfer<Value>;
 };
 
 function isSelectableChoice<T>(
@@ -53,18 +47,19 @@ function isSelectableChoice<T>(
 }
 
 function normalizeChoices<Value>(
-  choices: ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
+  choices: ReadonlyArray<Value | Choice<Value> | Separator>,
 ): Array<NormalizedChoice<Value> | Separator> {
   let index = 0;
   return choices.map((choice) => {
     if (Separator.isSeparator(choice)) return choice;
 
     index += 1;
-    if (typeof choice === 'string') {
+    if (typeof choice !== 'object' || choice === null || !('value' in choice)) {
+      const name = String(choice);
       return {
-        value: choice as Value,
-        name: choice,
-        short: choice,
+        value: choice,
+        name,
+        short: name,
         key: String(index),
       };
     }
@@ -105,7 +100,16 @@ export default createPrompt(
     const { loop = true } = config;
     const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
     const [status, setStatus] = useState<Status>('idle');
-    const [value, setValue] = useState<string>('');
+    const [value, setValue] = useState<string>(() => {
+      const defaultChoice =
+        config.default == null
+          ? undefined
+          : choices.find(
+              (choice): choice is NormalizedChoice<Value> =>
+                isSelectableChoice(choice) && choice.value === config.default,
+            );
+      return defaultChoice?.key ?? '';
+    });
     const [errorMsg, setError] = useState<string>();
     const theme = makeTheme(config.theme);
     const prefix = usePrefix({ status, theme });

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expectTypeOf, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
 import rawlist, { Separator } from './src/index.ts';
 
@@ -388,5 +388,52 @@ describe('rawlist prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"✔ Select an option Second option"');
 
     await expect(answer).resolves.toEqual('second');
+  });
+
+  describe('default', () => {
+    it('preselects the default value', async () => {
+      const { answer, events, getScreen } = await render(rawlist, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        default: 2,
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number 2
+          1) 1
+          2) 2
+          3) 3
+          4) 4
+          5) 5"
+      `);
+
+      events.keypress('enter');
+      expectTypeOf(answer).resolves.toEqualTypeOf<number>();
+      expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
+      await expect(answer).resolves.toEqual(2);
+    });
+
+    it('ignores default value if not found', async () => {
+      const { answer, events, getScreen } = await render(rawlist, {
+        message: 'Select a fruit',
+        choices: [
+          { name: 'Apple', value: 'apple' },
+          { name: 'Banana', value: 'banana' },
+        ],
+        // Forcing an invalid default value
+        default: 'Oops! not in the list' as 'banana',
+      });
+
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a fruit
+          1) Apple
+          2) Banana"
+      `);
+
+      events.type('1');
+      events.keypress('enter');
+      expectTypeOf(answer).resolves.toEqualTypeOf<'apple' | 'banana'>();
+      await expect(answer).resolves.toEqual('apple');
+    });
   });
 });
