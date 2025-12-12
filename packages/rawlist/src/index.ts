@@ -44,7 +44,7 @@ type RawlistConfig<
     : ReadonlyArray<Choice<Value> | Separator>;
   loop?: boolean;
   theme?: PartialDeep<Theme>;
-  default?: number;
+  default?: Value;
 };
 
 function isSelectableChoice<T>(
@@ -107,12 +107,13 @@ export default createPrompt(
     const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
     const [status, setStatus] = useState<Status>('idle');
     const initialValue = useMemo(() => {
-      if (typeof config.default === 'number') {
-        const selectable = choices.filter(isSelectableChoice);
-        if (selectable.length === 0) return '';
-        const idx = Math.max(1, Math.min(selectable.length, Math.trunc(config.default)));
-        const choice = selectable[idx - 1] as NormalizedChoice<Value>;
-        return choice.key;
+      if (config.default !== undefined) {
+        const defaultChoice = choices.find(
+          (choice) => isSelectableChoice(choice) && choice.value === config.default,
+        );
+        if (defaultChoice && isSelectableChoice(defaultChoice)) {
+          return defaultChoice.key;
+        }
       }
       return '';
     }, [config.default, choices]);

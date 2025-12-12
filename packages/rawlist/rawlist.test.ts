@@ -11,7 +11,7 @@ const numberedChoices = [
 ];
 
 describe('rawlist prompt', () => {
-  it('preselects the default index', async () => {
+  it('preselects the default value', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select a number',
       choices: numberedChoices,
@@ -32,7 +32,7 @@ describe('rawlist prompt', () => {
     await expect(answer).resolves.toEqual(2);
   });
 
-  it('default index skips separators', async () => {
+  it('default value skips separators', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select a fruit',
       choices: [
@@ -41,7 +41,7 @@ describe('rawlist prompt', () => {
         { name: 'Banana', value: 'banana' },
         { name: 'Pineapple', value: 'pineapple' },
       ],
-      default: 2,
+      default: 'banana',
     });
 
     expect(getScreen()).toMatchInlineSnapshot(`
@@ -55,6 +55,27 @@ describe('rawlist prompt', () => {
     events.keypress('enter');
     expect(getScreen()).toMatchInlineSnapshot('"✔ Select a fruit Banana"');
     await expect(answer).resolves.toEqual('banana');
+  });
+
+  it('ignores default value if not found', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a fruit',
+      choices: [
+        { name: 'Apple', value: 'apple' },
+        { name: 'Banana', value: 'banana' },
+      ],
+      default: 'orange',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a fruit
+        1) Apple
+        2) Banana"
+    `);
+
+    events.type('1');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('apple');
   });
   it('use number key to select an option', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
