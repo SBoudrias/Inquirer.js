@@ -1,13 +1,7 @@
 import { Stream } from 'node:stream';
 import { stripVTControlCharacters } from 'node:util';
 import MuteStream from 'mute-stream';
-import type { Context } from '@inquirer/type';
-
-type PromptWithConfig<Config> = (config: Config, context?: Context) => Promise<unknown>;
-
-type InferValue<P> = P extends (config: never, context?: Context) => Promise<infer V>
-  ? V
-  : never;
+import type { Prompt, Context } from '@inquirer/type';
 
 class BufferedStream extends Stream.Writable {
   #_fullOutput: string = '';
@@ -42,12 +36,12 @@ class BufferedStream extends Stream.Writable {
   }
 }
 
-export async function render<const Config, const P extends PromptWithConfig<Config>>(
-  prompt: P,
-  props: Config,
+export async function render<Value, const Config>(
+  prompt: Prompt<Value, Config>,
+  config: Config,
   options?: Context,
 ): Promise<{
-  answer: Promise<InferValue<P>>;
+  answer: Promise<Value>;
   input: MuteStream;
   events: {
     keypress: (
@@ -63,7 +57,7 @@ export async function render<const Config, const P extends PromptWithConfig<Conf
 
   const output = new BufferedStream();
 
-  const answer = prompt(props, { input, output, ...options });
+  const answer = prompt(config, { input, output, ...options });
 
   // Wait for event listeners to be ready
   await Promise.resolve();

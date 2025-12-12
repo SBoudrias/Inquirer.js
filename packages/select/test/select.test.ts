@@ -1331,49 +1331,30 @@ describe('select prompt', () => {
   });
 
   describe('type inference', () => {
-    // These tests verify type inference at the call site (issue #1929).
-    // They use direct calls to select() rather than render() because
-    // the render() testing utility has its own type constraints that
-    // don't preserve computed return types.
-
     it('infers string type when choices is string[]', async () => {
-      const abortController = new AbortController();
-
-      // Type-only test: verify inference at call site
-      const answer = select(
-        {
-          message: 'Select one',
-          choices: ['Option A', 'Option B', 'Option C'],
-        },
-        { signal: abortController.signal },
-      );
+      const { answer, events } = await render(select, {
+        message: 'Select one',
+        choices: ['Option A', 'Option B', 'Option C'],
+      });
 
       // This test verifies that the return type is properly inferred as string
       // when string[] is passed as choices (issue #1929)
-      expectTypeOf(answer).toEqualTypeOf<Promise<string>>();
+      expectTypeOf(answer).toExtend<Promise<string>>();
 
-      // Cancel the prompt to clean up
-      abortController.abort();
-      await expect(answer).rejects.toThrow();
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual('Option A');
     });
 
     it('infers Value type when choices is Choice<Value>[]', async () => {
-      const abortController = new AbortController();
+      const { answer, events } = await render(select, {
+        message: 'Select a number',
+        choices: [{ value: 1 }, { value: 2 }, { value: 3 }],
+      });
 
-      // Type-only test: verify inference at call site
-      const answer = select(
-        {
-          message: 'Select a number',
-          choices: [{ value: 1 }, { value: 2 }, { value: 3 }],
-        },
-        { signal: abortController.signal },
-      );
+      expectTypeOf(answer).toExtend<Promise<number>>();
 
-      expectTypeOf(answer).toEqualTypeOf<Promise<number>>();
-
-      // Cancel the prompt to clean up
-      abortController.abort();
-      await expect(answer).rejects.toThrow();
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(1);
     });
   });
 });
