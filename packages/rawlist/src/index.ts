@@ -44,7 +44,7 @@ type RawlistConfig<
     : ReadonlyArray<Choice<Value> | Separator>;
   loop?: boolean;
   theme?: PartialDeep<Theme>;
-  default?: number; 
+  default?: number;
 };
 
 function isSelectableChoice<T>(
