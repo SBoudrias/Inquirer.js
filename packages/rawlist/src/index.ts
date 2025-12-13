@@ -101,23 +101,28 @@ function getSelectedChoice<Value>(
     : [undefined, undefined];
 }
 
+function getDefaultChoice<Value>(
+  choices: ReadonlyArray<Separator | NormalizedChoice<Value>>,
+  defaultValue?: Value,
+): string | void { 
+  const defaultChoice = choices.find(
+    (choice): choice is NormalizedChoice<Value> =>
+      isSelectableChoice(choice) && choice.value === defaultValue,
+  );
+
+  if (defaultChoice) {
+    return defaultChoice.key;
+  }
+}
+
 export default createPrompt(
   <Value>(config: RawlistConfig<Value>, done: (value: Value) => void) => {
     const { loop = true } = config;
     const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
     const [status, setStatus] = useState<Status>('idle');
-    const initialValue = useMemo(() => {
-      if (config.default !== undefined) {
-        const defaultChoice = choices.find(
-          (choice) => isSelectableChoice(choice) && choice.value === config.default,
-        );
-        if (defaultChoice && isSelectableChoice(defaultChoice)) {
-          return defaultChoice.key;
-        }
-      }
-      return '';
-    }, [config.default, choices]);
-    const [value, setValue] = useState<string>(initialValue);
+    const [value, setValue] = useState<string>(() =>
+      getDefaultChoice(choices, config.default) ?? '', 
+    );
     const [errorMsg, setError] = useState<string>();
     const theme = makeTheme(config.theme);
     const prefix = usePrefix({ status, theme });
