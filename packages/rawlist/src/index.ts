@@ -101,18 +101,18 @@ function getSelectedChoice<Value>(
     : [undefined, undefined];
 }
 
-function getDefaultChoice<Value>(
+function getDefaultChoiceKey<Value>(
   choices: ReadonlyArray<Separator | NormalizedChoice<Value>>,
-  defaultValue?: Value,
-): string | void { 
+  defaultValue: Value | undefined,
+): string | undefined {
+  if (defaultValue === undefined) return undefined;
+
   const defaultChoice = choices.find(
     (choice): choice is NormalizedChoice<Value> =>
       isSelectableChoice(choice) && choice.value === defaultValue,
   );
 
-  if (defaultChoice) {
-    return defaultChoice.key;
-  }
+  return defaultChoice?.key;
 }
 
 export default createPrompt(
@@ -120,8 +120,8 @@ export default createPrompt(
     const { loop = true } = config;
     const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
     const [status, setStatus] = useState<Status>('idle');
-    const [value, setValue] = useState<string>(() =>
-      getDefaultChoice(choices, config.default) ?? '', 
+    const [value, setValue] = useState<string | undefined>(() =>
+      getDefaultChoiceKey(choices, config.default),
     );
     const [errorMsg, setError] = useState<string>();
     const theme = makeTheme(config.theme);
@@ -142,13 +142,13 @@ export default createPrompt(
 
     useKeypress((key, rl) => {
       if (isEnterKey(key)) {
-        const [selectedChoice] = getSelectedChoice(value, choices);
+        const [selectedChoice] = getSelectedChoice(value ?? '', choices);
 
         if (isSelectableChoice(selectedChoice)) {
           setValue(selectedChoice.short);
           setStatus('done');
           done(selectedChoice.value);
-        } else if (value === '') {
+        } else if (!value) {
           setError('Please input a value');
         } else {
           setError(`"${styleText('red', value)}" isn't an available option`);
@@ -156,7 +156,7 @@ export default createPrompt(
       } else if (isUpKey(key) || isDownKey(key)) {
         rl.clearLine(0);
 
-        const [selectedChoice, active] = getSelectedChoice(value, choices);
+        const [selectedChoice, active] = getSelectedChoice(value ?? '', choices);
         if (!selectedChoice) {
           const firstChoice = isDownKey(key)
             ? choices.find(isSelectableChoice)!
@@ -183,7 +183,7 @@ export default createPrompt(
     const message = theme.style.message(config.message, status);
 
     if (status === 'done') {
-      return `${prefix} ${message} ${theme.style.answer(value)}`;
+      return `${prefix} ${message} ${theme.style.answer(value ?? '')}`;
     }
 
     const choicesStr = choices
@@ -194,7 +194,7 @@ export default createPrompt(
 
         const line = `  ${choice.key}) ${choice.name}`;
 
-        if (choice.key === value.toLowerCase()) {
+        if (choice.key === (value ?? '').toLowerCase()) {
           return theme.style.highlight(line);
         }
 
@@ -208,7 +208,7 @@ export default createPrompt(
     }
 
     return [
-      `${prefix} ${message} ${value}`,
+      `${prefix} ${message} ${value ?? ''}`,
       [choicesStr, error].filter(Boolean).join('\n'),
     ];
   },
