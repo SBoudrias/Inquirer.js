@@ -71,7 +71,7 @@ type SelectConfig<Value> = {
   choices: ReadonlyArray<Value | Choice<Value> | Separator>;
   pageSize?: number;
   loop?: boolean;
-  default?: Value;
+  default?: NoInfer<Value>;
   theme?: PartialDeep<Theme<SelectTheme>>;
 };
 

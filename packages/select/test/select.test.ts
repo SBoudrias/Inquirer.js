@@ -1339,7 +1339,7 @@ describe('select prompt', () => {
 
       // This test verifies that the return type is properly inferred as string
       // when string[] is passed as choices (issue #1929)
-      expectTypeOf(answer).toExtend<Promise<string>>();
+      expectTypeOf(answer).resolves.toExtend<string>();
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual('Option A');
@@ -1351,7 +1351,7 @@ describe('select prompt', () => {
         choices: [{ value: 1 }, { value: 2 }, { value: 3 }],
       });
 
-      expectTypeOf(answer).toExtend<Promise<number>>();
+      expectTypeOf(answer).resolves.toExtend<number>();
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual(1);
