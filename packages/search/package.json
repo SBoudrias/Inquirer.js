@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/search",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Inquirer search prompt",
   "keywords": [
     "answer",
@@ -61,12 +61,12 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/core": "^11.0.2",
+    "@inquirer/core": "^11.1.0",
     "@inquirer/figures": "^2.0.2",
     "@inquirer/type": "^4.0.2"
   },
   "devDependencies": {
-    "@inquirer/testing": "^3.0.2",
+    "@inquirer/testing": "^3.0.3",
     "@repo/tsconfig": "workspace:*",
     "typescript": "^5.9.3"
   },

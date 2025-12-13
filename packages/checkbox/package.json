@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/checkbox",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "Inquirer checkbox prompt",
   "keywords": [
     "answer",
@@ -62,12 +62,12 @@
   },
   "dependencies": {
     "@inquirer/ansi": "^2.0.2",
-    "@inquirer/core": "^11.0.2",
+    "@inquirer/core": "^11.1.0",
     "@inquirer/figures": "^2.0.2",
     "@inquirer/type": "^4.0.2"
   },
   "devDependencies": {
-    "@inquirer/testing": "^3.0.2",
+    "@inquirer/testing": "^3.0.3",
     "@repo/tsconfig": "workspace:*",
     "typescript": "^5.9.3"
   },
