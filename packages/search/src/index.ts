@@ -123,7 +123,9 @@ export default createPrompt(
     const theme = makeTheme<SearchTheme>(searchTheme, config.theme);
     const [status, setStatus] = useState<Status>('loading');
 
-    const [searchTerm, setSearchTerm] = useState<string>(typeof config.default === 'string' ? config.default : '');
+    const [searchTerm, setSearchTerm] = useState<string>(
+      typeof config.default === 'string' ? config.default : '',
+    );
     const [searchResults, setSearchResults] = useState<ReadonlyArray<Item<Value>>>([]);
     const [searchError, setSearchError] = useState<string>();
     const [defaultIndex, setDefaultIndex] = useState(-1);
@@ -160,9 +162,7 @@ export default createPrompt(
               const index = normalized.findIndex(
                 (item) =>
                   isSelectable(item) &&
-                  String(item.value)
-                    .toLowerCase()
-                    .includes(String(defaultValue).toLowerCase()),
+                  String(item.value).toLowerCase().includes(defaultValue.toLowerCase()),
               );
               if (index !== -1) {
                 setDefaultIndex(index);
@@ -172,6 +172,9 @@ export default createPrompt(
                 setDefaultIndex(-1);
               }
               setDefaultValue(undefined);
+            } else {
+              const firstSelectable = normalized.findIndex(isSelectable);
+              setActive(firstSelectable !== -1 ? firstSelectable : 0);
             }
             setStatus('idle');
           }
@@ -194,7 +197,7 @@ export default createPrompt(
 
     useKeypress(async (key, rl) => {
       if (isEnterKey(key)) {
-        if (selectedChoice) {
+        if (selectedChoice && isSelectable(selectedChoice)) {
           setStatus('loading');
           const isValid = await validate(selectedChoice.value);
           setStatus('idle');
