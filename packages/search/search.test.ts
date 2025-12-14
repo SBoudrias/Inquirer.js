@@ -629,21 +629,6 @@ describe('search prompt', () => {
       default: 'New',
     });
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province (New)
-      ❯ Alberta
-        British Columbia
-        Manitoba
-        New Brunswick
-        Newfoundland and Labrador
-        Nova Scotia
-        Ontario
-
-      ↑↓ navigate • ⏎ select"
-    `);
-
-    events.keypress('tab');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
       ❯ New Brunswick
         Newfoundland and Labrador
@@ -662,14 +647,9 @@ describe('search prompt', () => {
       default: 'New',
     });
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Select a Canadian province (New)
-      ❯ Alberta
-        British Columbia
-        Manitoba
-        New Brunswick
+      "? Select a Canadian province New
+      ❯ New Brunswick
         Newfoundland and Labrador
-        Nova Scotia
-        Ontario
 
       ↑↓ navigate • ⏎ select"
     `);

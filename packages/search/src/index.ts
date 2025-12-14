@@ -14,7 +14,6 @@ import {
   makeTheme,
   type Theme,
   type Status,
-  isBackspaceKey,
 } from '@inquirer/core';
 import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
@@ -124,9 +123,10 @@ export default createPrompt(
     const theme = makeTheme<SearchTheme>(searchTheme, config.theme);
     const [status, setStatus] = useState<Status>('loading');
 
-    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [searchTerm, setSearchTerm] = useState<string>(typeof config.default === 'string' ? config.default : '');
     const [searchResults, setSearchResults] = useState<ReadonlyArray<Item<Value>>>([]);
     const [searchError, setSearchError] = useState<string>();
+    const [defaultIndex, setDefaultIndex] = useState(-1);
     const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
 
     const prefix = usePrefix({ status, theme });
@@ -154,9 +154,25 @@ export default createPrompt(
 
           if (!controller.signal.aborted) {
             // Reset the pointer
-            setActive(undefined);
-            setSearchError(undefined);
-            setSearchResults(normalizeChoices(results));
+            const normalized = normalizeChoices(results);
+            setSearchResults(normalized);
+            if (defaultValue) {
+              const index = normalized.findIndex(
+                (item) =>
+                  isSelectable(item) &&
+                  String(item.value)
+                    .toLowerCase()
+                    .includes(String(defaultValue).toLowerCase()),
+              );
+              if (index !== -1) {
+                setDefaultIndex(index);
+                setActive(index);
+                setSearchTerm(defaultValue);
+              } else {
+                setDefaultIndex(-1);
+              }
+              setDefaultValue(undefined);
+            }
             setStatus('idle');
           }
         } catch (error: unknown) {
@@ -198,20 +214,12 @@ export default createPrompt(
           // get cleared, forcing the user to re-enter the value instead of fixing it.
           rl.write(searchTerm);
         }
-      } else if (isTabKey(key) && defaultValue && !searchTerm) {
-        rl.clearLine(0);
-        rl.write(defaultValue);
-        setSearchTerm(defaultValue);
-        setDefaultValue(undefined);
       } else if (isTabKey(key) && selectedChoice) {
         rl.clearLine(0); // Remove the tab character.
         rl.write(selectedChoice.name);
         setSearchTerm(selectedChoice.name);
-      } else if (isBackspaceKey(key) && !searchTerm) {
-        setDefaultValue(undefined);
       } else if (status !== 'loading' && (isUpKey(key) || isDownKey(key))) {
         rl.clearLine(0);
-        setDefaultValue(undefined);
         if (
           (isUpKey(key) && active !== bounds.first) ||
           (isDownKey(key) && active !== bounds.last)
@@ -224,6 +232,7 @@ export default createPrompt(
           setActive(next);
         }
       } else {
+        if (defaultIndex !== -1) setDefaultIndex(-1);
         setSearchTerm(rl.line);
       }
     });
@@ -275,14 +284,7 @@ export default createPrompt(
     }
 
     const description = selectedChoice?.description;
-    let defaultStr;
-    if (defaultValue && status !== 'done' && !searchTerm) {
-      defaultStr = theme.style.defaultAnswer(defaultValue);
-    }
-    const header = [prefix, message, defaultStr, searchStr]
-      .filter(Boolean)
-      .join(' ')
-      .trimEnd();
+    const header = [prefix, message, searchStr].filter(Boolean).join(' ').trimEnd();
     const body = [
       error ?? page,
       ' ',
