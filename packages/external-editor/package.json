@@ -2,15 +2,6 @@
   "name": "@inquirer/external-editor",
   "version": "2.0.2",
   "description": "Edit a string with the users preferred text editor using $VISUAL or $ENVIRONMENT",
-  "type": "module",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": "./src/index.ts"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SBoudrias/Inquirer.js.git"
-  },
   "keywords": [
     "answer",
     "answers",
@@ -20,7 +11,10 @@
     "command",
     "command-line",
     "confirm",
+    "editor",
     "enquirer",
+    "external",
+    "external-editor",
     "generate",
     "generator",
     "hyper",
@@ -46,37 +40,31 @@
     "terminal",
     "tty",
     "ui",
+    "user",
+    "visual",
     "yeoman",
     "yo",
-    "zsh",
-    "editor",
-    "external",
-    "external-editor",
-    "user",
-    "visual"
+    "zsh"
   ],
-  "publishConfig": {
-    "access": "public",
-    "exports": {
-      "./package.json": "./package.json",
-      ".": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      }
-    },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
-  },
-  "files": [
-    "dist"
-  ],
-  "engines": {
-    "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/external-editor/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
   },
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "license": "MIT",
   "sideEffects": false,
-  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/external-editor/README.md",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "tsc": "tsc"
+  },
   "dependencies": {
     "chardet": "^2.1.1",
     "iconv-lite": "^0.7.0"
@@ -94,7 +82,19 @@
       "optional": true
     }
   },
-  "scripts": {
-    "tsc": "tsc"
+  "engines": {
+    "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./package.json": "./package.json"
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
   }
 }

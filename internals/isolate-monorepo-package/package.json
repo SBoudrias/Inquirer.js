@@ -2,14 +2,14 @@
   "name": "isolate-monorepo-package",
   "version": "1.0.0",
   "private": true,
-  "sideEffects": false,
   "description": "Tool for testing package isolation in Yarn workspace monorepo",
+  "sideEffects": false,
   "type": "module",
-  "bin": "./src/bin.ts",
   "exports": {
-    "./package.json": "./package.json",
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
   },
+  "bin": "./src/bin.ts",
   "scripts": {
     "tsc": "tsc && chmod +x ./dist/bin.js"
   },

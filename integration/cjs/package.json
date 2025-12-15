@@ -2,6 +2,7 @@
   "name": "@inquirer/cjs-integration-tests",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": false,
   "scripts": {
     "test": "node --test **/*.test.*"
   },
@@ -11,7 +12,6 @@
     "@inquirer/prompts": "workspace:*",
     "inquirer": "workspace:*"
   },
-  "sideEffects": false,
   "engines": {
     "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
   }

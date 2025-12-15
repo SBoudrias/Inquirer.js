@@ -3,6 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 import semver from 'semver';
 import { globby } from 'globby';
+import { parse as parseJsonc } from 'jsonc-parser';
 import type { PackageJson, TsConfigJson } from 'type-fest';
 import { fixPeerDeps } from './hoist-peer-dependencies.ts';
 
@@ -14,7 +15,7 @@ function readFile(filepath: string) {
 
 function readJSONFile<T>(filepath: string): Promise<T> {
   return readFile(filepath)
-    .then(JSON.parse)
+    .then((content) => parseJsonc(content) as T)
     .catch((error: unknown) => {
       console.error(`Error reading ${filepath}: ${error}`);
       throw error;

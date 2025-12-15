@@ -2,15 +2,15 @@
   "name": "@repo/tsconfig",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": false,
+  "exports": {
+    ".": "./tsconfig.json",
+    "./package.json": "./package.json"
+  },
   "dependencies": {
     "@sindresorhus/tsconfig": "^8.1.0"
   },
-  "sideEffects": false,
   "engines": {
     "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
-  },
-  "exports": {
-    "./package.json": "./package.json",
-    ".": "./tsconfig.json"
   }
 }
