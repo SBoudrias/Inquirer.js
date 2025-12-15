@@ -10,6 +10,22 @@
     "perf": "error"
   },
   "rules": {
-    "no-await-in-loop": "off"
-  }
+    "no-await-in-loop": "off",
+    "oxc/no-map-spread": "off",
+    "typescript/await-thenable": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/no-unsafe-type-assertion": "off",
+    "typescript/no-unnecessary-type-assertion": "off",
+    "typescript/restrict-template-expressions": "off",
+    "typescript/unbound-method": "off"
+  },
+  "overrides": [
+    {
+      "files": ["integration/**/*.cjs", "integration/**/*.mjs"],
+      "rules": {
+        "typescript/no-floating-promises": "off"
+      }
+    }
+  ]
 }

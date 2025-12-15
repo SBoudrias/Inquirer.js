@@ -60,6 +60,10 @@ export default defineConfig(
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-unnecessary-type-parameters': 'off',
+      // Migrated to oxlint type-aware rules (--type-aware flag)
+      '@typescript-eslint/await-thenable': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
       'n/no-missing-import': ['error', { ignoreTypeImport: true }],
     },
   },
