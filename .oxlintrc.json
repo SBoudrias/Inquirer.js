@@ -3,9 +3,7 @@
   "env": {
     "node": true
   },
-  "ignorePatterns": [
-    ".yarn"
-  ],
+  "ignorePatterns": [".yarn"],
   "categories": {
     "correctness": "error",
     "suspicious": "error",
