@@ -2,8 +2,8 @@
   "extends": "@repo/tsconfig",
   "compilerOptions": {
     "isolatedDeclarations": true,
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": ["src"],
-  "exclude": ["src/**/*.test.ts"],
+  "exclude": ["src/**/*.test.ts"]
 }

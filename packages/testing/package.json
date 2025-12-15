@@ -35,27 +35,27 @@
     "stdin",
     "stdout",
     "terminal",
-    "tty",
-    "ui",
-    "yeoman",
-    "yo",
-    "zsh",
     "test",
     "testing",
-    "unit-test"
+    "tty",
+    "ui",
+    "unit-test",
+    "yeoman",
+    "yo",
+    "zsh"
   ],
   "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/testing/README.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/SBoudrias/Inquirer.js.git"
   },
-  "license": "MIT",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "license": "MIT",
   "sideEffects": false,
   "type": "module",
   "exports": {
-    "./package.json": "./package.json",
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
@@ -73,9 +73,6 @@
     "@types/node": "^24.10.1",
     "typescript": "^5.9.3"
   },
-  "engines": {
-    "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
-  },
   "peerDependencies": {
     "@types/node": ">=18"
   },
@@ -84,14 +81,17 @@
       "optional": true
     }
   },
+  "engines": {
+    "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
+  },
   "publishConfig": {
     "access": "public",
     "exports": {
-      "./package.json": "./package.json",
       ".": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
-      }
+      },
+      "./package.json": "./package.json"
     },
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts"

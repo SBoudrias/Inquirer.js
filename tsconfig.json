@@ -5,10 +5,10 @@
     "tools/**/*",
     "**/*.test.ts",
     "**/*.d.ts",
-    "**/examples/**/*",
+    "**/examples/**/*"
   ],
   "compilerOptions": {
     "skipLibCheck": true,
-    "noEmit": true,
-  },
+    "noEmit": true
+  }
 }

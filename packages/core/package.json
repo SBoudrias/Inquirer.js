@@ -46,13 +46,13 @@
     "type": "git",
     "url": "https://github.com/SBoudrias/Inquirer.js.git"
   },
-  "license": "MIT",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "license": "MIT",
   "sideEffects": false,
   "type": "module",
   "exports": {
-    "./package.json": "./package.json",
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
@@ -90,11 +90,11 @@
   "publishConfig": {
     "access": "public",
     "exports": {
-      "./package.json": "./package.json",
       ".": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
-      }
+      },
+      "./package.json": "./package.json"
     },
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts"

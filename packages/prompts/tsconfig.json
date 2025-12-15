@@ -3,6 +3,6 @@
   "include": ["src"],
   "exclude": ["src/**/*.test.ts"],
   "compilerOptions": {
-    "outDir": "dist",
-  },
+    "outDir": "dist"
+  }
 }
