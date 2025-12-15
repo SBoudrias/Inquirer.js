@@ -479,7 +479,7 @@ __metadata:
     "@inquirer/type": "npm:^4.0.2"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
-    "@types/node": "npm:^24.10.1"
+    "@types/node": "npm:^25.0.2"
     cli-width: "npm:^4.1.0"
     mute-stream: "npm:^3.0.0"
     signal-exit: "npm:^4.1.0"
@@ -501,7 +501,7 @@ __metadata:
     "@inquirer/figures": "npm:^2.0.2"
     "@inquirer/prompts": "npm:^8.1.0"
     "@repo/tsconfig": "workspace:*"
-    "@types/node": "npm:^24.10.1"
+    "@types/node": "npm:^25.0.2"
     typescript: "npm:^5.9.3"
   peerDependencies:
     "@types/node": ">=18"
@@ -725,7 +725,7 @@ __metadata:
     "@lerna-lite/cli": "npm:^4.9.2"
     "@lerna-lite/publish": "npm:^4.9.2"
     "@repo/tsconfig": "workspace:*"
-    "@types/node": "npm:^24.10.1"
+    "@types/node": "npm:^25.0.2"
     "@vitest/coverage-v8": "npm:^4.0.13"
     "@vitest/ui": "npm:^4.0.13"
     eslint: "npm:^9.39.1"
@@ -808,7 +808,7 @@ __metadata:
     "@inquirer/type": "npm:^4.0.2"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
-    "@types/node": "npm:^24.10.1"
+    "@types/node": "npm:^25.0.2"
     mute-stream: "npm:^3.0.0"
     typescript: "npm:^5.9.3"
   peerDependencies:
@@ -1919,7 +1919,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^24.10.1":
+"@types/node@npm:*":
   version: 24.10.1
   resolution: "@types/node@npm:24.10.1"
   dependencies:
@@ -1934,6 +1934,15 @@ __metadata:
   dependencies:
     undici-types: "npm:~6.21.0"
   checksum: 10/40d5368faa6d9be6c27ebca2362734bc9e035a742e0b5cafee40ba3b355d7cfcaedbc93618c76465451e53f1af0c811b4b85ee9b85e2e942f34a4c5310fa047b
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^25.0.2":
+  version: 25.0.2
+  resolution: "@types/node@npm:25.0.2"
+  dependencies:
+    undici-types: "npm:~7.16.0"
+  checksum: 10/8d37061ed51c273551cca3fe36913a448cc5992b687d7c077a5e99eeb3d0f15a8aca81e53ad3f557dc16f4f4b11877832bb4fbb45f3e162066806da969015251
   languageName: node
   linkType: hard
 
@@ -4032,7 +4041,7 @@ __metadata:
   resolution: "isolate-monorepo-package@workspace:internals/isolate-monorepo-package"
   dependencies:
     "@repo/tsconfig": "workspace:*"
-    "@types/node": "npm:^24.10.1"
+    "@types/node": "npm:^25.0.2"
     type-fest: "npm:^5.2.0"
     typescript: "npm:^5.9.3"
   bin:

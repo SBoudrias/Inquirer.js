@@ -75,7 +75,7 @@
     "@lerna-lite/cli": "^4.9.2",
     "@lerna-lite/publish": "^4.9.2",
     "@repo/tsconfig": "workspace:*",
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.0.2",
     "@vitest/coverage-v8": "^4.0.13",
     "@vitest/ui": "^4.0.13",
     "eslint": "^9.39.1",
