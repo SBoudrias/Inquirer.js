@@ -70,7 +70,7 @@
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.0.2",
     "typescript": "^5.9.3"
   },
   "engines": {
