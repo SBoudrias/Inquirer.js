@@ -136,7 +136,7 @@ You can rely on this behavior to implement progressive autocomplete searches. Wh
 
 Pressing `tab` also triggers the term autocomplete.
 
-You can see this behavior in action in [our search demo](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/demo/demos/search.mjs).
+You can see this behavior in action in [our search demo](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/demo/src/demos/search.ts).
 
 ## Theming
 
