@@ -30,16 +30,68 @@
     "typescript/switch-exhaustiveness-check": "error",
     "typescript/restrict-plus-operands": "error",
     "typescript/prefer-promise-reject-errors": "error",
-    "typescript/no-unsafe-type-assertion": "off",
-    "typescript/no-unnecessary-type-assertion": "off",
-    "typescript/restrict-template-expressions": "off",
-    "typescript/unbound-method": "off"
+    "typescript/no-unsafe-type-assertion": "error",
+    "typescript/no-unnecessary-type-assertion": "error",
+    "typescript/restrict-template-expressions": "error",
+    "typescript/unbound-method": "error"
   },
   "overrides": [
     {
       "files": ["integration/**/*.cjs", "integration/**/*.mjs"],
       "rules": {
         "typescript/no-floating-promises": "off"
+      }
+    },
+    {
+      "files": ["**/*.test.ts", "**/*.test.mts", "packages/testing/**"],
+      "rules": {
+        "typescript/no-unnecessary-type-assertion": "off",
+        "typescript/unbound-method": "off",
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      "files": ["internals/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off",
+        "typescript/restrict-template-expressions": "off"
+      }
+    },
+    {
+      "files": ["packages/external-editor/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      "files": ["packages/demo/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      "files": ["packages/core/src/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      "files": ["packages/inquirer/src/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      "files": [
+        "packages/select/src/**",
+        "packages/rawlist/src/**",
+        "packages/expand/src/**",
+        "packages/number/src/**",
+        "packages/search/src/**",
+        "packages/checkbox/src/**"
+      ],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
       }
     }
   ]

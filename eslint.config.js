@@ -55,7 +55,6 @@ export default defineConfig(
       },
     },
     rules: {
-      '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/no-invalid-void-type': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
@@ -64,6 +63,9 @@ export default defineConfig(
       '@typescript-eslint/await-thenable': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
       '@typescript-eslint/no-misused-promises': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+      '@typescript-eslint/unbound-method': 'off',
       '@typescript-eslint/no-deprecated': 'off',
       '@typescript-eslint/prefer-includes': 'off',
       '@typescript-eslint/no-for-in-array': 'off',
@@ -95,7 +97,6 @@ export default defineConfig(
   {
     files: ['packages/inquirer/test/**', 'packages/**/*.test.*'],
     rules: {
-      '@typescript-eslint/unbound-method': 'off',
       'n/no-extraneous-import': [
         'error',
         {
