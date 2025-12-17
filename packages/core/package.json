@@ -66,8 +66,7 @@
     "@inquirer/type": "^4.0.2",
     "cli-width": "^4.1.0",
     "mute-stream": "^3.0.0",
-    "signal-exit": "^4.1.0",
-    "wrap-ansi": "^9.0.2"
+    "signal-exit": "^4.1.0"
   },
   "devDependencies": {
     "@inquirer/testing": "^3.0.3",
