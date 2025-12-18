@@ -10,6 +10,89 @@
     "perf": "error"
   },
   "rules": {
-    "no-await-in-loop": "off"
-  }
+    "no-await-in-loop": "off",
+    "oxc/no-map-spread": "off",
+    "typescript/await-thenable": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/no-deprecated": "error",
+    "typescript/prefer-includes": "error",
+    "typescript/no-for-in-array": "error",
+    "typescript/no-implied-eval": "error",
+    "typescript/require-array-sort-compare": "error",
+    "typescript/no-base-to-string": "error",
+    "typescript/no-array-delete": "error",
+    "typescript/only-throw-error": "error",
+    "typescript/no-redundant-type-constituents": "error",
+    "typescript/no-meaningless-void-operator": "error",
+    "typescript/no-unsafe-enum-comparison": "error",
+    "typescript/no-mixed-enums": "error",
+    "typescript/switch-exhaustiveness-check": "error",
+    "typescript/restrict-plus-operands": "error",
+    "typescript/prefer-promise-reject-errors": "error",
+    "typescript/no-unsafe-type-assertion": "error",
+    "typescript/no-unnecessary-type-assertion": "error",
+    "typescript/restrict-template-expressions": "error",
+    "typescript/unbound-method": "error"
+  },
+  "overrides": [
+    {
+      "files": ["integration/**/*.cjs", "integration/**/*.mjs"],
+      "rules": {
+        "typescript/no-floating-promises": "off"
+      }
+    },
+    {
+      "files": ["**/*.test.ts", "**/*.test.mts", "packages/testing/**"],
+      "rules": {
+        "typescript/no-unnecessary-type-assertion": "off",
+        "typescript/unbound-method": "off",
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      "files": ["internals/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off",
+        "typescript/restrict-template-expressions": "off"
+      }
+    },
+    {
+      "files": ["packages/external-editor/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      "files": ["packages/demo/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      "files": ["packages/core/src/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      "files": ["packages/inquirer/src/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      "files": [
+        "packages/select/src/**",
+        "packages/rawlist/src/**",
+        "packages/expand/src/**",
+        "packages/number/src/**",
+        "packages/search/src/**",
+        "packages/checkbox/src/**"
+      ],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    }
+  ]
 }
