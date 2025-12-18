@@ -17,9 +17,7 @@ export function breakLines(content: string, width: number): string {
     let escapeSequence = '';
     let inEscape = false;
 
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i]!;
-
+    for (const char of line) {
       // Detect start of ANSI escape code
       if (char === '\x1b') {
         inEscape = true;
@@ -31,6 +29,8 @@ export function breakLines(content: string, width: number): string {
       if (inEscape) {
         escapeSequence += char;
 
+        // ANSI escape sequences always end with a letter (eg., 'm' in '\x1b[31m')
+        // This marks the end of the sequence so we can append it without counting its width
         if (/[a-zA-Z]/.test(char)) {
           inEscape = false;
           currentLine += escapeSequence;
