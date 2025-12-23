@@ -6,7 +6,6 @@ import {
   from,
   of,
   concatMap,
-  filter,
   reduce,
   isObservable,
   Observable,
@@ -23,7 +22,9 @@ import type {
   AsyncGetterFunction,
   PromptSession,
   StreamOptions,
+  CustomWhenResult,
 } from '../types.ts';
+import SkippedRenderer from './skipped-renderer.ts';
 
 export const _ = {
   set: (obj: Record<string, unknown>, path: string = '', value: unknown): void => {
@@ -230,16 +231,18 @@ export default class PromptsRunner<A extends Answers> {
       concatMap((question) =>
         of(question).pipe(
           concatMap((question) =>
-            from(
-              this.shouldRun(question).then((shouldRun: boolean | void) => {
-                if (shouldRun) {
-                  return question;
+            from(this.shouldRun(question)).pipe(
+              concatMap(({ display, ask }) => {
+                if (ask) {
+                  return defer(() => from(this.fetchAnswer(question)));
                 }
-                return;
+                if (display) {
+                  this.displaySkippedQuestion(question);
+                }
+                return EMPTY;
               }),
-            ).pipe(filter((val) => val != null)),
+            ),
           ),
-          concatMap((question) => defer(() => from(this.fetchAnswer(question)))),
         ),
       ),
     );
@@ -391,6 +394,13 @@ export default class PromptsRunner<A extends Answers> {
       });
   };
 
+  private displaySkippedQuestion(question: Question<A>) {
+    const renderer = SkippedRenderer[question.type] || SkippedRenderer.default;
+    type RendererFunc<A extends Answers> = (question: Question<A>) => string;
+    const outputText = (renderer as RendererFunc<A>)(question);
+    (this.opt.output || process.stdout).write(`${outputText}\n`);
+  }
+
   /**
    * Close the interface and cleanup listeners
    */
@@ -398,20 +408,27 @@ export default class PromptsRunner<A extends Answers> {
     this.abortController.abort();
   };
 
-  private shouldRun = async (question: Question<A>): Promise<boolean> => {
+  private shouldRun = async (question: Question<A>): Promise<CustomWhenResult> => {
     if (
       question.askAnswered !== true &&
       _.get(this.answers, question.name) !== undefined
     ) {
-      return false;
+      return { display: false, ask: false };
     }
 
     const { when } = question;
     if (typeof when === 'function') {
       const shouldRun = await runAsync(when)(this.answers);
-      return Boolean(shouldRun);
+      if (typeof shouldRun === 'object') {
+        const display = shouldRun.display;
+        const ask = shouldRun.ask;
+        return { display, ask };
+      }
+      const ask = Boolean(shouldRun);
+      return { display: ask, ask };
     }
 
-    return when !== false;
+    const ask = when !== false;
+    return { display: ask, ask };
   };
 }
