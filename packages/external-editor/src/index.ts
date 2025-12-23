@@ -4,7 +4,14 @@ import { readFileSync, unlinkSync, type WriteFileOptions, writeFileSync } from '
 import path from 'node:path';
 import os from 'node:os';
 import { randomUUID } from 'node:crypto';
-import iconv from 'iconv-lite';
+// iconv-lite 0.7.1 has broken type definitions, using createRequire as workaround
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const iconv: {
+  decode: (buffer: Buffer, encoding: string) => string;
+  encodingExists: (encoding: string) => boolean;
+} = require('iconv-lite');
 import { CreateFileError } from './errors/CreateFileError.ts';
 import { LaunchEditorError } from './errors/LaunchEditorError.ts';
 import { ReadFileError } from './errors/ReadFileError.ts';

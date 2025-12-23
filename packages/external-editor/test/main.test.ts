@@ -1,6 +1,12 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
 import { readFileSync, statSync, writeFileSync } from 'node:fs';
-import iconv from 'iconv-lite';
+// iconv-lite 0.7.1 has broken type definitions, using createRequire as workaround
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const iconv: {
+  encode: (content: string, encoding: string) => Buffer;
+} = require('iconv-lite');
 import { dirname } from 'node:path';
 import { edit, editAsync, ExternalEditor } from '../src/index.ts';
 
