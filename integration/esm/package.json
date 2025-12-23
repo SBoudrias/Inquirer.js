@@ -2,8 +2,8 @@
   "name": "@inquirer/esm-integration-tests",
   "version": "0.0.0",
   "private": true,
-  "sideEffects": false,
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "test": "node --test **/*.test.*"
   },

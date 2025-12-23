@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "description": "Tool for testing package isolation in Yarn workspace monorepo",
-  "sideEffects": false,
+  "bin": "./src/bin.ts",
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
     "./package.json": "./package.json"
   },
-  "bin": "./src/bin.ts",
   "scripts": {
     "tsc": "tsc && chmod +x ./dist/bin.js"
   },

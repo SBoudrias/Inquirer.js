@@ -2,12 +2,12 @@
   "name": "setup-packages",
   "version": "0.0.0",
   "private": true,
-  "sideEffects": false,
+  "bin": "./src/bin.ts",
   "type": "module",
+  "sideEffects": false,
   "exports": {
     "./package.json": "./package.json"
   },
-  "bin": "./src/bin.ts",
   "dependencies": {
     "globby": "^16.0.0",
     "jsonc-parser": "^3.3.1",
