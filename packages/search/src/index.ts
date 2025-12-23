@@ -76,6 +76,7 @@ type SearchConfig<
         | Promise<ReadonlyArray<Choice<Value> | Separator>>;
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
+  default?: string;
   theme?: PartialDeep<Theme<SearchTheme>>;
 };
 
@@ -122,9 +123,13 @@ export default createPrompt(
     const theme = makeTheme<SearchTheme>(searchTheme, config.theme);
     const [status, setStatus] = useState<Status>('loading');
 
-    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [searchTerm, setSearchTerm] = useState<string>(
+      typeof config.default === 'string' ? config.default : '',
+    );
     const [searchResults, setSearchResults] = useState<ReadonlyArray<Item<Value>>>([]);
     const [searchError, setSearchError] = useState<string>();
+    const [defaultIndex, setDefaultIndex] = useState(-1);
+    const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
 
     const prefix = usePrefix({ status, theme });
 
@@ -151,9 +156,26 @@ export default createPrompt(
 
           if (!controller.signal.aborted) {
             // Reset the pointer
-            setActive(undefined);
-            setSearchError(undefined);
-            setSearchResults(normalizeChoices(results));
+            const normalized = normalizeChoices(results);
+            setSearchResults(normalized);
+            if (defaultValue) {
+              const index = normalized.findIndex(
+                (item) =>
+                  isSelectable(item) &&
+                  String(item.value).toLowerCase().includes(defaultValue.toLowerCase()),
+              );
+              if (index !== -1) {
+                setDefaultIndex(index);
+                setActive(index);
+                setSearchTerm(defaultValue);
+              } else {
+                setDefaultIndex(-1);
+              }
+              setDefaultValue(undefined);
+            } else {
+              const firstSelectable = normalized.findIndex(isSelectable);
+              setActive(firstSelectable !== -1 ? firstSelectable : 0);
+            }
             setStatus('idle');
           }
         } catch (error: unknown) {
@@ -175,7 +197,7 @@ export default createPrompt(
 
     useKeypress(async (key, rl) => {
       if (isEnterKey(key)) {
-        if (selectedChoice) {
+        if (selectedChoice && isSelectable(selectedChoice)) {
           setStatus('loading');
           const isValid = await validate(selectedChoice.value);
           setStatus('idle');
@@ -213,6 +235,7 @@ export default createPrompt(
           setActive(next);
         }
       } else {
+        if (defaultIndex !== -1) setDefaultIndex(-1);
         setSearchTerm(rl.line);
       }
     });
