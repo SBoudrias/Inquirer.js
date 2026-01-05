@@ -3589,8 +3589,8 @@ __metadata:
   linkType: hard
 
 "globby@npm:^16.0.0":
-  version: 16.0.0
-  resolution: "globby@npm:16.0.0"
+  version: 16.1.0
+  resolution: "globby@npm:16.1.0"
   dependencies:
     "@sindresorhus/merge-streams": "npm:^4.0.0"
     fast-glob: "npm:^3.3.3"
@@ -3598,7 +3598,7 @@ __metadata:
     is-path-inside: "npm:^4.0.0"
     slash: "npm:^5.1.0"
     unicorn-magic: "npm:^0.4.0"
-  checksum: 10/3c9e13bc4c9b957fd538513e393a4aa17e1cf71c1a0d20190008f841e413e17ae93fd9869d885ece7c038aba60e7f6d935860440a7d4283b7ea8e972ad9c3d29
+  checksum: 10/394335741d5f5199fd498960a99cd5688f6db9632cb5617b700274d008d3ee269ecf4050cbc0d3f910205334c90e43424fa5192316c345fdc58d64faf4f103d7
   languageName: node
   linkType: hard
 
