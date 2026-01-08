@@ -621,4 +621,101 @@ describe('search prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual('QC');
   });
+
+  it('Allows setting a default value', async () => {
+    const { answer, events, getScreen } = await render(search, {
+      message: 'Select a Canadian province',
+      source: getListSearch(PROVINCES),
+      default: 'ON',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+      ❯ Ontario
+        Prince Edward Island
+        Quebec
+        Saskatchewan
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('ON');
+  });
+
+  it('Falls back to first item when default value is not found', async () => {
+    const { answer, events, getScreen } = await render(search, {
+      message: 'Select a Canadian province',
+      source: getListSearch(PROVINCES),
+      default: 'INVALID',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province
+      ❯ Alberta
+        British Columbia
+        Manitoba
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('AB');
+  });
+
+  it('Does not reapply default after searching', async () => {
+    const { answer, events, getScreen } = await render(search, {
+      message: 'Select a Canadian province',
+      source: getListSearch(PROVINCES),
+      default: 'ON',
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+      ❯ Ontario
+        Prince Edward Island
+        Quebec
+        Saskatchewan
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.type('New');
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province New
+      ❯ New Brunswick
+        Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress({ name: 'backspace', ctrl: true });
+    await Promise.resolve();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province
+      ❯ Alberta
+        British Columbia
+        Manitoba
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('AB');
+  });
 });
