@@ -394,11 +394,10 @@ export default class PromptsRunner<A extends Answers> {
       });
   };
 
-  private displaySkippedQuestion(question: Question<A>) {
+  private displaySkippedQuestion(question: Question<any>) {
+    const output = this.opt.output || process.stdout;
     const renderer = SkippedRenderer[question.type] || SkippedRenderer.default;
-    type RendererFunc<A extends Answers> = (question: Question<A>) => string;
-    const outputText = (renderer as RendererFunc<A>)(question);
-    (this.opt.output || process.stdout).write(`${outputText}\n`);
+    output.write(`${renderer(question)}\n`);
   }
 
   /**
@@ -419,13 +418,9 @@ export default class PromptsRunner<A extends Answers> {
     const { when } = question;
     if (typeof when === 'function') {
       const shouldRun = await runAsync(when)(this.answers);
-      if (typeof shouldRun === 'object') {
-        const display = shouldRun.display;
-        const ask = shouldRun.ask;
-        return { display, ask };
-      }
-      const ask = Boolean(shouldRun);
-      return { display: ask, ask };
+      return typeof shouldRun === 'object'
+        ? shouldRun
+        : { display: Boolean(shouldRun), ask: Boolean(shouldRun) };
     }
 
     const ask = when !== false;

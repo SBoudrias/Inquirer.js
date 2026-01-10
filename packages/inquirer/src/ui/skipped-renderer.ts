@@ -1,4 +1,4 @@
-import { Answers, Question } from '../types.ts';
+import type { Answers, Question } from '../types.ts';
 import { makeTheme } from '@inquirer/core';
 
 type RendererFunction<A extends Answers = Answers> = (question: Question<A>) => string;

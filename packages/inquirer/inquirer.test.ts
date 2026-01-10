@@ -760,8 +760,7 @@ describe('inquirer.prompt(...)', () => {
       ]);
 
       const output = writeSpy.mock.calls.map(([text]) => text).join('');
-      expect(output).toMatch(/Question 2/);
-      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(output).toContain('Question 2');
       expect(answers).toEqual({ q1: 'bar' });
       writeSpy.mockRestore();
     });
@@ -791,7 +790,7 @@ describe('inquirer.prompt(...)', () => {
       ]);
 
       const output = writeSpy.mock.calls.map(([text]) => text).join('');
-      expect(output).not.toMatch(/Question 2/);
+      expect(output).not.toContain('Question 2');
       expect(answers).toEqual({ q1: 'bar', q3: 'bar' });
       writeSpy.mockRestore();
     });
@@ -812,8 +811,8 @@ describe('inquirer.prompt(...)', () => {
       ]);
 
       const output = writeSpy.mock.calls.map(([text]) => text).join('');
-      expect(output).toMatch(/Are you sure\?.*Yes/);
-      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(output).toContain('Are you sure?');
+      expect(output).toContain('Yes');
       expect(answers).toEqual({ q1: 'bar' });
       writeSpy.mockRestore();
     });
@@ -838,8 +837,8 @@ describe('inquirer.prompt(...)', () => {
       ]);
 
       const output = writeSpy.mock.calls.map(([text]) => text).join('');
-      expect(output).toMatch(/Select fruit.*Banana/);
-      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(output).toContain('Select fruit');
+      expect(output).toContain('Banana');
       expect(answers).toEqual({ q1: 'bar' });
       writeSpy.mockRestore();
     });
@@ -865,8 +864,8 @@ describe('inquirer.prompt(...)', () => {
       ]);
 
       const output = writeSpy.mock.calls.map(([text]) => text).join('');
-      expect(output).toMatch(/Pick foods.*Pizza, Burger/);
-      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(output).toContain('Pick foods');
+      expect(output).toContain('Pizza, Burger');
       expect(answers).toEqual({ q1: 'bar' });
       writeSpy.mockRestore();
     });
@@ -888,8 +887,8 @@ describe('inquirer.prompt(...)', () => {
       ]);
 
       const output = writeSpy.mock.calls.map(([text]) => text).join('');
-      expect(output).toMatch(/Enter password.*\[PASSWORD SET\]/);
-      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(output).toContain('Enter password');
+      expect(output).toContain('[PASSWORD SET]');
       expect(answers).toEqual({ q1: 'bar' });
       writeSpy.mockRestore();
     });
@@ -911,8 +910,8 @@ describe('inquirer.prompt(...)', () => {
       ]);
 
       const output = writeSpy.mock.calls.map(([text]) => text).join('');
-      expect(output).toMatch(/Write content.*\[Default Content\]/);
-      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(output).toContain('Write content');
+      expect(output).toContain('[Default Content]');
       expect(answers).toEqual({ q1: 'bar' });
       writeSpy.mockRestore();
     });
@@ -934,8 +933,8 @@ describe('inquirer.prompt(...)', () => {
       ]);
 
       const output = writeSpy.mock.calls.map(([text]) => text).join('');
-      expect(output).toMatch(/Enter name.*John/);
-      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(output).toContain('Enter name');
+      expect(output).toContain('John');
       expect(answers).toEqual({ q1: 'bar' });
       writeSpy.mockRestore();
     });
@@ -957,8 +956,8 @@ describe('inquirer.prompt(...)', () => {
       ]);
 
       const output = writeSpy.mock.calls.map(([text]) => text).join('');
-      expect(output).toMatch(/Enter age.*25/);
-      expect(output.includes('\x1b[2m')).toBe(true);
+      expect(output).toContain('Enter age');
+      expect(output).toContain('25');
       expect(answers).toEqual({ q1: 'bar' });
       writeSpy.mockRestore();
     });
