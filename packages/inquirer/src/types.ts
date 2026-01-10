@@ -80,14 +80,16 @@ type WidenAnswerLiterals<T> = T extends string
 
 type MergeAnswerObjects<Base, Override> = Prettify<Omit<Base, keyof Override> & Override>;
 
-type AsyncCallbackFunction<R> = (
-  ...args: [error: null | undefined, value: R] | [error: Error, value: undefined]
-) => void;
-
-export type AsyncGetterFunction<R, A extends Answers> = (
-  this: { async: () => AsyncCallbackFunction<R> },
+export type AsyncGetterFunction<T, A extends Answers> = (
+  this: {
+    async: () => (
+      ...args: [error: null | undefined, value: T] | [error: Error, value: undefined]
+    ) => void;
+  },
   answers: NoInfer<Prettify<Partial<A>>>,
-) => void | R | Promise<R>;
+) => void | T | Promise<T>;
+
+type MaybeAsyncValue<T, A extends Answers> = T | AsyncGetterFunction<T, A>;
 
 /**
  * Allows to inject a custom question type into inquirer module.
@@ -109,17 +111,17 @@ export interface QuestionMap {
 }
 
 type KeyValueOrAsyncGetterFunction<T, k extends string, A extends Answers> =
-  T extends Record<string, any> ? T[k] | AsyncGetterFunction<T[k], A> : never;
+  T extends Record<string, any> ? MaybeAsyncValue<T[k], A> : never;
 
 export type Question<A extends Answers = Answers, Type extends string = string> = {
   type: Type;
   name: string;
-  message: string | AsyncGetterFunction<string, A>;
+  message: MaybeAsyncValue<string, A>;
   default?: any;
   choices?: any;
   filter?: (answer: any, answers: NoInfer<Partial<A>>) => any;
   askAnswered?: boolean;
-  when?: boolean | AsyncGetterFunction<boolean, A>;
+  when?: MaybeAsyncValue<boolean, A>;
 };
 
 type QuestionWithGetters<
@@ -131,7 +133,7 @@ type QuestionWithGetters<
   {
     type: Type;
     askAnswered?: boolean;
-    when?: boolean | AsyncGetterFunction<boolean, A>;
+    when?: MaybeAsyncValue<boolean, A>;
     filter?(input: any, answers: NoInfer<A>): any;
     message: KeyValueOrAsyncGetterFunction<Q, 'message', A>;
     default?: KeyValueOrAsyncGetterFunction<Q, 'default', A>;
@@ -219,12 +221,12 @@ export type PromptModulePublicQuestion<A extends Answers, Flat extends Answers =
     | 'select'
     | 'list';
   name: Extract<keyof Flat, string>;
-  message: string | AsyncGetterFunction<string, A>;
+  message: MaybeAsyncValue<string, A>;
   default?: unknown;
   choices?: unknown;
   filter?: (input: any, answers: NoInfer<Partial<A>>) => any;
   askAnswered?: boolean;
-  when?: boolean | AsyncGetterFunction<boolean, A>;
+  when?: MaybeAsyncValue<boolean, A>;
 } & Record<string, unknown>;
 
 export type StreamOptions = Prettify<Context & { skipTTYChecks?: boolean }>;
