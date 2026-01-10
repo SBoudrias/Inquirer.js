@@ -6,6 +6,7 @@ import {
   usePagination,
   useEffect,
   useMemo,
+  useRef,
   isDownKey,
   isEnterKey,
   isTabKey,
@@ -76,6 +77,7 @@ type SearchConfig<
         | Promise<ReadonlyArray<Choice<Value> | Separator>>;
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
+  default?: NoInfer<Value>;
   theme?: PartialDeep<Theme<SearchTheme>>;
 };
 
@@ -125,6 +127,7 @@ export default createPrompt(
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<ReadonlyArray<Item<Value>>>([]);
     const [searchError, setSearchError] = useState<string>();
+    const defaultApplied = useRef(false);
 
     const prefix = usePrefix({ status, theme });
 
@@ -150,10 +153,20 @@ export default createPrompt(
           });
 
           if (!controller.signal.aborted) {
-            // Reset the pointer
-            setActive(undefined);
+            const normalized = normalizeChoices(results);
+
+            let initialActive: number | undefined;
+            if (!defaultApplied.current && 'default' in config) {
+              const defaultIndex = normalized.findIndex(
+                (item) => isSelectable(item) && item.value === config.default,
+              );
+              initialActive = defaultIndex === -1 ? undefined : defaultIndex;
+              defaultApplied.current = true;
+            }
+
+            setActive(initialActive);
             setSearchError(undefined);
-            setSearchResults(normalizeChoices(results));
+            setSearchResults(normalized);
             setStatus('idle');
           }
         } catch (error: unknown) {
