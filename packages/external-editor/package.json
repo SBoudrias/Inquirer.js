@@ -79,7 +79,7 @@
   },
   "dependencies": {
     "chardet": "^2.1.1",
-    "iconv-lite": "^0.7.0"
+    "iconv-lite": "^0.7.2"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
