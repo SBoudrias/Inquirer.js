@@ -2,12 +2,7 @@ node_modules
 dist
 coverage
 .idea
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+.yarn
 .turbo
 .DS_Store
 
