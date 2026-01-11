@@ -390,6 +390,57 @@ describe('rawlist prompt', () => {
     await expect(answer).resolves.toEqual('second');
   });
 
+  it('displays description when choice is selected', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a color',
+      choices: [
+        { name: 'Blue', value: 'blue', description: 'A calming color' },
+        { name: 'Red', value: 'red', description: 'A bold color' },
+        { name: 'Green', value: 'green' },
+      ],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a color
+        1) Blue
+        2) Red
+        3) Green"
+    `);
+
+    events.type('1');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a color 1
+        1) Blue
+        2) Red
+        3) Green
+      A calming color"
+    `);
+
+    events.keypress('backspace');
+    events.type('2');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a color 2
+        1) Blue
+        2) Red
+        3) Green
+      A bold color"
+    `);
+
+    events.keypress('backspace');
+    events.type('3');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a color 3
+        1) Blue
+        2) Red
+        3) Green"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a color Green"');
+
+    await expect(answer).resolves.toEqual('green');
+  });
+
   describe('default', () => {
     it('preselects the default value', async () => {
       const { answer, events, getScreen } = await render(rawlist, {

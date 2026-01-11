@@ -18,11 +18,24 @@ import { styleText } from 'node:util';
 
 const numberRegex = /\d+/;
 
+type RawlistTheme = {
+  style: {
+    description: (text: string) => string;
+  };
+};
+
+const rawlistTheme: RawlistTheme = {
+  style: {
+    description: (text: string) => styleText('cyan', text),
+  },
+};
+
 type Choice<Value> = {
   value: Value;
   name?: string;
   short?: string;
   key?: string;
+  description?: string;
 };
 
 type NormalizedChoice<Value> = {
@@ -30,13 +43,14 @@ type NormalizedChoice<Value> = {
   name: string;
   short: string;
   key: string;
+  description?: string;
 };
 
 type RawlistConfig<Value> = {
   message: string;
   choices: ReadonlyArray<Value | Choice<Value> | Separator>;
   loop?: boolean;
-  theme?: PartialDeep<Theme>;
+  theme?: PartialDeep<Theme<RawlistTheme>>;
   default?: NoInfer<Value>;
 };
 
@@ -70,6 +84,7 @@ function normalizeChoices<Value>(
       name,
       short: choice.short ?? name,
       key: choice.key ?? String(index),
+      description: choice.description,
     };
   });
 }
@@ -111,7 +126,7 @@ export default createPrompt(
       return defaultChoice?.key ?? '';
     });
     const [errorMsg, setError] = useState<string>();
-    const theme = makeTheme(config.theme);
+    const theme = makeTheme(rawlistTheme, config.theme);
     const prefix = usePrefix({ status, theme });
 
     const bounds = useMemo(() => {
@@ -181,7 +196,7 @@ export default createPrompt(
 
         const line = `  ${choice.key}) ${choice.name}`;
 
-        if (choice.key === value.toLowerCase()) {
+        if (choice.key === value) {
           return theme.style.highlight(line);
         }
 
@@ -194,9 +209,15 @@ export default createPrompt(
       error = theme.style.error(errorMsg);
     }
 
+    const [selectedChoice] = getSelectedChoice(value, choices);
+    let description = '';
+    if (!errorMsg && selectedChoice?.description) {
+      description = theme.style.description(selectedChoice.description);
+    }
+
     return [
       `${prefix} ${message} ${value}`,
-      [choicesStr, error].filter(Boolean).join('\n'),
+      [choicesStr, error, description].filter(Boolean).join('\n'),
     ];
   },
 );
