@@ -23,6 +23,7 @@ type Choice<Value> = {
   name?: string;
   short?: string;
   key?: string;
+  description?: string;
 };
 
 type NormalizedChoice<Value> = {
@@ -30,6 +31,7 @@ type NormalizedChoice<Value> = {
   name: string;
   short: string;
   key: string;
+  description?: string;
 };
 
 type RawlistConfig<Value> = {
@@ -70,6 +72,7 @@ function normalizeChoices<Value>(
       name,
       short: choice.short ?? name,
       key: choice.key ?? String(index),
+      description: choice.description,
     };
   });
 }
