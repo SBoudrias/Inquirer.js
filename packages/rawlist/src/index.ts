@@ -18,6 +18,18 @@ import { styleText } from 'node:util';
 
 const numberRegex = /\d+/;
 
+type RawlistTheme = {
+  style: {
+    description: (text: string) => string;
+  };
+};
+
+const rawlistTheme: RawlistTheme = {
+  style: {
+    description: (text: string) => styleText('cyan', text),
+  },
+};
+
 type Choice<Value> = {
   value: Value;
   name?: string;
@@ -38,7 +50,7 @@ type RawlistConfig<Value> = {
   message: string;
   choices: ReadonlyArray<Value | Choice<Value> | Separator>;
   loop?: boolean;
-  theme?: PartialDeep<Theme>;
+  theme?: PartialDeep<Theme<RawlistTheme>>;
   default?: NoInfer<Value>;
 };
 
@@ -114,7 +126,7 @@ export default createPrompt(
       return defaultChoice?.key ?? '';
     });
     const [errorMsg, setError] = useState<string>();
-    const theme = makeTheme(config.theme);
+    const theme = makeTheme(rawlistTheme, config.theme);
     const prefix = usePrefix({ status, theme });
 
     const bounds = useMemo(() => {
