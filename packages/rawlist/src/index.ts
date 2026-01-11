@@ -209,9 +209,15 @@ export default createPrompt(
       error = theme.style.error(errorMsg);
     }
 
+    const [selectedChoice] = getSelectedChoice(value.toLowerCase(), choices);
+    let description = '';
+    if (!errorMsg && selectedChoice?.description) {
+      description = theme.style.description(selectedChoice.description);
+    }
+
     return [
       `${prefix} ${message} ${value}`,
-      [choicesStr, error].filter(Boolean).join('\n'),
+      [choicesStr, error, description].filter(Boolean).join('\n'),
     ];
   },
 );
