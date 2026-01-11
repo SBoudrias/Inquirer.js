@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: latest
           cache: 'yarn'
-      - run: yarn install --immutable --immutable-cache
+      - run: yarn install --immutable
       - name: Typescript
         run: yarn tsc
 
@@ -46,7 +46,7 @@ jobs:
         with:
           node-version: latest
           cache: 'yarn'
-      - run: yarn install --immutable --immutable-cache
+      - run: yarn install --immutable
       - run: yarn tsc
       - run: yarn oxlint .
       - run: yarn oxfmt --check .
@@ -70,7 +70,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-      - run: yarn install --immutable --immutable-cache
+      - run: yarn install --immutable
       - run: yarn vitest --run --coverage
       - uses: codecov/codecov-action@v5
 
@@ -93,7 +93,7 @@ jobs:
         with:
           node-version: latest
           cache: 'yarn'
-      - run: yarn install --immutable --immutable-cache
+      - run: yarn install --immutable
       - run: yarn tsc
       - name: Test isolated build of @inquirer/demo
         run: |
