@@ -87,6 +87,7 @@ type Choice<Value> = {
   name?: string;
   short?: string;
   key?: string;
+  description?: string;
 };
 ```
 
@@ -96,6 +97,7 @@ Here's each property:
 - `name`: This is the string displayed in the choice list.
 - `short`: Once the prompt is done (press enter), we'll use `short` if defined to render next to the question. By default we'll use `name`.
 - `key`: The key of the choice. Displayed as `key) name`.
+- `description`: Option description which appears below the list when the choice is selected.
 
 `choices` can also be an array of string, in which case the string will be used both as the `value` and the `name`.
 
@@ -115,6 +117,7 @@ type Theme = {
     message: (text: string, status: 'idle' | 'done' | 'loading') => string;
     error: (text: string) => string;
     highlight: (text: string) => string;
+    description: (text: string) => string;
   };
 };
 ```

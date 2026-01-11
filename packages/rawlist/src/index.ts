@@ -196,7 +196,7 @@ export default createPrompt(
 
         const line = `  ${choice.key}) ${choice.name}`;
 
-        if (choice.key === value.toLowerCase()) {
+        if (choice.key === value) {
           return theme.style.highlight(line);
         }
 
@@ -209,7 +209,7 @@ export default createPrompt(
       error = theme.style.error(errorMsg);
     }
 
-    const [selectedChoice] = getSelectedChoice(value.toLowerCase(), choices);
+    const [selectedChoice] = getSelectedChoice(value, choices);
     let description = '';
     if (!errorMsg && selectedChoice?.description) {
       description = theme.style.description(selectedChoice.description);
