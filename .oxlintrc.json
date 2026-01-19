@@ -10,6 +10,7 @@
     "perf": "error"
   },
   "rules": {
-    "no-await-in-loop": "off"
+    "no-await-in-loop": "off",
+    "no-map-spread": "off"
   }
 }
