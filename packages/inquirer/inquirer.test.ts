@@ -483,6 +483,34 @@ describe('inquirer.prompt(...)', () => {
     ]);
   });
 
+  it('should pass previous answers to the validate function', async () => {
+    const answers = await inquirer.prompt([
+      {
+        type: 'stub',
+        name: 'first_name',
+        answer: 'John',
+        message: 'First name',
+      },
+      {
+        type: 'stub',
+        name: 'last_name',
+        answer: 'Doe',
+        message: 'Last name',
+        validate(
+          _value: string,
+          previousAnswers: Partial<{ first_name: string; last_name: string }>,
+        ) {
+          expect(previousAnswers).toBeDefined();
+          expect(previousAnswers.first_name).toEqual('John');
+          return true;
+        },
+      } as any,
+    ]);
+
+    expect(answers['first_name']).toEqual('John');
+    expect(answers['last_name']).toEqual('Doe');
+  });
+
   it('should parse `choices` if passed as a function', async () => {
     const stubChoices = ['foo', 'bar'];
 

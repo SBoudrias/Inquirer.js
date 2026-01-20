@@ -119,6 +119,10 @@ export type Question<A extends Answers = Answers, Type extends string = string> 
   message: MaybeAsyncValue<string, A>;
   default?: any;
   choices?: any;
+  validate?: (
+    value: any,
+    answers: NoInfer<Partial<A>>,
+  ) => boolean | string | Promise<boolean | string>;
   filter?: (answer: any, answers: NoInfer<Partial<A>>) => any;
   askAnswered?: boolean;
   when?: MaybeAsyncValue<boolean, A>;

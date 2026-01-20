@@ -291,12 +291,22 @@ export default class PromptsRunner<A extends Answers> {
       });
     }
 
-    return Object.assign({}, question, {
+    // Wrap the validate function to pass answers as second parameter for backward compatibility
+    const wrappedQuestion = Object.assign({}, question, {
       message,
       default: defaultValue,
       choices,
       type: question.type in this.prompts ? question.type : 'input',
     });
+
+    if (question.validate) {
+      const originalValidate = question.validate;
+      wrappedQuestion.validate = (value: any) => {
+        return originalValidate(value, this.answers);
+      };
+    }
+
+    return wrappedQuestion;
   };
 
   private fetchAnswer = async (rawQuestion: Question<A>) => {
