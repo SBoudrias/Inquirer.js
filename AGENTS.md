@@ -12,9 +12,15 @@ Install deps with `yarn install`. Use `yarn dev` for Turbo-powered incremental T
 
 Code is ESM-first TypeScript targeting Node ≥ 18. Prettier enforces two-space indentation, trailing commas, and single quotes—lean on it rather than hand formatting. Prefer named exports, keep prompt IDs aligned with folder names, and store assets beside their entry points. Use `camelCase` for variables/functions and `PascalCase` for classes/components. Run `yarn oxlint --fix` and `yarn eslint --fix` before committing to maintain rule compliance.
 
+## TypeScript Best Practices
+
+Prioritize type safety and leverage existing types from the codebase. Use `Question<A>` from `packages/inquirer/src/types.ts` instead of generic `Record<string, unknown>` when working with question objects. Prefer `unknown` over `any` for truly unknown types, and use `Partial<T>` for optional properties. Leverage generic type parameters (like `<A extends Answers>`) throughout to maintain type consistency. Avoid eslint-disable comments by refactoring to proper types rather than suppressing warnings. When extending types, use intersection types (`Type & { prop: T }`) for explicit signatures rather than casting to `any`.
+
 ## Testing Guidelines
 
 Vitest owns unit coverage via `vitest.config.ts`, with `coverage.all = true` so untested files fail CI. Co-locate specs as `*.test.ts` next to source, and model cross-package flows under `integration/**/**/*.test.ts`. Iterate with `yarn vitest --run packages`, then finish with `yarn test` to exercise the full matrix. Update snapshots using `yarn vitest --update`.
+
+Keep tests simple and focused. Reuse existing test stubs and fixtures rather than creating custom mocks. If a behavior affects all prompts, test it with an existing prompt type rather than creating a specialized stub. Write tests that verify actual behavior rather than implementation details. Prefer straightforward assertions over complex validation logic.
 
 ## Commit & Pull Request Guidelines
 
