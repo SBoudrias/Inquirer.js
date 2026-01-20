@@ -300,15 +300,16 @@ export default class PromptsRunner<A extends Answers> {
     });
 
     if ('validate' in question) {
-      const questionRecord = question as Record<string, unknown>;
-      const validateFn = questionRecord['validate'];
+      const questionWithValidate = question as Question<A> & {
+        validate?: (value: unknown, answers: Partial<A>) => unknown;
+      };
+      const validateFn = questionWithValidate.validate;
       if (typeof validateFn === 'function') {
-        const wrappedQuestionRecord = wrappedQuestion as Record<string, unknown>;
-        wrappedQuestionRecord['validate'] = (value: unknown) => {
-          return (validateFn as (value: unknown, answers: Partial<A>) => unknown)(
-            value,
-            this.answers,
-          );
+        const wrappedQuestionWithValidate = wrappedQuestion as Question<A> & {
+          validate?: (value: unknown) => unknown;
+        };
+        wrappedQuestionWithValidate.validate = (value: unknown) => {
+          return validateFn(value, this.answers);
         };
       }
     }
