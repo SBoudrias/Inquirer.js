@@ -291,12 +291,26 @@ export default class PromptsRunner<A extends Answers> {
       });
     }
 
-    return Object.assign({}, question, {
+    // Wrap the validate function to pass answers as second parameter for backward compatibility
+    const wrappedQuestion = Object.assign({}, question, {
       message,
       default: defaultValue,
       choices,
       type: question.type in this.prompts ? question.type : 'input',
     });
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if ('validate' in question && typeof (question as any)['validate'] === 'function') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const originalValidate = (question as any)['validate'];
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      (wrappedQuestion as any)['validate'] = (value: any) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        return originalValidate(value, this.answers);
+      };
+    }
+
+    return wrappedQuestion;
   };
 
   private fetchAnswer = async (rawQuestion: Question<A>) => {

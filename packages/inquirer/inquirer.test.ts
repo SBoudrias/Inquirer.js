@@ -483,6 +483,60 @@ describe('inquirer.prompt(...)', () => {
     ]);
   });
 
+  it('should pass previous answers to the validate function', async () => {
+    let validateCalled = false;
+    let validationResult: boolean | string | undefined;
+
+    class StubPromptWithValidation {
+      question: Record<string, any>;
+
+      constructor(question: Record<string, any>) {
+        this.question = question;
+      }
+
+      async run() {
+        // Simulate calling the validate function as prompts would
+        if (typeof this.question['validate'] === 'function') {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+          validationResult = await this.question['validate']('Test User');
+        }
+        return Promise.resolve('Test User');
+      }
+
+      close() {}
+    }
+
+    inquirer.registerPrompt('stubWithValidation', StubPromptWithValidation);
+
+    await inquirer.prompt([
+      {
+        type: 'stub',
+        name: 'first_name',
+        answer: 'Test',
+        message: 'message',
+      },
+      {
+        type: 'stubWithValidation',
+        name: 'last_name',
+        message: 'message',
+        validate(value: string, answers: any) {
+          validateCalled = true;
+          expect(answers).toBeDefined();
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          expect(answers.first_name).toEqual('Test');
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          if (answers.first_name === 'Test' && value === 'Test User') {
+            return 'You cannot be called Test User';
+          }
+          return true;
+        },
+      } as any,
+    ]);
+
+    expect(validateCalled).toEqual(true);
+    expect(validationResult).toEqual('You cannot be called Test User');
+  });
+
   it('should parse `choices` if passed as a function', async () => {
     const stubChoices = ['foo', 'bar'];
 
