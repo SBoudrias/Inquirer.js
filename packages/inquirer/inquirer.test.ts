@@ -487,18 +487,20 @@ describe('inquirer.prompt(...)', () => {
     let validateCalled = false;
     let validationResult: boolean | string | undefined;
 
-    class StubPromptWithValidation {
-      question: Record<string, any>;
+    type ValidateFn = (value: unknown) => Promise<boolean | string> | boolean | string;
 
-      constructor(question: Record<string, any>) {
+    class StubPromptWithValidation {
+      question: Record<string, unknown>;
+
+      constructor(question: Record<string, unknown>) {
         this.question = question;
       }
 
       async run() {
         // Simulate calling the validate function as prompts would
-        if (typeof this.question['validate'] === 'function') {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-          validationResult = await this.question['validate']('Test User');
+        const validateFn = this.question['validate'];
+        if (typeof validateFn === 'function') {
+          validationResult = await (validateFn as ValidateFn)('Test User');
         }
         return Promise.resolve('Test User');
       }
@@ -507,6 +509,8 @@ describe('inquirer.prompt(...)', () => {
     }
 
     inquirer.registerPrompt('stubWithValidation', StubPromptWithValidation);
+
+    type TestAnswers = { first_name: string; last_name: string };
 
     await inquirer.prompt([
       {
@@ -519,12 +523,10 @@ describe('inquirer.prompt(...)', () => {
         type: 'stubWithValidation',
         name: 'last_name',
         message: 'message',
-        validate(value: string, answers: any) {
+        validate(value: string, answers: Partial<TestAnswers>) {
           validateCalled = true;
           expect(answers).toBeDefined();
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           expect(answers.first_name).toEqual('Test');
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           if (answers.first_name === 'Test' && value === 'Test User') {
             return 'You cannot be called Test User';
           }

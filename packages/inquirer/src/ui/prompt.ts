@@ -299,15 +299,18 @@ export default class PromptsRunner<A extends Answers> {
       type: question.type in this.prompts ? question.type : 'input',
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if ('validate' in question && typeof (question as any)['validate'] === 'function') {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const originalValidate = (question as any)['validate'];
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      (wrappedQuestion as any)['validate'] = (value: any) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        return originalValidate(value, this.answers);
-      };
+    if ('validate' in question) {
+      const questionRecord = question as Record<string, unknown>;
+      const validateFn = questionRecord['validate'];
+      if (typeof validateFn === 'function') {
+        const wrappedQuestionRecord = wrappedQuestion as Record<string, unknown>;
+        wrappedQuestionRecord['validate'] = (value: unknown) => {
+          return (validateFn as (value: unknown, answers: Partial<A>) => unknown)(
+            value,
+            this.answers,
+          );
+        };
+      }
     }
 
     return wrappedQuestion;
