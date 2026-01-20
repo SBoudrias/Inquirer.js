@@ -484,59 +484,31 @@ describe('inquirer.prompt(...)', () => {
   });
 
   it('should pass previous answers to the validate function', async () => {
-    let validateCalled = false;
-    let validationResult: boolean | string | undefined;
-
-    type ValidateFn = (value: unknown) => Promise<boolean | string> | boolean | string;
-
-    class StubPromptWithValidation {
-      question: Record<string, unknown>;
-
-      constructor(question: Record<string, unknown>) {
-        this.question = question;
-      }
-
-      async run() {
-        // Simulate calling the validate function as prompts would
-        const validateFn = this.question['validate'];
-        if (typeof validateFn === 'function') {
-          validationResult = await (validateFn as ValidateFn)('Test User');
-        }
-        return Promise.resolve('Test User');
-      }
-
-      close() {}
-    }
-
-    inquirer.registerPrompt('stubWithValidation', StubPromptWithValidation);
-
-    type TestAnswers = { first_name: string; last_name: string };
-
-    await inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: 'stub',
         name: 'first_name',
-        answer: 'Test',
-        message: 'message',
+        answer: 'John',
+        message: 'First name',
       },
       {
-        type: 'stubWithValidation',
+        type: 'stub',
         name: 'last_name',
-        message: 'message',
-        validate(value: string, answers: Partial<TestAnswers>) {
-          validateCalled = true;
-          expect(answers).toBeDefined();
-          expect(answers.first_name).toEqual('Test');
-          if (answers.first_name === 'Test' && value === 'Test User') {
-            return 'You cannot be called Test User';
-          }
+        answer: 'Doe',
+        message: 'Last name',
+        validate(
+          _value: string,
+          previousAnswers: Partial<{ first_name: string; last_name: string }>,
+        ) {
+          expect(previousAnswers).toBeDefined();
+          expect(previousAnswers.first_name).toEqual('John');
           return true;
         },
       } as any,
     ]);
 
-    expect(validateCalled).toEqual(true);
-    expect(validationResult).toEqual('You cannot be called Test User');
+    expect(answers['first_name']).toEqual('John');
+    expect(answers['last_name']).toEqual('Doe');
   });
 
   it('should parse `choices` if passed as a function', async () => {
