@@ -299,19 +299,11 @@ export default class PromptsRunner<A extends Answers> {
       type: question.type in this.prompts ? question.type : 'input',
     });
 
-    if ('validate' in question) {
-      const questionWithValidate = question as Question<A> & {
-        validate?: (value: unknown, answers: Partial<A>) => unknown;
+    if (question.validate) {
+      const originalValidate = question.validate;
+      wrappedQuestion.validate = (value: any) => {
+        return originalValidate(value, this.answers);
       };
-      const validateFn = questionWithValidate.validate;
-      if (typeof validateFn === 'function') {
-        const wrappedQuestionWithValidate = wrappedQuestion as Question<A> & {
-          validate?: (value: unknown) => unknown;
-        };
-        wrappedQuestionWithValidate.validate = (value: unknown) => {
-          return validateFn(value, this.answers);
-        };
-      }
     }
 
     return wrappedQuestion;
