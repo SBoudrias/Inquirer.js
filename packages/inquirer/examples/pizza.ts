@@ -40,7 +40,7 @@ const answers = await inquirer.prompt<{
     },
   },
   {
-    type: 'list',
+    type: 'select',
     name: 'size',
     message: 'What size do you need?',
     choices: ['Large', 'Medium', 'Small'],
@@ -93,7 +93,7 @@ const answers = await inquirer.prompt<{
     default: 'Nope, all good!',
   },
   {
-    type: 'list',
+    type: 'select',
     name: 'prize',
     message: 'For leaving a comment, you get a freebie',
     choices: ['cake', 'fries'],

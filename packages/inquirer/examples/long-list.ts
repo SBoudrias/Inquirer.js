@@ -25,7 +25,7 @@ const multiLineChoices = [
 
 const answers = await inquirer.prompt<{ letter: string; name: string[] }>([
   {
-    type: 'list',
+    type: 'select',
     loop: false,
     name: 'letter',
     message: "What's your favorite letter?",

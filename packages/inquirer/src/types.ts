@@ -222,8 +222,7 @@ export type PromptModulePublicQuestion<A extends Answers, Flat extends Answers =
     | 'expand'
     | 'checkbox'
     | 'search'
-    | 'select'
-    | 'list';
+    | 'select';
   name: Extract<keyof Flat, string>;
   message: MaybeAsyncValue<string, A>;
   default?: unknown;
