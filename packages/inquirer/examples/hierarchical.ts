@@ -11,7 +11,7 @@ async function main() {
 
 async function exitHouse() {
   const answers = await inquirer.prompt<{ direction: string }>({
-    type: 'list',
+    type: 'select',
     name: 'direction',
     message: 'Which direction would you like to go?',
     choices: ['Forward', 'Right', 'Left', 'Back'],
@@ -30,7 +30,7 @@ async function exitHouse() {
 
 async function encounter1() {
   const answers = await inquirer.prompt<{ direction: string }>({
-    type: 'list',
+    type: 'select',
     name: 'direction',
     message: 'Which direction would you like to go?',
     choices: ['Forward', 'Right', 'Left', 'Back'],
@@ -51,7 +51,7 @@ async function encounter1() {
 
 async function encounter2a() {
   const answers = await inquirer.prompt<{ direction: string }>({
-    type: 'list',
+    type: 'select',
     name: 'direction',
     message: 'Which direction would you like to go?',
     choices: ['Forward', 'Right', 'Left', 'Back'],
@@ -72,7 +72,7 @@ async function encounter2a() {
 
 async function encounter2b() {
   await inquirer.prompt<{ weapon: string }>({
-    type: 'list',
+    type: 'select',
     name: 'weapon',
     message: 'Pick one',
     choices: [

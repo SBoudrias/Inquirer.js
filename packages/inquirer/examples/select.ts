@@ -1,12 +1,12 @@
 /**
- * List prompt example
+ * Select prompt example
  */
 
 import inquirer from 'inquirer';
 
 const answers = await inquirer.prompt<{ theme: string; size: string }>([
   {
-    type: 'list',
+    type: 'select',
     name: 'theme',
     message: 'What do you want to do?',
     choices: [
@@ -19,7 +19,7 @@ const answers = await inquirer.prompt<{ theme: string; size: string }>([
     ],
   },
   {
-    type: 'list',
+    type: 'select',
     name: 'size',
     message: 'What size do you need?',
     choices: [
