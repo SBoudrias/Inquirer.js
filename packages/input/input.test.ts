@@ -141,6 +141,20 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mike"`);
   });
 
+  it('handle numeric default option', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'What port do you want to use?',
+      // @ts-expect-error - testing runtime behavior with numeric default
+      default: 3042,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? What port do you want to use? (3042)"`);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('3042');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What port do you want to use? 3042"`);
+  });
+
   it('handle overwriting the default option', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',

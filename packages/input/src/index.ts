@@ -37,7 +37,9 @@ export default createPrompt<string, InputConfig>((config, done) => {
   const { prefill = 'tab' } = config;
   const theme = makeTheme<InputTheme>(inputTheme, config.theme);
   const [status, setStatus] = useState<Status>('idle');
-  const [defaultValue = '', setDefaultValue] = useState<string>(config.default);
+  // Coerce to string to handle runtime values that may be numbers despite TypeScript types
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion
+  const [defaultValue, setDefaultValue] = useState<string>(String(config.default ?? ''));
   const [errorMsg, setError] = useState<string>();
   const [value, setValue] = useState<string>('');
 
@@ -87,9 +89,9 @@ export default createPrompt<string, InputConfig>((config, done) => {
         setStatus('idle');
       }
     } else if (isBackspaceKey(key) && !value) {
-      setDefaultValue(undefined);
+      setDefaultValue('');
     } else if (isTabKey(key) && !value) {
-      setDefaultValue(undefined);
+      setDefaultValue('');
       rl.clearLine(0); // Remove the tab character.
       rl.write(defaultValue);
       setValue(defaultValue);
