@@ -1,7 +1,5 @@
 import cliWidth from 'cli-width';
-import wrapAnsi from 'wrap-ansi';
 import { readline } from './hook-engine.ts';
-
 /**
  * Force line returns at specific width. This function is ANSI code friendly and it'll
  * ignore invisible codes during width calculation.
@@ -10,14 +8,55 @@ import { readline } from './hook-engine.ts';
  * @return {string}
  */
 export function breakLines(content: string, width: number): string {
-  return content
-    .split('\n')
-    .flatMap((line) =>
-      wrapAnsi(line, width, { trim: false, hard: true })
-        .split('\n')
-        .map((str) => str.trimEnd()),
-    )
-    .join('\n');
+  const lines = content.split('\n');
+  const result: string[] = [];
+
+  for (const line of lines) {
+    let currentLine = '';
+    let visibleLength = 0;
+    let escapeSequence = '';
+    let inEscape = false;
+
+    for (const char of line) {
+      // Detect start of ANSI escape code
+      if (char === '\x1b') {
+        inEscape = true;
+        escapeSequence += char;
+        continue;
+      }
+
+      // If inside an escape sequence, accumulate it but don't count width
+      if (inEscape) {
+        escapeSequence += char;
+
+        // ANSI escape sequences always end with a letter (eg., 'm' in '\x1b[31m')
+        // This marks the end of the sequence so we can append it without counting its width
+        if (/[a-zA-Z]/.test(char)) {
+          inEscape = false;
+          currentLine += escapeSequence;
+          escapeSequence = '';
+        }
+        continue;
+      }
+
+      // Normal character: Add to line and increment visual width
+      currentLine += char;
+      visibleLength++;
+
+      // Hard Wrap: If we reached the width limit
+      if (visibleLength === width) {
+        result.push(currentLine);
+        currentLine = '';
+        visibleLength = 0;
+      }
+    }
+
+    if (currentLine.length > 0 || result.length === 0) {
+      result.push(currentLine.trimEnd());
+    }
+  }
+
+  return result.join('\n');
 }
 
 /**
