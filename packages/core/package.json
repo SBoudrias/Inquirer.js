@@ -77,9 +77,9 @@
     "@inquirer/figures": "^2.0.3",
     "@inquirer/type": "^4.0.3",
     "cli-width": "^4.1.0",
+    "fast-wrap-ansi": "^0.2.0",
     "mute-stream": "^3.0.0",
-    "signal-exit": "^4.1.0",
-    "fast-wrap-ansi": "^0.2.0"
+    "signal-exit": "^4.1.0"
   },
   "devDependencies": {
     "@inquirer/testing": "^3.0.4",
