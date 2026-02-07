@@ -1,45 +1,15 @@
-import { Stream } from 'node:stream';
 import { stripVTControlCharacters } from 'node:util';
 import MuteStream from 'mute-stream';
 import type { Prompt, Context } from '@inquirer/type';
 
-class BufferedStream extends Stream.Writable {
-  #_fullOutput: string = '';
-  #_chunks: Array<string> = [];
-  #_rawChunks: Array<string> = [];
-
-  override _write(chunk: Buffer, _encoding: string, callback: () => void) {
-    const str = chunk.toString();
-
-    this.#_fullOutput += str;
-
-    // Keep track of every chunk send through.
-    this.#_rawChunks.push(str);
-
-    // Stripping the ANSI codes here because Inquirer will push commands ANSI (like cursor move.)
-    // This is probably fine since we don't care about those for testing; but this could become
-    // an issue if we ever want to test for those.
-    if (stripVTControlCharacters(str).trim().length > 0) {
-      this.#_chunks.push(str);
-    }
-    callback();
-  }
-
-  getLastChunk({ raw }: { raw?: boolean }): string {
-    const chunks = raw ? this.#_rawChunks : this.#_chunks;
-    const lastChunk = chunks.at(-1);
-    return lastChunk ?? '';
-  }
-
-  getFullOutput(): string {
-    return this.#_fullOutput;
-  }
-}
+type RenderOptions = Omit<Context, 'input' | 'output'>;
+import { BufferedStream } from './buffered-stream.js';
+import { interpretTerminalOutput } from './terminal.js';
 
 export async function render<Value, const Config>(
   prompt: Prompt<Value, Config>,
   config: Config,
-  options?: Context,
+  options?: RenderOptions,
 ): Promise<{
   answer: Promise<Value>;
   input: MuteStream;
@@ -50,18 +20,22 @@ export async function render<Value, const Config>(
     type: (text: string) => void;
   };
   getScreen: ({ raw }?: { raw?: boolean }) => string;
-  getFullOutput: () => string;
+  getFullOutput: ({ raw }?: { raw?: boolean }) => Promise<string>;
 }> {
   const input = new MuteStream();
   input.unmute();
 
   const output = new BufferedStream();
+  const firstRender = new Promise<void>((resolve) => output.once('render', resolve));
 
-  const answer = prompt(config, { input, output, ...options });
+  const answer = prompt(config, { ...options, input, output });
 
-  // Wait for event listeners to be ready
-  await Promise.resolve();
-  await Promise.resolve();
+  // The first render is synchronous. If our BufferedStream received a write, we're ready.
+  if (output.writeCount === 0) {
+    // Our BufferedStream didn't receive a write yet. This happens when the prompt
+    // errored before rendering. Race against the answer promise to handle that case.
+    await Promise.race([firstRender, answer.catch(() => {})]);
+  }
 
   const events = {
     keypress(
@@ -96,8 +70,10 @@ export async function render<Value, const Config>(
       const lastScreen = output.getLastChunk({ raw: Boolean(raw) });
       return raw ? lastScreen : stripVTControlCharacters(lastScreen).trim();
     },
-    getFullOutput: (): string => {
-      return output.getFullOutput();
+    getFullOutput: async ({ raw }: { raw?: boolean } = {}): Promise<string> => {
+      const fullOutput = output.getFullOutput();
+      if (raw) return fullOutput;
+      return interpretTerminalOutput(fullOutput);
     },
   };
 }
