@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "yarn oxfmt ${file_path}"
+          }
+        ]
+      }
+    ]
+  }
+}
