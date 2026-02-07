@@ -92,5 +92,26 @@ vi.mock('@inquirer/search', async (importOriginal) => {
   return { ...actual, default: wrapPrompt(actual.default) };
 });
 
+vi.mock('@inquirer/editor', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@inquirer/editor')>();
+  return { ...actual, default: wrapPrompt(actual.default) };
+});
+
+// Mock the external editor to capture typed input instead of spawning a real editor.
+// We intercept screen.type() so the text never flows through readline (which would
+// re-trigger the editor's enter-key handler and close the readline interface).
+vi.mock('@inquirer/external-editor', () => ({
+  editAsync: (
+    _text: string,
+    callback: (err: Error | undefined, result: string | undefined) => void,
+  ) => {
+    const origType = screenInstance.type.bind(screenInstance);
+    screenInstance.type = (text: string) => {
+      screenInstance.type = origType;
+      process.nextTick(() => callback(undefined, text));
+    };
+  },
+}));
+
 // Re-export Screen class and KeypressEvent type for advanced use cases
 export { Screen, type KeypressEvent } from './screen.js';

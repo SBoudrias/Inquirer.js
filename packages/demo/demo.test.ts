@@ -6,6 +6,7 @@ import confirmDemo from './src/demos/confirm.ts';
 import inputDemo from './src/demos/input.ts';
 import selectDemo from './src/demos/select.ts';
 import checkboxDemo from './src/demos/checkbox.ts';
+import editorDemo from './src/demos/editor.ts';
 
 describe('@inquirer/demo E2E tests', () => {
   describe('screen.getScreen()', () => {
@@ -250,6 +251,24 @@ describe('@inquirer/demo E2E tests', () => {
         "✔ Select a package manager npm
         ✔ Select your favorite letters A, C"
       `);
+    });
+  });
+
+  describe('editor prompt', () => {
+    it('captures typed text as editor content', async () => {
+      const demo = editorDemo();
+      await screen.nextPrompt();
+      expect(screen.getScreen()).toContain('short bio');
+
+      // Press enter to open the editor, then type the content
+      screen.keypress('enter');
+      screen.type('Line 1\nLine 2\nLine 3');
+
+      // Second prompt opens editor automatically (waitForUserInput: false)
+      await screen.nextPrompt();
+      screen.type('Auto editor content');
+
+      await demo;
     });
   });
 

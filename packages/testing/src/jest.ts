@@ -84,5 +84,26 @@ jest.mock('@inquirer/search', () => {
   return { ...actual, default: wrapPrompt(actual.default) };
 });
 
+jest.mock('@inquirer/editor', () => {
+  const actual = jest.requireActual('@inquirer/editor');
+  return { ...actual, default: wrapPrompt(actual.default) };
+});
+
+// Mock the external editor to capture typed input instead of spawning a real editor.
+// We intercept screen.type() so the text never flows through readline (which would
+// re-trigger the editor's enter-key handler and close the readline interface).
+jest.mock('@inquirer/external-editor', () => ({
+  editAsync: (
+    _text: string,
+    callback: (err: Error | undefined, result: string | undefined) => void,
+  ) => {
+    const origType = screenInstance.type.bind(screenInstance);
+    screenInstance.type = (text: string) => {
+      screenInstance.type = origType;
+      process.nextTick(() => callback(undefined, text));
+    };
+  },
+}));
+
 // Re-export Screen class and KeypressEvent type for advanced use cases
 export { Screen, type KeypressEvent } from './screen.js';
