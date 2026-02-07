@@ -98,18 +98,29 @@ vi.mock('@inquirer/editor', async (importOriginal) => {
 });
 
 // Mock the external editor to capture typed input instead of spawning a real editor.
-// We intercept screen.type() so the text never flows through readline (which would
-// re-trigger the editor's enter-key handler and close the readline interface).
+// Buffers all screen.type() calls and submits on screen.keypress('enter'), matching
+// the interaction pattern of other prompts (type → enter).
 vi.mock('@inquirer/external-editor', () => ({
   editAsync: (
     _text: string,
     callback: (err: Error | undefined, result: string | undefined) => void,
   ) => {
-    const origType = screenInstance.type.bind(screenInstance);
-    screenInstance.type = (text: string) => {
-      screenInstance.type = origType;
-      process.nextTick(() => callback(undefined, text));
-    };
+    let buffer = '';
+
+    const typeSpy = vi
+      .spyOn(screenInstance, 'type')
+      .mockImplementation((text: string) => {
+        buffer += text;
+      });
+
+    const keypressSpy = vi.spyOn(screenInstance, 'keypress').mockImplementation((key) => {
+      const name = typeof key === 'string' ? key : key.name;
+      if (name === 'enter' || name === 'return') {
+        typeSpy.mockRestore();
+        keypressSpy.mockRestore();
+        process.nextTick(() => callback(undefined, buffer));
+      }
+    });
   },
 }));
 

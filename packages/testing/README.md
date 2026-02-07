@@ -168,7 +168,7 @@ vi.mock('@my-company/custom-prompt', async (importOriginal) => {
 ### Important Notes
 
 1. **Import order matters**: Import `@inquirer/testing/vitest` or `@inquirer/testing/jest` BEFORE importing modules that use Inquirer prompts
-2. **Editor prompt not supported**: The `@inquirer/editor` prompt opens an external editor and isn't currently supported in E2E testing.
+2. **Editor prompt**: The external editor is mocked — `screen.type()` buffers text, and `screen.keypress('enter')` submits it (same pattern as other prompts). Works with both `waitForUserInput: true` and `false`
 3. **Sequential prompts**: Multiple prompts are supported, but they must run sequentially (not concurrently)
 
 ### E2E Testing Example

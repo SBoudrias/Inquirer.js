@@ -260,13 +260,15 @@ describe('@inquirer/demo E2E tests', () => {
       await screen.nextPrompt();
       expect(screen.getScreen()).toContain('short bio');
 
-      // Press enter to open the editor, then type the content
+      // Press enter to open the editor, type content, then enter to save
       screen.keypress('enter');
       screen.type('Line 1\nLine 2\nLine 3');
+      screen.keypress('enter');
 
       // Second prompt opens editor automatically (waitForUserInput: false)
       await screen.nextPrompt();
       screen.type('Auto editor content');
+      screen.keypress('enter');
 
       await demo;
     });
