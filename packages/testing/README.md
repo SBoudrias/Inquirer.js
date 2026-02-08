@@ -145,7 +145,8 @@ describe('my CLI', () => {
 
 The `screen` object provides:
 
-- `nextPrompt()` - Wait for the current prompt to be ready, or for it to complete and the next prompt to render. Call this after starting your CLI and after sending input that completes a prompt (e.g., pressing enter)
+- `nextRender()` - Wait for the next screen render. Returns immediately if a render already happened since the last call. Use this to wait for the initial render, or for async re-renders (e.g., validation errors)
+- `nextPrompt()` - Wait for the current prompt to complete and the next prompt to render. Use this in multi-prompt flows
 - `getScreen({ raw?: boolean })` - Get the current prompt screen content. By default strips ANSI codes
 - `getFullOutput({ raw?: boolean })` - Get all accumulated output interpreted through a virtual terminal (returns a `Promise`). By default resolves ANSI escape sequences into actual screen state
 - `type(text)` - Type text (writes to stream AND emits keypresses)

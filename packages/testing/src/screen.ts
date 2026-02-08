@@ -16,6 +16,7 @@ export class Screen {
   #currentOutput: BufferedStream | null = null;
   #activePromise: Promise<unknown> | null = null;
   #promiseConsumed = false;
+  #rendersConsumed = 0;
 
   constructor() {
     this.#input = new MuteStream();
@@ -30,6 +31,7 @@ export class Screen {
     const output = new BufferedStream();
     this.#outputs.push(output);
     this.#currentOutput = output;
+    this.#rendersConsumed = 0;
     return output;
   }
 
@@ -39,28 +41,32 @@ export class Screen {
   }
 
   /**
-   * Wait for the current prompt to be ready, or for it to complete and the next prompt to be ready.
-   * - First call: waits for the prompt to render
-   * - Subsequent calls: waits for current prompt to complete, then next to render
+   * Wait for the next render on the current output.
+   * Returns immediately if a render has happened since the last call.
    */
-  async nextPrompt(): Promise<void> {
-    if (this.#activePromise && this.#promiseConsumed) {
-      // We've already interacted with this prompt, wait for it to complete
-      await this.#activePromise;
-    }
-    // Mark that we're now interacting with the current prompt
-    this.#promiseConsumed = true;
-
-    // The first render is synchronous, so the output may already have data.
-    // Only wait if no meaningful write has happened yet.
-    if (this.#currentOutput && this.#currentOutput.writeCount > 0) {
+  async nextRender(): Promise<void> {
+    const writeCount = this.#currentOutput?.writeCount ?? 0;
+    if (writeCount > this.#rendersConsumed) {
+      this.#rendersConsumed = writeCount;
       return;
     }
 
-    // Wait for the next meaningful write to the output stream
     await new Promise<void>((resolve) => {
       this.#currentOutput?.once('render', resolve);
     });
+    this.#rendersConsumed = this.#currentOutput?.writeCount ?? 0;
+  }
+
+  /**
+   * Wait for the current prompt to complete and the next prompt to render.
+   * On first call, simply waits for the initial render.
+   */
+  async nextPrompt(): Promise<void> {
+    if (this.#activePromise && this.#promiseConsumed) {
+      await this.#activePromise;
+    }
+    this.#promiseConsumed = true;
+    await this.nextRender();
   }
 
   getScreen({ raw }: { raw?: boolean } = {}): string {
@@ -98,5 +104,6 @@ export class Screen {
     this.#currentOutput = null;
     this.#activePromise = null;
     this.#promiseConsumed = false;
+    this.#rendersConsumed = 0;
   }
 }
