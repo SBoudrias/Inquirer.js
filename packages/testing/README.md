@@ -98,9 +98,8 @@ import { runMyCli } from './my-cli.js';
 describe('my CLI', () => {
   it('asks for name and confirms', async () => {
     const result = runMyCli();
-    await screen.next();
 
-    // First prompt
+    // First prompt is immediately available
     expect(screen.getScreen()).toContain('What is your name?');
     screen.type('John');
     screen.keypress('enter');
@@ -124,9 +123,8 @@ import { runMyCli } from './my-cli.js';
 describe('my CLI', () => {
   it('asks for name and confirms', async () => {
     const result = runMyCli();
-    await screen.next();
 
-    // First prompt
+    // First prompt is immediately available
     expect(screen.getScreen()).toContain('What is your name?');
     screen.type('John');
     screen.keypress('enter');
@@ -145,7 +143,7 @@ describe('my CLI', () => {
 
 The `screen` object provides:
 
-- `next()` - Wait for the next screen update. Handles initial renders, re-renders (e.g., validation errors), and prompt transitions automatically
+- `next()` - Wait for the next screen update (prompt transitions, validation errors, async updates). The initial prompt render is available immediately via `getScreen()` — no `next()` needed
 - `getScreen({ raw?: boolean })` - Get the current prompt screen content. By default strips ANSI codes
 - `getFullOutput({ raw?: boolean })` - Get all accumulated output interpreted through a virtual terminal (returns a `Promise`). By default resolves ANSI escape sequences into actual screen state
 - `type(text)` - Type text (writes to stream AND emits keypresses)

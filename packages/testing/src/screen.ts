@@ -15,7 +15,6 @@ export class Screen {
   #outputs: BufferedStream[] = [];
   #currentOutput: BufferedStream | null = null;
   #activePromise: Promise<unknown> | null = null;
-  #promiseConsumed = false;
   #rendersConsumed = 0;
   #renderResolve: (() => void) | null = null;
 
@@ -46,19 +45,23 @@ export class Screen {
 
   setActivePromise(promise: Promise<unknown>): void {
     this.#activePromise = promise;
-    this.#promiseConsumed = false;
+    // Auto-consume the initial render. Since createPrompt renders synchronously,
+    // getScreen() works immediately after starting a prompt — no next() needed.
+    this.#rendersConsumed = this.#currentOutput?.writeCount ?? 0;
   }
 
   /**
    * Wait for the next screen update.
    *
-   * On the first call, waits for the initial prompt render.
-   * On subsequent calls, handles both re-renders within the same prompt
-   * (e.g., validation errors, async updates) and prompt transitions in
-   * multi-prompt flows (automatically waits for the next prompt).
+   * Handles re-renders within the same prompt (e.g., validation errors,
+   * async updates) and prompt transitions in multi-prompt flows
+   * (automatically waits for the next prompt).
+   *
+   * Note: The initial prompt render is available immediately via getScreen()
+   * — no next() call is needed before reading it.
    */
   async next(): Promise<void> {
-    if (this.#activePromise && this.#promiseConsumed) {
+    if (this.#activePromise) {
       const currentPromise = this.#activePromise;
 
       // Consume any renders that happened synchronously (e.g., loading state).
@@ -112,11 +115,9 @@ export class Screen {
         }
       }
     } else {
-      // First call or no active promise — wait for the initial render
+      // No active promise — wait for a render (e.g., prompt hasn't started yet)
       await this.#waitForNextRender();
     }
-
-    this.#promiseConsumed = true;
   }
 
   async #waitForNextRender(): Promise<void> {
@@ -173,7 +174,6 @@ export class Screen {
     this.#outputs = [];
     this.#currentOutput = null;
     this.#activePromise = null;
-    this.#promiseConsumed = false;
     this.#rendersConsumed = 0;
     this.#renderResolve = null;
   }

@@ -12,7 +12,6 @@ describe('@inquirer/demo E2E tests', () => {
   describe('screen.getScreen()', () => {
     it('returns the current prompt screen', async () => {
       const demo = confirmDemo();
-      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`"? Confirm? (Y/n)"`);
 
       screen.keypress('enter');
@@ -45,7 +44,6 @@ describe('@inquirer/demo E2E tests', () => {
   describe('screen.getFullOutput()', () => {
     it('accumulates all output across prompts', async () => {
       const demo = confirmDemo();
-      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`"? Confirm? (Y/n)"`);
 
       screen.keypress('enter');
@@ -79,7 +77,6 @@ describe('@inquirer/demo E2E tests', () => {
   describe('screen.type()', () => {
     it('types text into input prompts', async () => {
       const demo = inputDemo();
-      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(
         `"? What's your favorite food? (Croissant)"`,
       );
@@ -121,7 +118,6 @@ describe('@inquirer/demo E2E tests', () => {
   describe('screen.keypress()', () => {
     it('navigates with arrow keys', async () => {
       const demo = selectDemo();
-      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a package manager
         ❯ npm
@@ -205,7 +201,6 @@ describe('@inquirer/demo E2E tests', () => {
 
     it('toggles with space key', async () => {
       const demo = checkboxDemo();
-      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a package manager
         ❯◯ npm
@@ -257,7 +252,6 @@ describe('@inquirer/demo E2E tests', () => {
   describe('editor prompt', () => {
     it('captures typed text as editor content', async () => {
       const demo = editorDemo();
-      await screen.next();
       expect(screen.getScreen()).toContain('short bio');
 
       // Press enter to open the editor, type content, then enter to save
@@ -277,7 +271,6 @@ describe('@inquirer/demo E2E tests', () => {
   describe('screen.clear()', () => {
     it('resets screen state between test runs', async () => {
       const demo1 = confirmDemo();
-      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`"? Confirm? (Y/n)"`);
 
       screen.keypress('enter');
@@ -292,7 +285,6 @@ describe('@inquirer/demo E2E tests', () => {
       screen.clear();
 
       const demo2 = confirmDemo();
-      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`"? Confirm? (Y/n)"`);
 
       // After clear, full output only contains second run
