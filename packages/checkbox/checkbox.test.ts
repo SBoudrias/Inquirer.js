@@ -24,7 +24,6 @@ describe('checkbox prompt', () => {
       message: 'Select a number',
       choices: numberedChoices,
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -66,7 +65,6 @@ describe('checkbox prompt', () => {
       message: 'Select a number',
       choices: ['Option A', 'Option B', 'Option C'],
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -99,7 +97,6 @@ describe('checkbox prompt', () => {
       choices: numberedChoices,
       loop: false,
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -140,7 +137,6 @@ describe('checkbox prompt', () => {
       choices: [new Separator(), ...numberedChoices],
       loop: false,
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -181,7 +177,6 @@ describe('checkbox prompt', () => {
       choices: numberedChoices,
       loop: false,
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -223,7 +218,6 @@ describe('checkbox prompt', () => {
       choices: [...numberedChoices, new Separator()],
       loop: false,
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -264,7 +258,6 @@ describe('checkbox prompt', () => {
       message: 'Select a number',
       choices: numberedChoices,
     });
-    await screen.next();
 
     screen.keypress('4');
     expect(screen.getScreen()).toMatchInlineSnapshot(`
@@ -290,7 +283,6 @@ describe('checkbox prompt', () => {
       message: 'Select a number',
       choices: [{ value: 1 }, { value: 2, checked: true }],
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -310,7 +302,6 @@ describe('checkbox prompt', () => {
       message: 'Select a number',
       choices: [{ value: 1 }, { value: 2, checked: true }],
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -343,7 +334,6 @@ describe('checkbox prompt', () => {
       choices: numberedChoices,
       pageSize: 2,
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -363,7 +353,6 @@ describe('checkbox prompt', () => {
       choices: numberedChoices,
       pageSize: 10,
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -391,7 +380,6 @@ describe('checkbox prompt', () => {
       choices: numberedChoices,
       pageSize: 2,
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
@@ -426,7 +414,6 @@ describe('checkbox prompt', () => {
         { name: 'Pepperoni', value: 'pepperoni' },
       ],
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
@@ -462,7 +449,6 @@ describe('checkbox prompt', () => {
         { name: 'Pepperoni', value: 'pepperoni' },
       ],
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
@@ -497,7 +483,6 @@ describe('checkbox prompt', () => {
         { name: 'Pepperoni', value: 'pepperoni' },
       ],
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
@@ -529,7 +514,6 @@ describe('checkbox prompt', () => {
       message: 'Select a number',
       choices: numberedChoices,
     });
-    await screen.next();
 
     screen.keypress('4');
     expect(screen.getScreen()).toMatchInlineSnapshot(`
@@ -583,7 +567,6 @@ describe('checkbox prompt', () => {
       message: 'Select a number',
       choices: numberedChoices,
     });
-    await screen.next();
 
     screen.keypress('4');
     expect(screen.getScreen()).toMatchInlineSnapshot(`
@@ -610,7 +593,6 @@ describe('checkbox prompt', () => {
       message: 'Select a number',
       choices: numberedChoices,
     });
-    await screen.next();
 
     const unselect = [2, 4, 6, 7, 8, 11];
     unselect.forEach((value) => {
@@ -652,7 +634,6 @@ describe('checkbox prompt', () => {
       choices: numberedChoices,
       required: true,
     });
-    await screen.next();
 
     screen.keypress('enter');
     await screen.next();
@@ -699,7 +680,6 @@ describe('checkbox prompt', () => {
       message: 'Select a family',
       choices: choices,
     });
-    await screen.next();
 
     expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a family
@@ -748,7 +728,6 @@ describe('checkbox prompt', () => {
         return true;
       },
     });
-    await screen.next();
 
     screen.keypress('enter');
     await screen.next();
@@ -783,7 +762,6 @@ describe('checkbox prompt', () => {
           },
         },
       });
-      await screen.next();
 
       screen.keypress('space');
       expect(screen.getScreen()).toMatchInlineSnapshot(`
@@ -812,7 +790,6 @@ describe('checkbox prompt', () => {
           },
         },
       });
-      await screen.next();
 
       screen.keypress('space');
       expect(screen.getScreen()).toMatchInlineSnapshot(`
@@ -851,7 +828,6 @@ describe('checkbox prompt', () => {
           },
         },
       });
-      await screen.next();
 
       screen.keypress('space');
       screen.keypress('down');
@@ -887,7 +863,6 @@ describe('checkbox prompt', () => {
           },
         ],
       });
-      await screen.next();
 
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a commit
@@ -930,7 +905,6 @@ describe('checkbox prompt', () => {
           },
         },
       });
-      await screen.next();
 
       screen.keypress('space');
       screen.keypress('down');
@@ -953,7 +927,6 @@ describe('checkbox prompt', () => {
         message: 'Select a number',
         choices: numberedChoices,
       });
-      await screen.next();
 
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
@@ -986,7 +959,6 @@ describe('checkbox prompt', () => {
           },
         },
       });
-      await screen.next();
 
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
@@ -1042,7 +1014,6 @@ describe('checkbox prompt', () => {
           },
         },
       });
-      await screen.next();
 
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
@@ -1075,7 +1046,6 @@ describe('checkbox prompt', () => {
           all: 'b',
         },
       });
-      await screen.next();
 
       screen.keypress('4');
       expect(screen.getScreen()).toMatchInlineSnapshot(`
@@ -1133,7 +1103,6 @@ describe('checkbox prompt', () => {
         invert: 'j',
       },
     });
-    await screen.next();
 
     const unselect = [2, 4, 6, 7, 8, 11];
     unselect.forEach((value) => {
@@ -1166,7 +1135,6 @@ describe('checkbox prompt', () => {
         invert: null,
       },
     });
-    await screen.next();
 
     // All options are deselected and should not change if default shortcuts are pressed
     const expectedScreen = screen.getScreen();
@@ -1208,7 +1176,6 @@ describe('checkbox prompt', () => {
           { value: 'six', name: 'Six' },
         ],
       });
-      await screen.next();
 
       // Press '5' to toggle the 5th selectable item (which is 'Five')
       screen.keypress('5');
@@ -1230,7 +1197,6 @@ describe('checkbox prompt', () => {
           { value: 'four', name: 'Four' },
         ],
       });
-      await screen.next();
 
       // Press '3' to toggle the 3rd selectable item (which is 'Three')
       screen.keypress('3');
@@ -1255,7 +1221,6 @@ describe('checkbox prompt', () => {
           { value: 'six', name: 'Six' },
         ],
       });
-      await screen.next();
 
       // Press '3' to toggle the 3rd selectable item (which is 'Five')
       // Selectable items are One, Three, Five, Six (Two and Four are disabled)
@@ -1280,7 +1245,6 @@ describe('checkbox prompt', () => {
         message: 'Select package managers',
         choices,
       });
-      await screen.next();
 
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select package managers
@@ -1334,7 +1298,6 @@ describe('checkbox prompt', () => {
           keybindings: ['vim'],
         },
       });
-      await screen.next();
 
       // Down
       screen.keypress('j');
@@ -1359,7 +1322,6 @@ describe('checkbox prompt', () => {
           keybindings: ['emacs'],
         },
       });
-      await screen.next();
 
       // Down
       screen.keypress({ name: 'n', ctrl: true });
@@ -1384,7 +1346,6 @@ describe('checkbox prompt', () => {
           keybindings: ['vim', 'emacs'],
         },
       });
-      await screen.next();
 
       // Vim: Down
       screen.keypress('j');
