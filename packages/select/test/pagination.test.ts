@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render } from '@inquirer/testing';
+import { screen } from '@inquirer/testing/vitest';
 import select, { Separator } from '../src/index.ts';
 
 const italianMenu = [
@@ -39,14 +39,14 @@ describe('select() prompt pagination', () => {
   describe('loop: true', () => {
     describe('choices fitting in pageSize', () => {
       it('multi-line choices', async () => {
-        const { answer, events, getScreen } = await render(select, {
+        const answer = select({
           message: 'Select a recipe',
           choices: italianMenu,
           pageSize: 9,
           loop: true,
         });
 
-        expect(getScreen()).toMatchInlineSnapshot(`
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -61,8 +61,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -77,8 +77,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -93,8 +93,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -109,8 +109,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -125,8 +125,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -141,8 +141,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -157,8 +157,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -173,19 +173,19 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('enter');
+        screen.keypress('enter');
         await expect(answer).resolves.toEqual('salad');
       });
 
       it('multi-line choices + separators', async () => {
-        const { answer, events, getScreen } = await render(select, {
+        const answer = select({
           message: 'Select a recipe',
           choices: [new Separator(), ...italianMenu, new Separator()],
           pageSize: 11,
           loop: true,
         });
 
-        expect(getScreen()).toMatchInlineSnapshot(`
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
           ❯ Spaghetti Carbonara
@@ -202,8 +202,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
             Spaghetti Carbonara
@@ -220,8 +220,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
             Spaghetti Carbonara
@@ -238,8 +238,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
           ❯ Spaghetti Carbonara
@@ -256,8 +256,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
             Spaghetti Carbonara
@@ -274,8 +274,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
             Spaghetti Carbonara
@@ -292,8 +292,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
           ❯ Spaghetti Carbonara
@@ -310,8 +310,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
             Spaghetti Carbonara
@@ -328,21 +328,21 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('enter');
+        screen.keypress('enter');
         await expect(answer).resolves.toEqual('salad');
       });
     });
 
     describe('choices longer than pageSize', () => {
       it('multi-line choices', async () => {
-        const { answer, events, getScreen } = await render(select, {
+        const answer = select({
           message: 'Select a recipe',
           choices: italianMenu,
           pageSize: 7,
           loop: true,
         });
 
-        expect(getScreen()).toMatchInlineSnapshot(`
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -355,8 +355,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -369,8 +369,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
@@ -383,8 +383,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Caesar Salad
               Romaine, Croutons, Parmesan
@@ -397,8 +397,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
@@ -411,8 +411,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -425,8 +425,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Caesar Salad
               Romaine, Croutons, Parmesan
@@ -439,19 +439,19 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('enter');
+        screen.keypress('enter');
         await expect(answer).resolves.toEqual('carbonara');
       });
 
       it('multi-line choices + separators', async () => {
-        const { answer, events, getScreen } = await render(select, {
+        const answer = select({
           message: 'Select a recipe',
           choices: [new Separator(), ...italianMenu, new Separator()],
           pageSize: 7,
           loop: true,
         });
 
-        expect(getScreen()).toMatchInlineSnapshot(`
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
           ❯ Spaghetti Carbonara
@@ -464,8 +464,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -478,8 +478,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
@@ -492,8 +492,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
               15 minutes
            ──────────────
@@ -506,8 +506,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Margherita Pizza
               Tomatoes, Mozzarella, Basil
@@ -520,8 +520,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -534,8 +534,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
               15 minutes
            ──────────────
@@ -548,19 +548,19 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('enter');
+        screen.keypress('enter');
         await expect(answer).resolves.toEqual('carbonara');
       });
 
       it('single line choices, progressive cursor', async () => {
-        const { answer, events, getScreen } = await render(select, {
+        const answer = select({
           message: 'Select a number',
           choices: numberedChoices,
           pageSize: 7,
           loop: true,
         });
 
-        expect(getScreen()).toMatchInlineSnapshot(`
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a number
           ❯ 1
             2
@@ -573,8 +573,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a number
             1
           ❯ 2
@@ -587,8 +587,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a number
             1
             2
@@ -601,8 +601,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a number
             12
             1
@@ -615,8 +615,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a number
             11
             12
@@ -629,8 +629,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a number
             12
             1
@@ -643,20 +643,20 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('enter');
+        screen.keypress('enter');
         await expect(answer).resolves.toEqual(2);
       });
     });
 
     it('single line choices, going up a while and down', async () => {
-      const { answer, events, getScreen } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: numberedChoices,
         pageSize: 7,
         loop: true,
       });
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯ 1
           2
@@ -669,11 +669,11 @@ describe('select() prompt pagination', () => {
         ↑↓ navigate • ⏎ select"
       `);
 
-      events.keypress('up');
-      events.keypress('up');
-      events.keypress('up');
-      events.keypress('up');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.keypress('up');
+      screen.keypress('up');
+      screen.keypress('up');
+      screen.keypress('up');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯ 9
           10
@@ -686,8 +686,8 @@ describe('select() prompt pagination', () => {
         ↑↓ navigate • ⏎ select"
       `);
 
-      events.keypress('down');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.keypress('down');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
           9
         ❯ 10
@@ -700,7 +700,7 @@ describe('select() prompt pagination', () => {
         ↑↓ navigate • ⏎ select"
       `);
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(10);
     });
   });
@@ -708,14 +708,14 @@ describe('select() prompt pagination', () => {
   describe('loop: false', () => {
     describe('choices fitting in pageSize', () => {
       it('multi-line choices', async () => {
-        const { answer, events, getScreen } = await render(select, {
+        const answer = select({
           message: 'Select a recipe',
           choices: italianMenu,
           pageSize: 9,
           loop: false,
         });
 
-        expect(getScreen()).toMatchInlineSnapshot(`
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -730,8 +730,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -746,8 +746,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        const bottomScreen = getScreen();
+        screen.keypress('down');
+        const bottomScreen = screen.getScreen();
         expect(bottomScreen).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
@@ -763,11 +763,11 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(bottomScreen).toEqual(getScreen());
+        screen.keypress('down');
+        expect(bottomScreen).toEqual(screen.getScreen());
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -782,8 +782,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        const topScreen = getScreen();
+        screen.keypress('up');
+        const topScreen = screen.getScreen();
         expect(topScreen).toMatchInlineSnapshot(`
           "? Select a recipe
           ❯ Spaghetti Carbonara
@@ -799,22 +799,22 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(topScreen).toEqual(getScreen());
+        screen.keypress('up');
+        expect(topScreen).toEqual(screen.getScreen());
 
-        events.keypress('enter');
+        screen.keypress('enter');
         await expect(answer).resolves.toEqual('carbonara');
       });
 
       it('multi-line choices + separators', async () => {
-        const { answer, events, getScreen } = await render(select, {
+        const answer = select({
           message: 'Select a recipe',
           choices: [new Separator(), ...italianMenu, new Separator()],
           pageSize: 11,
           loop: false,
         });
 
-        expect(getScreen()).toMatchInlineSnapshot(`
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
           ❯ Spaghetti Carbonara
@@ -831,8 +831,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
             Spaghetti Carbonara
@@ -849,8 +849,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
             Spaghetti Carbonara
@@ -867,8 +867,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
             Spaghetti Carbonara
@@ -885,8 +885,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
             Spaghetti Carbonara
@@ -903,8 +903,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        const topScreen = getScreen();
+        screen.keypress('up');
+        const topScreen = screen.getScreen();
         expect(topScreen).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
@@ -922,24 +922,24 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(topScreen).toEqual(getScreen());
+        screen.keypress('up');
+        expect(topScreen).toEqual(screen.getScreen());
 
-        events.keypress('enter');
+        screen.keypress('enter');
         await expect(answer).resolves.toEqual('carbonara');
       });
     });
 
     describe('choices longer than pageSize', () => {
       it('multi-line choices', async () => {
-        const { answer, events, getScreen } = await render(select, {
+        const answer = select({
           message: 'Select a recipe',
           choices: italianMenu,
           pageSize: 7,
           loop: false,
         });
 
-        expect(getScreen()).toMatchInlineSnapshot(`
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
           ❯ Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -952,8 +952,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -966,8 +966,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        const bottomScreen = getScreen();
+        screen.keypress('down');
+        const bottomScreen = screen.getScreen();
         expect(bottomScreen).toMatchInlineSnapshot(`
           "? Select a recipe
               30 minutes
@@ -981,11 +981,11 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(bottomScreen).toEqual(getScreen());
+        screen.keypress('down');
+        expect(bottomScreen).toEqual(screen.getScreen());
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -998,8 +998,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        const topScreen = getScreen();
+        screen.keypress('up');
+        const topScreen = screen.getScreen();
         expect(topScreen).toMatchInlineSnapshot(`
           "? Select a recipe
           ❯ Spaghetti Carbonara
@@ -1013,22 +1013,22 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(topScreen).toEqual(getScreen());
+        screen.keypress('up');
+        expect(topScreen).toEqual(screen.getScreen());
 
-        events.keypress('enter');
+        screen.keypress('enter');
         await expect(answer).resolves.toEqual('carbonara');
       });
 
       it('multi-line choices + separators', async () => {
-        const { answer, events, getScreen } = await render(select, {
+        const answer = select({
           message: 'Select a recipe',
           choices: [new Separator(), ...italianMenu, new Separator()],
           pageSize: 7,
           loop: false,
         });
 
-        expect(getScreen()).toMatchInlineSnapshot(`
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
           ❯ Spaghetti Carbonara
@@ -1041,8 +1041,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('down');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -1055,8 +1055,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        const bottomScreen = getScreen();
+        screen.keypress('down');
+        const bottomScreen = screen.getScreen();
         expect(bottomScreen).toMatchInlineSnapshot(`
           "? Select a recipe
             Margherita Pizza
@@ -1070,11 +1070,11 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('down');
-        expect(bottomScreen).toEqual(getScreen());
+        screen.keypress('down');
+        expect(bottomScreen).toEqual(screen.getScreen());
 
-        events.keypress('up');
-        expect(getScreen()).toMatchInlineSnapshot(`
+        screen.keypress('up');
+        expect(screen.getScreen()).toMatchInlineSnapshot(`
           "? Select a recipe
             Spaghetti Carbonara
               Eggs, Pecorino Romano, Pancetta
@@ -1087,8 +1087,8 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        const topScreen = getScreen();
+        screen.keypress('up');
+        const topScreen = screen.getScreen();
         expect(topScreen).toMatchInlineSnapshot(`
           "? Select a recipe
            ──────────────
@@ -1102,10 +1102,10 @@ describe('select() prompt pagination', () => {
           ↑↓ navigate • ⏎ select"
         `);
 
-        events.keypress('up');
-        expect(topScreen).toEqual(getScreen());
+        screen.keypress('up');
+        expect(topScreen).toEqual(screen.getScreen());
 
-        events.keypress('enter');
+        screen.keypress('enter');
         await expect(answer).resolves.toEqual('carbonara');
       });
     });

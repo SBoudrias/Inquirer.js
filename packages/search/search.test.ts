@@ -1,5 +1,5 @@
 import { describe, it, expect, expectTypeOf } from 'vitest';
-import { render } from '@inquirer/testing';
+import { screen } from '@inquirer/testing/vitest';
 import search, { Separator } from './src/index.ts';
 
 // Array of all countries names as string
@@ -40,12 +40,13 @@ function getListSearch(
 
 describe('search prompt', () => {
   it('allows to search', async () => {
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a Canadian province',
       source: getListSearch(PROVINCES),
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province
       ❯ Alberta
         British Columbia
@@ -58,9 +59,9 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.type('New');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('New');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
       ❯ New Brunswick
         Newfoundland and Labrador
@@ -68,9 +69,9 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('NB');
-    expect(getScreen()).toMatchInlineSnapshot(
+    expect(screen.getScreen()).toMatchInlineSnapshot(
       `"✔ Select a Canadian province New Brunswick"`,
     );
   });
@@ -88,14 +89,15 @@ describe('search prompt', () => {
       'Tully',
     ];
 
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a family',
       source: (term: string = '') => {
         return choices.filter((choice) => choice.includes(term));
       },
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a family
       ❯ Stark
         Lannister
@@ -108,8 +110,8 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a family
         Stark
       ❯ Lannister
@@ -122,26 +124,27 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.type('Targ');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('Targ');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a family Targ
       ❯ Targaryen
 
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('Targaryen');
   });
 
   it('allows to search and navigate the list', async () => {
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a Canadian province',
       source: getListSearch(PROVINCES),
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province
       ❯ Alberta
         British Columbia
@@ -154,9 +157,9 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.type('N');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('N');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province N
       ❯ Manitoba
         New Brunswick
@@ -169,9 +172,9 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province N
         Manitoba
         New Brunswick
@@ -184,22 +187,22 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('NL');
-    expect(getScreen()).toMatchInlineSnapshot(
+    expect(screen.getScreen()).toMatchInlineSnapshot(
       `"✔ Select a Canadian province Newfoundland and Labrador"`,
     );
   });
 
   it('controls bounds of the list when navigating', async () => {
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a Canadian province',
       source: getListSearch(PROVINCES),
     });
 
-    events.type('New');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('New');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
       ❯ New Brunswick
         Newfoundland and Labrador
@@ -207,19 +210,19 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('up');
-    events.keypress('up');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('up');
+    screen.keypress('up');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
       ❯ New Brunswick
         Newfoundland and Labrador
 
       ↑↓ navigate • ⏎ select"
     `);
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
         New Brunswick
       ❯ Newfoundland and Labrador
@@ -227,8 +230,8 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('up');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('up');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
       ❯ New Brunswick
         Newfoundland and Labrador
@@ -236,17 +239,16 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('NB');
-    expect(getScreen()).toMatchInlineSnapshot(
+    expect(screen.getScreen()).toMatchInlineSnapshot(
       `"✔ Select a Canadian province New Brunswick"`,
     );
   });
 
   it('handles search errors', async () => {
     const abortController = new AbortController();
-    const { answer, events, getScreen } = await render(
-      search,
+    const answer = search(
       {
         message: 'Select a Canadian province',
         source: (term: string | void) => {
@@ -258,15 +260,15 @@ describe('search prompt', () => {
       { signal: abortController.signal },
     );
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province
 
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.type('New');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('New');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
       > You're being rate limited
 
@@ -279,8 +281,7 @@ describe('search prompt', () => {
 
   it('handles empty results', async () => {
     const abortController = new AbortController();
-    const { answer, events, getScreen } = await render(
-      search,
+    const answer = search(
       {
         message: 'Select a Canadian province',
         source: () => [],
@@ -288,23 +289,25 @@ describe('search prompt', () => {
       { signal: abortController.signal },
     );
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province
 
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.type('N');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('N');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province N
       > No results found
 
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('backspace');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('backspace');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province
 
       ↑↓ navigate • ⏎ select"
@@ -326,12 +329,13 @@ describe('search prompt', () => {
       { value: 'Spain' },
     ];
 
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a country',
       source: getListSearch(choices),
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a country
        ~ Americas ~
       ❯ Canada
@@ -344,9 +348,9 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.type('France');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('France');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a country France
        ~ Americas ~
        ~ Europe ~
@@ -356,11 +360,11 @@ describe('search prompt', () => {
     `);
 
     // This event will be ignored;
-    events.keypress('enter');
+    screen.keypress('enter');
 
-    Array.from({ length: 'France'.length }).forEach(() => events.keypress('backspace'));
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    Array.from({ length: 'France'.length }).forEach(() => screen.keypress('backspace'));
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a country
        ~ Americas ~
       ❯ Canada
@@ -373,12 +377,12 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.type('United');
-    await Promise.resolve();
-    events.keypress('enter');
+    screen.type('United');
+    await screen.next();
+    screen.keypress('enter');
 
     await expect(answer).resolves.toEqual('United States');
-    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a country United States"`);
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Select a country United States"`);
   });
 
   it('handles choices with descriptions', async () => {
@@ -388,12 +392,13 @@ describe('search prompt', () => {
       { value: 'Targaryen', description: 'Fire and blood' },
     ];
 
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a family',
       source: getListSearch(choices),
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a family
       ❯ Stark
         Lannister
@@ -403,8 +408,8 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a family
         Stark
       ❯ Lannister
@@ -414,9 +419,9 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.type('Targ');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('Targ');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a family Targ
       ❯ Targaryen
 
@@ -424,14 +429,13 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('Targaryen');
   });
 
   it('allows default parameters to be used as source function parameters', async () => {
     const abortController = new AbortController();
-    const { answer } = await render(
-      search,
+    const answer = search(
       {
         message: 'Select a family',
         source: (term: string = '') => {
@@ -447,12 +451,13 @@ describe('search prompt', () => {
   });
 
   it('Autocomplete with tab', async () => {
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a Canadian province',
       source: getListSearch(PROVINCES),
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province
       ❯ Alberta
         British Columbia
@@ -465,10 +470,9 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.type('New');
-
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('New');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
       ❯ New Brunswick
         Newfoundland and Labrador
@@ -476,8 +480,8 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('tab');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('tab');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New Brunswick
       ❯ New Brunswick
         Newfoundland and Labrador
@@ -485,7 +489,7 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('NB');
   });
 
@@ -493,7 +497,7 @@ describe('search prompt', () => {
     const FOLDERS = ['src', 'dist'];
     const FILES = ['src/index.mts', 'dist/index.js'];
 
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a file',
       source: (term?: string) => {
         if (term && FOLDERS.includes(term)) {
@@ -513,7 +517,8 @@ describe('search prompt', () => {
       },
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a file
       ❯ src
         dist
@@ -521,31 +526,30 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.type('di');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('di');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a file di
       ❯ dist
 
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    await Promise.resolve();
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('enter');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a file dist
       ❯ dist/index.js
 
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('dist/index.js');
   });
 
   it('handles validation errors', async () => {
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a Canadian province',
       source: getListSearch(PROVINCES),
       validate: (value: string) => {
@@ -555,7 +559,8 @@ describe('search prompt', () => {
       },
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province
       ❯ Alberta
         British Columbia
@@ -568,68 +573,68 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    await Promise.resolve();
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('enter');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province Alberta
       ❯ Alberta
 
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('enter');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province Alberta
       > You must provide a valid value
 
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress({ name: 'backspace', ctrl: true });
-    events.type('New Brun');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress({ name: 'backspace', ctrl: true });
+    screen.type('New Brun');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New Brun
       ❯ New Brunswick
 
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('enter');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New Brunswick
       ❯ New Brunswick
 
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('enter');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New Brunswick
       > New Brunswick is unavailable at the moment.
 
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress({ name: 'backspace', ctrl: true });
-    events.type('Quebec');
-    await Promise.resolve();
-    events.keypress('enter');
+    screen.keypress({ name: 'backspace', ctrl: true });
+    screen.type('Quebec');
+    await screen.next();
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('QC');
   });
 
   it('Allows setting a default value', async () => {
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a Canadian province',
       source: getListSearch(PROVINCES),
       default: 'ON',
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province
         New Brunswick
         Newfoundland and Labrador
@@ -642,18 +647,19 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('ON');
   });
 
   it('Falls back to first item when default value is not found', async () => {
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a Canadian province',
       source: getListSearch(PROVINCES),
       default: 'INVALID',
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province
       ❯ Alberta
         British Columbia
@@ -666,18 +672,19 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('AB');
   });
 
   it('Does not reapply default after searching', async () => {
-    const { answer, events, getScreen } = await render(search, {
+    const answer = search({
       message: 'Select a Canadian province',
       source: getListSearch(PROVINCES),
       default: 'ON',
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province
         New Brunswick
         Newfoundland and Labrador
@@ -690,9 +697,9 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.type('New');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('New');
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province New
       ❯ New Brunswick
         Newfoundland and Labrador
@@ -700,9 +707,9 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress({ name: 'backspace', ctrl: true });
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress({ name: 'backspace', ctrl: true });
+    await screen.next();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a Canadian province
       ❯ Alberta
         British Columbia
@@ -715,7 +722,7 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('AB');
   });
 });

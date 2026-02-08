@@ -1,5 +1,5 @@
 import { describe, it, expect, expectTypeOf, vi, afterEach } from 'vitest';
-import { render } from '@inquirer/testing';
+import { screen } from '@inquirer/testing/vitest';
 import { ValidationError } from '@inquirer/core';
 import select, { Separator } from '../src/index.ts';
 
@@ -39,12 +39,12 @@ afterEach(() => {
 
 describe('select prompt', () => {
   it('use arrow keys to select an option', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: numberedChoices,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 1
         2
@@ -57,9 +57,9 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         1
         2
@@ -72,19 +72,19 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 3"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 3"');
 
     await expect(answer).resolves.toEqual(3);
   });
 
   it('allow selecting the first option', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: numberedChoices.slice(0, 3),
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 1
         2
@@ -93,19 +93,19 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(1);
 
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
   });
 
   it('allow passing strings as choices', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select one',
       choices: ['Option A', 'Option B', 'Option C'],
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select one
       ❯ Option A
         Option B
@@ -114,20 +114,20 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select one Option A"`);
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Select one Option A"`);
 
     await expect(answer).resolves.toEqual('Option A');
   });
 
   it('use number key to select an option', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: numberedChoices,
     });
 
-    events.type('4');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('4');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         1
         2
@@ -140,20 +140,20 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 4"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 4"');
 
     await expect(answer).resolves.toEqual(4);
   });
 
   it('use 2-digits number to select an option', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: numberedChoices,
     });
 
-    events.type('12');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('12');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 12
         1
@@ -166,20 +166,20 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 12"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 12"');
 
     await expect(answer).resolves.toEqual(12);
   });
 
   it('select an option with a mix of letters and digits by index (7th option)', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select an option',
       choices: complexStringChoices,
     });
 
-    events.type('7');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('7');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select an option
         3
         4 a
@@ -192,20 +192,20 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select an option 4 c"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select an option 4 c"');
 
     await expect(answer).resolves.toEqual('4 c');
   });
 
   it('select an option with a mix of letters and digits by text starting with a number (7.)', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select an option',
       choices: complexStringChoices,
     });
 
-    events.type('7.');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('7.');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select an option
         4 c
         5
@@ -218,20 +218,20 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select an option 7.1"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select an option 7.1"');
 
     await expect(answer).resolves.toEqual('7.1');
   });
 
   it('allow setting a smaller page size', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: numberedChoices,
       pageSize: 2,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 1
         2
@@ -239,18 +239,18 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(1);
   });
 
   it('allow setting a bigger page size', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: numberedChoices,
       pageSize: 10,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 1
         2
@@ -266,18 +266,18 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(1);
   });
 
   it('cycles through options', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: numberedChoices,
       pageSize: 2,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 1
         2
@@ -285,9 +285,9 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('up');
-    events.keypress('up');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('up');
+    screen.keypress('up');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 11
         12
@@ -295,19 +295,19 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(11);
   });
 
   it('does not scroll up beyond first item when not looping', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: numberedChoices,
       pageSize: 2,
       loop: false,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 1
         2
@@ -315,9 +315,9 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('up');
-    events.keypress('up');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('up');
+    screen.keypress('up');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 1
         2
@@ -325,19 +325,19 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(1);
   });
 
   it('does not scroll up beyond first selectable item when not looping', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: [new Separator(), ...numberedChoices],
       pageSize: 2,
       loop: false,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ──────────────
       ❯ 1
@@ -345,9 +345,9 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('up');
-    events.keypress('up');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('up');
+    screen.keypress('up');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ──────────────
       ❯ 1
@@ -355,19 +355,19 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(1);
   });
 
   it('does not scroll down beyond last item when not looping', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: numberedChoices,
       pageSize: 5,
       loop: false,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 1
         2
@@ -378,15 +378,15 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         7
         8
@@ -397,8 +397,8 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         8
         9
@@ -409,8 +409,8 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         8
         9
@@ -421,8 +421,8 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         8
         9
@@ -433,9 +433,9 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         8
         9
@@ -446,19 +446,19 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(numberedChoices.length);
   });
 
   it('does not scroll down beyond last item when not looping with separators', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: [new Separator(), ...numberedChoices, new Separator()],
       pageSize: 5,
       loop: false,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ──────────────
       ❯ 1
@@ -469,15 +469,15 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         7
         8
@@ -488,8 +488,8 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         8
         9
@@ -500,8 +500,8 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         9
         10
@@ -512,8 +512,8 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         9
         10
@@ -524,9 +524,9 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         9
         10
@@ -537,19 +537,19 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(numberedChoices.length);
   });
 
   it('does not scroll down beyond last selectable item when not looping', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: [...numberedChoices, new Separator()],
       pageSize: 3,
       loop: false,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 1
         2
@@ -558,9 +558,9 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    numberedChoices.forEach(() => events.keypress('down'));
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    numberedChoices.forEach(() => screen.keypress('down'));
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         11
       ❯ 12
@@ -569,12 +569,12 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(numberedChoices.length);
   });
 
   it('skip disabled options by arrow keys', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a topping',
       choices: [
         { name: 'Ham', value: 'ham' },
@@ -583,7 +583,7 @@ describe('select prompt', () => {
       ],
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯ Ham
       - Pineapple (disabled)
@@ -592,8 +592,8 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
         Ham
       - Pineapple (disabled)
@@ -602,14 +602,14 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
 
     await expect(answer).resolves.toEqual('pepperoni');
   });
 
   it('skip disabled options by number key', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a topping',
       choices: [
         { name: 'Ham', value: 'ham' },
@@ -618,7 +618,7 @@ describe('select prompt', () => {
       ],
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯ Ham
       - Pineapple (disabled)
@@ -627,8 +627,8 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('2');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('2');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯ Ham
       - Pineapple (disabled)
@@ -637,16 +637,15 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Ham"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a topping Ham"');
 
     await expect(answer).resolves.toEqual('ham');
   });
 
   it('allow customizing disabled label', async () => {
     const abortController = new AbortController();
-    const { answer, getScreen } = await render(
-      select,
+    const answer = select(
       {
         message: 'Select a topping',
         choices: [
@@ -657,7 +656,7 @@ describe('select prompt', () => {
       { signal: abortController.signal },
     );
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯ Ham
       - Pineapple *premium*
@@ -670,7 +669,7 @@ describe('select prompt', () => {
   });
 
   it('allow customizing short names after selection', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a commit',
       choices: [
         {
@@ -691,7 +690,7 @@ describe('select prompt', () => {
       ],
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a commit
       ❯ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
         3272b94a (origin/main) Fix(inquirer): Fix close method not required
@@ -700,13 +699,13 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual('2cc9e311');
-    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a commit 2cc9e311"`);
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Select a commit 2cc9e311"`);
   });
 
   it('throws if all choices are disabled', async () => {
-    const { answer } = await render(select, {
+    const answer = select({
       message: 'Select a topping',
       choices: [
         { name: 'Ham', value: 'ham', disabled: true },
@@ -721,7 +720,7 @@ describe('select prompt', () => {
   });
 
   it('skip separator by arrow keys', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a topping',
       choices: [
         { name: 'Ham', value: 'ham' },
@@ -730,7 +729,7 @@ describe('select prompt', () => {
       ],
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯ Ham
        ──────────────
@@ -739,8 +738,8 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
         Ham
        ──────────────
@@ -749,14 +748,14 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
 
     await expect(answer).resolves.toEqual('pepperoni');
   });
 
   it('skip separator by number key', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a topping',
       choices: [
         { name: 'Ham', value: 'ham' },
@@ -765,7 +764,7 @@ describe('select prompt', () => {
       ],
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯ Ham
        ──────────────
@@ -774,8 +773,8 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('2');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('2');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯ Ham
        ──────────────
@@ -784,14 +783,14 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Ham"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a topping Ham"');
 
     await expect(answer).resolves.toEqual('ham');
   });
 
   it('Allow adding description to choices', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a topping',
       choices: [
         { name: 'Ham', value: 'ham', description: 'Our classic toping' },
@@ -799,7 +798,7 @@ describe('select prompt', () => {
       ],
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯ Ham
         Pineapple
@@ -808,8 +807,8 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
         Ham
       ❯ Pineapple
@@ -818,20 +817,20 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pineapple"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pineapple"');
 
     await expect(answer).resolves.toEqual('pineapple');
   });
 
   it('Allows setting a default value', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: numberedChoices,
       default: numberedChoices[3].value,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         1
         2
@@ -844,13 +843,13 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(4);
   });
 
   it('searches through the choice list', async () => {
     vi.useFakeTimers();
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: [
         { name: 'Canada', value: 'CA' },
@@ -860,8 +859,8 @@ describe('select prompt', () => {
     });
 
     // Uppercase search
-    events.type('UNIT');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('UNIT');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         Canada
         China
@@ -873,8 +872,8 @@ describe('select prompt', () => {
     vi.advanceTimersByTime(700);
 
     // Lowercase search
-    events.type('c');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('c');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ Canada
         China
@@ -884,8 +883,8 @@ describe('select prompt', () => {
     `);
 
     vi.advanceTimersByTime(400);
-    events.type('h');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('h');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         Canada
       ❯ China
@@ -896,8 +895,8 @@ describe('select prompt', () => {
 
     vi.advanceTimersByTime(400);
     // Search didn't restart yet. So we search for `chu`; no match.
-    events.type('u');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('u');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         Canada
       ❯ China
@@ -906,9 +905,9 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('backspace');
-    events.type('u');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('backspace');
+    screen.type('u');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
         Canada
         China
@@ -917,7 +916,7 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     vi.runAllTimers();
     await expect(answer).resolves.toEqual('US');
   });
@@ -926,12 +925,12 @@ describe('select prompt', () => {
     const scrollTip = '↑↓ navigate • ⏎ select';
 
     it('keysHelpTip: show help by default', async () => {
-      const { answer, events, getScreen } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: numberedChoices,
       });
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯ 1
           2
@@ -943,16 +942,16 @@ describe('select prompt', () => {
 
         ↑↓ navigate • ⏎ select"
       `);
-      expect(getScreen()).toContain(scrollTip);
+      expect(screen.getScreen()).toContain(scrollTip);
 
-      events.keypress('down');
-      events.keypress('enter');
+      screen.keypress('down');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(2);
-      expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
+      expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
     });
 
     it('keysHelpTip: hide help when returning undefined', async () => {
-      const { answer, events, getScreen } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: numberedChoices,
         theme: {
@@ -962,7 +961,7 @@ describe('select prompt', () => {
         },
       });
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯ 1
           2
@@ -972,10 +971,10 @@ describe('select prompt', () => {
           6
           7"
       `);
-      expect(getScreen()).not.toContain(scrollTip);
+      expect(screen.getScreen()).not.toContain(scrollTip);
 
-      events.keypress('down');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.keypress('down');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
           1
         ❯ 2
@@ -985,16 +984,16 @@ describe('select prompt', () => {
           6
           7"
       `);
-      expect(getScreen()).not.toContain(scrollTip);
+      expect(screen.getScreen()).not.toContain(scrollTip);
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(2);
-      expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
+      expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
     });
 
     it('keysHelpTip: custom help text', async () => {
       const customHelpText = 'Utilisez les flèches pour révéler plus de choix';
-      const { answer, events, getScreen } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: numberedChoices,
         theme: {
@@ -1004,7 +1003,7 @@ describe('select prompt', () => {
         },
       });
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯ 1
           2
@@ -1016,23 +1015,23 @@ describe('select prompt', () => {
 
         Utilisez les flèches pour révéler plus de choix"
       `);
-      expect(getScreen()).toContain(customHelpText);
+      expect(screen.getScreen()).toContain(customHelpText);
 
-      events.keypress('down');
-      events.keypress('enter');
+      screen.keypress('down');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(2);
-      expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
+      expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
     });
   });
 
   it('Displays the element index', async () => {
-    const { answer, events, getScreen } = await render(select, {
+    const answer = select({
       message: 'Select a number',
       choices: numberedChoices,
       theme: { indexMode: 'number' },
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯ 1. 1
         2. 2
@@ -1045,13 +1044,13 @@ describe('select prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(1);
   });
 
   describe('numeric selection with separators', () => {
     it('selects the correct item when separators are in the middle', async () => {
-      const { answer, events, getScreen } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: [
           { value: 1, name: 'One' },
@@ -1068,7 +1067,7 @@ describe('select prompt', () => {
         },
       });
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯ 1. One
           2. Two
@@ -1081,15 +1080,15 @@ describe('select prompt', () => {
         ↑↓ navigate • ⏎ select"
       `);
 
-      events.type('5');
-      expect(getScreen()).toContain('❯ 5. Five');
+      screen.type('5');
+      expect(screen.getScreen()).toContain('❯ 5. Five');
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(5);
     });
 
     it('selects the correct item when separators are at the beginning', async () => {
-      const { answer, events, getScreen } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: [
           new Separator(),
@@ -1104,7 +1103,7 @@ describe('select prompt', () => {
         },
       });
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
          ──────────────
          ---
@@ -1117,18 +1116,18 @@ describe('select prompt', () => {
       `);
 
       // Type '3' to select the 3rd selectable item (which is 'Three')
-      events.type('3');
+      screen.type('3');
 
-      expect(getScreen()).toContain('❯ 3. Three');
+      expect(screen.getScreen()).toContain('❯ 3. Three');
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(3);
     });
   });
 
   describe('keybindings', () => {
     it('supports vim bindings when vim is in the keybindings array', async () => {
-      const { answer, events, getScreen } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: [
           new Separator(),
@@ -1144,7 +1143,7 @@ describe('select prompt', () => {
         },
       });
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
          ──────────────
          ---
@@ -1157,17 +1156,17 @@ describe('select prompt', () => {
       `);
 
       // Vim bindings
-      events.keypress('j');
-      expect(getScreen()).toContain('❯ 2. Two');
-      events.keypress('k');
-      expect(getScreen()).toContain('❯ 1. One');
+      screen.keypress('j');
+      expect(screen.getScreen()).toContain('❯ 2. Two');
+      screen.keypress('k');
+      expect(screen.getScreen()).toContain('❯ 1. One');
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(1);
     });
 
     it('supports emacs bindings when emacs is in the keybindings array', async () => {
-      const { answer, events, getScreen } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: [
           new Separator(),
@@ -1183,7 +1182,7 @@ describe('select prompt', () => {
         },
       });
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
          ──────────────
          ---
@@ -1196,17 +1195,17 @@ describe('select prompt', () => {
       `);
 
       // Emacs bindings
-      events.keypress({ name: 'n', ctrl: true });
-      expect(getScreen()).toContain('❯ 2. Two');
-      events.keypress({ name: 'p', ctrl: true });
-      expect(getScreen()).toContain('❯ 1. One');
+      screen.keypress({ name: 'n', ctrl: true });
+      expect(screen.getScreen()).toContain('❯ 2. Two');
+      screen.keypress({ name: 'p', ctrl: true });
+      expect(screen.getScreen()).toContain('❯ 1. One');
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(1);
     });
 
     it('supports both vim and emacs bindings when both are in the keybindings array', async () => {
-      const { answer, events, getScreen } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: [
           new Separator(),
@@ -1222,7 +1221,7 @@ describe('select prompt', () => {
         },
       });
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
          ──────────────
          ---
@@ -1235,24 +1234,24 @@ describe('select prompt', () => {
       `);
 
       // Vim bindings
-      events.keypress('j');
-      expect(getScreen()).toContain('❯ 2. Two');
-      events.keypress('k');
-      expect(getScreen()).toContain('❯ 1. One');
+      screen.keypress('j');
+      expect(screen.getScreen()).toContain('❯ 2. Two');
+      screen.keypress('k');
+      expect(screen.getScreen()).toContain('❯ 1. One');
 
       // Emacs bindings
-      events.keypress({ name: 'n', ctrl: true });
-      expect(getScreen()).toContain('❯ 2. Two');
-      events.keypress({ name: 'p', ctrl: true });
-      expect(getScreen()).toContain('❯ 1. One');
+      screen.keypress({ name: 'n', ctrl: true });
+      expect(screen.getScreen()).toContain('❯ 2. Two');
+      screen.keypress({ name: 'p', ctrl: true });
+      expect(screen.getScreen()).toContain('❯ 1. One');
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(1);
     });
 
     it('disables the search feature when vim keybindings are enabled', async () => {
       vi.useFakeTimers();
-      const { answer, events, getScreen } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: [
           { name: 'Canada', value: 'CA' },
@@ -1264,7 +1263,7 @@ describe('select prompt', () => {
         },
       });
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯ Canada
           China
@@ -1274,9 +1273,9 @@ describe('select prompt', () => {
       `);
 
       // No-op since search is disabled when vim bindings are enabled
-      events.type('China');
+      screen.type('China');
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯ Canada
           China
@@ -1285,14 +1284,14 @@ describe('select prompt', () => {
         ↑↓ navigate • ⏎ select"
       `);
 
-      events.keypress('enter');
+      screen.keypress('enter');
       vi.runAllTimers();
       await expect(answer).resolves.toEqual('CA');
     });
 
     it('keeps search feature enabled when only emacs keybindings are enabled', async () => {
       vi.useFakeTimers();
-      const { answer, events, getScreen } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: [
           { name: 'Canada', value: 'CA' },
@@ -1304,7 +1303,7 @@ describe('select prompt', () => {
         },
       });
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯ Canada
           China
@@ -1314,8 +1313,8 @@ describe('select prompt', () => {
       `);
 
       // Search still works with emacs bindings
-      events.type('ch');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.type('ch');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
           Canada
         ❯ China
@@ -1324,7 +1323,7 @@ describe('select prompt', () => {
         ↑↓ navigate • ⏎ select"
       `);
 
-      events.keypress('enter');
+      screen.keypress('enter');
       vi.runAllTimers();
       await expect(answer).resolves.toEqual('ZH');
     });
@@ -1332,7 +1331,7 @@ describe('select prompt', () => {
 
   describe('type inference', () => {
     it('infers string type when choices is string[]', async () => {
-      const { answer, events } = await render(select, {
+      const answer = select({
         message: 'Select one',
         choices: ['Option A', 'Option B', 'Option C'],
       });
@@ -1341,19 +1340,19 @@ describe('select prompt', () => {
       // when string[] is passed as choices (issue #1929)
       expectTypeOf(answer).resolves.toExtend<string>();
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual('Option A');
     });
 
     it('infers Value type when choices is Choice<Value>[]', async () => {
-      const { answer, events } = await render(select, {
+      const answer = select({
         message: 'Select a number',
         choices: [{ value: 1 }, { value: 2 }, { value: 3 }],
       });
 
       expectTypeOf(answer).resolves.toExtend<number>();
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(1);
     });
   });

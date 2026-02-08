@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render } from '@inquirer/testing';
+import { screen } from '@inquirer/testing/vitest';
 import expand, { Separator } from './src/index.ts';
 
 const overwriteChoices = [
@@ -37,57 +37,57 @@ const overwriteChoicesWithoutName = overwriteChoices.map((choice) => ({
 
 describe('expand prompt', () => {
   it('selects in collapsed mode', async () => {
-    const { answer, events, getScreen } = await render(expand, {
+    const answer = expand({
       message: 'Overwrite this file?',
       choices: overwriteChoices,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
 
-    events.type('y');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('y');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? (yadxH) y
       >> Overwrite"
     `);
 
-    events.keypress('backspace');
-    events.type('a');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('backspace');
+    screen.type('a');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? (yadxH) a
       >> Overwrite this one and all next"
     `);
 
-    events.keypress('backspace');
-    events.type('d');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('backspace');
+    screen.type('d');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? (yadxH) d
       >> Show diff"
     `);
 
-    events.keypress('backspace');
-    events.type('x');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('backspace');
+    screen.type('x');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? (yadxH) x
       >> Abort"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? Abort"`);
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? Abort"`);
 
     await expect(answer).resolves.toEqual('abort');
   });
 
   it('selects in expanded mode', async () => {
-    const { answer, events, getScreen } = await render(expand, {
+    const answer = expand({
       message: 'Overwrite this file?',
       choices: overwriteChoices,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
 
-    events.type('h');
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('h');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? h
         y) Overwrite
         a) Overwrite this one and all next
@@ -95,8 +95,8 @@ describe('expand prompt', () => {
         x) Abort"
     `);
 
-    events.type('y');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('y');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? y
         y) Overwrite
         a) Overwrite this one and all next
@@ -105,9 +105,9 @@ describe('expand prompt', () => {
       >> Overwrite"
     `);
 
-    events.keypress('backspace');
-    events.type('a');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('backspace');
+    screen.type('a');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? a
         y) Overwrite
         a) Overwrite this one and all next
@@ -116,9 +116,9 @@ describe('expand prompt', () => {
       >> Overwrite this one and all next"
     `);
 
-    events.keypress('backspace');
-    events.type('d');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('backspace');
+    screen.type('d');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? d
         y) Overwrite
         a) Overwrite this one and all next
@@ -127,9 +127,9 @@ describe('expand prompt', () => {
       >> Show diff"
     `);
 
-    events.keypress('backspace');
-    events.type('x');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('backspace');
+    screen.type('x');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? x
         y) Overwrite
         a) Overwrite this one and all next
@@ -138,14 +138,14 @@ describe('expand prompt', () => {
       >> Abort"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? Abort"`);
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? Abort"`);
 
     await expect(answer).resolves.toEqual('abort');
   });
 
   it('supports separators', async () => {
-    const { answer, events, getScreen } = await render(expand, {
+    const answer = expand({
       message: 'Overwrite this file?',
       choices: [
         {
@@ -160,19 +160,19 @@ describe('expand prompt', () => {
       ],
     });
 
-    expect(getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? (ynH)"`);
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"? Overwrite this file? (ynH)"`);
 
-    events.type('h');
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('h');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? h
         y) Yarn
        ──────────────
         n) npm"
     `);
 
-    events.type('y');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('y');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? y
         y) Yarn
        ──────────────
@@ -180,9 +180,9 @@ describe('expand prompt', () => {
       >> Yarn"
     `);
 
-    events.keypress('backspace');
-    events.type('n');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('backspace');
+    screen.type('n');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? n
         y) Yarn
        ──────────────
@@ -190,56 +190,55 @@ describe('expand prompt', () => {
       >> npm"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? npm"`);
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? npm"`);
 
     await expect(answer).resolves.toEqual('npm');
   });
 
   it('selects without value', async () => {
-    const { answer, events, getScreen } = await render(expand, {
+    const answer = expand({
       message: 'Overwrite this file?',
       choices: overwriteChoicesWithoutValue,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
 
-    events.type('y');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('y');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? (yadxH) y
       >> Overwrite"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Overwrite this file? Overwrite"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Overwrite this file? Overwrite"');
 
     await expect(answer).resolves.toEqual('Overwrite');
   });
 
   it('selects without name', async () => {
-    const { answer, events, getScreen } = await render(expand, {
+    const answer = expand({
       message: 'Overwrite this file?',
       choices: overwriteChoicesWithoutName,
     });
 
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
 
-    events.type('y');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('y');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? (yadxH) y
       >> overwrite"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Overwrite this file? overwrite"');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Overwrite this file? overwrite"');
 
     await expect(answer).resolves.toEqual('overwrite');
   });
 
   it('handles empty selection', async () => {
     const abortController = new AbortController();
-    const { answer, events, getScreen } = await render(
-      expand,
+    const answer = expand(
       {
         message: 'Overwrite this file?',
         choices: overwriteChoices,
@@ -247,11 +246,11 @@ describe('expand prompt', () => {
       { signal: abortController.signal },
     );
 
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
 
     // The help option is selected by default. so we'll go in expand mode first
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file?
         y) Overwrite
         a) Overwrite this one and all next
@@ -259,8 +258,8 @@ describe('expand prompt', () => {
         x) Abort"
     `);
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file?
         y) Overwrite
         a) Overwrite this one and all next
@@ -275,8 +274,7 @@ describe('expand prompt', () => {
 
   it('handles non-existing selection', async () => {
     const abortController = new AbortController();
-    const { answer, events, getScreen } = await render(
-      expand,
+    const answer = expand(
       {
         message: 'Overwrite this file?',
         choices: overwriteChoices,
@@ -284,11 +282,11 @@ describe('expand prompt', () => {
       { signal: abortController.signal },
     );
 
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (yadxH)"');
 
-    events.type('4');
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.type('4');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file? (yadxH) 4
       > "4" isn't an available option"
     `);
@@ -298,24 +296,23 @@ describe('expand prompt', () => {
   });
 
   it('selects without name', async () => {
-    const { answer, events, getScreen } = await render(expand, {
+    const answer = expand({
       message: 'Overwrite this file?',
       choices: overwriteChoices,
       default: 'y',
     });
 
-    expect(getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (Yadxh)"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"? Overwrite this file? (Yadxh)"');
 
-    events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? Overwrite"`);
+    screen.keypress('enter');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? Overwrite"`);
 
     await expect(answer).resolves.toEqual('overwrite');
   });
 
   it('can defaults to expanded', async () => {
     const abortController = new AbortController();
-    const { answer, getScreen } = await render(
-      expand,
+    const answer = expand(
       {
         message: 'Overwrite this file?',
         choices: overwriteChoices,
@@ -324,7 +321,7 @@ describe('expand prompt', () => {
       { signal: abortController.signal },
     );
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Overwrite this file?
         y) Overwrite
         a) Overwrite this one and all next
