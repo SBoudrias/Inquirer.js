@@ -91,18 +91,15 @@ export class Screen {
         }
       } else {
         // Got a render. Check if the prompt also completed (making this a "done" render).
-        // The done() setImmediate is always scheduled before our continuation runs,
-        // so our setImmediate fires after the prompt resolves.
-        let settled = false;
-        currentPromise.then(
-          () => {
-            settled = true;
-          },
-          () => {
-            settled = true;
-          },
-        );
-        await new Promise<void>((resolve) => setImmediate(resolve));
+        // Microtasks (promise settlement) always drain before macrotasks (setImmediate),
+        // so if the prompt resolved, its .then wins the race.
+        const settled = await Promise.race([
+          currentPromise.then(
+            () => true,
+            () => true,
+          ),
+          new Promise<false>((resolve) => setImmediate(() => resolve(false))),
+        ]);
 
         if (settled) {
           if (this.#activePromise !== currentPromise) {
