@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render } from '@inquirer/testing';
+import { screen } from '@inquirer/testing/vitest';
 import { ValidationError } from '@inquirer/core';
 import checkbox, { Separator } from './src/index.ts';
 
@@ -20,12 +20,13 @@ const numberedChoices = [
 
 describe('checkbox prompt', () => {
   it('use arrow keys to select an option', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◯ 2
@@ -38,11 +39,11 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('down');
-    events.keypress('space');
-    events.keypress('down');
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    screen.keypress('space');
+    screen.keypress('down');
+    screen.keypress('space');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◯ 1
        ◉ 2
@@ -55,18 +56,19 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([2, 3]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2, 3"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 2, 3"');
   });
 
   it('works with string choices', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: ['Option A', 'Option B', 'Option C'],
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ Option A
        ◯ Option B
@@ -75,9 +77,9 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('down');
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    screen.keypress('space');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◯ Option A
       ❯◉ Option B
@@ -86,19 +88,20 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(['Option B']);
-    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number Option B"`);
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Select a number Option B"`);
   });
 
   it('does not scroll up beyond first item when not looping', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
       loop: false,
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◯ 2
@@ -111,9 +114,9 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('up');
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('up');
+    screen.keypress('space');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◉ 1
        ◯ 2
@@ -126,19 +129,20 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
   });
 
   it('does not scroll up beyond first selectable item when not looping', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: [new Separator(), ...numberedChoices],
       loop: false,
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ──────────────
       ❯◯ 1
@@ -151,9 +155,9 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('up');
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('up');
+    screen.keypress('space');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ──────────────
       ❯◉ 1
@@ -166,19 +170,20 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
   });
 
   it('does not scroll down beyond last option when not looping', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
       loop: false,
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◯ 2
@@ -191,10 +196,10 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    numberedChoices.forEach(() => events.keypress('down'));
-    events.keypress('down');
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    numberedChoices.forEach(() => screen.keypress('down'));
+    screen.keypress('down');
+    screen.keypress('space');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◯ 6
        ◯ 7
@@ -207,19 +212,20 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([12]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 12"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 12"');
   });
 
   it('does not scroll down beyond last selectable option when not looping', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: [...numberedChoices, new Separator()],
       loop: false,
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◯ 2
@@ -232,10 +238,10 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    numberedChoices.forEach(() => events.keypress('down'));
-    events.keypress('down');
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    numberedChoices.forEach(() => screen.keypress('down'));
+    screen.keypress('down');
+    screen.keypress('space');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◯ 7
        ◯ 8
@@ -248,19 +254,20 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([12]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 12"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 12"');
   });
 
   it('use number key to select an option', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
     });
+    await screen.nextPrompt();
 
-    events.keypress('4');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('4');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◯ 1
        ◯ 2
@@ -273,18 +280,19 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([4]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 4"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 4"');
   });
 
   it('allow preselecting an option', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: [{ value: 1 }, { value: 2, checked: true }],
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◉ 2
@@ -292,18 +300,19 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([2]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 2"');
   });
 
   it('allow preselecting and changing that selection', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: [{ value: 1 }, { value: 2, checked: true }],
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◉ 2
@@ -311,11 +320,11 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('space');
-    events.keypress('down');
-    events.keypress('space');
+    screen.keypress('space');
+    screen.keypress('down');
+    screen.keypress('space');
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◉ 1
       ❯◯ 2
@@ -323,19 +332,20 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a number 1"');
   });
 
   it('allow setting a smaller page size', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
       pageSize: 2,
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◯ 2
@@ -343,18 +353,19 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([]);
   });
 
   it('allow setting a bigger page size', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
       pageSize: 10,
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◯ 2
@@ -370,18 +381,19 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([]);
   });
 
   it('cycles through options', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
       pageSize: 2,
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◯ 2
@@ -389,11 +401,11 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('up');
-    events.keypress('space');
-    events.keypress('up');
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('up');
+    screen.keypress('space');
+    screen.keypress('up');
+    screen.keypress('space');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◉ 11
        ◉ 12
@@ -401,12 +413,12 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([11, 12]);
   });
 
   it('skip disabled options by arrow keys', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a topping',
       choices: [
         { name: 'Ham', value: 'ham' },
@@ -414,8 +426,9 @@ describe('checkbox prompt', () => {
         { name: 'Pepperoni', value: 'pepperoni' },
       ],
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯◯ Ham
       - Pineapple (disabled)
@@ -424,9 +437,9 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('down');
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    screen.keypress('space');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
        ◯ Ham
       - Pineapple (disabled)
@@ -435,13 +448,13 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(['pepperoni']);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
   });
 
   it('skip disabled options by number key', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a topping',
       choices: [
         { name: 'Ham', value: 'ham' },
@@ -449,8 +462,9 @@ describe('checkbox prompt', () => {
         { name: 'Pepperoni', value: 'pepperoni' },
       ],
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯◯ Ham
       - Pineapple (disabled)
@@ -459,8 +473,8 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('2');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('2');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯◯ Ham
       - Pineapple (disabled)
@@ -469,13 +483,13 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a topping"');
   });
 
   it('skip separator by arrow keys', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a topping',
       choices: [
         { name: 'Ham', value: 'ham' },
@@ -483,8 +497,9 @@ describe('checkbox prompt', () => {
         { name: 'Pepperoni', value: 'pepperoni' },
       ],
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯◯ Ham
        ──────────────
@@ -493,9 +508,9 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('down');
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    screen.keypress('space');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
        ◯ Ham
        ──────────────
@@ -504,19 +519,20 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(['pepperoni']);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
+    expect(screen.getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
   });
 
   it('allow select all', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
     });
+    await screen.nextPrompt();
 
-    events.keypress('4');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('4');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◯ 1
        ◯ 2
@@ -529,8 +545,8 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('a');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('a');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◉ 1
        ◉ 2
@@ -543,8 +559,8 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('a');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('a');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◯ 1
        ◯ 2
@@ -557,19 +573,20 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('a');
-    events.keypress('enter');
+    screen.keypress('a');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(numberedChoices.map(({ value }) => value));
   });
 
   it('allow deselect all', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
     });
+    await screen.nextPrompt();
 
-    events.keypress('4');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('4');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◯ 1
        ◯ 2
@@ -582,23 +599,24 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('a');
-    events.keypress('a');
-    events.keypress('enter');
+    screen.keypress('a');
+    screen.keypress('a');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([]);
   });
 
   it('allow inverting selection', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
     });
+    await screen.nextPrompt();
 
     const unselect = [2, 4, 6, 7, 8, 11];
     unselect.forEach((value) => {
-      events.keypress(String(value));
+      screen.keypress(String(value));
     });
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◯ 5
        ◉ 6
@@ -611,13 +629,13 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('i');
-    events.keypress('enter');
+    screen.keypress('i');
+    screen.keypress('enter');
     await expect(answer).resolves.not.toContain(unselect);
   });
 
   it('throws if all choices are disabled', async () => {
-    const { answer } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices.map((choice) => ({ ...choice, disabled: true })),
     });
@@ -629,15 +647,16 @@ describe('checkbox prompt', () => {
   });
 
   it('shows validation message if user did not select any choice', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
       required: true,
     });
+    await screen.nextPrompt();
 
-    events.keypress('enter');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('enter');
+    await screen.nextRender();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◯ 2
@@ -651,8 +670,8 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('space');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◉ 1
        ◯ 2
@@ -665,7 +684,7 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
   });
 
@@ -676,12 +695,13 @@ describe('checkbox prompt', () => {
       { value: 'Targaryen', description: 'Fire and blood' },
     ];
 
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a family',
       choices: choices,
     });
+    await screen.nextPrompt();
 
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a family
       ❯◯ Stark
        ◯ Lannister
@@ -691,8 +711,8 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('down');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('down');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a family
        ◯ Stark
       ❯◯ Lannister
@@ -702,8 +722,8 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('space');
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('space');
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a family
        ◯ Stark
       ❯◉ Lannister
@@ -713,12 +733,12 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual(['Lannister']);
   });
 
   it('uses custom validation', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
       validate: (items: ReadonlyArray<unknown>) => {
@@ -728,10 +748,11 @@ describe('checkbox prompt', () => {
         return true;
       },
     });
+    await screen.nextPrompt();
 
-    events.keypress('enter');
-    await Promise.resolve();
-    expect(getScreen()).toMatchInlineSnapshot(`
+    screen.keypress('enter');
+    await screen.nextRender();
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
        ◯ 2
@@ -745,14 +766,14 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
-    events.keypress('space');
-    events.keypress('enter');
+    screen.keypress('space');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
   });
 
   describe('theme: icon', () => {
     it('checked/unchecked', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select a number',
         choices: numberedChoices,
         theme: {
@@ -762,8 +783,10 @@ describe('checkbox prompt', () => {
           },
         },
       });
-      events.keypress('space');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      await screen.nextPrompt();
+
+      screen.keypress('space');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯√ 1
          x 2
@@ -775,12 +798,12 @@ describe('checkbox prompt', () => {
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
-      events.keypress('enter');
+      screen.keypress('enter');
       await answer;
     });
 
     it('cursor', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select a number',
         choices: numberedChoices,
         theme: {
@@ -789,8 +812,10 @@ describe('checkbox prompt', () => {
           },
         },
       });
-      events.keypress('space');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      await screen.nextPrompt();
+
+      screen.keypress('space');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         >◉ 1
          ◯ 2
@@ -802,14 +827,14 @@ describe('checkbox prompt', () => {
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
-      events.keypress('enter');
+      screen.keypress('enter');
       await answer;
     });
   });
 
   describe('theme: style.renderSelectedChoices', () => {
     it('renderSelectedChoices', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select your favourite number.',
         choices: numberedChoices,
         theme: {
@@ -826,22 +851,23 @@ describe('checkbox prompt', () => {
           },
         },
       });
+      await screen.nextPrompt();
 
-      events.keypress('space');
-      events.keypress('down');
-      events.keypress('space');
-      events.keypress('down');
-      events.keypress('space');
-      events.keypress('enter');
+      screen.keypress('space');
+      screen.keypress('down');
+      screen.keypress('space');
+      screen.keypress('down');
+      screen.keypress('space');
+      screen.keypress('enter');
 
       await answer;
-      expect(getScreen()).toMatchInlineSnapshot(
+      expect(screen.getScreen()).toMatchInlineSnapshot(
         '"✔ Select your favourite number. You have selected 1 and 2 more."',
       );
     });
 
     it('allow customizing short names after selection', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select a commit',
         choices: [
           {
@@ -861,8 +887,9 @@ describe('checkbox prompt', () => {
           },
         ],
       });
+      await screen.nextPrompt();
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a commit
         ❯◯ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
          ◯ 3272b94a (origin/main) Fix(inquirer): Fix close method not required
@@ -871,10 +898,10 @@ describe('checkbox prompt', () => {
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
 
-      events.keypress('space');
-      events.keypress('down');
-      events.keypress('space');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.keypress('space');
+      screen.keypress('down');
+      screen.keypress('space');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a commit
          ◉ 2cc9e311 (HEAD -> main) Fix(inquirer): Ensure no mutation of the question
         ❯◉ 3272b94a (origin/main) Fix(inquirer): Fix close method not required
@@ -883,13 +910,13 @@ describe('checkbox prompt', () => {
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(['2cc9e311', '3272b94a']);
-      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a commit 2cc9e311, 3272b94a"`);
+      expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Select a commit 2cc9e311, 3272b94a"`);
     });
 
     it('using allChoices parameter', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select your favourite number.',
         choices: numberedChoices,
         theme: {
@@ -903,15 +930,16 @@ describe('checkbox prompt', () => {
           },
         },
       });
+      await screen.nextPrompt();
 
-      events.keypress('space');
-      events.keypress('down');
-      events.keypress('down');
-      events.keypress('space');
-      events.keypress('enter');
+      screen.keypress('space');
+      screen.keypress('down');
+      screen.keypress('down');
+      screen.keypress('space');
+      screen.keypress('enter');
 
       await answer;
-      expect(getScreen()).toMatchInlineSnapshot(
+      expect(screen.getScreen()).toMatchInlineSnapshot(
         '"✔ Select your favourite number. You have selected 2 out of 12 options."',
       );
     });
@@ -921,12 +949,13 @@ describe('checkbox prompt', () => {
     const scrollTip = '↑↓ navigate • space select • a all • i invert • ⏎ submit';
 
     it('keysHelpTip: show help by default', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select a number',
         choices: numberedChoices,
       });
+      await screen.nextPrompt();
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯◯ 1
          ◯ 2
@@ -938,17 +967,17 @@ describe('checkbox prompt', () => {
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
-      expect(getScreen()).toContain(scrollTip);
+      expect(screen.getScreen()).toContain(scrollTip);
 
-      events.keypress('down');
-      events.keypress('space');
-      events.keypress('enter');
+      screen.keypress('down');
+      screen.keypress('space');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual([2]);
-      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
+      expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
     });
 
     it('keysHelpTip: hide help when returning undefined', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select a number',
         choices: numberedChoices,
         theme: {
@@ -957,8 +986,9 @@ describe('checkbox prompt', () => {
           },
         },
       });
+      await screen.nextPrompt();
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯◯ 1
          ◯ 2
@@ -968,10 +998,10 @@ describe('checkbox prompt', () => {
          ◯ 6
          ◯ 7"
       `);
-      expect(getScreen()).not.toContain(scrollTip);
+      expect(screen.getScreen()).not.toContain(scrollTip);
 
-      events.keypress('down');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.keypress('down');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
          ◯ 1
         ❯◯ 2
@@ -981,10 +1011,10 @@ describe('checkbox prompt', () => {
          ◯ 6
          ◯ 7"
       `);
-      expect(getScreen()).not.toContain(scrollTip);
+      expect(screen.getScreen()).not.toContain(scrollTip);
 
-      events.keypress('space');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.keypress('space');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
          ◯ 1
         ❯◉ 2
@@ -994,16 +1024,16 @@ describe('checkbox prompt', () => {
          ◯ 6
          ◯ 7"
       `);
-      expect(getScreen()).not.toContain(scrollTip);
+      expect(screen.getScreen()).not.toContain(scrollTip);
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual([2]);
-      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
+      expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
     });
 
     it('keysHelpTip: custom help text', async () => {
       const customHelpText = 'Pulse <space> para seleccionar, y <enter> para continuar';
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select a number',
         choices: numberedChoices,
         theme: {
@@ -1012,8 +1042,9 @@ describe('checkbox prompt', () => {
           },
         },
       });
+      await screen.nextPrompt();
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
         ❯◯ 1
          ◯ 2
@@ -1025,28 +1056,29 @@ describe('checkbox prompt', () => {
 
         Pulse <space> para seleccionar, y <enter> para continuar"
       `);
-      expect(getScreen()).toContain(customHelpText);
+      expect(screen.getScreen()).toContain(customHelpText);
 
-      events.keypress('down');
-      events.keypress('space');
-      events.keypress('enter');
+      screen.keypress('down');
+      screen.keypress('space');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual([2]);
-      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
+      expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
     });
   });
 
   describe('shortcuts', () => {
     it('allow select all with customized key', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select a number',
         choices: numberedChoices,
         shortcuts: {
           all: 'b',
         },
       });
+      await screen.nextPrompt();
 
-      events.keypress('4');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.keypress('4');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
          ◯ 1
          ◯ 2
@@ -1059,8 +1091,8 @@ describe('checkbox prompt', () => {
         ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
 
-      events.keypress('b');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.keypress('b');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
          ◉ 1
          ◉ 2
@@ -1073,8 +1105,8 @@ describe('checkbox prompt', () => {
         ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
 
-      events.keypress('b');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.keypress('b');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a number
          ◯ 1
          ◯ 2
@@ -1087,26 +1119,27 @@ describe('checkbox prompt', () => {
         ↑↓ navigate • space select • b all • i invert • ⏎ submit"
       `);
 
-      events.keypress('b');
-      events.keypress('enter');
+      screen.keypress('b');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(numberedChoices.map(({ value }) => value));
     });
   });
 
   it('allow inverting selection with customized key', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
       shortcuts: {
         invert: 'j',
       },
     });
+    await screen.nextPrompt();
 
     const unselect = [2, 4, 6, 7, 8, 11];
     unselect.forEach((value) => {
-      events.keypress(String(value));
+      screen.keypress(String(value));
     });
-    expect(getScreen()).toMatchInlineSnapshot(`
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
       "? Select a number
        ◯ 5
        ◉ 6
@@ -1119,13 +1152,13 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • j invert • ⏎ submit"
     `);
 
-    events.keypress('j');
-    events.keypress('enter');
+    screen.keypress('j');
+    screen.keypress('enter');
     await expect(answer).resolves.not.toContain(unselect);
   });
 
   it('disable `all` and `invert` keys', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const answer = checkbox({
       message: 'Select a number',
       choices: numberedChoices,
       shortcuts: {
@@ -1133,9 +1166,10 @@ describe('checkbox prompt', () => {
         invert: null,
       },
     });
+    await screen.nextPrompt();
 
     // All options are deselected and should not change if default shortcuts are pressed
-    const expectedScreen = getScreen();
+    const expectedScreen = screen.getScreen();
     expect(expectedScreen).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
@@ -1149,19 +1183,19 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • ⏎ submit"
     `);
 
-    events.keypress('a');
-    expect(getScreen()).toBe(expectedScreen);
+    screen.keypress('a');
+    expect(screen.getScreen()).toBe(expectedScreen);
 
-    events.keypress('i');
-    expect(getScreen()).toBe(expectedScreen);
+    screen.keypress('i');
+    expect(screen.getScreen()).toBe(expectedScreen);
 
-    events.keypress('enter');
+    screen.keypress('enter');
     await expect(answer).resolves.toEqual([]);
   });
 
   describe('numeric selection with separators', () => {
     it('toggles the correct item when separators are in the middle', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select items',
         choices: [
           { value: 'one', name: 'One' },
@@ -1174,17 +1208,18 @@ describe('checkbox prompt', () => {
           { value: 'six', name: 'Six' },
         ],
       });
+      await screen.nextPrompt();
 
       // Press '5' to toggle the 5th selectable item (which is 'Five')
-      events.keypress('5');
-      expect(getScreen()).toContain('❯◉ Five');
+      screen.keypress('5');
+      expect(screen.getScreen()).toContain('❯◉ Five');
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(['five']);
     });
 
     it('toggles the correct item when separators are at the beginning', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select items',
         choices: [
           new Separator(),
@@ -1195,18 +1230,19 @@ describe('checkbox prompt', () => {
           { value: 'four', name: 'Four' },
         ],
       });
+      await screen.nextPrompt();
 
       // Press '3' to toggle the 3rd selectable item (which is 'Three')
-      events.keypress('3');
+      screen.keypress('3');
 
-      expect(getScreen()).toContain('❯◉ Three');
+      expect(screen.getScreen()).toContain('❯◉ Three');
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(['three']);
     });
 
     it('toggles the correct item when some items are disabled', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select items',
         choices: [
           { value: 'one', name: 'One' },
@@ -1219,14 +1255,15 @@ describe('checkbox prompt', () => {
           { value: 'six', name: 'Six' },
         ],
       });
+      await screen.nextPrompt();
 
       // Press '3' to toggle the 3rd selectable item (which is 'Five')
       // Selectable items are One, Three, Five, Six (Two and Four are disabled)
-      events.keypress('3');
+      screen.keypress('3');
 
-      expect(getScreen()).toContain('❯◉ Three');
+      expect(screen.getScreen()).toContain('❯◉ Three');
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(['three']);
     });
 
@@ -1239,12 +1276,13 @@ describe('checkbox prompt', () => {
         { name: 'pnpm', value: 'pnpm', disabled: '(pnpm is not available)' },
       ];
 
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select package managers',
         choices,
       });
+      await screen.nextPrompt();
 
-      expect(getScreen()).toMatchInlineSnapshot(`
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select package managers
         ❯◯ npm
          ◯ yarn
@@ -1255,8 +1293,8 @@ describe('checkbox prompt', () => {
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
 
-      events.keypress('space');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.keypress('space');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select package managers
         ❯◉ Node Package Manager
          ◯ yarn
@@ -1266,9 +1304,9 @@ describe('checkbox prompt', () => {
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
-      events.keypress('down');
-      events.keypress('space');
-      expect(getScreen()).toMatchInlineSnapshot(`
+      screen.keypress('down');
+      screen.keypress('space');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select package managers
          ◉ Node Package Manager
         ❯◉ Yet Another Resource Negotiator
@@ -1278,15 +1316,15 @@ describe('checkbox prompt', () => {
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual(['npm', 'yarn']);
-      expect(getScreen()).toMatchInlineSnapshot(`"✔ Select package managers npm, yarn"`);
+      expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ Select package managers npm, yarn"`);
     });
   });
 
   describe('keybindings', () => {
     it('supports vim keybindings when vim is in the keybindings array', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select items',
         choices: [
           { value: 'one', name: 'One' },
@@ -1296,21 +1334,22 @@ describe('checkbox prompt', () => {
           keybindings: ['vim'],
         },
       });
+      await screen.nextPrompt();
 
       // Down
-      events.keypress('j');
-      expect(getScreen()).toContain('❯◯ Two');
+      screen.keypress('j');
+      expect(screen.getScreen()).toContain('❯◯ Two');
 
       // Up
-      events.keypress('k');
-      expect(getScreen()).toContain('❯◯ One');
+      screen.keypress('k');
+      expect(screen.getScreen()).toContain('❯◯ One');
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual([]);
     });
 
     it('supports emacs keybindings when emacs is in the keybindings array', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select items',
         choices: [
           { value: 'one', name: 'One' },
@@ -1320,21 +1359,22 @@ describe('checkbox prompt', () => {
           keybindings: ['emacs'],
         },
       });
+      await screen.nextPrompt();
 
       // Down
-      events.keypress({ name: 'n', ctrl: true });
-      expect(getScreen()).toContain('❯◯ Two');
+      screen.keypress({ name: 'n', ctrl: true });
+      expect(screen.getScreen()).toContain('❯◯ Two');
 
       // Up
-      events.keypress({ name: 'p', ctrl: true });
-      expect(getScreen()).toContain('❯◯ One');
+      screen.keypress({ name: 'p', ctrl: true });
+      expect(screen.getScreen()).toContain('❯◯ One');
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual([]);
     });
 
     it('supports both vim and emacs keybindings when both are in the keybindings array', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
+      const answer = checkbox({
         message: 'Select items',
         choices: [
           { value: 'one', name: 'One' },
@@ -1344,24 +1384,25 @@ describe('checkbox prompt', () => {
           keybindings: ['vim', 'emacs'],
         },
       });
+      await screen.nextPrompt();
 
       // Vim: Down
-      events.keypress('j');
-      expect(getScreen()).toContain('❯◯ Two');
+      screen.keypress('j');
+      expect(screen.getScreen()).toContain('❯◯ Two');
 
       // Vim: Up
-      events.keypress('k');
-      expect(getScreen()).toContain('❯◯ One');
+      screen.keypress('k');
+      expect(screen.getScreen()).toContain('❯◯ One');
 
       // Emacs: Down
-      events.keypress({ name: 'n', ctrl: true });
-      expect(getScreen()).toContain('❯◯ Two');
+      screen.keypress({ name: 'n', ctrl: true });
+      expect(screen.getScreen()).toContain('❯◯ Two');
 
       // Emacs: Up
-      events.keypress({ name: 'p', ctrl: true });
-      expect(getScreen()).toContain('❯◯ One');
+      screen.keypress({ name: 'p', ctrl: true });
+      expect(screen.getScreen()).toContain('❯◯ One');
 
-      events.keypress('enter');
+      screen.keypress('enter');
       await expect(answer).resolves.toEqual([]);
     });
   });
