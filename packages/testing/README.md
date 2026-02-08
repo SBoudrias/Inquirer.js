@@ -98,7 +98,7 @@ import { runMyCli } from './my-cli.js';
 describe('my CLI', () => {
   it('asks for name and confirms', async () => {
     const result = runMyCli();
-    await screen.nextPrompt();
+    await screen.next();
 
     // First prompt
     expect(screen.getScreen()).toContain('What is your name?');
@@ -106,7 +106,7 @@ describe('my CLI', () => {
     screen.keypress('enter');
 
     // Wait for next prompt
-    await screen.nextPrompt();
+    await screen.next();
     expect(screen.getScreen()).toContain('Confirm?');
     screen.keypress('enter');
 
@@ -124,7 +124,7 @@ import { runMyCli } from './my-cli.js';
 describe('my CLI', () => {
   it('asks for name and confirms', async () => {
     const result = runMyCli();
-    await screen.nextPrompt();
+    await screen.next();
 
     // First prompt
     expect(screen.getScreen()).toContain('What is your name?');
@@ -132,7 +132,7 @@ describe('my CLI', () => {
     screen.keypress('enter');
 
     // Wait for next prompt
-    await screen.nextPrompt();
+    await screen.next();
     expect(screen.getScreen()).toContain('Confirm?');
     screen.keypress('enter');
 
@@ -145,8 +145,7 @@ describe('my CLI', () => {
 
 The `screen` object provides:
 
-- `nextRender()` - Wait for the next screen render. Returns immediately if a render already happened since the last call. Use this to wait for the initial render, or for async re-renders (e.g., validation errors)
-- `nextPrompt()` - Wait for the current prompt to complete and the next prompt to render. Use this in multi-prompt flows
+- `next()` - Wait for the next screen update. Handles initial renders, re-renders (e.g., validation errors), and prompt transitions automatically
 - `getScreen({ raw?: boolean })` - Get the current prompt screen content. By default strips ANSI codes
 - `getFullOutput({ raw?: boolean })` - Get all accumulated output interpreted through a virtual terminal (returns a `Promise`). By default resolves ANSI escape sequences into actual screen state
 - `type(text)` - Type text (writes to stream AND emits keypresses)

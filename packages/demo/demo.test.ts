@@ -12,23 +12,23 @@ describe('@inquirer/demo E2E tests', () => {
   describe('screen.getScreen()', () => {
     it('returns the current prompt screen', async () => {
       const demo = confirmDemo();
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`"? Confirm? (Y/n)"`);
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(
         `"? Confirm with default to no? (y/N)"`,
       );
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(
         `"? Confirm with your custom transformer function? (Y/n)"`,
       );
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`"? Confirm? (Y/n)"`);
 
       screen.keypress('enter');
@@ -45,11 +45,11 @@ describe('@inquirer/demo E2E tests', () => {
   describe('screen.getFullOutput()', () => {
     it('accumulates all output across prompts', async () => {
       const demo = confirmDemo();
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`"? Confirm? (Y/n)"`);
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(
         `"? Confirm with default to no? (y/N)"`,
       );
@@ -61,9 +61,9 @@ describe('@inquirer/demo E2E tests', () => {
       `);
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       screen.keypress('enter');
       await demo;
 
@@ -79,7 +79,7 @@ describe('@inquirer/demo E2E tests', () => {
   describe('screen.type()', () => {
     it('types text into input prompts', async () => {
       const demo = inputDemo();
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(
         `"? What's your favorite food? (Croissant)"`,
       );
@@ -90,14 +90,14 @@ describe('@inquirer/demo E2E tests', () => {
       );
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`"? Enter an hex color?"`);
 
       screen.type('fff');
       expect(screen.getScreen()).toMatchInlineSnapshot(`"? Enter an hex color? fff"`);
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(
         `"? (Slow validation) provide a number:"`,
       );
@@ -121,7 +121,7 @@ describe('@inquirer/demo E2E tests', () => {
   describe('screen.keypress()', () => {
     it('navigates with arrow keys', async () => {
       const demo = selectDemo();
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a package manager
         ❯ npm
@@ -148,7 +148,7 @@ describe('@inquirer/demo E2E tests', () => {
       `);
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select your favorite letter
          == Alphabet (choices cycle as you scroll through) ==
@@ -163,7 +163,7 @@ describe('@inquirer/demo E2E tests', () => {
       `);
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select your favorite letter (example without loop)
          == Alphabet (choices cycle as you scroll through) ==
@@ -178,7 +178,7 @@ describe('@inquirer/demo E2E tests', () => {
       `);
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a recipe
         ❯ Spaghetti Carbonara
@@ -205,7 +205,7 @@ describe('@inquirer/demo E2E tests', () => {
 
     it('toggles with space key', async () => {
       const demo = checkboxDemo();
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select a package manager
         ❯◯ npm
@@ -230,7 +230,7 @@ describe('@inquirer/demo E2E tests', () => {
       `);
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`
         "? Select your favorite letters
          == Alphabet (choices cycle as you scroll through) ==
@@ -257,7 +257,7 @@ describe('@inquirer/demo E2E tests', () => {
   describe('editor prompt', () => {
     it('captures typed text as editor content', async () => {
       const demo = editorDemo();
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toContain('short bio');
 
       // Press enter to open the editor, type content, then enter to save
@@ -266,7 +266,7 @@ describe('@inquirer/demo E2E tests', () => {
       screen.keypress('enter');
 
       // Second prompt opens editor automatically (waitForUserInput: false)
-      await screen.nextPrompt();
+      await screen.next();
       screen.type('Auto editor content');
       screen.keypress('enter');
 
@@ -277,22 +277,22 @@ describe('@inquirer/demo E2E tests', () => {
   describe('screen.clear()', () => {
     it('resets screen state between test runs', async () => {
       const demo1 = confirmDemo();
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`"? Confirm? (Y/n)"`);
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       screen.keypress('enter');
       await demo1;
 
       screen.clear();
 
       const demo2 = confirmDemo();
-      await screen.nextPrompt();
+      await screen.next();
       expect(screen.getScreen()).toMatchInlineSnapshot(`"? Confirm? (Y/n)"`);
 
       // After clear, full output only contains second run
@@ -300,11 +300,11 @@ describe('@inquirer/demo E2E tests', () => {
       expect(matches.length).toBe(1);
 
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       screen.keypress('enter');
-      await screen.nextPrompt();
+      await screen.next();
       screen.keypress('enter');
       await demo2;
 

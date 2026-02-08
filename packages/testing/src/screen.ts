@@ -17,6 +17,7 @@ export class Screen {
   #activePromise: Promise<unknown> | null = null;
   #promiseConsumed = false;
   #rendersConsumed = 0;
+  #renderResolve: (() => void) | null = null;
 
   constructor() {
     this.#input = new MuteStream();
@@ -32,6 +33,14 @@ export class Screen {
     this.#outputs.push(output);
     this.#currentOutput = output;
     this.#rendersConsumed = 0;
+
+    // Forward render events for cross-output listening
+    output.on('render', () => {
+      if (this.#renderResolve) {
+        this.#renderResolve();
+      }
+    });
+
     return output;
   }
 
@@ -41,10 +50,76 @@ export class Screen {
   }
 
   /**
-   * Wait for the next render on the current output.
-   * Returns immediately if a render has happened since the last call.
+   * Wait for the next screen update.
+   *
+   * On the first call, waits for the initial prompt render.
+   * On subsequent calls, handles both re-renders within the same prompt
+   * (e.g., validation errors, async updates) and prompt transitions in
+   * multi-prompt flows (automatically waits for the next prompt).
    */
-  async nextRender(): Promise<void> {
+  async next(): Promise<void> {
+    if (this.#activePromise && this.#promiseConsumed) {
+      const currentPromise = this.#activePromise;
+
+      // Consume any renders that happened synchronously (e.g., loading state).
+      // We want to wait for the next meaningful state change, not an intermediate render.
+      this.#rendersConsumed = this.#currentOutput?.writeCount ?? 0;
+
+      // Race: a future render (validation error, async update) vs the promise settling
+      // (prompt completed, possibly synchronously before any new render arrives).
+      const renderPromise = this.#waitForNextRender();
+      const settlePromise = currentPromise.then(
+        () => 'settled' as const,
+        () => 'settled' as const,
+      );
+
+      const result = await Promise.race([
+        renderPromise.then(() => 'render' as const),
+        settlePromise,
+      ]);
+
+      if (result === 'settled') {
+        if (this.#activePromise !== currentPromise) {
+          // New prompt already started — its render was caught by the race's renderPromise.
+          this.#rendersConsumed = this.#currentOutput?.writeCount ?? 0;
+        } else {
+          // Prompt settled but no new prompt yet. Wait for the next prompt's first render.
+          await this.#waitForNextRender();
+        }
+      } else {
+        // Got a render. Check if the prompt also completed (making this a "done" render).
+        // The done() setImmediate is always scheduled before our continuation runs,
+        // so our setImmediate fires after the prompt resolves.
+        let settled = false;
+        currentPromise.then(
+          () => {
+            settled = true;
+          },
+          () => {
+            settled = true;
+          },
+        );
+        await new Promise<void>((resolve) => setImmediate(resolve));
+
+        if (settled) {
+          if (this.#activePromise !== currentPromise) {
+            // New prompt already started — its render was caught by the race.
+            this.#rendersConsumed = this.#currentOutput?.writeCount ?? 0;
+          } else {
+            // Prompt completed but no new prompt yet. Wait for it.
+            await this.#waitForNextRender();
+          }
+        }
+      }
+    } else {
+      // First call or no active promise — wait for the initial render
+      await this.#waitForNextRender();
+    }
+
+    this.#promiseConsumed = true;
+  }
+
+  async #waitForNextRender(): Promise<void> {
     const writeCount = this.#currentOutput?.writeCount ?? 0;
     if (writeCount > this.#rendersConsumed) {
       this.#rendersConsumed = writeCount;
@@ -52,21 +127,16 @@ export class Screen {
     }
 
     await new Promise<void>((resolve) => {
-      this.#currentOutput?.once('render', resolve);
+      const handler = () => {
+        this.#renderResolve = null;
+        resolve();
+      };
+      // Listen on current output (for re-renders within same prompt)
+      this.#currentOutput?.once('render', handler);
+      // Also set up cross-output listener (for prompt transitions and initial render)
+      this.#renderResolve = handler;
     });
     this.#rendersConsumed = this.#currentOutput?.writeCount ?? 0;
-  }
-
-  /**
-   * Wait for the current prompt to complete and the next prompt to render.
-   * On first call, simply waits for the initial render.
-   */
-  async nextPrompt(): Promise<void> {
-    if (this.#activePromise && this.#promiseConsumed) {
-      await this.#activePromise;
-    }
-    this.#promiseConsumed = true;
-    await this.nextRender();
   }
 
   getScreen({ raw }: { raw?: boolean } = {}): string {
@@ -105,5 +175,6 @@ export class Screen {
     this.#activePromise = null;
     this.#promiseConsumed = false;
     this.#rendersConsumed = 0;
+    this.#renderResolve = null;
   }
 }
