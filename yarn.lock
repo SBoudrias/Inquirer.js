@@ -753,7 +753,7 @@ __metadata:
     husky: "npm:^9.1.7"
     isolate-monorepo-package: "workspace:*"
     nano-staged: "npm:^0.9.0"
-    oxfmt: "npm:^0.27.0"
+    oxfmt: "npm:^0.28.0"
     oxlint: "npm:^1.28.0"
     setup-packages: "workspace:*"
     turbo: "npm:^2.6.1"
@@ -1471,58 +1471,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxfmt/darwin-arm64@npm:0.27.0":
-  version: 0.27.0
-  resolution: "@oxfmt/darwin-arm64@npm:0.27.0"
+"@oxfmt/darwin-arm64@npm:0.28.0":
+  version: 0.28.0
+  resolution: "@oxfmt/darwin-arm64@npm:0.28.0"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@oxfmt/darwin-x64@npm:0.27.0":
-  version: 0.27.0
-  resolution: "@oxfmt/darwin-x64@npm:0.27.0"
+"@oxfmt/darwin-x64@npm:0.28.0":
+  version: 0.28.0
+  resolution: "@oxfmt/darwin-x64@npm:0.28.0"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@oxfmt/linux-arm64-gnu@npm:0.27.0":
-  version: 0.27.0
-  resolution: "@oxfmt/linux-arm64-gnu@npm:0.27.0"
+"@oxfmt/linux-arm64-gnu@npm:0.28.0":
+  version: 0.28.0
+  resolution: "@oxfmt/linux-arm64-gnu@npm:0.28.0"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@oxfmt/linux-arm64-musl@npm:0.27.0":
-  version: 0.27.0
-  resolution: "@oxfmt/linux-arm64-musl@npm:0.27.0"
+"@oxfmt/linux-arm64-musl@npm:0.28.0":
+  version: 0.28.0
+  resolution: "@oxfmt/linux-arm64-musl@npm:0.28.0"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@oxfmt/linux-x64-gnu@npm:0.27.0":
-  version: 0.27.0
-  resolution: "@oxfmt/linux-x64-gnu@npm:0.27.0"
+"@oxfmt/linux-x64-gnu@npm:0.28.0":
+  version: 0.28.0
+  resolution: "@oxfmt/linux-x64-gnu@npm:0.28.0"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@oxfmt/linux-x64-musl@npm:0.27.0":
-  version: 0.27.0
-  resolution: "@oxfmt/linux-x64-musl@npm:0.27.0"
+"@oxfmt/linux-x64-musl@npm:0.28.0":
+  version: 0.28.0
+  resolution: "@oxfmt/linux-x64-musl@npm:0.28.0"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@oxfmt/win32-arm64@npm:0.27.0":
-  version: 0.27.0
-  resolution: "@oxfmt/win32-arm64@npm:0.27.0"
+"@oxfmt/win32-arm64@npm:0.28.0":
+  version: 0.28.0
+  resolution: "@oxfmt/win32-arm64@npm:0.28.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@oxfmt/win32-x64@npm:0.27.0":
-  version: 0.27.0
-  resolution: "@oxfmt/win32-x64@npm:0.27.0"
+"@oxfmt/win32-x64@npm:0.28.0":
+  version: 0.28.0
+  resolution: "@oxfmt/win32-x64@npm:0.28.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -4864,19 +4864,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oxfmt@npm:^0.27.0":
-  version: 0.27.0
-  resolution: "oxfmt@npm:0.27.0"
+"oxfmt@npm:^0.28.0":
+  version: 0.28.0
+  resolution: "oxfmt@npm:0.28.0"
   dependencies:
-    "@oxfmt/darwin-arm64": "npm:0.27.0"
-    "@oxfmt/darwin-x64": "npm:0.27.0"
-    "@oxfmt/linux-arm64-gnu": "npm:0.27.0"
-    "@oxfmt/linux-arm64-musl": "npm:0.27.0"
-    "@oxfmt/linux-x64-gnu": "npm:0.27.0"
-    "@oxfmt/linux-x64-musl": "npm:0.27.0"
-    "@oxfmt/win32-arm64": "npm:0.27.0"
-    "@oxfmt/win32-x64": "npm:0.27.0"
-    tinypool: "npm:2.0.0"
+    "@oxfmt/darwin-arm64": "npm:0.28.0"
+    "@oxfmt/darwin-x64": "npm:0.28.0"
+    "@oxfmt/linux-arm64-gnu": "npm:0.28.0"
+    "@oxfmt/linux-arm64-musl": "npm:0.28.0"
+    "@oxfmt/linux-x64-gnu": "npm:0.28.0"
+    "@oxfmt/linux-x64-musl": "npm:0.28.0"
+    "@oxfmt/win32-arm64": "npm:0.28.0"
+    "@oxfmt/win32-x64": "npm:0.28.0"
+    tinypool: "npm:2.1.0"
   dependenciesMeta:
     "@oxfmt/darwin-arm64":
       optional: true
@@ -4896,7 +4896,7 @@ __metadata:
       optional: true
   bin:
     oxfmt: bin/oxfmt
-  checksum: 10/25595932a32b9c4190c901c06ab54e9e9e388a3aefde8706a92e2176f0f89e8704f84fcb2ccd7d785ba0d671df2bfb05f9573b496092c879b393711a99bd8694
+  checksum: 10/30f6f93831a994594f00934de9cc9be1b22500efd6eb704dfc7405e61110d118083788a81f3b269412b028d010b78c421d07b2d42a80dd161c81bbdeb77ad6be
   languageName: node
   linkType: hard
 
@@ -5938,10 +5938,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinypool@npm:2.0.0":
-  version: 2.0.0
-  resolution: "tinypool@npm:2.0.0"
-  checksum: 10/0f9dbeb25b2f0d8243321d8044254accf35b14d1c5b343115dd86ef3a0aacd64b68fc6d319ea714a295165ed355e93d031757a7505067448ffd0fa688697a80d
+"tinypool@npm:2.1.0":
+  version: 2.1.0
+  resolution: "tinypool@npm:2.1.0"
+  checksum: 10/c11cfe84e8147d5bf198fe04ea789c068dfa8656c7f3483c76a7408c02d108b2e07d7301458021a0a98952d4a760efb6212ab49a01bac085c4aed3d6ee40ab2d
   languageName: node
   linkType: hard
 
