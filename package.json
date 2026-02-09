@@ -64,14 +64,14 @@
     "tsc": "turbo tsc && tsc -p tsconfig.json"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
+    "@eslint/js": "^10.0.1",
     "@lerna-lite/cli": "^4.9.2",
     "@lerna-lite/publish": "^4.9.2",
     "@repo/tsconfig": "workspace:*",
     "@types/node": "^25.0.2",
     "@vitest/coverage-v8": "^4.0.13",
     "@vitest/ui": "^4.0.13",
-    "eslint": "^9.39.1",
+    "eslint": "^10.0.0",
     "eslint-plugin-n": "^17.23.1",
     "eslint-plugin-oxlint": "^1.28.0",
     "globals": "^17.0.0",
