@@ -27,13 +27,20 @@ yarn add @inquirer/testing --dev
 </tr>
 </table>
 
-# Example
+# Usage
 
-Here's an example of a test running with Jest (though `@inquirer/testing` will work with any runners).
+This package provides two ways to test Inquirer prompts:
+
+1. **Unit testing** with `render()` - Test individual prompts in isolation
+2. **E2E testing** with `screen` - Test full CLI applications that use Inquirer
+
+## Unit Testing with `render()`
+
+The `render()` function creates and instruments a command line interface for testing a single prompt.
 
 ```ts
 import { render } from '@inquirer/testing';
-import input from './src/index.mjs';
+import input from '@inquirer/input';
 
 describe('input prompt', () => {
   it('handle simple use case', async () => {
@@ -48,7 +55,6 @@ describe('input prompt', () => {
 
     events.type('ohn');
     events.keypress('enter');
-    // or events.keypress({ name: 'enter' })
 
     await expect(answer).resolves.toEqual('John');
     expect(getScreen()).toMatchInlineSnapshot(`"? What is your name John"`);
@@ -56,23 +62,116 @@ describe('input prompt', () => {
 });
 ```
 
-# Usage
-
-The core utility of `@inquirer/testing` is the `render()` function. This `render` function will create and instrument a command line like interface.
+### `render()` API
 
 `render` takes 2 arguments:
 
 1. The Inquirer prompt to test (the return value of `createPrompt()`)
 2. The prompt configuration (the first prompt argument)
 
-`render` then returns a promise that will resolve once the prompt is rendered and the test environment up and running. This promise returns the utilities we'll use to interact with our tests:
+`render` returns a promise that resolves once the prompt is rendered. This promise returns:
 
-1. `answer` (`Promise`) This is the promise that'll be resolved once an answer is provided and valid.
-2. `getScreen` (`({ raw: boolean }) => string`) This function returns the state of what is printed on the command line screen at any given time. You can use its return value to validate your prompt is properly rendered. By default this function will strip the ANSI codes (used for colors.)
-3. `events` (`{ keypress: (name | Key) => void, type: (string) => void }`) Is the utilities allowing you to interact with the prompt. Use it to trigger keypress events, or typing any input.
-4. `getFullOutput` (`() => string`) Return a raw dump of everything that got sent on the output stream.
+- `answer` (`Promise`) - Resolves when an answer is provided and valid
+- `getScreen` (`({ raw?: boolean }) => string`) - Returns the current screen content. By default strips ANSI codes
+- `events` - Utilities to interact with the prompt:
+  - `keypress(key: string | KeyObject)` - Trigger a keypress event
+  - `type(text: string)` - Type text into the prompt
+- `getFullOutput` (`() => Promise<string>`) - Returns the full output interpreted through a virtual terminal, resolving ANSI escape sequences into the actual screen state
 
-You can refer to [the `@inquirer/input` prompt test suite](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/input.test.ts) as a practical example.
+### Unit Testing Example
+
+You can refer to the [`@inquirer/input` test suite](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/input.test.ts) for a comprehensive unit testing example using `render()`.
+
+## E2E Testing with `screen`
+
+For testing full CLI applications that use Inquirer prompts internally, use the framework-specific entry points:
+
+### Vitest
+
+```ts
+import { describe, it, expect } from 'vitest';
+import { screen } from '@inquirer/testing/vitest';
+
+// Import your CLI AFTER @inquirer/testing/vitest
+import { runMyCli } from './my-cli.js';
+
+describe('my CLI', () => {
+  it('asks for name and confirms', async () => {
+    const result = runMyCli();
+
+    // First prompt is immediately available
+    expect(screen.getScreen()).toContain('What is your name?');
+    screen.type('John');
+    screen.keypress('enter');
+
+    // Wait for next prompt
+    await screen.next();
+    expect(screen.getScreen()).toContain('Confirm?');
+    screen.keypress('enter');
+
+    await result;
+  });
+});
+```
+
+### Jest
+
+```ts
+import { screen } from '@inquirer/testing/jest';
+import { runMyCli } from './my-cli.js';
+
+describe('my CLI', () => {
+  it('asks for name and confirms', async () => {
+    const result = runMyCli();
+
+    // First prompt is immediately available
+    expect(screen.getScreen()).toContain('What is your name?');
+    screen.type('John');
+    screen.keypress('enter');
+
+    // Wait for next prompt
+    await screen.next();
+    expect(screen.getScreen()).toContain('Confirm?');
+    screen.keypress('enter');
+
+    await result;
+  });
+});
+```
+
+### `screen` API
+
+The `screen` object provides:
+
+- `next()` - Wait for the next screen update (prompt transitions, validation errors, async updates). The initial prompt render is available immediately via `getScreen()` — no `next()` needed
+- `getScreen({ raw?: boolean })` - Get the current prompt screen content. By default strips ANSI codes
+- `getFullOutput({ raw?: boolean })` - Get all accumulated output interpreted through a virtual terminal (returns a `Promise`). By default resolves ANSI escape sequences into actual screen state
+- `type(text)` - Type text (writes to stream AND emits keypresses)
+- `keypress(key)` - Send a keypress event
+- `clear()` - Reset screen state (called automatically before each test)
+
+### Mocking Third-Party Prompts
+
+All `@inquirer/*` prompts are mocked automatically. To mock a third-party or custom prompt package, use `wrapPrompt` in your own `vi.mock()` call:
+
+```ts
+import { screen, wrapPrompt } from '@inquirer/testing/vitest';
+
+vi.mock('@my-company/custom-prompt', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@my-company/custom-prompt')>();
+  return { ...actual, default: wrapPrompt(actual.default) };
+});
+```
+
+### Important Notes
+
+1. **Import order matters**: Import `@inquirer/testing/vitest` or `@inquirer/testing/jest` BEFORE importing modules that use Inquirer prompts
+2. **Editor prompt**: The external editor is mocked — `screen.type()` buffers text, and `screen.keypress('enter')` submits it (same pattern as other prompts). Works with both `waitForUserInput: true` and `false`
+3. **Sequential prompts**: Multiple prompts are supported, but they must run sequentially (not concurrently)
+
+### E2E Testing Example
+
+You can refer to the [`@inquirer/demo` test suite](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/demo/demo.test.ts) for a comprehensive E2E testing example using `screen`.
 
 # License
 

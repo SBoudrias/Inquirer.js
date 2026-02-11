@@ -84,6 +84,7 @@
     "@inquirer/prompts": "^8.2.0"
   },
   "devDependencies": {
+    "@inquirer/testing": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@types/node": "^25.0.2",
     "typescript": "^5.9.3"

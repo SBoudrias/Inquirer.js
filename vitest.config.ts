@@ -16,6 +16,6 @@ export default defineConfig({
         '.yarn/**',
       ],
     },
-    testTimeout: 300,
+    testTimeout: 5000,
   },
 });
