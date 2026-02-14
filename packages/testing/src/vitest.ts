@@ -45,8 +45,7 @@ export function wrapPrompt<Value, Config>(
   };
 }
 
-// Mock individual prompt packages
-// Note: @inquirer/prompts just re-exports these, so mocking individual packages covers both import styles
+// Mock individual prompt packages (covers `import input from '@inquirer/input'` style)
 vi.mock('@inquirer/input', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@inquirer/input')>();
   return { ...actual, default: wrapPrompt(actual.default) };
@@ -95,6 +94,26 @@ vi.mock('@inquirer/search', async (importOriginal) => {
 vi.mock('@inquirer/editor', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@inquirer/editor')>();
   return { ...actual, default: wrapPrompt(actual.default) };
+});
+
+// Mock @inquirer/prompts barrel re-exports (covers `import { input } from '@inquirer/prompts'` style).
+// While Vitest's module interception often propagates through ESM re-exports, an explicit mock
+// ensures consistent behavior across all environments and bundler configurations.
+vi.mock('@inquirer/prompts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@inquirer/prompts')>();
+  return {
+    ...actual,
+    input: wrapPrompt(actual.input),
+    select: wrapPrompt(actual.select),
+    confirm: wrapPrompt(actual.confirm),
+    checkbox: wrapPrompt(actual.checkbox),
+    password: wrapPrompt(actual.password),
+    expand: wrapPrompt(actual.expand),
+    rawlist: wrapPrompt(actual.rawlist),
+    number: wrapPrompt(actual.number),
+    search: wrapPrompt(actual.search),
+    editor: wrapPrompt(actual.editor),
+  };
 });
 
 // Mock the external editor to capture typed input instead of spawning a real editor.

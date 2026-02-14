@@ -152,13 +152,29 @@ The `screen` object provides:
 
 ### Mocking Third-Party Prompts
 
-All `@inquirer/*` prompts are mocked automatically. To mock a third-party or custom prompt package, use `wrapPrompt` in your own `vi.mock()` call:
+All `@inquirer/*` prompts are mocked automatically. To mock a third-party or custom prompt package, use `wrapPrompt` in your own mock call:
+
+#### Vitest
 
 ```ts
 import { screen, wrapPrompt } from '@inquirer/testing/vitest';
 
 vi.mock('@my-company/custom-prompt', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@my-company/custom-prompt')>();
+  return { ...actual, default: wrapPrompt(actual.default) };
+});
+```
+
+#### Jest
+
+In Jest, `jest.mock()` factories are hoisted before imports, so `wrapPrompt` must be accessed via `jest.requireActual()` inside the factory:
+
+```ts
+import { screen } from '@inquirer/testing/jest';
+
+jest.mock('@my-company/custom-prompt', () => {
+  const { wrapPrompt } = jest.requireActual('@inquirer/testing/jest');
+  const actual = jest.requireActual('@my-company/custom-prompt');
   return { ...actual, default: wrapPrompt(actual.default) };
 });
 ```

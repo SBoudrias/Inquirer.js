@@ -16,6 +16,15 @@ beforeEach(() => {
 /**
  * Wrap a prompt function to use the shared screen I/O.
  * Use this in your own `jest.mock()` calls to mock third-party prompts.
+ *
+ * @example
+ * ```ts
+ * jest.mock('@my-company/custom-prompt', () => {
+ *   const { wrapPrompt } = jest.requireActual('@inquirer/testing/jest');
+ *   const actual = jest.requireActual('@my-company/custom-prompt');
+ *   return { ...actual, default: wrapPrompt(actual.default) };
+ * });
+ * ```
  */
 export function wrapPrompt<Value, Config>(
   prompt: Prompt<Value, Config>,
@@ -37,8 +46,7 @@ export function wrapPrompt<Value, Config>(
   };
 }
 
-// Mock individual prompt packages
-// Note: @inquirer/prompts just re-exports these, so mocking individual packages covers both import styles
+// Mock individual prompt packages (covers `import input from '@inquirer/input'` style)
 jest.mock('@inquirer/input', () => {
   const actual = jest.requireActual('@inquirer/input');
   return { ...actual, default: wrapPrompt(actual.default) };
@@ -87,6 +95,25 @@ jest.mock('@inquirer/search', () => {
 jest.mock('@inquirer/editor', () => {
   const actual = jest.requireActual('@inquirer/editor');
   return { ...actual, default: wrapPrompt(actual.default) };
+});
+
+// Mock @inquirer/prompts barrel re-exports (covers `import { input } from '@inquirer/prompts'` style).
+// Jest's module mock for individual packages doesn't propagate through barrel re-exports.
+jest.mock('@inquirer/prompts', () => {
+  const actual = jest.requireActual('@inquirer/prompts');
+  return {
+    ...actual,
+    input: wrapPrompt(actual.input),
+    select: wrapPrompt(actual.select),
+    confirm: wrapPrompt(actual.confirm),
+    checkbox: wrapPrompt(actual.checkbox),
+    password: wrapPrompt(actual.password),
+    expand: wrapPrompt(actual.expand),
+    rawlist: wrapPrompt(actual.rawlist),
+    number: wrapPrompt(actual.number),
+    search: wrapPrompt(actual.search),
+    editor: wrapPrompt(actual.editor),
+  };
 });
 
 // Mock the external editor to capture typed input instead of spawning a real editor.
