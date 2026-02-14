@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import input from '@inquirer/input';
+import { input } from '@inquirer/prompts';
 
 describe('@inquirer/testing screen width', () => {
   it('does not hard-wrap long lines at 80 columns', async () => {
