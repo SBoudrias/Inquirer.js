@@ -1027,11 +1027,47 @@ __metadata:
     typescript: "npm:^5.9.3"
     vitest: "npm:^3.0.0"
   peerDependencies:
+    "@inquirer/checkbox": ">=1.0.0"
+    "@inquirer/confirm": ">=1.0.0"
+    "@inquirer/editor": ">=1.0.0"
+    "@inquirer/expand": ">=1.0.0"
+    "@inquirer/external-editor": ">=1.0.0"
+    "@inquirer/input": ">=1.0.0"
+    "@inquirer/number": ">=1.0.0"
+    "@inquirer/password": ">=1.0.0"
+    "@inquirer/prompts": ">=1.0.0"
+    "@inquirer/rawlist": ">=1.0.0"
+    "@inquirer/search": ">=1.0.0"
+    "@inquirer/select": ">=1.0.0"
     "@types/jest": ">=29.0.0"
     "@types/node": ">=18"
     jest: ">=29.0.0"
     vitest: ">=1.0.0"
   peerDependenciesMeta:
+    "@inquirer/checkbox":
+      optional: true
+    "@inquirer/confirm":
+      optional: true
+    "@inquirer/editor":
+      optional: true
+    "@inquirer/expand":
+      optional: true
+    "@inquirer/external-editor":
+      optional: true
+    "@inquirer/input":
+      optional: true
+    "@inquirer/number":
+      optional: true
+    "@inquirer/password":
+      optional: true
+    "@inquirer/prompts":
+      optional: true
+    "@inquirer/rawlist":
+      optional: true
+    "@inquirer/search":
+      optional: true
+    "@inquirer/select":
+      optional: true
     "@types/jest":
       optional: true
     "@types/node":
