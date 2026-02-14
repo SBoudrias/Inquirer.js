@@ -2,7 +2,7 @@ import { Terminal } from '@xterm/headless';
 
 export async function interpretTerminalOutput(
   rawOutput: string,
-  cols: number = 200,
+  cols: number = 10_000,
   rows: number = 4000,
 ): Promise<string> {
   const term = new Terminal({ cols, rows, allowProposedApi: true, convertEol: true });

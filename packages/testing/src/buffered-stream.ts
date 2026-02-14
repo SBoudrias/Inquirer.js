@@ -2,6 +2,11 @@ import { Stream } from 'node:stream';
 import { stripVTControlCharacters } from 'node:util';
 
 export class BufferedStream extends Stream.Writable {
+  // Expose a large column width so cli-width (used by @inquirer/core's breakLines)
+  // doesn't hard-wrap output at 80 columns. This prevents artificial line breaks
+  // that would break assertions like toContain() in tests.
+  columns = 10_000;
+
   #fullOutput: string = '';
   #chunks: string[] = [];
   #rawChunks: string[] = [];
