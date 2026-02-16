@@ -27,15 +27,21 @@ beforeEach(() => {
  * ```
  */
 export function wrapPrompt<Value, Config>(
-  prompt: Prompt<Value, Config>,
+  prompt: Prompt<Value, Config> | { default: Prompt<Value, Config> },
 ): Prompt<Value, Config> {
+  // Unwrap SWC-style module namespace objects where barrel re-exports like
+  // `export { default as input } from '@inquirer/input'` get transformed into
+  // `{ default: fn }` instead of the function directly.
+  const fn: Prompt<Value, Config> =
+    typeof prompt === 'function' ? prompt : prompt.default;
+
   return (
     config: Config,
     context?: Parameters<Prompt<Value, Config>>[1],
   ): Promise<Value> => {
     const output = screenInstance.createOutput();
 
-    const promise = prompt(config, {
+    const promise = fn(config, {
       ...context,
       input: screenInstance.input,
       output,
@@ -46,104 +52,167 @@ export function wrapPrompt<Value, Config>(
   };
 }
 
-// Mock individual prompt packages (covers `import input from '@inquirer/input'` style)
+// Prompt names used by the @inquirer/prompts barrel mock to wrap only prompt exports.
+const promptNames = [
+  'input',
+  'select',
+  'confirm',
+  'checkbox',
+  'password',
+  'expand',
+  'rawlist',
+  'number',
+  'search',
+  'editor',
+];
+
+// Mock individual prompt packages (covers `import input from '@inquirer/input'` style).
+// All prompt packages are optional peer dependencies, so factories silently skip
+// packages that aren't installed in the consumer's project.
 jest.mock('@inquirer/input', () => {
-  const actual = jest.requireActual('@inquirer/input');
-  return { ...actual, default: wrapPrompt(actual.default) };
+  try {
+    const actual = jest.requireActual('@inquirer/input');
+    return { ...actual, default: wrapPrompt(actual.default) };
+  } catch {
+    return {};
+  }
 });
 
 jest.mock('@inquirer/select', () => {
-  const actual = jest.requireActual('@inquirer/select');
-  return { ...actual, default: wrapPrompt(actual.default) };
+  try {
+    const actual = jest.requireActual('@inquirer/select');
+    return { ...actual, default: wrapPrompt(actual.default) };
+  } catch {
+    return {};
+  }
 });
 
 jest.mock('@inquirer/confirm', () => {
-  const actual = jest.requireActual('@inquirer/confirm');
-  return { ...actual, default: wrapPrompt(actual.default) };
+  try {
+    const actual = jest.requireActual('@inquirer/confirm');
+    return { ...actual, default: wrapPrompt(actual.default) };
+  } catch {
+    return {};
+  }
 });
 
 jest.mock('@inquirer/checkbox', () => {
-  const actual = jest.requireActual('@inquirer/checkbox');
-  return { ...actual, default: wrapPrompt(actual.default) };
+  try {
+    const actual = jest.requireActual('@inquirer/checkbox');
+    return { ...actual, default: wrapPrompt(actual.default) };
+  } catch {
+    return {};
+  }
 });
 
 jest.mock('@inquirer/password', () => {
-  const actual = jest.requireActual('@inquirer/password');
-  return { ...actual, default: wrapPrompt(actual.default) };
+  try {
+    const actual = jest.requireActual('@inquirer/password');
+    return { ...actual, default: wrapPrompt(actual.default) };
+  } catch {
+    return {};
+  }
 });
 
 jest.mock('@inquirer/expand', () => {
-  const actual = jest.requireActual('@inquirer/expand');
-  return { ...actual, default: wrapPrompt(actual.default) };
+  try {
+    const actual = jest.requireActual('@inquirer/expand');
+    return { ...actual, default: wrapPrompt(actual.default) };
+  } catch {
+    return {};
+  }
 });
 
 jest.mock('@inquirer/rawlist', () => {
-  const actual = jest.requireActual('@inquirer/rawlist');
-  return { ...actual, default: wrapPrompt(actual.default) };
+  try {
+    const actual = jest.requireActual('@inquirer/rawlist');
+    return { ...actual, default: wrapPrompt(actual.default) };
+  } catch {
+    return {};
+  }
 });
 
 jest.mock('@inquirer/number', () => {
-  const actual = jest.requireActual('@inquirer/number');
-  return { ...actual, default: wrapPrompt(actual.default) };
+  try {
+    const actual = jest.requireActual('@inquirer/number');
+    return { ...actual, default: wrapPrompt(actual.default) };
+  } catch {
+    return {};
+  }
 });
 
 jest.mock('@inquirer/search', () => {
-  const actual = jest.requireActual('@inquirer/search');
-  return { ...actual, default: wrapPrompt(actual.default) };
+  try {
+    const actual = jest.requireActual('@inquirer/search');
+    return { ...actual, default: wrapPrompt(actual.default) };
+  } catch {
+    return {};
+  }
 });
 
 jest.mock('@inquirer/editor', () => {
-  const actual = jest.requireActual('@inquirer/editor');
-  return { ...actual, default: wrapPrompt(actual.default) };
+  try {
+    const actual = jest.requireActual('@inquirer/editor');
+    return { ...actual, default: wrapPrompt(actual.default) };
+  } catch {
+    return {};
+  }
 });
 
 // Mock @inquirer/prompts barrel re-exports (covers `import { input } from '@inquirer/prompts'` style).
 // Jest's module mock for individual packages doesn't propagate through barrel re-exports.
+// Only prompt functions are wrapped; other exports (like Separator) are passed through.
 jest.mock('@inquirer/prompts', () => {
-  const actual = jest.requireActual('@inquirer/prompts');
-  return {
-    ...actual,
-    input: wrapPrompt(actual.input),
-    select: wrapPrompt(actual.select),
-    confirm: wrapPrompt(actual.confirm),
-    checkbox: wrapPrompt(actual.checkbox),
-    password: wrapPrompt(actual.password),
-    expand: wrapPrompt(actual.expand),
-    rawlist: wrapPrompt(actual.rawlist),
-    number: wrapPrompt(actual.number),
-    search: wrapPrompt(actual.search),
-    editor: wrapPrompt(actual.editor),
-  };
+  try {
+    const actual = jest.requireActual('@inquirer/prompts');
+    const wrapped: Record<string, unknown> = { ...actual };
+    for (const name of promptNames) {
+      if (name in actual) {
+        wrapped[name] = wrapPrompt(actual[name]);
+      }
+    }
+    return wrapped;
+  } catch {
+    return {};
+  }
 });
 
 // Mock the external editor to capture typed input instead of spawning a real editor.
 // Buffers all screen.type() calls and submits on screen.keypress('enter'), matching
 // the interaction pattern of other prompts (type → enter).
-jest.mock('@inquirer/external-editor', () => ({
-  editAsync: (
-    _text: string,
-    callback: (err: Error | undefined, result: string | undefined) => void,
-  ) => {
-    let buffer = '';
+jest.mock('@inquirer/external-editor', () => {
+  try {
+    jest.requireActual('@inquirer/external-editor');
+  } catch {
+    return {};
+  }
 
-    const typeSpy = jest
-      .spyOn(screenInstance, 'type')
-      .mockImplementation((text: string) => {
-        buffer += text;
-      });
+  return {
+    editAsync: (
+      _text: string,
+      callback: (err: Error | undefined, result: string | undefined) => void,
+    ) => {
+      let buffer = '';
 
-    const keypressSpy = jest
-      .spyOn(screenInstance, 'keypress')
-      .mockImplementation((key) => {
-        const name = typeof key === 'string' ? key : key.name;
-        if (name === 'enter' || name === 'return') {
-          typeSpy.mockRestore();
-          keypressSpy.mockRestore();
-          process.nextTick(() => callback(undefined, buffer));
-        }
-      });
-  },
-}));
+      const typeSpy = jest
+        .spyOn(screenInstance, 'type')
+        .mockImplementation((text: string) => {
+          buffer += text;
+        });
+
+      const keypressSpy = jest
+        .spyOn(screenInstance, 'keypress')
+        .mockImplementation((key) => {
+          const name = typeof key === 'string' ? key : key.name;
+          if (name === 'enter' || name === 'return') {
+            typeSpy.mockRestore();
+            keypressSpy.mockRestore();
+            process.nextTick(() => callback(undefined, buffer));
+          }
+        });
+    },
+  };
+});
 
 // Re-export Screen class and KeypressEvent type for advanced use cases
 export { Screen, type KeypressEvent } from './screen.js';
