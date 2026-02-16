@@ -2,6 +2,9 @@ import { stripVTControlCharacters } from 'node:util';
 import MuteStream from 'mute-stream';
 import type { Prompt, Context } from '@inquirer/type';
 
+// Capture the real setImmediate before test frameworks can mock it with fake timers.
+const nativeSetImmediate = globalThis.setImmediate;
+
 type RenderOptions = Omit<Context, 'input' | 'output'>;
 import { BufferedStream } from './buffered-stream.js';
 import { interpretTerminalOutput } from './terminal.js';
@@ -36,6 +39,13 @@ export async function render<Value, const Config>(
     // errored before rendering. Race against the answer promise to handle that case.
     await Promise.race([firstRender, answer.catch(() => {})]);
   }
+
+  // Wait for @inquirer/core's input gate to open. The gate uses setImmediate to
+  // discard keystrokes buffered before the prompt was created (see issue #1303).
+  // Without this, events.type() data would be dropped by the still-closed gate.
+  // We use the native setImmediate captured at module load to avoid interference
+  // from fake timers in tests.
+  await new Promise<void>((resolve) => nativeSetImmediate(resolve));
 
   const events = {
     keypress(
