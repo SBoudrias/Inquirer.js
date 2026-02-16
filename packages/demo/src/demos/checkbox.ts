@@ -16,6 +16,12 @@ const demo = async () => {
         value: 'pnpm',
         disabled: '(pnpm is not available)',
       },
+      {
+        name: 'Node.js',
+        value: 'node',
+        checked: true,
+        disabled: '(required dependency)',
+      },
     ],
   });
   console.log('Answer:', answer);

@@ -418,7 +418,7 @@ describe('checkbox prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯◯ Ham
-      - Pineapple (disabled)
+       - Pineapple (disabled)
        ◯ Pepperoni
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
@@ -429,7 +429,7 @@ describe('checkbox prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
        ◯ Ham
-      - Pineapple (disabled)
+       - Pineapple (disabled)
       ❯◉ Pepperoni
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
@@ -438,6 +438,85 @@ describe('checkbox prompt', () => {
     events.keypress('enter');
     await expect(answer).resolves.toEqual(['pepperoni']);
     expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
+  });
+
+  it('includes disabled+checked choice in the answer', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a topping',
+      choices: [
+        { name: 'Ham', value: 'ham' },
+        { name: 'Pineapple', value: 'pineapple', disabled: true, checked: true },
+        { name: 'Pepperoni', value: 'pepperoni' },
+      ],
+    });
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(['pineapple']);
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pineapple"');
+  });
+
+  it('renders disabled+checked choice with checked icon', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a topping',
+      choices: [
+        { name: 'Ham', value: 'ham' },
+        { name: 'Pineapple', value: 'pineapple', disabled: true, checked: true },
+        { name: 'Pepperoni', value: 'pepperoni' },
+      ],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping
+      ❯◯ Ham
+       ◎ Pineapple (disabled)
+       ◯ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+    `);
+
+    events.keypress('enter');
+    await answer;
+  });
+
+  it('excludes disabled+unchecked choice from the answer', async () => {
+    const { answer, events } = await render(checkbox, {
+      message: 'Select a topping',
+      choices: [
+        { name: 'Ham', value: 'ham' },
+        { name: 'Pineapple', value: 'pineapple', disabled: true },
+        { name: 'Pepperoni', value: 'pepperoni' },
+      ],
+    });
+
+    events.keypress('space');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(['ham']);
+  });
+
+  it('cannot toggle a disabled+checked choice', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a topping',
+      choices: [
+        { name: 'Ham', value: 'ham' },
+        { name: 'Pineapple', value: 'pineapple', disabled: true, checked: true },
+        { name: 'Pepperoni', value: 'pepperoni' },
+      ],
+    });
+
+    // Arrow keys skip disabled items, so pressing down goes to Pepperoni
+    events.keypress('down');
+    events.keypress('space');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping
+       ◯ Ham
+       ◎ Pineapple (disabled)
+      ❯◉ Pepperoni
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(['pineapple', 'pepperoni']);
   });
 
   it('skip disabled options by number key', async () => {
@@ -453,7 +532,7 @@ describe('checkbox prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯◯ Ham
-      - Pineapple (disabled)
+       - Pineapple (disabled)
        ◯ Pepperoni
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
@@ -463,7 +542,7 @@ describe('checkbox prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
       ❯◯ Ham
-      - Pineapple (disabled)
+       - Pineapple (disabled)
        ◯ Pepperoni
 
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
@@ -1250,7 +1329,7 @@ describe('checkbox prompt', () => {
          ◯ yarn
          ──────────────
          ◯ jspm
-        - pnpm (pnpm is not available)
+         - pnpm (pnpm is not available)
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
@@ -1262,7 +1341,7 @@ describe('checkbox prompt', () => {
          ◯ yarn
          ──────────────
          ◯ jspm
-        - pnpm (pnpm is not available)
+         - pnpm (pnpm is not available)
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
@@ -1274,7 +1353,7 @@ describe('checkbox prompt', () => {
         ❯◉ Yet Another Resource Negotiator
          ──────────────
          ◯ jspm
-        - pnpm (pnpm is not available)
+         - pnpm (pnpm is not available)
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);

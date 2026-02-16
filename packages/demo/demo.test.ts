@@ -206,8 +206,9 @@ describe('@inquirer/demo E2E tests', () => {
         ❯◯ npm
          ◯ yarn
          ──────────────
-        - jspm (disabled)
-        - pnpm (pnpm is not available)
+         - jspm (disabled)
+         - pnpm (pnpm is not available)
+         ◎ Node.js (required dependency)
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
@@ -218,8 +219,9 @@ describe('@inquirer/demo E2E tests', () => {
         ❯◉ npm
          ◯ yarn
          ──────────────
-        - jspm (disabled)
-        - pnpm (pnpm is not available)
+         - jspm (disabled)
+         - pnpm (pnpm is not available)
+         ◎ Node.js (required dependency)
 
         ↑↓ navigate • space select • a all • i invert • ⏎ submit"
       `);
@@ -243,7 +245,7 @@ describe('@inquirer/demo E2E tests', () => {
       await demo;
 
       expect(await screen.getFullOutput()).toMatchInlineSnapshot(`
-        "✔ Select a package manager npm
+        "✔ Select a package manager npm, Node.js
         ✔ Select your favorite letters A, C"
       `);
     });
