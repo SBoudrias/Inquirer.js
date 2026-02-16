@@ -405,7 +405,7 @@ describe('checkbox prompt', () => {
     await expect(answer).resolves.toEqual([11, 12]);
   });
 
-  it('skip disabled options by arrow keys', async () => {
+  it('allows cursor on disabled options but prevents toggling', async () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a topping',
       choices: [
@@ -424,17 +424,22 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
+    // Down lands on disabled Pineapple; space does nothing
     events.keypress('down');
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
        ◯ Ham
-       - Pineapple (disabled)
-      ❯◉ Pepperoni
+      ❯- Pineapple (disabled)
+       ◯ Pepperoni
 
+      > This option is disabled and cannot be toggled.
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
+    // Move down to Pepperoni and select it
+    events.keypress('down');
+    events.keypress('space');
     events.keypress('enter');
     await expect(answer).resolves.toEqual(['pepperoni']);
     expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
@@ -503,20 +508,21 @@ describe('checkbox prompt', () => {
       ],
     });
 
-    // Arrow keys skip disabled items, so pressing down goes to Pepperoni
+    // Cursor lands on disabled Pineapple; space does nothing (stays checked)
     events.keypress('down');
     events.keypress('space');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
        ◯ Ham
-       ◎ Pineapple (disabled)
-      ❯◉ Pepperoni
+      ❯◎ Pineapple (disabled)
+       ◯ Pepperoni
 
+      > This option is disabled and cannot be toggled.
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
-    await expect(answer).resolves.toEqual(['pineapple', 'pepperoni']);
+    await expect(answer).resolves.toEqual(['pineapple']);
   });
 
   it('skip disabled options by number key', async () => {
@@ -695,10 +701,40 @@ describe('checkbox prompt', () => {
     await expect(answer).resolves.not.toContain(unselect);
   });
 
-  it('throws if all choices are disabled', async () => {
+  it('allows navigating when all choices are disabled', async () => {
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Select a number',
+      choices: [
+        { value: 1, disabled: true },
+        { value: 2, disabled: true },
+      ],
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+      ❯- 1 (disabled)
+       - 2 (disabled)
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+       - 1 (disabled)
+      ❯- 2 (disabled)
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual([]);
+  });
+
+  it('throws if all choices are separators', async () => {
     const { answer } = await render(checkbox, {
       message: 'Select a number',
-      choices: numberedChoices.map((choice) => ({ ...choice, disabled: true })),
+      choices: [new Separator(), new Separator()],
     });
 
     await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
