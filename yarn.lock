@@ -1022,7 +1022,7 @@ __metadata:
     "@types/jest": "npm:^29.5.0"
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^25.0.2"
-    "@xterm/headless": "npm:^5.5.0"
+    "@xterm/headless": "npm:^6.0.0"
     mute-stream: "npm:^3.0.0"
     typescript: "npm:^5.9.3"
     vitest: "npm:^3.0.0"
@@ -2653,10 +2653,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xterm/headless@npm:^5.5.0":
-  version: 5.5.0
-  resolution: "@xterm/headless@npm:5.5.0"
-  checksum: 10/6c2e062553496cdcd1a65cc614fea25aeb3c042b4f1b8474effd365f0b49be7a2c508123e326c2fc4a60bac35e2b3006e86c08547a1faddda67efc2f1ac14916
+"@xterm/headless@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@xterm/headless@npm:6.0.0"
+  checksum: 10/54567809834724313695de397d7669905bd52cf7f56b91bbefda6821d6ba26f08637030a69b0e7d99377dc0a0785488445b59e337eb77e53e9aa3e90174691f9
   languageName: node
   linkType: hard
 

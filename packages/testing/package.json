@@ -92,7 +92,7 @@
   },
   "dependencies": {
     "@inquirer/type": "^4.0.3",
-    "@xterm/headless": "^5.5.0",
+    "@xterm/headless": "^6.0.0",
     "mute-stream": "^3.0.0"
   },
   "devDependencies": {
