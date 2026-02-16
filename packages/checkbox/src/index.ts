@@ -27,10 +27,11 @@ type CheckboxTheme = {
     checked: string;
     unchecked: string;
     cursor: string;
+    disabledChecked: string;
+    disabledUnchecked: string;
   };
   style: {
-    disabledChoice: (text: string) => string;
-    disabledCheckedChoice: (text: string) => string;
+    disabled: (text: string) => string;
     renderSelectedChoices: <T>(
       selectedChoices: ReadonlyArray<NormalizedChoice<T>>,
       allChoices: ReadonlyArray<NormalizedChoice<T> | Separator>,
@@ -51,11 +52,11 @@ const checkboxTheme: CheckboxTheme = {
     checked: styleText('green', figures.circleFilled),
     unchecked: figures.circle,
     cursor: figures.pointer,
+    disabledChecked: styleText('green', figures.circleDouble),
+    disabledUnchecked: '-',
   },
   style: {
-    disabledChoice: (text: string) => styleText('dim', ` - ${text}`),
-    disabledCheckedChoice: (text: string) =>
-      styleText('dim', ` ${styleText('green', figures.circleDouble)} ${text}`),
+    disabled: (text: string) => styleText('dim', text),
     renderSelectedChoices: (selectedChoices) =>
       selectedChoices.map((choice) => choice.short).join(', '),
     description: (text: string) => styleText('cyan', text),
@@ -256,13 +257,17 @@ export default createPrompt(
           return ` ${item.separator}`;
         }
 
+        const cursor = isActive ? theme.icon.cursor : ' ';
+
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
-          if (item.checked) {
-            return theme.style.disabledCheckedChoice(`${item.name} ${disabledLabel}`);
-          }
-          return theme.style.disabledChoice(`${item.name} ${disabledLabel}`);
+          const checkbox = item.checked
+            ? theme.icon.disabledChecked
+            : theme.icon.disabledUnchecked;
+          return theme.style.disabled(
+            `${cursor}${checkbox} ${item.name} ${disabledLabel}`,
+          );
         }
 
         if (isActive) {
@@ -272,7 +277,6 @@ export default createPrompt(
         const checkbox = item.checked ? theme.icon.checked : theme.icon.unchecked;
         const name = item.checked ? item.checkedName : item.name;
         const color = isActive ? theme.style.highlight : (x: string) => x;
-        const cursor = isActive ? theme.icon.cursor : ' ';
         return color(`${cursor}${checkbox} ${name}`);
       },
       pageSize,
