@@ -242,6 +242,8 @@ export default createPrompt(
 
         const indexLabel =
           theme.indexMode === 'number' ? `${index + 1 - separatorCount}. ` : '';
+        const cursor = isActive ? theme.icon.cursor : ' ';
+
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
@@ -249,7 +251,6 @@ export default createPrompt(
         }
 
         const color = isActive ? theme.style.highlight : (x: string) => x;
-        const cursor = isActive ? theme.icon.cursor : ` `;
         return color(`${cursor} ${indexLabel}${item.name}`);
       },
       pageSize,
