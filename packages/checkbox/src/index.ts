@@ -30,6 +30,7 @@ type CheckboxTheme = {
   };
   style: {
     disabledChoice: (text: string) => string;
+    disabledCheckedChoice: (text: string) => string;
     renderSelectedChoices: <T>(
       selectedChoices: ReadonlyArray<NormalizedChoice<T>>,
       allChoices: ReadonlyArray<NormalizedChoice<T> | Separator>,
@@ -52,7 +53,9 @@ const checkboxTheme: CheckboxTheme = {
     cursor: figures.pointer,
   },
   style: {
-    disabledChoice: (text: string) => styleText('dim', `- ${text}`),
+    disabledChoice: (text: string) => styleText('dim', ` - ${text}`),
+    disabledCheckedChoice: (text: string) =>
+      styleText('dim', ` ${styleText('green', figures.circleDouble)} ${text}`),
     renderSelectedChoices: (selectedChoices) =>
       selectedChoices.map((choice) => choice.short).join(', '),
     description: (text: string) => styleText('cyan', text),
@@ -113,7 +116,7 @@ function isSelectable<Value>(item: Item<Value>): item is NormalizedChoice<Value>
 }
 
 function isChecked<Value>(item: Item<Value>): item is NormalizedChoice<Value> {
-  return isSelectable(item) && item.checked;
+  return !Separator.isSeparator(item) && item.checked;
 }
 
 function toggle<Value>(item: Item<Value>): Item<Value> {
@@ -193,7 +196,7 @@ export default createPrompt(
       if (isEnterKey(key)) {
         const selection = items.filter(isChecked);
         const isValid = await validate([...selection]);
-        if (required && !items.some(isChecked)) {
+        if (required && !selection.length) {
           setError('At least one choice must be selected');
         } else if (isValid === true) {
           setStatus('done');
@@ -256,6 +259,9 @@ export default createPrompt(
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
+          if (item.checked) {
+            return theme.style.disabledCheckedChoice(`${item.name} ${disabledLabel}`);
+          }
           return theme.style.disabledChoice(`${item.name} ${disabledLabel}`);
         }
 
