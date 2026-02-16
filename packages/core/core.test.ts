@@ -1,4 +1,4 @@
-import { EventEmitter } from 'node:stream';
+import { EventEmitter, PassThrough } from 'node:stream';
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import { stripVTControlCharacters } from 'node:util';
@@ -574,6 +574,41 @@ it('allow aborting the prompt using signals', async () => {
   abortController.abort();
 
   await expect(answer).rejects.toThrow(AbortPromptError);
+});
+
+it('should ignore keypresses buffered before prompt creation', async () => {
+  const prompt = createPrompt(
+    (_config: { message: string }, done: (value: string) => void) => {
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done('submitted');
+        }
+      });
+
+      return 'Question?';
+    },
+  );
+
+  // Use PassThrough which has proper stream buffering (like real process.stdin)
+  const input = new PassThrough();
+  const output = new PassThrough();
+  output.write = () => true; // suppress output
+
+  // Buffer an Enter keypress BEFORE the prompt exists
+  input.write('\r');
+
+  const answer = prompt({ message: 'test' }, { input, output });
+
+  // The buffered Enter should NOT resolve the prompt
+  const result = await Promise.race([
+    answer.then(() => 'resolved'),
+    new Promise((resolve) => setTimeout(() => resolve('pending'), 200)),
+  ]);
+  expect(result).toBe('pending');
+
+  // A real Enter AFTER creation should still work
+  input.write('\r');
+  await expect(answer).resolves.toBe('submitted');
 });
 
 it('fail on aborted signals', async () => {

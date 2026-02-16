@@ -9,6 +9,10 @@ import { type InquirerReadline } from '@inquirer/type';
 import { withHooks, effectScheduler } from './hook-engine.ts';
 import { AbortPromptError, CancelPromptError, ExitPromptError } from './errors.ts';
 
+// Capture the real setImmediate at module load time so it works even when test
+// frameworks mock timers with vi.useFakeTimers() or similar.
+const nativeSetImmediate = globalThis.setImmediate;
+
 type ViewFunction<Value, Config> = (
   config: Prettify<Config>,
   done: (value: Value) => void,
@@ -49,6 +53,11 @@ export function createPrompt<Value, Config>(
     const output = new MuteStream();
     output.pipe(context.output ?? process.stdout);
 
+    // Pre-mute the output so that readline doesn't echo stale keystrokes
+    // to the terminal before the first render. ScreenManager will unmute/mute
+    // the output around each render call as needed.
+    output.mute();
+
     const rl = readline.createInterface({
       terminal: true,
       input,
@@ -85,14 +94,6 @@ export function createPrompt<Value, Config>(
     rl.on('SIGINT', sigint);
     cleanups.add(() => rl.removeListener('SIGINT', sigint));
 
-    // Re-renders only happen when the state change; but the readline cursor could change position
-    // and that also requires a re-render (and a manual one because we mute the streams).
-    // We set the listener after the initial workLoop to avoid a double render if render triggered
-    // by a state change sets the cursor to the right position.
-    const checkCursorPos = () => screen.checkCursorPos();
-    rl.input.on('keypress', checkCursorPos);
-    cleanups.add(() => rl.input.removeListener('keypress', checkCursorPos));
-
     return withHooks(rl, (cycle) => {
       // The close event triggers immediately when the user press ctrl+c. SignalExit on the other hand
       // triggers after the process is done (which happens after timeouts are done triggering.)
@@ -101,30 +102,57 @@ export function createPrompt<Value, Config>(
       rl.on('close', hooksCleanup);
       cleanups.add(() => rl.removeListener('close', hooksCleanup));
 
-      cycle(() => {
-        try {
-          const nextView = view(config, (value) => {
-            setImmediate(() => resolve(value));
-          });
+      const startCycle = () => {
+        // Re-renders only happen when the state change; but the readline cursor could
+        // change position and that also requires a re-render (and a manual one because
+        // we mute the streams). We set the listener after the initial workLoop to avoid
+        // a double render if render triggered by a state change sets the cursor to the
+        // right position.
+        const checkCursorPos = () => screen.checkCursorPos();
+        rl.input.on('keypress', checkCursorPos);
+        cleanups.add(() => rl.input.removeListener('keypress', checkCursorPos));
 
-          // Typescript won't allow this, but not all users rely on typescript.
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          if (nextView === undefined) {
-            const callerFilename = callSites[1]?.getFileName();
-            throw new Error(
-              `Prompt functions must return a string.\n    at ${callerFilename}`,
-            );
+        cycle(() => {
+          try {
+            const nextView = view(config, (value) => {
+              setImmediate(() => resolve(value));
+            });
+
+            // Typescript won't allow this, but not all users rely on typescript.
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (nextView === undefined) {
+              const callerFilename = callSites[1]?.getFileName();
+              throw new Error(
+                `Prompt functions must return a string.\n    at ${callerFilename}`,
+              );
+            }
+
+            const [content, bottomContent] =
+              typeof nextView === 'string' ? [nextView] : nextView;
+            screen.render(content, bottomContent);
+
+            effectScheduler.run();
+          } catch (error: unknown) {
+            reject(error);
           }
+        });
+      };
 
-          const [content, bottomContent] =
-            typeof nextView === 'string' ? [nextView] : nextView;
-          screen.render(content, bottomContent);
-
-          effectScheduler.run();
-        } catch (error: unknown) {
-          reject(error);
-        }
-      });
+      // Proper Readable streams (like process.stdin) may have OS-level buffered
+      // data that arrives in the poll phase when readline resumes the stream.
+      // Deferring the first render by one setImmediate tick (check phase, after
+      // poll) lets that stale data flow through readline harmlessly—no keypress
+      // handlers are registered yet and the output is muted, so the stale
+      // keystrokes are silently discarded.
+      // Old-style streams (like MuteStream) have no such buffering, so the
+      // render cycle starts immediately.
+      //
+      // @see https://github.com/SBoudrias/Inquirer.js/issues/1303
+      if ('readableFlowing' in input) {
+        nativeSetImmediate(startCycle);
+      } else {
+        startCycle();
+      }
 
       return Object.assign(
         promise
