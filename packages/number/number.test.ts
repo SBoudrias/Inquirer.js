@@ -21,7 +21,7 @@ describe('number prompt', () => {
   });
 
   it('handle non numeric input', async () => {
-    const { answer, events, getScreen } = await render(number, {
+    const { answer, events, getScreen, nextRender } = await render(number, {
       message: 'What is your age',
     });
 
@@ -31,7 +31,7 @@ describe('number prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? What is your age Twenty"`);
 
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? What is your age Twenty
       > You must provide a valid numeric value"
@@ -52,7 +52,7 @@ describe('number prompt', () => {
   });
 
   it('supports min/max options', async () => {
-    const { answer, events, getScreen } = await render(number, {
+    const { answer, events, getScreen, nextRender } = await render(number, {
       message: 'What is your age',
       min: 16,
       max: 120,
@@ -62,7 +62,7 @@ describe('number prompt', () => {
 
     events.type('14');
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? What is your age 14
       > Value must be between 16 and 120"
@@ -72,7 +72,7 @@ describe('number prompt', () => {
     events.keypress('backspace');
     events.type('140');
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? What is your age 140
       > Value must be between 16 and 120"
@@ -88,7 +88,7 @@ describe('number prompt', () => {
   });
 
   it('supports step option', async () => {
-    const { answer, events, getScreen } = await render(number, {
+    const { answer, events, getScreen, nextRender } = await render(number, {
       message: 'Enter an increment of 5',
       step: 5,
     });
@@ -97,7 +97,7 @@ describe('number prompt', () => {
 
     events.type('13');
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter an increment of 5 13
       > Value must be a multiple of 5"
@@ -112,7 +112,7 @@ describe('number prompt', () => {
   });
 
   it('supports step option from min', async () => {
-    const { answer, events, getScreen } = await render(number, {
+    const { answer, events, getScreen, nextRender } = await render(number, {
       message: 'Enter an increment of 5',
       step: 5,
       min: 3,
@@ -122,7 +122,7 @@ describe('number prompt', () => {
 
     events.type('12');
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter an increment of 5 12
       > Value must be a multiple of 5 starting from 3"
@@ -154,7 +154,7 @@ describe('number prompt', () => {
   });
 
   it('handle synchronous validation', async () => {
-    const { answer, events, getScreen } = await render(number, {
+    const { answer, events, getScreen, nextRender } = await render(number, {
       message: 'Answer 2 ===',
       validate: (value?: number) => value === 2,
     });
@@ -165,7 +165,7 @@ describe('number prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 1"`);
 
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Answer 2 === 1
       > You must provide a valid numeric value"
@@ -180,7 +180,7 @@ describe('number prompt', () => {
   });
 
   it('handle asynchronous validation', async () => {
-    const { answer, events, getScreen } = await render(number, {
+    const { answer, events, getScreen, nextRender } = await render(number, {
       message: 'Answer 2 ===',
       validate: (value?: number) => {
         return new Promise<string | boolean>((resolve) => {
@@ -199,7 +199,7 @@ describe('number prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 1"`);
 
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Answer 2 === 1
       > Answer must be 2"
@@ -255,7 +255,7 @@ describe('number prompt', () => {
   });
 
   it('handle removing the default option with required prompt', async () => {
-    const { answer, events, getScreen } = await render(number, {
+    const { answer, events, getScreen, nextRender } = await render(number, {
       message: 'What is your age',
       default: 35,
       required: true,
@@ -265,7 +265,7 @@ describe('number prompt', () => {
 
     events.keypress('backspace');
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? What is your age
       > You must provide a valid numeric value"
@@ -318,7 +318,7 @@ describe('number prompt', () => {
   });
 
   it('is theme-able', async () => {
-    const { answer, events, getScreen } = await render(number, {
+    const { answer, events, getScreen, nextRender } = await render(number, {
       message: 'Answer must be: 2',
       validate: (value?: number) => value === 2,
       theme: {
@@ -337,7 +337,7 @@ describe('number prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"Q: Answer must be: 2 === 1"`);
 
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "Q: Answer must be: 2 === 1
       !! You must provide a valid numeric value !!"

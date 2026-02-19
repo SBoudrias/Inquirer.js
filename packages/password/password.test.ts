@@ -61,7 +61,7 @@ describe('password prompt', () => {
   });
 
   it('handle synchronous validation', async () => {
-    const { answer, events, getScreen } = await render(password, {
+    const { answer, events, getScreen, nextRender } = await render(password, {
       message: 'Enter your password',
       mask: true,
       validate: (value: string) => value.length >= 8,
@@ -73,7 +73,7 @@ describe('password prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? Enter your password *"`);
 
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter your password *
       > You must provide a valid value"

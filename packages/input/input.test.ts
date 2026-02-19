@@ -38,7 +38,7 @@ describe('input prompt', () => {
   });
 
   it('handle synchronous validation', async () => {
-    const { answer, events, getScreen } = await render(input, {
+    const { answer, events, getScreen, nextRender } = await render(input, {
       message: 'Answer 2 ===',
       validate: (value: string) => value === '2',
     });
@@ -49,8 +49,7 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 1"`);
 
     events.keypress('enter');
-    await Promise.resolve();
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Answer 2 === 1
       > You must provide a valid value"
@@ -65,7 +64,7 @@ describe('input prompt', () => {
   });
 
   it('can clear value when validation fail', async () => {
-    const { answer, events, getScreen } = await render(input, {
+    const { answer, events, getScreen, nextRender } = await render(input, {
       message: 'Answer 2 ===',
       validate: (value: string) => value === '2',
       theme: {
@@ -79,8 +78,7 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 1"`);
 
     events.keypress('enter');
-    await Promise.resolve();
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Answer 2 ===
       > You must provide a valid value"
@@ -94,7 +92,7 @@ describe('input prompt', () => {
   });
 
   it('handle asynchronous validation', async () => {
-    const { answer, events, getScreen } = await render(input, {
+    const { answer, events, getScreen, nextRender } = await render(input, {
       message: 'Answer 2 ===',
       validate: (value: string) => {
         return new Promise<string | boolean>((resolve) => {
@@ -113,8 +111,7 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 1"`);
 
     events.keypress('enter');
-    await Promise.resolve();
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Answer 2 === 1
       > Answer must be 2"
@@ -271,13 +268,13 @@ describe('input prompt', () => {
   });
 
   it('shows validation message if user did not provide any value', async () => {
-    const { answer, events, getScreen } = await render(input, {
+    const { answer, events, getScreen, nextRender } = await render(input, {
       message: `What's your favorite food?`,
       required: true,
     });
 
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? What's your favorite food?
       > You must provide a value"
@@ -312,7 +309,7 @@ describe('input prompt', () => {
   });
 
   it('is theme-able', async () => {
-    const { answer, events, getScreen } = await render(input, {
+    const { answer, events, getScreen, nextRender } = await render(input, {
       message: 'Answer must be: 2',
       validate: (value?: string) => value === '2',
       theme: {
@@ -331,8 +328,7 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"Q: Answer must be: 2 === 1"`);
 
     events.keypress('enter');
-    await Promise.resolve();
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "Q: Answer must be: 2 === 1
       !! You must provide a valid value !!"
@@ -347,15 +343,14 @@ describe('input prompt', () => {
   });
 
   it('supports pattern validation', async () => {
-    const { answer, events, getScreen } = await render(input, {
+    const { answer, events, getScreen, nextRender } = await render(input, {
       message: 'Enter a number',
       pattern: /^[0-9]*\.?[0-9]*$/,
     });
 
     events.type('123a');
     events.keypress('enter');
-    await Promise.resolve();
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Enter a number 123a
       > Invalid input"
@@ -368,7 +363,7 @@ describe('input prompt', () => {
   });
 
   it('supports pattern validation with custom error message', async () => {
-    const { answer, events, getScreen } = await render(input, {
+    const { answer, events, getScreen, nextRender } = await render(input, {
       message: 'Enter a number',
       pattern: /^[0-9]*\.?[0-9]*$/,
       patternError: 'Only numbers and a decimal point are allowed',
@@ -376,8 +371,7 @@ describe('input prompt', () => {
 
     events.type('123a');
     events.keypress('enter');
-    await Promise.resolve();
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
     "? Enter a number 123a
     > Only numbers and a decimal point are allowed"

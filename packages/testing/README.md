@@ -73,10 +73,41 @@ describe('input prompt', () => {
 
 - `answer` (`Promise`) - Resolves when an answer is provided and valid
 - `getScreen` (`({ raw?: boolean }) => string`) - Returns the current screen content. By default strips ANSI codes
+- `nextRender` (`() => Promise<void>`) - Wait for the next screen update. Use after triggering async actions (e.g. pressing enter with validation). Coalesces rapid back-to-back renders so a single `await nextRender()` captures the final settled state
 - `events` - Utilities to interact with the prompt:
   - `keypress(key: string | KeyObject)` - Trigger a keypress event
   - `type(text: string)` - Type text into the prompt
 - `getFullOutput` (`() => Promise<string>`) - Returns the full output interpreted through a virtual terminal, resolving ANSI escape sequences into the actual screen state
+
+### Async actions and `nextRender()`
+
+When a keypress triggers an asynchronous action (such as input validation), the screen won't update synchronously. Use `nextRender()` to wait for the prompt to settle before reading the screen:
+
+```ts
+import { render } from '@inquirer/testing';
+import input from '@inquirer/input';
+
+it('shows a validation error', async () => {
+  const { answer, events, getScreen, nextRender } = await render(input, {
+    message: 'Enter a number',
+    validate: (value) => /^\d+$/.test(value) || 'Must be a number',
+  });
+
+  events.type('abc');
+  events.keypress('enter');
+
+  await nextRender(); // wait for validation to complete and the error to render
+  expect(getScreen()).toContain('Must be a number');
+
+  events.keypress('backspace');
+  events.keypress('backspace');
+  events.keypress('backspace');
+  events.type('42');
+  events.keypress('enter');
+
+  await expect(answer).resolves.toEqual('42');
+});
+```
 
 ### Unit Testing Example
 

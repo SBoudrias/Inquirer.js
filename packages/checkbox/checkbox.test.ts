@@ -708,14 +708,14 @@ describe('checkbox prompt', () => {
   });
 
   it('shows validation message if user did not select any choice', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const { answer, events, getScreen, nextRender } = await render(checkbox, {
       message: 'Select a number',
       choices: numberedChoices,
       required: true,
     });
 
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
@@ -797,7 +797,7 @@ describe('checkbox prompt', () => {
   });
 
   it('uses custom validation', async () => {
-    const { answer, events, getScreen } = await render(checkbox, {
+    const { answer, events, getScreen, nextRender } = await render(checkbox, {
       message: 'Select a number',
       choices: numberedChoices,
       validate: (items: ReadonlyArray<unknown>) => {
@@ -809,7 +809,7 @@ describe('checkbox prompt', () => {
     });
 
     events.keypress('enter');
-    await Promise.resolve();
+    await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a number
       ❯◯ 1
