@@ -21,6 +21,7 @@ export async function render<Value, const Config>(
   };
   getScreen: ({ raw }?: { raw?: boolean }) => string;
   getFullOutput: ({ raw }?: { raw?: boolean }) => Promise<string>;
+  nextRender: () => Promise<void>;
 }> {
   const input = new MuteStream();
   input.unmute();
@@ -62,6 +63,27 @@ export async function render<Value, const Config>(
     },
   };
 
+  let rendersConsumed = output.writeCount;
+
+  function nextRender(): Promise<void> {
+    const waitForRender =
+      output.writeCount > rendersConsumed
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => output.once('render', resolve));
+
+    // After detecting a render, let the event loop settle so that multiple
+    // synchronous-ish renders (e.g. validation: loading → error) are coalesced.
+    return waitForRender.then(
+      () =>
+        new Promise<void>((resolve) => {
+          setImmediate(() => {
+            rendersConsumed = output.writeCount;
+            resolve();
+          });
+        }),
+    );
+  }
+
   return {
     answer,
     input,
@@ -75,5 +97,6 @@ export async function render<Value, const Config>(
       if (raw) return fullOutput;
       return interpretTerminalOutput(fullOutput);
     },
+    nextRender,
   };
 }
