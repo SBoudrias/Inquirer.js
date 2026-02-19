@@ -1,6 +1,5 @@
 import { describe, it, expect, expectTypeOf, vi, afterEach } from 'vitest';
 import { render } from '@inquirer/testing';
-import { ValidationError } from '@inquirer/core';
 import select, { Separator } from '../src/index.ts';
 
 const numberedChoices = [
@@ -573,7 +572,7 @@ describe('select prompt', () => {
     await expect(answer).resolves.toEqual(numberedChoices.length);
   });
 
-  it('skip disabled options by arrow keys', async () => {
+  it('allow cursor to land on disabled options by arrow keys', async () => {
     const { answer, events, getScreen } = await render(select, {
       message: 'Select a topping',
       choices: [
@@ -587,6 +586,16 @@ describe('select prompt', () => {
       "? Select a topping
       ❯ Ham
       - Pineapple (disabled)
+        Pepperoni
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('down');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping
+        Ham
+      ❯ Pineapple (disabled)
         Pepperoni
 
       ↑↓ navigate • ⏎ select"
@@ -705,19 +714,51 @@ describe('select prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a commit 2cc9e311"`);
   });
 
-  it('throws if all choices are disabled', async () => {
-    const { answer } = await render(select, {
-      message: 'Select a topping',
-      choices: [
-        { name: 'Ham', value: 'ham', disabled: true },
-        { name: 'Pineapple', value: 'pineapple', disabled: '*premium*' },
-      ],
-    });
-
-    await expect(answer).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[ValidationError: [select prompt] No selectable choices. All choices are disabled.]`,
+  it('shows error when trying to select a disabled option', async () => {
+    const abortController = new AbortController();
+    const { answer, events, getScreen } = await render(
+      select,
+      {
+        message: 'Select a topping',
+        choices: [
+          { name: 'Ham', value: 'ham', disabled: true },
+          { name: 'Pineapple', value: 'pineapple', disabled: '*premium*' },
+        ],
+      },
+      { signal: abortController.signal },
     );
-    await expect(answer).rejects.toBeInstanceOf(ValidationError);
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping
+      ❯ Ham (disabled)
+      - Pineapple *premium*
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping
+      ❯ Ham (disabled)
+      - Pineapple *premium*
+
+      > This option is disabled and cannot be selected.
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('down');
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping
+      - Ham (disabled)
+      ❯ Pineapple *premium*
+
+      > This option is disabled and cannot be selected.
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    abortController.abort();
+    await expect(answer).rejects.toBeInstanceOf(Error);
   });
 
   it('skip separator by arrow keys', async () => {

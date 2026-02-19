@@ -39,6 +39,7 @@ type CheckboxTheme = {
     description: (text: string) => string;
     keysHelpTip: (keys: [key: string, action: string][]) => string | undefined;
   };
+  i18n: { disabledError: string };
   keybindings: ReadonlyArray<Keybinding>;
 };
 
@@ -65,6 +66,7 @@ const checkboxTheme: CheckboxTheme = {
         .map(([key, action]) => `${styleText('bold', key)} ${styleText('dim', action)}`)
         .join(styleText('dim', ' • ')),
   },
+  i18n: { disabledError: 'This option is disabled and cannot be toggled.' },
   keybindings: [],
 };
 
@@ -114,6 +116,10 @@ type Item<Value> = NormalizedChoice<Value> | Separator;
 
 function isSelectable<Value>(item: Item<Value>): item is NormalizedChoice<Value> {
   return !Separator.isSeparator(item) && !item.disabled;
+}
+
+function isNavigable<Value>(item: Item<Value>): item is NormalizedChoice<Value> {
+  return !Separator.isSeparator(item);
 }
 
 function isChecked<Value>(item: Item<Value>): item is NormalizedChoice<Value> {
@@ -178,8 +184,8 @@ export default createPrompt(
     );
 
     const bounds = useMemo(() => {
-      const first = items.findIndex(isSelectable);
-      const last = items.findLastIndex(isSelectable);
+      const first = items.findIndex(isNavigable);
+      const last = items.findLastIndex(isNavigable);
 
       if (first === -1) {
         throw new ValidationError(
@@ -206,6 +212,9 @@ export default createPrompt(
           setError(isValid || 'You must select a valid value');
         }
       } else if (isUpKey(key, keybindings) || isDownKey(key, keybindings)) {
+        if (errorMsg) {
+          setError(undefined);
+        }
         if (
           loop ||
           (isUpKey(key, keybindings) && active !== bounds.first) ||
@@ -215,12 +224,19 @@ export default createPrompt(
           let next = active;
           do {
             next = (next + offset + items.length) % items.length;
-          } while (!isSelectable(items[next]!));
+          } while (!isNavigable(items[next]!));
           setActive(next);
         }
       } else if (isSpaceKey(key)) {
-        setError(undefined);
-        setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
+        const activeItem = items[active];
+        if (activeItem && !Separator.isSeparator(activeItem)) {
+          if (activeItem.disabled) {
+            setError(theme.i18n.disabledError);
+          } else {
+            setError(undefined);
+            setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
+          }
+        }
       } else if (key.name === shortcuts.all) {
         const selectAll = items.some((choice) => isSelectable(choice) && !choice.checked);
         setItems(items.map(check(selectAll)));

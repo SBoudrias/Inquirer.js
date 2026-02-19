@@ -31,6 +31,7 @@ type SelectTheme = {
     description: (text: string) => string;
     keysHelpTip: (keys: [key: string, action: string][]) => string | undefined;
   };
+  i18n: { disabledError: string };
   indexMode: 'hidden' | 'number';
   keybindings: ReadonlyArray<Keybinding>;
 };
@@ -38,13 +39,14 @@ type SelectTheme = {
 const selectTheme: SelectTheme = {
   icon: { cursor: figures.pointer },
   style: {
-    disabled: (text: string) => styleText('dim', `- ${text}`),
+    disabled: (text: string) => styleText('dim', text),
     description: (text: string) => styleText('cyan', text),
     keysHelpTip: (keys: [string, string][]) =>
       keys
         .map(([key, action]) => `${styleText('bold', key)} ${styleText('dim', action)}`)
         .join(styleText('dim', ' • ')),
   },
+  i18n: { disabledError: 'This option is disabled and cannot be selected.' },
   indexMode: 'hidden',
   keybindings: [],
 };
@@ -79,6 +81,12 @@ function isSelectable<Value>(
   item: NormalizedChoice<Value> | Separator,
 ): item is NormalizedChoice<Value> {
   return !Separator.isSeparator(item) && !item.disabled;
+}
+
+function isNavigable<Value>(
+  item: NormalizedChoice<Value> | Separator,
+): item is NormalizedChoice<Value> {
+  return !Separator.isSeparator(item);
 }
 
 function normalizeChoices<Value>(
@@ -130,8 +138,8 @@ export default createPrompt(
     const items = useMemo(() => normalizeChoices(config.choices), [config.choices]);
 
     const bounds = useMemo(() => {
-      const first = items.findIndex(isSelectable);
-      const last = items.findLastIndex(isSelectable);
+      const first = items.findIndex(isNavigable);
+      const last = items.findLastIndex(isNavigable);
 
       if (first === -1) {
         throw new ValidationError(
@@ -156,12 +164,21 @@ export default createPrompt(
     // Safe to assume the cursor position always point to a Choice.
     const selectedChoice = items[active] as NormalizedChoice<Value>;
 
+    const [errorMsg, setError] = useState<string>();
+
     useKeypress((key, rl) => {
       clearTimeout(searchTimeoutRef.current);
+      if (errorMsg) {
+        setError(undefined);
+      }
 
       if (isEnterKey(key)) {
-        setStatus('done');
-        done(selectedChoice.value);
+        if (selectedChoice.disabled) {
+          setError(theme.i18n.disabledError);
+        } else {
+          setStatus('done');
+          done(selectedChoice.value);
+        }
       } else if (isUpKey(key, keybindings) || isDownKey(key, keybindings)) {
         rl.clearLine(0);
         if (
@@ -173,7 +190,7 @@ export default createPrompt(
           let next = active;
           do {
             next = (next + offset + items.length) % items.length;
-          } while (!isSelectable(items[next]!));
+          } while (!isNavigable(items[next]!));
           setActive(next);
         }
       } else if (isNumberKey(key) && !Number.isNaN(Number(rl.line))) {
@@ -240,14 +257,17 @@ export default createPrompt(
           return ` ${item.separator}`;
         }
 
+        const cursor = isActive ? theme.icon.cursor : ' ';
         const indexLabel =
           theme.indexMode === 'number' ? `${index + 1 - separatorCount}. ` : '';
-        const cursor = isActive ? theme.icon.cursor : ' ';
 
         if (item.disabled) {
           const disabledLabel =
             typeof item.disabled === 'string' ? item.disabled : '(disabled)';
-          return theme.style.disabled(`${indexLabel}${item.name} ${disabledLabel}`);
+          const disabledCursor = isActive ? theme.icon.cursor : '-';
+          return theme.style.disabled(
+            `${disabledCursor} ${indexLabel}${item.name} ${disabledLabel}`,
+          );
         }
 
         const color = isActive ? theme.style.highlight : (x: string) => x;
@@ -269,6 +289,7 @@ export default createPrompt(
       page,
       ' ',
       description ? theme.style.description(description) : '',
+      errorMsg ? theme.style.error(errorMsg) : '',
       helpLine,
     ]
       .filter(Boolean)
