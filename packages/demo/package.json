@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/demo",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Inquirer demos",
   "keywords": [
     "answer",
@@ -79,9 +79,9 @@
     "tsc": "tsc && chmod +x ./dist/index.js"
   },
   "dependencies": {
-    "@inquirer/core": "^11.1.4",
+    "@inquirer/core": "^11.1.5",
     "@inquirer/figures": "^2.0.3",
-    "@inquirer/prompts": "^8.2.1"
+    "@inquirer/prompts": "^8.3.0"
   },
   "devDependencies": {
     "@inquirer/testing": "workspace:*",
