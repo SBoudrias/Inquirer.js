@@ -638,6 +638,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@inquirer/i18n@workspace:packages/i18n":
+  version: 0.0.0-use.local
+  resolution: "@inquirer/i18n@workspace:packages/i18n"
+  dependencies:
+    "@inquirer/core": "npm:^11.1.4"
+    "@inquirer/prompts": "npm:^8.2.1"
+    "@inquirer/testing": "npm:^3.2.0"
+    "@repo/tsconfig": "workspace:*"
+    typescript: "npm:^5.9.3"
+  peerDependencies:
+    "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@inquirer/input@npm:^4.3.1":
   version: 4.3.1
   resolution: "@inquirer/input@npm:4.3.1"

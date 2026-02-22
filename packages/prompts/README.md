@@ -170,6 +170,18 @@ import { rawlist } from '@inquirer/prompts';
 
 [See documentation](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/rawlist) for usage example and options documentation.
 
+# Internationalization (i18n)
+
+Need prompts in a language other than English? The [`@inquirer/i18n`](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/i18n) package is a drop-in replacement for `@inquirer/prompts` with built-in support for multiple languages.
+
+```js
+// Drop-in replacement — same API, translated UI labels
+import { input, select, confirm } from '@inquirer/i18n/fr'; // French
+import { input, select, confirm } from '@inquirer/i18n/zh'; // Chinese (Simplified)
+```
+
+[See the full documentation](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/i18n) for available languages and how to create a custom locale.
+
 # Create your own prompts
 
 The [API documentation is over here](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/core), and our [testing utilities here](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/testing).
