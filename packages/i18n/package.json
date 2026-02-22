@@ -1,0 +1,131 @@
+{
+  "name": "@inquirer/i18n",
+  "version": "0.0.0",
+  "description": "Internationalized Inquirer prompts - drop-in package with i18n support",
+  "keywords": [
+    "answer",
+    "answers",
+    "ask",
+    "base",
+    "cli",
+    "command",
+    "command-line",
+    "confirm",
+    "enquirer",
+    "generate",
+    "generator",
+    "hyper",
+    "i18n",
+    "input",
+    "inquire",
+    "inquirer",
+    "interface",
+    "internationalization",
+    "iterm",
+    "javascript",
+    "l10n",
+    "localization",
+    "menu",
+    "node",
+    "nodejs",
+    "prompt",
+    "promptly",
+    "prompts",
+    "question",
+    "readline",
+    "scaffold",
+    "scaffolder",
+    "scaffolding",
+    "stdin",
+    "stdout",
+    "terminal",
+    "tty",
+    "types",
+    "typescript",
+    "ui",
+    "yeoman",
+    "yo",
+    "zsh"
+  ],
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/i18n/README.md",
+  "license": "MIT",
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./src/index.ts",
+    "./create": "./src/create.ts",
+    "./en": "./src/locales/en.ts",
+    "./fr": "./src/locales/fr.ts",
+    "./zh": "./src/locales/zh.ts",
+    "./pt": "./src/locales/pt.ts",
+    "./es": "./src/locales/es.ts"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      "./package.json": "./package.json",
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./create": {
+        "types": "./dist/create.d.ts",
+        "default": "./dist/create.js"
+      },
+      "./en": {
+        "types": "./dist/locales/en.d.ts",
+        "default": "./dist/locales/en.js"
+      },
+      "./fr": {
+        "types": "./dist/locales/fr.d.ts",
+        "default": "./dist/locales/fr.js"
+      },
+      "./zh": {
+        "types": "./dist/locales/zh.d.ts",
+        "default": "./dist/locales/zh.js"
+      },
+      "./pt": {
+        "types": "./dist/locales/pt.d.ts",
+        "default": "./dist/locales/pt.js"
+      },
+      "./es": {
+        "types": "./dist/locales/es.d.ts",
+        "default": "./dist/locales/es.js"
+      }
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "scripts": {
+    "tsc": "tsc"
+  },
+  "dependencies": {
+    "@inquirer/core": "^11.1.4",
+    "@inquirer/prompts": "^8.2.1"
+  },
+  "devDependencies": {
+    "@inquirer/testing": "^3.2.0",
+    "@repo/tsconfig": "workspace:*",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@types/node": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "@types/node": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
+  }
+}

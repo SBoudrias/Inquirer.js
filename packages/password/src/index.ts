@@ -11,16 +11,28 @@ import {
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
 
+type PasswordTheme = {
+  style: {
+    maskedText: string;
+  };
+};
+
+const passwordTheme: PasswordTheme = {
+  style: {
+    maskedText: '[input is masked]',
+  },
+};
+
 type PasswordConfig = {
   message: string;
   mask?: boolean | string;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
-  theme?: PartialDeep<Theme>;
+  theme?: PartialDeep<Theme<PasswordTheme>>;
 };
 
 export default createPrompt<string, PasswordConfig>((config, done) => {
   const { validate = () => true } = config;
-  const theme = makeTheme(config.theme);
+  const theme = makeTheme<PasswordTheme>(passwordTheme, config.theme);
 
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setError] = useState<string>();
@@ -63,7 +75,7 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     const maskChar = typeof config.mask === 'string' ? config.mask : '*';
     formattedValue = maskChar.repeat(value.length);
   } else if (status !== 'done') {
-    helpTip = `${theme.style.help('[input is masked]')}${cursorHide}`;
+    helpTip = `${theme.style.help(theme.style.maskedText)}${cursorHide}`;
   }
 
   if (status === 'done') {

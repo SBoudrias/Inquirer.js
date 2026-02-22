@@ -14,10 +14,16 @@ import type { PartialDeep, InquirerReadline } from '@inquirer/type';
 
 type EditorTheme = {
   validationFailureMode: 'keep' | 'clear';
+  style: {
+    waitingMessage: (enterKey: string) => string;
+  };
 };
 
 const editorTheme: EditorTheme = {
   validationFailureMode: 'keep',
+  style: {
+    waitingMessage: (enterKey) => `Press ${enterKey} to launch your preferred editor.`,
+  },
 };
 
 type EditorConfig = {
@@ -97,11 +103,9 @@ export default createPrompt<string, EditorConfig>((config, done) => {
 
   const message = theme.style.message(config.message, status);
   let helpTip = '';
-  if (status === 'loading') {
-    helpTip = theme.style.help('Received');
-  } else if (status === 'idle') {
+  if (status === 'idle') {
     const enterKey = theme.style.key('enter');
-    helpTip = theme.style.help(`Press ${enterKey} to launch your preferred editor.`);
+    helpTip = theme.style.help(theme.style.waitingMessage(enterKey));
   }
 
   let error = '';
