@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { lessThan, tryParse } from 'std-semver';
+import { lessThan, tryParseRange } from 'std-semver';
 import { globby } from 'globby';
 import { parse as parseJsonc } from 'jsonc-parser';
 import type { PackageJson, TsConfigJson } from 'type-fest';
@@ -10,10 +10,7 @@ import { fixPeerDeps } from './hoist-peer-dependencies.ts';
 type ExportDef = Exclude<PackageJson['exports'], undefined | null>;
 
 function coerce(version: string | undefined) {
-  if (!version) return undefined;
-  const match = version.match(/(\d+\.\d+\.\d+)/);
-  if (!match) return undefined;
-  return tryParse(match[1]!);
+  return tryParseRange(version ?? '')?.[0]?.[0];
 }
 
 function readFile(filepath: string) {
