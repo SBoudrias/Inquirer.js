@@ -1,0 +1,10 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "tsc": {
+      "dependsOn": [],
+      "outputs": ["dist/**"],
+      "inputs": ["../../package.json", "package.json", "src/*", "!**/*.test.ts"]
+    }
+  }
+}
