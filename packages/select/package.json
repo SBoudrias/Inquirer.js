@@ -79,7 +79,6 @@
     "@inquirer/type": "^4.0.3"
   },
   "devDependencies": {
-    "@inquirer/testing": "^3.3.0",
     "@repo/tsconfig": "workspace:*",
     "typescript": "^5.9.3"
   },
