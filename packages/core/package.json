@@ -82,7 +82,6 @@
     "signal-exit": "^4.1.0"
   },
   "devDependencies": {
-    "@inquirer/testing": "^3.3.0",
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
     "@types/node": "^25.0.2",
