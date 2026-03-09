@@ -113,7 +113,6 @@
     "@inquirer/prompts": "^8.3.0"
   },
   "devDependencies": {
-    "@inquirer/testing": "^3.3.0",
     "@repo/tsconfig": "workspace:*",
     "typescript": "^5.9.3"
   },
