@@ -82,13 +82,13 @@ export default defineConfig(
       'n/no-extraneous-import': [
         'error',
         {
-          allowModules: ['vitest'],
+          allowModules: ['vitest', '@inquirer/testing'],
         },
       ],
       'n/no-extraneous-require': [
         'error',
         {
-          allowModules: ['vitest'],
+          allowModules: ['vitest', '@inquirer/testing'],
         },
       ],
       'n/no-unsupported-features/node-builtins': [
