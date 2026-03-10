@@ -11,11 +11,10 @@
   "dependencies": {
     "globby": "^16.0.0",
     "jsonc-parser": "^3.3.1",
-    "semver": "^7.7.3"
+    "std-semver": "^1.0.8"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "@types/semver": "^7.7.1",
     "type-fest": "^5.2.0"
   },
   "engines": {

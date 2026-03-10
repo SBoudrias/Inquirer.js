@@ -2357,13 +2357,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^7.7.1":
-  version: 7.7.1
-  resolution: "@types/semver@npm:7.7.1"
-  checksum: 10/8f09e7e6ca3ded67d78ba7a8f7535c8d9cf8ced83c52e7f3ac3c281fe8c689c3fe475d199d94390dc04fc681d51f2358b430bb7b2e21c62de24f2bee2c719068
-  languageName: node
-  linkType: hard
-
 "@types/stack-utils@npm:^2.0.3":
   version: 2.0.3
   resolution: "@types/stack-utils@npm:2.0.3"
@@ -6188,10 +6181,9 @@ __metadata:
   resolution: "setup-packages@workspace:internals/setup-packages"
   dependencies:
     "@repo/tsconfig": "workspace:*"
-    "@types/semver": "npm:^7.7.1"
     globby: "npm:^16.0.0"
     jsonc-parser: "npm:^3.3.1"
-    semver: "npm:^7.7.3"
+    std-semver: "npm:^1.0.8"
     type-fest: "npm:^5.2.0"
   bin:
     setup-packages: ./src/bin.ts
@@ -6445,6 +6437,13 @@ __metadata:
   version: 3.10.0
   resolution: "std-env@npm:3.10.0"
   checksum: 10/19c9cda4f370b1ffae2b8b08c72167d8c3e5cfa972aaf5c6873f85d0ed2faa729407f5abb194dc33380708c00315002febb6f1e1b484736bfcf9361ad366013a
+  languageName: node
+  linkType: hard
+
+"std-semver@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "std-semver@npm:1.0.8"
+  checksum: 10/b109198278710ac854bd035a84ec3e23e1f985ff07cbefbcfdcaf5b3bf99a7110dcca3ec5f808ebe99bed1d4056880cd929bf3eb199c6850f7a6f136d78825d7
   languageName: node
   linkType: hard
 

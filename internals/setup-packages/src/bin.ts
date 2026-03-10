@@ -1,13 +1,17 @@
 #!/usr/bin/env node
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import semver from 'semver';
+import { lessThan, tryParseRange } from 'std-semver';
 import { globby } from 'globby';
 import { parse as parseJsonc } from 'jsonc-parser';
 import type { PackageJson, TsConfigJson } from 'type-fest';
 import { fixPeerDeps } from './hoist-peer-dependencies.ts';
 
 type ExportDef = Exclude<PackageJson['exports'], undefined | null>;
+
+function coerce(version: string | undefined) {
+  return tryParseRange(version ?? '')?.[0]?.[0];
+}
 
 function readFile(filepath: string) {
   return fs.readFile(filepath, 'utf8');
@@ -40,7 +44,7 @@ async function writeJSONFile(filepath: string, content: unknown) {
 }
 
 const rootPkg = await readJSONFile<PackageJson>(path.join(process.cwd(), 'package.json'));
-const rootNodeVersion = semver.coerce(rootPkg.engines?.['node']);
+const rootNodeVersion = coerce(rootPkg.engines?.['node']);
 if (!Array.isArray(rootPkg.workspaces) || rootNodeVersion == null) {
   throw new Error(
     '[Inquirer] The scaffolding tool requires `workspaces` and `engines.node` in the root package.json',
@@ -73,8 +77,8 @@ for (const [pkgPath, pkg] of packages) {
   pkg.sideEffects ??= false;
 
   // Set min engines version.
-  const pkgNodeVersion = semver.coerce(pkg.engines['node']);
-  if (pkgNodeVersion == null || semver.lt(pkgNodeVersion, rootNodeVersion)) {
+  const pkgNodeVersion = coerce(pkg.engines['node']);
+  if (pkgNodeVersion == null || lessThan(pkgNodeVersion, rootNodeVersion)) {
     pkg.engines['node'] = rootPkg.engines?.['node'];
   }
 
