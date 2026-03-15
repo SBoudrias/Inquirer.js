@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/number",
-  "version": "4.0.8",
+  "version": "4.0.9",
   "description": "Inquirer number prompt",
   "keywords": [
     "answer",
@@ -73,7 +73,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/core": "^11.1.5",
+    "@inquirer/core": "^11.1.6",
     "@inquirer/type": "^4.0.3"
   },
   "devDependencies": {
