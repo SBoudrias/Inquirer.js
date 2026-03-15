@@ -2,7 +2,7 @@
 // Note: Jest's requireActual returns `any` by design, unlike Vitest's typed importOriginal
 
 import type { Prompt } from '@inquirer/type';
-import { Screen } from './screen.js';
+import { Screen } from './screen.ts';
 
 // Global screen instance - exported for tests
 const screenInstance: Screen = new Screen();

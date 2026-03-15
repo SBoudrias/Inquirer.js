@@ -3,8 +3,8 @@ import MuteStream from 'mute-stream';
 import type { Prompt, Context } from '@inquirer/type';
 
 type RenderOptions = Omit<Context, 'input' | 'output'>;
-import { BufferedStream } from './buffered-stream.js';
-import { interpretTerminalOutput } from './terminal.js';
+import { BufferedStream } from './buffered-stream.ts';
+import { interpretTerminalOutput } from './terminal.ts';
 
 export async function render<Value, const Config>(
   prompt: Prompt<Value, Config>,

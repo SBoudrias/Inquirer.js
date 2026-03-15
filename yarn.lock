@@ -580,6 +580,7 @@ __metadata:
     "@inquirer/core": "workspace:*"
     "@inquirer/input": "workspace:*"
     "@inquirer/prompts": "workspace:*"
+    "@inquirer/testing": "workspace:*"
     inquirer: "workspace:*"
   languageName: unknown
   linkType: soft
