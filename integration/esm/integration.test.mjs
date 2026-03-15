@@ -8,6 +8,7 @@ import { input } from '@inquirer/prompts';
 import defaultInput from '@inquirer/input';
 import { createPrompt } from '@inquirer/core';
 import inquirer, { createPromptModule } from 'inquirer';
+import { render } from '@inquirer/testing';
 import fixturePrompt from './fixturePrompt.mjs';
 
 const exec = promisify(child_process.exec);
@@ -23,6 +24,10 @@ describe('ESM Integration', () => {
 
   it('@inquirer/core should export createPrompt', () => {
     assert.ok(typeof createPrompt === 'function');
+  });
+
+  it('@inquirer/testing render should be exported', () => {
+    assert.ok(typeof render === 'function');
   });
 
   it('works when prompt throws an error', async () => {

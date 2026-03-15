@@ -1,7 +1,7 @@
 import { stripVTControlCharacters } from 'node:util';
 import MuteStream from 'mute-stream';
-import { BufferedStream } from './buffered-stream.js';
-import { interpretTerminalOutput } from './terminal.js';
+import { BufferedStream } from './buffered-stream.ts';
+import { interpretTerminalOutput } from './terminal.ts';
 
 export type KeypressEvent = {
   name?: string;

@@ -11,6 +11,7 @@
     "@inquirer/core": "workspace:*",
     "@inquirer/input": "workspace:*",
     "@inquirer/prompts": "workspace:*",
+    "@inquirer/testing": "workspace:*",
     "inquirer": "workspace:*"
   },
   "engines": {
