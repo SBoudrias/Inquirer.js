@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/search",
-  "version": "4.1.5",
+  "version": "4.1.6",
   "description": "Inquirer search prompt",
   "keywords": [
     "answer",
@@ -73,9 +73,9 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/core": "^11.1.6",
-    "@inquirer/figures": "^2.0.3",
-    "@inquirer/type": "^4.0.3"
+    "@inquirer/core": "^11.1.7",
+    "@inquirer/figures": "^2.0.4",
+    "@inquirer/type": "^4.0.4"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",

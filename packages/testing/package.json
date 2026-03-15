@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/testing",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "description": "Inquirer testing utilities",
   "keywords": [
     "answer",
@@ -91,7 +91,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/type": "^4.0.3",
+    "@inquirer/type": "^4.0.4",
     "@xterm/headless": "^6.0.0",
     "mute-stream": "^3.0.0"
   },

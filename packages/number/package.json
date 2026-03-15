@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/number",
-  "version": "4.0.9",
+  "version": "4.0.10",
   "description": "Inquirer number prompt",
   "keywords": [
     "answer",
@@ -73,8 +73,8 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/core": "^11.1.6",
-    "@inquirer/type": "^4.0.3"
+    "@inquirer/core": "^11.1.7",
+    "@inquirer/type": "^4.0.4"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
