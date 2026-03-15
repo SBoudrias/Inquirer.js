@@ -5,7 +5,12 @@ export async function interpretTerminalOutput(
   cols: number = 10_000,
   rows: number = 4000,
 ): Promise<string> {
-  const term = new xterm.Terminal({ cols, rows, allowProposedApi: true, convertEol: true });
+  const term = new xterm.Terminal({
+    cols,
+    rows,
+    allowProposedApi: true,
+    convertEol: true,
+  });
   await new Promise<void>((resolve) => term.write(rawOutput, resolve));
 
   const lines: string[] = [];
