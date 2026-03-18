@@ -23,7 +23,7 @@ type EditorTheme = {
 const editorTheme: EditorTheme = {
   validationFailureMode: 'keep',
   style: {
-    loadingMessage: () => 'Loading...',
+    loadingMessage: () => '',
     waitingMessage: (enterKey) => `Press ${enterKey} to launch your preferred editor.`,
   },
 };
