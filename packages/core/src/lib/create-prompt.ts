@@ -8,6 +8,7 @@ import { PromisePolyfill } from './promise-polyfill.ts';
 import { type InquirerReadline } from '@inquirer/type';
 import { withHooks, effectScheduler } from './hook-engine.ts';
 import { AbortPromptError, CancelPromptError, ExitPromptError } from './errors.ts';
+import path from 'node:path';
 
 // Capture the real setImmediate at module load time so it works even when test
 // frameworks mock timers with vi.useFakeTimers() or similar.
@@ -121,7 +122,11 @@ export function createPrompt<Value, Config>(
             // Typescript won't allow this, but not all users rely on typescript.
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (nextView === undefined) {
-              const callerFilename = callSites[1]?.getFileName();
+              let callerFilename = callSites[1]?.getFileName();
+              if (callerFilename && !callerFilename.startsWith('file://')) {
+                callerFilename = path.resolve(callerFilename);
+              }
+
               throw new Error(
                 `Prompt functions must return a string.\n    at ${callerFilename}`,
               );

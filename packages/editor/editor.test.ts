@@ -274,4 +274,46 @@ describe('editor prompt', () => {
     await expect(answer).resolves.toEqual('new value');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
+
+  it('displays custom waitingMessage', async () => {
+    const { getScreen } = await render(editor, {
+      message: 'Add a description',
+      theme: {
+        style: {
+          waitingMessage: () => 'Waiting...',
+        },
+      },
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Add a description Waiting..."
+    `);
+  });
+
+  it('displays custom loadingMessage', async () => {
+    const { events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      theme: {
+        style: {
+          loadingMessage: () => 'Loading...',
+        },
+      },
+      validate: async () => {
+        // simulate long-running validation so there's time for loadingMessage to display
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return true;
+      },
+    });
+
+    expect(editAsync).not.toHaveBeenCalled();
+    events.keypress('enter');
+
+    // Test default error message
+    const editPromise = editorAction(undefined, '1');
+    events.type('foo'); // Ignored events while validation runs
+    await editPromise;
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Add a description Loading..."
+    `);
+  });
 });

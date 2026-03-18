@@ -24,6 +24,7 @@ const ptLocale: Locale = {
     helpSelect: 'selecionar',
   },
   editor: {
+    loadingMessage: () => '',
     waitingMessage: (enterKey) =>
       `Pressione ${enterKey} para abrir seu editor preferido.`,
   },
