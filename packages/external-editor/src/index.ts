@@ -61,9 +61,21 @@ function sanitizeAffix(affix?: string): string {
 
 function splitStringBySpace(str: string): string[] {
   const pieces: string[] = [];
+  const quoteRegex = /(?<!\\)(?:\\\\)*"(?:\s|$)/;
+
   let currentString = '';
   for (let strIndex = 0; strIndex < str.length; strIndex++) {
     const currentLetter = str.charAt(strIndex);
+
+    if (currentString.length === 0 && currentLetter === '"') {
+      const nextQuote = quoteRegex.exec(str.substring(strIndex + 1));
+      if (nextQuote) {
+        pieces.push(str.substring(strIndex, nextQuote.index + 2));
+        strIndex = nextQuote.index + 2;
+        continue;
+      }
+    }
+
     if (
       strIndex > 0 &&
       currentLetter === ' ' &&
@@ -79,7 +91,8 @@ function splitStringBySpace(str: string): string[] {
   if (currentString.length > 0) {
     pieces.push(currentString);
   }
-  return pieces;
+
+  return pieces.map(piece => piece.replace('\\ ', ''));
 }
 
 export class ExternalEditor {
@@ -144,10 +157,8 @@ export class ExternalEditor {
           ? 'notepad'
           : 'vim';
 
-    const editorOpts = splitStringBySpace(editor).map((piece: string) =>
-      piece.replace('\\ ', ' '),
-    );
-    const bin = editorOpts.shift()!;
+    const editorOpts = splitStringBySpace(editor);
+    const bin = editorOpts.shift()!.replace(/^"(.*)"$/, '$1');
 
     this.editor = { args: editorOpts, bin };
   }

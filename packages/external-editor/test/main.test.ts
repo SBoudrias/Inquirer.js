@@ -84,6 +84,43 @@ describe('main', () => {
   });
 });
 
+describe('determine editor', () => {
+  let previousVisual: string | undefined;
+  let editor: ExternalEditor;
+
+  beforeAll(() => {
+    previousVisual = process.env['VISUAL'];
+  });
+
+  beforeEach(() => {
+    process.env['VISUAL'] = 'truncate --size 10';
+    editor = new ExternalEditor(testingInput);
+  });
+
+  afterEach(() => {
+    editor.cleanup();
+    process.env['VISUAL'] = previousVisual;
+  });
+
+  it('sets editor correctly with path containing spaces and no quotes', () => {
+    process.env['VISUAL'] = 'C:\\Program Files (x86)\\Notepad++\\notepad++.exe';
+
+    editor['determineEditor']();
+
+    // this is expected to split like this without quotes and will throw an error when editor attempts to open
+    expect(editor.editor.bin).toEqual('C:\\Program');
+    expect(editor.editor.args).toEqual(['Files', '(x86)\\Notepad++\\notepad++.exe']);
+  });
+
+  it('sets editor correctly with path containing spaces and with quotes', () => {
+    process.env['VISUAL'] = '"C:\\Program Files (x86)\\Notepad++\\notepad++.exe"';
+
+    editor['determineEditor']();
+    expect(editor.editor.bin).toEqual('C:\\Program Files (x86)\\Notepad++\\notepad++.exe');
+    expect(editor.editor.args).toEqual([]);
+  });
+});
+
 describe('invalid exit code', () => {
   let editor: ExternalEditor;
 
