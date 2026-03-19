@@ -651,7 +651,7 @@ describe('Error handling', () => {
     });
     const { answer } = await render(prompt, { message: 'Question' });
 
-    await expect(answer).rejects.toThrowError('Error in render function');
+    await expect(answer).rejects.toThrow('Error in render function');
   });
 
   it('surface errors in useEffect', async () => {
@@ -665,7 +665,7 @@ describe('Error handling', () => {
 
     const { answer } = await render(prompt, { message: 'Question' });
 
-    await expect(answer).rejects.toThrowError('Error in useEffect');
+    await expect(answer).rejects.toThrow('Error in useEffect');
   });
 
   it('surface errors in useEffect cleanup functions', async () => {
@@ -683,7 +683,7 @@ describe('Error handling', () => {
 
     const { answer } = await render(prompt, { message: 'Question' });
 
-    await expect(answer).rejects.toThrowError('Error in useEffect cleanup');
+    await expect(answer).rejects.toThrow('Error in useEffect cleanup');
   });
 
   it('prevent returning promises from useEffect hook', async () => {

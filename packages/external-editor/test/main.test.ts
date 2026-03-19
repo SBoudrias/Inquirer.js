@@ -116,7 +116,9 @@ describe('determine editor', () => {
     process.env['VISUAL'] = '"C:\\Program Files (x86)\\Notepad++\\notepad++.exe"';
 
     editor['determineEditor']();
-    expect(editor.editor.bin).toEqual('C:\\Program Files (x86)\\Notepad++\\notepad++.exe');
+    expect(editor.editor.bin).toEqual(
+      'C:\\Program Files (x86)\\Notepad++\\notepad++.exe',
+    );
     expect(editor.editor.args).toEqual([]);
   });
 });

@@ -92,7 +92,7 @@ function splitStringBySpace(str: string): string[] {
     pieces.push(currentString);
   }
 
-  return pieces.map(piece => piece.replace('\\ ', ''));
+  return pieces.map((piece) => piece.replace('\\ ', ''));
 }
 
 export class ExternalEditor {
