@@ -102,7 +102,29 @@ describe('determine editor', () => {
     process.env['VISUAL'] = previousVisual;
   });
 
-  it('sets editor correctly with path containing spaces and no quotes', () => {
+  it('no VISUAL or EDITOR is present', () => {
+    delete process.env['VISUAL'];
+    delete process.env['EDITOR'];
+
+    editor['determineEditor']();
+    if (process.platform.startsWith('win')) {
+      expect(editor.editor.bin).toEqual('notepad');
+    } else {
+      expect(editor.editor.bin).toEqual('vim');
+    }
+
+    expect(editor.editor.args).toEqual([]);
+  });
+
+  it('with arguments', () => {
+    process.env['VISUAL'] = 'notepad --test';
+
+    editor['determineEditor']();
+    expect(editor.editor.bin).toEqual('notepad');
+    expect(editor.editor.args).toEqual(['--test']);
+  });
+
+  it('path containing spaces and no quotes', () => {
     process.env['VISUAL'] = 'C:\\Program Files (x86)\\Notepad++\\notepad++.exe';
 
     editor['determineEditor']();
@@ -112,7 +134,7 @@ describe('determine editor', () => {
     expect(editor.editor.args).toEqual(['Files', '(x86)\\Notepad++\\notepad++.exe']);
   });
 
-  it('sets editor correctly with path containing spaces and with quotes', () => {
+  it('path containing spaces and with quotes', () => {
     process.env['VISUAL'] = '"C:\\Program Files (x86)\\Notepad++\\notepad++.exe"';
 
     editor['determineEditor']();
