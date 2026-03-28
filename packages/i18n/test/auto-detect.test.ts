@@ -143,6 +143,7 @@ describe('auto locale detection', () => {
         },
         search: { helpNavigate: 'navigieren', helpSelect: 'wählen' },
         editor: {
+          loadingMessage: () => '',
           waitingMessage: (key) => `Drücken Sie ${key} um Ihren Editor zu öffnen.`,
         },
         password: { maskedText: '[Eingabe verborgen]' },

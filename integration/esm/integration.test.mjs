@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import child_process from 'node:child_process';
 import { writeFileSync, unlinkSync } from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
 import { input } from '@inquirer/prompts';
 import defaultInput from '@inquirer/input';
@@ -32,7 +33,7 @@ describe('ESM Integration', () => {
 
   it('works when prompt throws an error', async () => {
     await assert.rejects(() => fixturePrompt({}), {
-      message: `Prompt functions must return a string.\n    at file://${path.join(import.meta.dirname, './fixturePrompt.mjs')}`,
+      message: `Prompt functions must return a string.\n    at ${pathToFileURL(path.join(import.meta.dirname, './fixturePrompt.mjs'))}`,
     });
   });
 
@@ -42,7 +43,7 @@ describe('ESM Integration', () => {
     assert.ok(typeof createPromptModule === 'function');
   });
 
-  it('works with Unix yes command piped input', async () => {
+  it('works with yes command piped input', async () => {
     try {
       await exec('which yes');
     } catch {
@@ -65,9 +66,11 @@ describe('ESM Integration', () => {
     );
 
     try {
-      await exec(`yes | node ${testScript} > /dev/null`);
+      const outputPath = process.platform.startsWith('win') ? 'NUL' : '/dev/null';
+      await exec(`yes | node ${testScript} > ${outputPath}`);
       assert.ok(true);
-    } catch {
+    } catch (error) {
+      console.error(error);
       assert.fail('Command thew');
     } finally {
       unlinkSync(testScript);
