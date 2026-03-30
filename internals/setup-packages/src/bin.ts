@@ -115,6 +115,10 @@ for (const [pkgPath, pkg] of packages) {
     tsconfig.compilerOptions ??= {};
     tsconfig.compilerOptions.outDir = 'dist';
     tsconfig.compilerOptions.rootDir = 'src';
+    tsconfig.compilerOptions.types = [
+      'node',
+      ...(tsconfig.compilerOptions.types ?? []).filter((t) => t !== 'node'),
+    ];
 
     pkg.files = ['dist'];
 
