@@ -89,7 +89,7 @@
   "devDependencies": {
     "@inquirer/type": "^4.0.4",
     "@repo/tsconfig": "workspace:*",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   },
   "peerDependencies": {
     "@types/node": ">=18"
