@@ -465,6 +465,7 @@ __metadata:
   dependencies:
     "@repo/tsconfig": "workspace:*"
     "@types/chardet": "npm:^1.0.0"
+    "@types/node": "npm:^25.0.2"
     chardet: "npm:^2.1.1"
     iconv-lite: "npm:^0.7.2"
     typescript: "npm:^6.0.2"
@@ -488,6 +489,7 @@ __metadata:
   resolution: "@inquirer/figures@workspace:packages/figures"
   dependencies:
     "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^25.0.2"
     typescript: "npm:^6.0.2"
   languageName: unknown
   linkType: soft

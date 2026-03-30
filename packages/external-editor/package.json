@@ -84,6 +84,7 @@
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
     "@types/chardet": "^1.0.0",
+    "@types/node": "^25.0.2",
     "typescript": "^6.0.2"
   },
   "peerDependencies": {
