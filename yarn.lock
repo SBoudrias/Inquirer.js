@@ -284,7 +284,7 @@ __metadata:
   resolution: "@inquirer/ansi@workspace:packages/ansi"
   dependencies:
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   languageName: unknown
   linkType: soft
 
@@ -297,7 +297,7 @@ __metadata:
     "@inquirer/figures": "npm:^2.0.4"
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -324,7 +324,7 @@ __metadata:
     "@inquirer/core": "npm:^11.1.7"
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -368,7 +368,7 @@ __metadata:
     fast-wrap-ansi: "npm:^0.2.0"
     mute-stream: "npm:^3.0.0"
     signal-exit: "npm:^4.1.0"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -387,7 +387,7 @@ __metadata:
     "@inquirer/testing": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^25.0.2"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -406,7 +406,7 @@ __metadata:
     "@inquirer/external-editor": "npm:^2.0.4"
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -450,7 +450,7 @@ __metadata:
     "@inquirer/core": "npm:^11.1.7"
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -467,7 +467,7 @@ __metadata:
     "@types/chardet": "npm:^1.0.0"
     chardet: "npm:^2.1.1"
     iconv-lite: "npm:^0.7.2"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -488,7 +488,7 @@ __metadata:
   resolution: "@inquirer/figures@workspace:packages/figures"
   dependencies:
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   languageName: unknown
   linkType: soft
 
@@ -499,7 +499,7 @@ __metadata:
     "@inquirer/core": "npm:^11.1.7"
     "@inquirer/prompts": "npm:^8.3.2"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -530,7 +530,7 @@ __metadata:
     "@inquirer/core": "npm:^11.1.7"
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -546,7 +546,7 @@ __metadata:
     "@inquirer/core": "npm:^11.1.7"
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -563,7 +563,7 @@ __metadata:
     "@inquirer/core": "npm:^11.1.7"
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -588,7 +588,7 @@ __metadata:
     "@inquirer/select": "npm:^5.1.2"
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -604,7 +604,7 @@ __metadata:
     "@inquirer/core": "npm:^11.1.7"
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -636,7 +636,7 @@ __metadata:
     setup-packages: "workspace:*"
     turbo: "npm:^2.6.1"
     type-fest: "npm:^5.2.0"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
     typescript-eslint: "npm:^8.46.4"
     vitest: "npm:^4.0.13"
   languageName: unknown
@@ -650,7 +650,7 @@ __metadata:
     "@inquirer/figures": "npm:^2.0.4"
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -686,7 +686,7 @@ __metadata:
     "@inquirer/figures": "npm:^2.0.4"
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -706,7 +706,7 @@ __metadata:
     "@types/node": "npm:^25.0.2"
     "@xterm/headless": "npm:^6.0.0"
     mute-stream: "npm:^3.0.0"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
     vitest: "npm:^4.0.18"
   peerDependencies:
     "@inquirer/checkbox": ">=1.0.0"
@@ -778,7 +778,7 @@ __metadata:
   resolution: "@inquirer/type@workspace:packages/type"
   dependencies:
     "@repo/tsconfig": "workspace:*"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -4118,7 +4118,7 @@ __metadata:
     mute-stream: "npm:^3.0.0"
     run-async: "npm:^4.0.6"
     rxjs: "npm:^7.8.2"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
   peerDependenciesMeta:
@@ -4236,7 +4236,7 @@ __metadata:
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^25.0.2"
     type-fest: "npm:^5.2.0"
-    typescript: "npm:^5.9.3"
+    typescript: "npm:^6.0.2"
   bin:
     isolate-monorepo-package: ./src/bin.ts
   languageName: unknown
@@ -6547,23 +6547,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.9.3":
-  version: 5.9.3
-  resolution: "typescript@npm:5.9.3"
+"typescript@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "typescript@npm:6.0.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/c089d9d3da2729fd4ac517f9b0e0485914c4b3c26f80dc0cffcb5de1719a17951e92425d55db59515c1a7ddab65808466debb864d0d56dcf43f27007d0709594
+  checksum: 10/b9fc2fcee7ee8e5ca6f5138181964550531e18e2d20ecb71b802d4d495881e3444e0ef94cbb6e84eb2ba41e913f6feae3ca33cc722b32e6e6dfadb32d23b80e6
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.9.3#optional!builtin<compat/typescript>":
-  version: 5.9.3
-  resolution: "typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"
+"typescript@patch:typescript@npm%3A^6.0.2#optional!builtin<compat/typescript>":
+  version: 6.0.2
+  resolution: "typescript@patch:typescript@npm%3A6.0.2#optional!builtin<compat/typescript>::version=6.0.2&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/696e1b017bc2635f4e0c94eb4435357701008e2f272f553d06e35b494b8ddc60aa221145e286c28ace0c89ee32827a28c2040e3a69bdc108b1a5dc8fb40b72e3
+  checksum: 10/e5501dfcf8c5b6b9a61f6fa53decc40187cebe3a2b7b2bd51c615007ad4cf6d58298461fef63294f6be9d5f2f33019b2a2e2bf02d9cb7d7f6ec94372bf24ffa2
   languageName: node
   linkType: hard
 

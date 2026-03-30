@@ -100,7 +100,7 @@
     "@types/jest": "^30.0.0",
     "@types/mute-stream": "^0.0.4",
     "@types/node": "^25.0.2",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "vitest": "^4.0.18"
   },
   "peerDependencies": {
