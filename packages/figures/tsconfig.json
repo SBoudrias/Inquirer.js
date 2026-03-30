@@ -4,6 +4,8 @@
   "exclude": ["src/**/*.test.ts"],
   "compilerOptions": {
     "outDir": "dist",
-    "isolatedDeclarations": true
+    "isolatedDeclarations": true,
+    "rootDir": "src",
+    "types": ["node"]
   }
 }
