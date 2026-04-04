@@ -15,6 +15,7 @@ import type { PartialDeep, InquirerReadline } from '@inquirer/type';
 type EditorTheme = {
   validationFailureMode: 'keep' | 'clear';
   style: {
+    loadingMessage: () => string;
     waitingMessage: (enterKey: string) => string;
   };
 };
@@ -22,6 +23,7 @@ type EditorTheme = {
 const editorTheme: EditorTheme = {
   validationFailureMode: 'keep',
   style: {
+    loadingMessage: () => '',
     waitingMessage: (enterKey) => `Press ${enterKey} to launch your preferred editor.`,
   },
 };
@@ -103,7 +105,9 @@ export default createPrompt<string, EditorConfig>((config, done) => {
 
   const message = theme.style.message(config.message, status);
   let helpTip = '';
-  if (status === 'idle') {
+  if (status === 'loading') {
+    helpTip = theme.style.help(theme.style.loadingMessage());
+  } else if (status === 'idle') {
     const enterKey = theme.style.key('enter');
     helpTip = theme.style.help(theme.style.waitingMessage(enterKey));
   }

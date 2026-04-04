@@ -274,4 +274,59 @@ describe('editor prompt', () => {
     await expect(answer).resolves.toEqual('new value');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
+
+  it('displays custom waitingMessage', async () => {
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      theme: {
+        style: {
+          waitingMessage: () => 'Waiting...',
+        },
+      },
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Add a description Waiting..."
+    `);
+
+    expect(editAsync).not.toHaveBeenCalled();
+
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledOnce();
+
+    await editorAction(undefined, 'test value with waiting message');
+
+    await expect(answer).resolves.toEqual('test value with waiting message');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
+  });
+
+  it('displays custom loadingMessage', async () => {
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      theme: {
+        style: {
+          loadingMessage: () => 'Loading...',
+        },
+      },
+      validate: async () => {
+        // simulate long-running validation so there's time for loadingMessage to display
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return true;
+      },
+    });
+
+    expect(editAsync).not.toHaveBeenCalled();
+    events.keypress('enter');
+
+    // Test default error message
+    const editPromise = editorAction(undefined, 'test value with loading message');
+    events.type('foo'); // Ignored events while validation runs
+    await editPromise;
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Add a description Loading..."
+    `);
+
+    await expect(answer).resolves.toEqual('test value with loading message');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
+  });
 });

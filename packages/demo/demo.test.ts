@@ -266,8 +266,14 @@ describe('@inquirer/demo E2E tests', () => {
       screen.type('Auto editor content');
       screen.keypress('enter');
 
+      // Third prompt opens editor with custom messages
+      await screen.next();
+      screen.keypress('enter');
+      screen.type('Custom messages content');
+      screen.keypress('enter');
+
       await demo;
-    });
+    }, 10000);
   });
 
   describe('screen.clear()', () => {

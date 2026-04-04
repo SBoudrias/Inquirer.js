@@ -24,6 +24,7 @@ const frLocale: Locale = {
     helpSelect: 'sélectionner',
   },
   editor: {
+    loadingMessage: () => '',
     waitingMessage: (enterKey) =>
       `Appuyez sur ${enterKey} pour lancer votre éditeur préféré.`,
   },
