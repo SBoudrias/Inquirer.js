@@ -52,6 +52,8 @@ export interface SearchStrings {
  * Localized strings for the editor prompt
  */
 export interface EditorStrings {
+  /** Message shown while prompt is validating file contents */
+  loadingMessage: () => string;
   /** Message shown while waiting for user to open editor (receives formatted enter key) */
   waitingMessage: (enterKey: string) => string;
 }
