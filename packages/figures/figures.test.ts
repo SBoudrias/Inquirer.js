@@ -6,7 +6,17 @@ afterAll(() => {
 
 it('falls back to ascii figures when unicode is not supported', async () => {
   const { default: unicodeFigures } = await import('@inquirer/figures');
-  vi.resetModules().stubEnv('TERM', 'linux');
+  vi.resetModules();
+  if (process.platform.startsWith('win')) {
+    vi.stubEnv('WT_SESSION', undefined)
+      .stubEnv('TERMINUS_SUBLIME', undefined)
+      .stubEnv('ConEmuTask', undefined)
+      .stubEnv('TERM_PROGRAM', undefined)
+      .stubEnv('TERM', undefined)
+      .stubEnv('TERMINAL_EMULATOR', undefined);
+  } else {
+    vi.stubEnv('TERM', 'linux');
+  }
   const { default: asciiFigures } = await import('@inquirer/figures');
 
   expect(asciiFigures.checkboxOn).not.toEqual(unicodeFigures.checkboxOn);

@@ -31,6 +31,8 @@ At this point you should be good to go!
 
 We're using vitest for all unit tests. And then have a few integration tests with the native Node.js test runner making sure different setups works (like CJS/ESM.)
 
+If you are developing on Windows, you will need to run tests in a bash terminal such as Git Bash so that commands like `chmod` work correctly.
+
 To run everything:
 
 ```sh

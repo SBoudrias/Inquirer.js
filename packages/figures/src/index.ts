@@ -5,7 +5,7 @@ import process from 'node:process';
 
 // Ported from is-unicode-supported
 function isUnicodeSupported() {
-  if (process.platform !== 'win32') {
+  if (!process.platform.startsWith('win')) {
     return process.env['TERM'] !== 'linux'; // Linux console (kernel)
   }
 
