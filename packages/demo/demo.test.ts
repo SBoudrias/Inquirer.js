@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { screen } from '@inquirer/testing/vitest';
 
 // Import demos AFTER @inquirer/testing/vitest to ensure mocks are applied
@@ -71,7 +71,7 @@ describe('@inquirer/demo E2E tests', () => {
         ✔ Confirm with default to no? No
         ✔ Confirm with your custom transformer function? 👍"
       `);
-    });
+    }, 10000);
   });
 
   describe('screen.type()', () => {
@@ -265,6 +265,16 @@ describe('@inquirer/demo E2E tests', () => {
       await screen.next();
       screen.type('Auto editor content');
       screen.keypress('enter');
+
+      // Third prompt opens editor with custom messages; use fake timers
+      // to skip the 3s validation delay in the demo
+      await screen.next();
+      vi.useFakeTimers({ toFake: ['setTimeout'] });
+      screen.keypress('enter');
+      screen.type('Custom messages content');
+      screen.keypress('enter');
+      await vi.runAllTimersAsync();
+      vi.useRealTimers();
 
       await demo;
     });

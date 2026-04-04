@@ -24,6 +24,7 @@ const esLocale: Locale = {
     helpSelect: 'seleccionar',
   },
   editor: {
+    loadingMessage: () => 'Validando...',
     waitingMessage: (enterKey) => `Presione ${enterKey} para lanzar su editor preferido.`,
   },
   password: {

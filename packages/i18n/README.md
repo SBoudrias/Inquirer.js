@@ -100,6 +100,7 @@ const deLocale: Locale = {
   },
   search: { helpNavigate: 'Navigieren', helpSelect: 'Auswählen' },
   editor: {
+    loadingMessage: () => 'Überprüfung...',
     waitingMessage: (enterKey) => `Drücken Sie ${enterKey}, um Ihren Editor zu öffnen.`,
   },
   password: { maskedText: '[Eingabe verborgen]' },
