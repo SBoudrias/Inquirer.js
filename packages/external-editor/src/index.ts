@@ -9,6 +9,7 @@ import { CreateFileError } from './errors/CreateFileError.ts';
 import { LaunchEditorError } from './errors/LaunchEditorError.ts';
 import { ReadFileError } from './errors/ReadFileError.ts';
 import { RemoveFileError } from './errors/RemoveFileError.ts';
+import { parseEditorCommand } from './parse-editor-command.ts';
 
 export interface IEditorParams {
   args: string[];
@@ -57,29 +58,6 @@ export function editAsync(
 function sanitizeAffix(affix?: string): string {
   if (!affix) return '';
   return affix.replace(/[^a-zA-Z0-9_.-]/g, '_');
-}
-
-function splitStringBySpace(str: string): string[] {
-  const pieces: string[] = [];
-  let currentString = '';
-  for (let strIndex = 0; strIndex < str.length; strIndex++) {
-    const currentLetter = str.charAt(strIndex);
-    if (
-      strIndex > 0 &&
-      currentLetter === ' ' &&
-      str[strIndex - 1] !== '\\' &&
-      currentString.length > 0
-    ) {
-      pieces.push(currentString);
-      currentString = '';
-    } else {
-      currentString = `${currentString}${currentLetter}`;
-    }
-  }
-  if (currentString.length > 0) {
-    pieces.push(currentString);
-  }
-  return pieces;
 }
 
 export class ExternalEditor {
@@ -136,20 +114,12 @@ export class ExternalEditor {
   }
 
   private determineEditor() {
-    const editor = process.env['VISUAL']
-      ? process.env['VISUAL']
-      : process.env['EDITOR']
-        ? process.env['EDITOR']
-        : process.platform.startsWith('win')
-          ? 'notepad'
-          : 'vim';
+    const editor =
+      process.env['VISUAL'] ??
+      process.env['EDITOR'] ??
+      (process.platform.startsWith('win') ? 'notepad' : 'vim');
 
-    const editorOpts = splitStringBySpace(editor).map((piece: string) =>
-      piece.replace('\\ ', ' '),
-    );
-    const bin = editorOpts.shift()!;
-
-    this.editor = { args: editorOpts, bin };
+    this.editor = parseEditorCommand(editor);
   }
 
   private createTemporaryFile() {
