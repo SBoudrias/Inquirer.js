@@ -84,6 +84,67 @@ describe('main', () => {
   });
 });
 
+describe('determine editor', () => {
+  let previousVisual: string | undefined;
+  let editor: ExternalEditor;
+
+  beforeAll(() => {
+    previousVisual = process.env['VISUAL'];
+  });
+
+  beforeEach(() => {
+    process.env['VISUAL'] = 'truncate --size 10';
+    editor = new ExternalEditor(testingInput);
+  });
+
+  afterEach(() => {
+    editor.cleanup();
+    process.env['VISUAL'] = previousVisual;
+  });
+
+  it('no VISUAL or EDITOR is present', () => {
+    delete process.env['VISUAL'];
+    delete process.env['EDITOR'];
+
+    editor['determineEditor']();
+    if (process.platform.startsWith('win')) {
+      expect(editor.editor.bin).toEqual('notepad');
+    } else {
+      expect(editor.editor.bin).toEqual('vim');
+    }
+
+    expect(editor.editor.args).toEqual([]);
+  });
+
+  it('with arguments', () => {
+    process.env['VISUAL'] = 'notepad --test';
+
+    editor['determineEditor']();
+    expect(editor.editor.bin).toEqual('notepad');
+    expect(editor.editor.args).toEqual(['--test']);
+  });
+
+  it('path containing spaces and no quotes', () => {
+    process.env['VISUAL'] = 'C:\\Program Files (x86)\\Notepad++\\notepad++.exe';
+
+    editor['determineEditor']();
+
+    // this is expected to split like this without quotes and will throw an error when editor attempts to open
+    expect(editor.editor.bin).toEqual('C:\\Program');
+    expect(editor.editor.args).toEqual(['Files', '(x86)\\Notepad++\\notepad++.exe']);
+  });
+
+  it('path containing spaces and with quotes', () => {
+    process.env['VISUAL'] = '"C:\\Program Files (x86)\\Notepad++\\notepad++.exe"';
+
+    editor['determineEditor']();
+    expect(editor.editor.bin).toEqual(
+      'C:\\Program Files (x86)\\Notepad++\\notepad++.exe',
+    );
+    expect(editor.editor.args).toEqual([]);
+  });
+});
+
 describe('invalid exit code', () => {
   let editor: ExternalEditor;
 
