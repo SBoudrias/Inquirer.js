@@ -8,7 +8,8 @@ it('falls back to ascii figures when unicode is not supported', async () => {
   const { default: unicodeFigures } = await import('@inquirer/figures');
   vi.resetModules();
   if (process.platform.startsWith('win')) {
-    vi.stubEnv('WT_SESSION', undefined)
+    vi.stubEnv('CI', undefined)
+      .stubEnv('WT_SESSION', undefined)
       .stubEnv('TERMINUS_SUBLIME', undefined)
       .stubEnv('ConEmuTask', undefined)
       .stubEnv('TERM_PROGRAM', undefined)

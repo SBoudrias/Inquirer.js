@@ -10,6 +10,7 @@ function isUnicodeSupported() {
   }
 
   return (
+    Boolean(process.env['CI']) || // CI environments generally support unicode
     Boolean(process.env['WT_SESSION']) || // Windows Terminal
     Boolean(process.env['TERMINUS_SUBLIME']) || // Terminus (<0.2.27)
     process.env['ConEmuTask'] === '{cmd::Cmder}' || // ConEmu and cmder

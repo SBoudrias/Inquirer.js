@@ -66,10 +66,12 @@ jobs:
         node-version: [20, 22, 24]
     steps:
       - uses: actions/checkout@v6
+      - run: npm install -g corepack --force
+      - run: corepack enable
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-      - run: corepack enable
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: yarn vitest --run --coverage
       - uses: codecov/codecov-action@v6
