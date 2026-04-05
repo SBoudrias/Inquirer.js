@@ -20,7 +20,7 @@ type ViewFunction<Value, Config> = (
 ) => string | [string, string | undefined];
 
 function getCallSites() {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
+  // oxlint-disable-next-line typescript/unbound-method
   const _prepareStackTrace = Error.prepareStackTrace;
   let result: NodeJS.CallSite[] = [];
   try {
