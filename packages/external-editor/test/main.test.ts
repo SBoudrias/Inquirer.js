@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
 import { readFileSync, statSync, writeFileSync } from 'node:fs';
 import iconv from 'iconv-lite';
-import { dirname } from 'node:path';
+import path from 'node:path';
 import { edit, editAsync, ExternalEditor } from '../src/index.ts';
 
 const testingInput = 'aAbBcCdDeEfFgG';
@@ -129,7 +129,9 @@ describe('custom options', () => {
       prefix: 'pre',
     });
 
-    expect(editor.tempFile).toMatch(/.+\/pre.+$/);
+    const escapedSep = path.sep.replace(/\\/g, '\\\\');
+    const regex = new RegExp(`.+${escapedSep}pre.+$`);
+    expect(editor.tempFile).toMatch(regex);
   });
 
   it('postfix', () => {
@@ -145,7 +147,7 @@ describe('custom options', () => {
       dir: __dirname,
     });
 
-    expect(dirname(editor.tempFile)).toBe(__dirname);
+    expect(path.dirname(editor.tempFile)).toBe(__dirname);
   });
 
   it('mode', () => {
@@ -156,7 +158,12 @@ describe('custom options', () => {
     const stat = statSync(editor.tempFile);
     const int = parseInt(stat.mode.toString(8), 10);
 
-    expect(int).toBe(100755);
+    if (process.platform.startsWith('win')) {
+      // windows can't set executable bits in chmod so the max is 666
+      expect(int).toBe(100666);
+    } else {
+      expect(int).toBe(100755);
+    }
   });
 });
 

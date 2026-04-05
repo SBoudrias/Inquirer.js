@@ -58,13 +58,15 @@ jobs:
 
   Unit:
     name: Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest, windows-latest]
         node-version: [20, 22, 24]
     steps:
       - uses: actions/checkout@v6
+      - run: npm install -g corepack --force
       - run: corepack enable
       - uses: actions/setup-node@v6
         with:
