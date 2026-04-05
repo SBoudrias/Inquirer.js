@@ -3,6 +3,7 @@ import { readFileSync, statSync, writeFileSync } from 'node:fs';
 import iconv from 'iconv-lite';
 import path from 'node:path';
 import { edit, editAsync, ExternalEditor } from '../src/index.ts';
+import { parseEditorCommand } from '../src/parse-editor-command.ts';
 
 const testingInput = 'aAbBcCdDeEfFgG';
 const expectedResult = 'aAbBcCdDeE';
@@ -81,6 +82,56 @@ describe('main', () => {
     });
 
     expect(text).toBe(editor.text);
+  });
+});
+
+describe('parseEditorCommand', () => {
+  it('simple binary name', () => {
+    expect(parseEditorCommand('vim')).toEqual({ bin: 'vim', args: [] });
+  });
+
+  it('binary with arguments', () => {
+    expect(parseEditorCommand('notepad --test')).toEqual({
+      bin: 'notepad',
+      args: ['--test'],
+    });
+  });
+
+  it('path containing spaces and no quotes', () => {
+    // Without quotes, splits on the first space
+    expect(
+      parseEditorCommand('C:\\Program Files (x86)\\Notepad++\\notepad++.exe'),
+    ).toEqual({
+      bin: 'C:\\Program',
+      args: ['Files', '(x86)\\Notepad++\\notepad++.exe'],
+    });
+  });
+
+  it('quoted path without arguments', () => {
+    expect(
+      parseEditorCommand('"C:\\Program Files (x86)\\Notepad++\\notepad++.exe"'),
+    ).toEqual({
+      bin: 'C:\\Program Files (x86)\\Notepad++\\notepad++.exe',
+      args: [],
+    });
+  });
+
+  it('quoted path with arguments', () => {
+    expect(
+      parseEditorCommand(
+        '"C:\\Program Files (x86)\\Notepad++\\notepad++.exe" --wait --line 10',
+      ),
+    ).toEqual({
+      bin: 'C:\\Program Files (x86)\\Notepad++\\notepad++.exe',
+      args: ['--wait', '--line', '10'],
+    });
+  });
+
+  it('unmatched quote treats rest as binary', () => {
+    expect(parseEditorCommand('"unclosed path')).toEqual({
+      bin: 'unclosed path',
+      args: [],
+    });
   });
 });
 
