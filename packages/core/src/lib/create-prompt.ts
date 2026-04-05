@@ -113,10 +113,20 @@ export function createPrompt<Value, Config>(
         rl.input.on('keypress', checkCursorPos);
         cleanups.add(() => rl.input.removeListener('keypress', checkCursorPos));
 
+        let pendingDone: { value: Value } | null = null;
+
         cycle(() => {
+          let effectsSettled = false;
           try {
             const nextView = view(config, (value) => {
-              setImmediate(() => resolve(value));
+              if (effectsSettled) {
+                // After the cycle completes (async validation path), the "done"
+                // render already flushed via setStatus → handleChange, so resolve
+                // immediately.
+                resolve(value);
+              } else {
+                pendingDone = { value };
+              }
             });
 
             // Typescript won't allow this, but not all users rely on typescript.
@@ -139,6 +149,13 @@ export function createPrompt<Value, Config>(
             effectScheduler.run();
           } catch (error: unknown) {
             reject(error);
+          }
+          effectsSettled = true;
+
+          if (pendingDone !== null) {
+            const { value } = pendingDone;
+            pendingDone = null;
+            resolve(value);
           }
         });
       };
