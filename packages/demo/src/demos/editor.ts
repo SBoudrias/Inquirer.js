@@ -24,6 +24,23 @@ const demo = async () => {
       waitForUserInput: false,
     }),
   );
+
+  console.log(
+    'Answer:',
+    await editor({
+      message: 'Custom messages',
+      validate: async () => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        return true;
+      },
+      theme: {
+        style: {
+          loadingMessage: () => 'Loading...',
+          waitingMessage: (enterKey: string) => `Press ${enterKey} to write stuff`,
+        },
+      },
+    }),
+  );
 };
 
 if (import.meta.url.startsWith('file:')) {

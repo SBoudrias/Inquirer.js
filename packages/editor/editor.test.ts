@@ -274,4 +274,61 @@ describe('editor prompt', () => {
     await expect(answer).resolves.toEqual('new value');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
+
+  it('displays custom waitingMessage', async () => {
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      theme: {
+        style: {
+          waitingMessage: (enterKey: string) => `Hit ${enterKey} to continue`,
+        },
+      },
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Add a description Hit <enter> to continue"
+    `);
+
+    expect(editAsync).not.toHaveBeenCalled();
+
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledOnce();
+
+    await editorAction(undefined, 'test value with waiting message');
+
+    await expect(answer).resolves.toEqual('test value with waiting message');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
+  });
+
+  it('displays custom loadingMessage', async () => {
+    let resolveValidation: () => void;
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      theme: {
+        style: {
+          loadingMessage: () => 'Loading...',
+        },
+      },
+      validate: () =>
+        new Promise<boolean>((resolve) => {
+          resolveValidation = () => resolve(true);
+        }),
+    });
+
+    expect(editAsync).not.toHaveBeenCalled();
+    events.keypress('enter');
+
+    // Trigger the editor callback; validation starts and loadingMessage should appear
+    const editPromise = editorAction(undefined, 'test value with loading message');
+    events.type('foo'); // Ignored events while validation runs
+    await editPromise;
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Add a description Loading..."
+    `);
+
+    resolveValidation!();
+
+    await expect(answer).resolves.toEqual('test value with loading message');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
+  });
 });

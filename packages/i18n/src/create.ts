@@ -134,6 +134,7 @@ export function createLocalizedPrompts(locale: Locale) {
     editor(this: void, config: EditorConfig, context?: Context) {
       const theme = makeTheme(config.theme, {
         style: {
+          loadingMessage: locale.editor.loadingMessage,
           waitingMessage: locale.editor.waitingMessage,
         },
       });

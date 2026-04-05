@@ -24,6 +24,7 @@ const zhLocale: Locale = {
     helpSelect: '选择',
   },
   editor: {
+    loadingMessage: () => '验证中...',
     waitingMessage: (enterKey) => `按 ${enterKey} 键启动您的首选编辑器。`,
   },
   password: {
