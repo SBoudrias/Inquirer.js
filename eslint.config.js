@@ -55,11 +55,30 @@ export default defineConfig(
       },
     },
     rules: {
-      '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/no-invalid-void-type': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-unnecessary-type-parameters': 'off',
+      // Migrated to oxlint type-aware rules (--type-aware flag)
+      '@typescript-eslint/await-thenable': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+      '@typescript-eslint/unbound-method': 'off',
+      '@typescript-eslint/no-deprecated': 'off',
+      '@typescript-eslint/prefer-includes': 'off',
+      '@typescript-eslint/no-for-in-array': 'off',
+      '@typescript-eslint/no-implied-eval': 'off',
+      '@typescript-eslint/no-base-to-string': 'off',
+      '@typescript-eslint/only-throw-error': 'off',
+      '@typescript-eslint/no-redundant-type-constituents': 'off',
+      '@typescript-eslint/no-meaningless-void-operator': 'off',
+      '@typescript-eslint/no-unsafe-enum-comparison': 'off',
+      '@typescript-eslint/no-mixed-enums': 'off',
+      '@typescript-eslint/switch-exhaustiveness-check': 'off',
+      '@typescript-eslint/restrict-plus-operands': 'off',
+      '@typescript-eslint/prefer-promise-reject-errors': 'off',
       'n/no-missing-import': ['error', { ignoreTypeImport: true }],
     },
   },
@@ -78,7 +97,6 @@ export default defineConfig(
   {
     files: ['packages/inquirer/test/**', 'packages/**/*.test.*'],
     rules: {
-      '@typescript-eslint/unbound-method': 'off',
       'n/no-extraneous-import': [
         'error',
         {
