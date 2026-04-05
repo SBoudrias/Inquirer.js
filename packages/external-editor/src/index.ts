@@ -1,58 +1,67 @@
 import { detect } from 'chardet';
-import { spawn, spawnSync } from 'child_process';
-import { readFileSync, unlinkSync, type WriteFileOptions, writeFileSync } from 'fs';
+import { spawn, spawnSync } from 'node:child_process';
+import { readFileSync, unlinkSync, type WriteFileOptions, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { randomUUID } from 'node:crypto';
 import iconv from 'iconv-lite';
-import { CreateFileError } from './errors/CreateFileError.ts';
-import { LaunchEditorError } from './errors/LaunchEditorError.ts';
-import { ReadFileError } from './errors/ReadFileError.ts';
-import { RemoveFileError } from './errors/RemoveFileError.ts';
-import { parseEditorCommand } from './parse-editor-command.ts';
+import {
+  CreateFileError,
+  LaunchEditorError,
+  ReadFileError,
+  RemoveFileError,
+} from './errors.ts';
+import { parseEditorCommand, type EditorParams } from './parse-editor-command.ts';
 
-export interface IEditorParams {
-  args: string[];
-  bin: string;
-}
-
-export interface IFileOptions {
+export type FileOptions = {
   prefix?: string;
   postfix?: string;
   mode?: number;
   template?: string;
   dir?: string;
-}
+};
+
+/** @deprecated Use FileOptions */
+export type IFileOptions = FileOptions;
 
 export type StringCallback = (err: Error | undefined, result: string | undefined) => void;
-export type VoidCallback = () => void;
 export { CreateFileError, LaunchEditorError, ReadFileError, RemoveFileError };
 
-export function edit(text: string = '', fileOptions?: IFileOptions): string {
+export function edit(text: string = '', fileOptions?: FileOptions): string {
   const editor = new ExternalEditor(text, fileOptions);
   editor.run();
-  editor.cleanup();
   return editor.text;
 }
 
+export function editAsync(text?: string, fileOptions?: FileOptions): Promise<string>;
+/** @deprecated Use editAsync(text, options) returning a Promise instead */
+export function editAsync(
+  text: string,
+  callback: StringCallback,
+  fileOptions?: FileOptions,
+): void;
 export function editAsync(
   text: string = '',
-  callback: StringCallback,
-  fileOptions?: IFileOptions,
-): void {
-  const editor = new ExternalEditor(text, fileOptions);
-  editor.runAsync((err: Error | undefined, result: string | undefined) => {
-    if (err) {
-      setImmediate(callback, err, undefined);
-    } else {
-      try {
-        editor.cleanup();
-        setImmediate(callback, undefined, result);
-      } catch (cleanupError) {
-        setImmediate(callback, cleanupError as Error, undefined);
-      }
-    }
-  });
+  callbackOrOptions?: StringCallback | FileOptions,
+  fileOptions?: FileOptions,
+): Promise<string> | void {
+  const callback =
+    typeof callbackOrOptions === 'function' ? callbackOrOptions : undefined;
+  const options =
+    typeof callbackOrOptions === 'function' ? fileOptions : callbackOrOptions;
+
+  const editor = new ExternalEditor(text, options);
+  const promise = editor.runAsync();
+
+  if (callback) {
+    promise.then(
+      (result) => callback(undefined, result),
+      (err: unknown) => callback(err as Error, undefined),
+    );
+    return;
+  }
+
+  return promise;
 }
 
 function sanitizeAffix(affix?: string): string {
@@ -62,67 +71,24 @@ function sanitizeAffix(affix?: string): string {
 
 export class ExternalEditor {
   public text: string = '';
-  public tempFile!: string;
-  public editor!: IEditorParams;
+  public tempFile: string = '';
+  public editor!: EditorParams;
   public lastExitStatus: number = 0;
-  private fileOptions: IFileOptions = {};
+  private fileOptions: FileOptions = {};
 
-  public get temp_file(): string {
-    console.log('DEPRECATED: temp_file. Use tempFile moving forward.');
-    return this.tempFile;
-  }
-
-  public get last_exit_status(): number {
-    console.log('DEPRECATED: last_exit_status. Use lastExitStatus moving forward.');
-    return this.lastExitStatus;
-  }
-
-  constructor(text: string = '', fileOptions?: IFileOptions) {
+  constructor(text: string = '', fileOptions?: FileOptions) {
     this.text = text;
 
     if (fileOptions) {
       this.fileOptions = fileOptions;
     }
 
-    this.determineEditor();
-    this.createTemporaryFile();
-  }
-
-  public run(): string {
-    this.launchEditor();
-    this.readTemporaryFile();
-    return this.text;
-  }
-
-  public runAsync(callback: StringCallback): void {
-    try {
-      this.launchEditorAsync(() => {
-        try {
-          this.readTemporaryFile();
-          setImmediate(callback, undefined, this.text);
-        } catch (readError) {
-          setImmediate(callback, readError as Error, undefined);
-        }
-      });
-    } catch (launchError) {
-      setImmediate(callback, launchError as Error, undefined);
-    }
-  }
-
-  public cleanup(): void {
-    this.removeTemporaryFile();
-  }
-
-  private determineEditor() {
-    const editor =
+    const editorCommand =
       process.env['VISUAL'] ??
       process.env['EDITOR'] ??
       (process.platform.startsWith('win') ? 'notepad' : 'vim');
+    this.editor = parseEditorCommand(editorCommand);
 
-    this.editor = parseEditorCommand(editor);
-  }
-
-  private createTemporaryFile() {
     try {
       const baseDir = this.fileOptions.dir ?? os.tmpdir();
       const id = randomUUID();
@@ -141,7 +107,68 @@ export class ExternalEditor {
       }
       writeFileSync(this.tempFile, this.text, opt);
     } catch (createFileError) {
-      throw new CreateFileError(createFileError as Error);
+      throw new CreateFileError(createFileError);
+    }
+  }
+
+  public run(): string {
+    try {
+      const editorProcess = spawnSync(
+        this.editor.bin,
+        this.editor.args.concat([this.tempFile]),
+        { stdio: 'inherit' },
+      );
+      this.lastExitStatus = editorProcess.status ?? 0;
+    } catch (launchError) {
+      throw new LaunchEditorError(launchError);
+    }
+    this.readTemporaryFile();
+    this.cleanup();
+    return this.text;
+  }
+
+  public runAsync(): Promise<string>;
+  /** @deprecated Use runAsync() returning a Promise instead */
+  public runAsync(callback: StringCallback): void;
+  public runAsync(callback?: StringCallback): Promise<string> | void {
+    const promise = new Promise<void>((resolve, reject) => {
+      try {
+        const editorProcess = spawn(
+          this.editor.bin,
+          this.editor.args.concat([this.tempFile]),
+          { stdio: 'inherit' },
+        );
+        editorProcess.on('exit', (code: number) => {
+          this.lastExitStatus = code;
+          resolve();
+        });
+      } catch (launchError) {
+        reject(new LaunchEditorError(launchError));
+      }
+    }).then(() => {
+      this.readTemporaryFile();
+      this.cleanup();
+      return this.text;
+    });
+
+    if (callback) {
+      promise.then(
+        (text) => callback(undefined, text),
+        (err: unknown) => callback(err as Error, undefined),
+      );
+      return;
+    }
+
+    return promise;
+  }
+
+  public cleanup(): void {
+    if (!this.tempFile) return;
+    try {
+      unlinkSync(this.tempFile);
+      this.tempFile = '';
+    } catch (removeFileError) {
+      throw new RemoveFileError(removeFileError);
     }
   }
 
@@ -161,44 +188,7 @@ export class ExternalEditor {
         this.text = iconv.decode(tempFileBuffer, encoding);
       }
     } catch (readFileError) {
-      throw new ReadFileError(readFileError as Error);
-    }
-  }
-
-  private removeTemporaryFile() {
-    try {
-      unlinkSync(this.tempFile);
-    } catch (removeFileError) {
-      throw new RemoveFileError(removeFileError as Error);
-    }
-  }
-
-  private launchEditor() {
-    try {
-      const editorProcess = spawnSync(
-        this.editor.bin,
-        this.editor.args.concat([this.tempFile]),
-        { stdio: 'inherit' },
-      );
-      this.lastExitStatus = editorProcess.status ?? 0;
-    } catch (launchError) {
-      throw new LaunchEditorError(launchError as Error);
-    }
-  }
-
-  private launchEditorAsync(callback: VoidCallback) {
-    try {
-      const editorProcess = spawn(
-        this.editor.bin,
-        this.editor.args.concat([this.tempFile]),
-        { stdio: 'inherit' },
-      );
-      editorProcess.on('exit', (code: number) => {
-        this.lastExitStatus = code;
-        setImmediate(callback);
-      });
-    } catch (launchError) {
-      throw new LaunchEditorError(launchError as Error);
+      throw new ReadFileError(readFileError);
     }
   }
 }

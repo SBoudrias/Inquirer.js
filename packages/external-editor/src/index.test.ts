@@ -2,8 +2,8 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from
 import { readFileSync, statSync, writeFileSync } from 'node:fs';
 import iconv from 'iconv-lite';
 import path from 'node:path';
-import { edit, editAsync, ExternalEditor } from '../src/index.ts';
-import { parseEditorCommand } from '../src/parse-editor-command.ts';
+import { edit, editAsync, ExternalEditor } from './index.ts';
+import { parseEditorCommand } from './parse-editor-command.ts';
 
 const testingInput = 'aAbBcCdDeEfFgG';
 const expectedResult = 'aAbBcCdDeE';
@@ -35,13 +35,7 @@ describe('main', () => {
   });
 
   it('convenience function `editAsync`', async () => {
-    const text = await new Promise((resolve) => {
-      editAsync(testingInput, (error, text) => {
-        expect(error).toBeUndefined();
-        resolve(text);
-      });
-    });
-
+    const text = await editAsync(testingInput);
     expect(text).toBe(expectedResult);
   });
 
@@ -195,10 +189,10 @@ describe('custom options', () => {
 
   it('dir', () => {
     editor = new ExternalEditor('testing', {
-      dir: __dirname,
+      dir: import.meta.dirname,
     });
 
-    expect(path.dirname(editor.tempFile)).toBe(__dirname);
+    expect(path.dirname(editor.tempFile)).toBe(import.meta.dirname);
   });
 
   it('mode', () => {

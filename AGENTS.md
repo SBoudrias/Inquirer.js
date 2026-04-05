@@ -22,6 +22,33 @@ Vitest owns unit coverage via `vitest.config.ts`, with `coverage.all = true` so 
 
 Keep tests simple and focused. Reuse existing test stubs and fixtures rather than creating custom mocks. If a behavior affects all prompts, test it with an existing prompt type rather than creating a specialized stub. Write tests that verify actual behavior rather than implementation details. Prefer straightforward assertions over complex validation logic.
 
+## Package-Specific Code Style
+
+### Type Declarations
+
+Prefer `type` over `interface` for all object shapes. Never prefix type names with `I` (no `IEditorParams`, `IFileOptions`). Use descriptive names without Hungarian notation: `EditorParams`, `FileOptions`.
+
+### Node.js Built-in Imports
+
+Always use the `node:` protocol prefix for Node.js built-in modules: `import { spawn } from 'node:child_process'`, `import { readFileSync } from 'node:fs'`. This is enforced by linting.
+
+### Error Classes
+
+Model custom error classes after the style in `packages/core/src/lib/errors.ts`:
+
+- Declare `override name = 'ErrorName'` as a class field (not set in the constructor).
+- Pass `{ cause: originalError }` to `super()` to populate `this.cause` per the standard `Error` API.
+- Do not add a separate `originalError` instance field.
+- Do not include copyright header comments.
+
+### Async Patterns
+
+All async operations must be Promise-based. Do not use Node-style callbacks `(err, result) => void`. Do not use `setImmediate` to defer callbacks; use `await` and `Promise` directly. Wrap event-emitter-based APIs (like `child_process.spawn`) in `new Promise(...)`.
+
+### Test File Location
+
+Unit tests must be co-located as `*.test.ts` files beside their source files inside `src/`. Separate `test/` directories are not used.
+
 ## Commit & Pull Request Guidelines
 
 Follow Conventional Commit prefixes such as `feat:`, `fix:`, `docs:`, or `chore:`; keep scopes lowercase (`feat(@inquirer/package-name): add fuzzy search`). Summaries should stay imperative and under 80 characters. Pull requests must describe the change, list the commands run (for example `yarn test`), and link issues or discussions. Attach terminal recordings or screenshots for UX-facing changes, and ensure lockfiles and generated readme fragments stay current.

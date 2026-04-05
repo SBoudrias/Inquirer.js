@@ -1,4 +1,4 @@
-import { editAsync, type IFileOptions } from '@inquirer/external-editor';
+import { editAsync, type FileOptions } from '@inquirer/external-editor';
 import {
   createPrompt,
   useEffect,
@@ -34,7 +34,7 @@ type EditorConfig = {
   postfix?: string;
   waitForUserInput?: boolean;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
-  file?: IFileOptions;
+  file?: FileOptions;
   theme?: PartialDeep<Theme<EditorTheme>>;
 };
 
@@ -52,38 +52,31 @@ export default createPrompt<string, EditorConfig>((config, done) => {
 
   const prefix = usePrefix({ status, theme });
 
-  function startEditor(rl: InquirerReadline) {
+  async function startEditor(rl: InquirerReadline) {
     rl.pause();
 
-    const editCallback = async (error: Error | undefined, answer: string | undefined) => {
+    try {
+      const answer = await editAsync(value, { postfix, ...fileProps });
       rl.resume();
-      if (error) {
-        setError(error.toString());
+      setStatus('loading');
+      const isValid = await validate(answer);
+      if (isValid === true) {
+        setError(undefined);
+        setStatus('done');
+        done(answer);
       } else {
-        setStatus('loading');
-        const finalAnswer = answer ?? '';
-        const isValid = await validate(finalAnswer);
-        if (isValid === true) {
-          setError(undefined);
-          setStatus('done');
-          done(finalAnswer);
+        if (theme.validationFailureMode === 'clear') {
+          setValue(config.default);
         } else {
-          if (theme.validationFailureMode === 'clear') {
-            setValue(config.default);
-          } else {
-            setValue(finalAnswer);
-          }
-
-          setError(isValid || 'You must provide a valid value');
-          setStatus('idle');
+          setValue(answer);
         }
+        setError(isValid || 'You must provide a valid value');
+        setStatus('idle');
       }
-    };
-
-    editAsync(value, (error, answer) => void editCallback(error, answer), {
-      postfix,
-      ...fileProps,
-    });
+    } catch (error: unknown) {
+      rl.resume();
+      setError(String(error));
+    }
   }
 
   useEffect((rl) => {

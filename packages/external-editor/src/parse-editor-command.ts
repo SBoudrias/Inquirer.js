@@ -1,6 +1,9 @@
-import type { IEditorParams } from './index.ts';
+export type EditorParams = {
+  args: string[];
+  bin: string;
+};
 
-export function parseEditorCommand(editor: string): IEditorParams {
+export function parseEditorCommand(editor: string): EditorParams {
   let bin: string;
   let rest: string;
 

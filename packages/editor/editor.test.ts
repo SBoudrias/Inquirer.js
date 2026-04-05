@@ -1,23 +1,37 @@
-import { describe, it, expect, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import { editAsync } from '@inquirer/external-editor';
 import editor from './src/index.ts';
 
 vi.mock('@inquirer/external-editor');
+
+let resolveEdit: (value: string) => void;
+let rejectEdit: (error: Error) => void;
+
+beforeEach(() => {
+  vi.mocked(editAsync).mockImplementation(
+    (_text, _options) =>
+      new Promise<string>((resolve, reject) => {
+        resolveEdit = resolve;
+        rejectEdit = reject;
+      }),
+  );
+});
+
 afterEach(() => {
   vi.mocked(editAsync).mockClear();
 });
 
 async function editorAction(error: undefined | Error, value?: string) {
-  const { lastCall } = vi.mocked(editAsync).mock;
-  if (!lastCall) throw new Error("editor wasn't open");
-
-  // Bugfix: The callback error value is nullable.
-  const editCallback = lastCall[1] as (
-    error: undefined | Error,
-    value: string,
-  ) => void | Promise<void>;
-  await editCallback(error, value ?? '');
+  if (error) {
+    rejectEdit(error);
+  } else {
+    resolveEdit(value ?? '');
+  }
+  // Two yields: first lets the .then()/.catch() fire (up to the first await
+  // inside), second lets synchronous validate results continue.
+  await Promise.resolve();
+  await Promise.resolve();
 }
 
 describe('editor prompt', () => {
@@ -32,9 +46,7 @@ describe('editor prompt', () => {
     expect(editAsync).not.toHaveBeenCalled();
 
     events.keypress('enter');
-    expect(editAsync).toHaveBeenLastCalledWith('', expect.any(Function), {
-      postfix: '.txt',
-    });
+    expect(editAsync).toHaveBeenLastCalledWith('', { postfix: '.txt' });
 
     await editorAction(undefined, 'value from editor');
 
@@ -47,9 +59,7 @@ describe('editor prompt', () => {
       message: 'Add a description',
       waitForUserInput: false,
     });
-    expect(editAsync).toHaveBeenLastCalledWith('', expect.any(Function), {
-      postfix: '.txt',
-    });
+    expect(editAsync).toHaveBeenLastCalledWith('', { postfix: '.txt' });
 
     await editorAction(undefined, 'value from editor');
 
@@ -67,13 +77,9 @@ describe('editor prompt', () => {
     expect(editAsync).not.toHaveBeenCalled();
 
     events.keypress('enter');
-    expect(editAsync).toHaveBeenLastCalledWith(
-      'default description',
-      expect.any(Function),
-      {
-        postfix: '.md',
-      },
-    );
+    expect(editAsync).toHaveBeenLastCalledWith('default description', {
+      postfix: '.md',
+    });
 
     await editorAction(undefined, 'value from editor');
 
@@ -93,7 +99,7 @@ describe('editor prompt', () => {
     expect(editAsync).not.toHaveBeenCalled();
 
     events.keypress('enter');
-    expect(editAsync).toHaveBeenLastCalledWith('', expect.any(Function), {
+    expect(editAsync).toHaveBeenLastCalledWith('', {
       postfix: '.md',
       dir: '/tmp',
     });
@@ -138,9 +144,7 @@ describe('editor prompt', () => {
     events.keypress('enter');
     expect(editAsync).toHaveBeenCalledTimes(2);
     // Previous answer is passed in the second time for editing
-    expect(editAsync).toHaveBeenLastCalledWith('3', expect.any(Function), {
-      postfix: '.txt',
-    });
+    expect(editAsync).toHaveBeenLastCalledWith('3', { postfix: '.txt' });
 
     // Test user defined error message
     await editorAction(undefined, '2');
@@ -182,9 +186,7 @@ describe('editor prompt', () => {
     events.keypress('enter');
 
     expect(editAsync).toHaveBeenCalledOnce();
-    expect(editAsync).toHaveBeenLastCalledWith('', expect.any(Function), {
-      postfix: '.txt',
-    });
+    expect(editAsync).toHaveBeenLastCalledWith('', { postfix: '.txt' });
     await editorAction(undefined, 'foo bar');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Add a description Press <enter> to launch your preferred editor.
@@ -194,9 +196,7 @@ describe('editor prompt', () => {
     events.keypress('enter');
     expect(editAsync).toHaveBeenCalledTimes(2);
     // Because we clear, the second call goes back to an empty string
-    expect(editAsync).toHaveBeenLastCalledWith('', expect.any(Function), {
-      postfix: '.txt',
-    });
+    expect(editAsync).toHaveBeenLastCalledWith('', { postfix: '.txt' });
 
     await editorAction(undefined, '1');
     await expect(answer).resolves.toEqual('1');
@@ -229,9 +229,7 @@ describe('editor prompt', () => {
     events.keypress('enter');
 
     expect(editAsync).toHaveBeenCalledOnce();
-    expect(editAsync).toHaveBeenLastCalledWith('default value', expect.any(Function), {
-      postfix: '.txt',
-    });
+    expect(editAsync).toHaveBeenLastCalledWith('default value', { postfix: '.txt' });
     await editorAction(undefined, 'foo bar');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Add a description Press <enter> to launch your preferred editor.
@@ -241,9 +239,7 @@ describe('editor prompt', () => {
     events.keypress('enter');
     expect(editAsync).toHaveBeenCalledTimes(2);
     // Because we clear, the second call goes back to the default value
-    expect(editAsync).toHaveBeenLastCalledWith('default value', expect.any(Function), {
-      postfix: '.txt',
-    });
+    expect(editAsync).toHaveBeenLastCalledWith('default value', { postfix: '.txt' });
 
     await editorAction(undefined, '1');
     await expect(answer).resolves.toEqual('1');

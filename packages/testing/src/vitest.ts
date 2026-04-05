@@ -188,28 +188,27 @@ vi.mock('@inquirer/external-editor', async (importOriginal) => {
   }
 
   return {
-    editAsync: (
-      _text: string,
-      callback: (err: Error | undefined, result: string | undefined) => void,
-    ) => {
+    editAsync: (_text: string) => {
       let buffer = '';
 
-      const typeSpy = vi
-        .spyOn(screenInstance, 'type')
-        .mockImplementation((text: string) => {
-          buffer += text;
-        });
+      return new Promise<string>((resolve) => {
+        const typeSpy = vi
+          .spyOn(screenInstance, 'type')
+          .mockImplementation((text: string) => {
+            buffer += text;
+          });
 
-      const keypressSpy = vi
-        .spyOn(screenInstance, 'keypress')
-        .mockImplementation((key) => {
-          const name = typeof key === 'string' ? key : key.name;
-          if (name === 'enter' || name === 'return') {
-            typeSpy.mockRestore();
-            keypressSpy.mockRestore();
-            process.nextTick(() => callback(undefined, buffer));
-          }
-        });
+        const keypressSpy = vi
+          .spyOn(screenInstance, 'keypress')
+          .mockImplementation((key) => {
+            const name = typeof key === 'string' ? key : key.name;
+            if (name === 'enter' || name === 'return') {
+              typeSpy.mockRestore();
+              keypressSpy.mockRestore();
+              resolve(buffer);
+            }
+          });
+      });
     },
   };
 });
