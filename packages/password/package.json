@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/password",
-  "version": "5.0.10",
+  "version": "5.0.11",
   "description": "Inquirer password prompt",
   "keywords": [
     "answer",
@@ -73,9 +73,9 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/ansi": "^2.0.4",
-    "@inquirer/core": "^11.1.7",
-    "@inquirer/type": "^4.0.4"
+    "@inquirer/ansi": "^2.0.5",
+    "@inquirer/core": "^11.1.8",
+    "@inquirer/type": "^4.0.5"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",

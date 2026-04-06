@@ -1,6 +1,6 @@
 {
   "name": "inquirer",
-  "version": "13.3.2",
+  "version": "13.4.0",
   "description": "A collection of common interactive command line user interfaces.",
   "keywords": [
     "answer",
@@ -73,10 +73,10 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/ansi": "^2.0.4",
-    "@inquirer/core": "^11.1.7",
-    "@inquirer/prompts": "^8.3.2",
-    "@inquirer/type": "^4.0.4",
+    "@inquirer/ansi": "^2.0.5",
+    "@inquirer/core": "^11.1.8",
+    "@inquirer/prompts": "^8.4.0",
+    "@inquirer/type": "^4.0.5",
     "mute-stream": "^3.0.0",
     "run-async": "^4.0.6",
     "rxjs": "^7.8.2"
