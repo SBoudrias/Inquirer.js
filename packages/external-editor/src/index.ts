@@ -119,7 +119,7 @@ export class ExternalEditor {
     return promise;
   }
 
-  public cleanup(): void {
+  private cleanup(): void {
     if (!this.tempFile) return;
     try {
       unlinkSync(this.tempFile);

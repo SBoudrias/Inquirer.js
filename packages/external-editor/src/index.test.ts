@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { readFileSync, unlinkSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import os from 'node:os';
@@ -21,10 +21,6 @@ describe('main', () => {
 
   beforeEach(() => {
     editor = new ExternalEditor(testingInput);
-  });
-
-  afterEach(() => {
-    editor.cleanup();
   });
 
   afterAll(() => {
@@ -113,10 +109,6 @@ describe('invalid exit code', () => {
     editor.editor.args = ['-c', 'exit 1'];
   });
 
-  afterEach(() => {
-    editor.cleanup();
-  });
-
   it('run()', () => {
     editor.run();
     expect(editor.lastExitStatus).toBe(1);
@@ -139,18 +131,9 @@ const captureModeScript =
   "const fs=require('fs'); const s=fs.statSync(process.argv[2]); fs.writeFileSync(process.argv[1], String(s.mode))";
 
 describe('custom options', () => {
-  let editor: ExternalEditor | null = null;
-
-  afterEach(() => {
-    if (editor) {
-      editor.cleanup();
-    }
-    editor = null;
-  });
-
   it('prefix', () => {
     const captureFile = path.join(os.tmpdir(), randomUUID());
-    editor = new ExternalEditor('testing', { prefix: 'pre' });
+    const editor = new ExternalEditor('testing', { prefix: 'pre' });
     editor.editor = {
       bin: process.execPath,
       args: ['-e', capturePathScript, captureFile],
@@ -164,7 +147,7 @@ describe('custom options', () => {
 
   it('postfix', () => {
     const captureFile = path.join(os.tmpdir(), randomUUID());
-    editor = new ExternalEditor('testing', { postfix: 'end.post' });
+    const editor = new ExternalEditor('testing', { postfix: 'end.post' });
     editor.editor = {
       bin: process.execPath,
       args: ['-e', capturePathScript, captureFile],
@@ -177,7 +160,7 @@ describe('custom options', () => {
 
   it('dir', () => {
     const captureFile = path.join(os.tmpdir(), randomUUID());
-    editor = new ExternalEditor('testing', { dir: import.meta.dirname });
+    const editor = new ExternalEditor('testing', { dir: import.meta.dirname });
     editor.editor = {
       bin: process.execPath,
       args: ['-e', capturePathScript, captureFile],
@@ -190,7 +173,7 @@ describe('custom options', () => {
 
   it('mode', () => {
     const captureFile = path.join(os.tmpdir(), randomUUID());
-    editor = new ExternalEditor('testing', { mode: 0o755 });
+    const editor = new ExternalEditor('testing', { mode: 0o755 });
     editor.editor = {
       bin: process.execPath,
       args: ['-e', captureModeScript, captureFile],
@@ -215,17 +198,8 @@ const writeEncodedScript =
   "const fs=require('fs'); fs.writeFileSync(process.argv[2], Buffer.from(process.argv[1], 'hex'))";
 
 describe('charsets', () => {
-  let editor: ExternalEditor;
-
-  beforeEach(() => {
-    editor = new ExternalEditor('XXX');
-  });
-
-  afterEach(() => {
-    editor.cleanup();
-  });
-
   it('empty', () => {
+    const editor = new ExternalEditor('XXX');
     editor.editor = { bin: process.execPath, args: ['-e', writeEncodedScript, ''] };
     const text = editor.run();
     expect(text).toBe('');
@@ -234,6 +208,7 @@ describe('charsets', () => {
   it('utf8', () => {
     const testData = 'काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥';
     const hex = Buffer.from(iconv.encode(testData, 'utf8')).toString('hex');
+    const editor = new ExternalEditor('XXX');
     editor.editor = { bin: process.execPath, args: ['-e', writeEncodedScript, hex] };
     const result = editor.run();
     expect(result).toBe(testData);
@@ -242,6 +217,7 @@ describe('charsets', () => {
   it('utf16', () => {
     const testData = 'काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥';
     const hex = Buffer.from(iconv.encode(testData, 'utf16')).toString('hex');
+    const editor = new ExternalEditor('XXX');
     editor.editor = { bin: process.execPath, args: ['-e', writeEncodedScript, hex] };
     const result = editor.run();
     expect(result).toBe(testData);
@@ -250,6 +226,7 @@ describe('charsets', () => {
   it('win1252', () => {
     const testData = 'Testing 1 2 3 ! @ #';
     const hex = Buffer.from(iconv.encode(testData, 'win1252')).toString('hex');
+    const editor = new ExternalEditor('XXX');
     editor.editor = { bin: process.execPath, args: ['-e', writeEncodedScript, hex] };
     const result = editor.run();
     expect(result).toBe(testData);
@@ -258,6 +235,7 @@ describe('charsets', () => {
   it('Big5', () => {
     const testData = '能 脊 胼 胯 臭 臬 舀 舐 航 舫 舨 般 芻 茫 荒 荔';
     const hex = Buffer.from(iconv.encode(testData, 'Big5')).toString('hex');
+    const editor = new ExternalEditor('XXX');
     editor.editor = { bin: process.execPath, args: ['-e', writeEncodedScript, hex] };
     const result = editor.run();
     expect(result).toBe(testData);
