@@ -81,7 +81,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
 
   useEffect((rl) => {
     if (!waitForUserInput) {
-      startEditor(rl);
+      void startEditor(rl);
     }
   }, []);
 
@@ -92,7 +92,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     }
 
     if (isEnterKey(key)) {
-      startEditor(rl);
+      void startEditor(rl);
     }
   });
 

@@ -1,4 +1,4 @@
-import { ExternalEditor } from '@inquirer/external-editor';
+import { editAsync } from '@inquirer/external-editor';
 import readline from 'node:readline';
 
 const rl = readline.createInterface({
@@ -12,17 +12,10 @@ process.stdout.write(
   'Please write a message. (press enter to launch your preferred editor)\n',
 );
 
-const editor = new ExternalEditor(message);
-
 rl.on('line', () => {
-  try {
-    rl.pause();
-    editor.runAsync((error, response) => {
-      if (error) {
-        console.error(error.message);
-        rl.close();
-        return;
-      }
+  rl.pause();
+  editAsync(message)
+    .then((response) => {
       if (!response || response.length === 0) {
         readline.moveCursor(process.stdout, 0, -1);
         process.stdout.write(
@@ -35,10 +28,10 @@ rl.on('line', () => {
         process.stdout.write('\n');
         rl.close();
       }
+    })
+    .catch((err: unknown) => {
+      console.error((err as Error).message);
+      process.stdout.write('\n');
+      rl.close();
     });
-  } catch (err) {
-    console.error((err as Error).message);
-    process.stdout.write('\n');
-    rl.close();
-  }
 });
