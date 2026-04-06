@@ -95,7 +95,7 @@ type CheckboxConfig<Value = string> = {
   message: string;
   prefix?: string;
   pageSize?: number;
-  choices: ReadonlyArray<string | Choice<Value> | Separator>;
+  choices: ReadonlyArray<Value | Choice<Value> | Separator>;
   loop?: boolean;
   required?: boolean;
   validate?: (
@@ -130,17 +130,18 @@ function check(checked: boolean) {
 }
 
 function normalizeChoices<Value>(
-  choices: ReadonlyArray<string | Choice<Value> | Separator>,
+  choices: ReadonlyArray<Value | Choice<Value> | Separator>,
 ): Item<Value>[] {
   return choices.map((choice) => {
     if (Separator.isSeparator(choice)) return choice;
 
-    if (typeof choice === 'string') {
+    if (typeof choice !== 'object' || choice === null || !('value' in choice)) {
+      const name = String(choice);
       return {
         value: choice as Value,
-        name: choice,
-        short: choice,
-        checkedName: choice,
+        name,
+        short: name,
+        checkedName: name,
         disabled: false,
         checked: false,
       };

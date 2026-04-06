@@ -66,8 +66,8 @@ type SearchConfig<Value = string> = {
     term: string | undefined,
     opt: { signal: AbortSignal },
   ) =>
-    | ReadonlyArray<string | Choice<Value> | Separator>
-    | Promise<ReadonlyArray<string | Choice<Value> | Separator>>;
+    | ReadonlyArray<Value | Choice<Value> | Separator>
+    | Promise<ReadonlyArray<Value | Choice<Value> | Separator>>;
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
   default?: NoInfer<Value>;
@@ -81,16 +81,17 @@ function isSelectable<Value>(item: Item<Value>): item is NormalizedChoice<Value>
 }
 
 function normalizeChoices<Value>(
-  choices: ReadonlyArray<string | Choice<Value> | Separator>,
+  choices: ReadonlyArray<Value | Choice<Value> | Separator>,
 ): Array<NormalizedChoice<Value> | Separator> {
   return choices.map((choice) => {
     if (Separator.isSeparator(choice)) return choice;
 
-    if (typeof choice === 'string') {
+    if (typeof choice !== 'object' || choice === null || !('value' in choice)) {
+      const name = String(choice);
       return {
         value: choice as Value,
-        name: choice,
-        short: choice,
+        name,
+        short: name,
         disabled: false,
       };
     }

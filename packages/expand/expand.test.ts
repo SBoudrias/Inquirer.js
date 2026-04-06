@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, expectTypeOf } from 'vitest';
 import { render } from '@inquirer/testing';
 import expand, { Separator } from './src/index.ts';
 
@@ -332,6 +332,26 @@ describe('expand prompt', () => {
         x) Abort"
     `);
 
+    abortController.abort();
+    await expect(answer).rejects.toThrow();
+  });
+});
+
+describe('expand types', () => {
+  it('infers boolean from Choice<boolean> choices', async () => {
+    const abortController = new AbortController();
+    const { answer } = await render(
+      expand,
+      {
+        message: 'test',
+        choices: [
+          { key: 'y' as const, name: 'Yes', value: true },
+          { key: 'n' as const, name: 'No', value: false },
+        ],
+      },
+      { signal: abortController.signal },
+    );
+    expectTypeOf(answer).resolves.toExtend<boolean>();
     abortController.abort();
     await expect(answer).rejects.toThrow();
   });
