@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render } from '@inquirer/testing';
-import { editAsync, type FileOptions } from '@inquirer/external-editor';
+import { editAsync } from '@inquirer/external-editor';
 import editor from './src/index.ts';
 
 vi.mock('@inquirer/external-editor');
@@ -10,7 +10,7 @@ let rejectEdit: (error: Error) => void;
 
 beforeEach(() => {
   vi.mocked(editAsync).mockImplementation(
-    (_text?: string, _options?: FileOptions): Promise<string> =>
+    (_text, _options) =>
       new Promise<string>((resolve, reject) => {
         resolveEdit = resolve;
         rejectEdit = reject;

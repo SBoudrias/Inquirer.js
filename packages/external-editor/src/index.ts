@@ -34,29 +34,29 @@ export function edit(text: string = '', fileOptions?: FileOptions): string {
 
 type EditAsync = {
   /** @deprecated Use editAsync(text, options) returning a Promise instead */
-  (text: string, callback: StringCallback, fileOptions?: FileOptions): void;
+  (text: string, callback: StringCallback, fileOptions?: FileOptions): Promise<string>;
   (text?: string, fileOptions?: FileOptions): Promise<string>;
 };
 
-export const editAsync = function _editAsync(
-  text: string = '',
+export const editAsync: EditAsync = (
+  text?: string,
   callbackOrOptions?: StringCallback | FileOptions,
   fileOptions?: FileOptions,
-): Promise<string> | void {
+): Promise<string> => {
   const callback =
     typeof callbackOrOptions === 'function' ? callbackOrOptions : undefined;
   const options =
     typeof callbackOrOptions === 'function' ? fileOptions : callbackOrOptions;
-  const promise = new ExternalEditor(text, options).runAsync();
+
+  const promise = new ExternalEditor(text ?? '', options).runAsync();
   if (callback) {
     promise.then(
       (result) => callback(undefined, result),
       (err: unknown) => callback(err as Error, undefined),
     );
-    return;
   }
   return promise;
-} as unknown as EditAsync;
+};
 
 function sanitizeAffix(affix?: string): string {
   if (!affix) return '';
@@ -102,10 +102,7 @@ export class ExternalEditor {
     }
   }
 
-  public runAsync(): Promise<string>;
-  /** @deprecated Use runAsync() returning a Promise instead */
-  public runAsync(callback: StringCallback): void;
-  public runAsync(callback?: StringCallback): Promise<string> | void {
+  public runAsync(callback?: StringCallback): Promise<string> {
     this.createTempFile();
     const promise = new Promise<void>((resolve, reject) => {
       try {
@@ -135,7 +132,6 @@ export class ExternalEditor {
         (text) => callback(undefined, text),
         (err: unknown) => callback(err as Error, undefined),
       );
-      return;
     }
 
     return promise;
