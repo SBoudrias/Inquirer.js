@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, expectTypeOf } from 'vitest';
 import { render } from '@inquirer/testing';
 import { ValidationError } from '@inquirer/core';
 import checkbox, { Separator } from './src/index.ts';
@@ -1479,5 +1479,31 @@ describe('checkbox prompt', () => {
       events.keypress('enter');
       await expect(answer).resolves.toEqual([]);
     });
+  });
+});
+
+describe('checkbox types', () => {
+  it('infers exact string union from hardcoded string choices', async () => {
+    const abortController = new AbortController();
+    const { answer } = await render(
+      checkbox,
+      { message: 'test', choices: ['foo', 'bar'] },
+      { signal: abortController.signal },
+    );
+    expectTypeOf(answer).resolves.toExtend<('foo' | 'bar')[]>();
+    abortController.abort();
+    await expect(answer).rejects.toThrow();
+  });
+
+  it('infers number[] from Choice<number> choices', async () => {
+    const abortController = new AbortController();
+    const { answer } = await render(
+      checkbox,
+      { message: 'test', choices: [{ value: 1 }, { value: 2 }] },
+      { signal: abortController.signal },
+    );
+    expectTypeOf(answer).resolves.toExtend<number[]>();
+    abortController.abort();
+    await expect(answer).rejects.toThrow();
   });
 });

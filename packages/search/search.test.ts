@@ -717,3 +717,35 @@ describe('search prompt', () => {
     await expect(answer).resolves.toEqual('AB');
   });
 });
+
+describe('search types', () => {
+  it('infers exact string union from hardcoded string choices', async () => {
+    const abortController = new AbortController();
+    const { answer } = await render(
+      search,
+      {
+        message: 'test',
+        source: () => ['foo', 'bar'] as const,
+      },
+      { signal: abortController.signal },
+    );
+    expectTypeOf(answer).resolves.toExtend<'foo' | 'bar'>();
+    abortController.abort();
+    await expect(answer).rejects.toThrow();
+  });
+
+  it('infers number from Choice<number> choices', async () => {
+    const abortController = new AbortController();
+    const { answer } = await render(
+      search,
+      {
+        message: 'test',
+        source: () => [{ value: 1 }, { value: 2 }],
+      },
+      { signal: abortController.signal },
+    );
+    expectTypeOf(answer).resolves.toExtend<number>();
+    abortController.abort();
+    await expect(answer).rejects.toThrow();
+  });
+});
