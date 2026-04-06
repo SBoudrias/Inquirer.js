@@ -48,14 +48,7 @@ export const editAsync: EditAsync = (
   const options =
     typeof callbackOrOptions === 'function' ? fileOptions : callbackOrOptions;
 
-  const promise = new ExternalEditor(text ?? '', options).runAsync();
-  if (callback) {
-    promise.then(
-      (result) => callback(undefined, result),
-      (err: unknown) => callback(err as Error, undefined),
-    );
-  }
-  return promise;
+  return new ExternalEditor(text ?? '', options).runAsync(callback);
 };
 
 function sanitizeAffix(affix?: string): string {
