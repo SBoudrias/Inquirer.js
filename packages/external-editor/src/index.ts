@@ -32,9 +32,31 @@ export function edit(text: string = '', fileOptions?: FileOptions): string {
   return new ExternalEditor(text, fileOptions).run();
 }
 
-export function editAsync(text: string = '', fileOptions?: FileOptions): Promise<string> {
-  return new ExternalEditor(text, fileOptions).runAsync();
-}
+type EditAsync = {
+  /** @deprecated Use editAsync(text, options) returning a Promise instead */
+  (text: string, callback: StringCallback, fileOptions?: FileOptions): void;
+  (text?: string, fileOptions?: FileOptions): Promise<string>;
+};
+
+export const editAsync = function _editAsync(
+  text: string = '',
+  callbackOrOptions?: StringCallback | FileOptions,
+  fileOptions?: FileOptions,
+): Promise<string> | void {
+  const callback =
+    typeof callbackOrOptions === 'function' ? callbackOrOptions : undefined;
+  const options =
+    typeof callbackOrOptions === 'function' ? fileOptions : callbackOrOptions;
+  const promise = new ExternalEditor(text, options).runAsync();
+  if (callback) {
+    promise.then(
+      (result) => callback(undefined, result),
+      (err: unknown) => callback(err as Error, undefined),
+    );
+    return;
+  }
+  return promise;
+} as unknown as EditAsync;
 
 function sanitizeAffix(affix?: string): string {
   if (!affix) return '';
