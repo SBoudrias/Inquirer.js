@@ -47,14 +47,8 @@ describe('main', () => {
     expect(editor.lastExitStatus).toBe(0);
   });
 
-  it('runAsync() callbacks correctly', async () => {
-    const text = await new Promise<string | undefined>((resolve) => {
-      editor.runAsync((error, text) => {
-        expect(error).toBeUndefined();
-        resolve(text);
-      });
-    });
-
+  it('runAsync() returns correctly', async () => {
+    const text = await editor.runAsync();
     expect(text).toBe(expectedResult);
     expect(editor.lastExitStatus).toBe(0);
   });
@@ -129,13 +123,7 @@ describe('invalid exit code', () => {
   });
 
   it('runAsync()', async () => {
-    await new Promise<void>((resolve) => {
-      editor.runAsync((error) => {
-        expect(error).toBeUndefined();
-        resolve();
-      });
-    });
-
+    await editor.runAsync();
     expect(editor.lastExitStatus).toBe(1);
   });
 });

@@ -82,8 +82,8 @@ export class ExternalEditor {
 
     this.editor = parseEditorCommand(
       process.env['VISUAL'] ??
-      process.env['EDITOR'] ??
-      (process.platform.startsWith('win') ? 'notepad' : 'vim')
+        process.env['EDITOR'] ??
+        (process.platform.startsWith('win') ? 'notepad' : 'vim'),
     );
   }
 
