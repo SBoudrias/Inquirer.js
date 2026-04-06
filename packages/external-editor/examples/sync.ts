@@ -39,7 +39,7 @@ rl.on('line', () => {
       rl.close();
     }
   } catch (err) {
-    process.stderr.write((err as Error).message);
+    process.stderr.write(String(err));
     process.stdout.write('\n');
     rl.close();
   }

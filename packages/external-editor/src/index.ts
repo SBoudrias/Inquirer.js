@@ -123,7 +123,8 @@ export class ExternalEditor {
     if (callback) {
       promise.then(
         (text) => callback(undefined, text),
-        (err: unknown) => callback(err as Error, undefined),
+        (err: unknown) =>
+          callback(err instanceof Error ? err : new Error(String(err)), undefined),
       );
     }
 

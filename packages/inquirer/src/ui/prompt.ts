@@ -37,6 +37,7 @@ export const _ = {
         pointer[key] = {};
       }
 
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       pointer = pointer[key] as Record<string, unknown>;
     });
   },
@@ -76,9 +77,11 @@ async function fetchAsyncQuestionProperty<
 
   const propGetter = question[prop];
   if (typeof propGetter === 'function') {
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     return runAsync(propGetter as (...args: unknown[]) => Promise<RawValue>)(answers);
   }
 
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return propGetter as RawValue;
 }
 
@@ -244,16 +247,19 @@ export default class PromptsRunner<A extends Answers> {
       ),
     );
 
-    return lastValueFrom(
-      this.process.pipe(
-        reduce((answersObj, answer: { name: string; answer: unknown }) => {
-          _.set(answersObj, answer.name, answer.answer);
-          return answersObj;
-        }, this.answers),
-      ),
-    )
-      .then(() => this.answers as A)
-      .finally(() => this.close());
+    return (
+      lastValueFrom(
+        this.process.pipe(
+          reduce((answersObj, answer: { name: string; answer: unknown }) => {
+            _.set(answersObj, answer.name, answer.answer);
+            return answersObj;
+          }, this.answers),
+        ),
+      )
+        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+        .then(() => this.answers as A)
+        .finally(() => this.close())
+    );
   }
 
   private prepareQuestion = async (question: Question<A>) => {
@@ -328,6 +334,7 @@ export default class PromptsRunner<A extends Answers> {
               return;
             }
 
+            // oxlint-disable-next-line typescript/no-unsafe-type-assertion
             const rl = readline.createInterface(
               setupReadlineOptions(opt),
             ) as unknown as InquirerReadline;

@@ -97,14 +97,15 @@ export default createPrompt(
         if (required || answer != null) {
           isValid = validateNumber(answer, { min, max, step });
         }
-        if (isValid === true) {
-          isValid = await validate(answer as number);
+        if (isValid === true && answer != null) {
+          isValid = await validate(answer);
         }
 
         if (isValid === true) {
           setValue(String(answer ?? ''));
           setStatus('done');
-          done(answer as number);
+          // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+          done(answer as Required extends true ? number : number | undefined);
         } else {
           // Reset the readline line value to the previous value. On line event, the value
           // get cleared, forcing the user to re-enter the value instead of fixing it.

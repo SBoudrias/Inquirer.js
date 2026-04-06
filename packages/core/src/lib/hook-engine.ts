@@ -106,6 +106,7 @@ export function withPointer<Value, ReturnValue>(
   const { index } = store;
   const pointer: Pointer<Value> = {
     get(): Value {
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       return store.hooks[index] as Value;
     },
     set(value: Value) {

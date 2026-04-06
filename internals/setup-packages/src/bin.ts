@@ -18,12 +18,15 @@ function readFile(filepath: string) {
 }
 
 function readJSONFile<T>(filepath: string): Promise<T> {
-  return readFile(filepath)
-    .then((content) => parseJsonc(content) as T)
-    .catch((error: unknown) => {
-      console.error(`Error reading ${filepath}: ${error}`);
-      throw error;
-    });
+  return (
+    readFile(filepath)
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+      .then((content) => parseJsonc(content) as T)
+      .catch((error: unknown) => {
+        console.error(`Error reading ${filepath}: ${String(error)}`);
+        throw error;
+      })
+  );
 }
 
 function fileExists(filepath: string) {

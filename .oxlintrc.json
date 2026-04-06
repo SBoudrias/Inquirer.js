@@ -3,6 +3,9 @@
   "env": {
     "node": true
   },
+  "options": {
+    "typeAware": true
+  },
   "ignorePatterns": [".yarn"],
   "categories": {
     "correctness": "error",
@@ -12,6 +15,28 @@
   "rules": {
     "no-await-in-loop": "off",
     "no-map-spread": "off",
-    "no-shadow": "off"
-  }
+    "no-shadow": "off",
+    "typescript/no-misused-promises": "error",
+    "typescript/no-deprecated": "error",
+    "typescript/prefer-includes": "error",
+    "typescript/only-throw-error": "error",
+    "typescript/no-mixed-enums": "error",
+    "typescript/switch-exhaustiveness-check": "error",
+    "typescript/restrict-plus-operands": "error",
+    "typescript/prefer-promise-reject-errors": "error"
+  },
+  "overrides": [
+    {
+      "files": ["integration/**/*.cjs", "integration/**/*.mjs"],
+      "rules": {
+        "typescript/no-floating-promises": "off"
+      }
+    },
+    {
+      "files": ["**/*.test.ts", "**/*.test.mts", "**/*.test.mjs", "**/*.test.cjs"],
+      "rules": {
+        "typescript/unbound-method": "off"
+      }
+    }
+  ]
 }

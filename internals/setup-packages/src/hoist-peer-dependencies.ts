@@ -5,12 +5,14 @@ import type { PackageJson } from 'type-fest';
 const require = Module.createRequire(import.meta.url);
 
 export function fixPeerDeps(target: string) {
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   const pkg = require(`${target}/package.json`) as PackageJson;
 
   for (const name of Object.keys(pkg.dependencies ?? {})) {
     // Import the dependency package.json file and parse it
     let depPkg: PackageJson;
     try {
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       depPkg = require(`${name}/package.json`) as PackageJson;
     } catch {
       // If the sub package doesn't expose their package.json; skip it.

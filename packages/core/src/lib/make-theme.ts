@@ -26,12 +26,14 @@ function deepMerge<T extends object>(...objects: Partial<T>[]): T {
     }
   }
 
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return output as T;
 }
 
 export function makeTheme<SpecificTheme extends object>(
   ...themes: ReadonlyArray<undefined | PartialDeep<Theme<SpecificTheme>>>
 ): Prettify<Theme<SpecificTheme>> {
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   const themesToMerge = [
     defaultTheme,
     ...themes.filter((theme) => theme != null),

@@ -99,7 +99,9 @@ describe('auto locale detection', () => {
   });
 
   it('falls back to English when Intl returns unsupported locale', async () => {
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((() => ({
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       resolvedOptions: () => ({ locale: 'de-DE' }) as Intl.ResolvedDateTimeFormatOptions,
     })) as typeof Intl.DateTimeFormat);
     const { confirm } = await import('../src/index.ts');
@@ -112,7 +114,9 @@ describe('auto locale detection', () => {
   });
 
   it('uses Intl API when no env vars are set', async () => {
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((() => ({
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       resolvedOptions: () => ({ locale: 'fr-FR' }) as Intl.ResolvedDateTimeFormatOptions,
     })) as typeof Intl.DateTimeFormat);
     const { confirm } = await import('../src/index.ts');

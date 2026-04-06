@@ -15,6 +15,15 @@ type PackageJson = _PackageJson & {
 
 const execAsync = promisify(exec);
 
+function parseJSON<T>(content: string): T {
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+  return JSON.parse(content) as T;
+}
+
+async function readJSON<T>(filePath: string): Promise<T> {
+  return parseJSON<T>(await fsPromises.readFile(filePath, 'utf-8'));
+}
+
 type YarnWorkspaceInfo = {
   name: string;
   location: string;
@@ -87,7 +96,7 @@ export async function discoverWorkspaces(
   // First pass: collect all workspace package names
   for (const line of lines) {
     try {
-      const workspace = JSON.parse(line) as YarnWorkspaceInfo;
+      const workspace = parseJSON<YarnWorkspaceInfo>(line);
       workspaceNames.add(workspace.name);
     } catch {
       // Skip invalid JSON lines
@@ -97,13 +106,12 @@ export async function discoverWorkspaces(
   // Second pass: build workspace map with dependencies (in parallel)
   const workspacePromises = lines.map(async (line) => {
     try {
-      const workspace = JSON.parse(line) as YarnWorkspaceInfo;
+      const workspace = parseJSON<YarnWorkspaceInfo>(line);
       const packageJsonPath = path.join(rootDir, workspace.location, 'package.json');
 
       try {
         await fsPromises.access(packageJsonPath);
-        const packageContent = await fsPromises.readFile(packageJsonPath, 'utf-8');
-        const pkg = JSON.parse(packageContent) as PackageJson;
+        const pkg = await readJSON<PackageJson>(packageJsonPath);
         const dependencies = new Set<string>();
 
         // Extract workspace dependencies
@@ -398,8 +406,7 @@ export async function setupIsolatedEnvironment(
 
   // Modify package.json to use local tarballs
   const packageJsonPath = path.join(packageDestDir, 'package.json');
-  const packageContent = await fsPromises.readFile(packageJsonPath, 'utf-8');
-  const pkg = JSON.parse(packageContent) as PackageJson;
+  const pkg = await readJSON<PackageJson>(packageJsonPath);
 
   // Update direct dependencies to use file: protocol
   for (const deps of [pkg.dependencies, pkg.devDependencies]) {

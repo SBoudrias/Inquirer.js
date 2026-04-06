@@ -171,10 +171,12 @@ export default createPrompt(
         ) {
           const offset = isUpKey(key) ? -1 : 1;
           let next = active;
+          let nextChoice: NormalizedChoice<Value> | Separator | undefined;
           do {
             next = (next + offset + choices.length) % choices.length;
-          } while (!isSelectableChoice(choices[next]));
-          setValue((choices[next] as NormalizedChoice<Value>).key);
+            nextChoice = choices[next];
+          } while (!isSelectableChoice(nextChoice));
+          setValue(nextChoice.key);
         }
       } else {
         setValue(rl.line);

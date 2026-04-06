@@ -51,20 +51,6 @@ export function wrapPrompt<Value, Config>(
   };
 }
 
-// Prompt names used by the @inquirer/prompts barrel mock to wrap only prompt exports.
-const promptNames = [
-  'input',
-  'select',
-  'confirm',
-  'checkbox',
-  'password',
-  'expand',
-  'rawlist',
-  'number',
-  'search',
-  'editor',
-];
-
 // Mock individual prompt packages (covers `import input from '@inquirer/input'` style).
 // All prompt packages are optional peer dependencies, so factories silently skip
 // packages that aren't installed in the consumer's project.
@@ -164,14 +150,20 @@ vi.mock('@inquirer/editor', async (importOriginal) => {
 // Only prompt functions are wrapped; other exports (like Separator) are passed through.
 vi.mock('@inquirer/prompts', async (importOriginal) => {
   try {
-    const actual = await importOriginal<Record<string, unknown>>();
-    const wrapped: Record<string, unknown> = { ...actual };
-    for (const name of promptNames) {
-      if (name in actual) {
-        wrapped[name] = wrapPrompt(actual[name] as Parameters<typeof wrapPrompt>[0]);
-      }
-    }
-    return wrapped;
+    const actual = await importOriginal<typeof import('@inquirer/prompts')>();
+    return {
+      ...actual,
+      input: wrapPrompt(actual.input),
+      select: wrapPrompt(actual.select),
+      confirm: wrapPrompt(actual.confirm),
+      checkbox: wrapPrompt(actual.checkbox),
+      password: wrapPrompt(actual.password),
+      expand: wrapPrompt(actual.expand),
+      rawlist: wrapPrompt(actual.rawlist),
+      number: wrapPrompt(actual.number),
+      search: wrapPrompt(actual.search),
+      editor: wrapPrompt(actual.editor),
+    };
   } catch {
     return {};
   }

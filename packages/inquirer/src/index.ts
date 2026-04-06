@@ -153,6 +153,7 @@ export function createPromptModule<
     promptModule.prompts = { ...builtInPrompts };
   };
 
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return promptModule as unknown as PromptModuleApi<Prompts>;
 }
 

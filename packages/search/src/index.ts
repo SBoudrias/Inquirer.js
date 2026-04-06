@@ -178,6 +178,7 @@ export default createPrompt(
     }, [searchTerm]);
 
     // Safe to assume the cursor position never points to a Separator.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     const selectedChoice = searchResults[active] as NormalizedChoice<Value> | void;
 
     useKeypress(async (key, rl) => {
