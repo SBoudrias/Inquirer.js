@@ -33,7 +33,7 @@ describe('ESM Integration', () => {
 
   it('works when prompt throws an error', async () => {
     await assert.rejects(() => fixturePrompt({}), {
-      message: `Prompt functions must return a string.\n    at ${pathToFileURL(path.join(import.meta.dirname, './fixturePrompt.mjs'))}`,
+      message: `Prompt functions must return a string.\n    at ${pathToFileURL(path.join(import.meta.dirname, './fixturePrompt.mjs')).href}`,
     });
   });
 

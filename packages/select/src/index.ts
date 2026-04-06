@@ -161,8 +161,10 @@ export default createPrompt(
       defaultItemIndex === -1 ? bounds.first : defaultItemIndex,
     );
 
-    // Safe to assume the cursor position always point to a Choice.
-    const selectedChoice = items[active] as NormalizedChoice<Value>;
+    const selectedChoice = items[active];
+    if (selectedChoice == null || Separator.isSeparator(selectedChoice)) {
+      throw new Error('Active index does not point to a choice');
+    }
 
     const [errorMsg, setError] = useState<string>();
 

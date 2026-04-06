@@ -232,6 +232,7 @@ describe('inquirer.prompt(...)', () => {
     vi.spyOn(readline, 'createInterface').mockImplementation((opts) => {
       const rl = actualCreateInterface(opts);
       vi.spyOn(rl, 'close');
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       vi.spyOn((rl as unknown as InquirerReadline).output, 'end');
       return rl;
     });
@@ -245,6 +246,7 @@ describe('inquirer.prompt(...)', () => {
     ]);
 
     await promise;
+    // oxlint-disable-next-line typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion
     const rl1 = vi.mocked(readline.createInterface).mock.results[0]!
       .value as InquirerReadline;
     expect(rl1.close).toHaveBeenCalledTimes(1);
@@ -259,6 +261,7 @@ describe('inquirer.prompt(...)', () => {
     ]);
 
     await promise2;
+    // oxlint-disable-next-line typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion
     const rl2 = vi.mocked(readline.createInterface).mock.results[1]!
       .value as InquirerReadline;
     expect(rl2.close).toHaveBeenCalledTimes(1);
@@ -271,6 +274,7 @@ describe('inquirer.prompt(...)', () => {
     vi.spyOn(readline, 'createInterface').mockImplementation((opts) => {
       const rl = actualCreateInterface(opts);
       vi.spyOn(rl, 'close');
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       vi.spyOn((rl as unknown as InquirerReadline).output, 'end');
       return rl;
     });
@@ -285,6 +289,7 @@ describe('inquirer.prompt(...)', () => {
 
     await expect(promise).rejects.toThrow();
 
+    // oxlint-disable-next-line typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion
     const rl = vi.mocked(readline.createInterface).mock.results[0]!
       .value as InquirerReadline;
     expect(rl.close).toHaveBeenCalledTimes(1);
@@ -491,6 +496,7 @@ describe('inquirer.prompt(...)', () => {
         answer: 'John',
         message: 'First name',
       },
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       {
         type: 'stub',
         name: 'last_name',

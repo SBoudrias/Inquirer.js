@@ -20,7 +20,7 @@ type ViewFunction<Value, Config> = (
 ) => string | [string, string | undefined];
 
 function getCallSites() {
-  // eslint-disable-next-line @typescript-eslint/unbound-method
+  // oxlint-disable-next-line typescript/unbound-method
   const _prepareStackTrace = Error.prepareStackTrace;
   let result: NodeJS.CallSite[] = [];
   try {
@@ -59,6 +59,7 @@ export function createPrompt<Value, Config>(
     // the output around each render call as needed.
     output.mute();
 
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     const rl = readline.createInterface({
       terminal: true,
       input,

@@ -472,6 +472,7 @@ describe('rawlist prompt', () => {
           { name: 'Banana', value: 'banana' },
         ],
         // Forcing an invalid default value
+        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
         default: 'Oops! not in the list' as 'banana',
       });
 

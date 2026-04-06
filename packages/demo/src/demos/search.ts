@@ -32,6 +32,7 @@ const demo = async () => {
         `https://registry.npmjs.org/-/v1/search?text=${encodeURIComponent(input)}&size=20`,
         { signal },
       );
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       const data = (await response.json()) as {
         objects: ReadonlyArray<{ package: { name: string; description: string } }>;
       };

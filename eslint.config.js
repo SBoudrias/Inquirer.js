@@ -55,7 +55,6 @@ export default defineConfig(
       },
     },
     rules: {
-      '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/no-invalid-void-type': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
@@ -78,7 +77,6 @@ export default defineConfig(
   {
     files: ['packages/inquirer/test/**', 'packages/**/*.test.*'],
     rules: {
-      '@typescript-eslint/unbound-method': 'off',
       'n/no-extraneous-import': [
         'error',
         {
@@ -110,5 +108,5 @@ export default defineConfig(
       ],
     },
   },
-  ...oxlint.configs['flat/recommended'],
+  ...oxlint.buildFromOxlintConfigFile('./.oxlintrc.json'),
 );

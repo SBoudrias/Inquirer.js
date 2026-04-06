@@ -145,7 +145,7 @@ type QuestionWithGetters<
   }
 >;
 
-/* eslint-disable @typescript-eslint/no-redundant-type-constituents, @typescript-eslint/no-duplicate-type-constituents */
+/* oxlint-disable typescript/no-redundant-type-constituents, typescript/no-duplicate-type-constituents */
 export type UnnamedDistinctQuestion<A extends Answers = object> =
   | QuestionWithGetters<
       'checkbox',
@@ -161,7 +161,7 @@ export type UnnamedDistinctQuestion<A extends Answers = object> =
   | QuestionWithGetters<'rawlist', Parameters<typeof rawlist>[0], A>
   | QuestionWithGetters<'search', Parameters<typeof search>[0], A>
   | QuestionWithGetters<'select', Parameters<typeof select>[0], A>;
-/* eslint-enable @typescript-eslint/no-redundant-type-constituents, @typescript-eslint/no-duplicate-type-constituents */
+/* oxlint-enable typescript/no-redundant-type-constituents, typescript/no-duplicate-type-constituents */
 
 export type CustomQuestion<
   A extends Answers,

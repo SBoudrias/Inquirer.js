@@ -80,9 +80,10 @@ function normalizeChoices<Value>(
     const name: string = 'name' in choice ? choice.name : String(choice.value);
     const value = 'value' in choice ? choice.value : name;
     return {
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       value: value as Value,
       name,
-      key: choice.key.toLowerCase() as Key,
+      key: choice.key,
     };
   });
 }

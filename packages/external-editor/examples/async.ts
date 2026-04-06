@@ -30,7 +30,7 @@ rl.on('line', () => {
       }
     })
     .catch((err: unknown) => {
-      console.error((err as Error).message);
+      console.error(String(err));
       process.stdout.write('\n');
       rl.close();
     });

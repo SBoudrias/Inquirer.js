@@ -3,6 +3,10 @@ import { withPointer, handleChange } from './hook-engine.ts';
 
 type NotFunction<T> = T extends (...args: never) => unknown ? never : T;
 
+function isFactory<V>(value: NotFunction<V> | (() => V)): value is () => V {
+  return typeof value === 'function';
+}
+
 export function useState<Value>(
   defaultValue: NotFunction<Value> | (() => Value),
 ): [Value, (newValue: Value) => void];
@@ -25,8 +29,7 @@ export function useState<Value>(defaultValue: NotFunction<Value> | (() => Value)
       return [pointer.get(), setState];
     }
 
-    const value =
-      typeof defaultValue === 'function' ? (defaultValue as () => Value)() : defaultValue;
+    const value = isFactory(defaultValue) ? defaultValue() : defaultValue;
     pointer.set(value);
     return [value, setState];
   });
