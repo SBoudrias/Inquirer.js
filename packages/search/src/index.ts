@@ -89,7 +89,7 @@ function normalizeChoices<Value>(
     if (typeof choice !== 'object' || choice === null || !('value' in choice)) {
       const name = String(choice);
       return {
-        value: choice as Value,
+        value: choice,
         name,
         short: name,
         disabled: false,
