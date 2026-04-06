@@ -91,18 +91,11 @@ type NormalizedChoice<Value> = {
   checked: boolean;
 };
 
-type CheckboxConfig<
-  Value,
-  ChoicesObject =
-    | ReadonlyArray<string | Separator>
-    | ReadonlyArray<Choice<Value> | Separator>,
-> = {
+type CheckboxConfig<Value = string> = {
   message: string;
   prefix?: string;
   pageSize?: number;
-  choices: ChoicesObject extends ReadonlyArray<string | Separator>
-    ? ChoicesObject
-    : ReadonlyArray<Choice<Value> | Separator>;
+  choices: ReadonlyArray<string | Choice<Value> | Separator>;
   loop?: boolean;
   required?: boolean;
   validate?: (
@@ -137,7 +130,7 @@ function check(checked: boolean) {
 }
 
 function normalizeChoices<Value>(
-  choices: ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
+  choices: ReadonlyArray<string | Choice<Value> | Separator>,
 ): Item<Value>[] {
   return choices.map((choice) => {
     if (Separator.isSeparator(choice)) return choice;

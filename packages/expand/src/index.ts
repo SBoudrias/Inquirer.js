@@ -61,23 +61,16 @@ type NormalizedChoice<Value> = {
   key: Key;
 };
 
-type ExpandConfig<
-  Value,
-  ChoicesObject = readonly { key: Key; name: string }[] | readonly Choice<Value>[],
-> = {
+type ExpandConfig<Value = string> = {
   message: string;
-  choices: ChoicesObject extends readonly (Separator | { key: Key; name: string })[]
-    ? ChoicesObject
-    : readonly (Separator | Choice<Value>)[];
+  choices: readonly (Separator | { key: Key; name: string } | Choice<Value>)[];
   default?: Key | 'h';
   expanded?: boolean;
   theme?: PartialDeep<Theme>;
 };
 
 function normalizeChoices<Value>(
-  choices:
-    | readonly (Separator | { key: Key; name: string })[]
-    | readonly (Separator | Choice<Value>)[],
+  choices: readonly (Separator | { key: Key; name: string } | Choice<Value>)[],
 ): (Separator | NormalizedChoice<Value>)[] {
   return choices.map((choice) => {
     if (Separator.isSeparator(choice)) {

@@ -60,21 +60,14 @@ type NormalizedChoice<Value> = {
   disabled: boolean | string;
 };
 
-type SearchConfig<
-  Value,
-  ChoicesObject =
-    | ReadonlyArray<string | Separator>
-    | ReadonlyArray<Choice<Value> | Separator>,
-> = {
+type SearchConfig<Value = string> = {
   message: string;
   source: (
     term: string | undefined,
     opt: { signal: AbortSignal },
-  ) => ChoicesObject extends ReadonlyArray<string | Separator>
-    ? ChoicesObject | Promise<ChoicesObject>
-    :
-        | ReadonlyArray<Choice<Value> | Separator>
-        | Promise<ReadonlyArray<Choice<Value> | Separator>>;
+  ) =>
+    | ReadonlyArray<string | Choice<Value> | Separator>
+    | Promise<ReadonlyArray<string | Choice<Value> | Separator>>;
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
   default?: NoInfer<Value>;
@@ -88,7 +81,7 @@ function isSelectable<Value>(item: Item<Value>): item is NormalizedChoice<Value>
 }
 
 function normalizeChoices<Value>(
-  choices: ReadonlyArray<string | Separator> | ReadonlyArray<Choice<Value> | Separator>,
+  choices: ReadonlyArray<string | Choice<Value> | Separator>,
 ): Array<NormalizedChoice<Value> | Separator> {
   return choices.map((choice) => {
     if (Separator.isSeparator(choice)) return choice;
