@@ -14,11 +14,11 @@
     "tsc": "tsc && chmod +x ./dist/bin.js"
   },
   "dependencies": {
-    "type-fest": "^5.2.0"
+    "type-fest": "^5.5.0"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "@types/node": "^25.0.2",
+    "@types/node": "^25.5.2",
     "typescript": "^6.0.2"
   },
   "engines": {

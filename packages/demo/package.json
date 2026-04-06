@@ -86,7 +86,7 @@
   "devDependencies": {
     "@inquirer/testing": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "@types/node": "^25.0.2",
+    "@types/node": "^25.5.2",
     "typescript": "^6.0.2"
   },
   "peerDependencies": {

@@ -335,7 +335,7 @@ __metadata:
     "@inquirer/type": "npm:^4.0.4"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
-    "@types/node": "npm:^25.0.2"
+    "@types/node": "npm:^25.5.2"
     cli-width: "npm:^4.1.0"
     fast-wrap-ansi: "npm:^0.2.0"
     mute-stream: "npm:^3.0.0"
@@ -358,7 +358,7 @@ __metadata:
     "@inquirer/prompts": "npm:^8.3.2"
     "@inquirer/testing": "workspace:*"
     "@repo/tsconfig": "workspace:*"
-    "@types/node": "npm:^25.0.2"
+    "@types/node": "npm:^25.5.2"
     typescript: "npm:^6.0.2"
   peerDependencies:
     "@types/node": ">=18"
@@ -421,7 +421,7 @@ __metadata:
   dependencies:
     "@repo/tsconfig": "workspace:*"
     "@types/chardet": "npm:^1.0.0"
-    "@types/node": "npm:^25.0.2"
+    "@types/node": "npm:^25.5.2"
     chardet: "npm:^2.1.1"
     iconv-lite: "npm:^0.7.2"
     typescript: "npm:^6.0.2"
@@ -438,7 +438,7 @@ __metadata:
   resolution: "@inquirer/figures@workspace:packages/figures"
   dependencies:
     "@repo/tsconfig": "workspace:*"
-    "@types/node": "npm:^25.0.2"
+    "@types/node": "npm:^25.5.2"
     typescript: "npm:^6.0.2"
   languageName: unknown
   linkType: soft
@@ -557,13 +557,13 @@ __metadata:
     "@lerna-lite/cli": "npm:^5.0.0"
     "@lerna-lite/publish": "npm:^5.0.0"
     "@repo/tsconfig": "workspace:*"
-    "@types/node": "npm:^25.0.2"
-    "@vitest/coverage-v8": "npm:^4.0.13"
-    "@vitest/ui": "npm:^4.0.13"
-    eslint: "npm:^10.0.3"
-    eslint-plugin-n: "npm:^17.23.1"
+    "@types/node": "npm:^25.5.2"
+    "@vitest/coverage-v8": "npm:^4.1.2"
+    "@vitest/ui": "npm:^4.1.2"
+    eslint: "npm:^10.2.0"
+    eslint-plugin-n: "npm:^17.24.0"
     eslint-plugin-oxlint: "npm:^1.58.0"
-    globals: "npm:^17.0.0"
+    globals: "npm:^17.4.0"
     husky: "npm:^9.1.7"
     isolate-monorepo-package: "workspace:*"
     nano-staged: "npm:^0.9.0"
@@ -571,11 +571,11 @@ __metadata:
     oxlint: "npm:^1.58.0"
     oxlint-tsgolint: "npm:^0.20.0"
     setup-packages: "workspace:*"
-    turbo: "npm:^2.6.1"
-    type-fest: "npm:^5.2.0"
+    turbo: "npm:^2.9.4"
+    type-fest: "npm:^5.5.0"
     typescript: "npm:^6.0.2"
-    typescript-eslint: "npm:^8.46.4"
-    vitest: "npm:^4.0.13"
+    typescript-eslint: "npm:^8.58.0"
+    vitest: "npm:^4.1.2"
   languageName: unknown
   linkType: soft
 
@@ -622,11 +622,11 @@ __metadata:
     "@repo/tsconfig": "workspace:*"
     "@types/jest": "npm:^30.0.0"
     "@types/mute-stream": "npm:^0.0.4"
-    "@types/node": "npm:^25.0.2"
+    "@types/node": "npm:^25.5.2"
     "@xterm/headless": "npm:^6.0.0"
     mute-stream: "npm:^3.0.0"
     typescript: "npm:^6.0.2"
-    vitest: "npm:^4.0.18"
+    vitest: "npm:^4.1.2"
   peerDependencies:
     "@inquirer/checkbox": ">=1.0.0"
     "@inquirer/confirm": ">=1.0.0"
@@ -2106,7 +2106,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^25.0.2":
+"@types/node@npm:*":
   version: 25.5.0
   resolution: "@types/node@npm:25.5.0"
   dependencies:
@@ -2121,6 +2121,15 @@ __metadata:
   dependencies:
     undici-types: "npm:~6.21.0"
   checksum: 10/c75bc9a8dbc49a61f3e6f49304cf7b1c05e818a1071b46e9effd1a51af7a1b5c10fd2e04f314b74ce78f4ca7e3ddc1d6e61c94c2e3354c8be9f9f7ee5e79e23c
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^25.5.2":
+  version: 25.5.2
+  resolution: "@types/node@npm:25.5.2"
+  dependencies:
+    undici-types: "npm:~7.18.0"
+  checksum: 10/11782030f910ecf600cd537791980bd8b68496570ecd633d512d713b5b8a16ea3740fce85c82d0593305f809a7c205d7e86c07f179063fc98f014a7f9b013166
   languageName: node
   linkType: hard
 
@@ -2296,7 +2305,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/coverage-v8@npm:^4.0.13":
+"@vitest/coverage-v8@npm:^4.1.2":
   version: 4.1.2
   resolution: "@vitest/coverage-v8@npm:4.1.2"
   dependencies:
@@ -2391,7 +2400,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/ui@npm:^4.0.13":
+"@vitest/ui@npm:^4.1.2":
   version: 4.1.2
   resolution: "@vitest/ui@npm:4.1.2"
   dependencies:
@@ -3177,7 +3186,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-n@npm:^17.23.1":
+"eslint-plugin-n@npm:^17.24.0":
   version: 17.24.0
   resolution: "eslint-plugin-n@npm:17.24.0"
   dependencies:
@@ -3233,7 +3242,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^10.0.3":
+"eslint@npm:^10.2.0":
   version: 10.2.0
   resolution: "eslint@npm:10.2.0"
   dependencies:
@@ -3767,14 +3776,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^17.0.0":
+"globals@npm:^17.4.0":
   version: 17.4.0
   resolution: "globals@npm:17.4.0"
   checksum: 10/ffad244617e94efcb3da72b7beefc941167c21316148ce378f322db7af72db06468f370e23224b3c7b17b5173a7c75b134e5e7b0949f2828519054a76892508d
   languageName: node
   linkType: hard
 
-"globby@npm:^16.0.0":
+"globby@npm:^16.2.0":
   version: 16.2.0
   resolution: "globby@npm:16.2.0"
   dependencies:
@@ -4166,8 +4175,8 @@ __metadata:
   resolution: "isolate-monorepo-package@workspace:internals/isolate-monorepo-package"
   dependencies:
     "@repo/tsconfig": "workspace:*"
-    "@types/node": "npm:^25.0.2"
-    type-fest: "npm:^5.2.0"
+    "@types/node": "npm:^25.5.2"
+    type-fest: "npm:^5.5.0"
     typescript: "npm:^6.0.2"
   bin:
     isolate-monorepo-package: ./src/bin.ts
@@ -5932,10 +5941,10 @@ __metadata:
   resolution: "setup-packages@workspace:internals/setup-packages"
   dependencies:
     "@repo/tsconfig": "workspace:*"
-    globby: "npm:^16.0.0"
+    globby: "npm:^16.2.0"
     jsonc-parser: "npm:^3.3.1"
     std-semver: "npm:^1.0.8"
-    type-fest: "npm:^5.2.0"
+    type-fest: "npm:^5.5.0"
   bin:
     setup-packages: ./src/bin.ts
   languageName: unknown
@@ -6425,7 +6434,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turbo@npm:^2.6.1":
+"turbo@npm:^2.9.4":
   version: 2.9.4
   resolution: "turbo@npm:2.9.4"
   dependencies:
@@ -6470,7 +6479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^5.2.0":
+"type-fest@npm:^5.5.0":
   version: 5.5.0
   resolution: "type-fest@npm:5.5.0"
   dependencies:
@@ -6479,7 +6488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-eslint@npm:^8.46.4":
+"typescript-eslint@npm:^8.58.0":
   version: 8.58.0
   resolution: "typescript-eslint@npm:8.58.0"
   dependencies:
@@ -6691,7 +6700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest@npm:^4.0.13, vitest@npm:^4.0.18":
+"vitest@npm:^4.1.2":
   version: 4.1.2
   resolution: "vitest@npm:4.1.2"
   dependencies:

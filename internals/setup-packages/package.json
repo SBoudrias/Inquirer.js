@@ -9,13 +9,13 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "globby": "^16.0.0",
+    "globby": "^16.2.0",
     "jsonc-parser": "^3.3.1",
     "std-semver": "^1.0.8"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "type-fest": "^5.2.0"
+    "type-fest": "^5.5.0"
   },
   "engines": {
     "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
