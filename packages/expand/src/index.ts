@@ -63,22 +63,30 @@ type NormalizedChoice<Value> = {
 
 type ExpandConfig<Value = string> = {
   message: string;
-  choices: readonly (Separator | { key: Key; name: string } | Choice<Value>)[];
+  choices: readonly (
+    | Separator
+    | { key: Key; name: Value; value?: never }
+    | Choice<Value>
+  )[];
   default?: Key | 'h';
   expanded?: boolean;
   theme?: PartialDeep<Theme>;
 };
 
 function normalizeChoices<Value>(
-  choices: readonly (Separator | { key: Key; name: string } | Choice<Value>)[],
+  choices: readonly (
+    | Separator
+    | { key: Key; name: Value; value?: never }
+    | Choice<Value>
+  )[],
 ): (Separator | NormalizedChoice<Value>)[] {
   return choices.map((choice) => {
     if (Separator.isSeparator(choice)) {
       return choice;
     }
 
-    const name: string = 'name' in choice ? choice.name : String(choice.value);
-    const value = 'value' in choice ? choice.value : name;
+    const name: string = 'name' in choice ? String(choice.name) : String(choice.value);
+    const value = 'value' in choice ? choice.value : choice.name;
     return {
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       value: value as Value,
