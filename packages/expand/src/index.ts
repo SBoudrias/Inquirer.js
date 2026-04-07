@@ -10,7 +10,7 @@ import {
   type Theme,
   type Status,
 } from '@inquirer/core';
-import type { PartialDeep, Context } from '@inquirer/type';
+import type { PartialDeep } from '@inquirer/type';
 import { styleText } from 'node:util';
 
 type Key =
@@ -65,7 +65,7 @@ type ExpandConfig<Value = string> = {
   message: string;
   choices: readonly (
     | Separator
-    | { key: Key; name: string; value?: never }
+    | { key: Key; name: Value & string; value?: never }
     | Choice<Value>
   )[];
   default?: Key | 'h';
@@ -76,7 +76,7 @@ type ExpandConfig<Value = string> = {
 function normalizeChoices<Value>(
   choices: readonly (
     | Separator
-    | { key: Key; name: string; value?: never }
+    | { key: Key; name: Value & string; value?: never }
     | Choice<Value>
   )[],
 ): (Separator | NormalizedChoice<Value>)[] {
@@ -208,14 +208,6 @@ const expand = createPrompt(
   },
 );
 
-export default expand as {
-  <Value extends string>(
-    config: Omit<ExpandConfig<string>, 'choices'> & {
-      choices: ReadonlyArray<{ key: Key; name: Value; value?: never } | Separator>;
-    },
-    context?: Context,
-  ): Promise<Value>;
-} & typeof expand;
-
+export default expand;
 export type { ExpandConfig };
 export { Separator } from '@inquirer/core';

@@ -87,10 +87,8 @@ export const checkbox: typeof en.checkbox = (config, context) =>
 export const search: typeof en.search = (config, context) =>
   getLocale().search(config, context);
 
-// oxlint-disable-next-line typescript/no-unsafe-type-assertion
-export const expand: typeof en.expand = ((config: unknown, context?: unknown) =>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getLocale().expand(config as any, context as any)) as typeof en.expand;
+export const expand: typeof en.expand = (config, context) =>
+  getLocale().expand(config, context);
 
 export const editor: typeof en.editor = (config, context) =>
   getLocale().editor(config, context);
