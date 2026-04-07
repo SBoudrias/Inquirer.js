@@ -209,5 +209,4 @@ const expand = createPrompt(
 );
 
 export default expand;
-export type { ExpandConfig };
 export { Separator } from '@inquirer/core';
