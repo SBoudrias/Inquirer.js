@@ -355,4 +355,22 @@ describe('expand types', () => {
     abortController.abort();
     await expect(answer).rejects.toThrow();
   });
+
+  it('infers string literal union from name-only choices', async () => {
+    const abortController = new AbortController();
+    const { answer } = await render(
+      expand,
+      {
+        message: 'test',
+        choices: [
+          { key: 'y' as const, name: 'Yes' },
+          { key: 'n' as const, name: 'No' },
+        ],
+      },
+      { signal: abortController.signal },
+    );
+    expectTypeOf(answer).resolves.toEqualTypeOf<'Yes' | 'No'>();
+    abortController.abort();
+    await expect(answer).rejects.toThrow();
+  });
 });

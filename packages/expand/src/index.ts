@@ -63,14 +63,22 @@ type NormalizedChoice<Value> = {
 
 type ExpandConfig<Value = string> = {
   message: string;
-  choices: readonly (Separator | { key: Key; name: string } | Choice<Value>)[];
+  choices: readonly (
+    | Separator
+    | { key: Key; name: Value & string; value?: never }
+    | Choice<Value>
+  )[];
   default?: Key | 'h';
   expanded?: boolean;
   theme?: PartialDeep<Theme>;
 };
 
 function normalizeChoices<Value>(
-  choices: readonly (Separator | { key: Key; name: string } | Choice<Value>)[],
+  choices: readonly (
+    | Separator
+    | { key: Key; name: Value & string; value?: never }
+    | Choice<Value>
+  )[],
 ): (Separator | NormalizedChoice<Value>)[] {
   return choices.map((choice) => {
     if (Separator.isSeparator(choice)) {
@@ -94,7 +102,7 @@ const helpChoice = {
   value: undefined,
 };
 
-export default createPrompt(
+const expand = createPrompt(
   <Value>(config: ExpandConfig<Value>, done: (value: Value) => void) => {
     const { default: defaultKey = 'h' } = config;
     const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
@@ -200,4 +208,5 @@ export default createPrompt(
   },
 );
 
+export default expand;
 export { Separator } from '@inquirer/core';
