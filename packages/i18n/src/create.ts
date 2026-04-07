@@ -3,6 +3,7 @@ import {
   confirm as confirmPrompt,
   editor as editorPrompt,
   expand as expandPrompt,
+  type ExpandConfig,
   input as inputPrompt,
   number as numberPrompt,
   password as passwordPrompt,
@@ -21,7 +22,8 @@ type ConfirmConfig = Parameters<typeof confirmPrompt>[0];
 type SelectConfig<Value> = Parameters<typeof selectPrompt<Value>>[0];
 type CheckboxConfig<Value> = Parameters<typeof checkboxPrompt<Value>>[0];
 type SearchConfig<Value> = Parameters<typeof searchPrompt<Value>>[0];
-type ExpandConfig<Value> = Parameters<typeof expandPrompt<Value>>[0];
+// ExpandConfig is imported directly from @inquirer/prompts (not derived via Parameters
+// to avoid conflicts with the name-only inference overload on the expand function)
 type RawlistConfig<Value> = Parameters<typeof rawlistPrompt<Value>>[0];
 type EditorConfig = Parameters<typeof editorPrompt>[0];
 type InputConfig = Parameters<typeof inputPrompt>[0];
@@ -124,7 +126,8 @@ export function createLocalizedPrompts(locale: Locale) {
     },
 
     expand<Value>(this: void, config: ExpandConfig<Value>, context?: Context) {
-      return expandPrompt(config, context);
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+      return expandPrompt(config, context) as Promise<Value>;
     },
 
     rawlist<Value>(this: void, config: RawlistConfig<Value>, context?: Context) {

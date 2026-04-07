@@ -10,7 +10,7 @@ import {
   type Theme,
   type Status,
 } from '@inquirer/core';
-import type { PartialDeep } from '@inquirer/type';
+import type { PartialDeep, Context } from '@inquirer/type';
 import { styleText } from 'node:util';
 
 type Key =
@@ -65,7 +65,7 @@ type ExpandConfig<Value = string> = {
   message: string;
   choices: readonly (
     | Separator
-    | { key: Key; name: Value; value?: never }
+    | { key: Key; name: string; value?: never }
     | Choice<Value>
   )[];
   default?: Key | 'h';
@@ -76,7 +76,7 @@ type ExpandConfig<Value = string> = {
 function normalizeChoices<Value>(
   choices: readonly (
     | Separator
-    | { key: Key; name: Value; value?: never }
+    | { key: Key; name: string; value?: never }
     | Choice<Value>
   )[],
 ): (Separator | NormalizedChoice<Value>)[] {
@@ -85,8 +85,8 @@ function normalizeChoices<Value>(
       return choice;
     }
 
-    const name: string = 'name' in choice ? String(choice.name) : String(choice.value);
-    const value = 'value' in choice ? choice.value : choice.name;
+    const name: string = 'name' in choice ? choice.name : String(choice.value);
+    const value = 'value' in choice ? choice.value : name;
     return {
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       value: value as Value,
@@ -102,7 +102,7 @@ const helpChoice = {
   value: undefined,
 };
 
-export default createPrompt(
+const expand = createPrompt(
   <Value>(config: ExpandConfig<Value>, done: (value: Value) => void) => {
     const { default: defaultKey = 'h' } = config;
     const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
@@ -208,4 +208,14 @@ export default createPrompt(
   },
 );
 
+export default expand as {
+  <Value extends string>(
+    config: Omit<ExpandConfig<string>, 'choices'> & {
+      choices: ReadonlyArray<{ key: Key; name: Value; value?: never } | Separator>;
+    },
+    context?: Context,
+  ): Promise<Value>;
+} & typeof expand;
+
+export type { ExpandConfig };
 export { Separator } from '@inquirer/core';

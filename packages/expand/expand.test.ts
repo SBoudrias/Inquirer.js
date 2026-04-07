@@ -340,8 +340,8 @@ describe('expand prompt', () => {
 describe('expand types', () => {
   it('infers boolean from Choice<boolean> choices', async () => {
     const abortController = new AbortController();
-    const { answer } = await render(
-      expand,
+    abortController.abort();
+    const answer = expand(
       {
         message: 'test',
         choices: [
@@ -352,14 +352,13 @@ describe('expand types', () => {
       { signal: abortController.signal },
     );
     expectTypeOf(answer).resolves.toExtend<boolean>();
-    abortController.abort();
     await expect(answer).rejects.toThrow();
   });
 
   it('infers string literal union from name-only choices', async () => {
     const abortController = new AbortController();
-    const { answer } = await render(
-      expand,
+    abortController.abort();
+    const answer = expand(
       {
         message: 'test',
         choices: [
@@ -370,7 +369,6 @@ describe('expand types', () => {
       { signal: abortController.signal },
     );
     expectTypeOf(answer).resolves.toEqualTypeOf<'Yes' | 'No'>();
-    abortController.abort();
     await expect(answer).rejects.toThrow();
   });
 });
