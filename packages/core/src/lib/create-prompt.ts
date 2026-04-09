@@ -54,17 +54,18 @@ export function createPrompt<Value, Config>(
     const output = new MuteStream();
     output.pipe(context.output ?? process.stdout);
 
-    // Pre-mute the output so that readline doesn't echo stale keystrokes
-    // to the terminal before the first render. ScreenManager will unmute/mute
-    // the output around each render call as needed.
-    output.mute();
-
     // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     const rl = readline.createInterface({
       terminal: true,
       input,
       output,
     }) as unknown as InquirerReadline;
+
+    // Mute the output after readline has initialized so readline can perform
+    // any terminal setup writes (e.g. Windows Console API initialization)
+    // before suppressing output. ScreenManager will unmute/mute around each
+    // render call as needed.
+    output.mute();
     const screen = new ScreenManager(rl);
 
     const { promise, resolve, reject } = PromisePolyfill.withResolver<Value>();
