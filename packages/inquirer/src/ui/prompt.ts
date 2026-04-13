@@ -238,7 +238,7 @@ export default class PromptsRunner<A extends Answers> {
                 if (shouldRun) {
                   return question;
                 }
-                return;
+                return undefined;
               }),
             ).pipe(filter((val) => val != null)),
           ),
