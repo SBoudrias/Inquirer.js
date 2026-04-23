@@ -103,6 +103,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@conventional-changelog/git-client@npm:^2.7.0":
+  version: 2.7.0
+  resolution: "@conventional-changelog/git-client@npm:2.7.0"
+  dependencies:
+    "@simple-libs/child-process-utils": "npm:^1.0.0"
+    "@simple-libs/stream-utils": "npm:^1.2.0"
+    semver: "npm:^7.5.2"
+  peerDependencies:
+    conventional-commits-filter: ^5.0.0
+    conventional-commits-parser: ^6.4.0
+  peerDependenciesMeta:
+    conventional-commits-filter:
+      optional: true
+    conventional-commits-parser:
+      optional: true
+  checksum: 10/d170ae97ce9771aa77c4ab66127ddbdd154e6b0801b3315d38f3a57bff2d515239140f0cdf0110641f732072493020ef281295209daf68601982b9675c23ba2f
+  languageName: node
+  linkType: hard
+
 "@emnapi/core@npm:^1.7.1":
   version: 1.9.0
   resolution: "@emnapi/core@npm:1.9.0"
@@ -399,7 +418,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/expand@npm:^5.0.10, @inquirer/expand@npm:^5.0.13, @inquirer/expand@workspace:packages/expand":
+"@inquirer/expand@npm:^5.0.12, @inquirer/expand@npm:^5.0.13, @inquirer/expand@workspace:packages/expand":
   version: 0.0.0-use.local
   resolution: "@inquirer/expand@workspace:packages/expand"
   dependencies:
@@ -459,7 +478,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/input@npm:^5.0.10, @inquirer/input@npm:^5.0.12, @inquirer/input@workspace:*, @inquirer/input@workspace:packages/input":
+"@inquirer/input@npm:^5.0.11, @inquirer/input@npm:^5.0.12, @inquirer/input@workspace:*, @inquirer/input@workspace:packages/input":
   version: 0.0.0-use.local
   resolution: "@inquirer/input@workspace:packages/input"
   dependencies:
@@ -596,7 +615,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/select@npm:^5.1.2, @inquirer/select@npm:^5.1.4, @inquirer/select@workspace:packages/select":
+"@inquirer/select@npm:^5.1.3, @inquirer/select@npm:^5.1.4, @inquirer/select@workspace:packages/select":
   version: 0.0.0-use.local
   resolution: "@inquirer/select@workspace:packages/select"
   dependencies:
@@ -821,15 +840,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna-lite/cli@npm:5.0.0, @lerna-lite/cli@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@lerna-lite/cli@npm:5.0.0"
+"@lerna-lite/cli@npm:5.1.0, @lerna-lite/cli@npm:^5.0.0":
+  version: 5.1.0
+  resolution: "@lerna-lite/cli@npm:5.1.0"
   dependencies:
-    "@lerna-lite/core": "npm:5.0.0"
-    "@lerna-lite/init": "npm:5.0.0"
-    "@lerna-lite/npmlog": "npm:5.0.0"
+    "@lerna-lite/core": "npm:5.1.0"
+    "@lerna-lite/init": "npm:5.1.0"
+    "@lerna-lite/npmlog": "npm:5.1.0"
     dedent: "npm:^1.7.2"
-    dotenv: "npm:^17.3.1"
+    dotenv: "npm:^17.4.2"
     import-local: "npm:^3.2.0"
     load-json-file: "npm:^7.0.1"
     yargs: "npm:^18.0.0"
@@ -848,18 +867,18 @@ __metadata:
       optional: true
   bin:
     lerna: dist/cli.js
-  checksum: 10/9e743da846e24e18f3a36c6f3bd6fa1603a6104853b05fdc77d8ab2e7e07f98e7ab9b86dc6b48f003b92f18da625ae92663dce89a78db808f7a91cf02dc95d8c
+  checksum: 10/3370c8edfdf84558e374597d64fa7f9d68fd34627723f9f5f69b13a902f9bb78c2961fc1042fcced6105786b17480ccd255c8072fc18a14f589e932e7f5f15d6
   languageName: node
   linkType: hard
 
-"@lerna-lite/core@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@lerna-lite/core@npm:5.0.0"
+"@lerna-lite/core@npm:5.1.0":
+  version: 5.1.0
+  resolution: "@lerna-lite/core@npm:5.1.0"
   dependencies:
-    "@inquirer/expand": "npm:^5.0.10"
-    "@inquirer/input": "npm:^5.0.10"
-    "@inquirer/select": "npm:^5.1.2"
-    "@lerna-lite/npmlog": "npm:5.0.0"
+    "@inquirer/expand": "npm:^5.0.12"
+    "@inquirer/input": "npm:^5.0.11"
+    "@inquirer/select": "npm:^5.1.3"
+    "@lerna-lite/npmlog": "npm:5.1.0"
     "@npmcli/run-script": "npm:^10.0.4"
     ci-info: "npm:^4.4.0"
     dedent: "npm:^1.7.2"
@@ -870,47 +889,47 @@ __metadata:
     load-json-file: "npm:^7.0.1"
     npm-package-arg: "npm:^13.0.2"
     p-map: "npm:^7.0.4"
-    p-queue: "npm:^9.1.0"
+    p-queue: "npm:^9.1.2"
     semver: "npm:^7.7.4"
-    tinyglobby: "npm:^0.2.15"
+    tinyglobby: "npm:^0.2.16"
     write-file-atomic: "npm:^7.0.1"
     write-json-file: "npm:^7.0.0"
     yaml: "npm:^2.8.3"
     zeptomatch: "npm:^2.1.0"
-  checksum: 10/1aa7583c3f215ad379f7aecccaaef675c97c7fc30dbf15d6eb4b90bf4a18b65267cbabccd02f28e573e790dfe88e68606ff31971d8c4ce4dbda4516dedf371bb
+  checksum: 10/184296618563b36c9ef48d09fbc0ffe252fd47dd13f12750c40c0f60810dc5c04246d545c2f21819abeed89cd7fedcf8cd4b586aed71bee80a9def20123db986
   languageName: node
   linkType: hard
 
-"@lerna-lite/init@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@lerna-lite/init@npm:5.0.0"
+"@lerna-lite/init@npm:5.1.0":
+  version: 5.1.0
+  resolution: "@lerna-lite/init@npm:5.1.0"
   dependencies:
-    "@lerna-lite/core": "npm:5.0.0"
+    "@lerna-lite/core": "npm:5.1.0"
     fs-extra: "npm:^11.3.4"
     p-map: "npm:^7.0.4"
     write-json-file: "npm:^7.0.0"
-  checksum: 10/23448ca678e0a351113baa236e210a98d7250fad295163600c0ec75ccf438352fac241b75d64dfc861dcf54ac200e613fc195b3678e490325c83457276890cb7
+  checksum: 10/b40ab1c1da5363008b365e6c4a6677a689e847a3785f2d4bb529324351a92a849c34787c7ff3b7aadc96efe6218afad9708b33d9f20d57b90932182189e7bd24
   languageName: node
   linkType: hard
 
-"@lerna-lite/npmlog@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@lerna-lite/npmlog@npm:5.0.0"
+"@lerna-lite/npmlog@npm:5.1.0":
+  version: 5.1.0
+  resolution: "@lerna-lite/npmlog@npm:5.1.0"
   dependencies:
     fast-string-width: "npm:^3.0.2"
     signal-exit: "npm:^4.1.0"
-  checksum: 10/d0b92fd270c0173a143d0bbe0db50ddbbb1d2397fb8a3f87505481c284e7fa87ec317587bfa5ca27997af64c240bade650ebc034210a2e51eb48969aa47abd47
+  checksum: 10/98c0b1b69cd7cad6103d2d877e4f0faf23897a951d91269745a57f4541e201dd63432db9c98910ea07fb63a73dde97ceef9df6ca19c17988c6049ff3465aff44
   languageName: node
   linkType: hard
 
 "@lerna-lite/publish@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@lerna-lite/publish@npm:5.0.0"
+  version: 5.1.0
+  resolution: "@lerna-lite/publish@npm:5.1.0"
   dependencies:
-    "@lerna-lite/cli": "npm:5.0.0"
-    "@lerna-lite/core": "npm:5.0.0"
-    "@lerna-lite/npmlog": "npm:5.0.0"
-    "@lerna-lite/version": "npm:5.0.0"
+    "@lerna-lite/cli": "npm:5.1.0"
+    "@lerna-lite/core": "npm:5.1.0"
+    "@lerna-lite/npmlog": "npm:5.1.0"
+    "@lerna-lite/version": "npm:5.1.0"
     "@npmcli/arborist": "npm:^9.4.2"
     "@npmcli/package-json": "npm:^7.0.5"
     ci-info: "npm:^4.4.0"
@@ -927,19 +946,19 @@ __metadata:
     semver: "npm:^7.7.4"
     ssri: "npm:^13.0.1"
     tar: "npm:^7.5.13"
-    tinyglobby: "npm:^0.2.15"
-  checksum: 10/30e1a252b07e4e4d95b9aecce6b12997f2b7b22dad3c0a8812dc654a69d12cf9f8ecbac3d165a33d0d5d0edd9caf52de08bb88333edfa72ae6f0ddc4dec4c66d
+    tinyglobby: "npm:^0.2.16"
+  checksum: 10/855c7092f84c2fb6e5b24dab1d2fb4bc2e1de2ff4a4a9850d336a9d8877f1356db5153382ff455e7b7d1758fecccaf8e9d5398e5dd718728445b038446a9c249
   languageName: node
   linkType: hard
 
-"@lerna-lite/version@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@lerna-lite/version@npm:5.0.0"
+"@lerna-lite/version@npm:5.1.0":
+  version: 5.1.0
+  resolution: "@lerna-lite/version@npm:5.1.0"
   dependencies:
-    "@conventional-changelog/git-client": "npm:^2.6.0"
-    "@lerna-lite/cli": "npm:5.0.0"
-    "@lerna-lite/core": "npm:5.0.0"
-    "@lerna-lite/npmlog": "npm:5.0.0"
+    "@conventional-changelog/git-client": "npm:^2.7.0"
+    "@lerna-lite/cli": "npm:5.1.0"
+    "@lerna-lite/core": "npm:5.1.0"
+    "@lerna-lite/npmlog": "npm:5.1.0"
     "@octokit/plugin-enterprise-rest": "npm:^6.0.1"
     "@octokit/rest": "npm:^22.0.1"
     conventional-changelog: "npm:^7.2.0"
@@ -958,7 +977,7 @@ __metadata:
     semver: "npm:^7.7.4"
     write-json-file: "npm:^7.0.0"
     zeptomatch: "npm:^2.1.0"
-  checksum: 10/f1207d7a9b1625702840098da4bfbee55736cab53c769afa3242da8c7954c98041e0caf7bdc6c9897d2dc11439888cfc90eb8f464893c4964352724e5ea061d7
+  checksum: 10/023279c2e3a43d172c815394731d3a37a503374333bde794758ef53bf14593583d99e94b8a31e12c2e62d6da4660a97b8b52bfe331845fba7907c0c9191229ea
   languageName: node
   linkType: hard
 
@@ -3057,10 +3076,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^17.3.1":
-  version: 17.3.1
-  resolution: "dotenv@npm:17.3.1"
-  checksum: 10/4dde6571dff22c2323a3e33ac25e1e7d51c4b6d60dc884f59e3efe85c8fd3cc8800d6b3925d05c46b19dca08cba821a0a24e22f75a1b9b768c859b98bb927b04
+"dotenv@npm:^17.4.2":
+  version: 17.4.2
+  resolution: "dotenv@npm:17.4.2"
+  checksum: 10/ca1b6f54d58e39914901e1518958e86083aca8deb5aa2e7f2a51acd53291d97852479b0ab26ed949b6a45a0e9adcc7b0d1c3c72375e8ea670f7005e341c6daba
   languageName: node
   linkType: hard
 
@@ -5404,13 +5423,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"p-queue@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "p-queue@npm:9.1.0"
+"p-queue@npm:^9.1.2":
+  version: 9.1.2
+  resolution: "p-queue@npm:9.1.2"
   dependencies:
     eventemitter3: "npm:^5.0.1"
     p-timeout: "npm:^7.0.0"
-  checksum: 10/7221f58c20852fe1d9283fdcfb2c62628384daf4ccd7a936ba826637d41e1e66f606bc2eaa6d1705513daccb47c21eb890400fc0a91f8566c83d176e63fd3664
+  checksum: 10/ed8e3c936aa15c9aa1a33805d4b5e740bd8bfb3bd825e0fb378ac4d496b0505233690c38af09f4fd3b677d0aa4e0d6b46f18c5779683db79d9914e2e8929ccf6
   languageName: node
   linkType: hard
 
@@ -6338,6 +6357,16 @@ __metadata:
     fdir: "npm:^6.5.0"
     picomatch: "npm:^4.0.3"
   checksum: 10/d72bd826a8b0fa5fa3929e7fe5ba48fceb2ae495df3a231b6c5408cd7d8c00b58ab5a9c2a76ba56a62ee9b5e083626f1f33599734bed1ffc4b792406408f0ca2
+  languageName: node
+  linkType: hard
+
+"tinyglobby@npm:^0.2.16":
+  version: 0.2.16
+  resolution: "tinyglobby@npm:0.2.16"
+  dependencies:
+    fdir: "npm:^6.5.0"
+    picomatch: "npm:^4.0.4"
+  checksum: 10/5c2c41b572ada38449e7c86a5fe034f204a1dbba577225a761a14f29f48dc3f2fc0d81a6c56fcc67c5a742cc3aa9fb5e2ca18dbf22b610b0bc0e549b34d5a0f8
   languageName: node
   linkType: hard
 
