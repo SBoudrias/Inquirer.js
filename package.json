@@ -81,7 +81,7 @@
     "nano-staged": "^1.0.2",
     "oxfmt": "^0.46.0",
     "oxlint": "^1.58.0",
-    "oxlint-tsgolint": "^0.21.0",
+    "oxlint-tsgolint": "^0.22.1",
     "setup-packages": "workspace:*",
     "turbo": "^2.9.4",
     "type-fest": "^5.5.0",
