@@ -583,7 +583,6 @@ __metadata:
     eslint-plugin-n: "npm:^17.24.0"
     eslint-plugin-oxlint: "npm:^1.58.0"
     globals: "npm:^17.4.0"
-    husky: "npm:^9.1.7"
     isolate-monorepo-package: "workspace:*"
     nano-staged: "npm:^1.0.2"
     oxfmt: "npm:^0.47.0"
@@ -3900,15 +3899,6 @@ __metadata:
   dependencies:
     ms: "npm:^2.0.0"
   checksum: 10/9c7a74a2827f9294c009266c82031030eae811ca87b0da3dceb8d6071b9bde22c9f3daef0469c3c533cc67a97d8a167cd9fc0389350e5f415f61a79b171ded16
-  languageName: node
-  linkType: hard
-
-"husky@npm:^9.1.7":
-  version: 9.1.7
-  resolution: "husky@npm:9.1.7"
-  bin:
-    husky: bin.js
-  checksum: 10/c2412753f15695db369634ba70f50f5c0b7e5cb13b673d0826c411ec1bd9ddef08c1dad89ea154f57da2521d2605bd64308af748749b27d08c5f563bcd89975f
   languageName: node
   linkType: hard
 

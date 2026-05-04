@@ -1,0 +1,11 @@
+[hook "pre-commit"]
+	event = pre-commit
+	command = sh -c 'yarn nano-staged'
+
+[hook "post-checkout"]
+	event = post-checkout
+	command = sh -c 'yarn install'
+
+[hook "pre-push"]
+	event = pre-push
+	command = sh -c 'CI=true yarn pretest && yarn test'
