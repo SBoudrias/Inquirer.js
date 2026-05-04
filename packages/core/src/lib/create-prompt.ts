@@ -21,7 +21,7 @@ type ViewFunction<Value, Config> = (
 
 function getCallSites() {
   // oxlint-disable-next-line typescript/unbound-method
-  const _prepareStackTrace = Error.prepareStackTrace;
+  const savedPrepareStackTrace = Error.prepareStackTrace;
   let result: NodeJS.CallSite[] = [];
   try {
     Error.prepareStackTrace = (_, callSites) => {
@@ -36,7 +36,7 @@ function getCallSites() {
     // https://nodejs.org/api/cli.html#--frozen-intrinsics
     return result;
   }
-  Error.prepareStackTrace = _prepareStackTrace;
+  Error.prepareStackTrace = savedPrepareStackTrace;
   return result;
 }
 

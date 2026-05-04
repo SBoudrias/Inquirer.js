@@ -931,7 +931,7 @@ describe('checkbox prompt', () => {
           style: {
             renderSelectedChoices: (selected: { value: number }[]) => {
               if (selected.length > 1) {
-                return `You have selected ${(selected[0] as { value: number }).value} and ${selected.length - 1} more.`;
+                return `You have selected ${selected[0]!.value} and ${selected.length - 1} more.`;
               }
               return `You have selected ${selected
                 .slice(0, 1)
