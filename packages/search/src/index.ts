@@ -113,7 +113,7 @@ function normalizeChoices<Value>(
 }
 
 export default createPrompt(
-  <Value>(config: SearchConfig<Value>, done: (value: Value) => void) => {
+  <const Value>(config: SearchConfig<Value>, done: (value: Value) => void) => {
     const { pageSize = 7, validate = () => true } = config;
     const theme = makeTheme<SearchTheme>(searchTheme, config.theme);
     const [status, setStatus] = useState<Status>('loading');

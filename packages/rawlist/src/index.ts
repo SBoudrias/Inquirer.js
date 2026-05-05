@@ -111,7 +111,7 @@ function getSelectedChoice<Value>(
 }
 
 export default createPrompt(
-  <Value>(config: RawlistConfig<Value>, done: (value: Value) => void) => {
+  <const Value>(config: RawlistConfig<Value>, done: (value: Value) => void) => {
     const { loop = true } = config;
     const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
     const [status, setStatus] = useState<Status>('idle');

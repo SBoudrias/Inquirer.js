@@ -123,7 +123,7 @@ function normalizeChoices<Value>(
 }
 
 export default createPrompt(
-  <Value>(config: SelectConfig<Value>, done: (value: Value) => void) => {
+  <const Value>(config: SelectConfig<Value>, done: (value: Value) => void) => {
     const { loop = true, pageSize = 7 } = config;
     const theme = makeTheme<SelectTheme>(selectTheme, config.theme);
     const { keybindings } = theme;
