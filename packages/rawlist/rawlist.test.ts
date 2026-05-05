@@ -489,3 +489,17 @@ describe('rawlist prompt', () => {
     });
   });
 });
+
+describe('rawlist types', () => {
+  it('preserves string literal union when called directly with inline choices', async () => {
+    const abortController = new AbortController();
+    abortController.abort();
+    const answer = rawlist(
+      { message: 'Select one', choices: ['1', '2'] },
+      { signal: abortController.signal },
+    );
+
+    expectTypeOf(answer).resolves.toEqualTypeOf<'1' | '2'>();
+    await expect(answer).rejects.toThrow();
+  });
+});

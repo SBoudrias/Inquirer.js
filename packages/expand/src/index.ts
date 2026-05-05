@@ -103,7 +103,7 @@ const helpChoice = {
 };
 
 const expand = createPrompt(
-  <Value>(config: ExpandConfig<Value>, done: (value: Value) => void) => {
+  <const Value>(config: ExpandConfig<Value>, done: (value: Value) => void) => {
     const { default: defaultKey = 'h' } = config;
     const choices = useMemo(() => normalizeChoices(config.choices), [config.choices]);
     const [status, setStatus] = useState<Status>('idle');

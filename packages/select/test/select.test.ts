@@ -1397,5 +1397,17 @@ describe('select prompt', () => {
       events.keypress('enter');
       await expect(answer).resolves.toEqual(1);
     });
+
+    it('preserves string literal union when called directly with inline choices', async () => {
+      const abortController = new AbortController();
+      abortController.abort();
+      const answer = select(
+        { message: 'Select one', choices: ['1', '2'] },
+        { signal: abortController.signal },
+      );
+
+      expectTypeOf(answer).resolves.toEqualTypeOf<'1' | '2'>();
+      await expect(answer).rejects.toThrow();
+    });
   });
 });

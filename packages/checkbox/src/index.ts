@@ -166,7 +166,7 @@ function normalizeChoices<Value>(
 }
 
 export default createPrompt(
-  <Value>(config: CheckboxConfig<Value>, done: (value: Array<Value>) => void) => {
+  <const Value>(config: CheckboxConfig<Value>, done: (value: Array<Value>) => void) => {
     const { pageSize = 7, loop = true, required, validate = () => true } = config;
     const shortcuts = { all: 'a', invert: 'i', ...config.shortcuts };
     const theme = makeTheme<CheckboxTheme>(checkboxTheme, config.theme);
