@@ -1,6 +1,13 @@
 import { stripVTControlCharacters } from 'node:util';
 import { breakLines, readlineWidth } from './utils.ts';
-import { cursorDown, cursorUp, cursorTo, cursorShow, eraseLines } from '@inquirer/ansi';
+import {
+  cursorDown,
+  cursorLeft,
+  cursorUp,
+  cursorTo,
+  cursorShow,
+  eraseLines,
+} from '@inquirer/ansi';
 import type { InquirerReadline } from '@inquirer/type';
 
 const height = (content: string): number => content.split('\n').length;
@@ -97,6 +104,11 @@ export default class ScreenManager {
 
     let output = cursorDown(this.extraLinesUnderPrompt);
     output += clearContent ? eraseLines(this.height) : '\n';
+    // Reset cursor to column 0. On Windows terminals, \n moves the cursor
+    // down without resetting the column when the rendered prompt+answer
+    // wraps past the terminal width. Without this, all subsequent output
+    // starts at the wrong horizontal offset.
+    output += cursorLeft;
     output += cursorShow;
     this.write(output);
 

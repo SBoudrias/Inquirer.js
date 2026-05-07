@@ -354,6 +354,11 @@ export default class PromptsRunner<A extends Answers> {
               rl.setPrompt('');
               rl.output.unmute();
               rl.output.write(cursorShow);
+              // Reset cursor to column 0. On Windows terminals, \n moves the
+              // cursor down without resetting the column when the rendered
+              // prompt+answer wraps past the terminal width. Without this,
+              // all subsequent output starts at the wrong horizontal offset.
+              readline.cursorTo(rl.output, 0);
               rl.output.end();
               rl.close();
             };

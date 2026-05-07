@@ -23,7 +23,7 @@ import {
   makeTheme,
   type Status,
 } from './src/index.ts';
-import { cursorShow, eraseLines } from '@inquirer/ansi';
+import { cursorLeft, cursorShow, eraseLines } from '@inquirer/ansi';
 
 describe('createPrompt()', () => {
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
@@ -489,7 +489,7 @@ describe('createPrompt()', () => {
     events.keypress('enter');
 
     await expect(answer).resolves.toEqual('done');
-    expect(getScreen({ raw: true })).toEqual(eraseLines(1) + cursorShow);
+    expect(getScreen({ raw: true })).toEqual(eraseLines(1) + cursorLeft + cursorShow);
   });
 
   it('clear timeout when force closing', { timeout: 1000 }, async () => {
