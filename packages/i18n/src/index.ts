@@ -1,12 +1,12 @@
-import * as en from './locales/en.js';
-import * as es from './locales/es.js';
-import * as fr from './locales/fr.js';
-import * as pt from './locales/pt.js';
-import * as zh from './locales/zh.js';
+import * as en from './locales/en.ts';
+import * as es from './locales/es.ts';
+import * as fr from './locales/fr.ts';
+import * as pt from './locales/pt.ts';
+import * as zh from './locales/zh.ts';
 
-import { createLocalizedPrompts } from './create.js';
+import { createLocalizedPrompts } from './create.ts';
 
-export * from './create.js';
+export * from './create.ts';
 
 type LocaleModule = ReturnType<typeof createLocalizedPrompts>;
 
