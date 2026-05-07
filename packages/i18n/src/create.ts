@@ -12,9 +12,9 @@ import {
 } from '@inquirer/prompts';
 import { makeTheme } from '@inquirer/core';
 import { styleText } from 'node:util';
-import type { Locale } from './types.js';
+import type { Locale } from './types.ts';
 
-export type { Locale } from './types.js';
+export type { Locale } from './types.ts';
 
 // Extract config types from the prompt functions
 type ConfirmConfig = Parameters<typeof confirmPrompt>[0];

@@ -214,4 +214,4 @@ jest.mock('@inquirer/external-editor', () => {
 });
 
 // Re-export Screen class and KeypressEvent type for advanced use cases
-export { Screen, type KeypressEvent } from './screen.js';
+export { Screen, type KeypressEvent } from './screen.ts';
