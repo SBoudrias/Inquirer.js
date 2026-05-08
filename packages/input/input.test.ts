@@ -138,6 +138,20 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mike"`);
   });
 
+  it('accepts explicit undefined as default', async () => {
+    const defaultValue: string | undefined = undefined;
+    const { answer, events, getScreen } = await render(input, {
+      message: 'What is your name',
+      default: defaultValue,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name"`);
+
+    events.type('Mike');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('Mike');
+  });
+
   it('handle numeric default option', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What port do you want to use?',
