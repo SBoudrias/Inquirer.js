@@ -23,7 +23,7 @@ const inputTheme: InputTheme = {
 
 type InputConfig = {
   message: string;
-  default?: string;
+  default?: string | undefined;
   prefill?: 'tab' | 'editable';
   required?: boolean;
   transformer?: (value: string, { isFinal }: { isFinal: boolean }) => string;
