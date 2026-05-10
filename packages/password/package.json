@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/password",
-  "version": "5.0.12",
+  "version": "5.0.13",
   "description": "Inquirer password prompt",
   "keywords": [
     "answer",
@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "@inquirer/ansi": "^2.0.5",
-    "@inquirer/core": "^11.1.9",
+    "@inquirer/core": "^11.1.10",
     "@inquirer/type": "^4.0.5"
   },
   "devDependencies": {
