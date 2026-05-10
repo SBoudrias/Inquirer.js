@@ -89,7 +89,7 @@
     "vitest": "^4.1.2"
   },
   "nano-staged": {
-    "*.{js,mjs,cjs,ts,mts,cts,jsx,tsx,json}": "yarn oxfmt --no-error-on-unmatched-pattern",
+    "*": "yarn oxfmt --no-error-on-unmatched-pattern",
     "*.m?[jt]sx?": [
       "yarn oxlint --fix",
       "yarn eslint --fix"
