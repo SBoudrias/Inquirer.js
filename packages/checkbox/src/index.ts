@@ -79,6 +79,7 @@ type Choice<Value> = {
   disabled?: boolean | string;
   checked?: boolean;
   type?: never;
+  exclusive?: boolean;
 };
 
 type NormalizedChoice<Value> = {
@@ -89,6 +90,7 @@ type NormalizedChoice<Value> = {
   short: string;
   disabled: boolean | string;
   checked: boolean;
+  exclusive: boolean;
 };
 
 type CheckboxConfig<Value = string> = {
@@ -123,10 +125,26 @@ function toggle<Value>(item: Item<Value>): Item<Value> {
   return isSelectable(item) ? { ...item, checked: !item.checked } : item;
 }
 
+function deselect<Value>(item: Item<Value>): Item<Value> {
+  return isSelectable(item) && item.checked ? { ...item, checked: false } : item;
+}
+
 function check(checked: boolean) {
   return function <Value>(item: Item<Value>): Item<Value> {
     return isSelectable(item) ? { ...item, checked } : item;
   };
+}
+
+function processSelection<Value>(
+  items: readonly Item<Value>[],
+  selectedItem: NormalizedChoice<Value>,
+) {
+  return items.map((choice) => {
+    if (Separator.isSeparator(choice)) return choice;
+    else if (choice === selectedItem) return toggle(choice);
+    else if (selectedItem.exclusive) return deselect(choice);
+    else return choice.exclusive ? deselect(choice) : choice;
+  });
 }
 
 function normalizeChoices<Value>(
@@ -144,6 +162,7 @@ function normalizeChoices<Value>(
         checkedName: name,
         disabled: false,
         checked: false,
+        exclusive: false,
       };
     }
 
@@ -155,6 +174,7 @@ function normalizeChoices<Value>(
       checkedName: choice.checkedName ?? name,
       disabled: choice.disabled ?? false,
       checked: choice.checked ?? false,
+      exclusive: choice.exclusive ?? false,
     };
 
     if (choice.description) {
@@ -228,7 +248,7 @@ export default createPrompt(
             setError(theme.i18n.disabledError);
           } else {
             setError(undefined);
-            setItems(items.map((choice, i) => (i === active ? toggle(choice) : choice)));
+            setItems(processSelection(items, activeItem));
           }
         }
       } else if (key.name === shortcuts.all) {
@@ -251,7 +271,7 @@ export default createPrompt(
         const selectedItem = items[position];
         if (selectedItem && isSelectable(selectedItem)) {
           setActive(position);
-          setItems(items.map((choice, i) => (i === position ? toggle(choice) : choice)));
+          setItems(processSelection(items, selectedItem));
         }
       }
     });

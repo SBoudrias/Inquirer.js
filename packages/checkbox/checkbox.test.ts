@@ -1480,6 +1480,120 @@ describe('checkbox prompt', () => {
       await expect(answer).resolves.toEqual([]);
     });
   });
+
+  describe('exclusive choices', () => {
+    const exclusiveChoices = [
+      { value: 'none', name: 'None', exclusive: true },
+      { value: 'apple', name: 'Apple' },
+      { value: 'orange', name: 'Orange' },
+    ];
+
+    it('selecting an exclusive choice deselects all other choices', async () => {
+      const { answer, events } = await render(checkbox, {
+        message: 'Select fruits',
+        choices: exclusiveChoices,
+      });
+
+      // Select apple and orange first
+      events.keypress('down');
+      events.keypress('space');
+      events.keypress('down');
+      events.keypress('space');
+
+      // Navigate to None (exclusive) and select it
+      events.keypress('up');
+      events.keypress('up');
+      events.keypress('space');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['none']);
+    });
+
+    it('selecting a non-exclusive choice deselects all exclusive choices', async () => {
+      const { answer, events } = await render(checkbox, {
+        message: 'Select fruits',
+        choices: exclusiveChoices,
+      });
+
+      // Select None (exclusive) first
+      events.keypress('space');
+
+      // Navigate to Apple and select it
+      events.keypress('down');
+      events.keypress('space');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['apple']);
+    });
+
+    it('unchecking an exclusive choice just unchecks it without side effects', async () => {
+      const { answer, events } = await render(checkbox, {
+        message: 'Select fruits',
+        choices: exclusiveChoices,
+      });
+
+      // Select None (exclusive), then deselect it
+      events.keypress('space');
+      events.keypress('space');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual([]);
+    });
+
+    it('multiple exclusive choices mutually exclude each other', async () => {
+      const { answer, events } = await render(checkbox, {
+        message: 'Select fruits',
+        choices: [
+          { value: 'none', name: 'None', exclusive: true },
+          { value: 'na', name: 'N/A', exclusive: true },
+          { value: 'apple', name: 'Apple' },
+        ],
+      });
+
+      // Select None (exclusive)
+      events.keypress('space');
+
+      // Navigate to N/A (also exclusive) and select it
+      events.keypress('down');
+      events.keypress('space');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['na']);
+    });
+
+    it('number key selection respects exclusivity', async () => {
+      const { answer, events } = await render(checkbox, {
+        message: 'Select fruits',
+        choices: exclusiveChoices,
+      });
+
+      // Select apple (item 2) via number key
+      events.keypress('2');
+
+      // Select none (item 1, exclusive) via number key
+      events.keypress('1');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['none']);
+    });
+
+    it('does not deselect disabled checked items when an exclusive choice is selected', async () => {
+      const { answer, events } = await render(checkbox, {
+        message: 'Select fruits',
+        choices: [
+          { value: 'fruit', name: 'Fruit', exclusive: true },
+          { value: 'apple', name: 'Apple', checked: true, disabled: true },
+          { value: 'orange', name: 'Orange' },
+        ],
+      });
+
+      // Select Fruit (exclusive)
+      events.keypress('space');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['fruit', 'apple']);
+    });
+  });
 });
 
 describe('checkbox types', () => {
