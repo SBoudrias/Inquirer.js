@@ -357,7 +357,7 @@ __metadata:
     "@types/node": "npm:^25.5.2"
     cli-width: "npm:^4.1.0"
     fast-wrap-ansi: "npm:^0.2.0"
-    mute-stream: "npm:^3.0.0"
+    mute-stream: "npm:^4.0.0"
     signal-exit: "npm:^4.1.0"
     typescript: "npm:^6.0.2"
   peerDependencies:
@@ -642,7 +642,7 @@ __metadata:
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^25.5.2"
     "@xterm/headless": "npm:^6.0.0"
-    mute-stream: "npm:^3.0.0"
+    mute-stream: "npm:^4.0.0"
     typescript: "npm:^6.0.2"
     vitest: "npm:^4.1.2"
   peerDependencies:
@@ -3977,7 +3977,7 @@ __metadata:
     "@inquirer/type": "npm:^4.0.5"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
-    mute-stream: "npm:^3.0.0"
+    mute-stream: "npm:^4.0.0"
     run-async: "npm:^4.0.6"
     rxjs: "npm:^7.8.2"
     typescript: "npm:^6.0.2"
@@ -4793,10 +4793,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mute-stream@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "mute-stream@npm:3.0.0"
-  checksum: 10/bee5db5c996a4585dbffc49e51fea10f3582d7f65441db9bc63126f16269541713c6ccb5a6fe37e08f627967b6eb28dd6b35e54a8dce53cf3837d7e010917b43
+"mute-stream@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "mute-stream@npm:4.0.0"
+  checksum: 10/ba222dabc89a9ec08a35fc826d1096f6ef9f183f119e5ebd89b6f1207a9329ac1da730297a1135e967f3c5b18d0c3f71c3da74650beacced567db7b76d7d2ad8
   languageName: node
   linkType: hard
 
