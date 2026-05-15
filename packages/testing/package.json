@@ -68,7 +68,8 @@
     "./package.json": "./package.json"
   },
   "publishConfig": {
-    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
@@ -84,8 +85,7 @@
       },
       "./package.json": "./package.json"
     },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    "access": "public"
   },
   "scripts": {
     "tsc": "tsc"

@@ -61,10 +61,11 @@
     "./package.json": "./package.json"
   },
   "publishConfig": {
-    "access": "public",
     "bin": {
       "inquirer-demo": "./dist/index.js"
     },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
@@ -72,8 +73,7 @@
       },
       "./package.json": "./package.json"
     },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    "access": "public"
   },
   "scripts": {
     "tsc": "tsc && chmod +x ./dist/index.js"
