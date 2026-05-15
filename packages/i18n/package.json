@@ -70,7 +70,8 @@
     "./es": "./src/locales/es.ts"
   },
   "publishConfig": {
-    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
       "./package.json": "./package.json",
       ".": {
@@ -102,8 +103,7 @@
         "default": "./dist/locales/es.js"
       }
     },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    "access": "public"
   },
   "scripts": {
     "tsc": "tsc"
