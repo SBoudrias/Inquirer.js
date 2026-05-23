@@ -25,74 +25,27 @@ import {
 } from './src/index.ts';
 import { cursorLeft, cursorShow, eraseLines } from '@inquirer/ansi';
 
-type PromptConfig = { message: string };
-type DoneCallback = (value: string) => void;
-
-const keypressNavigationPrompt = (config: PromptConfig, done: DoneCallback) => {
-  const [value, setValue] = useState('');
-
-  useKeypress((key: KeypressEvent) => {
-    if (isEnterKey(key)) {
-      done(value);
-    } else if (isDownKey(key)) {
-      setValue('down');
-    } else if (isUpKey(key)) {
-      setValue('up');
-    } else if (isShiftKey(key)) {
-      setValue('shift');
-    }
-  });
-
-  return `${config.message} ${value}`;
-};
-
-const arrayStatePrompt = (_config: PromptConfig, done: DoneCallback) => {
-  const [value, setValue] = useState([1, 2]);
-
-  useEffect(() => {
-    setValue([1, 3]);
-  }, []);
-
-  useKeypress((key: KeypressEvent) => {
-    if (isEnterKey(key)) {
-      done(String(value));
-    }
-  });
-
-  return String(value);
-};
-
-const effectNotSyncPrompt = (config: PromptConfig, done: DoneCallback) => {
-  let value = 'outside';
-
-  useEffect(() => {
-    value = 'inside';
-  }, []);
-
-  useKeypress((key: KeypressEvent) => {
-    if (isEnterKey(key)) {
-      done('done');
-    }
-  });
-
-  expect(value).toEqual('outside');
-
-  return `${config.message} ${value}`;
-};
-
-const submitOnEnterPrompt = (config: PromptConfig, done: DoneCallback) => {
-  useKeypress((key: KeypressEvent) => {
-    if (isEnterKey(key)) {
-      done('done');
-    }
-  });
-
-  return config.message;
-};
-
 describe('createPrompt()', () => {
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
-    const prompt = createPrompt(keypressNavigationPrompt);
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      const [value, setValue] = useState('');
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(value);
+        } else if (isDownKey(key)) {
+          setValue('down');
+        } else if (isUpKey(key)) {
+          setValue('up');
+        } else if (isShiftKey(key)) {
+          setValue('shift');
+        }
+      });
+
+      return `${config.message} ${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
     const { answer, events, getScreen } = await render(prompt, { message: 'Question' });
 
     events.keypress({ name: 'space', shift: true });
@@ -107,7 +60,23 @@ describe('createPrompt()', () => {
   });
 
   it('useEffect: works with setting state at once with objects', async () => {
-    const prompt = createPrompt(arrayStatePrompt);
+    const Prompt = (_config: { message: string }, done: (value: string) => void) => {
+      const [value, setValue] = useState([1, 2]);
+
+      useEffect(() => {
+        setValue([1, 3]);
+      }, []);
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(String(value));
+        }
+      });
+
+      return String(value);
+    };
+
+    const prompt = createPrompt(Prompt);
     const { answer, events } = await render(prompt, { message: 'Question' });
     events.keypress('enter');
 
@@ -203,7 +172,25 @@ describe('createPrompt()', () => {
   });
 
   it('useEffect: is not called synchronously during render', async () => {
-    const prompt = createPrompt(effectNotSyncPrompt);
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      let value = 'outside';
+
+      useEffect(() => {
+        value = 'inside';
+      }, []);
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done('done');
+        }
+      });
+
+      expect(value).toEqual('outside');
+
+      return `${config.message} ${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
     const { answer, events } = await render(prompt, { message: 'Question' });
 
     events.keypress('enter');
@@ -481,7 +468,17 @@ describe('createPrompt()', () => {
   });
 
   it('allow cleaning the prompt after completion', async () => {
-    const prompt = createPrompt(submitOnEnterPrompt);
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done('done');
+        }
+      });
+
+      return config.message;
+    };
+
+    const prompt = createPrompt(Prompt);
     const { answer, events, getScreen } = await render(
       prompt,
       { message: 'Question' },
@@ -531,7 +528,16 @@ describe('createPrompt()', () => {
   });
 
   it('release listeners when done', async () => {
-    const prompt = createPrompt(submitOnEnterPrompt);
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done('done');
+        }
+      });
+
+      return config.message;
+    };
+    const prompt = createPrompt(Prompt);
 
     const warningSpy = vi.fn();
     process.on('warning', warningSpy);
@@ -547,7 +553,17 @@ describe('createPrompt()', () => {
 });
 
 it('allow aborting the prompt using signals', async () => {
-  const prompt = createPrompt(submitOnEnterPrompt);
+  const Prompt = (config: { message: string }, done: (value: string) => void) => {
+    useKeypress((key: KeypressEvent) => {
+      if (isEnterKey(key)) {
+        done('done');
+      }
+    });
+
+    return config.message;
+  };
+
+  const prompt = createPrompt(Prompt);
   const abortController = new AbortController();
   const { answer } = await render(
     prompt,
@@ -596,7 +612,17 @@ it('should ignore keypresses buffered before prompt creation', async () => {
 });
 
 it('fail on aborted signals', async () => {
-  const prompt = createPrompt(submitOnEnterPrompt);
+  const Prompt = (config: { message: string }, done: (value: string) => void) => {
+    useKeypress((key: KeypressEvent) => {
+      if (isEnterKey(key)) {
+        done('done');
+      }
+    });
+
+    return config.message;
+  };
+
+  const prompt = createPrompt(Prompt);
   const { answer } = await render(
     prompt,
     { message: 'Question' },
