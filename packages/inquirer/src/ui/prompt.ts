@@ -128,6 +128,17 @@ export type PromptFn<Value = any, Config = any> = (
  */
 export type PromptCollection = Record<string, PromptFn | LegacyPromptConstructor>;
 
+class UnknownPromptTypeError extends Error {
+  override name = 'UnknownPromptTypeError';
+
+  constructor(type: string, prompts: PromptCollection) {
+    const availableTypes = Object.keys(prompts).toSorted().join(', ');
+    super(
+      `Prompt type "${type}" is not registered. Available prompt types: ${availableTypes}`,
+    );
+  }
+}
+
 class TTYError extends Error {
   override name = 'TTYError';
   isTtyError = true;
@@ -263,6 +274,11 @@ export default class PromptsRunner<A extends Answers> {
   }
 
   private prepareQuestion = async (question: Question<A>) => {
+    const type = question.type ?? 'input';
+    if (!Object.hasOwn(this.prompts, type)) {
+      throw new UnknownPromptTypeError(type, this.prompts);
+    }
+
     const [message, defaultValue, resolvedChoices] = await Promise.all([
       fetchAsyncQuestionProperty(question, 'message', this.answers),
       fetchAsyncQuestionProperty(question, 'default', this.answers),
@@ -302,7 +318,7 @@ export default class PromptsRunner<A extends Answers> {
       message,
       default: defaultValue,
       choices,
-      type: question.type in this.prompts ? question.type : 'input',
+      type,
     });
 
     if (question.validate) {

@@ -24,6 +24,7 @@ declare module './src/index.js' {
     stub2: { answer?: string | boolean; message: string; default: string };
     stubSelect: { choices: string[] };
     failing: { message: string };
+    list: { message: string };
   }
 }
 
@@ -32,6 +33,7 @@ type TestQuestions = {
   stub2: { answer?: string | boolean; message: string; default: string };
   stubSelect: { choices: string[] };
   failing: { message: string };
+  list: { message: string };
 };
 
 function throwFunc(step: any): any {
@@ -89,7 +91,7 @@ describe('exported types', () => {
     expectTypeOf({}).not.toExtend<Question>();
   });
 
-  it('exported Question type requires type, name and message', () => {
+  it('exported Question type requires name and message', () => {
     const question = {
       type: 'input',
       name: 'q1',
@@ -97,7 +99,7 @@ describe('exported types', () => {
     } as const;
     expectTypeOf(question).toExtend<Question>();
     expectTypeOf(question).toExtend<DistinctQuestion>();
-    expectTypeOf({ name: 'q1', message: 'message' }).not.toExtend<Question>();
+    expectTypeOf({ name: 'q1', message: 'message' }).toExtend<Question>();
     expectTypeOf({ type: 'stub', message: 'message' }).not.toExtend<Question>();
     expectTypeOf({ type: 'stub', name: 'q1' }).not.toExtend<Question>();
   });
@@ -202,6 +204,33 @@ describe('inquirer.prompt(...)', () => {
       });
       expect(answers).toEqual({ q1: 'bar' });
       expectTypeOf(answers).toEqualTypeOf<{ q1: any }>();
+    });
+
+    it('defaults to input when prompt type is unset', async () => {
+      inquirer.registerPrompt('input', StubPrompt);
+
+      const answers = await inquirer.prompt({
+        name: 'q1',
+        message: 'message',
+      });
+
+      expect(answers).toEqual({ q1: 'bar' });
+    });
+
+    it('throws when prompt type is not registered', async () => {
+      inquirer.registerPrompt('input', StubPrompt);
+
+      await expect(
+        inquirer.prompt({
+          type: 'list',
+          name: 'q1',
+          message: 'message',
+        }),
+      ).rejects.toMatchObject({
+        name: 'UnknownPromptTypeError',
+        message:
+          'Prompt type "list" is not registered. Available prompt types: checkbox, confirm, editor, expand, failing, input, number, password, rawlist, search, select, stub',
+      });
     });
 
     it('takes an Observable', async () => {
