@@ -114,7 +114,7 @@ type KeyValueOrAsyncGetterFunction<T, k extends string, A extends Answers> =
   T extends Record<string, any> ? MaybeAsyncValue<T[k], A> : never;
 
 export type Question<A extends Answers = Answers, Type extends string = string> = {
-  type: Type;
+  type?: Type;
   name: string;
   message: MaybeAsyncValue<string, A>;
   default?: any;
@@ -212,7 +212,7 @@ export type DictionaryAnswers<
 >;
 
 export type PromptModulePublicQuestion<A extends Answers, Flat extends Answers = A> = {
-  type:
+  type?:
     | 'input'
     | 'confirm'
     | 'editor'
