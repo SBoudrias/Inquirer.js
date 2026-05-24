@@ -12,7 +12,7 @@ import {
   select,
 } from '@inquirer/prompts';
 import type { Context, DistributiveMerge, Prettify } from '@inquirer/type';
-import { Observable } from 'rxjs';
+import type { Observable } from './utils/observable.ts';
 
 export type Answers<Key extends string = string> = Record<Key, any>;
 

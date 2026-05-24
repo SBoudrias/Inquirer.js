@@ -9,7 +9,7 @@ import stream from 'node:stream';
 import tty from 'node:tty';
 import readline from 'node:readline';
 import { vi, expect, beforeEach, afterEach, describe, it, expectTypeOf } from 'vitest';
-import { of } from 'rxjs';
+import { from as observableFrom, map, of, Subject } from 'rxjs';
 import { AbortPromptError, createPrompt } from '@inquirer/core';
 import type { InquirerReadline } from '@inquirer/type';
 import inquirer from './src/index.ts';
@@ -253,6 +253,50 @@ describe('inquirer.prompt(...)', () => {
 
       expect(answers).toEqual({ q1: true, q2: false });
       expectTypeOf(answers).toEqualTypeOf<{ q1: any; q2: any }>();
+    });
+
+    it('takes an Observable that emits questions over time', async () => {
+      const questions = new Subject<Question & { answer: boolean }>();
+      const processEvents: unknown[] = [];
+
+      const promise = inquirer.prompt(questions);
+      promise.ui.process.subscribe((answer) => {
+        processEvents.push(answer);
+      });
+
+      questions.next({
+        type: 'stub',
+        name: 'q1',
+        message: 'message',
+        answer: true,
+      });
+      questions.next({
+        type: 'stub',
+        name: 'q2',
+        message: 'message',
+        answer: false,
+      });
+      questions.complete();
+
+      await expect(promise).resolves.toEqual({ q1: true, q2: false });
+      expect(processEvents).toEqual([
+        { name: 'q1', answer: true },
+        { name: 'q2', answer: false },
+      ]);
+    });
+
+    it('rejects when an Observable question source errors', async () => {
+      const questions = new Subject<Question>();
+      const error = new Error('Question source failed');
+      const onError = vi.fn();
+
+      const promise = inquirer.prompt(questions);
+      promise.ui.process.subscribe({ error: onError });
+
+      questions.error(error);
+
+      await expect(promise).rejects.toBe(error);
+      expect(onError).toHaveBeenCalledWith(error);
     });
   });
 
@@ -636,6 +680,33 @@ describe('inquirer.prompt(...)', () => {
     await promise;
     expect(spy).toHaveBeenCalledWith({ name: 'name1', answer: 'bar' });
     expect(spy).toHaveBeenCalledWith({ name: 'name', answer: 'doe' });
+  });
+
+  it('should expose an RxJS-compatible Reactive interface', async () => {
+    const processEvents: string[] = [];
+
+    const promise = inquirer.prompt([
+      {
+        type: 'stub',
+        name: 'name1',
+        message: 'message',
+        answer: 'bar',
+      },
+      {
+        type: 'stub',
+        name: 'name',
+        message: 'message',
+        answer: 'doe',
+      },
+    ]);
+    observableFrom(promise.ui.process)
+      .pipe(map(({ name, answer }) => `${name}:${String(answer)}`))
+      .subscribe((answer) => {
+        processEvents.push(answer);
+      });
+
+    await promise;
+    expect(processEvents).toEqual(['name1:bar', 'name:doe']);
   });
 
   it('should expose the UI', async () => {

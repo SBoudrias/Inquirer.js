@@ -78,12 +78,12 @@
     "@inquirer/prompts": "^8.4.3",
     "@inquirer/type": "^4.0.5",
     "mute-stream": "^4.0.0",
-    "run-async": "^4.0.6",
-    "rxjs": "^7.8.2"
+    "run-async": "^4.0.6"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
     "@types/mute-stream": "^0.0.4",
+    "rxjs": "^7.8.2",
     "typescript": "^6.0.2"
   },
   "peerDependencies": {

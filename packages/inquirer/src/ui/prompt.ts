@@ -1,17 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
 import readline from 'node:readline';
-import {
-  defer,
-  EMPTY,
-  from,
-  of,
-  concatMap,
-  filter,
-  reduce,
-  isObservable,
-  Observable,
-  lastValueFrom,
-} from 'rxjs';
 import runAsync from 'run-async';
 import MuteStream from 'mute-stream';
 import { AbortPromptError } from '@inquirer/core';
@@ -24,6 +12,13 @@ import type {
   PromptSession,
   StreamOptions,
 } from '../types.ts';
+import {
+  EMPTY,
+  createObservableController,
+  isObservableLike,
+  observableToAsyncIterable,
+} from '../utils/observable.ts';
+import type { InteropObservable } from '../utils/observable.ts';
 
 export const _ = {
   set: (obj: Record<string, unknown>, path: string = '', value: unknown): void => {
@@ -139,6 +134,8 @@ class UnknownPromptTypeError extends Error {
   }
 }
 
+type AnswerEvent = { name: string; answer: unknown };
+
 class TTYError extends Error {
   override name = 'TTYError';
   isTtyError = true;
@@ -208,7 +205,7 @@ function isPromptConstructor(
 export default class PromptsRunner<A extends Answers> {
   private prompts: PromptCollection;
   answers: Partial<A> = {};
-  process: Observable<any> = EMPTY;
+  process: InteropObservable<AnswerEvent> = EMPTY;
   private abortController: AbortController = new AbortController();
   private opt: StreamOptions;
 
@@ -219,58 +216,48 @@ export default class PromptsRunner<A extends Answers> {
 
   async run(questions: PromptSession<A>, answers?: Partial<A>): Promise<A> {
     this.abortController = new AbortController();
+    const processController = createObservableController<AnswerEvent>();
+    this.process = processController.observable;
 
     // Keep global reference to the answers
     this.answers = typeof answers === 'object' ? { ...answers } : {};
 
-    let obs: Observable<Question<A>>;
+    try {
+      for await (const question of this.getQuestions(questions)) {
+        if (await this.shouldRun(question)) {
+          const answer = await this.fetchAnswer(question);
+          _.set(this.answers, answer.name, answer.answer);
+          processController.next(answer);
+        }
+      }
+
+      processController.complete();
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+      return this.answers as A;
+    } catch (error: unknown) {
+      processController.error(error);
+      throw error;
+    } finally {
+      this.close();
+    }
+  }
+
+  private async *getQuestions(
+    questions: PromptSession<A>,
+  ): AsyncGenerator<Question<A>, void> {
     if (isQuestionArray(questions)) {
-      obs = from(questions);
-    } else if (isObservable(questions)) {
-      obs = questions;
+      yield* questions;
+    } else if (isObservableLike(questions)) {
+      yield* observableToAsyncIterable(questions);
     } else if (isQuestionMap(questions)) {
       // Case: Called with a set of { name: question }
-      obs = from(
-        Object.entries(questions).map(([name, question]): Question<A> => {
-          return Object.assign({}, question, { name });
-        }),
-      );
+      for (const [name, question] of Object.entries(questions)) {
+        yield Object.assign({}, question, { name });
+      }
     } else {
       // Case: Called with a single question config
-      obs = from([questions]);
+      yield questions;
     }
-
-    this.process = obs.pipe(
-      concatMap((question) =>
-        of(question).pipe(
-          concatMap((question) =>
-            from(
-              this.shouldRun(question).then((shouldRun: boolean | void) => {
-                if (shouldRun) {
-                  return question;
-                }
-                return undefined;
-              }),
-            ).pipe(filter((val) => val != null)),
-          ),
-          concatMap((question) => defer(() => from(this.fetchAnswer(question)))),
-        ),
-      ),
-    );
-
-    return (
-      lastValueFrom(
-        this.process.pipe(
-          reduce((answersObj, answer: { name: string; answer: unknown }) => {
-            _.set(answersObj, answer.name, answer.answer);
-            return answersObj;
-          }, this.answers),
-        ),
-      )
-        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-        .then(() => this.answers as A)
-        .finally(() => this.close())
-    );
   }
 
   private prepareQuestion = async (question: Question<A>) => {

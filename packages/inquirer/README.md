@@ -117,7 +117,7 @@ yarn node packages/inquirer/examples/checkbox.js
 
 Launch the prompt interface (inquiry session)
 
-- **questions** (Array) containing [Question Object](#question) (using the [reactive interface](#reactive-interface), you can also pass a `Rx.Observable` instance)
+- **questions** a [Question Object](#question), an array or map of questions, or an RxJS-compatible Observable of questions
 - **answers** (object) contains values of already answered questions. Inquirer will avoid asking answers already provided here. Defaults `{}`.
 - returns a **Promise**
 
@@ -328,9 +328,7 @@ The `postfix` property is useful if you want to provide an extension.
 
 ## Reactive interface
 
-Internally, Inquirer uses the [JS reactive extension](https://github.com/ReactiveX/rxjs) to handle events and async flows.
-
-This mean you can take advantage of this feature to provide more advanced flows. For example, you can dynamically add questions to be asked:
+`inquirer.prompt()` accepts an RxJS-compatible Observable of questions. This supports dynamic flows where questions are emitted over time:
 
 ```js
 const prompts = new Rx.Subject();
