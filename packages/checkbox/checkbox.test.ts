@@ -1,4 +1,4 @@
-import { describe, it, expect, expectTypeOf } from 'vitest';
+import { afterEach, describe, it, expect, expectTypeOf, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import { ValidationError } from '@inquirer/core';
 import checkbox, { Separator } from './src/index.ts';
@@ -17,6 +17,10 @@ const numberedChoices = [
   { value: 11 },
   { value: 12 },
 ];
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 describe('checkbox prompt', () => {
   it('use arrow keys to select an option', async () => {
@@ -1473,6 +1477,32 @@ describe('checkbox prompt', () => {
       expect(getScreen()).toContain('❯◯ Two');
 
       // Emacs: Up
+      events.keypress({ name: 'p', ctrl: true });
+      expect(getScreen()).toContain('❯◯ One');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual([]);
+    });
+
+    it('uses keybindings from INQUIRER_KEYBINDINGS by default', async () => {
+      vi.stubEnv('INQUIRER_KEYBINDINGS', 'vim,emacs');
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select items',
+        choices: [
+          { value: 'one', name: 'One' },
+          { value: 'two', name: 'Two' },
+        ],
+      });
+
+      events.keypress('j');
+      expect(getScreen()).toContain('❯◯ Two');
+
+      events.keypress('k');
+      expect(getScreen()).toContain('❯◯ One');
+
+      events.keypress({ name: 'n', ctrl: true });
+      expect(getScreen()).toContain('❯◯ Two');
+
       events.keypress({ name: 'p', ctrl: true });
       expect(getScreen()).toContain('❯◯ One');
 

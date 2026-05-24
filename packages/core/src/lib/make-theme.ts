@@ -1,5 +1,5 @@
 import type { Prettify, PartialDeep } from '@inquirer/type';
-import { defaultTheme, type Theme } from './theme.ts';
+import { getDefaultTheme, type Theme } from './theme.ts';
 
 function isPlainObject(value: unknown): value is object {
   if (typeof value !== 'object' || value === null) return false;
@@ -35,7 +35,7 @@ export function makeTheme<SpecificTheme extends object>(
 ): Prettify<Theme<SpecificTheme>> {
   // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   const themesToMerge = [
-    defaultTheme,
+    getDefaultTheme(),
     ...themes.filter((theme) => theme != null),
   ] as Theme<SpecificTheme>[];
   return deepMerge(...themesToMerge);

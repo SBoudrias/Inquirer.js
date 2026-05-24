@@ -6,6 +6,27 @@ export type KeypressEvent = {
 
 export type Keybinding = 'emacs' | 'vim';
 
+const keybindings = ['emacs', 'vim'] as const satisfies ReadonlyArray<Keybinding>;
+const keybindingLookup: ReadonlySet<string> = new Set(keybindings);
+
+function isKeybinding(value: string): value is Keybinding {
+  return keybindingLookup.has(value);
+}
+
+export function getDefaultKeybindings(): ReadonlyArray<Keybinding> {
+  const env = process.env['INQUIRER_KEYBINDINGS'];
+  if (!env) return [];
+
+  return Array.from(
+    new Set(
+      env
+        .toLowerCase()
+        .split(/[\s,]+/)
+        .filter(isKeybinding),
+    ),
+  );
+}
+
 export const isUpKey = (
   key: KeypressEvent,
   keybindings: ReadonlyArray<Keybinding> = [],

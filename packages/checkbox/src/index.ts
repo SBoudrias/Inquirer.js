@@ -15,7 +15,6 @@ import {
   Separator,
   type Theme,
   type Status,
-  type Keybinding,
 } from '@inquirer/core';
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
@@ -40,7 +39,6 @@ type CheckboxTheme = {
     keysHelpTip: (keys: [key: string, action: string][]) => string | undefined;
   };
   i18n: { disabledError: string };
-  keybindings: ReadonlyArray<Keybinding>;
 };
 
 type CheckboxShortcuts = {
@@ -67,7 +65,6 @@ const checkboxTheme: CheckboxTheme = {
         .join(styleText('dim', ' • ')),
   },
   i18n: { disabledError: 'This option is disabled and cannot be toggled.' },
-  keybindings: [],
 };
 
 type Choice<Value> = {

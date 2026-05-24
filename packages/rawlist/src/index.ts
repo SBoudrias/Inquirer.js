@@ -127,6 +127,7 @@ export default createPrompt(
     });
     const [errorMsg, setError] = useState<string>();
     const theme = makeTheme(rawlistTheme, config.theme);
+    const { keybindings } = theme;
     const prefix = usePrefix({ status, theme });
 
     const bounds = useMemo(() => {
@@ -155,21 +156,21 @@ export default createPrompt(
         } else {
           setError(`"${styleText('red', value)}" isn't an available option`);
         }
-      } else if (isUpKey(key) || isDownKey(key)) {
+      } else if (isUpKey(key, keybindings) || isDownKey(key, keybindings)) {
         rl.clearLine(0);
 
         const [selectedChoice, active] = getSelectedChoice(value, choices);
         if (!selectedChoice) {
-          const firstChoice = isDownKey(key)
+          const firstChoice = isDownKey(key, keybindings)
             ? choices.find(isSelectableChoice)!
             : choices.findLast(isSelectableChoice)!;
           setValue(firstChoice.key);
         } else if (
           loop ||
-          (isUpKey(key) && active !== bounds.first) ||
-          (isDownKey(key) && active !== bounds.last)
+          (isUpKey(key, keybindings) && active !== bounds.first) ||
+          (isDownKey(key, keybindings) && active !== bounds.last)
         ) {
-          const offset = isUpKey(key) ? -1 : 1;
+          const offset = isUpKey(key, keybindings) ? -1 : 1;
           let next = active;
           let nextChoice: NormalizedChoice<Value> | Separator | undefined;
           do {

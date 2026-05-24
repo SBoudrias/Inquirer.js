@@ -116,6 +116,12 @@ Also note the `choices` array can contain `Separator`s to help organize long lis
 
 `choices` can also be an array of string, in which case the string will be used both as the `value` and the `name`.
 
+## Keybindings
+
+Set `INQUIRER_KEYBINDINGS=vim`, `INQUIRER_KEYBINDINGS=emacs`, or `INQUIRER_KEYBINDINGS=vim,emacs` to enable alternative navigation keybindings globally.
+
+You can override the environment setting per prompt with `theme.keybindings`.
+
 ## Shortcuts
 
 You can customize the shortcut keys for `all` and `invert` or disable them by setting them to `null`.
@@ -159,6 +165,7 @@ type Theme = {
     unchecked: string;
     cursor: string;
   };
+  keybindings: readonly ('emacs' | 'vim')[];
 };
 ```
 

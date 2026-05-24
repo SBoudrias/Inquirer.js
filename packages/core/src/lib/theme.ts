@@ -1,6 +1,7 @@
 import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 import type { Prettify } from '@inquirer/type';
+import { getDefaultKeybindings, type Keybinding } from './key.ts';
 
 /**
  * Union type representing the possible statuses of a prompt.
@@ -58,6 +59,17 @@ type DefaultTheme = {
      */
     frames: string[];
   };
+
+  /**
+   * Alternative keybindings enabled for prompt navigation.
+   *
+   * @defaultValue
+   * ```ts
+   * process.env['INQUIRER_KEYBINDINGS']
+   * ```
+   */
+  keybindings: ReadonlyArray<Keybinding>;
+
   /**
    * Object containing functions to style different parts of the prompt.
    */
@@ -176,6 +188,7 @@ export const defaultTheme: DefaultTheme = {
       styleText('yellow', frame),
     ),
   },
+  keybindings: [],
   style: {
     answer: (text: string) => styleText('cyan', text),
     message: (text: string) => styleText('bold', text),
@@ -186,3 +199,10 @@ export const defaultTheme: DefaultTheme = {
     key: (text: string) => styleText('cyan', styleText('bold', `<${text}>`)),
   },
 };
+
+export function getDefaultTheme(): DefaultTheme {
+  return {
+    ...defaultTheme,
+    keybindings: getDefaultKeybindings(),
+  };
+}
