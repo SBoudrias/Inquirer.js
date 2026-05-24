@@ -1,4 +1,4 @@
-import { describe, expectTypeOf, it, expect } from 'vitest';
+import { afterEach, describe, expectTypeOf, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import rawlist, { Separator } from './src/index.ts';
 
@@ -9,6 +9,10 @@ const numberedChoices = [
   { value: 4 },
   { value: 5 },
 ];
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 describe('rawlist prompt', () => {
   it('use number key to select an option', async () => {
@@ -244,6 +248,26 @@ describe('rawlist prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a topping Ham"`);
 
     await expect(answer).resolves.toEqual('ham');
+  });
+
+  it('uses keybindings from INQUIRER_KEYBINDINGS by default', async () => {
+    vi.stubEnv('INQUIRER_KEYBINDINGS', 'vim,emacs');
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a number',
+      choices: numberedChoices,
+    });
+
+    events.keypress('j');
+    expect(getScreen()).toContain('? Select a number 1');
+
+    events.keypress({ name: 'n', ctrl: true });
+    expect(getScreen()).toContain('? Select a number 2');
+
+    events.keypress({ name: 'p', ctrl: true });
+    expect(getScreen()).toContain('? Select a number 1');
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(1);
   });
 
   it('errors when no selected options', async () => {

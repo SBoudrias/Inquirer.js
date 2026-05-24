@@ -248,6 +248,8 @@ Listening for keypress events inside an inquirer prompt is a very common pattern
 - `isDownKey()` - Note: this utility will handle vim and emacs keybindings (down, `j`, and `ctrl+n`)
 - `isNumberKey()` one of 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
 
+Set `INQUIRER_KEYBINDINGS=vim`, `INQUIRER_KEYBINDINGS=emacs`, or `INQUIRER_KEYBINDINGS=vim,emacs` to enable alternative navigation keybindings globally. Prompt-level `theme.keybindings` values override the environment variable.
+
 ## Theming
 
 Theming utilities will allow you to expose customization of the prompt style. Inquirer also has a few standard theme values shared across all the official prompts.
@@ -305,6 +307,7 @@ type DefaultTheme = {
     interval: number;
     frames: string[];
   };
+  keybindings: readonly ('emacs' | 'vim')[];
   style: {
     answer: (text: string) => string;
     message: (text: string, status: 'idle' | 'done' | 'loading') => string;

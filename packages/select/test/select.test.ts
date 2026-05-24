@@ -34,6 +34,7 @@ const complexStringChoices = [
 
 afterEach(() => {
   vi.useRealTimers();
+  vi.unstubAllEnvs();
 });
 
 describe('select prompt', () => {
@@ -1291,6 +1292,55 @@ describe('select prompt', () => {
       await expect(answer).resolves.toEqual(1);
     });
 
+    it('uses keybindings from INQUIRER_KEYBINDINGS by default', async () => {
+      vi.stubEnv('INQUIRER_KEYBINDINGS', 'vim,emacs');
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+        ],
+      });
+
+      events.keypress('j');
+      expect(getScreen()).toContain('❯ Two');
+
+      events.keypress('k');
+      expect(getScreen()).toContain('❯ One');
+
+      events.keypress({ name: 'n', ctrl: true });
+      expect(getScreen()).toContain('❯ Two');
+
+      events.keypress({ name: 'p', ctrl: true });
+      expect(getScreen()).toContain('❯ One');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(1);
+    });
+
+    it('lets theme keybindings override INQUIRER_KEYBINDINGS', async () => {
+      vi.stubEnv('INQUIRER_KEYBINDINGS', 'vim');
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+        ],
+        theme: {
+          keybindings: [],
+        },
+      });
+
+      events.keypress('j');
+      expect(getScreen()).toContain('❯ One');
+
+      events.keypress('down');
+      expect(getScreen()).toContain('❯ Two');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(2);
+    });
+
     it('disables the search feature when vim keybindings are enabled', async () => {
       vi.useFakeTimers();
       const { answer, events, getScreen } = await render(select, {
@@ -1355,6 +1405,33 @@ describe('select prompt', () => {
       `);
 
       // Search still works with emacs bindings
+      events.type('ch');
+      expect(getScreen()).toMatchInlineSnapshot(`
+        "? Select a number
+          Canada
+        ❯ China
+          United States
+
+        ↑↓ navigate • ⏎ select"
+      `);
+
+      events.keypress('enter');
+      vi.runAllTimers();
+      await expect(answer).resolves.toEqual('ZH');
+    });
+
+    it('keeps search feature enabled when INQUIRER_KEYBINDINGS is set to emacs', async () => {
+      vi.useFakeTimers();
+      vi.stubEnv('INQUIRER_KEYBINDINGS', 'emacs');
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          { name: 'Canada', value: 'CA' },
+          { name: 'China', value: 'ZH' },
+          { name: 'United States', value: 'US' },
+        ],
+      });
+
       events.type('ch');
       expect(getScreen()).toMatchInlineSnapshot(`
         "? Select a number

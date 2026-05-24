@@ -1,5 +1,5 @@
 import { EventEmitter, PassThrough } from 'node:stream';
-import { describe, it, expect, vi } from 'vitest';
+import { afterEach, describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import { stripVTControlCharacters } from 'node:util';
 import {
@@ -24,6 +24,11 @@ import {
   type Status,
 } from './src/index.ts';
 import { cursorLeft, cursorShow, eraseLines } from '@inquirer/ansi';
+
+afterEach(() => {
+  vi.useRealTimers();
+  vi.unstubAllEnvs();
+});
 
 describe('createPrompt()', () => {
   it('onKeypress: allow to implement custom behavior on keypress', async () => {
@@ -800,5 +805,12 @@ describe('keybindings', () => {
     expect(isDownKey({ name: 'down', ctrl: false, shift: false })).toBeTruthy();
     expect(isDownKey({ name: 'j', ctrl: false, shift: false })).toBeFalsy();
     expect(isDownKey({ name: 'n', ctrl: true, shift: false })).toBeFalsy();
+  });
+
+  it('adds default keybindings to themes', () => {
+    vi.stubEnv('INQUIRER_KEYBINDINGS', 'vim emacs unknown vim');
+
+    expect(makeTheme().keybindings).toEqual(['vim', 'emacs']);
+    expect(makeTheme({ keybindings: [] }).keybindings).toEqual([]);
   });
 });

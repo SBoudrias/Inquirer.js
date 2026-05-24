@@ -17,7 +17,6 @@ import {
   makeTheme,
   type Theme,
   type Status,
-  type Keybinding,
 } from '@inquirer/core';
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
@@ -33,7 +32,6 @@ type SelectTheme = {
   };
   i18n: { disabledError: string };
   indexMode: 'hidden' | 'number';
-  keybindings: ReadonlyArray<Keybinding>;
 };
 
 const selectTheme: SelectTheme = {
@@ -48,7 +46,6 @@ const selectTheme: SelectTheme = {
   },
   i18n: { disabledError: 'This option is disabled and cannot be selected.' },
   indexMode: 'hidden',
-  keybindings: [],
 };
 
 type Choice<Value> = {
@@ -131,8 +128,7 @@ export default createPrompt(
     const prefix = usePrefix({ status, theme });
     const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
-    // Vim keybindings (j/k) conflict with typing those letters in search,
-    // so search must be disabled when vim bindings are enabled
+    // Vim keybindings (j/k) conflict with typing those letters in search.
     const searchEnabled = !keybindings.includes('vim');
 
     const items = useMemo(() => normalizeChoices(config.choices), [config.choices]);
