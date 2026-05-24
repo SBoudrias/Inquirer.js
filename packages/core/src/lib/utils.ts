@@ -13,7 +13,7 @@ export function breakLines(content: string, width: number): string {
   return content
     .split('\n')
     .flatMap((line) =>
-      wrapAnsi(line, width, { trim: false, hard: true })
+      wrapAnsi(line, width, { trim: false, wordWrap: false })
         .split('\n')
         .map((str) => str.trimEnd()),
     )
