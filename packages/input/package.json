@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/input",
-  "version": "5.0.13",
+  "version": "5.1.0",
   "description": "Inquirer input text prompt",
   "keywords": [
     "answer",
@@ -73,8 +73,8 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/core": "^11.1.10",
-    "@inquirer/type": "^4.0.5"
+    "@inquirer/core": "^11.2.0",
+    "@inquirer/type": "^4.0.6"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
