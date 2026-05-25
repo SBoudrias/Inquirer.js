@@ -4,6 +4,7 @@ import {
   useKeypress,
   useEffect,
   usePrefix,
+  useSignalAbortValue,
   isBackspaceKey,
   isEnterKey,
   isTabKey,
@@ -38,12 +39,14 @@ export default createPrompt<string, InputConfig>((config, done) => {
   const theme = makeTheme<InputTheme>(inputTheme, config.theme);
   const [status, setStatus] = useState<Status>('idle');
   // Coerce to string to handle runtime values that may be numbers despite TypeScript types
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion
+  // oxlint-disable-next-line typescript/no-unnecessary-type-conversion
   const [defaultValue, setDefaultValue] = useState<string>(String(config.default ?? ''));
   const [errorMsg, setError] = useState<string>();
   const [value, setValue] = useState<string>('');
 
   const prefix = usePrefix({ status, theme });
+
+  useSignalAbortValue(() => value || defaultValue);
 
   async function validate(value: string): Promise<true | string> {
     const { required, pattern, patternError = 'Invalid input' } = config;

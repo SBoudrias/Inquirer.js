@@ -2,6 +2,7 @@ import {
   createPrompt,
   useState,
   useKeypress,
+  useSignalAbortValue,
   usePrefix,
   usePagination,
   useMemo,
@@ -189,6 +190,8 @@ export default createPrompt(
 
     const [active, setActive] = useState(bounds.first);
     const [errorMsg, setError] = useState<string>();
+
+    useSignalAbortValue(() => items.filter(isChecked).map((choice) => choice.value));
 
     useKeypress(async (key) => {
       if (isEnterKey(key)) {

@@ -20,6 +20,25 @@ describe('input prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name John"`);
   });
 
+  it('resolves the current input on signal abort when requested', async () => {
+    const abortController = new AbortController();
+    const { answer, events } = await render(
+      input,
+      {
+        message: 'What is your name',
+      },
+      {
+        signal: abortController.signal,
+        signalAbortBehavior: 'resolve',
+      },
+    );
+
+    events.type('John');
+    abortController.abort();
+
+    await expect(answer).resolves.toEqual('John');
+  });
+
   it('handle transformer', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',

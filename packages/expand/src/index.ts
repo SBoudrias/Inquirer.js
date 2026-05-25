@@ -4,6 +4,7 @@ import {
   useState,
   useKeypress,
   usePrefix,
+  useSignalAbortValue,
   isEnterKey,
   makeTheme,
   Separator,
@@ -112,6 +113,16 @@ const expand = createPrompt(
     const [errorMsg, setError] = useState<string>();
     const theme = makeTheme(config.theme);
     const prefix = usePrefix({ theme, status });
+
+    const currentAnswerKey = (value || defaultKey).toLowerCase();
+    const currentChoice = choices.find(
+      (choice): choice is NormalizedChoice<Value> =>
+        !Separator.isSeparator(choice) && choice.key === currentAnswerKey,
+    );
+    useSignalAbortValue(
+      () => currentChoice!.value,
+      () => currentChoice != null,
+    );
 
     useKeypress((event, rl) => {
       if (isEnterKey(event)) {

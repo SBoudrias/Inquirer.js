@@ -195,12 +195,13 @@ All inquirer prompts are a function taking 2 arguments. The first argument is th
 
 The context options are:
 
-| Property          | Type                    | Required | Description                                                  |
-| ----------------- | ----------------------- | -------- | ------------------------------------------------------------ |
-| input             | `NodeJS.ReadableStream` | no       | The stdin stream (defaults to `process.stdin`)               |
-| output            | `NodeJS.WritableStream` | no       | The stdout stream (defaults to `process.stdout`)             |
-| clearPromptOnDone | `boolean`               | no       | If true, we'll clear the screen after the prompt is answered |
-| signal            | `AbortSignal`           | no       | An AbortSignal to cancel prompts asynchronously              |
+| Property            | Type                    | Required | Description                                                                                                          |
+| ------------------- | ----------------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| input               | `NodeJS.ReadableStream` | no       | The stdin stream (defaults to `process.stdin`)                                                                       |
+| output              | `NodeJS.WritableStream` | no       | The stdout stream (defaults to `process.stdout`)                                                                     |
+| clearPromptOnDone   | `boolean`               | no       | If true, we'll clear the screen after the prompt is answered                                                         |
+| signal              | `AbortSignal`           | no       | An AbortSignal to cancel prompts asynchronously                                                                      |
+| signalAbortBehavior | `'reject' \| 'resolve'` | no       | Defaults to `'reject'`. If set to `'resolve'`, supported prompts resolve with their current answer snapshot on abort |
 
 > [!WARNING]
 > When providing an input stream or piping `process.stdin`, it's very likely you need to call `process.stdin.setRawMode(true)`
@@ -248,6 +249,22 @@ setTimeout(() => {
 
 const answer = await confirm({ ... }, { signal: controller.signal });
 ```
+
+By default, aborting a prompt rejects with an `AbortPromptError`. Built-in prompts can instead resolve with their current answer snapshot when the signal aborts:
+
+```js
+import { input } from '@inquirer/prompts';
+
+const controller = new AbortController();
+setTimeout(() => controller.abort(), 5000);
+
+const answer = await input(
+  { message: 'Enter a value' },
+  { signal: controller.signal, signalAbortBehavior: 'resolve' },
+);
+```
+
+This does not run validation again. If a prompt cannot provide a current answer snapshot, it still rejects with `AbortPromptError`.
 
 # Recipes
 

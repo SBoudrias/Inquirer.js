@@ -8,6 +8,7 @@ import {
   useKeypress,
   useState,
   useRef,
+  useSignalAbortValue,
   useMemo,
   usePrefix,
   isDownKey,
@@ -574,6 +575,56 @@ it('allow aborting the prompt using signals', async () => {
     prompt,
     { message: 'Question' },
     { signal: abortController.signal },
+  );
+
+  abortController.abort();
+
+  await expect(answer).rejects.toThrow(AbortPromptError);
+});
+
+it('resolves the current prompt value on signal abort when requested', async () => {
+  const Prompt = (config: { message: string }, done: (value: string) => void) => {
+    const [value, setValue] = useState('initial');
+
+    useSignalAbortValue(() => value);
+    useKeypress((key: KeypressEvent) => {
+      if (isEnterKey(key)) {
+        done(value);
+      } else if (isDownKey(key)) {
+        setValue('down');
+      }
+    });
+
+    return `${config.message} ${value}`;
+  };
+
+  const prompt = createPrompt(Prompt);
+  const abortController = new AbortController();
+  const { answer, events } = await render(
+    prompt,
+    { message: 'Question' },
+    {
+      signal: abortController.signal,
+      signalAbortBehavior: 'resolve',
+    },
+  );
+
+  events.keypress('down');
+  abortController.abort();
+
+  await expect(answer).resolves.toEqual('down');
+});
+
+it('rejects on signal abort when no current prompt value is available', async () => {
+  const prompt = createPrompt((config: { message: string }) => config.message);
+  const abortController = new AbortController();
+  const { answer } = await render(
+    prompt,
+    { message: 'Question' },
+    {
+      signal: abortController.signal,
+      signalAbortBehavior: 'resolve',
+    },
   );
 
   abortController.abort();

@@ -2,6 +2,7 @@ import {
   createPrompt,
   useState,
   useKeypress,
+  useSignalAbortValue,
   isEnterKey,
   isTabKey,
   usePrefix,
@@ -35,6 +36,8 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   const [value, setValue] = useState('');
   const theme = makeTheme(config.theme);
   const prefix = usePrefix({ status, theme });
+
+  useSignalAbortValue(() => getBooleanValue(value, config.default));
 
   useKeypress((key, rl) => {
     if (status !== 'idle') return;

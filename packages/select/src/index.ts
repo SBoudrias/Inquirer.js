@@ -7,6 +7,7 @@ import {
   useRef,
   useMemo,
   useEffect,
+  useSignalAbortValue,
   isBackspaceKey,
   isEnterKey,
   isUpKey,
@@ -163,6 +164,11 @@ export default createPrompt(
     }
 
     const [errorMsg, setError] = useState<string>();
+
+    useSignalAbortValue(
+      () => selectedChoice.value,
+      () => !selectedChoice.disabled,
+    );
 
     useKeypress((key, rl) => {
       clearTimeout(searchTimeoutRef.current);

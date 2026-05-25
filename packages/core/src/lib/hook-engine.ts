@@ -11,9 +11,12 @@ type HookStore = {
   hooksEffect: Array<() => void>;
   index: number;
   handleChange: () => void;
+  getSignalAbortValue?: () => SignalAbortValue;
 };
 
 const hookStorage = new AsyncLocalStorage<HookStore>();
+
+type SignalAbortValue = { value: unknown } | undefined;
 
 function createStore(rl: InquirerReadline) {
   const store: HookStore = {
@@ -123,6 +126,14 @@ export function withPointer<Value, ReturnValue>(
 
 export function handleChange(): void {
   getStore().handleChange();
+}
+
+export function setSignalAbortValueGetter(getValue: () => SignalAbortValue): void {
+  getStore().getSignalAbortValue = getValue;
+}
+
+export function getSignalAbortValue(): SignalAbortValue {
+  return getStore().getSignalAbortValue?.();
 }
 
 export const effectScheduler = {

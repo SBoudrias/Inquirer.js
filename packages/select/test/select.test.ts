@@ -78,6 +78,27 @@ describe('select prompt', () => {
     await expect(answer).resolves.toEqual(3);
   });
 
+  it('resolves the highlighted value on signal abort when requested', async () => {
+    const abortController = new AbortController();
+    const { answer, events } = await render(
+      select,
+      {
+        message: 'Select a number',
+        choices: numberedChoices,
+      },
+      {
+        signal: abortController.signal,
+        signalAbortBehavior: 'resolve',
+      },
+    );
+
+    events.keypress('down');
+    events.keypress('down');
+    abortController.abort();
+
+    await expect(answer).resolves.toEqual(3);
+  });
+
   it('allow selecting the first option', async () => {
     const { answer, events, getScreen } = await render(select, {
       message: 'Select a number',

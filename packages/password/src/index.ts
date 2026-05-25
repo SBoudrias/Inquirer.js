@@ -2,6 +2,7 @@ import {
   createPrompt,
   useState,
   useKeypress,
+  useSignalAbortValue,
   usePrefix,
   isEnterKey,
   makeTheme,
@@ -39,6 +40,8 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
   const [value, setValue] = useState<string>('');
 
   const prefix = usePrefix({ status, theme });
+
+  useSignalAbortValue(() => value);
 
   useKeypress(async (key, rl) => {
     // Ignore keypress while our prompt is doing other processing.

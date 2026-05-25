@@ -3,6 +3,7 @@ import {
   useMemo,
   useState,
   useKeypress,
+  useSignalAbortValue,
   usePrefix,
   isDownKey,
   isEnterKey,
@@ -130,6 +131,12 @@ export default createPrompt(
     const { keybindings } = theme;
     const prefix = usePrefix({ status, theme });
 
+    const [selectedChoice] = getSelectedChoice(value, choices);
+    useSignalAbortValue(
+      () => selectedChoice!.value,
+      () => selectedChoice != null,
+    );
+
     const bounds = useMemo(() => {
       const first = choices.findIndex(isSelectableChoice);
       const last = choices.findLastIndex(isSelectableChoice);
@@ -212,7 +219,6 @@ export default createPrompt(
       error = theme.style.error(errorMsg);
     }
 
-    const [selectedChoice] = getSelectedChoice(value, choices);
     let description = '';
     if (!errorMsg && selectedChoice?.description) {
       description = theme.style.description(selectedChoice.description);

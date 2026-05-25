@@ -7,6 +7,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useSignalAbortValue,
   isDownKey,
   isEnterKey,
   isTabKey,
@@ -180,6 +181,11 @@ export default createPrompt(
     // Safe to assume the cursor position never points to a Separator.
     // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     const selectedChoice = searchResults[active] as NormalizedChoice<Value> | void;
+
+    useSignalAbortValue(
+      () => selectedChoice!.value,
+      () => selectedChoice != null && !selectedChoice.disabled,
+    );
 
     useKeypress(async (key, rl) => {
       if (isEnterKey(key)) {

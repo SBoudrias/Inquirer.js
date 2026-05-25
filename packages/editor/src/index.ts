@@ -5,6 +5,7 @@ import {
   useState,
   useKeypress,
   usePrefix,
+  useSignalAbortValue,
   isEnterKey,
   makeTheme,
   type Theme,
@@ -51,6 +52,8 @@ export default createPrompt<string, EditorConfig>((config, done) => {
   const [errorMsg, setError] = useState<string>();
 
   const prefix = usePrefix({ status, theme });
+
+  useSignalAbortValue(() => value);
 
   async function startEditor(rl: InquirerReadline) {
     rl.pause();

@@ -64,6 +64,29 @@ describe('checkbox prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number 2, 3"');
   });
 
+  it('resolves the checked values on signal abort when requested', async () => {
+    const abortController = new AbortController();
+    const { answer, events } = await render(
+      checkbox,
+      {
+        message: 'Select a number',
+        choices: numberedChoices,
+      },
+      {
+        signal: abortController.signal,
+        signalAbortBehavior: 'resolve',
+      },
+    );
+
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('space');
+    abortController.abort();
+
+    await expect(answer).resolves.toEqual([2, 3]);
+  });
+
   it('works with string choices', async () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a number',

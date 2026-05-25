@@ -6,7 +6,7 @@ import { onExit as onSignalExit } from 'signal-exit';
 import ScreenManager from './screen-manager.ts';
 import { PromisePolyfill } from './promise-polyfill.ts';
 import { type InquirerReadline } from '@inquirer/type';
-import { withHooks, effectScheduler } from './hook-engine.ts';
+import { withHooks, effectScheduler, getSignalAbortValue } from './hook-engine.ts';
 import { AbortPromptError, CancelPromptError, ExitPromptError } from './errors.ts';
 import path from 'node:path';
 
@@ -71,14 +71,9 @@ export function createPrompt<Value, Config>(
     const { promise, resolve, reject } = PromisePolyfill.withResolver<Value>();
     const cancel = () => reject(new CancelPromptError());
 
-    if (signal) {
-      const abort = () => reject(new AbortPromptError({ cause: signal.reason }));
-      if (signal.aborted) {
-        abort();
-        return Object.assign(promise, { cancel });
-      }
-      signal.addEventListener('abort', abort);
-      cleanups.add(() => signal.removeEventListener('abort', abort));
+    if (signal?.aborted) {
+      reject(new AbortPromptError({ cause: signal.reason }));
+      return Object.assign(promise, { cancel });
     }
 
     cleanups.add(
@@ -98,6 +93,30 @@ export function createPrompt<Value, Config>(
     cleanups.add(() => rl.removeListener('SIGINT', sigint));
 
     return withHooks(rl, (cycle) => {
+      if (signal) {
+        const abort = AsyncResource.bind(() => {
+          if (context.signalAbortBehavior === 'resolve') {
+            const signalAbortValue = getSignalAbortValue();
+            if (signalAbortValue) {
+              // The prompt implementation that calls useSignalAbortValue owns
+              // the same Value generic, but hook storage cannot carry it.
+              // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+              resolve(signalAbortValue.value as Value);
+              return;
+            }
+          }
+
+          reject(new AbortPromptError({ cause: signal.reason }));
+        });
+
+        if (signal.aborted) {
+          abort();
+        } else {
+          signal.addEventListener('abort', abort);
+          cleanups.add(() => signal.removeEventListener('abort', abort));
+        }
+      }
+
       // The close event triggers immediately when the user press ctrl+c. SignalExit on the other hand
       // triggers after the process is done (which happens after timeouts are done triggering.)
       // We triggers the hooks cleanup phase on rl `close` so active timeouts can be cleared.

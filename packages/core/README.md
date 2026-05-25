@@ -142,6 +142,30 @@ const todoSelect = createPrompt((config, done) => {
   const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);
 
   // ...
+});
+```
+
+### Signal abort value hook
+
+`useSignalAbortValue` lets a custom prompt expose the answer snapshot to resolve with when a consumer passes `{ signalAbortBehavior: 'resolve' }` alongside an `AbortSignal`.
+
+```ts
+const input = createPrompt<string, { message: string }>((config, done) => {
+  const [value, setValue] = useState('');
+
+  useSignalAbortValue(() => value);
+
+  // ...
+});
+```
+
+The optional second argument can prevent resolving when the prompt does not currently have a valid answer.
+
+```ts
+useSignalAbortValue(
+  () => selectedChoice.value,
+  () => selectedChoice != null && !selectedChoice.disabled,
+);
 ```
 
 ### Rendering hooks

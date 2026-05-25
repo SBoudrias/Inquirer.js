@@ -27,6 +27,7 @@ export type Context = {
   output?: NodeJS.WritableStream;
   clearPromptOnDone?: boolean;
   signal?: AbortSignal;
+  signalAbortBehavior?: 'reject' | 'resolve';
 };
 
 export type Prompt<Value, Config> = (config: Config, context?: Context) => Promise<Value>;

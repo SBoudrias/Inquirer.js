@@ -3,6 +3,7 @@ import {
   useState,
   useKeypress,
   usePrefix,
+  useSignalAbortValue,
   isBackspaceKey,
   isEnterKey,
   isTabKey,
@@ -81,6 +82,20 @@ export default createPrompt(
     const [errorMsg, setError] = useState<string>();
 
     const prefix = usePrefix({ status, theme });
+
+    function getCurrentAnswer(): number | undefined {
+      const input = value || defaultValue;
+      return input === '' ? undefined : Number(input);
+    }
+
+    function isCurrentAnswerAvailable(): boolean {
+      const answer = getCurrentAnswer();
+      return answer === undefined
+        ? !required
+        : validateNumber(answer, { min, max, step }) === true;
+    }
+
+    useSignalAbortValue(getCurrentAnswer, isCurrentAnswerAvailable);
 
     useKeypress(async (key, rl) => {
       // Ignore keypress while our prompt is doing other processing.

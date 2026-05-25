@@ -75,6 +75,28 @@ describe('search prompt', () => {
     );
   });
 
+  it('resolves the highlighted result on signal abort when requested', async () => {
+    const abortController = new AbortController();
+    const { answer, events, nextRender } = await render(
+      search,
+      {
+        message: 'Select a Canadian province',
+        source: getListSearch(PROVINCES),
+      },
+      {
+        signal: abortController.signal,
+        signalAbortBehavior: 'resolve',
+      },
+    );
+
+    events.type('New');
+    await nextRender();
+    events.keypress('down');
+    abortController.abort();
+
+    await expect(answer).resolves.toEqual('NL');
+  });
+
   it('works with string results', async () => {
     const choices = [
       'Stark',

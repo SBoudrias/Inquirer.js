@@ -20,6 +20,25 @@ describe('number prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 42"`);
   });
 
+  it('resolves the current number on signal abort when requested', async () => {
+    const abortController = new AbortController();
+    const { answer, events } = await render(
+      number,
+      {
+        message: 'What is your age',
+      },
+      {
+        signal: abortController.signal,
+        signalAbortBehavior: 'resolve',
+      },
+    );
+
+    events.type('42');
+    abortController.abort();
+
+    await expect(answer).resolves.toEqual(42);
+  });
+
   it('handle non numeric input', async () => {
     const { answer, events, getScreen, nextRender } = await render(number, {
       message: 'What is your age',
