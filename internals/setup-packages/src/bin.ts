@@ -1,17 +1,13 @@
 #!/usr/bin/env node
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { lessThan, tryParseRange } from 'std-semver';
+import { subset, validRange } from 'semver';
 import { globby } from 'globby';
 import { parse as parseJsonc } from 'jsonc-parser';
 import type { PackageJson, TsConfigJson } from 'type-fest';
 import { fixPeerDeps } from './hoist-peer-dependencies.ts';
 
 type ExportDef = Exclude<PackageJson['exports'], undefined | null>;
-
-function coerce(version: string | undefined) {
-  return tryParseRange(version ?? '')?.[0]?.[0];
-}
 
 function readFile(filepath: string) {
   return fs.readFile(filepath, 'utf8');
@@ -47,8 +43,12 @@ async function writeJSONFile(filepath: string, content: unknown) {
 }
 
 const rootPkg = await readJSONFile<PackageJson>(path.join(process.cwd(), 'package.json'));
-const rootNodeVersion = coerce(rootPkg.engines?.['node']);
-if (!Array.isArray(rootPkg.workspaces) || rootNodeVersion == null) {
+const rootNodeRange = rootPkg.engines?.['node'];
+if (
+  !Array.isArray(rootPkg.workspaces) ||
+  typeof rootNodeRange !== 'string' ||
+  validRange(rootNodeRange) == null
+) {
   throw new Error(
     '[Inquirer] The scaffolding tool requires `workspaces` and `engines.node` in the root package.json',
   );
@@ -80,13 +80,17 @@ for (const [pkgPath, pkg] of packages) {
   pkg.sideEffects ??= false;
 
   // Set min engines version.
-  const pkgNodeVersion = coerce(pkg.engines['node']);
-  if (pkgNodeVersion == null || lessThan(pkgNodeVersion, rootNodeVersion)) {
-    pkg.engines['node'] = rootPkg.engines?.['node'];
+  const pkgNodeRange = pkg.engines['node'];
+  if (
+    typeof pkgNodeRange !== 'string' ||
+    validRange(pkgNodeRange) == null ||
+    !subset(pkgNodeRange, rootNodeRange)
+  ) {
+    pkg.engines['node'] = rootNodeRange;
   }
 
   const dir = path.dirname(pkgPath);
-  fixPeerDeps(path.resolve(path.join(dir)));
+  fixPeerDeps(pkg, path.resolve(path.join(dir)));
 
   const isTS = Object.values(pkg.exports).some(
     (exportPath) => typeof exportPath === 'string' && exportPath.endsWith('.ts'),

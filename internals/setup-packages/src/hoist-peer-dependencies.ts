@@ -1,20 +1,11 @@
-import { writeFileSync } from 'node:fs';
-import Module from 'node:module';
 import type { PackageJson } from 'type-fest';
+import { resolveDependencyPackageJson } from './package-json.ts';
 
-const require = Module.createRequire(import.meta.url);
-
-export function fixPeerDeps(target: string) {
-  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-  const pkg = require(`${target}/package.json`) as PackageJson;
-
+export function fixPeerDeps(pkg: PackageJson, target: string) {
   for (const name of Object.keys(pkg.dependencies ?? {})) {
     // Import the dependency package.json file and parse it
-    let depPkg: PackageJson;
-    try {
-      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-      depPkg = require(`${name}/package.json`) as PackageJson;
-    } catch {
+    const depPkg = resolveDependencyPackageJson(name, target);
+    if (depPkg == null) {
       // If the sub package doesn't expose their package.json; skip it.
       console.error(`Could not find package.json for ${name}. Skipping...`);
       continue;
@@ -28,7 +19,4 @@ export function fixPeerDeps(target: string) {
       }
     }
   }
-
-  // Write the updated package.json file
-  writeFileSync(`${target}/package.json`, JSON.stringify(pkg, null, 2) + '\n');
 }
