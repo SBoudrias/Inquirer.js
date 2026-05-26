@@ -2,7 +2,10 @@
   "name": "setup-packages",
   "version": "0.0.0",
   "private": true,
-  "bin": "./src/bin.ts",
+  "bin": {
+    "setup-packages": "./src/bin.ts",
+    "validate-package-engines": "./src/validate-engines.ts"
+  },
   "type": "module",
   "sideEffects": false,
   "exports": {
@@ -11,13 +14,15 @@
   "dependencies": {
     "globby": "^16.2.0",
     "jsonc-parser": "^3.3.1",
-    "std-semver": "^1.0.8"
+    "semver": "^7.7.4"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "type-fest": "^5.5.0"
+    "@types/semver": "^7.7.1",
+    "type-fest": "^5.5.0",
+    "vitest": "^4.1.2"
   },
   "engines": {
-    "node": ">=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0"
+    "node": ">=23.5.0 || ^22.13.0 || ^20.17.0"
   }
 }

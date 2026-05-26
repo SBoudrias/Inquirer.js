@@ -357,7 +357,7 @@ __metadata:
     "@types/node": "npm:^25.5.2"
     cli-width: "npm:^4.1.0"
     fast-wrap-ansi: "npm:^0.2.0"
-    mute-stream: "npm:^4.0.0"
+    mute-stream: "npm:^3.0.0"
     signal-exit: "npm:^4.1.0"
     typescript: "npm:^6.0.2"
   peerDependencies:
@@ -642,7 +642,7 @@ __metadata:
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^25.5.2"
     "@xterm/headless": "npm:^6.0.0"
-    mute-stream: "npm:^4.0.0"
+    mute-stream: "npm:^3.0.0"
     typescript: "npm:^6.0.2"
     vitest: "npm:^4.1.2"
   peerDependencies:
@@ -2124,6 +2124,13 @@ __metadata:
   version: 7.0.3
   resolution: "@types/parse-path@npm:7.0.3"
   checksum: 10/21a12c228d38f5a75659dfd7cb127dc2001ed3f6acbd1b2e0575d1348c735594c0bab06a97fe849c151438384829f20ea5971cb045f7ecd37d53c76a9fcb9de3
+  languageName: node
+  linkType: hard
+
+"@types/semver@npm:^7.7.1":
+  version: 7.7.1
+  resolution: "@types/semver@npm:7.7.1"
+  checksum: 10/8f09e7e6ca3ded67d78ba7a8f7535c8d9cf8ced83c52e7f3ac3c281fe8c689c3fe475d199d94390dc04fc681d51f2358b430bb7b2e21c62de24f2bee2c719068
   languageName: node
   linkType: hard
 
@@ -3950,7 +3957,7 @@ __metadata:
     "@inquirer/type": "npm:^4.0.6"
     "@repo/tsconfig": "workspace:*"
     "@types/mute-stream": "npm:^0.0.4"
-    mute-stream: "npm:^4.0.0"
+    mute-stream: "npm:^3.0.0"
     run-async: "npm:^4.0.6"
     rxjs: "npm:^7.8.2"
     typescript: "npm:^6.0.2"
@@ -4766,10 +4773,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mute-stream@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "mute-stream@npm:4.0.0"
-  checksum: 10/ba222dabc89a9ec08a35fc826d1096f6ef9f183f119e5ebd89b6f1207a9329ac1da730297a1135e967f3c5b18d0c3f71c3da74650beacced567db7b76d7d2ad8
+"mute-stream@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "mute-stream@npm:3.0.0"
+  checksum: 10/bee5db5c996a4585dbffc49e51fea10f3582d7f65441db9bc63126f16269541713c6ccb5a6fe37e08f627967b6eb28dd6b35e54a8dce53cf3837d7e010917b43
   languageName: node
   linkType: hard
 
@@ -5787,12 +5794,15 @@ __metadata:
   resolution: "setup-packages@workspace:internals/setup-packages"
   dependencies:
     "@repo/tsconfig": "workspace:*"
+    "@types/semver": "npm:^7.7.1"
     globby: "npm:^16.2.0"
     jsonc-parser: "npm:^3.3.1"
-    std-semver: "npm:^1.0.8"
+    semver: "npm:^7.7.4"
     type-fest: "npm:^5.5.0"
+    vitest: "npm:^4.1.2"
   bin:
     setup-packages: ./src/bin.ts
+    validate-package-engines: ./src/validate-engines.ts
   languageName: unknown
   linkType: soft
 
@@ -6034,13 +6044,6 @@ __metadata:
   version: 4.0.0
   resolution: "std-env@npm:4.0.0"
   checksum: 10/19ef21cd85da52dc1178288d1b69e242b6579c0a76ddba2374f859aa58678797ec4a34c4f1fe6b9007a032e04d6fd3fca4e27349c88809265a9cbd90d924203f
-  languageName: node
-  linkType: hard
-
-"std-semver@npm:^1.0.8":
-  version: 1.0.8
-  resolution: "std-semver@npm:1.0.8"
-  checksum: 10/b109198278710ac854bd035a84ec3e23e1f985ff07cbefbcfdcaf5b3bf99a7110dcca3ec5f808ebe99bed1d4056880cd929bf3eb199c6850f7a6f136d78825d7
   languageName: node
   linkType: hard
 
