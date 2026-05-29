@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/core",
-  "version": "11.2.0",
+  "version": "11.2.1",
   "description": "Core Inquirer prompt API",
   "keywords": [
     "answer",
@@ -73,9 +73,9 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/ansi": "^2.0.6",
-    "@inquirer/figures": "^2.0.6",
-    "@inquirer/type": "^4.0.6",
+    "@inquirer/ansi": "^2.0.7",
+    "@inquirer/figures": "^2.0.7",
+    "@inquirer/type": "^4.0.7",
     "cli-width": "^4.1.0",
     "fast-wrap-ansi": "^0.2.0",
     "mute-stream": "^3.0.0",
