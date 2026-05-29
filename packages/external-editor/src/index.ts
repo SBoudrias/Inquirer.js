@@ -1,6 +1,12 @@
 import { detect } from 'chardet';
 import { spawn, spawnSync } from 'node:child_process';
-import { readFileSync, unlinkSync, type WriteFileOptions, writeFileSync } from 'node:fs';
+import {
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  type WriteFileOptions,
+  writeFileSync,
+} from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { randomUUID } from 'node:crypto';
@@ -62,6 +68,7 @@ export class ExternalEditor {
 
   private text: string = '';
   private tempFile: string = '';
+  private tempDir: string = '';
   private fileOptions: FileOptions = {};
 
   constructor(text: string = '', fileOptions: FileOptions = {}) {
@@ -79,11 +86,13 @@ export class ExternalEditor {
     this.createTempFile();
     try {
       try {
-        const editorProcess = spawnSync(
-          this.editor.bin,
-          this.editor.args.concat([this.tempFile]),
-          { stdio: 'inherit' },
-        );
+        const editorProcess = spawnSync(this.editor.bin, this.editorArgs(), {
+          shell: false,
+          stdio: 'inherit',
+        });
+        if (editorProcess.error) {
+          throw editorProcess.error;
+        }
         this.lastExitStatus = editorProcess.status ?? 0;
       } catch (launchError) {
         throw new LaunchEditorError(launchError);
@@ -99,13 +108,15 @@ export class ExternalEditor {
     this.createTempFile();
     const promise = new Promise<void>((resolve, reject) => {
       try {
-        const editorProcess = spawn(
-          this.editor.bin,
-          this.editor.args.concat([this.tempFile]),
-          { stdio: 'inherit' },
-        );
-        editorProcess.on('exit', (code: number) => {
-          this.lastExitStatus = code;
+        const editorProcess = spawn(this.editor.bin, this.editorArgs(), {
+          shell: false,
+          stdio: 'inherit',
+        });
+        editorProcess.once('error', (launchError) => {
+          reject(new LaunchEditorError(launchError));
+        });
+        editorProcess.once('exit', (code: number | null) => {
+          this.lastExitStatus = code ?? 0;
           resolve();
         });
       } catch (launchError) {
@@ -132,10 +143,11 @@ export class ExternalEditor {
   }
 
   private cleanup(): void {
-    if (!this.tempFile) return;
+    if (!this.tempDir) return;
     try {
-      unlinkSync(this.tempFile);
+      rmSync(this.tempDir, { force: true, recursive: true });
       this.tempFile = '';
+      this.tempDir = '';
     } catch (removeFileError) {
       throw new RemoveFileError(removeFileError);
     }
@@ -143,17 +155,13 @@ export class ExternalEditor {
 
   private createTempFile() {
     try {
-      const baseDir = this.fileOptions.dir ?? os.tmpdir();
+      const baseDir = path.resolve(this.fileOptions.dir ?? os.tmpdir());
+      this.tempDir = mkdtempSync(path.join(baseDir, 'inquirer-editor-'));
       const id = randomUUID();
       const prefix = sanitizeAffix(this.fileOptions.prefix);
       const postfix = sanitizeAffix(this.fileOptions.postfix);
       const filename = `${prefix}${id}${postfix}`;
-      const candidate = path.resolve(baseDir, filename);
-      const baseResolved = path.resolve(baseDir) + path.sep;
-      if (!candidate.startsWith(baseResolved)) {
-        throw new Error('Resolved temporary file escaped the base directory');
-      }
-      this.tempFile = candidate;
+      this.tempFile = path.join(this.tempDir, filename);
       const opt: WriteFileOptions = { encoding: 'utf8', flag: 'wx' };
       if (Object.prototype.hasOwnProperty.call(this.fileOptions, 'mode')) {
         opt.mode = this.fileOptions.mode;
@@ -162,6 +170,10 @@ export class ExternalEditor {
     } catch (createFileError) {
       throw new CreateFileError(createFileError);
     }
+  }
+
+  private editorArgs(): string[] {
+    return [...this.editor.args, this.tempFile];
   }
 
   private readTemporaryFile() {

@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
-import { readFileSync, unlinkSync } from 'node:fs';
+import { existsSync, readFileSync, unlinkSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import os from 'node:os';
 import iconv from 'iconv-lite';
 import path from 'node:path';
-import { edit, editAsync, ExternalEditor } from './index.ts';
+import { edit, editAsync, ExternalEditor, LaunchEditorError } from './index.ts';
 import { parseEditorCommand } from './parse-editor-command.ts';
 
 const testingInput = 'aAbBcCdDeEfFgG';
@@ -141,8 +141,7 @@ describe('custom options', () => {
     editor.run();
     const usedPath = readFileSync(captureFile, 'utf8');
     unlinkSync(captureFile);
-    const escapedSep = path.sep.replace(/\\/g, '\\\\');
-    expect(usedPath).toMatch(new RegExp(`.+${escapedSep}pre.+$`));
+    expect(path.basename(usedPath)).toMatch(/^pre.+$/);
   });
 
   it('postfix', () => {
@@ -155,7 +154,7 @@ describe('custom options', () => {
     editor.run();
     const usedPath = readFileSync(captureFile, 'utf8');
     unlinkSync(captureFile);
-    expect(usedPath).toMatch(/.+end\.post$/);
+    expect(path.basename(usedPath)).toMatch(/.+end\.post$/);
   });
 
   it('dir', () => {
@@ -168,7 +167,7 @@ describe('custom options', () => {
     editor.run();
     const usedPath = readFileSync(captureFile, 'utf8');
     unlinkSync(captureFile);
-    expect(path.dirname(usedPath)).toBe(import.meta.dirname);
+    expect(path.dirname(path.dirname(usedPath))).toBe(import.meta.dirname);
   });
 
   it('mode', () => {
@@ -189,6 +188,54 @@ describe('custom options', () => {
     } else {
       expect(int).toBe(100755);
     }
+  });
+
+  it('sanitizes prefix and postfix path separators', () => {
+    const captureFile = path.join(os.tmpdir(), randomUUID());
+    const editor = new ExternalEditor('testing', {
+      prefix: '../pre/',
+      postfix: '/../post',
+    });
+    editor.editor = {
+      bin: process.execPath,
+      args: ['-e', capturePathScript, captureFile],
+    };
+    editor.run();
+    const usedPath = readFileSync(captureFile, 'utf8');
+    unlinkSync(captureFile);
+    const filename = path.basename(usedPath);
+    expect(filename.startsWith('.._pre_')).toBe(true);
+    expect(filename.endsWith('_.._post')).toBe(true);
+  });
+
+  it('removes the temporary editor directory after reading', () => {
+    const captureFile = path.join(os.tmpdir(), randomUUID());
+    const editor = new ExternalEditor('testing');
+    editor.editor = {
+      bin: process.execPath,
+      args: ['-e', capturePathScript, captureFile],
+    };
+    editor.run();
+    const usedPath = readFileSync(captureFile, 'utf8');
+    unlinkSync(captureFile);
+    expect(existsSync(usedPath)).toBe(false);
+    expect(existsSync(path.dirname(usedPath))).toBe(false);
+  });
+});
+
+describe('launch errors', () => {
+  it('run() throws LaunchEditorError when the editor cannot start', () => {
+    const editor = new ExternalEditor('testing');
+    editor.editor.bin = `missing-editor-${randomUUID()}`;
+
+    expect(() => editor.run()).toThrow(LaunchEditorError);
+  });
+
+  it('runAsync() rejects with LaunchEditorError when the editor cannot start', async () => {
+    const editor = new ExternalEditor('testing');
+    editor.editor.bin = `missing-editor-${randomUUID()}`;
+
+    await expect(editor.runAsync()).rejects.toBeInstanceOf(LaunchEditorError);
   });
 });
 
