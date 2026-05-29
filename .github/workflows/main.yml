@@ -10,6 +10,9 @@ env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
+permissions:
+  contents: read
+
 jobs:
   Compile:
     runs-on: ubuntu-latest
