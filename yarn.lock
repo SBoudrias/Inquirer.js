@@ -5773,7 +5773,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.8.1":
+"semver@npm:^7.7.4, semver@npm:^7.8.1":
   version: 7.8.1
   resolution: "semver@npm:7.8.1"
   bin:
