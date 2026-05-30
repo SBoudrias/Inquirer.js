@@ -12,8 +12,10 @@ import { vi, expect, beforeEach, afterEach, describe, it, expectTypeOf } from 'v
 import { from as observableFrom, map, of, Subject } from 'rxjs';
 import { AbortPromptError, createPrompt } from '@inquirer/core';
 import type { InquirerReadline } from '@inquirer/type';
+import { screen } from '@inquirer/testing/vitest';
 import inquirer from './src/index.ts';
 import type { QuestionMap, Answers, Question, DistinctQuestion } from './src/index.ts';
+import type { StreamOptions } from './src/types.ts';
 import { _ } from './src/ui/prompt.ts';
 
 const actualCreateInterface = readline.createInterface;
@@ -78,12 +80,21 @@ class StubEventuallyFailingPrompt {
   }
 }
 
-beforeEach(() => {
-  inquirer.restoreDefaultPrompts();
-  inquirer.registerPrompt('stub', StubPrompt);
-  inquirer.registerPrompt('failing', StubFailingPrompt);
+function createTestPromptModule(options: StreamOptions = {}) {
+  const module = inquirer.createPromptModule<TestQuestions>({
+    output: screen.createOutput(),
+    ...options,
+  });
+  module.registerPrompt('stub', StubPrompt);
+  module.registerPrompt('failing', StubFailingPrompt);
+  return module;
+}
 
+const promptModule = createTestPromptModule();
+
+beforeEach(() => {
   vi.resetAllMocks();
+  inquirer.restoreDefaultPrompts();
 });
 
 describe('exported types', () => {
@@ -110,7 +121,7 @@ describe('exported types', () => {
       name: 'q1',
       message: 'message',
     } as const satisfies Question;
-    expectTypeOf(await inquirer.prompt(question)).toEqualTypeOf<{ q1: any }>();
+    expectTypeOf(await promptModule(question)).toEqualTypeOf<{ q1: any }>();
 
     const questions = [
       {
@@ -124,7 +135,7 @@ describe('exported types', () => {
         message: 'message',
       },
     ] as const satisfies Question[];
-    expectTypeOf(await inquirer.prompt(questions)).toEqualTypeOf<{ q1: any; q2: any }>();
+    expectTypeOf(await promptModule(questions)).toEqualTypeOf<{ q1: any; q2: any }>();
 
     const questions2 = [
       {
@@ -140,7 +151,7 @@ describe('exported types', () => {
         when: false,
       },
     ] as const satisfies DistinctQuestion[];
-    expectTypeOf(await inquirer.prompt(questions2)).toEqualTypeOf<{ q1: any; q2: any }>();
+    expectTypeOf(await promptModule(questions2)).toEqualTypeOf<{ q1: any; q2: any }>();
   });
 
   it('exported Answers type is not any', () => {
@@ -153,10 +164,10 @@ describe('exported types', () => {
   });
 });
 
-describe('inquirer.prompt(...)', () => {
+describe('promptModule(...)', () => {
   describe('interfaces', () => {
     it('takes a prompts array', async () => {
-      const answers = await inquirer.prompt([
+      const answers = await promptModule([
         {
           type: 'stub',
           name: 'q1',
@@ -177,7 +188,7 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('takes a question map object', async () => {
-      const answers = await inquirer.prompt({
+      const answers = await promptModule({
         q1: {
           type: 'stub',
           message: 'message',
@@ -197,7 +208,7 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('takes a single prompt', async () => {
-      const answers = await inquirer.prompt({
+      const answers = await promptModule({
         type: 'stub',
         name: 'q1',
         message: 'message',
@@ -207,9 +218,10 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('defaults to input when prompt type is unset', async () => {
-      inquirer.registerPrompt('input', StubPrompt);
+      const localPromptModule = createTestPromptModule();
+      localPromptModule.registerPrompt('input', StubPrompt);
 
-      const answers = await inquirer.prompt({
+      const answers = await localPromptModule({
         name: 'q1',
         message: 'message',
       });
@@ -218,10 +230,11 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('throws when prompt type is not registered', async () => {
-      inquirer.registerPrompt('input', StubPrompt);
+      const localPromptModule = createTestPromptModule();
+      localPromptModule.registerPrompt('input', StubPrompt);
 
       await expect(
-        inquirer.prompt({
+        localPromptModule({
           type: 'list',
           name: 'q1',
           message: 'message',
@@ -234,7 +247,7 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('takes an Observable', async () => {
-      const answers = await inquirer.prompt(
+      const answers = await promptModule(
         of(
           {
             type: 'stub',
@@ -259,7 +272,7 @@ describe('inquirer.prompt(...)', () => {
       const questions = new Subject<Question & { answer: boolean }>();
       const processEvents: unknown[] = [];
 
-      const promise = inquirer.prompt(questions);
+      const promise = promptModule(questions);
       promise.ui.process.subscribe((answer) => {
         processEvents.push(answer);
       });
@@ -290,7 +303,7 @@ describe('inquirer.prompt(...)', () => {
       const error = new Error('Question source failed');
       const onError = vi.fn();
 
-      const promise = inquirer.prompt(questions);
+      const promise = promptModule(questions);
       promise.ui.process.subscribe({ error: onError });
 
       questions.error(error);
@@ -310,7 +323,7 @@ describe('inquirer.prompt(...)', () => {
       return rl;
     });
 
-    const promise = inquirer.prompt([
+    const promise = promptModule([
       {
         type: 'stub',
         name: 'q1',
@@ -325,7 +338,7 @@ describe('inquirer.prompt(...)', () => {
     expect(rl1.close).toHaveBeenCalledTimes(1);
     expect(rl1.output.end).toHaveBeenCalledTimes(1);
 
-    const promise2 = inquirer.prompt([
+    const promise2 = promptModule([
       {
         type: 'stub',
         name: 'q1',
@@ -352,7 +365,7 @@ describe('inquirer.prompt(...)', () => {
       return rl;
     });
 
-    const promise = inquirer.prompt([
+    const promise = promptModule([
       {
         type: 'failing',
         name: 'q1',
@@ -370,7 +383,7 @@ describe('inquirer.prompt(...)', () => {
   });
 
   it('should take a prompts array with nested names', async () => {
-    const answers = await inquirer.prompt([
+    const answers = await promptModule([
       {
         type: 'stub',
         name: 'foo.bar.q1',
@@ -405,9 +418,10 @@ describe('inquirer.prompt(...)', () => {
 
       close() {}
     }
-    inquirer.registerPrompt('stub', FakePrompt);
+    const localPromptModule = createTestPromptModule();
+    localPromptModule.registerPrompt('stub', FakePrompt);
 
-    await inquirer.prompt(
+    await localPromptModule(
       [
         {
           type: 'stub',
@@ -439,9 +453,10 @@ describe('inquirer.prompt(...)', () => {
 
       close() {}
     }
-    inquirer.registerPrompt('stub2', FakePrompt);
+    const localPromptModule = createTestPromptModule();
+    localPromptModule.registerPrompt('stub2', FakePrompt);
 
-    const answers = await inquirer.prompt([
+    const answers = await localPromptModule([
       {
         type: 'stub',
         name: 'name1',
@@ -467,7 +482,7 @@ describe('inquirer.prompt(...)', () => {
   });
 
   it('should parse `default` if passed as a function', async () => {
-    await inquirer.prompt([
+    await promptModule([
       {
         type: 'stub',
         name: 'name1',
@@ -478,7 +493,7 @@ describe('inquirer.prompt(...)', () => {
         type: 'stub',
         name: 'name',
         message: 'message',
-        default(answers) {
+        default(answers: Partial<{ name1: string }>) {
           expect(answers.name1).toEqual('bar');
           return 'foo';
         },
@@ -501,9 +516,10 @@ describe('inquirer.prompt(...)', () => {
 
       close() {}
     }
-    inquirer.registerPrompt('stub2', Stub2Prompt);
+    const localPromptModule = createTestPromptModule();
+    localPromptModule.registerPrompt('stub2', Stub2Prompt);
 
-    await inquirer.prompt([
+    await localPromptModule([
       {
         type: 'stub',
         name: 'name1',
@@ -544,9 +560,10 @@ describe('inquirer.prompt(...)', () => {
 
       close() {}
     }
-    inquirer.registerPrompt('stub2', Stub2Prompt);
+    const localPromptModule = createTestPromptModule();
+    localPromptModule.registerPrompt('stub2', Stub2Prompt);
 
-    await inquirer.prompt([
+    await localPromptModule([
       {
         type: 'stub',
         name: 'name1',
@@ -562,7 +579,7 @@ describe('inquirer.prompt(...)', () => {
   });
 
   it('should pass previous answers to the validate function', async () => {
-    const answers = await inquirer.prompt([
+    const answers = await promptModule([
       {
         type: 'stub',
         name: 'first_name',
@@ -606,9 +623,10 @@ describe('inquirer.prompt(...)', () => {
 
       close() {}
     }
-    inquirer.registerPrompt('stubSelect', FakeSelect);
+    const localPromptModule = createTestPromptModule();
+    localPromptModule.registerPrompt('stubSelect', FakeSelect);
 
-    const answers = await inquirer.prompt([
+    const answers = await localPromptModule([
       {
         type: 'stub',
         name: 'name1',
@@ -644,9 +662,10 @@ describe('inquirer.prompt(...)', () => {
 
       close() {}
     }
-    inquirer.registerPrompt('stubSelect', FakeSelect);
+    const localPromptModule = createTestPromptModule();
+    localPromptModule.registerPrompt('stubSelect', FakeSelect);
 
-    const answers = await inquirer.prompt([
+    const answers = await localPromptModule([
       {
         type: 'stubSelect',
         name: 'name',
@@ -661,7 +680,7 @@ describe('inquirer.prompt(...)', () => {
   it('should expose the Reactive interface', async () => {
     const spy = vi.fn();
 
-    const promise = inquirer.prompt([
+    const promise = promptModule([
       {
         type: 'stub',
         name: 'name1',
@@ -685,7 +704,7 @@ describe('inquirer.prompt(...)', () => {
   it('should expose an RxJS-compatible Reactive interface', async () => {
     const processEvents: string[] = [];
 
-    const promise = inquirer.prompt([
+    const promise = promptModule([
       {
         type: 'stub',
         name: 'name1',
@@ -710,7 +729,7 @@ describe('inquirer.prompt(...)', () => {
   });
 
   it('should expose the UI', async () => {
-    const promise = inquirer.prompt([]);
+    const promise = promptModule([]);
     expect(promise.ui.answers).toBeTypeOf('object');
 
     await promise;
@@ -718,7 +737,7 @@ describe('inquirer.prompt(...)', () => {
 
   describe('hierarchical mode (`when`)', () => {
     it('should pass current answers to `when`', async () => {
-      const answers = await inquirer.prompt([
+      const answers = await promptModule([
         {
           type: 'stub',
           name: 'q1',
@@ -744,7 +763,7 @@ describe('inquirer.prompt(...)', () => {
     it('should run prompt if `when` returns true', async () => {
       const when = vi.fn(() => true);
 
-      const answers = await inquirer.prompt([
+      const answers = await promptModule([
         {
           type: 'stub',
           name: 'q1',
@@ -762,7 +781,7 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('should run prompt if `when` is true', async () => {
-      const answers = await inquirer.prompt([
+      const answers = await promptModule([
         {
           type: 'stub',
           name: 'q1',
@@ -781,7 +800,7 @@ describe('inquirer.prompt(...)', () => {
 
     it('should not run prompt if `when` returns false', async () => {
       const when = vi.fn(() => false);
-      const answers = await inquirer.prompt([
+      const answers = await promptModule([
         {
           type: 'stub',
           name: 'q1',
@@ -805,7 +824,7 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('should not run prompt if `when` is false', async () => {
-      const answers = await inquirer.prompt([
+      const answers = await promptModule([
         {
           type: 'stub',
           name: 'q1',
@@ -830,7 +849,7 @@ describe('inquirer.prompt(...)', () => {
     it('should run asynchronous `when`', async () => {
       let goesInWhen = false;
 
-      const answers = await inquirer.prompt([
+      const answers = await promptModule([
         {
           type: 'stub',
           name: 'q1',
@@ -859,7 +878,7 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('should get the value which set in `when` on returns false', async () => {
-      const answers = await inquirer.prompt([
+      const answers = await promptModule([
         {
           type: 'input',
           name: 'q',
@@ -877,7 +896,7 @@ describe('inquirer.prompt(...)', () => {
 
   describe('Prefilling answers', () => {
     it('should take a prompts array and answers and return answers', async () => {
-      const answers = await inquirer.prompt(
+      const answers = await promptModule(
         [
           {
             type: 'stub',
@@ -897,7 +916,7 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('should not run prompt if answer exists for question', async () => {
-      const answers = await inquirer.prompt(
+      const answers = await promptModule(
         [
           {
             type: 'input',
@@ -918,7 +937,7 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('should not run prompt if nested answer exists for question', async () => {
-      const answers = await inquirer.prompt(
+      const answers = await promptModule(
         [
           {
             type: 'input',
@@ -942,7 +961,7 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('should run prompt if answer exists for question and askAnswered is set', async () => {
-      const answers = await inquirer.prompt(
+      const answers = await promptModule(
         [
           {
             askAnswered: true,
@@ -960,7 +979,7 @@ describe('inquirer.prompt(...)', () => {
     });
 
     it('should run prompt if nested answer exists for question and askAnswered is set', async () => {
-      const answers = await inquirer.prompt(
+      const answers = await promptModule(
         [
           {
             askAnswered: true,
@@ -989,7 +1008,7 @@ describe('inquirer.prompt(...)', () => {
           technology: 'vue',
         };
 
-        const result = await inquirer.prompt(
+        const result = await promptModule(
           [
             {
               name: 'displayName',
@@ -1030,7 +1049,7 @@ describe('inquirer.prompt(...)', () => {
           field2: undefined as string | undefined,
         };
 
-        const result = await inquirer.prompt(
+        const result = await promptModule(
           [
             {
               name: 'field1',
@@ -1062,7 +1081,7 @@ describe('inquirer.prompt(...)', () => {
           description: 'Custom Description',
         };
 
-        const result = await inquirer.prompt(
+        const result = await promptModule(
           [
             {
               name: 'name',
@@ -1115,9 +1134,10 @@ describe('inquirer.prompt(...)', () => {
         close() {}
       }
 
-      inquirer.registerPrompt('stub2', FakePrompt);
+      const localPromptModule = createTestPromptModule();
+      localPromptModule.registerPrompt('stub2', FakePrompt);
 
-      const answers = await inquirer.prompt([
+      const answers = await localPromptModule([
         { type: 'stub', name: 'extra', message: 'message' },
         { type: 'stub2', name: 'foo', message: 'message' },
       ]);
@@ -1145,7 +1165,7 @@ describe('inquirer.prompt(...)', () => {
 
 describe('AbortSignal support', () => {
   it('throws on aborted signal', async () => {
-    const localPrompt = inquirer.createPromptModule<TestQuestions>({
+    const localPrompt = createTestPromptModule({
       signal: AbortSignal.abort(),
     });
     localPrompt.registerPrompt('stub', StubEventuallyFailingPrompt);
@@ -1156,7 +1176,7 @@ describe('AbortSignal support', () => {
 
   it('legacy prompts can be aborted by module signal', async () => {
     const abortController = new AbortController();
-    const localPrompt = inquirer.createPromptModule<TestQuestions>({
+    const localPrompt = createTestPromptModule({
       signal: abortController.signal,
     });
     localPrompt.registerPrompt('stub', StubEventuallyFailingPrompt);
@@ -1168,7 +1188,7 @@ describe('AbortSignal support', () => {
 
   it('modern prompts can be aborted by module signal', async () => {
     const abortController = new AbortController();
-    const localPrompt = inquirer.createPromptModule<TestQuestions>({
+    const localPrompt = createTestPromptModule({
       signal: abortController.signal,
     });
     localPrompt.registerPrompt(
@@ -1182,7 +1202,7 @@ describe('AbortSignal support', () => {
   });
 
   it('modern prompts can be aborted using ui.close()', async () => {
-    const localPrompt = inquirer.createPromptModule<TestQuestions>();
+    const localPrompt = createTestPromptModule();
     localPrompt.registerPrompt(
       'stub',
       createPrompt(() => 'dummy prompt'),
@@ -1207,10 +1227,9 @@ describe('Non-TTY checks', () => {
   });
 
   it('Throw an exception when run in non-tty', async () => {
-    const localPrompt = inquirer.createPromptModule<TestQuestions>({
+    const localPrompt = createTestPromptModule({
       skipTTYChecks: false,
     });
-    localPrompt.registerPrompt('stub', StubPrompt);
 
     const promise = localPrompt([
       {
@@ -1223,8 +1242,7 @@ describe('Non-TTY checks', () => {
   });
 
   it("Don't throw an exception when run in non-tty by default ", async () => {
-    const localPrompt = inquirer.createPromptModule<TestQuestions>();
-    localPrompt.registerPrompt('stub', StubPrompt);
+    const localPrompt = createTestPromptModule();
 
     await localPrompt([
       {
@@ -1241,10 +1259,9 @@ describe('Non-TTY checks', () => {
   });
 
   it("Don't throw an exception when run in non-tty and skipTTYChecks is true ", async () => {
-    const localPrompt = inquirer.createPromptModule<TestQuestions>({
+    const localPrompt = createTestPromptModule({
       skipTTYChecks: true,
     });
-    localPrompt.registerPrompt('stub', StubPrompt);
 
     await localPrompt([
       {
@@ -1261,7 +1278,7 @@ describe('Non-TTY checks', () => {
   });
 
   it("Don't throw an exception when run in non-tty and custom input is provided async ", async () => {
-    const localPrompt = inquirer.createPromptModule<TestQuestions>({
+    const localPrompt = createTestPromptModule({
       input: new stream.Readable({
         // We must have a default read implementation
         // for this to work, if not it will error out
@@ -1270,7 +1287,6 @@ describe('Non-TTY checks', () => {
         read() {},
       }),
     });
-    localPrompt.registerPrompt('stub', StubPrompt);
 
     await localPrompt([
       {
@@ -1287,11 +1303,10 @@ describe('Non-TTY checks', () => {
   });
 
   it('Throw an exception when run in non-tty and custom input is provided with skipTTYChecks: false', async () => {
-    const localPrompt = inquirer.createPromptModule<TestQuestions>({
+    const localPrompt = createTestPromptModule({
       input: new stream.Readable(),
       skipTTYChecks: false,
     });
-    localPrompt.registerPrompt('stub', StubPrompt);
 
     const promise = localPrompt([
       {
@@ -1309,11 +1324,10 @@ describe('Non-TTY checks', () => {
     const input = new tty.ReadStream(fs.openSync('/dev/tty', 'r+'));
 
     // Uses manually opened tty as input instead of process.stdin
-    const localPrompt = inquirer.createPromptModule<TestQuestions>({
+    const localPrompt = createTestPromptModule({
       input,
       skipTTYChecks: false,
     });
-    localPrompt.registerPrompt('stub', StubPrompt);
 
     const promise = localPrompt([
       {

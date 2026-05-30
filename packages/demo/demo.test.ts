@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { screen } from '@inquirer/testing/vitest';
 
 // Import demos AFTER @inquirer/testing/vitest to ensure mocks are applied
@@ -7,6 +7,14 @@ import inputDemo from './src/demos/input.ts';
 import selectDemo from './src/demos/select.ts';
 import checkboxDemo from './src/demos/checkbox.ts';
 import editorDemo from './src/demos/editor.ts';
+
+beforeEach(() => {
+  vi.spyOn(console, 'log').mockImplementation(() => {});
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('@inquirer/demo E2E tests', () => {
   describe('screen.getScreen()', () => {
