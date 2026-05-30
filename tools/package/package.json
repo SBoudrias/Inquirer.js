@@ -1,0 +1,67 @@
+{
+  "name": "@sboudrias/package",
+  "version": "0.0.0",
+  "keywords": [
+    "cli",
+    "lint",
+    "monorepo",
+    "node",
+    "npm",
+    "package-json",
+    "pnpm",
+    "workspace",
+    "yarn"
+  ],
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/tools/package/README.md",
+  "license": "MIT",
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBoudrias/Inquirer.js.git"
+  },
+  "bin": "./src/bin.ts",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "bin": "./dist/bin.js",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./package.json": "./package.json"
+    },
+    "access": "public"
+  },
+  "scripts": {
+    "tsc": "tsc && chmod +x ./dist/bin.js"
+  },
+  "dependencies": {
+    "clipanion": "^4.0.0-rc.4",
+    "globby": "^16.2.0",
+    "jsonc-parser": "^3.3.1",
+    "semver": "^7.7.4",
+    "typanion": "^3.14.0",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@types/node": "^25.5.2",
+    "@types/semver": "^7.7.1",
+    "type-fest": "^5.5.0",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.2"
+  },
+  "engines": {
+    "node": ">=23.5.0 || ^22.13.0 || ^20.17.0"
+  }
+}

@@ -2,10 +2,7 @@
   "name": "setup-packages",
   "version": "0.0.0",
   "private": true,
-  "bin": {
-    "setup-packages": "./src/bin.ts",
-    "validate-package-engines": "./src/validate-engines.ts"
-  },
+  "bin": "./src/bin.ts",
   "type": "module",
   "sideEffects": false,
   "exports": {

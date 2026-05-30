@@ -576,6 +576,7 @@ __metadata:
     "@lerna-lite/cli": "npm:^5.0.0"
     "@lerna-lite/publish": "npm:^5.0.0"
     "@repo/tsconfig": "workspace:*"
+    "@sboudrias/package": "workspace:*"
     "@types/node": "npm:^25.5.2"
     "@vitest/coverage-v8": "npm:^4.1.2"
     "@vitest/ui": "npm:^4.1.2"
@@ -1689,9 +1690,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@repo/tsconfig@workspace:*, @repo/tsconfig@workspace:internals/tsconfig":
+"@repo/tsconfig@workspace:*, @repo/tsconfig@workspace:tools/tsconfig":
   version: 0.0.0-use.local
-  resolution: "@repo/tsconfig@workspace:internals/tsconfig"
+  resolution: "@repo/tsconfig@workspace:tools/tsconfig"
   dependencies:
     "@sindresorhus/tsconfig": "npm:^8.1.0"
   languageName: unknown
@@ -1810,6 +1811,27 @@ __metadata:
   checksum: 10/6ce1601849b3095a2b6e57074c1f8a661eba67ebf65cf9afdf894d903302318247ddb69ab6cbc621e7f582408af301ea0523ed59ddb9a4ef3ea97f3d7002683e
   languageName: node
   linkType: hard
+
+"@sboudrias/package@workspace:*, @sboudrias/package@workspace:tools/package":
+  version: 0.0.0-use.local
+  resolution: "@sboudrias/package@workspace:tools/package"
+  dependencies:
+    "@repo/tsconfig": "workspace:*"
+    "@types/node": "npm:^25.5.2"
+    "@types/semver": "npm:^7.7.1"
+    clipanion: "npm:^4.0.0-rc.4"
+    globby: "npm:^16.2.0"
+    jsonc-parser: "npm:^3.3.1"
+    semver: "npm:^7.7.4"
+    typanion: "npm:^3.14.0"
+    type-fest: "npm:^5.5.0"
+    typescript: "npm:^6.0.2"
+    vitest: "npm:^4.1.2"
+    yaml: "npm:^2.9.0"
+  bin:
+    package: ./src/bin.ts
+  languageName: unknown
+  linkType: soft
 
 "@sigstore/bundle@npm:^4.0.0":
   version: 4.0.0
@@ -2748,6 +2770,17 @@ __metadata:
   version: 4.1.0
   resolution: "cli-width@npm:4.1.0"
   checksum: 10/b58876fbf0310a8a35c79b72ecfcf579b354e18ad04e6b20588724ea2b522799a758507a37dfe132fafaf93a9922cafd9514d9e1598e6b2cd46694853aed099f
+  languageName: node
+  linkType: hard
+
+"clipanion@npm:^4.0.0-rc.4":
+  version: 4.0.0-rc.4
+  resolution: "clipanion@npm:4.0.0-rc.4"
+  dependencies:
+    typanion: "npm:^3.8.0"
+  peerDependencies:
+    typanion: "*"
+  checksum: 10/c3a94783318d91e6b35380a8aa4a6f166964082a51ff2df21a339266223aaab98f5986dd2c37ca7fd640ad1d233b3cd5b24aad64c51537b54ccc9c66ec070eeb
   languageName: node
   linkType: hard
 
@@ -4057,9 +4090,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isolate-monorepo-package@workspace:*, isolate-monorepo-package@workspace:internals/isolate-monorepo-package":
+"isolate-monorepo-package@workspace:*, isolate-monorepo-package@workspace:tools/isolate-monorepo-package":
   version: 0.0.0-use.local
-  resolution: "isolate-monorepo-package@workspace:internals/isolate-monorepo-package"
+  resolution: "isolate-monorepo-package@workspace:tools/isolate-monorepo-package"
   dependencies:
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^25.5.2"
@@ -5789,9 +5822,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"setup-packages@workspace:*, setup-packages@workspace:internals/setup-packages":
+"setup-packages@workspace:*, setup-packages@workspace:tools/setup-packages":
   version: 0.0.0-use.local
-  resolution: "setup-packages@workspace:internals/setup-packages"
+  resolution: "setup-packages@workspace:tools/setup-packages"
   dependencies:
     "@repo/tsconfig": "workspace:*"
     "@types/semver": "npm:^7.7.1"
@@ -5802,7 +5835,6 @@ __metadata:
     vitest: "npm:^4.1.2"
   bin:
     setup-packages: ./src/bin.ts
-    validate-package-engines: ./src/validate-engines.ts
   languageName: unknown
   linkType: soft
 
@@ -6295,6 +6327,13 @@ __metadata:
   bin:
     turbo: bin/turbo
   checksum: 10/e9bf5b6c34a57ab80ac3bb73736835428f33d32de487dbdc9740460bbf938f95ab1adf045f26b0ccc3094f128f5c35945ffb74ded9fd27ff2676f846e5f5fb80
+  languageName: node
+  linkType: hard
+
+"typanion@npm:^3.14.0, typanion@npm:^3.8.0":
+  version: 3.14.0
+  resolution: "typanion@npm:3.14.0"
+  checksum: 10/5e88d9e6121ff0ec543f572152fdd1b70e9cca35406d79013ec8e08defa8ef96de5fec9e98da3afbd1eb4426b9e8e8fe423163d0b482e34a40103cab1ef29abd
   languageName: node
   linkType: hard
 

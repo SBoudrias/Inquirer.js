@@ -5,7 +5,6 @@ import { subset, validRange } from 'semver';
 import { globby } from 'globby';
 import { parse as parseJsonc } from 'jsonc-parser';
 import type { PackageJson, TsConfigJson } from 'type-fest';
-import { fixPeerDeps } from './hoist-peer-dependencies.ts';
 
 type ExportDef = Exclude<PackageJson['exports'], undefined | null>;
 
@@ -30,6 +29,10 @@ function fileExists(filepath: string) {
     () => true,
     () => false,
   );
+}
+
+function isToolsPackageDirectory(dir: string) {
+  return dir.split(/[\\/]/)[0] === 'tools';
 }
 
 async function writeFile(filepath: string, content: string) {
@@ -90,7 +93,6 @@ for (const [pkgPath, pkg] of packages) {
   }
 
   const dir = path.dirname(pkgPath);
-  fixPeerDeps(pkg, path.resolve(path.join(dir)));
 
   const isTS = Object.values(pkg.exports).some(
     (exportPath) => typeof exportPath === 'string' && exportPath.endsWith('.ts'),
@@ -103,7 +105,9 @@ for (const [pkgPath, pkg] of packages) {
     pkg.author = rootPkg.author;
     pkg.license = rootPkg.license;
     pkg.repository = rootPkg.repository;
-    pkg.keywords = [...new Set([...(rootPkg.keywords ?? []), ...(pkg.keywords ?? [])])];
+    if (!isToolsPackageDirectory(dir)) {
+      pkg.keywords = [...new Set([...(rootPkg.keywords ?? []), ...(pkg.keywords ?? [])])];
+    }
     pkg.publishConfig = { access: 'public' };
 
     if (hasReadme) {
@@ -167,35 +171,49 @@ for (const [pkgPath, pkg] of packages) {
     }
 
     // Build tsc command with chmod for bin files if needed
-    let tscCommand = 'tsc';
+    const tscCommand = ['tsc'];
 
     // Handle bin field in publishConfig
     if (pkg.bin) {
       if (!pkg.name) throw new Error(`Package name in ${pkgPath} is required`);
 
       const publishBin: Record<string, string> = {};
-      const binEntries = typeof pkg.bin === 'string' ? { [pkg.name]: pkg.bin } : pkg.bin;
+      const executablePaths: string[] = [];
 
-      for (const [binName, binPath] of Object.entries(binEntries)) {
-        if (typeof binPath !== 'string') continue;
-
-        const { dir, name, ext } = path.parse(binPath);
+      if (typeof pkg.bin === 'string') {
+        const { dir, name, ext } = path.parse(pkg.bin);
         const distDir = dir.replace(/^\.\/src/, 'dist');
+        const publishBinPath =
+          ext === '.ts' ? './' + path.join(distDir, name + '.js') : pkg.bin;
 
-        if (ext === '.ts') {
-          publishBin[binName] = './' + path.join(distDir, name + '.js');
-        } else {
-          publishBin[binName] = binPath;
+        executablePaths.push(publishBinPath);
+        pkg.publishConfig['bin'] = publishBinPath;
+      } else {
+        for (const [binName, binPath] of Object.entries(pkg.bin)) {
+          if (typeof binPath !== 'string') continue;
+
+          const { dir, name, ext } = path.parse(binPath);
+          const distDir = dir.replace(/^\.\/src/, 'dist');
+
+          if (ext === '.ts') {
+            publishBin[binName] = './' + path.join(distDir, name + '.js');
+          } else {
+            publishBin[binName] = binPath;
+          }
+        }
+
+        executablePaths.push(...Object.values(publishBin));
+        if (Object.values(publishBin).length > 0) {
+          pkg.publishConfig['bin'] = publishBin;
         }
       }
 
-      if (Object.values(publishBin).length > 0) {
-        tscCommand += ` && chmod +x ${Object.values(publishBin).join(' ')}`;
-        pkg.publishConfig['bin'] = publishBin;
+      if (executablePaths.length > 0) {
+        tscCommand.push(`chmod +x ${executablePaths.join(' ')}`);
       }
     }
 
-    pkg.scripts['tsc'] = tscCommand;
+    pkg.scripts['tsc'] = tscCommand.join(' && ');
     pkg.devDependencies['typescript'] = versions['typescript'];
 
     if (tsconfig.extends === '@repo/tsconfig') {

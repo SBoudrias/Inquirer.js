@@ -49,7 +49,7 @@
   "workspaces": [
     "packages/*",
     "integration/*",
-    "internals/*"
+    "tools/*"
   ],
   "type": "module",
   "scripts": {
@@ -59,8 +59,7 @@
     "prepublishOnly": "yarn tsc",
     "prepack": "find packages/* -maxdepth 1 -type f -name 'README*' -exec sed -i '' -e 's/utm_source=github/utm_source=npmjs/g' {} + && find packages/* -maxdepth 1  -type f -name package.json -exec sh -c 'jq \".devDependencies |= with_entries(select(.value != \\\"workspace:*\\\"))\" \"$1\" > \"$1.tmp\" && mv \"$1.tmp\" \"$1\"' _ {} \\;",
     "postpack": "git restore packages/*/package.json packages/*/README.md",
-    "check:engines": "validate-package-engines",
-    "setup": "setup-packages && oxfmt . --no-error-on-unmatched-pattern",
+    "setup": "setup-packages && package lint && oxfmt . --no-error-on-unmatched-pattern",
     "pretest": "yarn tsc && oxlint && oxfmt --check . && eslint .",
     "test": "vitest --run packages && turbo test",
     "tsc": "turbo tsc && tsc -p tsconfig.json"
@@ -70,6 +69,7 @@
     "@lerna-lite/cli": "^5.0.0",
     "@lerna-lite/publish": "^5.0.0",
     "@repo/tsconfig": "workspace:*",
+    "@sboudrias/package": "workspace:*",
     "@types/node": "^25.5.2",
     "@vitest/coverage-v8": "^4.1.2",
     "@vitest/ui": "^4.1.2",

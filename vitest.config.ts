@@ -9,7 +9,6 @@ export default defineConfig({
       exclude: [
         ...coverageConfigDefaults.exclude,
         'tools/**',
-        'internals/**',
         'packages/*/dist/**',
         'packages/*/examples/**',
         'packages/demo/**',
