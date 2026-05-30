@@ -54,7 +54,7 @@ jobs:
       - run: yarn oxlint .
       - run: yarn oxfmt --check .
       - run: yarn eslint .
-      - run: yarn check:engines
+      - run: yarn package lint --check
       - name: Validate package setup
         run: |
           yarn setup

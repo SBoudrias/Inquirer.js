@@ -1,6 +1,7 @@
 import fs from 'node:fs';
-import path from 'node:path';
+import fsPromises from 'node:fs/promises';
 import Module from 'node:module';
+import path from 'node:path';
 import { parse as parseJsonc } from 'jsonc-parser';
 import type { PackageJson } from 'type-fest';
 
@@ -61,6 +62,10 @@ function findNodeModulesPackageJson(name: string, fromDirectory: string) {
 
 export function readPackageJsonFile(filepath: string) {
   return asPackageJson(parseJsonc(fs.readFileSync(filepath, 'utf8')), filepath);
+}
+
+export async function writePackageJsonFile(filepath: string, packageJson: PackageJson) {
+  await fsPromises.writeFile(filepath, JSON.stringify(packageJson, null, 2) + '\n');
 }
 
 export function resolveDependencyPackageJson(

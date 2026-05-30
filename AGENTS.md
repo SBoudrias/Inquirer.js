@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-The repo is a Yarn workspaces monorepo. Core runtime logic shared primitives and shared primitives live in `packages/core/src`, and individual prompt implementations under `packages/<prompt>/src`. Testing utilities sit in `packages/testing`, while `packages/demo` provides the interactive showcase. Integration suites reside in `integration/cjs` and `integration/esm` to verify bundling. Tooling scripts live in `tools/` and repo wiring (tsconfig, release helpers) in `internals/`. Treat `packages/*/dist` as generated output.
+The repo is a Yarn workspaces monorepo. Core runtime logic shared primitives and shared primitives live in `packages/core/src`, and individual prompt implementations under `packages/<prompt>/src`. Testing utilities sit in `packages/testing`, while `packages/demo` provides the interactive showcase. Integration suites reside in `integration/cjs` and `integration/esm` to verify bundling. Tooling scripts and repo wiring (tsconfig, release helpers) live in `tools/`. Treat `packages/*/dist` and `tools/*/dist` as generated output.
 
 ## Build, Test, and Development Commands
 

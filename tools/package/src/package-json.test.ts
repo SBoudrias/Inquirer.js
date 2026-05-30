@@ -12,7 +12,7 @@ afterEach(async () => {
 });
 
 async function makeTempDir() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'setup-packages-'));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'package-json-'));
   tempDirs.push(dir);
   return dir;
 }
