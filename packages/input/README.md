@@ -68,9 +68,11 @@ const answer = await input({ message: 'Enter your name' });
 | required     | `boolean`                                                   | no       | Defaults to `false`. If set to true, `undefined` (empty) will not be accepted for this.                                                                                                                                 |
 | transformer  | `(string, { isFinal: boolean }) => string`                  | no       | Transform/Format the raw value entered by the user. Once the prompt is completed, `isFinal` will be `true`. This function is purely visual, modify the answer in your code if needed.                                   |
 | validate     | `string => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the filtered answered content. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
-| pattern      | `RegExp`                                                    | no       | Regular expression to validate the input against. If the input doesn't match the pattern, validation will fail with the error message specified in `patternError`.                                                      |
+| pattern      | `RegExp`                                                    | no       | Regular expression to validate the input against. The pattern must match the entire non-empty answer, similar to the HTML `pattern` attribute. Empty answers are accepted unless `required` is true.                    |
 | patternError | `string`                                                    | no       | Error message to display when the input doesn't match the `pattern`. Defaults to `'Invalid input'`.                                                                                                                     |
 | theme        | [See Theming](#Theming)                                     | no       | Customize look of the prompt.                                                                                                                                                                                           |
+
+Fixed-shape patterns also enable input masking. For example, `/^\d{3}-\d{3}-\d{4}$/` automatically formats `1234567890` as `123-456-7890` while the user types, and unfilled slots are displayed as `_` placeholders. Variable-length patterns such as `/^[0-9]*\.?[0-9]*$/` remain validation-only.
 
 ## Theming
 

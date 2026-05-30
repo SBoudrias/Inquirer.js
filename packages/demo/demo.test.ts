@@ -4,6 +4,7 @@ import { screen } from '@inquirer/testing/vitest';
 // Import demos AFTER @inquirer/testing/vitest to ensure mocks are applied
 import confirmDemo from './src/demos/confirm.ts';
 import inputDemo from './src/demos/input.ts';
+import inputMaskDemo from './src/demos/input-mask.ts';
 import selectDemo from './src/demos/select.ts';
 import checkboxDemo from './src/demos/checkbox.ts';
 import editorDemo from './src/demos/editor.ts';
@@ -113,6 +114,61 @@ describe('@inquirer/demo E2E tests', () => {
         ✔ (Slow validation) provide a number: 42"
       `);
     }, 10000);
+
+    it('runs the input mask demo', async () => {
+      const demo = inputMaskDemo();
+      expect(screen.getScreen()).toMatchInlineSnapshot(`"? US phone number"`);
+
+      screen.type('5551234567');
+      expect(screen.getScreen()).toMatchInlineSnapshot(
+        `"? US phone number (555) 123-4567"`,
+      );
+
+      screen.keypress('enter');
+      await screen.next();
+      expect(screen.getScreen()).toMatchInlineSnapshot(`"? EU phone number"`);
+
+      screen.type('33123456789');
+      expect(screen.getScreen()).toMatchInlineSnapshot(
+        `"? EU phone number +33 1 23 45 67 89"`,
+      );
+
+      screen.keypress('enter');
+      await screen.next();
+      expect(screen.getScreen()).toMatchInlineSnapshot(`"? US ZIP+4 code"`);
+
+      screen.type('123456789');
+      expect(screen.getScreen()).toMatchInlineSnapshot(`"? US ZIP+4 code 12345-6789"`);
+
+      screen.keypress('enter');
+      await screen.next();
+      expect(screen.getScreen()).toMatchInlineSnapshot(`"? Canadian postal code"`);
+
+      screen.type('K1A0B1');
+      expect(screen.getScreen()).toMatchInlineSnapshot(
+        `"? Canadian postal code K1A 0B1"`,
+      );
+
+      screen.keypress('enter');
+      await screen.next();
+      expect(screen.getScreen()).toMatchInlineSnapshot(`"? Credit card number"`);
+
+      screen.type('4242424242424242');
+      expect(screen.getScreen()).toMatchInlineSnapshot(
+        `"? Credit card number 4242 4242 4242 4242"`,
+      );
+
+      screen.keypress('enter');
+      await demo;
+
+      expect(await screen.getFullOutput()).toMatchInlineSnapshot(`
+        "✔ US phone number (555) 123-4567
+        ✔ EU phone number +33 1 23 45 67 89
+        ✔ US ZIP+4 code 12345-6789
+        ✔ Canadian postal code K1A 0B1
+        ✔ Credit card number 4242 4242 4242 4242"
+      `);
+    });
   });
 
   describe('screen.keypress()', () => {

@@ -3,6 +3,7 @@ import {
   useState,
   useKeypress,
   useEffect,
+  useMemo,
   usePrefix,
   isBackspaceKey,
   isEnterKey,
@@ -12,6 +13,7 @@ import {
   type Status,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
+import { applyMask, inferMask } from './mask.ts';
 
 type InputTheme = {
   validationFailureMode: 'keep' | 'clear';
@@ -33,15 +35,33 @@ type InputConfig = {
   patternError?: string;
 };
 
+function isValidPattern(value: string, pattern: RegExp): boolean {
+  if (!value) {
+    return true;
+  }
+
+  const flags = pattern.flags.replaceAll(/[gy]/g, '');
+  const match = new RegExp(`^(?:${pattern.source})$`, flags).exec(value);
+  return match?.[0] === value;
+}
+
 export default createPrompt<string, InputConfig>((config, done) => {
   const { prefill = 'tab' } = config;
   const theme = makeTheme<InputTheme>(inputTheme, config.theme);
+  const mask = useMemo(
+    () => (config.pattern ? inferMask(config.pattern) : undefined),
+    [config.pattern],
+  );
   const [status, setStatus] = useState<Status>('idle');
   // Coerce to string to handle runtime values that may be numbers despite TypeScript types
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion
-  const [defaultValue, setDefaultValue] = useState<string>(String(config.default ?? ''));
+  const [defaultValue, setDefaultValue] = useState<string>(() => {
+    // oxlint-disable-next-line typescript/no-unnecessary-type-conversion
+    const value = String(config.default ?? '');
+    return applyMask(value, mask).value;
+  });
   const [errorMsg, setError] = useState<string>();
   const [value, setValue] = useState<string>('');
+  const [maskRenderCount, setMaskRenderCount] = useState(0);
 
   const prefix = usePrefix({ status, theme });
 
@@ -51,7 +71,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
       return 'You must provide a value';
     }
 
-    if (pattern && !pattern.test(value)) {
+    if (pattern && !isValidPattern(value, pattern)) {
       return patternError;
     }
 
@@ -83,7 +103,9 @@ export default createPrompt<string, InputConfig>((config, done) => {
         } else {
           // Reset the readline line value to the previous value. On line event, the value
           // get cleared, forcing the user to re-enter the value instead of fixing it.
-          rl.write(value);
+          const masked = applyMask(value, mask);
+          rl.write(masked.displayValue);
+          rl.cursor = masked.cursor;
         }
         setError(isValid);
         setStatus('idle');
@@ -96,8 +118,18 @@ export default createPrompt<string, InputConfig>((config, done) => {
       rl.write(defaultValue);
       setValue(defaultValue);
     } else {
-      setValue(rl.line);
+      const masked = applyMask(rl.line, mask, rl.cursor);
+      if (masked.displayValue !== rl.line || masked.cursor !== rl.cursor) {
+        rl.line = masked.displayValue;
+        rl.cursor = masked.cursor;
+      }
+
+      setValue(masked.value);
       setError(undefined);
+
+      if (mask && masked.value === value && errorMsg === undefined) {
+        setMaskRenderCount(maskRenderCount + 1);
+      }
     }
   });
 
@@ -116,6 +148,8 @@ export default createPrompt<string, InputConfig>((config, done) => {
     formattedValue = config.transformer(value, { isFinal: status === 'done' });
   } else if (status === 'done') {
     formattedValue = theme.style.answer(value);
+  } else if (mask && value) {
+    formattedValue = applyMask(value, mask).displayValue;
   }
 
   let defaultStr;

@@ -360,20 +360,145 @@ describe('input prompt', () => {
     const { answer, events, getScreen, nextRender } = await render(input, {
       message: 'Enter a number',
       pattern: /^[0-9]*\.?[0-9]*$/,
+      theme: {
+        validationFailureMode: 'clear',
+      },
     });
 
     events.type('123a');
     events.keypress('enter');
     await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
-      "? Enter a number 123a
+      "? Enter a number
       > Invalid input"
     `);
 
-    events.keypress('backspace');
+    events.type('123');
     events.keypress('enter');
     await expect(answer).resolves.toEqual('123');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a number 123"`);
+  });
+
+  it('infers a mask from fixed patterns', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'Enter a phone number',
+      pattern: /^\d{3}-\d{3}-\d{4}$/,
+    });
+
+    events.type('1234567890');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a phone number 123-456-7890"`);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('123-456-7890');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a phone number 123-456-7890"`);
+  });
+
+  it('displays inferred masks before the whole value is present', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'Enter a phone number',
+      pattern: /^\(\d{3}\) \d{3}-\d{4}$/,
+    });
+
+    events.type('12');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a phone number (12_) ___-____"`);
+
+    events.type('34567890');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('(123) 456-7890');
+  });
+
+  it('ignores characters that do not fit an inferred mask', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'Enter a phone number',
+      pattern: /^\d{3}-\d{3}-\d{4}$/,
+    });
+
+    events.type('123abc4567890');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a phone number 123-456-7890"`);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('123-456-7890');
+  });
+
+  it('keeps variable patterns as validation-only patterns', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'Enter a number',
+      pattern: /^[0-9]*\.?[0-9]*$/,
+    });
+
+    events.type('100.001');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a number 100.001"`);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('100.001');
+  });
+
+  it('validates the full input value against pattern', async () => {
+    const { answer, events, getScreen, nextRender } = await render(input, {
+      message: 'Enter a number',
+      pattern: /\d+/,
+      theme: {
+        validationFailureMode: 'clear',
+      },
+    });
+
+    events.type('abc123');
+    events.keypress('enter');
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Enter a number
+      > Invalid input"
+    `);
+
+    events.type('123');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('123');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a number 123"`);
+  });
+
+  it('allows empty values to bypass pattern validation unless required', async () => {
+    const { answer, events, getScreen } = await render(input, {
+      message: 'Enter a number',
+      pattern: /\d+/,
+    });
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a number"`);
+  });
+
+  it('keeps required validation responsible for empty values', async () => {
+    const { answer, events, getScreen, nextRender } = await render(input, {
+      message: 'Enter a number',
+      required: true,
+      pattern: /\d+/,
+      patternError: 'Only numbers are allowed',
+    });
+
+    events.keypress('enter');
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Enter a number
+      > You must provide a value"
+    `);
+
+    events.type('123');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('123');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a number 123"`);
+  });
+
+  it('does not mutate stateful pattern regexes', async () => {
+    const pattern = /\d+/g;
+    const { answer, events } = await render(input, {
+      message: 'Enter a number',
+      pattern,
+    });
+
+    events.type('123');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('123');
+    expect(pattern.lastIndex).toBe(0);
   });
 
   it('supports pattern validation with custom error message', async () => {
@@ -381,17 +506,20 @@ describe('input prompt', () => {
       message: 'Enter a number',
       pattern: /^[0-9]*\.?[0-9]*$/,
       patternError: 'Only numbers and a decimal point are allowed',
+      theme: {
+        validationFailureMode: 'clear',
+      },
     });
 
     events.type('123a');
     events.keypress('enter');
     await nextRender();
     expect(getScreen()).toMatchInlineSnapshot(`
-    "? Enter a number 123a
+    "? Enter a number
     > Only numbers and a decimal point are allowed"
   `);
 
-    events.keypress('backspace');
+    events.type('123');
     events.keypress('enter');
     await expect(answer).resolves.toEqual('123');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a number 123"`);

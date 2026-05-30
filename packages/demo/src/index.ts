@@ -8,6 +8,7 @@ import confirmDemo from './demos/confirm.ts';
 import editorDemo from './demos/editor.ts';
 import expandDemo from './demos/expand.ts';
 import inputDemo from './demos/input.ts';
+import inputMaskDemo from './demos/input-mask.ts';
 import loaderDemo from './demos/loader.ts';
 import numberDemo from './demos/number.ts';
 import passwordDemo from './demos/password.ts';
@@ -23,6 +24,7 @@ const demos = {
   editor: editorDemo,
   expand: expandDemo,
   input: inputDemo,
+  inputMask: inputMaskDemo,
   loader: loaderDemo,
   number: numberDemo,
   password: passwordDemo,
@@ -65,6 +67,7 @@ async function askNextDemo() {
         message: 'Which demo do you want to run?',
         choices: [
           { name: 'Default value after timeout', value: 'timeout' },
+          { name: 'Input masks', value: 'inputMask' },
           { name: 'Loader', value: 'loader' },
           { name: 'Key logger', value: 'keys' },
           { name: 'Go back', value: 'back' },
