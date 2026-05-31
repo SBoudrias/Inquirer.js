@@ -1,7 +1,5 @@
 #!/usr/bin/env node
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { Builtins, Cli, Command, Option, type BaseContext } from 'clipanion';
+import { Builtins, Cli, Command, Option } from 'clipanion';
 import { lintPackages } from './lint.ts';
 
 class LintCommand extends Command {
@@ -44,19 +42,4 @@ const cli = Cli.from([LintCommand, Builtins.HelpCommand], {
   enableCapture: false,
 });
 
-export async function main(
-  argv = process.argv.slice(2),
-  context: Partial<BaseContext> = {},
-) {
-  return cli.run(argv, {
-    ...Cli.defaultContext,
-    ...context,
-  });
-}
-
-if (
-  process.argv[1] != null &&
-  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
-) {
-  process.exitCode = await main();
-}
+process.exitCode = await cli.run(process.argv.slice(2), Cli.defaultContext);
