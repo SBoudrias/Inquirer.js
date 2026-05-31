@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/editor",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "description": "Inquirer multiline editor prompt",
   "keywords": [
     "answer",
@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "@inquirer/core": "^11.2.1",
-    "@inquirer/external-editor": "^3.0.2",
+    "@inquirer/external-editor": "^3.0.3",
     "@inquirer/type": "^4.0.7"
   },
   "devDependencies": {
