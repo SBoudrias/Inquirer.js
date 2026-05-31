@@ -1,15 +1,18 @@
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { Writable } from 'node:stream';
-import { afterEach, describe, expect, it } from 'vitest';
-import { main } from './bin.ts';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const tempDirs: string[] = [];
 const originalCwd = process.cwd();
+const originalArgv = process.argv;
+const originalExitCode = process.exitCode;
 
 afterEach(async () => {
   process.chdir(originalCwd);
+  process.argv = originalArgv;
+  process.exitCode = originalExitCode;
+  vi.restoreAllMocks();
   await Promise.all(tempDirs.map((dir) => fs.rm(dir, { recursive: true, force: true })));
   tempDirs.length = 0;
 });
@@ -29,19 +32,18 @@ async function readJson(filepath: string) {
   return JSON.parse(await fs.readFile(filepath, 'utf8')) as unknown;
 }
 
-function createWritableCapture() {
+function captureStderr() {
   let output = '';
-  const stream = new Writable({
-    write(chunk, _encoding, callback) {
-      output += String(chunk);
-      callback();
-    },
+  vi.spyOn(process.stderr, 'write').mockImplementation((chunk, ...args) => {
+    output += String(chunk);
+
+    const callback = args.find((arg) => typeof arg === 'function');
+    callback?.();
+
+    return true;
   });
 
-  return {
-    stream,
-    output: () => output,
-  };
+  return () => output;
 }
 
 describe('package CLI', () => {
@@ -62,18 +64,22 @@ describe('package CLI', () => {
       },
     });
     await writeJson(packagePath, originalPackageJson);
-    const stderr = createWritableCapture();
+    const stderr = captureStderr();
     process.chdir(cwd);
+    process.argv = [
+      process.execPath,
+      path.join(originalCwd, 'tools/package/src/bin.ts'),
+      'lint',
+      '--check',
+    ];
 
-    const exitCode = await main(['lint', '--check'], {
-      stderr: stderr.stream,
-    });
+    await import('./bin.ts');
 
-    expect(exitCode).toBe(1);
-    expect(stderr.output()).toContain(
+    expect(process.exitCode).toBe(1);
+    expect(stderr()).toContain(
       '[would fix] app must define an engines.node range within the root range ">=20.17.0".',
     );
-    expect(stderr.output()).toContain('[would fix] app must export ./package.json.');
+    expect(stderr()).toContain('[would fix] app must export ./package.json.');
     expect(await readJson(packagePath)).toEqual(originalPackageJson);
   });
 });
