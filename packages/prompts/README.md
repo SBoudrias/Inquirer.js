@@ -316,16 +316,29 @@ if (allowEmail) {
 ```js
 import { input } from '@inquirer/prompts';
 
+const controller = new AbortController();
+const timeout = setTimeout(() => {
+  controller.abort();
+}, 5000);
+const clearInputTimeout = () => clearTimeout(timeout);
+
+process.stdin.once('keypress', clearInputTimeout);
+
 const answer = await input(
   { message: 'Enter a value (timing out in 5 seconds)' },
-  { signal: AbortSignal.timeout(5000) },
-).catch((error) => {
-  if (error.name === 'AbortPromptError') {
-    return 'Default value';
-  }
+  { signal: controller.signal },
+)
+  .catch((error) => {
+    if (error.name === 'AbortPromptError') {
+      return 'Default value';
+    }
 
-  throw error;
-});
+    throw error;
+  })
+  .finally(() => {
+    clearInputTimeout();
+    process.stdin.off('keypress', clearInputTimeout);
+  });
 ```
 
 ## Using as pre-commit/git hooks, or scripts
