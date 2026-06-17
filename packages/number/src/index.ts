@@ -11,6 +11,7 @@ import {
   type Status,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
+import { isStepOf } from './is-step-of.ts';
 
 type NumberConfig<Required extends boolean = boolean> = {
   message: string;
@@ -24,14 +25,6 @@ type NumberConfig<Required extends boolean = boolean> = {
   ) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme>;
 };
-
-function isStepOf(value: number, step: number, min: number): boolean {
-  const valuePow = value * Math.pow(10, 6);
-  const stepPow = step * Math.pow(10, 6);
-  const minPow = min * Math.pow(10, 6);
-
-  return (valuePow - (Number.isFinite(min) ? minPow : 0)) % stepPow === 0;
-}
 
 function validateNumber(
   value: number | undefined,
