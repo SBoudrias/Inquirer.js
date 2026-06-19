@@ -366,4 +366,18 @@ describe('number prompt', () => {
     await expect(answer).resolves.toEqual(10.01);
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a decimal number 10.01"`);
   });
+
+  it('accepts decimal steps without floating-point precision errors', async () => {
+    const { answer, events, getScreen } = await render(number, {
+      message: 'Enter a value',
+      step: 0.001,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? Enter a value"`);
+
+    events.type('1.001');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(1.001);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a value 1.001"`);
+  });
 });
