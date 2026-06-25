@@ -17,7 +17,7 @@ jobs:
   Compile:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Cache turbo build setup
         uses: actions/cache@v5
         with:
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: Compile
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Cache turbo build setup
         uses: actions/cache@v5
         with:
@@ -69,7 +69,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         node-version: [20, 22, 24, 26]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: npm install -g corepack --force
       - run: corepack enable
       - uses: actions/setup-node@v6
@@ -87,7 +87,7 @@ jobs:
     env:
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Cache turbo build setup
         uses: actions/cache@v5
         with:
