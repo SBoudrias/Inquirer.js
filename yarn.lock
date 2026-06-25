@@ -2713,9 +2713,9 @@ __metadata:
   linkType: hard
 
 "chardet@npm:*, chardet@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "chardet@npm:2.1.1"
-  checksum: 10/d56913b65e45c5c86f331988e2ef6264c131bfeadaae098ee719bf6610546c77740e37221ffec802dde56b5e4466613a4c754786f4da6b5f6c5477243454d324
+  version: 2.2.0
+  resolution: "chardet@npm:2.2.0"
+  checksum: 10/78d1e5ba7bdc7db23511a194eedca805918df90a511f9c57f9cc7c1fc03702ed4ad053e485a766ace930362869269c4a731feaf460ae24bd3ed7d190cde8087d
   languageName: node
   linkType: hard
 
