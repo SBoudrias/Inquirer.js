@@ -13,6 +13,8 @@ export type InquirerReadline = {
   clearLine: (dir: 0 | 1 | -1) => void; // https://nodejs.org/api/readline.html#rlclearlinedir
   getCursorPos: () => { rows: number; cols: number };
   setPrompt: (prompt: string) => void;
+  /** Current cursor position within the line buffer (0-based). */
+  cursor: number;
   line: string;
   write: (data: string) => void;
   on: (event: string, listener: (...args: unknown[]) => void) => void;

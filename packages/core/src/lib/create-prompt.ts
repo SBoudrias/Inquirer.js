@@ -61,6 +61,122 @@ export function createPrompt<Value, Config>(
       output,
     }) as unknown as InquirerReadline;
 
+    // Fix for Node.js v25+ where the native readline `_ttyWrite` implementation
+    // does not process special keypress events (backspace, delete, arrow keys)
+    // when they are emitted programmatically without a `sequence` field — as is
+    // done by @inquirer/testing's `events.keypress()` helper.
+    //
+    // Strategy: use prependListener to record the cursor position *before*
+    // readline's own keypress handler runs, then use a second listener that fires
+    // *after* readline's handler to apply the missing edit if readline's handler
+    // left rl.line / rl.cursor unchanged.
+    let cursorBeforeKey = rl.cursor;
+    const saveCursorBeforeKey = () => {
+      cursorBeforeKey = rl.cursor;
+    };
+    rl.input.prependListener('keypress', saveCursorBeforeKey);
+
+    const fixupKeypress = (
+      _s: string | null | undefined,
+      key: { name?: string; ctrl?: boolean; meta?: boolean } | undefined,
+    ) => {
+      // If readline's native handler processed the key, rl.cursor would have
+      // changed (for cursor-movement / destructive keys). We only need to
+      // intervene when the cursor is unchanged.
+      if (rl.cursor !== cursorBeforeKey) return;
+
+      const rlAny = rl as unknown as Record<string, ((...args: unknown[]) => void) | undefined>;
+      switch (key?.name) {
+        case 'backspace':
+          if (key.ctrl) {
+            // Ctrl+Backspace → delete word left
+            if (rl.cursor > 0) rlAny['_deleteWordLeft']?.();
+          } else if (key.meta) {
+            // Alt+Backspace → delete word left (macOS convention)
+            if (rl.cursor > 0) rlAny['_deleteWordLeft']?.();
+          } else {
+            if (rl.cursor > 0) rlAny['_deleteLeft']?.();
+          }
+          break;
+        case 'delete':
+          if (key.ctrl) {
+            if (rl.cursor < rl.line.length) rlAny['_deleteWordRight']?.();
+          } else {
+            if (rl.cursor < rl.line.length) rlAny['_deleteRight']?.();
+          }
+          break;
+        case 'left':
+          if (key.ctrl) {
+            if (rl.cursor > 0) rlAny['_wordLeft']?.();
+          } else {
+            if (rl.cursor > 0) rlAny['_moveCursor']?.(-1);
+          }
+          break;
+        case 'right':
+          if (key.ctrl) {
+            if (rl.cursor < rl.line.length) rlAny['_wordRight']?.();
+          } else {
+            if (rl.cursor < rl.line.length) rlAny['_moveCursor']?.(1);
+          }
+          break;
+        case 'home':
+          if (rl.cursor > 0) rlAny['_moveCursor']?.(-(rl.cursor));
+          break;
+        case 'end':
+          if (rl.cursor < rl.line.length) rlAny['_moveCursor']?.(rl.line.length - rl.cursor);
+          break;
+      }
+    };
+    rl.input.on('keypress', fixupKeypress);
+
+    // When rl.cursor is not at the end (e.g. after our _moveCursor fix above),
+    // native readline's _ttyWrite inserts characters at the *native* cursor—which
+    // is decoupled from the JS rl.cursor on non-TTY streams. Intercept input.write
+    // for non-TTY inputs so printable characters are inserted at the JS cursor
+    // position via _insertString (which does respect rl.cursor).
+    // oxlint-disable-next-line typescript/no-explicit-any
+    const inputAny = rl.input as any;
+    if (!inputAny.isTTY) {
+      const rlAny = rl as unknown as { _insertString?: (s: string) => void };
+      const origWrite = inputAny.write.bind(rl.input);
+      inputAny.write = function (
+        data: string | Buffer,
+        encodingOrCb?: string | ((err?: Error | null) => void),
+        cb?: (err?: Error | null) => void,
+      ): boolean {
+        const str = typeof data === 'string' ? data : (data as Buffer).toString('utf8');
+        // Only intercept when the cursor is not at end AND we have _insertString.
+        // For escape sequences / multi-byte sequences (non-printable), fall through
+        // to the normal path so readline can parse them correctly.
+        if (
+          rl.cursor < rl.line.length &&
+          str.length > 0 &&
+          str.charCodeAt(0) >= 0x20 &&
+          typeof rlAny._insertString === 'function'
+        ) {
+          rlAny._insertString(str);
+          // Still call the original write so that any listeners (e.g. mute-stream
+          // piping) receive the data, but suppress readline's emitKeypressEvents
+          // 'data' handler to prevent a second insertion via _ttyWrite.
+          // oxlint-disable-next-line typescript/no-explicit-any
+          const dataListeners = (rl.input as any).rawListeners('data') as ((...args: unknown[]) => void)[];
+          for (const listener of dataListeners) rl.input.removeListener('data', listener);
+          const result = origWrite(data, encodingOrCb, cb);
+          for (const listener of dataListeners) rl.input.on('data', listener);
+          return result;
+        }
+        return origWrite(data, encodingOrCb, cb);
+      };
+      cleanups.add(() => {
+        inputAny.write = origWrite;
+      });
+    }
+
+    cleanups.add(() => {
+      rl.input.removeListener('keypress', saveCursorBeforeKey);
+      rl.input.removeListener('keypress', fixupKeypress);
+    });
+
     // Mute the output after readline has initialized so readline can perform
     // any terminal setup writes (e.g. Windows Console API initialization)
     // before suppressing output. ScreenManager will unmute/mute around each
