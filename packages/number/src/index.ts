@@ -15,7 +15,7 @@ import { isStepOf } from './is-step-of.ts';
 
 type NumberConfig<Required extends boolean = boolean> = {
   message: string;
-  default?: number;
+  default?: number | undefined;
   min?: number;
   max?: number;
   step?: number | 'any';

@@ -226,6 +226,20 @@ describe('number prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 35"`);
   });
 
+  it('accepts explicit undefined as default', async () => {
+    const defaultValue: number | undefined = undefined;
+    const { answer, events, getScreen } = await render(number, {
+      message: 'What is your age',
+      default: defaultValue,
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your age"`);
+
+    events.type('20');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(20);
+  });
+
   it('handle overwriting the default option', async () => {
     const { answer, events, getScreen } = await render(number, {
       message: 'What is your age',

@@ -54,6 +54,21 @@ describe('editor prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
 
+  it('accepts explicit undefined as default', async () => {
+    const defaultValue: string | undefined = undefined;
+    const { answer, events } = await render(editor, {
+      message: 'Add a description',
+      default: defaultValue,
+    });
+
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenLastCalledWith('', { postfix: '.txt' });
+
+    await editorAction(undefined, 'value from editor');
+
+    await expect(answer).resolves.toEqual('value from editor');
+  });
+
   it('open editor immediately', async () => {
     const { answer, getScreen } = await render(editor, {
       message: 'Add a description',
