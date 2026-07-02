@@ -1,11 +1,11 @@
-[hook "pre-commit"]
+[hook "lint-staged"]
 	event = pre-commit
 	command = sh -c 'yarn nano-staged'
 
-[hook "post-checkout"]
+[hook "auto-install"]
 	event = post-checkout
 	command = sh -c 'yarn install'
 
-[hook "pre-push"]
+[hook "full-test"]
 	event = pre-push
 	command = sh -c 'CI=true yarn pretest && yarn test'
