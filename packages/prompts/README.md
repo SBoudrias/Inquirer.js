@@ -207,6 +207,22 @@ The context options are:
 > before calling inquirer functions. Node.js usually does it automatically, but when we shadow the stdin, Node can loss track
 > and not know it has to. If the prompt isn't interactive (arrows don't work, etc), it's likely due to this.
 
+When running Inquirer from an existing `node:readline` interface, pause the readline instance before starting the prompt, then resume it after the prompt settles. This makes the handoff of `process.stdin` ownership explicit and prevents the parent readline loop from losing control of the input stream.
+
+```js
+const answer = await rl.question('Command: ');
+
+if (answer === 'configure') {
+  rl.pause();
+
+  try {
+    const value = await input({ message: 'Configuration value' });
+  } finally {
+    rl.resume();
+  }
+}
+```
+
 Example:
 
 ```js
