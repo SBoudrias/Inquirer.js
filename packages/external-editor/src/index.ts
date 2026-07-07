@@ -109,7 +109,7 @@ export class ExternalEditor {
     const promise = new Promise<void>((resolve, reject) => {
       try {
         const editorProcess = spawn(this.editor.bin, this.editorArgs(), {
-          shell: false,
+          shell: true,
           stdio: 'inherit',
         });
         editorProcess.once('error', (launchError) => {
