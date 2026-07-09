@@ -797,7 +797,7 @@ describe('keybindings', () => {
     ).toBeTruthy();
   });
 
-  it('does not support vim and emac bindings by default', () => {
+  it('does not support vim and emacs bindings by default', () => {
     expect(isUpKey({ name: 'up', ctrl: false, shift: false })).toBeTruthy();
     expect(isUpKey({ name: 'k', ctrl: false, shift: false })).toBeFalsy();
     expect(isUpKey({ name: 'p', ctrl: true, shift: false })).toBeFalsy();
