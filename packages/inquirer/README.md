@@ -79,9 +79,7 @@ yarn add inquirer
 import inquirer from 'inquirer';
 
 inquirer
-  .prompt([
-    /* Pass your questions in here */
-  ])
+  .prompt([/* Pass your questions in here */])
   .then((answers) => {
     // Use user feedback for... whatever!!
   })
@@ -335,12 +333,8 @@ const prompts = new Rx.Subject();
 inquirer.prompt(prompts);
 
 // At some point in the future, push new questions
-prompts.next({
-  /* question... */
-});
-prompts.next({
-  /* question... */
-});
+prompts.next({/* question... */});
+prompts.next({/* question... */});
 
 // When you're done
 prompts.complete();

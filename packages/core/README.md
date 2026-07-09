@@ -49,9 +49,7 @@ const input = createPrompt((config, done) => {
 });
 
 // And it is then called as
-const answer = await input({
-  /* config */
-});
+const answer = await input({/* config */});
 ```
 
 ## Hooks
