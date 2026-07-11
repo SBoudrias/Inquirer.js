@@ -112,7 +112,7 @@ Here's each property:
 
 - `value`: The value is what will be returned by `await expand()`.
 - `name`: The string displayed in the choice list. It'll default to the stringify `value`.
-- `key`: The input the use must provide to select the choice. Must be a lowercase single alpha-numeric character string.
+- `key`: The input the use must provide to select the choice. Must be a lowercase single alphanumeric character string.
 
 ## Theming
 

@@ -1,11 +1,11 @@
 /**
- * Heirarchical conversation example
+ * Hierarchical conversation example
  */
 
 import inquirer from 'inquirer';
 
 async function main() {
-  console.log('You find youself in a small room, there is a door in front of you.');
+  console.log('You find yourself in a small room, there is a door in front of you.');
   await exitHouse();
 }
 
