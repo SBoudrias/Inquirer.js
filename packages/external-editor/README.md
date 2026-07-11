@@ -77,6 +77,19 @@ try {
 }
 ```
 
+### Windows editor commands
+
+On Windows, prefer setting `$VISUAL` or `$EDITOR` to the editor executable
+rather than a `.cmd` or `.bat` shim. This package launches the editor directly
+instead of through a shell so editor arguments and temporary file paths are not
+interpreted as shell commands.
+
+For example, use `Code.exe` with `--wait` instead of `code.cmd`:
+
+```powershell
+setx VISUAL '"C:\Program Files\Microsoft VS Code\Code.exe" --wait'
+```
+
 #### API
 
 **Convenience Functions**
