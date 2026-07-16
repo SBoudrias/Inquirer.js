@@ -70,7 +70,7 @@
     "@lerna-lite/publish": "^5.0.0",
     "@repo/tsconfig": "workspace:*",
     "@sboudrias/package": "workspace:*",
-    "@types/node": "^25.5.2",
+    "@types/node": "^26.1.1",
     "@vitest/coverage-v8": "^4.1.2",
     "@vitest/ui": "^4.1.2",
     "eslint": "^10.2.0",
