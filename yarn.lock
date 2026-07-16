@@ -65,7 +65,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@conventional-changelog/git-client@npm:^3.0.1, @conventional-changelog/git-client@npm:^3.0.2":
+"@conventional-changelog/git-client@npm:^3.1.0":
   version: 3.1.0
   resolution: "@conventional-changelog/git-client@npm:3.1.0"
   dependencies:
@@ -84,7 +84,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@conventional-changelog/template@npm:^1.2.0, @conventional-changelog/template@npm:^1.2.1":
+"@conventional-changelog/template@npm:^1.2.1":
   version: 1.2.1
   resolution: "@conventional-changelog/template@npm:1.2.1"
   checksum: 10/be65738f81cb232a794fc0ab2bbe9af2e32896e0c731fe8bdf8a2ab8dabdcc2645937d1025d6f7ad8878c6a51be1da9cab71e287ac476b8e07fb0b8cb7811425
@@ -800,13 +800,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna-lite/cli@npm:5.4.0, @lerna-lite/cli@npm:^5.0.0":
-  version: 5.4.0
-  resolution: "@lerna-lite/cli@npm:5.4.0"
+"@lerna-lite/cli@npm:5.4.1, @lerna-lite/cli@npm:^5.0.0":
+  version: 5.4.1
+  resolution: "@lerna-lite/cli@npm:5.4.1"
   dependencies:
-    "@lerna-lite/core": "npm:5.4.0"
-    "@lerna-lite/init": "npm:5.4.0"
-    "@lerna-lite/npmlog": "npm:5.4.0"
+    "@lerna-lite/core": "npm:5.4.1"
+    "@lerna-lite/init": "npm:5.4.1"
+    "@lerna-lite/npmlog": "npm:5.4.1"
     dotenv: "npm:^17.4.2"
     import-local: "npm:^3.2.0"
     yargs: "npm:^18.0.0"
@@ -825,18 +825,18 @@ __metadata:
       optional: true
   bin:
     lerna: dist/cli.js
-  checksum: 10/a37ba14852877fd04c4a056f361e1936a98de309438622e1b4275d3a6f5d6719df7f8eee371b95ea8776ea03f1e9be0c190db4a98d22458774425b9b5a570a16
+  checksum: 10/50edb511b802301c279c47ffa38180029a4dd87d55dbbdf40365be8efea128b1d0e4d476ebde1f4da77e0f8d77deb5f019a492a0bb9d018159ef159e4233f965
   languageName: node
   linkType: hard
 
-"@lerna-lite/core@npm:5.4.0":
-  version: 5.4.0
-  resolution: "@lerna-lite/core@npm:5.4.0"
+"@lerna-lite/core@npm:5.4.1":
+  version: 5.4.1
+  resolution: "@lerna-lite/core@npm:5.4.1"
   dependencies:
     "@inquirer/expand": "npm:^5.1.1"
     "@inquirer/input": "npm:^5.1.2"
     "@inquirer/select": "npm:^5.2.1"
-    "@lerna-lite/npmlog": "npm:5.4.0"
+    "@lerna-lite/npmlog": "npm:5.4.1"
     "@npmcli/run-script": "npm:^10.0.4"
     ci-info: "npm:^4.4.0"
     json5: "npm:^2.2.3"
@@ -848,38 +848,38 @@ __metadata:
     write-json-file: "npm:^7.0.0"
     yaml: "npm:^2.9.0"
     zeptomatch: "npm:^2.1.0"
-  checksum: 10/8b79dd438aae8779c988964d9e50d50b5618b4ab7fe75a55824ee738a13d12c6c55839e657bfb596d1b06f69055d0fe13810a6eef2e0eb9cadc81b54e24e8d40
+  checksum: 10/77018a58f5d58ac6cc4b8e7d9ba11bb44e3fdefff0e47c641b8be34330517a6143da693dc0063bc3c90370fa97256933de7a7031a8676f5c6d2c06ae425efa98
   languageName: node
   linkType: hard
 
-"@lerna-lite/init@npm:5.4.0":
-  version: 5.4.0
-  resolution: "@lerna-lite/init@npm:5.4.0"
+"@lerna-lite/init@npm:5.4.1":
+  version: 5.4.1
+  resolution: "@lerna-lite/init@npm:5.4.1"
   dependencies:
-    "@lerna-lite/core": "npm:5.4.0"
+    "@lerna-lite/core": "npm:5.4.1"
     write-json-file: "npm:^7.0.0"
-  checksum: 10/8acca3f170d86760dbe887f687bd691eafce48beb46b3106e353739851cf4e07d7eed1adde3ed9a63a5497673fd6b53cfecb043bf99b4593ef152018336d01b4
+  checksum: 10/e99852f97cffb189bb7ee5cddbaefe0c4dd300614d53a092c4e323261ee84f4d683e8f868d36352e7dc5da8f09870a7fd46592bb4a51cb5b68bae6f153dc70d7
   languageName: node
   linkType: hard
 
-"@lerna-lite/npmlog@npm:5.4.0":
-  version: 5.4.0
-  resolution: "@lerna-lite/npmlog@npm:5.4.0"
+"@lerna-lite/npmlog@npm:5.4.1":
+  version: 5.4.1
+  resolution: "@lerna-lite/npmlog@npm:5.4.1"
   dependencies:
     fast-string-width: "npm:^3.0.2"
     signal-exit: "npm:^4.1.0"
-  checksum: 10/8d11d4e81a562a05a846639b78b7d5e40331acb450492ad20e5bc80a1ccd9dc2a4da5f87f351c69b73084a5cf285ea595651209b5cabde69ebe42a5f76d32a17
+  checksum: 10/d2d256a42727e5c7259f6793cae53ac4e394b0718b7e4d1daf1188eb0d1fc78b8e0b6f2f0362e3b404bee377c7503ebef1345d1670946cda1c9ea2846373c398
   languageName: node
   linkType: hard
 
 "@lerna-lite/publish@npm:^5.0.0":
-  version: 5.4.0
-  resolution: "@lerna-lite/publish@npm:5.4.0"
+  version: 5.4.1
+  resolution: "@lerna-lite/publish@npm:5.4.1"
   dependencies:
-    "@lerna-lite/cli": "npm:5.4.0"
-    "@lerna-lite/core": "npm:5.4.0"
-    "@lerna-lite/npmlog": "npm:5.4.0"
-    "@lerna-lite/version": "npm:5.4.0"
+    "@lerna-lite/cli": "npm:5.4.1"
+    "@lerna-lite/core": "npm:5.4.1"
+    "@lerna-lite/npmlog": "npm:5.4.1"
+    "@lerna-lite/version": "npm:5.4.1"
     "@npmcli/arborist": "npm:^9.9.0"
     "@npmcli/package-json": "npm:^7.0.5"
     ci-info: "npm:^4.4.0"
@@ -892,33 +892,33 @@ __metadata:
     semver: "npm:^7.8.5"
     ssri: "npm:^13.0.1"
     tar: "npm:^7.5.19"
-  checksum: 10/3e6d935627e52cc77228dc108692774389cb38fdb0990c583d2d8b717480a9dcc18e64036c68a3a9962fe7aaa01c8d0896638dab90c84a43eb856a524f318379
+  checksum: 10/95f12bb52900c474b76bda08aa3fab1dd94f7114bfab1e7c5da722cb52629f2028ce0208d63b3517b01f515c88f51eb4ccb310b22dcf31159015cd0cb7b35bd2
   languageName: node
   linkType: hard
 
-"@lerna-lite/version@npm:5.4.0":
-  version: 5.4.0
-  resolution: "@lerna-lite/version@npm:5.4.0"
+"@lerna-lite/version@npm:5.4.1":
+  version: 5.4.1
+  resolution: "@lerna-lite/version@npm:5.4.1"
   dependencies:
-    "@conventional-changelog/git-client": "npm:^3.0.1"
-    "@conventional-changelog/template": "npm:^1.2.0"
-    "@lerna-lite/cli": "npm:5.4.0"
-    "@lerna-lite/core": "npm:5.4.0"
-    "@lerna-lite/npmlog": "npm:5.4.0"
+    "@conventional-changelog/git-client": "npm:^3.1.0"
+    "@conventional-changelog/template": "npm:^1.2.1"
+    "@lerna-lite/cli": "npm:5.4.1"
+    "@lerna-lite/core": "npm:5.4.1"
+    "@lerna-lite/npmlog": "npm:5.4.1"
     "@octokit/plugin-enterprise-rest": "npm:^6.0.1"
     "@octokit/rest": "npm:^22.0.1"
-    conventional-changelog: "npm:^8.0.0"
-    conventional-changelog-angular: "npm:^9.2.0"
-    conventional-changelog-writer: "npm:^9.1.0"
-    conventional-commits-parser: "npm:^7.0.0"
-    conventional-recommended-bump: "npm:^12.0.0"
+    conventional-changelog: "npm:^8.1.0"
+    conventional-changelog-angular: "npm:^9.2.1"
+    conventional-changelog-writer: "npm:^9.2.0"
+    conventional-commits-parser: "npm:^7.1.0"
+    conventional-recommended-bump: "npm:^12.1.0"
     git-url-parse: "npm:^16.1.0"
     handlebars: "npm:^4.7.9"
     npm-package-arg: "npm:^13.0.2"
     semver: "npm:^7.8.5"
     write-json-file: "npm:^7.0.0"
     zeptomatch: "npm:^2.1.0"
-  checksum: 10/a26639c7f0529fe4a46115293c478be3673d631a593f23f49b6b378a31d8d5b3a7949607b06a5c021b67f2b74e66b0b215de182e5920e5450285a7a9d7cef05e
+  checksum: 10/adf0930eb4d5eadfa2db36ccdb4b2a945bbd00f5a59f30fe92729dffc92be6814345bff6b2cafbe3ae0dd1568ed845f37fba6cf9c12528594eb2ed65651f32bf
   languageName: node
   linkType: hard
 
@@ -1942,44 +1942,44 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@turbo/darwin-64@npm:2.10.4":
-  version: 2.10.4
-  resolution: "@turbo/darwin-64@npm:2.10.4"
+"@turbo/darwin-64@npm:2.10.5":
+  version: 2.10.5
+  resolution: "@turbo/darwin-64@npm:2.10.5"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@turbo/darwin-arm64@npm:2.10.4":
-  version: 2.10.4
-  resolution: "@turbo/darwin-arm64@npm:2.10.4"
+"@turbo/darwin-arm64@npm:2.10.5":
+  version: 2.10.5
+  resolution: "@turbo/darwin-arm64@npm:2.10.5"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@turbo/linux-64@npm:2.10.4":
-  version: 2.10.4
-  resolution: "@turbo/linux-64@npm:2.10.4"
+"@turbo/linux-64@npm:2.10.5":
+  version: 2.10.5
+  resolution: "@turbo/linux-64@npm:2.10.5"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"@turbo/linux-arm64@npm:2.10.4":
-  version: 2.10.4
-  resolution: "@turbo/linux-arm64@npm:2.10.4"
+"@turbo/linux-arm64@npm:2.10.5":
+  version: 2.10.5
+  resolution: "@turbo/linux-arm64@npm:2.10.5"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"@turbo/windows-64@npm:2.10.4":
-  version: 2.10.4
-  resolution: "@turbo/windows-64@npm:2.10.4"
+"@turbo/windows-64@npm:2.10.5":
+  version: 2.10.5
+  resolution: "@turbo/windows-64@npm:2.10.5"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@turbo/windows-arm64@npm:2.10.4":
-  version: 2.10.4
-  resolution: "@turbo/windows-arm64@npm:2.10.4"
+"@turbo/windows-arm64@npm:2.10.5":
+  version: 2.10.5
+  resolution: "@turbo/windows-arm64@npm:2.10.5"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
@@ -2529,6 +2529,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"argue-cli@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "argue-cli@npm:3.1.0"
+  checksum: 10/e7bfdfb2c804e0070591e865d0c231618c8d71dac5eef768c8a4d39a3d159b45e5e08306fcb3c88a013ee7115bee90ba2b9411d3a8c4a0b3a7477c8c7024f642
+  languageName: node
+  linkType: hard
+
 "ast-v8-to-istanbul@npm:^1.0.0":
   version: 1.0.0
   resolution: "ast-v8-to-istanbul@npm:1.0.0"
@@ -2791,7 +2798,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-angular@npm:^9.2.0":
+"conventional-changelog-angular@npm:^9.2.1":
   version: 9.2.1
   resolution: "conventional-changelog-angular@npm:9.2.1"
   dependencies:
@@ -2807,36 +2814,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-writer@npm:^9.1.0, conventional-changelog-writer@npm:^9.1.1":
-  version: 9.1.1
-  resolution: "conventional-changelog-writer@npm:9.1.1"
+"conventional-changelog-writer@npm:^9.2.0":
+  version: 9.2.0
+  resolution: "conventional-changelog-writer@npm:9.2.0"
   dependencies:
     "@conventional-changelog/template": "npm:^1.2.1"
     "@simple-libs/stream-utils": "npm:^2.0.0"
+    argue-cli: "npm:^3.1.0"
     conventional-commits-filter: "npm:^6.0.1"
-    meow: "npm:^14.0.0"
     semver: "npm:^7.5.2"
   bin:
     conventional-changelog-writer: ./dist/cli/index.js
-  checksum: 10/01cfb84b86dbc2908c6d8d0526aa069f73f3341f7ddec0f9ce1428ecce6f5808d625b4241459edc3f1be7fbd5138b4bffd7ec7ffc7f2bd69ff059406e91575e2
+  checksum: 10/bb074557420a3f23392c64317ca6914d49ea548ff9c6418fb9cffa9c2cbf8878f1136bce38202af69646af896a6eade1945c87b9058a18b94adf7ed2fd72283e
   languageName: node
   linkType: hard
 
-"conventional-changelog@npm:^8.0.0":
-  version: 8.0.1
-  resolution: "conventional-changelog@npm:8.0.1"
+"conventional-changelog@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "conventional-changelog@npm:8.1.0"
   dependencies:
-    "@conventional-changelog/git-client": "npm:^3.0.2"
+    "@conventional-changelog/git-client": "npm:^3.1.0"
     "@simple-libs/hosted-git-info": "npm:^2.0.0"
     "@simple-libs/normalize-package-data": "npm:^1.0.0"
+    argue-cli: "npm:^3.1.0"
     conventional-changelog-preset-loader: "npm:^6.0.1"
-    conventional-changelog-writer: "npm:^9.1.1"
-    conventional-commits-parser: "npm:^7.0.1"
+    conventional-changelog-writer: "npm:^9.2.0"
+    conventional-commits-parser: "npm:^7.1.0"
     fd-package-json: "npm:^2.0.0"
-    meow: "npm:^14.0.0"
   bin:
     conventional-changelog: ./dist/cli/index.js
-  checksum: 10/81ee03f021cef502ca693e4a1c215822f2a2707f38d2ff4fa77f082c6472b0175682e1a6193c6b3f63fd36d3bf6acfc3a30b27b361758514466555e36cc2b51a
+  checksum: 10/e2a0263db104d7ef498a968c8762ed185516552fecfab5894888b481b75a4ea3d80f4479f0de118e4a41ae4d004b35982aa7bd90b7c816a2ebf1459399241b82
   languageName: node
   linkType: hard
 
@@ -2847,30 +2854,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-commits-parser@npm:^7.0.0, conventional-commits-parser@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "conventional-commits-parser@npm:7.0.1"
+"conventional-commits-parser@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "conventional-commits-parser@npm:7.1.0"
   dependencies:
     "@simple-libs/stream-utils": "npm:^2.0.0"
-    meow: "npm:^14.0.0"
+    argue-cli: "npm:^3.1.0"
   bin:
     conventional-commits-parser: ./dist/cli/index.js
-  checksum: 10/8f237651e311618b108d357cd4cce93ae5635455e5f2b5cc092be74534403a5c2603d54e0abda7e389df6a503553ba49e398d7a482e4657aa0596ca7cda314a0
+  checksum: 10/53ae3939469602f5767870a5417952aea6fb68cb602706e680a1df826f39ed381eaef2e99fe7e06ff9df040dc6f5ada4eb923004b3b50bb584fb8e65f749bb69
   languageName: node
   linkType: hard
 
-"conventional-recommended-bump@npm:^12.0.0":
-  version: 12.0.1
-  resolution: "conventional-recommended-bump@npm:12.0.1"
+"conventional-recommended-bump@npm:^12.1.0":
+  version: 12.1.0
+  resolution: "conventional-recommended-bump@npm:12.1.0"
   dependencies:
-    "@conventional-changelog/git-client": "npm:^3.0.2"
+    "@conventional-changelog/git-client": "npm:^3.1.0"
+    argue-cli: "npm:^3.1.0"
     conventional-changelog-preset-loader: "npm:^6.0.1"
     conventional-commits-filter: "npm:^6.0.1"
-    conventional-commits-parser: "npm:^7.0.1"
-    meow: "npm:^14.0.0"
+    conventional-commits-parser: "npm:^7.1.0"
   bin:
     conventional-recommended-bump: ./dist/cli/index.js
-  checksum: 10/dc61650542077662334774e286d22354ffc85149cb4496f423693f89c059162237fe4231b10b118ddac64a64f51aa7cb330775f1a1e3fe117178221fb153f5eb
+  checksum: 10/48819c690c81aa00411b4491cc0bf13f42a3aec07f3cea16bb3ca6b6ea7d5479c3406561f364ff66e210fa81d4a6bd9fe749df32ff9c4ab8964533bbab634081
   languageName: node
   linkType: hard
 
@@ -4476,13 +4483,6 @@ __metadata:
     proc-log: "npm:^6.0.0"
     ssri: "npm:^13.0.0"
   checksum: 10/01bc13d8e851212d55bbf0510dd5f94b9f239f253dfbd84275e23d1798ba7323a08b3c16031b83676fe75381ad5c70d17542c7b6828c98ee6e0d3eacdaf83ebb
-  languageName: node
-  linkType: hard
-
-"meow@npm:^14.0.0":
-  version: 14.1.0
-  resolution: "meow@npm:14.1.0"
-  checksum: 10/c6a22b3912a6bc849dee0d6475cd8bb63b9307e26919ca3ace28dc1aaf3d30257071de32bba496f7b5eec3e62b03a6b7731e3d04d18efb3c3103b829aad52ca5
   languageName: node
   linkType: hard
 
@@ -6138,15 +6138,15 @@ __metadata:
   linkType: hard
 
 "turbo@npm:^2.9.4":
-  version: 2.10.4
-  resolution: "turbo@npm:2.10.4"
+  version: 2.10.5
+  resolution: "turbo@npm:2.10.5"
   dependencies:
-    "@turbo/darwin-64": "npm:2.10.4"
-    "@turbo/darwin-arm64": "npm:2.10.4"
-    "@turbo/linux-64": "npm:2.10.4"
-    "@turbo/linux-arm64": "npm:2.10.4"
-    "@turbo/windows-64": "npm:2.10.4"
-    "@turbo/windows-arm64": "npm:2.10.4"
+    "@turbo/darwin-64": "npm:2.10.5"
+    "@turbo/darwin-arm64": "npm:2.10.5"
+    "@turbo/linux-64": "npm:2.10.5"
+    "@turbo/linux-arm64": "npm:2.10.5"
+    "@turbo/windows-64": "npm:2.10.5"
+    "@turbo/windows-arm64": "npm:2.10.5"
   dependenciesMeta:
     "@turbo/darwin-64":
       optional: true
@@ -6162,7 +6162,7 @@ __metadata:
       optional: true
   bin:
     turbo: bin/turbo
-  checksum: 10/3fd525a86ced28981bd43d604ba0306518b909ec04309ac79fc906b73fc21bc33a56360276d4aac3850e1e533a5c67accbbe143bca838693d518d3688499a2c5
+  checksum: 10/90480b731ce0394e77db1358b84c09dc074a5518d1816cd26dc2fda54a61e1cdbeee55caf7e2375c0fc5d62728b0f50a598fdee1e4b9a6d2c6f546fb7e1820d7
   languageName: node
   linkType: hard
 
