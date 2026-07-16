@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "@types/node": "^25.5.2",
+    "@types/node": "^26.1.1",
     "@types/semver": "^7.7.1",
     "type-fest": "^5.5.0",
     "typescript": "^6.0.2",
