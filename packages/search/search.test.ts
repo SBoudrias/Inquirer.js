@@ -75,6 +75,63 @@ describe('search prompt', () => {
     );
   });
 
+  it('starts searching with an initial value', async () => {
+    const terms: Array<string | undefined> = [];
+    const { answer, events, getScreen, nextRender } = await render(search, {
+      message: 'Select a Canadian province',
+      source: (term: string | undefined) => {
+        terms.push(term);
+        return getListSearch(PROVINCES)(term);
+      },
+      initialValue: 'New',
+    });
+
+    expect(terms[0]).toBe('New');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province New
+      ❯ New Brunswick
+        Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.type('foundland');
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province Newfoundland
+      ❯ Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress({ name: 'backspace', ctrl: true });
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province
+      ❯ Alberta
+        British Columbia
+        Manitoba
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.type('Quebec');
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province Quebec
+      ❯ Quebec
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('QC');
+  });
+
   it('works with string results', async () => {
     const choices = [
       'Stark',
