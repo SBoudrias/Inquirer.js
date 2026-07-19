@@ -30,7 +30,7 @@ const editorTheme: EditorTheme = {
 
 type EditorConfig = {
   message: string;
-  default?: string;
+  default?: string | undefined;
   postfix?: string;
   waitForUserInput?: boolean;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;

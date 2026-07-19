@@ -13,7 +13,7 @@ import type { PartialDeep } from '@inquirer/type';
 
 type ConfirmConfig = {
   message: string;
-  default?: boolean;
+  default?: boolean | undefined;
   transformer?: (value: boolean) => string;
   theme?: PartialDeep<Theme>;
 };

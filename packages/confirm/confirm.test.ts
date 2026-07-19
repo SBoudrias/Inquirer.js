@@ -95,6 +95,18 @@ describe('confirm prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? No"`);
   });
 
+  it('accepts explicit undefined as default', async () => {
+    const defaultValue: boolean | undefined = undefined;
+    const { answer, events } = await render(confirm, {
+      message: 'Do you want to proceed?',
+      default: defaultValue,
+    });
+
+    events.type('y');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(true);
+  });
+
   it('uses default on gibberish input', async () => {
     const { answer, events, getScreen } = await render(confirm, {
       message: 'Do you want to proceed?',
