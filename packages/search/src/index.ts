@@ -71,6 +71,7 @@ type SearchConfig<Value = string> = {
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
   default?: NoInfer<Value>;
+  initialValue?: string;
   theme?: PartialDeep<Theme<SearchTheme>>;
 };
 
@@ -118,7 +119,7 @@ export default createPrompt(
     const theme = makeTheme<SearchTheme>(searchTheme, config.theme);
     const [status, setStatus] = useState<Status>('loading');
 
-    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [searchTerm, setSearchTerm] = useState<string>(config.initialValue ?? '');
     const [searchResults, setSearchResults] = useState<ReadonlyArray<Item<Value>>>([]);
     const [searchError, setSearchError] = useState<string>();
     const defaultApplied = useRef(false);
@@ -133,6 +134,12 @@ export default createPrompt(
     }, [searchResults]);
 
     const [active = bounds.first, setActive] = useState<number>();
+
+    useEffect((rl) => {
+      if (config.initialValue) {
+        rl.write(config.initialValue);
+      }
+    }, []);
 
     useEffect(() => {
       const controller = new AbortController();
