@@ -76,14 +76,15 @@ const answer = await search({
 
 ## Options
 
-| Property | Type                                                       | Required | Description                                                                                                                                                                                          |
-| -------- | ---------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| message  | `string`                                                   | yes      | The question to ask                                                                                                                                                                                  |
-| source   | `(term: string \| void) => Promise<Choice[]>`              | yes      | This function returns the choices relevant to the search term.                                                                                                                                       |
-| pageSize | `number`                                                   | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                          |
-| default  | `Value`                                                    | no       | Defines in front of which item the cursor will initially appear. When omitted, the cursor will appear on the first selectable item.                                                                  |
-| validate | `Value => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the answer. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
-| theme    | [See Theming](#Theming)                                    | no       | Customize look of the prompt.                                                                                                                                                                        |
+| Property  | Type                                                       | Required | Description                                                                                                                                                                                          |
+| --------- | ---------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message   | `string`                                                   | yes      | The question to ask                                                                                                                                                                                  |
+| source    | `(term: string \| void) => Promise<Choice[]>`              | yes      | This function returns the choices relevant to the search term.                                                                                                                                       |
+| pageSize  | `number`                                                   | no       | By default, lists of choice longer than 7 will be paginated. Use this option to control how many choices will appear on the screen at once.                                                          |
+| default   | `Value`                                                    | no       | Defines in front of which item the cursor will initially appear. When omitted, the cursor will appear on the first selectable item.                                                                  |
+| validate  | `Value => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the answer. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
+| escapeKey | `'none' \| 'clear' \| 'cancel' \| 'clear-then-cancel'`     | no       | Controls Escape key behavior. Defaults to `'clear-then-cancel'`.                                                                                                                                     |
+| theme     | [See Theming](#Theming)                                    | no       | Customize look of the prompt.                                                                                                                                                                        |
 
 ### `source` function
 
@@ -138,6 +139,19 @@ You can rely on this behavior to implement progressive autocomplete searches. Wh
 Pressing `tab` also triggers the term autocomplete.
 
 You can see this behavior in action in [our search demo](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/demo/src/demos/search.ts).
+
+### Escape key behavior
+
+By default, pressing <kbd>Escape</kbd> clears the current search term. Pressing <kbd>Escape</kbd> again while the search term is empty resolves the prompt with `undefined`.
+
+You can customize this behavior with the `escapeKey` option:
+
+- `'clear-then-cancel'`: clear the search term first, then resolve with `undefined` if it is already empty.
+- `'clear'`: clear the search term and keep the prompt open.
+- `'cancel'`: resolve with `undefined`.
+- `'none'`: ignore Escape.
+
+When `escapeKey` can cancel the prompt, the returned promise type includes `undefined`.
 
 ## Theming
 

@@ -20,7 +20,11 @@ export type { Locale } from './types.ts';
 type ConfirmConfig = Parameters<typeof confirmPrompt>[0];
 type SelectConfig<Value> = Parameters<typeof selectPrompt<Value>>[0];
 type CheckboxConfig<Value> = Parameters<typeof checkboxPrompt<Value>>[0];
-type SearchConfig<Value> = Parameters<typeof searchPrompt<Value>>[0];
+type SearchEscapeKeyAction = 'none' | 'clear' | 'cancel' | 'clear-then-cancel';
+type SearchConfig<
+  Value,
+  EscapeKey extends SearchEscapeKeyAction = 'clear-then-cancel',
+> = Parameters<typeof searchPrompt<Value, EscapeKey>>[0];
 type ExpandConfig<Value> = Parameters<typeof expandPrompt<Value>>[0];
 type RawlistConfig<Value> = Parameters<typeof rawlistPrompt<Value>>[0];
 type EditorConfig = Parameters<typeof editorPrompt>[0];
@@ -104,7 +108,11 @@ export function createLocalizedPrompts(locale: Locale) {
       return checkboxPrompt({ ...config, theme }, context);
     },
 
-    search<Value>(this: void, config: SearchConfig<Value>, context?: Context) {
+    search<Value, EscapeKey extends SearchEscapeKeyAction = 'clear-then-cancel'>(
+      this: void,
+      config: SearchConfig<Value, EscapeKey>,
+      context?: Context,
+    ) {
       const theme = makeTheme(config.theme, {
         style: {
           keysHelpTip: (keys: Array<[string, string]>) => {
@@ -120,7 +128,7 @@ export function createLocalizedPrompts(locale: Locale) {
         },
       });
 
-      return searchPrompt({ ...config, theme }, context);
+      return searchPrompt<Value, EscapeKey>({ ...config, theme }, context);
     },
 
     expand<Value>(this: void, config: ExpandConfig<Value>, context?: Context) {

@@ -18,7 +18,7 @@ import {
 } from '@inquirer/core';
 import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
-import type { PartialDeep } from '@inquirer/type';
+import type { InquirerReadline, PartialDeep } from '@inquirer/type';
 
 type SearchTheme = {
   icon: { cursor: string };
@@ -60,7 +60,18 @@ type NormalizedChoice<Value> = {
   disabled: boolean | string;
 };
 
-type SearchConfig<Value = string> = {
+type SearchEscapeKeyAction = 'none' | 'clear' | 'cancel' | 'clear-then-cancel';
+
+type SearchAnswer<Value, EscapeKey extends SearchEscapeKeyAction> = EscapeKey extends
+  | 'none'
+  | 'clear'
+  ? Value
+  : Value | undefined;
+
+type SearchConfig<
+  Value = string,
+  EscapeKey extends SearchEscapeKeyAction = 'clear-then-cancel',
+> = {
   message: string;
   source: (
     term: string | undefined,
@@ -71,6 +82,7 @@ type SearchConfig<Value = string> = {
   validate?: (value: Value) => boolean | string | Promise<string | boolean>;
   pageSize?: number;
   default?: NoInfer<Value>;
+  escapeKey?: EscapeKey;
   theme?: PartialDeep<Theme<SearchTheme>>;
 };
 
@@ -113,7 +125,10 @@ function normalizeChoices<Value>(
 }
 
 export default createPrompt(
-  <const Value>(config: SearchConfig<Value>, done: (value: Value) => void) => {
+  <const Value, EscapeKey extends SearchEscapeKeyAction = 'clear-then-cancel'>(
+    config: SearchConfig<Value, EscapeKey>,
+    done: (value: SearchAnswer<Value, EscapeKey>) => void,
+  ) => {
     const { pageSize = 7, validate = () => true } = config;
     const theme = makeTheme<SearchTheme>(searchTheme, config.theme);
     const [status, setStatus] = useState<Status>('loading');
@@ -121,6 +136,7 @@ export default createPrompt(
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<ReadonlyArray<Item<Value>>>([]);
     const [searchError, setSearchError] = useState<string>();
+    const [isCanceled, setIsCanceled] = useState(false);
     const defaultApplied = useRef(false);
 
     const prefix = usePrefix({ status, theme });
@@ -181,8 +197,29 @@ export default createPrompt(
     // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     const selectedChoice = searchResults[active] as NormalizedChoice<Value> | void;
 
+    const cancel = () => {
+      setIsCanceled(true);
+      setStatus('done');
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+      done(undefined as SearchAnswer<Value, EscapeKey>);
+    };
+
+    const clearSearchTerm = (rl: InquirerReadline) => {
+      rl.clearLine(0);
+      setSearchTerm('');
+      setSearchError(undefined);
+    };
+
     useKeypress(async (key, rl) => {
-      if (isEnterKey(key)) {
+      const escapeKey = config.escapeKey ?? 'clear-then-cancel';
+
+      if (key.name === 'escape' && escapeKey !== 'none') {
+        if (escapeKey === 'clear' || (escapeKey === 'clear-then-cancel' && rl.line)) {
+          clearSearchTerm(rl);
+        } else {
+          cancel();
+        }
+      } else if (isEnterKey(key)) {
         if (selectedChoice) {
           setStatus('loading');
           const isValid = await validate(selectedChoice.value);
@@ -262,7 +299,9 @@ export default createPrompt(
     }
 
     let searchStr;
-    if (status === 'done' && selectedChoice) {
+    if (status === 'done' && isCanceled) {
+      return [prefix, message].filter(Boolean).join(' ').trimEnd();
+    } else if (status === 'done' && selectedChoice) {
       return [prefix, message, theme.style.answer(selectedChoice.short)]
         .filter(Boolean)
         .join(' ')
@@ -288,3 +327,4 @@ export default createPrompt(
 );
 
 export { Separator } from '@inquirer/core';
+export type { SearchEscapeKeyAction };

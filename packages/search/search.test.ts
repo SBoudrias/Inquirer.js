@@ -314,6 +314,110 @@ describe('search prompt', () => {
     await expect(answer).rejects.toThrow();
   });
 
+  it('clears the search term before cancelling with escape by default', async () => {
+    const { answer, events, getScreen, nextRender } = await render(search, {
+      message: 'Select a Canadian province',
+      source: getListSearch(PROVINCES),
+    });
+
+    events.type('New');
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province New
+      ❯ New Brunswick
+        Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('escape');
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province
+      ❯ Alberta
+        British Columbia
+        Manitoba
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('escape');
+    await expect(answer).resolves.toBeUndefined();
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a Canadian province"`);
+  });
+
+  it('cancels with escape without clearing first when configured', async () => {
+    const { answer, events, getScreen, nextRender } = await render(search, {
+      message: 'Select a Canadian province',
+      source: getListSearch(PROVINCES),
+      escapeKey: 'cancel',
+    });
+
+    events.type('New');
+    await nextRender();
+    events.keypress('escape');
+
+    await expect(answer).resolves.toBeUndefined();
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a Canadian province"`);
+  });
+
+  it('clears with escape without cancelling when configured', async () => {
+    const { answer, events, getScreen, nextRender } = await render(search, {
+      message: 'Select a Canadian province',
+      source: getListSearch(PROVINCES),
+      escapeKey: 'clear',
+    });
+
+    events.type('New');
+    await nextRender();
+    events.keypress('escape');
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province
+      ❯ Alberta
+        British Columbia
+        Manitoba
+        New Brunswick
+        Newfoundland and Labrador
+        Nova Scotia
+        Ontario
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('escape');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual('AB');
+  });
+
+  it('ignores escape when configured', async () => {
+    const { answer, events, getScreen, nextRender } = await render(search, {
+      message: 'Select a Canadian province',
+      source: getListSearch(PROVINCES),
+      escapeKey: 'none',
+    });
+
+    events.type('New');
+    await nextRender();
+    events.keypress('escape');
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a Canadian province New
+      ❯ New Brunswick
+        Newfoundland and Labrador
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('NB');
+  });
+
   it('handles separators & disabled choices', async () => {
     const choices = [
       new Separator('~ Americas ~'),
@@ -719,7 +823,7 @@ describe('search prompt', () => {
 });
 
 describe('search types', () => {
-  it('infers exact string union from hardcoded string choices', async () => {
+  it('infers undefined from default escape cancellation', async () => {
     const abortController = new AbortController();
     const { answer } = await render(
       search,
@@ -729,9 +833,38 @@ describe('search types', () => {
       },
       { signal: abortController.signal },
     );
-    expectTypeOf(answer).resolves.toExtend<'foo' | 'bar'>();
+    expectTypeOf(answer).resolves.toExtend<'foo' | 'bar' | undefined>();
     abortController.abort();
     await expect(answer).rejects.toThrow();
+  });
+
+  it('excludes undefined when escape only clears or is ignored', async () => {
+    const abortController = new AbortController();
+    const { answer: clearAnswer } = await render(
+      search,
+      {
+        message: 'test',
+        source: () => ['foo', 'bar'] as const,
+        escapeKey: 'clear',
+      },
+      { signal: abortController.signal },
+    );
+    expectTypeOf(clearAnswer).resolves.toExtend<'foo' | 'bar'>();
+
+    const { answer: noneAnswer } = await render(
+      search,
+      {
+        message: 'test',
+        source: () => ['foo', 'bar'] as const,
+        escapeKey: 'none',
+      },
+      { signal: abortController.signal },
+    );
+    expectTypeOf(noneAnswer).resolves.toExtend<'foo' | 'bar'>();
+
+    abortController.abort();
+    await expect(clearAnswer).rejects.toThrow();
+    await expect(noneAnswer).rejects.toThrow();
   });
 
   it('infers number from Choice<number> choices', async () => {
@@ -744,7 +877,7 @@ describe('search types', () => {
       },
       { signal: abortController.signal },
     );
-    expectTypeOf(answer).resolves.toExtend<number>();
+    expectTypeOf(answer).resolves.toExtend<number | undefined>();
     abortController.abort();
     await expect(answer).rejects.toThrow();
   });
