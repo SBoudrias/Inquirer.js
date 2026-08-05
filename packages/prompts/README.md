@@ -566,6 +566,21 @@ A modern multiselect checkbox prompt with search and filter capabilities, highli
 ↑↓ navigate • space de/select • type search • 2 selected  • ⏎ submit
 ```
 
+[**Tree Prompt**](https://github.com/3z3qu13l/inquirer-tree-prompt)<br/>
+Navigate a tree of choices, expanding and collapsing branches with the arrow keys. Children can be loaded lazily, and single or multiple items can be selected.
+
+```
+? Where is my phone?
+  ▼ in the house
+    ▼ in the living room
+      ❯ on the sofa
+        on the TV cabinet
+    ▶ in the bedroom
+      in the bathroom
+  ▶ in the car
+----------------
+```
+
 # License
 
 Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
