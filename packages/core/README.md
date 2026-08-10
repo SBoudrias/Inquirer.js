@@ -62,6 +62,14 @@ State lets a component “remember” information like user input. For example, 
 
 `useState` declares a state variable that you can update directly.
 
+The setter also accepts an updater function to compute the next state from the current one (mirroring React):
+
+```ts
+const [index, setIndex] = useState(0);
+
+setIndex((current) => current + 1);
+```
+
 ```ts
 import { createPrompt, useState } from '@inquirer/core';
 

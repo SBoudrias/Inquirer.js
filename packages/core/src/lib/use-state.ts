@@ -3,22 +3,39 @@ import { withPointer, handleChange } from './hook-engine.ts';
 
 type NotFunction<T> = T extends (...args: never) => unknown ? never : T;
 
+type Reducer<Value> = (currentValue: Value) => Value;
+
+type SetState<Value> = (newValue: NotFunction<Value> | Reducer<Value>) => void;
+
+type OptionalSetState<Value> = (newValue?: NotFunction<Value> | Reducer<Value>) => void;
+
 function isFactory<V>(value: NotFunction<V> | (() => V)): value is () => V {
+  return typeof value === 'function';
+}
+
+function isReducer<Value>(
+  value: NotFunction<Value> | Reducer<Value>,
+): value is Reducer<Value> {
   return typeof value === 'function';
 }
 
 export function useState<Value>(
   defaultValue: NotFunction<Value> | (() => Value),
-): [Value, (newValue: Value) => void];
+): [Value, SetState<Value>];
 export function useState<Value>(
   defaultValue?: NotFunction<Value> | (() => Value),
-): [Value | undefined, (newValue?: Value) => void];
+): [Value | undefined, OptionalSetState<Value | undefined>];
 export function useState<Value>(defaultValue: NotFunction<Value> | (() => Value)) {
-  return withPointer<Value, [Value, (newValue: Value) => void]>((pointer) => {
-    const setState = AsyncResource.bind(function setState(newValue: Value) {
+  return withPointer<Value, [Value, SetState<Value>]>((pointer) => {
+    const setState = AsyncResource.bind(function setState(
+      newValue: NotFunction<Value> | Reducer<Value>,
+    ) {
+      const currentValue = pointer.get();
+      const nextValue = isReducer(newValue) ? newValue(currentValue) : newValue;
+
       // Noop if the value is still the same.
-      if (pointer.get() !== newValue) {
-        pointer.set(newValue);
+      if (!Object.is(currentValue, nextValue)) {
+        pointer.set(nextValue);
 
         // Trigger re-render
         handleChange();

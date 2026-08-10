@@ -87,17 +87,11 @@ export function withUpdates<Args extends unknown[], R>(
   return AsyncResource.bind(wrapped);
 }
 
-type SetPointer<Value> = {
+type Pointer<Value> = {
   get(): Value;
   set(value: Value): void;
-  initialized: true;
+  initialized: boolean;
 };
-type UnsetPointer<Value> = {
-  get(): void;
-  set(value: Value): void;
-  initialized: false;
-};
-type Pointer<Value> = SetPointer<Value> | UnsetPointer<Value>;
 export function withPointer<Value, ReturnValue>(
   cb: (pointer: Pointer<Value>) => ReturnValue,
 ): ReturnValue {

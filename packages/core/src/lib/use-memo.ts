@@ -12,7 +12,7 @@ export function useMemo<Value>(
   return withPointer<PointerValue<Value>, Value>((pointer) => {
     const prev = pointer.get();
     if (
-      !prev ||
+      !pointer.initialized ||
       prev.dependencies.length !== dependencies.length ||
       prev.dependencies.some((dep, i) => dep !== dependencies[i])
     ) {

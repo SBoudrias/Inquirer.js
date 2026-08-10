@@ -240,6 +240,93 @@ describe('createPrompt()', () => {
     await expect(answer).resolves.toEqual('up');
   });
 
+  it('useState: setter accepts a reducer/action function', async () => {
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      const [value, setValue] = useState('');
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(value);
+        } else if (isDownKey(key)) {
+          setValue((current) => `${current}down`);
+        } else if (isUpKey(key)) {
+          setValue((current) => `${current}up`);
+        }
+      });
+
+      return `${config.message} ${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+
+    events.keypress('down');
+    events.keypress('down');
+    events.keypress('up');
+    events.keypress('enter');
+
+    // Each reducer reads the latest value: 'down' -> 'downdown' -> 'downdownup'
+    await expect(answer).resolves.toEqual('downdownup');
+  });
+
+  it('useState: reducer that returns the same value does not re-render', async () => {
+    const renderSpy = vi.fn();
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      renderSpy();
+
+      const [value, setValue] = useState('same');
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(value);
+        } else if (isDownKey(key)) {
+          setValue((current) => current);
+        }
+      });
+
+      return `${config.message} ${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+    expect(renderSpy).toHaveBeenCalledTimes(1);
+
+    events.keypress('down');
+    expect(renderSpy).toHaveBeenCalledTimes(1);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('same');
+  });
+
+  it('useState: NaN is treated as unchanged (Object.is semantics)', async () => {
+    const renderSpy = vi.fn();
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      renderSpy();
+
+      const [value, setValue] = useState<number>(Number.NaN);
+
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done(`${value}`);
+        } else if (isDownKey(key)) {
+          setValue(Number.NaN);
+        }
+      });
+
+      return `${config.message} ${value}`;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+    expect(renderSpy).toHaveBeenCalledTimes(1);
+
+    events.keypress('down');
+    expect(renderSpy).toHaveBeenCalledTimes(1);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('NaN');
+  });
+
   it('useState: set state is always bound to the async context', async () => {
     const eventEmitter = new EventEmitter();
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
