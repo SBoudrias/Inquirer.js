@@ -15,15 +15,26 @@ type ConfirmConfig = {
   message: string;
   default?: boolean | undefined;
   transformer?: (value: boolean) => string;
-  theme?: PartialDeep<Theme>;
+  theme?: PartialDeep<Theme<ConfirmTheme>>;
 };
 
-function getBooleanValue(value: string, defaultValue?: boolean): boolean {
-  let answer = defaultValue !== false;
-  if (/^(y|yes)/i.test(value)) answer = true;
-  else if (/^(n|no)/i.test(value)) answer = false;
-  return answer;
-}
+export type ConfirmTheme = {
+  style: {
+    /**
+     * The hint shown next to the message (e.g. "Y/n"), and the source of truth
+     * for which inputs are accepted as yes/no. Override it to localize the
+     * prompt: the first token is matched as "yes", the second as "no".
+     */
+    confirmHint: (defaultValue: boolean | undefined) => string;
+  };
+};
+
+const confirmTheme: ConfirmTheme = {
+  style: {
+    confirmHint: (defaultValue: boolean | undefined) =>
+      defaultValue === false ? 'y/N' : 'Y/n',
+  },
+};
 
 function boolToString(value: boolean): string {
   return value ? 'Yes' : 'No';
@@ -33,8 +44,23 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   const { transformer = boolToString } = config;
   const [status, setStatus] = useState<Status>('idle');
   const [value, setValue] = useState('');
-  const theme = makeTheme(config.theme);
+  const theme = makeTheme<ConfirmTheme>(confirmTheme, config.theme);
   const prefix = usePrefix({ status, theme });
+
+  // The hint drives both the displayed default and the accepted answers. The
+  // English `y`/`yes` and `n`/`no` stay accepted on top, so existing behaviour
+  // is unchanged even when the hint is localized.
+  const hint = theme.style.confirmHint(config.default);
+  const [yes, no] = hint.split('/');
+
+  function getBooleanValue(value: string, defaultValue?: boolean): boolean {
+    const v = value.toLowerCase();
+    if (yes && v.startsWith(yes.toLowerCase())) return true;
+    if (no && v.startsWith(no.toLowerCase())) return false;
+    if (/^(y|yes)/i.test(value)) return true;
+    if (/^(n|no)/i.test(value)) return false;
+    return defaultValue !== false;
+  }
 
   useKeypress((key, rl) => {
     if (status !== 'idle') return;
@@ -59,9 +85,7 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   if (status === 'done') {
     formattedValue = theme.style.answer(value);
   } else {
-    defaultValue = ` ${theme.style.defaultAnswer(
-      config.default === false ? 'y/N' : 'Y/n',
-    )}`;
+    defaultValue = ` ${theme.style.defaultAnswer(hint)}`;
   }
 
   const message = theme.style.message(config.message, status);

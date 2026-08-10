@@ -1,6 +1,6 @@
 export { default as checkbox, Separator } from '@inquirer/checkbox';
 export { default as editor } from '@inquirer/editor';
-export { default as confirm } from '@inquirer/confirm';
+export { default as confirm, type ConfirmTheme } from '@inquirer/confirm';
 export { default as input } from '@inquirer/input';
 export { default as number } from '@inquirer/number';
 export { default as expand } from '@inquirer/expand';

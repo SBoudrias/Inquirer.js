@@ -136,6 +136,45 @@ describe('confirm prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? Oui!"');
   });
 
+  it('derives the accepted answers from the theme hint', async () => {
+    const { answer, events, getScreen } = await render(confirm, {
+      message: 'Voulez-vous continuer?',
+      default: false,
+      theme: {
+        style: {
+          confirmHint: (defaultValue: boolean | undefined) =>
+            defaultValue === false ? 'o/N' : 'O/n',
+        },
+      },
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot('"? Voulez-vous continuer? (o/N)"');
+
+    events.type('oui');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual(true);
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Voulez-vous continuer? Yes"');
+  });
+
+  it('falls back on the default when the input matches neither the hint nor y/n', async () => {
+    const { answer, events } = await render(confirm, {
+      message: 'Voulez-vous continuer?',
+      default: true,
+      theme: {
+        style: {
+          confirmHint: (defaultValue: boolean | undefined) =>
+            defaultValue === false ? 'o/N' : 'O/n',
+        },
+      },
+    });
+
+    events.type('no');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual(false);
+  });
+
   it('toggle between values with the tab key', async () => {
     const { answer, events, getScreen } = await render(confirm, {
       message: 'Do you want to proceed?',
