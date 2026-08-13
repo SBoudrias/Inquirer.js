@@ -34,6 +34,12 @@ export default defineConfig(
     rules: {
       'n/hashbang': 'off',
       'n/no-unpublished-bin': 'off',
+      // `util.styleText` is intentionally used despite still being flagged as
+      // experimental on Node 20.x; it is stable on the other supported ranges.
+      'n/no-unsupported-features/node-builtins': [
+        'error',
+        { ignores: ['util.styleText'] },
+      ],
       'unicorn/consistent-function-scoping': 'off',
       'unicorn/filename-case': 'off',
       'unicorn/no-array-callback-reference': 'off',
