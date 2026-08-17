@@ -72,8 +72,46 @@ yarn demo
 
 ## Publishing new versions
 
-Note: This can only be done by someone with permission to the org on `npm` and requires 2FA setup.
+Releases are staged. CI builds and stages the packages when a release commit lands on `main`; a maintainer approves the staged versions with 2FA before they go live. Publishing authenticates via GitHub OIDC → npm Trusted Publishing — there is no npm token to steal.
+
+### Cut a release
 
 ```sh
-yarn lerna publish
+git checkout main
+git pull
+
+yarn lerna version           # interactive: pick the bump per package
+# → updates each package.json + CHANGELOG
+# → commits and creates tags like @inquirer/core@1.2.3
+
+git push origin main --follow-tags   # required: the tags must ride along with the push
 ```
+
+The push to `main` triggers `.github/workflows/publish.yml`. A `guard` job checks whether any release tags point at the pushed commit and skips the rest of the workflow when there are none (so regular commits don't re-run the release pipeline):
+
+1. **test** — `yarn install --immutable` + `yarn vitest --run packages`
+2. **build** — `yarn tsc`
+3. **publish** — `yarn lerna publish from-git --stage --yes --no-git-reset`
+
+`lerna publish from-git` stages every package tagged at HEAD (all tags created by `lerna version` point at the same commit). lerna-lite applies the `publishConfig` manifest overrides (main/types/exports) natively, runs the `prepublishOnly` build and the root `prepack` (workspace devDependency strip, README utm rewrite), and stages each package via OIDC Trusted Publishing. The packages are now **staged**, not live.
+
+Forgot `--follow-tags`? Push the tags afterwards (`git push origin <tag>...`), then re-run the publish workflow on the release commit from the Actions tab — `from-git` reads the tags at that commit, so it will pick them up on the re-run.
+
+### Approve the release
+
+```sh
+npm stage list
+npm stage view <stage-id>
+npm stage approve <stage-id>   # 2FA → package goes live with provenance
+```
+
+### First publish of a new package
+
+Trusted Publishing can't be configured until the package exists on npm. Publish once manually:
+
+```sh
+cd packages/<name>
+npm publish --ignore-scripts --access public   # interactive 2FA
+```
+
+Then configure the Trusted Publisher on npmjs.com (GitHub Actions, workflow `publish.yml`, stage-only). Later releases use the tag → stage → approve flow.
