@@ -90,12 +90,22 @@ describe('auto locale detection', () => {
 
   it('falls back to English for unsupported locale', async () => {
     process.env['LANG'] = 'de_DE.UTF-8';
+    // Mock the Intl API so the test is deterministic across platforms. On
+    // Windows + Node 22 the real Intl.DateTimeFormat() locale resolution is
+    // pathologically slow (seconds) when an unsupported LANG is set, which
+    // made this test flaky (timing out at the 5s default).
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion, typescript/no-unnecessary-type-assertion
+    vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((() => ({
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+      resolvedOptions: () => ({ locale: 'en-US' }) as Intl.ResolvedDateTimeFormatOptions,
+    })) as typeof Intl.DateTimeFormat);
     const { confirm } = await import('../src/index.ts');
 
     const answer = confirm({ message: 'Continue?' });
     expect(screen.getScreen()).toMatchInlineSnapshot(`"? Continue? (Y/n)"`);
     screen.keypress('enter');
     await answer;
+    vi.restoreAllMocks();
   });
 
   it('falls back to English when Intl returns unsupported locale', async () => {
