@@ -1,0 +1,124 @@
+name: Release
+
+# Secure release pipeline (npm Trusted Publishing + Staged Publishing).
+# See CONTRIBUTING.md "Publishing new versions" for the maintainer flow.
+#
+# Triggered by pushes to `main`. `yarn lerna version` bumps versions, commits,
+# and creates tags (inquirer@<version>, @inquirer/<name>@<version>, ...) all
+# pointing at the same commit; `lerna publish from-git --stage` then stages
+# every package tagged at HEAD in a single run. A `guard` job skips the rest
+# of the workflow when no release tag points at the pushed commit.
+#
+# Security model:
+#   - No npm token exists to steal; auth is GitHub OIDC → npm Trusted Publishing.
+#   - The publish job only *stages* the release. A maintainer must approve it
+#     with 2FA (`npm stage approve`) before it goes live.
+#   - Only the publish job has `id-token: write`; every job uses
+#     `persist-credentials: false` on checkout. Installs are `--immutable`
+#     with dependency scripts disabled (`enableScripts: false`) and a 3-day
+#     minimum age gate on new package versions.
+#   - lerna-lite applies `publishConfig` manifest overrides (main/types/exports)
+#     natively during publish, and runs the root `prepublishOnly` build and
+#     `prepack` lifecycle (workspace devDependency strip, README utm rewrite),
+#     so the staged tarball matches what a local `lerna publish` would produce.
+#   - The workflow filename must stay `publish.yml`: it is part of the Trusted
+#     Publisher configuration on npmjs.com.
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      has-release: ${{ steps.check.outputs.has-release }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0 # need tags to detect release commits
+      - name: Check for release tags at HEAD
+        id: check
+        run: |
+          if git tag --list 'inquirer@*' '@inquirer/*@*' '@sboudrias/*@*' --points-at HEAD | grep -q .; then
+            echo "has-release=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has-release=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [guard]
+    if: needs.guard.outputs.has-release == 'true'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false # no cache poisoning risk in a release workflow
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Run tests
+        run: yarn vitest --run packages
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [guard]
+    if: needs.guard.outputs.has-release == 'true'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false # no cache poisoning risk
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Build packages
+        run: yarn tsc
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [guard, test, build]
+    if: needs.guard.outputs.has-release == 'true'
+    permissions:
+      contents: read
+      id-token: write # required for npm Trusted Publishing (OIDC)
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0 # `lerna publish from-git` needs the tags pointing at HEAD
+          fetch-tags: true
+      - name: Install Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Stage npm release
+        run: yarn lerna publish from-git --stage --yes --no-git-reset
