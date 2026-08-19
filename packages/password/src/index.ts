@@ -4,6 +4,7 @@ import {
   useKeypress,
   usePrefix,
   isEnterKey,
+  isSpaceKey,
   makeTheme,
   type Theme,
   type Status,
@@ -14,18 +15,22 @@ import type { PartialDeep } from '@inquirer/type';
 type PasswordTheme = {
   style: {
     maskedText: string;
+    showHideTip: (visible: boolean) => string;
   };
 };
 
 const passwordTheme: PasswordTheme = {
   style: {
     maskedText: '[input is masked]',
+    showHideTip: (visible: boolean) =>
+      visible ? '(ctrl+space to hide)' : '(ctrl+space to show)',
   },
 };
 
 type PasswordConfig = {
   message: string;
   mask?: boolean | string;
+  allowShowPassword?: boolean;
   validate?: (value: string) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme<PasswordTheme>>;
 };
@@ -37,6 +42,7 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setError] = useState<string>();
   const [value, setValue] = useState<string>('');
+  const [revealed, setRevealed] = useState(false);
 
   const prefix = usePrefix({ status, theme });
 
@@ -61,6 +67,8 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
         setError(isValid || 'You must provide a valid value');
         setStatus('idle');
       }
+    } else if (config.allowShowPassword && key.ctrl && isSpaceKey(key)) {
+      setRevealed((prev) => !prev);
     } else {
       setValue(rl.line);
       setError(undefined);
@@ -69,13 +77,25 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
 
   const message = theme.style.message(config.message, status);
 
+  const canReveal = Boolean(config.allowShowPassword);
+  const showPlaintext = canReveal && revealed && status !== 'done';
+
   let formattedValue = '';
   let helpTip;
   if (config.mask) {
     const maskChar = typeof config.mask === 'string' ? config.mask : '*';
-    formattedValue = maskChar.repeat(value.length);
+    formattedValue = showPlaintext ? value : maskChar.repeat(value.length);
+    if (canReveal && status !== 'done') {
+      helpTip = theme.style.help(theme.style.showHideTip(showPlaintext));
+    }
   } else if (status !== 'done') {
-    helpTip = `${theme.style.help(theme.style.maskedText)}${cursorHide}`;
+    formattedValue = showPlaintext ? value : '';
+    const tip = showPlaintext
+      ? theme.style.showHideTip(true)
+      : canReveal
+        ? `${theme.style.maskedText} ${theme.style.showHideTip(false)}`
+        : theme.style.maskedText;
+    helpTip = `${theme.style.help(tip)}${cursorHide}`;
   }
 
   if (status === 'done') {
@@ -87,5 +107,15 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     error = theme.style.error(errorMsg);
   }
 
-  return [[prefix, message, config.mask ? formattedValue : helpTip].join(' '), error];
+  const parts = [prefix, message];
+  if (config.mask) {
+    parts.push(formattedValue);
+    if (helpTip) parts.push(helpTip);
+  } else if (showPlaintext) {
+    parts.push(formattedValue, helpTip ?? '');
+  } else if (helpTip) {
+    parts.push(helpTip);
+  }
+
+  return [parts.join(' '), error];
 });
