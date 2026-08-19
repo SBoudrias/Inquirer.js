@@ -135,4 +135,4 @@ jobs:
       - name: Build packages
         run: yarn tsc
       - name: Stage npm release
-        run: yarn lerna publish from-git --stage --yes --no-git-reset
+        run: yarn lerna publish from-git --stage --concurrency 1 --yes --no-git-reset
