@@ -110,6 +110,12 @@ jobs:
           persist-credentials: false
           fetch-depth: 0 # `lerna publish from-git` needs the tags pointing at HEAD
           fetch-tags: true
+      - name: Cache turbo build setup
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-turbo-
       - name: Install Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -120,5 +126,12 @@ jobs:
         run: corepack enable
       - name: Install dependencies
         run: yarn install --immutable
+      # Build first (mirrors the Compile job in main.yml) so the turbo cache is
+      # warm when lerna's root `prepublishOnly` re-runs `yarn tsc` during staging.
+      # Without this, the publish job's fresh `@inquirer/testing:tsc` can fail to
+      # resolve the optional-peer prompt packages that the Compile/build jobs
+      # resolve via the turbo cache.
+      - name: Build packages
+        run: yarn tsc
       - name: Stage npm release
         run: yarn lerna publish from-git --stage --yes --no-git-reset
