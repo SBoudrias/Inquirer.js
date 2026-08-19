@@ -27,6 +27,7 @@ name: Release
 on:
   push:
     branches: ['main']
+  workflow_dispatch: # manual trigger for maintainers (e.g. to re-run after a fix)
 
 jobs:
   guard:
