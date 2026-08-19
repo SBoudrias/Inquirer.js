@@ -581,6 +581,22 @@ Navigate a tree of choices, expanding and collapsing branches with the arrow key
 ----------------
 ```
 
+[**Grouped Checkbox Prompt**](https://github.com/patik/inquirer-grouped-checkbox)<br/>
+Checkboxes organized into labeled groups. Selecting a group header toggles every item in that group, each group shows its own running total, and typing filters across all the groups at once.
+
+```
+? Which languages do you work in? (3/6)
+❯ ◉ 🖥️ Frontend (3/3)
+    ◉ TypeScript
+    ◉ JavaScript
+    ◉ CSS
+  ◯ ⚙️ Backend (0/3)
+    ◯ Go
+    ◯ Python
+    ◯ Rust
+(Select: space • Toggle all: a • Invert: i)
+```
+
 # License
 
 Copyright (c) 2023 Simon Boudrias (twitter: [@vaxilart](https://twitter.com/Vaxilart))<br/>
