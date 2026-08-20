@@ -60,12 +60,13 @@ const answer = await password({ message: 'Enter your name' });
 
 ## Options
 
-| Property | Type                                                        | Required | Description                                                                                                                                                                                                             |
-| -------- | ----------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| message  | `string`                                                    | yes      | The question to ask                                                                                                                                                                                                     |
-| mask     | `boolean`                                                   | no       | Show a `*` mask over the input or keep it transparent                                                                                                                                                                   |
-| validate | `string => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the filtered answered content. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash. |
-| theme    | [See Theming](#Theming)                                     | no       | Customize look of the prompt.                                                                                                                                                                                           |
+| Property          | Type                                                        | Required | Description                                                                                                                                                                                                                                                                        |
+| ----------------- | ----------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| message           | `string`                                                    | yes      | The question to ask                                                                                                                                                                                                                                                                |
+| mask              | `boolean`                                                   | no       | Show a `*` mask over the input or keep it transparent                                                                                                                                                                                                                              |
+| allowShowPassword | `boolean`                                                   | no       | Allow the user to press `ctrl+space` to temporarily reveal the typed value. Off by default. Note: some terminal emulators and OSes intercept `ctrl+space` (e.g. for IME switching), so the shortcut isn't guaranteed to fire everywhere — masking still works normally either way. |
+| validate          | `string => boolean \| string \| Promise<boolean \| string>` | no       | On submit, validate the filtered answered content. When returning a string, it'll be used as the error message displayed to the user. Note: returning a rejected promise, we'll assume a code error happened and crash.                                                            |
+| theme             | [See Theming](#Theming)                                     | no       | Customize look of the prompt.                                                                                                                                                                                                                                                      |
 
 ## Theming
 
@@ -83,9 +84,13 @@ type Theme = {
     message: (text: string, status: 'idle' | 'done' | 'loading') => string;
     error: (text: string) => string;
     help: (text: string) => string;
+    maskedText: string;
+    showHideTip: (visible: boolean) => string;
   };
 };
 ```
+
+`maskedText` is the tip shown next to the prompt when `mask` is off (default: `[input is masked]`). `showHideTip` renders the `ctrl+space` hint shown when `allowShowPassword` is set, given whether the value is currently visible (default: `(ctrl+space to show)` / `(ctrl+space to hide)`).
 
 # License
 
