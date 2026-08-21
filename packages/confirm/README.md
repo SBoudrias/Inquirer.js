@@ -82,9 +82,17 @@ type Theme = {
     answer: (text: string) => string;
     message: (text: string, status: 'idle' | 'done' | 'loading') => string;
     defaultAnswer: (text: string) => string;
+    confirmHint: (defaultValue: boolean | undefined) => string;
   };
 };
 ```
+
+The `confirmHint` style controls the hint shown next to the message (e.g. `Y/n`). It is
+also the source of truth for which inputs are accepted as yes/no: the first token of the
+hint is matched as "yes" and the second as "no" (prefix-based, case-insensitive). The
+English `y`/`yes` and `n`/`no` remain accepted on top, so overriding the hint only adds
+accepted answers — it never removes the defaults. This is how `@inquirer/i18n` localizes
+the prompt.
 
 # License
 

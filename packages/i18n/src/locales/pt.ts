@@ -1,7 +1,7 @@
 import { createLocalizedPrompts } from '../create.ts';
 import type { Locale } from '../types.ts';
 
-const ptLocale: Locale = {
+export const locale: Locale = {
   confirm: {
     yesLabel: 'Sim',
     noLabel: 'Não',
@@ -44,6 +44,6 @@ export const {
   input,
   number,
   password,
-} = createLocalizedPrompts(ptLocale);
+} = createLocalizedPrompts(locale);
 
 export { Separator } from '@inquirer/prompts';

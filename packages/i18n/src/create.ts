@@ -11,6 +11,7 @@ import {
   select as selectPrompt,
 } from '@inquirer/prompts';
 import { makeTheme } from '@inquirer/core';
+import type { ConfirmTheme } from '@inquirer/prompts';
 import { styleText } from 'node:util';
 import type { Locale } from './types.ts';
 
@@ -40,13 +41,12 @@ type Context = Parameters<typeof confirmPrompt>[1];
 export function createLocalizedPrompts(locale: Locale) {
   return {
     confirm(this: void, config: ConfirmConfig, context?: Context) {
-      const theme = makeTheme(config.theme, {
+      const theme = makeTheme<ConfirmTheme>(config.theme, {
         style: {
-          defaultAnswer: (text: string) => {
-            if (text === 'Y/n') return styleText('dim', `(${locale.confirm.hintYes})`);
-            if (text === 'y/N') return styleText('dim', `(${locale.confirm.hintNo})`);
-            return styleText('dim', `(${text})`);
-          },
+          // The hint drives both the displayed default and the accepted answers:
+          // confirm parses the first token as "yes" and the second as "no".
+          confirmHint: (defaultValue: boolean | undefined) =>
+            defaultValue === false ? locale.confirm.hintNo : locale.confirm.hintYes,
         },
       });
 
