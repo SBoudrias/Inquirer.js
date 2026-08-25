@@ -40,27 +40,17 @@ type Context = Parameters<typeof confirmPrompt>[1];
 export function createLocalizedPrompts(locale: Locale) {
   return {
     confirm(this: void, config: ConfirmConfig, context?: Context) {
-      const theme = makeTheme(config.theme, {
-        style: {
-          defaultAnswer: (text: string) => {
-            if (text === 'Y/n') return styleText('dim', `(${locale.confirm.hintYes})`);
-            if (text === 'y/N') return styleText('dim', `(${locale.confirm.hintNo})`);
-            return styleText('dim', `(${text})`);
-          },
+      // The labels are the keywords: confirm shows their first character in
+      // the hint, matches them prefix-based, and displays the label once done.
+      const theme = {
+        ...config.theme,
+        keywords: {
+          yes: locale.confirm.yesLabel,
+          no: locale.confirm.noLabel,
         },
-      });
+      };
 
-      return confirmPrompt(
-        {
-          ...config,
-          theme,
-          transformer:
-            config.transformer ??
-            ((answer: boolean) =>
-              answer ? locale.confirm.yesLabel : locale.confirm.noLabel),
-        },
-        context,
-      );
+      return confirmPrompt({ ...config, theme }, context);
     },
 
     select<Value>(this: void, config: SelectConfig<Value>, context?: Context) {

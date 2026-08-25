@@ -78,13 +78,36 @@ type Theme = {
     interval: number;
     frames: string[];
   };
+  keywords: {
+    yes: string;
+    no: string;
+  };
   style: {
     answer: (text: string) => string;
     message: (text: string, status: 'idle' | 'done' | 'loading') => string;
     defaultAnswer: (text: string) => string;
+    confirmDefault: (text: string) => string;
   };
 };
 ```
+
+The `keywords` property defines the words accepted as "yes" and "no". Matching is
+prefix-based and case-insensitive, and the first character of each word is shown in
+the hint (e.g. `Y/n`). The matched word is also displayed once the prompt is answered.
+Overriding `keywords` is how `@inquirer/i18n` localizes the prompt:
+
+```ts
+confirm({
+  message: '¿Continuar?',
+  theme: {
+    keywords: { yes: 'Sí', no: 'No' },
+  },
+});
+```
+
+The `confirmDefault` style marks the character representing the default answer in the
+hint. By default it uppercases the character (`Y/n`); for scripts without case
+(e.g. Chinese) it highlights the character with a color instead.
 
 # License
 
