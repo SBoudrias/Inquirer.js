@@ -1,6 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { styleText } from 'node:util';
 import { render } from '@inquirer/testing';
 import confirm from './src/index.ts';
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 describe('confirm prompt', () => {
   it('handles "yes"', async () => {
@@ -134,6 +139,63 @@ describe('confirm prompt', () => {
 
     await expect(answer).resolves.toEqual(true);
     expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? Oui!"');
+  });
+
+  it('accepts localized keywords from the theme', async () => {
+    const { answer, events, getScreen } = await render(confirm, {
+      message: 'Voulez-vous continuer?',
+      default: false,
+      theme: {
+        keywords: { yes: 'Oui', no: 'Non' },
+      },
+    });
+
+    expect(getScreen()).toMatchInlineSnapshot('"? Voulez-vous continuer? (o/N)"');
+
+    events.type('oui');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual(true);
+    // The localized keyword is displayed once done.
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Voulez-vous continuer? Oui"');
+  });
+
+  it('falls back on the default when the input matches no keyword', async () => {
+    const { answer, events } = await render(confirm, {
+      message: 'Voulez-vous continuer?',
+      default: true,
+      theme: {
+        keywords: { yes: 'Oui', no: 'Non' },
+      },
+    });
+
+    events.type('y');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual(true);
+  });
+
+  it('highlights the default keyword in scripts without case (e.g. Chinese)', async () => {
+    vi.stubEnv('FORCE_COLOR', '1');
+    const { answer, events, getScreen } = await render(confirm, {
+      message: '确认?',
+      default: false,
+      theme: {
+        keywords: { yes: '是', no: '否' },
+      },
+    });
+
+    // The default (否) is highlighted with a color, while the non-default (是)
+    // stays plain.
+    const raw = getScreen({ raw: true });
+    expect(raw).toContain(styleText('cyan', '否'));
+    expect(raw).not.toContain(styleText('cyan', '是'));
+
+    events.type('是');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual(true);
+    expect(getScreen()).toMatchInlineSnapshot('"✔ 确认? 是"');
   });
 
   it('toggle between values with the tab key', async () => {

@@ -89,7 +89,7 @@ import { createLocalizedPrompts, registerLocale } from '@inquirer/i18n';
 import type { Locale } from '@inquirer/i18n';
 
 const deLocale: Locale = {
-  confirm: { yesLabel: 'Ja', noLabel: 'Nein', hintYes: 'J/n', hintNo: 'j/N' },
+  confirm: { yesLabel: 'Ja', noLabel: 'Nein' },
   select: { helpNavigate: 'Navigieren', helpSelect: 'Auswählen' },
   checkbox: {
     helpNavigate: 'Navigieren',

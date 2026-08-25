@@ -1,12 +1,10 @@
 import { createLocalizedPrompts } from '../create.ts';
 import type { Locale } from '../types.ts';
 
-const esLocale: Locale = {
+export const locale: Locale = {
   confirm: {
     yesLabel: 'Sí',
     noLabel: 'No',
-    hintYes: 'S/n',
-    hintNo: 's/N',
   },
   select: {
     helpNavigate: 'navegar',
@@ -43,6 +41,6 @@ export const {
   input,
   number,
   password,
-} = createLocalizedPrompts(esLocale);
+} = createLocalizedPrompts(locale);
 
 export { Separator } from '@inquirer/prompts';

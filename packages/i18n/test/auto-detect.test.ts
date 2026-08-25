@@ -136,7 +136,7 @@ describe('auto locale detection', () => {
     registerLocale(
       'de',
       createLocalizedPrompts({
-        confirm: { yesLabel: 'Ja', noLabel: 'Nein', hintYes: 'J/n', hintNo: 'j/N' },
+        confirm: { yesLabel: 'Ja', noLabel: 'Nein' },
         select: { helpNavigate: 'navigieren', helpSelect: 'wählen' },
         checkbox: {
           helpNavigate: 'navigieren',

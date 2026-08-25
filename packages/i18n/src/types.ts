@@ -2,14 +2,10 @@
  * Localized strings for the confirm prompt
  */
 export interface ConfirmStrings {
-  /** Default label for "Yes" option */
+  /** Label for "Yes" — also the keyword accepted as "yes" (prefix-matched) */
   yesLabel: string;
-  /** Default label for "No" option */
+  /** Label for "No" — also the keyword accepted as "no" (prefix-matched) */
   noLabel: string;
-  /** Hint text when default is true (e.g., "Y/n") */
-  hintYes: string;
-  /** Hint text when default is false (e.g., "y/N") */
-  hintNo: string;
 }
 
 /**
