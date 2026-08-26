@@ -175,7 +175,7 @@ type DefaultTheme = {
   };
 };
 
-export type Theme<Extension extends object = object> = Prettify<Extension & DefaultTheme>;
+export type Theme<Extension extends object = object> = Extension & DefaultTheme;
 
 export const defaultTheme: DefaultTheme = {
   prefix: {

@@ -38,5 +38,6 @@ export function makeTheme<SpecificTheme extends object>(
     getDefaultTheme(),
     ...themes.filter((theme) => theme != null),
   ] as Theme<SpecificTheme>[];
-  return deepMerge(...themesToMerge);
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+  return deepMerge(...themesToMerge) as Prettify<Theme<SpecificTheme>>;
 }

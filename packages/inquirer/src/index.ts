@@ -16,7 +16,6 @@ import {
   search,
   Separator,
 } from '@inquirer/prompts';
-import type { Prettify } from '@inquirer/type';
 import PromptsRunner from './ui/prompt.ts';
 import type { PromptCollection, LegacyPromptConstructor, PromptFn } from './ui/prompt.ts';
 import type {
@@ -93,8 +92,8 @@ const builtInPrompts: PromptCollection = {
   search,
 };
 
-type PromptReturnType<T> = Promise<Prettify<T>> & {
-  ui: PromptsRunner<Prettify<T>>;
+type PromptReturnType<T extends Answers> = Promise<T> & {
+  ui: PromptsRunner<T>;
 };
 
 /**
