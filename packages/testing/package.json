@@ -93,7 +93,7 @@
   "dependencies": {
     "@inquirer/type": "^4.0.7",
     "@xterm/headless": "^6.0.0",
-    "mute-stream": "^3.0.0"
+    "mute-stream": "^4.0.0"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
