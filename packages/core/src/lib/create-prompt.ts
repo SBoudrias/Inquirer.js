@@ -1,6 +1,6 @@
 import * as readline from 'node:readline';
 import { AsyncResource } from 'node:async_hooks';
-import { type Prompt, type Prettify } from '@inquirer/type';
+import { type Prompt } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import { onExit as onSignalExit } from 'signal-exit';
 import ScreenManager from './screen-manager.ts';
@@ -15,9 +15,15 @@ import path from 'node:path';
 const nativeSetImmediate = globalThis.setImmediate;
 
 type ViewFunction<Value, Config> = (
-  config: Prettify<Config>,
+  config: Config,
   done: (value: Value) => void,
 ) => string | [string, string | undefined];
+
+/**
+ * Expand the top-level keys of a type for better IDE display, without
+ * recursing into nested fields (so generic values stay compatible).
+ */
+type ShallowPrettify<T> = { [K in keyof T]: T[K] } & {};
 
 function getCallSites() {
   // oxlint-disable-next-line typescript/unbound-method
@@ -42,10 +48,13 @@ function getCallSites() {
 
 export function createPrompt<Value, Config>(
   view: ViewFunction<Value, Config>,
-): Prompt<Value, Config> {
+): Prompt<Value, ShallowPrettify<Config> & Config> {
   const callSites = getCallSites();
 
-  const prompt: Prompt<Value, Config> = (config, context = {}) => {
+  const prompt: Prompt<Value, ShallowPrettify<Config> & Config> = (
+    config,
+    context = {},
+  ) => {
     // Default `input` to stdin
     const { input = process.stdin, signal } = context;
     const cleanups = new Set<() => void>();

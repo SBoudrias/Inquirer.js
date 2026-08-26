@@ -86,7 +86,7 @@ export type AsyncGetterFunction<T, A extends Answers> = (
       ...args: [error: null | undefined, value: T] | [error: Error, value: undefined]
     ) => void;
   },
-  answers: NoInfer<Prettify<Partial<A>>>,
+  answers: NoInfer<Partial<A>>,
 ) => void | T | Promise<T>;
 
 type MaybeAsyncValue<T, A extends Answers> = T | AsyncGetterFunction<T, A>;
@@ -179,11 +179,9 @@ export type PromptModuleNamedQuestion<
   A extends Answers,
   Prompts extends Record<string, Record<string, any>> = never,
   Flat extends Answers = A,
-> = Prettify<
-  PromptModuleSpecificQuestion<A, Prompts> & {
-    name: Extract<keyof Flat, string>;
-  }
->;
+> = PromptModuleSpecificQuestion<A, Prompts> & {
+  name: Extract<keyof Flat, string>;
+};
 
 export type DistinctQuestion<A extends Answers = Answers> = PromptModuleNamedQuestion<A>;
 

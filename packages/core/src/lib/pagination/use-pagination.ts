@@ -1,4 +1,3 @@
-import type { Prettify } from '@inquirer/type';
 import { useRef } from '../use-ref.ts';
 import { readlineWidth, breakLines } from '../utils.ts';
 
@@ -103,13 +102,7 @@ export function usePagination<T>({
   /** The index of the active item. */
   active: number;
   /** Renders an item as part of a page. */
-  renderItem: (
-    layout: Prettify<{
-      item: T;
-      index: number;
-      isActive: boolean;
-    }>,
-  ) => string;
+  renderItem: (layout: { item: T; index: number; isActive: boolean }) => string;
   /** The size of the page. */
   pageSize: number;
   /** Allows creating an infinitely looping list. `true` if unspecified. */
