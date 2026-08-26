@@ -28,6 +28,7 @@ export const locale: Locale = {
   },
   password: {
     maskedText: '[entrada mascarada]',
+    helpToggle: 'alternar visibilidade',
   },
 };
 

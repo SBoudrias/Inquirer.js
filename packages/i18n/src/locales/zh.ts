@@ -27,6 +27,7 @@ export const locale: Locale = {
   },
   password: {
     maskedText: '[输入已隐藏]',
+    helpToggle: '切换可见性',
   },
 };
 

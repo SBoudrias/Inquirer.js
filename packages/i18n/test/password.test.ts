@@ -7,7 +7,10 @@ import { password } from '@inquirer/i18n/zh';
 describe('password (zh)', () => {
   it('idle state shows Chinese masked text', async () => {
     const answer = password({ message: '请输入密码' });
-    expect(screen.getScreen()).toMatchInlineSnapshot(`"? 请输入密码 [输入已隐藏]"`);
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
+      "? 请输入密码 [输入已隐藏]
+      ctrl+t 切换可见性"
+    `);
 
     screen.type('secret');
     screen.keypress('enter');
@@ -17,7 +20,10 @@ describe('password (zh)', () => {
   it('after typing still shows masked text', async () => {
     const answer = password({ message: '请输入密码' });
     screen.type('secret');
-    expect(screen.getScreen()).toMatchInlineSnapshot(`"? 请输入密码 [输入已隐藏]"`);
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
+      "? 请输入密码 [输入已隐藏]
+      ctrl+t 切换可见性"
+    `);
 
     screen.keypress('enter');
     await answer;
