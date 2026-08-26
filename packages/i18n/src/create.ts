@@ -148,6 +148,15 @@ export function createLocalizedPrompts(locale: Locale) {
       const theme = makeTheme(config.theme, {
         style: {
           maskedText: locale.password.maskedText,
+          keysHelpTip: (keys: Array<[string, string]>) => {
+            const localizedKeys = keys.map(([key, label]): [string, string] => {
+              if (label === 'toggle visibility') return [key, locale.password.helpToggle];
+              return [key, label];
+            });
+            return localizedKeys
+              .map(([k, l]) => `${styleText('bold', k)} ${styleText('dim', l)}`)
+              .join(styleText('dim', ' • '));
+          },
         },
       });
 

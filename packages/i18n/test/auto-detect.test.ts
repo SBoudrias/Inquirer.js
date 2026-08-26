@@ -160,7 +160,10 @@ describe('auto locale detection', () => {
           loadingMessage: () => 'Überprüfung...',
           waitingMessage: (key) => `Drücken Sie ${key} um Ihren Editor zu öffnen.`,
         },
-        password: { maskedText: '[Eingabe verborgen]' },
+        password: {
+          maskedText: '[Eingabe verborgen]',
+          helpToggle: 'Sichtbarkeit umschalten',
+        },
       }),
     );
 

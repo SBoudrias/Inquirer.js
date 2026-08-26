@@ -60,6 +60,8 @@ export interface EditorStrings {
 export interface PasswordStrings {
   /** Text shown instead of typed input to indicate it is hidden */
   maskedText: string;
+  /** Help text for the key that toggles mask visibility */
+  helpToggle: string;
 }
 
 /**

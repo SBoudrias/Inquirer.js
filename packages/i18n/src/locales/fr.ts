@@ -28,6 +28,7 @@ export const locale: Locale = {
   },
   password: {
     maskedText: '[saisie masquée]',
+    helpToggle: 'afficher/masquer',
   },
 };
 
