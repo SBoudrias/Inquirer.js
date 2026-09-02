@@ -93,7 +93,9 @@ The push to `main` triggers `.github/workflows/publish.yml`. A `guard` job check
 2. **build** — `yarn tsc`
 3. **publish** — `yarn lerna publish from-git --stage --yes --no-git-reset`
 
-`lerna publish from-git` stages every package tagged at HEAD (all tags created by `lerna version` point at the same commit). lerna-lite applies the `publishConfig` manifest overrides (main/types/exports) natively, runs the `prepublishOnly` build and the root `prepack` (workspace devDependency strip, README utm rewrite), and stages each package via OIDC Trusted Publishing. The packages are now **staged**, not live.
+`lerna publish from-git` stages every package tagged at HEAD (all tags created by `lerna version` point at the same commit). lerna-lite applies the `publishConfig` manifest overrides (main/types/exports) natively, runs the `prepublishOnly` build and the root `prepack` (README utm rewrite, `package normalize` manifest fixups, exact `@inquirer/type` pin), and stages each package via OIDC Trusted Publishing. The packages are now **staged**, not live.
+
+The `@inquirer/type` dependency is pinned to an exact version in published manifests (`package pin @inquirer/type` runs at `prepack` time). TypeScript type definitions leak into consumers' `tsc` runs, so a semver range on a types package can break downstream builds without any change to the Inquirer.js source (see [#2244](https://github.com/SBoudrias/Inquirer.js/issues/2244)).
 
 Forgot `--follow-tags`? Push the tags afterwards (`git push origin <tag>...`), then re-run the publish workflow on the release commit from the Actions tab — `from-git` reads the tags at that commit, so it will pick them up on the re-run.
 

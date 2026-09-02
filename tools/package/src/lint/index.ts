@@ -4,9 +4,9 @@ import type { PackageJson } from 'type-fest';
 import {
   applyPeerDependencyHoists,
   getPeerDependencyHoists,
-} from './peer-dependencies.ts';
-import { resolveDependencyPackageJson, writePackageJsonFile } from './package-json.ts';
-import { readWorkspaceProject } from './workspaces.ts';
+} from '../peer-dependencies.ts';
+import { resolveDependencyPackageJson, writePackageJsonFile } from '../package-json.ts';
+import { readWorkspaceProject } from '../workspaces.ts';
 
 function nodeEngine(pkg: PackageJson) {
   const node = pkg.engines?.['node'];
