@@ -820,12 +820,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna-lite/cli@npm:5.6.0, @lerna-lite/cli@npm:^5.6.0":
-  version: 5.6.0
-  resolution: "@lerna-lite/cli@npm:5.6.0"
+"@lerna-lite/cli@npm:5.6.1, @lerna-lite/cli@npm:^5.6.0":
+  version: 5.6.1
+  resolution: "@lerna-lite/cli@npm:5.6.1"
   dependencies:
-    "@lerna-lite/core": "npm:5.6.0"
-    "@lerna-lite/init": "npm:5.6.0"
+    "@lerna-lite/core": "npm:5.6.1"
+    "@lerna-lite/init": "npm:5.6.1"
     "@lerna-lite/npmlog": "npm:5.4.1"
     dotenv: "npm:^17.4.2"
     import-local: "npm:^3.2.0"
@@ -845,13 +845,13 @@ __metadata:
       optional: true
   bin:
     lerna: dist/cli.js
-  checksum: 10/0c825f14dd226ef65ad4cf1294e402677d81fd8b51c4c5f3e71a559d96aeefbfef47ed2962ad7fec42148b557dd1933d62628290d71d80789fc3bf20d64bc354
+  checksum: 10/af894668cc0b33290151066200361244a6634cbb0170d9dec145e6955406259af0c01e253982f510ce8a4f8f7813d101fc2280311fa2cf0fb1b8d1b896e93f00
   languageName: node
   linkType: hard
 
-"@lerna-lite/core@npm:5.6.0":
-  version: 5.6.0
-  resolution: "@lerna-lite/core@npm:5.6.0"
+"@lerna-lite/core@npm:5.6.1":
+  version: 5.6.1
+  resolution: "@lerna-lite/core@npm:5.6.1"
   dependencies:
     "@inquirer/expand": "npm:^5.1.1"
     "@inquirer/input": "npm:^5.1.2"
@@ -868,17 +868,17 @@ __metadata:
     write-json-file: "npm:^7.0.0"
     yaml: "npm:^2.9.0"
     zeptomatch: "npm:^2.1.0"
-  checksum: 10/3948e9f214f225f1e0731c68103e5fffe73ae00ad9dec0e567e5a89b84de5c685b8cca4e330ffb7c5e74e177b95e26a1da99d7310f35346c181883fdfef2c80e
+  checksum: 10/0d751aee9e21a9a78ad76a6d6a6fa2af8309b59ac50b7aef5299f71fcd450ae7e045e59f02dc42b0f37950ca65d97d24baf7b35627b9039d120ce0525f1d0b66
   languageName: node
   linkType: hard
 
-"@lerna-lite/init@npm:5.6.0":
-  version: 5.6.0
-  resolution: "@lerna-lite/init@npm:5.6.0"
+"@lerna-lite/init@npm:5.6.1":
+  version: 5.6.1
+  resolution: "@lerna-lite/init@npm:5.6.1"
   dependencies:
-    "@lerna-lite/core": "npm:5.6.0"
+    "@lerna-lite/core": "npm:5.6.1"
     write-json-file: "npm:^7.0.0"
-  checksum: 10/0bfb012f9d701d8d17743a9ff2c6414eaf8336c3f348edafe90044f2e1c05e3088292f05ebe029f84d89775e9808c50d69fbd6fe5f9d89762bda6a9cdfdb87e6
+  checksum: 10/40426abd4998dfa604a26e359b72451887b5700a24ed324586e5386a9c0d3bc487308248c5ffbf55d5e4babdf7184a65022bac7f0df3b53d0b14e1c83796140c
   languageName: node
   linkType: hard
 
@@ -893,13 +893,13 @@ __metadata:
   linkType: hard
 
 "@lerna-lite/publish@npm:^5.6.0":
-  version: 5.6.0
-  resolution: "@lerna-lite/publish@npm:5.6.0"
+  version: 5.6.1
+  resolution: "@lerna-lite/publish@npm:5.6.1"
   dependencies:
-    "@lerna-lite/cli": "npm:5.6.0"
-    "@lerna-lite/core": "npm:5.6.0"
+    "@lerna-lite/cli": "npm:5.6.1"
+    "@lerna-lite/core": "npm:5.6.1"
     "@lerna-lite/npmlog": "npm:5.4.1"
-    "@lerna-lite/version": "npm:5.6.0"
+    "@lerna-lite/version": "npm:5.6.1"
     "@npmcli/arborist": "npm:^9.9.1"
     "@npmcli/package-json": "npm:^7.0.5"
     ci-info: "npm:^4.4.0"
@@ -912,18 +912,18 @@ __metadata:
     ssri: "npm:^13.0.1"
     tar: "npm:^7.5.22"
     verkit: "npm:^0.4.0"
-  checksum: 10/bc9833f6ca2f716a402a762db279b28e8a04595a5c5e11a712efa343b83177531fb5a21bdf24bba7e12ee50283ebdcbf564f790116b18cd24aba6af2cd1a0b97
+  checksum: 10/c483454c1a6154ef08013bfd5694a2c8f879acad395448c6e1cf9249540269ed7bc0ba9a7930310a27aff3d475c00cd3e5cbaad32f181c0fc97859f366090d08
   languageName: node
   linkType: hard
 
-"@lerna-lite/version@npm:5.6.0":
-  version: 5.6.0
-  resolution: "@lerna-lite/version@npm:5.6.0"
+"@lerna-lite/version@npm:5.6.1":
+  version: 5.6.1
+  resolution: "@lerna-lite/version@npm:5.6.1"
   dependencies:
     "@conventional-changelog/git-client": "npm:^3.1.2"
     "@conventional-changelog/template": "npm:^1.3.0"
-    "@lerna-lite/cli": "npm:5.6.0"
-    "@lerna-lite/core": "npm:5.6.0"
+    "@lerna-lite/cli": "npm:5.6.1"
+    "@lerna-lite/core": "npm:5.6.1"
     "@lerna-lite/npmlog": "npm:5.4.1"
     "@octokit/plugin-enterprise-rest": "npm:^6.0.1"
     "@octokit/rest": "npm:^22.0.1"
@@ -938,7 +938,7 @@ __metadata:
     verkit: "npm:^0.4.0"
     write-json-file: "npm:^7.0.0"
     zeptomatch: "npm:^2.1.0"
-  checksum: 10/b9318f4f966a71d6e1548157995e6a7194309b0335b9127c41226f502180940549dd331f4569c6241a5967e9781d251e093cee9b3c569e553b3558cbb9b27939
+  checksum: 10/28e0d55c279dfade17dabb339dbe208dfa2c2826bbc99a85945f62954c1f4bb6f89337d3cb8aabcf5e3d7a7bcb12fb586c9f446704c02c56fdc950e0fe148af8
   languageName: node
   linkType: hard
 
@@ -1948,44 +1948,44 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@turbo/darwin-64@npm:2.10.11":
-  version: 2.10.11
-  resolution: "@turbo/darwin-64@npm:2.10.11"
+"@turbo/darwin-64@npm:2.10.12":
+  version: 2.10.12
+  resolution: "@turbo/darwin-64@npm:2.10.12"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@turbo/darwin-arm64@npm:2.10.11":
-  version: 2.10.11
-  resolution: "@turbo/darwin-arm64@npm:2.10.11"
+"@turbo/darwin-arm64@npm:2.10.12":
+  version: 2.10.12
+  resolution: "@turbo/darwin-arm64@npm:2.10.12"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@turbo/linux-64@npm:2.10.11":
-  version: 2.10.11
-  resolution: "@turbo/linux-64@npm:2.10.11"
+"@turbo/linux-64@npm:2.10.12":
+  version: 2.10.12
+  resolution: "@turbo/linux-64@npm:2.10.12"
   conditions: (os=android | os=linux) & cpu=x64
   languageName: node
   linkType: hard
 
-"@turbo/linux-arm64@npm:2.10.11":
-  version: 2.10.11
-  resolution: "@turbo/linux-arm64@npm:2.10.11"
+"@turbo/linux-arm64@npm:2.10.12":
+  version: 2.10.12
+  resolution: "@turbo/linux-arm64@npm:2.10.12"
   conditions: (os=android | os=linux) & cpu=arm64
   languageName: node
   linkType: hard
 
-"@turbo/windows-64@npm:2.10.11":
-  version: 2.10.11
-  resolution: "@turbo/windows-64@npm:2.10.11"
+"@turbo/windows-64@npm:2.10.12":
+  version: 2.10.12
+  resolution: "@turbo/windows-64@npm:2.10.12"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@turbo/windows-arm64@npm:2.10.11":
-  version: 2.10.11
-  resolution: "@turbo/windows-arm64@npm:2.10.11"
+"@turbo/windows-arm64@npm:2.10.12":
+  version: 2.10.12
+  resolution: "@turbo/windows-arm64@npm:2.10.12"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
@@ -6166,15 +6166,15 @@ __metadata:
   linkType: hard
 
 "turbo@npm:^2.9.4":
-  version: 2.10.11
-  resolution: "turbo@npm:2.10.11"
+  version: 2.10.12
+  resolution: "turbo@npm:2.10.12"
   dependencies:
-    "@turbo/darwin-64": "npm:2.10.11"
-    "@turbo/darwin-arm64": "npm:2.10.11"
-    "@turbo/linux-64": "npm:2.10.11"
-    "@turbo/linux-arm64": "npm:2.10.11"
-    "@turbo/windows-64": "npm:2.10.11"
-    "@turbo/windows-arm64": "npm:2.10.11"
+    "@turbo/darwin-64": "npm:2.10.12"
+    "@turbo/darwin-arm64": "npm:2.10.12"
+    "@turbo/linux-64": "npm:2.10.12"
+    "@turbo/linux-arm64": "npm:2.10.12"
+    "@turbo/windows-64": "npm:2.10.12"
+    "@turbo/windows-arm64": "npm:2.10.12"
   dependenciesMeta:
     "@turbo/darwin-64":
       optional: true
@@ -6190,7 +6190,7 @@ __metadata:
       optional: true
   bin:
     turbo: bin/turbo
-  checksum: 10/f367be9b4accf4030e0e5550bc29ae5fb54a92af65f7911a6d05e77f99ad10294b3d67ac3619fcb17fadd5a842c473414a360c4eaf2afc83840d68ab8d340a53
+  checksum: 10/d92ff6c947dacd9a25ceed9267ad45ec3ee89ca7776e8b4851098c234d811e090656958f52c72a1ee6e1d825a29907d649775f1feb4c628a38194d522c659e27
   languageName: node
   linkType: hard
 
