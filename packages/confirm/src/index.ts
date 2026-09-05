@@ -77,7 +77,7 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   const { transformer = boolToString } = config;
 
   function getBooleanValue(value: string, defaultValue?: boolean): boolean {
-    const v = value.toLowerCase();
+    const v = value.trim().toLowerCase();
     if (v === '') return defaultValue !== false;
     if (yes.toLowerCase().startsWith(v)) return true;
     if (no.toLowerCase().startsWith(v)) return false;
