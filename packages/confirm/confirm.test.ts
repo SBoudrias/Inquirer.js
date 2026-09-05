@@ -72,6 +72,18 @@ describe('confirm prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? No"`);
   });
 
+  it('ignores surrounding whitespace', async () => {
+    const { answer, events, getScreen } = await render(confirm, {
+      message: 'Do you want to proceed?',
+    });
+
+    events.type('  yes  ');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual(true);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? Yes"`);
+  });
+
   it('uses default (yes) on empty input', async () => {
     const { answer, events, getScreen } = await render(confirm, {
       message: 'Do you want to proceed?',
