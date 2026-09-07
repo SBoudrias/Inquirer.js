@@ -392,6 +392,57 @@ describe('createPrompt()', () => {
     await expect(answer).resolves.toEqual('foo');
   });
 
+  it('useEffect: a throwing cleanup rejects the prompt and drops the answer', async () => {
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done('done');
+        }
+      });
+
+      useEffect(() => {
+        return () => {
+          throw new Error('cleanup failed');
+        };
+      }, []);
+
+      return config.message;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+
+    events.keypress('enter');
+
+    await expect(answer).rejects.toThrow('cleanup failed');
+  });
+
+  it('useEffect: a throwing cleanup supersedes the abort error', async () => {
+    // Documents the settlement semantics: cleanup errors surface as the prompt
+    // rejection, replacing the original settlement error (here AbortPromptError).
+    const Prompt = (config: { message: string }) => {
+      useEffect(() => {
+        return () => {
+          throw new Error('cleanup failed');
+        };
+      }, []);
+
+      return config.message;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const abortController = new AbortController();
+    const { answer } = await render(
+      prompt,
+      { message: 'Question' },
+      { signal: abortController.signal },
+    );
+
+    abortController.abort();
+
+    await expect(answer).rejects.toThrow('cleanup failed');
+  });
+
   it('useEffect: only re-render once on state changes', async () => {
     const renderSpy = vi.fn();
     const Prompt = (config: { message: string }, done: (value: string) => void) => {
