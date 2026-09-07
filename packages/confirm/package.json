@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/confirm",
-  "version": "6.3.1",
+  "version": "6.3.2",
   "description": "Inquirer confirm prompt",
   "keywords": [
     "answer",
@@ -73,7 +73,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/core": "^12.0.2",
+    "@inquirer/core": "^12.0.3",
     "@inquirer/type": "^4.1.1"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/search",
-  "version": "4.3.2",
+  "version": "4.3.3",
   "description": "Inquirer search prompt",
   "keywords": [
     "answer",
@@ -73,7 +73,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/core": "^12.0.2",
+    "@inquirer/core": "^12.0.3",
     "@inquirer/figures": "^2.0.9",
     "@inquirer/type": "^4.1.1"
   },
