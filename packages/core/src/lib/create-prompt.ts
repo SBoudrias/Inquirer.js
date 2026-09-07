@@ -14,6 +14,26 @@ import path from 'node:path';
 // frameworks mock timers with vi.useFakeTimers() or similar.
 const nativeSetImmediate = globalThis.setImmediate;
 
+/**
+ * Register an event listener and return its disposer, so registrations collapse
+ * into a single statement: `cleanups.add(listenTo(rl, 'close', handler))`.
+ */
+function listenTo(
+  target:
+    | Pick<InquirerReadline, 'on' | 'removeListener'>
+    | Pick<EventTarget, 'addEventListener' | 'removeEventListener'>,
+  event: string,
+  listener: () => void,
+): () => void {
+  if ('on' in target) {
+    target.on(event, listener);
+    return () => target.removeListener(event, listener);
+  }
+
+  target.addEventListener(event, listener);
+  return () => target.removeEventListener(event, listener);
+}
+
 type ViewFunction<Value, Config> = (
   config: Config,
   done: (value: Value) => void,
@@ -78,41 +98,73 @@ export function createPrompt<Value, Config>(
     const screen = new ScreenManager(rl);
 
     const { promise, resolve, reject } = PromisePolyfill.withResolver<Value>();
-    const cancel = () => reject(new CancelPromptError());
-
-    if (signal) {
-      const abort = () => reject(new AbortPromptError({ cause: signal.reason }));
-      if (signal.aborted) {
-        abort();
-        return Object.assign(promise, { cancel });
-      }
-      signal.addEventListener('abort', abort);
-      cleanups.add(() => signal.removeEventListener('abort', abort));
-    }
-
-    cleanups.add(
-      onSignalExit((code, signal) => {
-        reject(
-          new ExitPromptError(`User force closed the prompt with ${code} ${signal}`),
-        );
-      }),
-    );
-
-    // SIGINT must be explicitly handled by the prompt so the ExitPromptError can be handled.
-    // Otherwise, the prompt will stop and in some scenarios never resolve.
-    // Ref issue #1741
-    const sigint = () =>
-      reject(new ExitPromptError(`User force closed the prompt with SIGINT`));
-    rl.on('SIGINT', sigint);
-    cleanups.add(() => rl.removeListener('SIGINT', sigint));
 
     return withHooks(rl, (cycle) => {
-      // The close event triggers immediately when the user press ctrl+c. SignalExit on the other hand
-      // triggers after the process is done (which happens after timeouts are done triggering.)
-      // We triggers the hooks cleanup phase on rl `close` so active timeouts can be cleared.
-      const hooksCleanup = AsyncResource.bind(() => effectScheduler.clearAll());
-      rl.on('close', hooksCleanup);
-      cleanups.add(() => rl.removeListener('close', hooksCleanup));
+      // Clear hook effects synchronously before the prompt settles: readline
+      // emits keypresses synchronously within a single data event, so a
+      // microtask-deferred cleanup would let same-tick input keep driving a
+      // settled prompt.
+      const clearEffects = AsyncResource.bind(() => effectScheduler.clearAll());
+      // The promise resolvers and effectScheduler.clearAll() are both idempotent,
+      // so repeated settlement attempts are harmless no-ops. If a hook cleanup
+      // throws, the cleanup error supersedes the settlement: the answer (or
+      // settlement error, e.g. AbortPromptError) is dropped in favor of
+      // rejecting with the cleanup error.
+      const settlePrompt = (settle: () => void) => {
+        try {
+          clearEffects();
+          settle();
+        } catch (error: unknown) {
+          reject(error);
+        }
+      };
+      const resolvePrompt = (value: Value) => settlePrompt(() => resolve(value));
+      const rejectPrompt = (error: unknown) => settlePrompt(() => reject(error));
+
+      const promptPromise = Object.assign(
+        promise
+          .finally(() => {
+            cleanups.forEach((cleanup) => cleanup());
+
+            screen.done({ clearContent: Boolean(context.clearPromptOnDone) });
+            output.end();
+          })
+          .then(() => promise),
+        { cancel: () => rejectPrompt(new CancelPromptError()) },
+      );
+
+      if (signal) {
+        const abort = () => rejectPrompt(new AbortPromptError({ cause: signal.reason }));
+        if (signal.aborted) {
+          abort();
+          return promptPromise;
+        }
+        cleanups.add(listenTo(signal, 'abort', abort));
+      }
+
+      cleanups.add(
+        onSignalExit((code, signal) => {
+          rejectPrompt(
+            new ExitPromptError(`User force closed the prompt with ${code} ${signal}`),
+          );
+        }),
+      );
+
+      // SIGINT must be explicitly handled by the prompt so the ExitPromptError can be handled.
+      // Otherwise, the prompt will stop and in some scenarios never resolve.
+      // Ref issue #1741
+      cleanups.add(
+        listenTo(rl, 'SIGINT', () =>
+          rejectPrompt(new ExitPromptError(`User force closed the prompt with SIGINT`)),
+        ),
+      );
+
+      // Fallback for readline closing without the prompt settling (e.g. stdin
+      // EOF), so active effect timeouts still get cleared. Every settlement
+      // path already clears effects through settlePrompt; this event triggers
+      // immediately when the user presses ctrl+c, while signal-exit only
+      // triggers after the process is done (after timeouts finish triggering).
+      cleanups.add(listenTo(rl, 'close', clearEffects));
 
       const startCycle = () => {
         // Re-renders only happen when the state change; but the readline cursor could
@@ -120,9 +172,7 @@ export function createPrompt<Value, Config>(
         // we mute the streams). We set the listener after the initial workLoop to avoid
         // a double render if render triggered by a state change sets the cursor to the
         // right position.
-        const checkCursorPos = () => screen.checkCursorPos();
-        rl.input.on('keypress', checkCursorPos);
-        cleanups.add(() => rl.input.removeListener('keypress', checkCursorPos));
+        cleanups.add(listenTo(rl.input, 'keypress', () => screen.checkCursorPos()));
 
         let pendingDone: { value: Value } | null = null;
 
@@ -134,7 +184,7 @@ export function createPrompt<Value, Config>(
                 // After the cycle completes (async validation path), the "done"
                 // render already flushed via setStatus → handleChange, so resolve
                 // immediately.
-                resolve(value);
+                resolvePrompt(value);
               } else {
                 pendingDone = { value };
               }
@@ -159,14 +209,14 @@ export function createPrompt<Value, Config>(
 
             effectScheduler.run();
           } catch (error: unknown) {
-            reject(error);
+            rejectPrompt(error);
           }
           effectsSettled = true;
 
           if (pendingDone !== null) {
             const { value } = pendingDone;
             pendingDone = null;
-            resolve(value);
+            resolvePrompt(value);
           }
         });
       };
@@ -187,29 +237,7 @@ export function createPrompt<Value, Config>(
         startCycle();
       }
 
-      return Object.assign(
-        promise
-          .then(
-            (answer) => {
-              effectScheduler.clearAll();
-              return answer;
-            },
-            (error: unknown) => {
-              effectScheduler.clearAll();
-              throw error;
-            },
-          )
-          // Wait for the promise to settle, then cleanup.
-          .finally(() => {
-            cleanups.forEach((cleanup) => cleanup());
-
-            screen.done({ clearContent: Boolean(context.clearPromptOnDone) });
-            output.end();
-          })
-          // Once cleanup is done, let the expose promise resolve/reject to the internal one.
-          .then(() => promise),
-        { cancel },
-      );
+      return promptPromise;
     });
   };
 

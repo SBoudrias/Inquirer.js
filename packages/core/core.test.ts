@@ -17,6 +17,7 @@ import {
   isShiftKey,
   Separator,
   AbortPromptError,
+  CancelPromptError,
   ValidationError,
   HookError,
   type KeypressEvent,
@@ -390,6 +391,96 @@ describe('createPrompt()', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('foo');
+  });
+
+  it('useKeypress: ignores keypresses after the prompt is done', async () => {
+    const handler = vi.fn();
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      useKeypress((key: KeypressEvent) => {
+        handler(key.name);
+
+        if (isEnterKey(key)) {
+          done('done');
+        }
+      });
+
+      return config.message;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+
+    events.keypress('enter');
+    events.keypress('down');
+
+    await expect(answer).resolves.toEqual('done');
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(handler).toHaveBeenCalledWith('enter');
+  });
+
+  it('useKeypress: ignores keypresses after the prompt is aborted', async () => {
+    const handler = vi.fn();
+    const Prompt = (config: { message: string }) => {
+      useKeypress((key: KeypressEvent) => {
+        handler(key.name);
+      });
+
+      return config.message;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const abortController = new AbortController();
+    const { answer, events } = await render(
+      prompt,
+      { message: 'Question' },
+      { signal: abortController.signal },
+    );
+
+    abortController.abort();
+    events.keypress('down');
+
+    await expect(answer).rejects.toThrow(AbortPromptError);
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it('useKeypress: ignores keypresses after the prompt is cancelled', async () => {
+    const handler = vi.fn();
+    const Prompt = (config: { message: string }) => {
+      useKeypress((key: KeypressEvent) => {
+        handler(key.name);
+      });
+
+      return config.message;
+    };
+
+    const prompt = createPrompt<string, { message: string }>(Prompt);
+    const { answer, events } = await render(prompt, { message: 'Question' });
+
+    // `render` types the answer as a bare promise; the runtime instance exposes
+    // the untyped `cancel()` API.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+    (answer as Promise<string> & { cancel: () => void }).cancel();
+    events.keypress('down');
+
+    await expect(answer).rejects.toThrow(CancelPromptError);
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it('on already-aborted signal: runs the terminal cleanup', async () => {
+    const Prompt = (config: { message: string }) => config.message;
+
+    const prompt = createPrompt(Prompt);
+    const { answer, getFullOutput } = await render(
+      prompt,
+      { message: 'Question' },
+      { signal: AbortSignal.abort() },
+    );
+
+    await expect(answer).rejects.toThrow(AbortPromptError);
+    // The prompt never rendered, but settling still restores the cursor and
+    // closes the readline interface (screen.done() + output.end()).
+    const fullOutput = await getFullOutput({ raw: true });
+    expect(fullOutput).toContain(cursorShow);
   });
 
   it('useEffect: a throwing cleanup rejects the prompt and drops the answer', async () => {
