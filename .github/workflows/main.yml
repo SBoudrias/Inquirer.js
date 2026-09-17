@@ -137,3 +137,43 @@ jobs:
           yarn install
           yarn test
           cd -
+
+  deno:
+    name: Deno Tests (${{ matrix.deno-version }})
+    runs-on: ubuntu-latest
+    needs: Compile
+    env:
+      YARN_ENABLE_IMMUTABLE_INSTALLS: false
+    strategy:
+      fail-fast: false
+      matrix:
+        # Deno >= 2.7 is required: earlier versions throw EOPNOTSUPP when
+        # node:readline enables raw mode on non-TTY stdin.
+        deno-version: ['v2.7.x', 'v2.8.x', 'v2.9.x', 'latest']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Cache turbo build setup
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-turbo-
+      - run: corepack enable
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: latest
+          cache: 'yarn'
+      - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        with:
+          deno-version: ${{ matrix.deno-version }}
+      - run: yarn install --immutable
+      - run: yarn tsc
+      - name: Run deno integration tests
+        run: |
+          cd $(yarn isolate-monorepo-package @inquirer/deno-integration-tests)
+          yarn set version stable
+          yarn install
+          yarn test
+          cd -

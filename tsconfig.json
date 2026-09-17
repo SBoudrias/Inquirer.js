@@ -5,7 +5,8 @@
     "tools/**/*",
     "**/*.test.ts",
     "**/*.d.ts",
-    "**/examples/**/*"
+    "**/examples/**/*",
+    "integration/deno/cases/**/*.ts"
   ],
   "compilerOptions": {
     "skipLibCheck": true,
