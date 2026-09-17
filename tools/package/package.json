@@ -59,7 +59,8 @@
     "@types/semver": "^7.7.1",
     "type-fest": "^5.5.0",
     "typescript": "^6.0.2",
-    "vitest": "^4.1.2"
+    "vite": "^8.3.0",
+    "vitest": "^5.0.0"
   },
   "engines": {
     "node": ">=23.5.0 || ^22.13.0 || ^20.17.0"
