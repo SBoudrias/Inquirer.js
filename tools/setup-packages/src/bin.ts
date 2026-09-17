@@ -3,7 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 import { subset, validRange } from 'semver';
 import { globby } from 'globby';
-import { parse as parseJsonc } from 'jsonc-parser';
+import { parse as parseJsonc, modify, applyEdits, type JSONPath } from 'jsonc-parser';
 import type { PackageJson, TsConfigJson } from 'type-fest';
 
 type ExportDef = Exclude<PackageJson['exports'], undefined | null>;
@@ -41,8 +41,67 @@ async function writeFile(filepath: string, content: string) {
   }
 }
 
+/**
+ * Patch a JSONC document in place with the properties of `updated`, preserving
+ * comments and formatting: unchanged entries are left untouched, changed or
+ * new entries are patched at their location, and removed entries are deleted.
+ * Entries are applied sequentially against the evolving text since `modify`
+ * computes edits relative to the document it is given.
+ */
+function applyJsoncUpdates(
+  text: string,
+  current: unknown,
+  updated: unknown,
+  propertyPath: JSONPath = [],
+): string {
+  const options = { formattingOptions: { tabSize: 2, insertSpaces: true } };
+  let result = text;
+
+  if (isJsonObject(updated) && isJsonObject(current)) {
+    for (const key of Object.keys(current)) {
+      if (!(key in updated)) {
+        result = applyEdits(
+          result,
+          modify(result, [...propertyPath, key], undefined, options),
+        );
+      }
+    }
+    for (const [key, value] of Object.entries(updated)) {
+      if (key in current && isJsonObject(value) && isJsonObject(current[key])) {
+        result = applyJsoncUpdates(result, current[key], value, [...propertyPath, key]);
+      } else if (!(key in current) || !isSameJson(value, current[key])) {
+        result = applyEdits(
+          result,
+          modify(result, [...propertyPath, key], value, options),
+        );
+      }
+    }
+  } else if (!isSameJson(updated, current)) {
+    result = applyEdits(result, modify(result, propertyPath, updated, options));
+  }
+
+  return result;
+}
+
+function isJsonObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isSameJson(a: unknown, b: unknown): boolean {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
 async function writeJSONFile(filepath: string, content: unknown) {
-  await writeFile(filepath, JSON.stringify(content, null, 2) + '\n');
+  if (await fileExists(filepath)) {
+    const text = await readFile(filepath);
+    let updated = applyJsoncUpdates(text, parseJsonc(text), content);
+    if (!updated.endsWith('\n')) {
+      updated += '\n';
+    }
+    await writeFile(filepath, updated);
+  } else {
+    await writeFile(filepath, JSON.stringify(content, null, 2) + '\n');
+  }
 }
 
 const rootPkg = await readJSONFile<PackageJson>(path.join(process.cwd(), 'package.json'));
