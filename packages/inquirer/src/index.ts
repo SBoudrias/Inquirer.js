@@ -159,6 +159,7 @@ export function createPromptModule<
 /**
  * Public CLI helper interface
  */
+// eslint-disable-next-line @typescript-eslint/no-generated-empty-object-type -- `Omit` intentionally resolves to `{}` when `QuestionMap` is not augmented; module augmentation of `QuestionMap` still adds custom prompt types dynamically.
 const prompt = createPromptModule<Omit<QuestionMap, '__dummy'>>();
 
 // Expose helper functions on the top level for easiest usage by common users
