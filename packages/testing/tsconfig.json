@@ -4,7 +4,10 @@
     "isolatedDeclarations": true,
     "outDir": "dist",
     "rootDir": "src",
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    // tinybench (vitest dependency) types reference DOM lib types like
+    // `DOMHighResTimeStamp`, and the shared config keeps skipLibCheck off.
+    "lib": ["es2023", "dom"]
   },
   "include": ["src"],
   "exclude": ["src/**/*.test.ts"]
