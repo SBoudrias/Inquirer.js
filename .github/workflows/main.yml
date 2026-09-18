@@ -138,18 +138,14 @@ jobs:
           yarn test
           cd -
 
-  deno:
-    name: Deno Tests (${{ matrix.deno-version }})
+  deno-pack:
+    name: Deno Pack
     runs-on: ubuntu-latest
     needs: Compile
     env:
+      # The isolated deno workspace has no lockfile, so immutable installs
+      # would fail inside it. The repo-level install still passes --immutable.
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
-    strategy:
-      fail-fast: false
-      matrix:
-        # Deno >= 2.7 is required: earlier versions throw EOPNOTSUPP when
-        # node:readline enables raw mode on non-TTY stdin.
-        deno-version: ['v2.7.x', 'v2.8.x', 'v2.9.x', 'latest']
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -165,15 +161,44 @@ jobs:
         with:
           node-version: latest
           cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn tsc
+      - name: Pack isolated deno test project
+        run: |
+          DIR=$(yarn isolate-monorepo-package @inquirer/deno-integration-tests)
+          cd "$DIR"
+          yarn set version stable
+          yarn install
+          cd -
+          tar -czf "${RUNNER_TEMP}/deno-integration-tests.tar.gz" \
+            -C "$(dirname "$DIR")" "$(basename "$DIR")"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: deno-integration-tests
+          path: ${{ runner.temp }}/deno-integration-tests.tar.gz
+          if-no-files-found: error
+          retention-days: 1
+
+  deno:
+    name: Deno Tests (${{ matrix.deno-version }})
+    runs-on: ubuntu-latest
+    needs: deno-pack
+    strategy:
+      fail-fast: false
+      matrix:
+        # Deno >= 2.7 is required: earlier versions throw EOPNOTSUPP when
+        # node:readline enables raw mode on non-TTY stdin.
+        deno-version: ['v2.7.x', 'v2.8.x', 'v2.9.x', 'latest']
+    steps:
       - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
         with:
           deno-version: ${{ matrix.deno-version }}
-      - run: yarn install --immutable
-      - run: yarn tsc
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: deno-integration-tests
+          path: ${{ runner.temp }}
       - name: Run deno integration tests
         run: |
-          cd $(yarn isolate-monorepo-package @inquirer/deno-integration-tests)
-          yarn set version stable
-          yarn install
-          yarn test
-          cd -
+          tar -xzf "${RUNNER_TEMP}/deno-integration-tests.tar.gz" -C "${RUNNER_TEMP}"
+          cd "${RUNNER_TEMP}/deno"
+          deno test --allow-env --allow-run=deno integration.test.mjs

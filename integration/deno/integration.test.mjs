@@ -7,6 +7,12 @@ import { describe, it } from 'node:test';
  * with answers piped to stdin (CI has no TTY). Deno is deliberately granted
  * the minimal permission set: if a future change requires more permissions
  * than documented, these tests fail and flag it.
+ *
+ * This driver runs under both runners, using the node:test API which Deno
+ * implements natively:
+ * - `node --test` locally (`yarn test` via turbo); skips when deno is absent.
+ * - `deno test --allow-env --allow-run=deno` in CI, where child processes
+ *   are restricted to spawning deno itself.
  */
 
 const hasDeno = spawnSync('deno', ['--version'], { stdio: 'pipe' }).status === 0;
@@ -75,6 +81,7 @@ describe('Deno Integration', () => {
     const check = spawnSync('deno', ['check', 'cases/'], {
       encoding: 'utf8',
       timeout: 120_000,
+      cwd: new URL('.', import.meta.url).pathname,
     });
     assert.equal(check.status, 0, `deno check failed:\n${check.stdout}${check.stderr}`);
   });
