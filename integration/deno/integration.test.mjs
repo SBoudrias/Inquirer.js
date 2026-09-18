@@ -76,93 +76,169 @@ function parseResult(stdout) {
   return JSON.parse(line);
 }
 
+/**
+ * Serializes test bodies. `node --test` runs tests within a describe
+ * sequentially, but Deno's node:test compatibility layer may overlap them;
+ * concurrent child spawns are unreliable on Deno 2.7 (some children never
+ * receive their piped stdin answers under load).
+ * @template T
+ * @param {() => Promise<T>} fn
+ */
+let testQueue = Promise.resolve();
+function sequential(fn) {
+  return () => {
+    const run = testQueue.then(fn);
+    testQueue = run.then(
+      () => undefined,
+      () => undefined,
+    );
+    return run;
+  };
+}
+
 describe('Deno Integration', () => {
-  it('passes deno check on all cases', { skip }, async () => {
-    const check = spawnSync('deno', ['check', 'cases/'], {
-      encoding: 'utf8',
-      timeout: 120_000,
-      cwd: new URL('.', import.meta.url).pathname,
-    });
-    assert.equal(check.status, 0, `deno check failed:\n${check.stdout}${check.stderr}`);
-  });
+  it(
+    'passes deno check on all cases',
+    { skip },
+    sequential(async () => {
+      const check = spawnSync('deno', ['check', 'cases/'], {
+        encoding: 'utf8',
+        timeout: 120_000,
+        cwd: new URL('.', import.meta.url).pathname,
+      });
+      assert.equal(check.status, 0, `deno check failed:\n${check.stdout}${check.stderr}`);
+    }),
+  );
 
-  it('runs input prompt', { skip }, async () => {
-    const result = await runCase('input.ts', 'Simon\n');
-    assertOk(result);
-    assert.equal(parseResult(result.stdout), 'Simon');
-  });
+  it(
+    'runs input prompt',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('input.ts', 'Simon\n');
+      assertOk(result);
+      assert.equal(parseResult(result.stdout), 'Simon');
+    }),
+  );
 
-  it('runs confirm prompt', { skip }, async () => {
-    const result = await runCase('confirm.ts', 'y\n');
-    assertOk(result);
-    assert.equal(parseResult(result.stdout), true);
-  });
+  it(
+    'runs confirm prompt',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('confirm.ts', 'y\n');
+      assertOk(result);
+      assert.equal(parseResult(result.stdout), true);
+    }),
+  );
 
-  it('runs number prompt', { skip }, async () => {
-    const result = await runCase('number.ts', '42\n');
-    assertOk(result);
-    assert.equal(parseResult(result.stdout), 42);
-  });
+  it(
+    'runs number prompt',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('number.ts', '42\n');
+      assertOk(result);
+      assert.equal(parseResult(result.stdout), 42);
+    }),
+  );
 
-  it('runs select prompt (first choice on enter)', { skip }, async () => {
-    const result = await runCase('select.ts', '\n');
-    assertOk(result);
-    assert.equal(parseResult(result.stdout), 'first');
-  });
+  it(
+    'runs select prompt (first choice on enter)',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('select.ts', '\n');
+      assertOk(result);
+      assert.equal(parseResult(result.stdout), 'first');
+    }),
+  );
 
-  it('runs checkbox prompt (empty selection)', { skip }, async () => {
-    const result = await runCase('checkbox.ts', '\n');
-    assertOk(result);
-    assert.deepEqual(parseResult(result.stdout), []);
-  });
+  it(
+    'runs checkbox prompt (empty selection)',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('checkbox.ts', '\n');
+      assertOk(result);
+      assert.deepEqual(parseResult(result.stdout), []);
+    }),
+  );
 
-  it('runs rawlist prompt', { skip }, async () => {
-    const result = await runCase('rawlist.ts', '2\n');
-    assertOk(result);
-    assert.equal(parseResult(result.stdout), 2);
-  });
+  it(
+    'runs rawlist prompt',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('rawlist.ts', '2\n');
+      assertOk(result);
+      assert.equal(parseResult(result.stdout), 2);
+    }),
+  );
 
-  it('runs expand prompt', { skip }, async () => {
-    const result = await runCase('expand.ts', 'y\n');
-    assertOk(result);
-    assert.equal(parseResult(result.stdout), 'overwrite');
-  });
+  it(
+    'runs expand prompt',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('expand.ts', 'y\n');
+      assertOk(result);
+      assert.equal(parseResult(result.stdout), 'overwrite');
+    }),
+  );
 
-  it('runs password prompt', { skip }, async () => {
-    const result = await runCase('password.ts', 'hunter2\n');
-    assertOk(result);
-    assert.equal(parseResult(result.stdout), 'hunter2');
-  });
+  it(
+    'runs password prompt',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('password.ts', 'hunter2\n');
+      assertOk(result);
+      assert.equal(parseResult(result.stdout), 'hunter2');
+    }),
+  );
 
-  it('runs search prompt', { skip }, async () => {
-    const result = await runCase('search.ts', '\n');
-    assertOk(result);
-    assert.equal(parseResult(result.stdout), 'banana');
-  });
+  it(
+    'runs search prompt',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('search.ts', '\n');
+      assertOk(result);
+      assert.equal(parseResult(result.stdout), 'banana');
+    }),
+  );
 
-  it('runs i18n prompt with locale detection', { skip }, async () => {
-    const result = await runCase('i18n-confirm.ts', 'y\n');
-    assertOk(result);
-    assert.equal(parseResult(result.stdout), true);
-    assert.match(result.stdout, /Oui/);
-  });
+  it(
+    'runs i18n prompt with locale detection',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('i18n-confirm.ts', 'y\n');
+      assertOk(result);
+      assert.equal(parseResult(result.stdout), true);
+      assert.match(result.stdout, /Oui/);
+    }),
+  );
 
-  it('runs legacy inquirer package', { skip }, async () => {
-    const result = await runCase('inquirer-legacy.ts', 'Simon\n');
-    assertOk(result);
-    assert.deepEqual(parseResult(result.stdout), { name: 'Simon' });
-  });
+  it(
+    'runs legacy inquirer package',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('inquirer-legacy.ts', 'Simon\n');
+      assertOk(result);
+      assert.deepEqual(parseResult(result.stdout), { name: 'Simon' });
+    }),
+  );
 
-  it('renders figures symbols', { skip }, async () => {
-    const result = await runCase('figures.ts', '');
-    assertOk(result);
-    assert.ok(parseResult(result.stdout).length > 0);
-  });
+  it(
+    'renders figures symbols',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('figures.ts', '');
+      assertOk(result);
+      assert.ok(parseResult(result.stdout).length > 0);
+    }),
+  );
 
-  it('surfaces prompt errors with a non-zero exit', { skip }, async () => {
-    const result = await runCase('fixture-error.ts', '');
-    assert.equal(result.timedOut, false, 'Case timed out');
-    assert.notEqual(result.code, 0);
-    assert.match(result.stderr, /boom/);
-  });
+  it(
+    'surfaces prompt errors with a non-zero exit',
+    { skip },
+    sequential(async () => {
+      const result = await runCase('fixture-error.ts', '');
+      assert.equal(result.timedOut, false, 'Case timed out');
+      assert.notEqual(result.code, 0);
+      assert.match(result.stderr, /boom/);
+    }),
+  );
 });
