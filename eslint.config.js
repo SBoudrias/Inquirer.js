@@ -19,6 +19,10 @@ export default defineConfig(
       'tools/*/node_modules/**',
       'integration/*/dist/**',
       'integration/*/node_modules/**',
+      // Deno fixture scripts: type-checked by `deno check` in CI and linted by
+      // oxlint. The typed-lint project service requires tsconfig coverage,
+      // which conflicts with Deno's own config discovery.
+      'integration/deno/cases/**',
       'packages/*/__snapshots__/**',
     ],
   },
