@@ -8,15 +8,11 @@ import { describe, it } from 'node:test';
  * the minimal permission set: if a future change requires more permissions
  * than documented, these tests fail and flag it.
  *
- * This driver runs under both runners, using the node:test API which Deno
- * implements natively:
- * - `node --test` locally (`yarn test` via turbo); skips when deno is absent.
- * - `deno test --allow-env --allow-run=deno` in CI, where child processes
- *   are restricted to spawning deno itself.
+ * Run under `deno test` (CI matrix, or `yarn test:deno` locally) — using the
+ * node:test API, which Deno implements natively. Child processes are
+ * restricted to spawning deno itself via --allow-run=deno.
  */
 
-const hasDeno = spawnSync('deno', ['--version'], { stdio: 'pipe' }).status === 0;
-const skip = hasDeno ? false : 'deno is not installed (install from https://deno.land)';
 const CASE_TIMEOUT = 30_000;
 
 /**
@@ -76,17 +72,13 @@ function parseResult(stdout) {
   return JSON.parse(line);
 }
 
-/**
- * Serializes test bodies. `node --test` runs tests within a describe
- * sequentially, but Deno's node:test compatibility layer may overlap them;
- * concurrent child spawns are unreliable on Deno 2.7 (some children never
- * receive their piped stdin answers under load).
- * @template T
- * @param {() => Promise<T>} fn
- */
 let testQueue = Promise.resolve();
+
 function sequential(fn) {
   return () => {
+    // `sequential` keeps test bodies non-overlapping: concurrent child
+    // spawns are unreliable on Deno 2.7 (some children never receive
+    // their piped stdin answers under load).
     const run = testQueue.then(fn);
     testQueue = run.then(
       () => undefined,
@@ -99,7 +91,6 @@ function sequential(fn) {
 describe('Deno Integration', () => {
   it(
     'passes deno check on all cases',
-    { skip },
     sequential(async () => {
       const check = spawnSync('deno', ['check', 'cases/'], {
         encoding: 'utf8',
@@ -112,7 +103,6 @@ describe('Deno Integration', () => {
 
   it(
     'runs input prompt',
-    { skip },
     sequential(async () => {
       const result = await runCase('input.ts', 'Simon\n');
       assertOk(result);
@@ -122,7 +112,6 @@ describe('Deno Integration', () => {
 
   it(
     'runs confirm prompt',
-    { skip },
     sequential(async () => {
       const result = await runCase('confirm.ts', 'y\n');
       assertOk(result);
@@ -132,7 +121,6 @@ describe('Deno Integration', () => {
 
   it(
     'runs number prompt',
-    { skip },
     sequential(async () => {
       const result = await runCase('number.ts', '42\n');
       assertOk(result);
@@ -142,7 +130,6 @@ describe('Deno Integration', () => {
 
   it(
     'runs select prompt (first choice on enter)',
-    { skip },
     sequential(async () => {
       const result = await runCase('select.ts', '\n');
       assertOk(result);
@@ -152,7 +139,6 @@ describe('Deno Integration', () => {
 
   it(
     'runs checkbox prompt (empty selection)',
-    { skip },
     sequential(async () => {
       const result = await runCase('checkbox.ts', '\n');
       assertOk(result);
@@ -162,7 +148,6 @@ describe('Deno Integration', () => {
 
   it(
     'runs rawlist prompt',
-    { skip },
     sequential(async () => {
       const result = await runCase('rawlist.ts', '2\n');
       assertOk(result);
@@ -172,7 +157,6 @@ describe('Deno Integration', () => {
 
   it(
     'runs expand prompt',
-    { skip },
     sequential(async () => {
       const result = await runCase('expand.ts', 'y\n');
       assertOk(result);
@@ -182,7 +166,6 @@ describe('Deno Integration', () => {
 
   it(
     'runs password prompt',
-    { skip },
     sequential(async () => {
       const result = await runCase('password.ts', 'hunter2\n');
       assertOk(result);
@@ -192,7 +175,6 @@ describe('Deno Integration', () => {
 
   it(
     'runs search prompt',
-    { skip },
     sequential(async () => {
       const result = await runCase('search.ts', '\n');
       assertOk(result);
@@ -202,7 +184,6 @@ describe('Deno Integration', () => {
 
   it(
     'runs i18n prompt with locale detection',
-    { skip },
     sequential(async () => {
       const result = await runCase('i18n-confirm.ts', 'y\n');
       assertOk(result);
@@ -213,7 +194,6 @@ describe('Deno Integration', () => {
 
   it(
     'runs legacy inquirer package',
-    { skip },
     sequential(async () => {
       const result = await runCase('inquirer-legacy.ts', 'Simon\n');
       assertOk(result);
@@ -223,7 +203,6 @@ describe('Deno Integration', () => {
 
   it(
     'renders figures symbols',
-    { skip },
     sequential(async () => {
       const result = await runCase('figures.ts', '');
       assertOk(result);
@@ -233,7 +212,6 @@ describe('Deno Integration', () => {
 
   it(
     'surfaces prompt errors with a non-zero exit',
-    { skip },
     sequential(async () => {
       const result = await runCase('fixture-error.ts', '');
       assert.equal(result.timedOut, false, 'Case timed out');

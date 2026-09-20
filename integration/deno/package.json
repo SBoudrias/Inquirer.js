@@ -5,7 +5,7 @@
   "type": "module",
   "sideEffects": false,
   "scripts": {
-    "test": "node --test **/*.test.*"
+    "test:deno": "deno test --allow-env --allow-run=deno integration.test.mjs"
   },
   "devDependencies": {
     "@inquirer/core": "workspace:*",
