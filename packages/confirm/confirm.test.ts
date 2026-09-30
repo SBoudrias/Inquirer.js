@@ -151,6 +151,29 @@ describe('confirm prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? No"`);
   });
 
+  it('allows customizing the error message from the theme', async () => {
+    const { answer, events, getScreen } = await render(confirm, {
+      message: 'Do you want to proceed?',
+      theme: {
+        keywords: { error: () => 'Nope!' },
+      },
+    });
+
+    events.type('foobar');
+    events.keypress('enter');
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Do you want to proceed? (Y/n) foobar
+      > Nope!"
+    `);
+
+    for (const _ of 'foobar') events.keypress('backspace');
+    events.type('y');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual(true);
+  });
+
   it('supports transformer option', async () => {
     const { answer, events, getScreen } = await render(confirm, {
       message: 'Do you want to proceed?',

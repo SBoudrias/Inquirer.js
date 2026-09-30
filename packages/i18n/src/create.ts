@@ -47,6 +47,8 @@ export function createLocalizedPrompts(locale: Locale) {
         keywords: {
           yes: locale.confirm.yesLabel,
           no: locale.confirm.noLabel,
+          error: ({ yes, no }: { yes: string; no: string }) =>
+            locale.confirm.invalidAnswer(yes, no),
         },
       };
 

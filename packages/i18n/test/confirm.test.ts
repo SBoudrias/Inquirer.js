@@ -130,12 +130,32 @@ describe('confirm (localized keywords)', () => {
   );
 
   it.each(locales)(
-    '$name falls back to the default for unrecognized input',
+    '$name always accepts the built-in y/n answers',
     async ({ confirm }) => {
-      const answer = confirm({ message: 'Continue?', default: true });
+      const answer = confirm({ message: 'Continue?', default: false });
       screen.type('y');
       screen.keypress('enter');
       await expect(answer).resolves.toBe(true);
+    },
+  );
+
+  it.each(locales)(
+    '$name shows a localized error on unrecognized input',
+    async ({ confirm, strings }) => {
+      const answer = confirm({ message: 'Continue?', default: true });
+      screen.type('foobar');
+      screen.keypress('enter');
+
+      // The prompt stays active and the error is localized.
+      expect(screen.getScreen()).toContain(
+        strings.confirm.invalidAnswer(strings.confirm.yesLabel, strings.confirm.noLabel),
+      );
+
+      // The user can clear the rejected input and answer again.
+      for (const _ of 'foobar') screen.keypress('backspace');
+      screen.type('n');
+      screen.keypress('enter');
+      await expect(answer).resolves.toBe(false);
     },
   );
 });

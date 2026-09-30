@@ -81,6 +81,7 @@ type Theme = {
   keywords: {
     yes: string;
     no: string;
+    error: (keywords: { yes: string; no: string }) => string;
   };
   style: {
     answer: (text: string) => string;
@@ -95,14 +96,9 @@ The `keywords` property defines the words accepted as "yes" and "no". Matching i
 prefix-based and case-insensitive, and the first character of each word is shown in
 the hint (e.g. `Y/n`). The matched word is also displayed once the prompt is answered.
 
-Whatever the localized keywords are, the built-in English answers `y`, `n`, `yes` and
-`no` are always accepted too; typing a single ASCII key is the terminal muscle memory,
-even in non-Latin locales. Keywords take precedence when matching (e.g. with
-`Oui`/`Non`, typing `n` matches `Non`).
-
-If the submitted input matches no keyword, the prompt is not answered: it stays
-active, shows an error and lets the user retry (it doesn't silently fall back on the
-default).
+The built-in `y`/`n`/`yes`/`no` answers are always accepted, whatever the keywords
+are. Unrecognized input shows the `keywords.error` message instead of silently
+falling back on the default answer.
 
 Overriding `keywords` is how `@inquirer/i18n` localizes the prompt:
 

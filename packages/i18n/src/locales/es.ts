@@ -5,6 +5,7 @@ export const locale: Locale = {
   confirm: {
     yesLabel: 'Sí',
     noLabel: 'No',
+    invalidAnswer: (si, no) => `Responde con "${si}" o "${no}"`,
   },
   select: {
     helpNavigate: 'navegar',

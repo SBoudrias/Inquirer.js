@@ -30,6 +30,11 @@ type ConfirmTheme = {
   keywords: {
     yes: string;
     no: string;
+    /**
+     * Message shown when the submitted input matches no keyword. Receives the
+     * yes/no keywords; this is how `@inquirer/i18n` localizes the message.
+     */
+    error: (keywords: { yes: string; no: string }) => string;
   };
   style: {
     /**
@@ -45,6 +50,7 @@ const confirmTheme: ConfirmTheme = {
   keywords: {
     yes: 'Yes',
     no: 'No',
+    error: ({ yes, no }) => `You must answer with "${yes}" or "${no}"`,
   },
   style: {
     confirmDefault: (text: string) => {
@@ -82,13 +88,15 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   // Note: the built-in English `y`/`n`/`yes`/`no` answers are always accepted,
   // whatever the localized keywords are; typing a single ASCII key is the
   // terminal muscle memory, even in non-Latin locales.
-  function parseAnswer(value: string): boolean | undefined {
+  function getBooleanValue(value: string): boolean | undefined {
     const v = value.trim().toLowerCase();
-    if (v === '') return undefined;
+    // Empty input selects the default answer (the one highlighted in the hint).
+    if (v === '') return config.default !== false;
     if (yes.toLowerCase().startsWith(v)) return true;
     if (no.toLowerCase().startsWith(v)) return false;
     if ('yes'.startsWith(v)) return true;
     if ('no'.startsWith(v)) return false;
+    // Unrecognized input is rejected by the caller (shows an error).
     return undefined;
   }
 
@@ -96,12 +104,12 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
     if (status !== 'idle') return;
 
     if (isEnterKey(key)) {
-      const answer = value.trim() === '' ? config.default !== false : parseAnswer(value);
+      const answer = getBooleanValue(value);
       if (answer === undefined) {
         // Reject unrecognized input instead of silently falling back on the
         // default. Restore the typed input (the line event cleared it).
         rl.write(value);
-        setError(`You must answer with "${yes}" or "${no}"`);
+        setError(theme.keywords.error({ yes, no }));
         return;
       }
 
@@ -109,7 +117,7 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
       setStatus('done');
       done(answer);
     } else if (isTabKey(key)) {
-      const answer = boolToString(!(parseAnswer(value) ?? config.default !== false));
+      const answer = boolToString(!(getBooleanValue(value) ?? config.default !== false));
       rl.clearLine(0); // Remove the tab character.
       rl.write(answer);
       setValue(answer);

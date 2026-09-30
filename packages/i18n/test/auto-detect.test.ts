@@ -146,7 +146,11 @@ describe('auto locale detection', () => {
     registerLocale(
       'de',
       createLocalizedPrompts({
-        confirm: { yesLabel: 'Ja', noLabel: 'Nein' },
+        confirm: {
+          yesLabel: 'Ja',
+          noLabel: 'Nein',
+          invalidAnswer: (ja, nein) => `Antworte mit "${ja}" oder "${nein}"`,
+        },
         select: { helpNavigate: 'navigieren', helpSelect: 'wählen' },
         checkbox: {
           helpNavigate: 'navigieren',
