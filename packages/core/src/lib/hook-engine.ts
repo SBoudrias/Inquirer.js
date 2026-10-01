@@ -33,18 +33,17 @@ export function withHooks<T>(
   cb: (cycle: (render: () => void) => void) => T,
 ): T {
   const store = createStore(rl);
-  return hookStorage.run(store, () => {
-    function cycle(render: () => void) {
-      store.handleChange = () => {
-        store.index = 0;
-        render();
-      };
 
-      store.handleChange();
-    }
+  function cycle(render: () => void) {
+    store.handleChange = () => {
+      store.index = 0;
+      render();
+    };
 
-    return cb(cycle);
-  });
+    store.handleChange();
+  }
+
+  return hookStorage.run(store, () => cb(cycle));
 }
 
 // Safe getStore utility that'll return the store or throw if undefined.
