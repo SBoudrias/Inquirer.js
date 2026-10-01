@@ -94,11 +94,11 @@ describe('auto locale detection', () => {
     // Windows + Node 22 the real Intl.DateTimeFormat() locale resolution is
     // pathologically slow (seconds) when an unsupported LANG is set, which
     // made this test flaky (timing out at the 5s default).
-    // oxlint-disable-next-line typescript/no-unsafe-type-assertion, typescript/no-unnecessary-type-assertion
+    /* oxlint-disable typescript/no-unsafe-type-assertion, typescript/no-unnecessary-type-assertion */
     vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((() => ({
-      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       resolvedOptions: () => ({ locale: 'en-US' }) as Intl.ResolvedDateTimeFormatOptions,
     })) as typeof Intl.DateTimeFormat);
+    /* oxlint-enable typescript/no-unsafe-type-assertion, typescript/no-unnecessary-type-assertion */
     const { confirm } = await import('../src/index.ts');
 
     const answer = confirm({ message: 'Continue?' });
@@ -109,11 +109,11 @@ describe('auto locale detection', () => {
   });
 
   it('falls back to English when Intl returns unsupported locale', async () => {
-    // oxlint-disable-next-line typescript/no-unsafe-type-assertion, typescript/no-unnecessary-type-assertion
+    /* oxlint-disable typescript/no-unsafe-type-assertion, typescript/no-unnecessary-type-assertion */
     vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((() => ({
-      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       resolvedOptions: () => ({ locale: 'de-DE' }) as Intl.ResolvedDateTimeFormatOptions,
     })) as typeof Intl.DateTimeFormat);
+    /* oxlint-enable typescript/no-unsafe-type-assertion, typescript/no-unnecessary-type-assertion */
     const { confirm } = await import('../src/index.ts');
 
     const answer = confirm({ message: 'Continue?' });
@@ -124,11 +124,11 @@ describe('auto locale detection', () => {
   });
 
   it('uses Intl API when no env vars are set', async () => {
-    // oxlint-disable-next-line typescript/no-unsafe-type-assertion, typescript/no-unnecessary-type-assertion
+    /* oxlint-disable typescript/no-unsafe-type-assertion, typescript/no-unnecessary-type-assertion */
     vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((() => ({
-      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       resolvedOptions: () => ({ locale: 'fr-FR' }) as Intl.ResolvedDateTimeFormatOptions,
     })) as typeof Intl.DateTimeFormat);
+    /* oxlint-enable typescript/no-unsafe-type-assertion, typescript/no-unnecessary-type-assertion */
     const { confirm } = await import('../src/index.ts');
 
     const answer = confirm({ message: 'Question?' });

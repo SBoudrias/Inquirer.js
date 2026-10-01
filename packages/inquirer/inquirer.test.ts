@@ -332,9 +332,10 @@ describe('promptModule(...)', () => {
     ]);
 
     await promise;
-    // oxlint-disable-next-line typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion
+    /* oxlint-disable typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion */
     const rl1 = vi.mocked(readline.createInterface).mock.results[0]!
       .value as InquirerReadline;
+    /* oxlint-enable typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion */
     expect(rl1.close).toHaveBeenCalledTimes(1);
     expect(rl1.output.end).toHaveBeenCalledTimes(1);
 
@@ -347,9 +348,10 @@ describe('promptModule(...)', () => {
     ]);
 
     await promise2;
-    // oxlint-disable-next-line typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion
+    /* oxlint-disable typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion */
     const rl2 = vi.mocked(readline.createInterface).mock.results[1]!
       .value as InquirerReadline;
+    /* oxlint-enable typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion */
     expect(rl2.close).toHaveBeenCalledTimes(1);
     expect(rl2.output.end).toHaveBeenCalledTimes(1);
 
@@ -375,9 +377,10 @@ describe('promptModule(...)', () => {
 
     await expect(promise).rejects.toThrow();
 
-    // oxlint-disable-next-line typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion
+    /* oxlint-disable typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion */
     const rl = vi.mocked(readline.createInterface).mock.results[0]!
       .value as InquirerReadline;
+    /* oxlint-enable typescript/no-unnecessary-type-assertion, typescript/no-unsafe-type-assertion */
     expect(rl.close).toHaveBeenCalledTimes(1);
     expect(rl.output.end).toHaveBeenCalledTimes(1);
   });
@@ -586,7 +589,7 @@ describe('promptModule(...)', () => {
         answer: 'John',
         message: 'First name',
       },
-      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+      /* oxlint-disable typescript/no-unsafe-type-assertion */
       {
         type: 'stub',
         name: 'last_name',
@@ -601,6 +604,7 @@ describe('promptModule(...)', () => {
           return true;
         },
       } as any,
+      /* oxlint-enable typescript/no-unsafe-type-assertion */
     ]);
 
     expect(answers['first_name']).toEqual('John');

@@ -337,10 +337,11 @@ export default class PromptsRunner<A extends Answers> {
               return;
             }
 
-            // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+            /* oxlint-disable typescript/no-unsafe-type-assertion */
             const rl = readline.createInterface(
               setupReadlineOptions(opt),
             ) as unknown as InquirerReadline;
+            /* oxlint-enable typescript/no-unsafe-type-assertion */
 
             /**
              * Handle the ^C exit

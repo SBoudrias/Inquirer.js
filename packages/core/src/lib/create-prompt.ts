@@ -83,12 +83,13 @@ export function createPrompt<Value, Config>(
     const output = new MuteStream();
     output.pipe(context.output ?? process.stdout);
 
-    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+    /* oxlint-disable typescript/no-unsafe-type-assertion */
     const rl = readline.createInterface({
       terminal: true,
       input,
       output,
     }) as unknown as InquirerReadline;
+    /* oxlint-enable typescript/no-unsafe-type-assertion */
 
     // Mute the output after readline has initialized so readline can perform
     // any terminal setup writes (e.g. Windows Console API initialization)
