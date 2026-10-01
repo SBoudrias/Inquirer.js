@@ -115,7 +115,7 @@ const expand = createPrompt(
 
     useKeypress((event, rl) => {
       if (isEnterKey(event)) {
-        const answer = (value || defaultKey).toLowerCase();
+        const answer = (value.trim() || defaultKey).toLowerCase();
         if (answer === 'h' && !expanded) {
           setExpanded(true);
         } else {
@@ -178,7 +178,7 @@ const expand = createPrompt(
           }
 
           const line = `  ${choice.key}) ${choice.name}`;
-          if (choice.key === value.toLowerCase()) {
+          if (choice.key === value.trim().toLowerCase()) {
             return theme.style.highlight(line);
           }
 
@@ -190,7 +190,7 @@ const expand = createPrompt(
     let helpTip = '';
     const currentOption = choices.find(
       (choice): choice is NormalizedChoice<Value> =>
-        !Separator.isSeparator(choice) && choice.key === value.toLowerCase(),
+        !Separator.isSeparator(choice) && choice.key === value.trim().toLowerCase(),
     );
     if (currentOption) {
       helpTip = `${styleText('cyan', '>>')} ${currentOption.name}`;
