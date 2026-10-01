@@ -273,6 +273,46 @@ describe('expand prompt', () => {
     await expect(answer).rejects.toThrow();
   });
 
+  it('ignores surrounding whitespace', async () => {
+    const { answer, events, getScreen } = await render(expand, {
+      message: 'Overwrite this file?',
+      choices: overwriteChoices,
+    });
+
+    events.type(' y ');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Overwrite this file? (yadxH)  y
+      >> Overwrite"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Overwrite this file? Overwrite"`);
+
+    await expect(answer).resolves.toEqual('overwrite');
+  });
+
+  it('highlights the choice matching an input with surrounding whitespace', async () => {
+    const { answer, events, getScreen } = await render(expand, {
+      message: 'Overwrite this file?',
+      choices: overwriteChoices,
+      expanded: true,
+      theme: { style: { highlight: (text: string) => `> ${text.trim()}` } },
+    });
+
+    events.type(' d ');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Overwrite this file?  d
+        y) Overwrite
+        a) Overwrite this one and all next
+      > d) Show diff
+        x) Abort
+      >> Show diff"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('diff');
+  });
+
   it('handles non-existing selection', async () => {
     const abortController = new AbortController();
     const { answer, events, getScreen } = await render(

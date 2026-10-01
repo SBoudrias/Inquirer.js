@@ -371,6 +371,37 @@ describe('rawlist prompt', () => {
     await expect(answer).resolves.toEqual('no');
   });
 
+  it('ignores surrounding whitespace around custom keys', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a number',
+      choices: [
+        {
+          key: 'y',
+          name: 'Yes',
+          value: 'yes',
+        },
+        {
+          key: 'n',
+          name: 'No',
+          value: 'no',
+        },
+      ],
+      theme: { style: { highlight: (text: string) => `> ${text.trim()}` } },
+    });
+
+    events.type(' n ');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number  n
+        y) Yes
+      > n) No"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number No"');
+
+    await expect(answer).resolves.toEqual('no');
+  });
+
   it('allow using numeric keys (0, 1, 2)', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select an option',

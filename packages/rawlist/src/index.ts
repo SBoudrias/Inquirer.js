@@ -96,8 +96,11 @@ function getSelectedChoice<Value>(
   let selectedChoice: NormalizedChoice<Value> | undefined;
   const selectableChoices = choices.filter(isSelectableChoice);
 
-  // First, try to match by custom key (exact match)
-  selectedChoice = selectableChoices.find((choice) => choice.key === input);
+  // First, try to match by custom key (exact match, then ignoring surrounding whitespace)
+  const trimmedInput = input.trim();
+  selectedChoice = selectableChoices.find(
+    (choice) => choice.key === input || choice.key === trimmedInput,
+  );
 
   // If no custom key match and input is numeric, try 1-based index
   if (!selectedChoice && numberRegex.test(input)) {
@@ -191,6 +194,7 @@ export default createPrompt(
       return `${prefix} ${message} ${theme.style.answer(value)}`;
     }
 
+    const [selectedChoice] = getSelectedChoice(value, choices);
     const choicesStr = choices
       .map((choice) => {
         if (Separator.isSeparator(choice)) {
@@ -199,7 +203,7 @@ export default createPrompt(
 
         const line = `  ${choice.key}) ${choice.name}`;
 
-        if (choice.key === value) {
+        if (selectedChoice && choice.key === selectedChoice.key) {
           return theme.style.highlight(line);
         }
 
@@ -212,7 +216,6 @@ export default createPrompt(
       error = theme.style.error(errorMsg);
     }
 
-    const [selectedChoice] = getSelectedChoice(value, choices);
     let description = '';
     if (!errorMsg && selectedChoice?.description) {
       description = theme.style.description(selectedChoice.description);
