@@ -1,0 +1,20 @@
+{
+  "name": "@inquirer/deno-integration-tests",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "test:deno": "deno test --allow-env --allow-run=deno integration.test.mjs"
+  },
+  "devDependencies": {
+    "@inquirer/core": "workspace:*",
+    "@inquirer/figures": "workspace:*",
+    "@inquirer/i18n": "workspace:*",
+    "@inquirer/prompts": "workspace:*",
+    "inquirer": "workspace:*"
+  },
+  "engines": {
+    "node": ">=23.5.0 || ^22.13.0 || ^20.17.0"
+  }
+}

@@ -386,6 +386,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@inquirer/deno-integration-tests@workspace:integration/deno":
+  version: 0.0.0-use.local
+  resolution: "@inquirer/deno-integration-tests@workspace:integration/deno"
+  dependencies:
+    "@inquirer/core": "workspace:*"
+    "@inquirer/figures": "workspace:*"
+    "@inquirer/i18n": "workspace:*"
+    "@inquirer/prompts": "workspace:*"
+    inquirer: "workspace:*"
+  languageName: unknown
+  linkType: soft
+
 "@inquirer/editor@npm:^5.3.3, @inquirer/editor@workspace:packages/editor":
   version: 0.0.0-use.local
   resolution: "@inquirer/editor@workspace:packages/editor"
@@ -449,7 +461,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/figures@npm:^2.0.9, @inquirer/figures@workspace:packages/figures":
+"@inquirer/figures@npm:^2.0.9, @inquirer/figures@workspace:*, @inquirer/figures@workspace:packages/figures":
   version: 0.0.0-use.local
   resolution: "@inquirer/figures@workspace:packages/figures"
   dependencies:
@@ -459,7 +471,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@inquirer/i18n@workspace:packages/i18n":
+"@inquirer/i18n@workspace:*, @inquirer/i18n@workspace:packages/i18n":
   version: 0.0.0-use.local
   resolution: "@inquirer/i18n@workspace:packages/i18n"
   dependencies:
