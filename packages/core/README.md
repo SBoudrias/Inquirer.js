@@ -8,17 +8,10 @@ It aims to implements a lightweight API similar to React hooks - but without JSX
 
 <table>
 <tr>
-  <th>npm</th>
   <th>yarn</th>
+  <th>pnpm</th>
 </tr>
 <tr>
-<td>
-
-```sh
-npm install @inquirer/core
-```
-
-</td>
 <td>
 
 ```sh
@@ -26,15 +19,42 @@ yarn add @inquirer/core
 ```
 
 </td>
+<td>
+
+```sh
+pnpm add @inquirer/core
+```
+
+</td>
 </tr>
 <tr>
-<th colSpan="2">deno</th>
+  <th>bun</th>
+  <th>deno</th>
+</tr>
+<tr>
+<td>
+
+```sh
+bun add @inquirer/core
+```
+
+</td>
+<td>
+
+```sh
+deno add npm:@inquirer/core
+```
+
+</td>
+</tr>
+<tr>
+<th colSpan="2">npm</th>
 </tr>
 <tr>
 <td colSpan="2">
 
 ```sh
-deno add npm:@inquirer/core
+npm install @inquirer/core
 ```
 
 </td>

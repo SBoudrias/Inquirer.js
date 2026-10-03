@@ -8,17 +8,10 @@ Simple interactive command line prompt to gather boolean input from users.
 
 <table>
 <tr>
-  <th>npm</th>
   <th>yarn</th>
+  <th>pnpm</th>
 </tr>
 <tr>
-<td>
-
-```sh
-npm install @inquirer/prompts
-```
-
-</td>
 <td>
 
 ```sh
@@ -26,12 +19,27 @@ yarn add @inquirer/prompts
 ```
 
 </td>
+<td>
+
+```sh
+pnpm add @inquirer/prompts
+```
+
+</td>
 </tr>
 <tr>
-<th colSpan="2">deno</th>
+  <th>bun</th>
+  <th>deno</th>
 </tr>
 <tr>
-<td colSpan="2">
+<td>
+
+```sh
+bun add @inquirer/prompts
+```
+
+</td>
+<td>
 
 ```sh
 deno add npm:@inquirer/prompts
@@ -40,16 +48,25 @@ deno add npm:@inquirer/prompts
 </td>
 </tr>
 <tr>
-<td colSpan="2" align="center">Or</td>
+<th colSpan="2">npm</th>
 </tr>
 <tr>
-<td>
+<td colSpan="2">
 
 ```sh
-npm install @inquirer/confirm
+npm install @inquirer/prompts
 ```
 
 </td>
+</tr>
+<tr>
+<td colSpan="2" align="center">Or</td>
+</tr>
+<tr>
+  <th>yarn</th>
+  <th>pnpm</th>
+</tr>
+<tr>
 <td>
 
 ```sh
@@ -57,12 +74,27 @@ yarn add @inquirer/confirm
 ```
 
 </td>
+<td>
+
+```sh
+pnpm add @inquirer/confirm
+```
+
+</td>
 </tr>
 <tr>
-<th colSpan="2">deno</th>
+  <th>bun</th>
+  <th>deno</th>
 </tr>
 <tr>
-<td colSpan="2">
+<td>
+
+```sh
+bun add @inquirer/confirm
+```
+
+</td>
+<td>
 
 ```sh
 deno add npm:@inquirer/confirm
@@ -70,7 +102,21 @@ deno add npm:@inquirer/confirm
 
 </td>
 </tr>
+<tr>
+<th colSpan="2">npm</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+npm install @inquirer/confirm
+```
+
+</td>
+</tr>
 </table>
+
+On Deno, prompts detect the terminal's unicode and color support from the environment, so run your script with `--allow-env`.
 
 # Usage
 

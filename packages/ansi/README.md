@@ -6,17 +6,10 @@ A lightweight package providing ANSI escape sequences for terminal cursor manipu
 
 <table>
 <tr>
-  <th>npm</th>
   <th>yarn</th>
+  <th>pnpm</th>
 </tr>
 <tr>
-<td>
-
-```sh
-npm install @inquirer/ansi
-```
-
-</td>
 <td>
 
 ```sh
@@ -24,15 +17,42 @@ yarn add @inquirer/ansi
 ```
 
 </td>
+<td>
+
+```sh
+pnpm add @inquirer/ansi
+```
+
+</td>
 </tr>
 <tr>
-<th colSpan="2">deno</th>
+  <th>bun</th>
+  <th>deno</th>
+</tr>
+<tr>
+<td>
+
+```sh
+bun add @inquirer/ansi
+```
+
+</td>
+<td>
+
+```sh
+deno add npm:@inquirer/ansi
+```
+
+</td>
+</tr>
+<tr>
+<th colSpan="2">npm</th>
 </tr>
 <tr>
 <td colSpan="2">
 
 ```sh
-deno add npm:@inquirer/ansi
+npm install @inquirer/ansi
 ```
 
 </td>

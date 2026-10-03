@@ -54,17 +54,10 @@ A collection of common interactive command line user interfaces.
 
 <table>
 <tr>
-  <th>npm</th>
   <th>yarn</th>
+  <th>pnpm</th>
 </tr>
 <tr>
-<td>
-
-```sh
-npm install inquirer
-```
-
-</td>
 <td>
 
 ```sh
@@ -72,15 +65,42 @@ yarn add inquirer
 ```
 
 </td>
+<td>
+
+```sh
+pnpm add inquirer
+```
+
+</td>
 </tr>
 <tr>
-<th colSpan="2">deno</th>
+  <th>bun</th>
+  <th>deno</th>
+</tr>
+<tr>
+<td>
+
+```sh
+bun add inquirer
+```
+
+</td>
+<td>
+
+```sh
+deno add npm:inquirer
+```
+
+</td>
+</tr>
+<tr>
+<th colSpan="2">npm</th>
 </tr>
 <tr>
 <td colSpan="2">
 
 ```sh
-deno add npm:inquirer
+npm install inquirer
 ```
 
 </td>

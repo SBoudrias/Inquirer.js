@@ -19,17 +19,10 @@ npx @inquirer/demo@latest
 
 <table>
 <tr>
-  <th>npm</th>
   <th>yarn</th>
+  <th>pnpm</th>
 </tr>
 <tr>
-<td>
-
-```sh
-npm install @inquirer/prompts
-```
-
-</td>
 <td>
 
 ```sh
@@ -37,12 +30,6 @@ yarn add @inquirer/prompts
 ```
 
 </td>
-</tr>
-<tr>
-  <th>pnpm</th>
-  <th>bun</th>
-</tr>
-<tr>
 <td>
 
 ```sh
@@ -50,6 +37,12 @@ pnpm add @inquirer/prompts
 ```
 
 </td>
+</tr>
+<tr>
+  <th>bun</th>
+  <th>deno</th>
+</tr>
+<tr>
 <td>
 
 ```sh
@@ -57,15 +50,22 @@ bun add @inquirer/prompts
 ```
 
 </td>
+<td>
+
+```sh
+deno add npm:@inquirer/prompts
+```
+
+</td>
 </tr>
 <tr>
-  <th colSpan="2">deno</th>
+<th colSpan="2">npm</th>
 </tr>
 <tr>
 <td colSpan="2">
 
 ```sh
-deno add npm:@inquirer/prompts
+npm install @inquirer/prompts
 ```
 
 </td>

@@ -10,17 +10,10 @@ Internationalized Inquirer prompts — a 100% drop-in replacement for `@inquirer
 
 <table>
 <tr>
-  <th>npm</th>
   <th>yarn</th>
+  <th>pnpm</th>
 </tr>
 <tr>
-<td>
-
-```sh
-npm install @inquirer/i18n
-```
-
-</td>
 <td>
 
 ```sh
@@ -28,12 +21,6 @@ yarn add @inquirer/i18n
 ```
 
 </td>
-</tr>
-<tr>
-  <th>pnpm</th>
-  <th>bun</th>
-</tr>
-<tr>
 <td>
 
 ```sh
@@ -41,6 +28,12 @@ pnpm add @inquirer/i18n
 ```
 
 </td>
+</tr>
+<tr>
+  <th>bun</th>
+  <th>deno</th>
+</tr>
+<tr>
 <td>
 
 ```sh
@@ -48,15 +41,22 @@ bun add @inquirer/i18n
 ```
 
 </td>
+<td>
+
+```sh
+deno add npm:@inquirer/i18n
+```
+
+</td>
 </tr>
 <tr>
-  <th colSpan="2">deno</th>
+<th colSpan="2">npm</th>
 </tr>
 <tr>
 <td colSpan="2">
 
 ```sh
-deno add npm:@inquirer/i18n
+npm install @inquirer/i18n
 ```
 
 </td>
