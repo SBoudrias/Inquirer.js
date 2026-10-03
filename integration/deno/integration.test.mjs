@@ -37,17 +37,16 @@ function it(name, fn) {
 }
 
 /**
- * Runs a case, asserts it exited cleanly, and returns the JSON value
- * printed after the last `RESULT ` marker.
+ * Runs a case and reports what happened in its `deno run` process.
  *
  * @param {string} caseFile file under cases/, relative to this file
  * @param {string} input answers piped to the case's stdin
- * @param {{ expectFailure?: boolean }} [options]
- *   `expectFailure: true` inverts the exit-status assertion (the case is
- *   expected to crash) and returns `{ code, stderr }` instead.
- * @returns {Promise<unknown>}
+ * @returns {Promise<{ code: number | null, answer?: unknown, stderr: string }>}
+ *   `answer` is the JSON value printed after the last `RESULT ` marker; it
+ *   is only set when the case exited cleanly. Tests that expect a failure
+ *   assert on `code` and `stderr` instead.
  */
-async function runCase(caseFile, input, { expectFailure = false } = {}) {
+async function runCase(caseFile, input) {
   const child = spawn('deno', ['run', '--allow-env', `cases/${caseFile}`], {
     cwd: new URL('.', import.meta.url).pathname,
   });
@@ -77,15 +76,14 @@ async function runCase(caseFile, input, { expectFailure = false } = {}) {
       `Case timed out after ${CASE_TIMEOUT}ms. Partial output:\n${out}${err}`,
     );
 
-    if (expectFailure) {
-      assert.notEqual(code, 0, `Expected a non-zero exit code, got ${code}.`);
+    if (code !== 0) {
       return { code, stderr: err };
     }
 
-    assert.equal(code, 0, `Exited with ${code}. stderr:\n${err}`);
     const marker = out.lastIndexOf('RESULT ');
-    assert.notEqual(marker, -1, `No RESULT marker in output:\n${out}`);
-    return JSON.parse(out.slice(marker + 'RESULT '.length).split('\n')[0]);
+    assert.notEqual(marker, -1, `No RESULT marker in output:\n${out}${err}`);
+    const answer = JSON.parse(out.slice(marker + 'RESULT '.length).split('\n')[0]);
+    return { code, answer, stderr: err };
   } finally {
     clearTimeout(timeout);
   }
@@ -102,57 +100,60 @@ describe('Deno Integration', () => {
   });
 
   it('runs input prompt', async () => {
-    assert.equal(await runCase('input.ts', 'Simon\n'), 'Simon');
+    assert.equal((await runCase('input.ts', 'Simon\n')).answer, 'Simon');
   });
 
   it('runs confirm prompt', async () => {
-    assert.equal(await runCase('confirm.ts', 'y\n'), true);
+    assert.equal((await runCase('confirm.ts', 'y\n')).answer, true);
   });
 
   it('runs number prompt', async () => {
-    assert.equal(await runCase('number.ts', '42\n'), 42);
+    assert.equal((await runCase('number.ts', '42\n')).answer, 42);
   });
 
   it('runs select prompt (first choice on enter)', async () => {
-    assert.equal(await runCase('select.ts', '\n'), 'first');
+    assert.equal((await runCase('select.ts', '\n')).answer, 'first');
   });
 
   it('runs checkbox prompt (empty selection)', async () => {
-    assert.deepEqual(await runCase('checkbox.ts', '\n'), []);
+    assert.deepEqual((await runCase('checkbox.ts', '\n')).answer, []);
   });
 
   it('runs rawlist prompt', async () => {
-    assert.equal(await runCase('rawlist.ts', '2\n'), 2);
+    assert.equal((await runCase('rawlist.ts', '2\n')).answer, 2);
   });
 
   it('runs expand prompt', async () => {
-    assert.equal(await runCase('expand.ts', 'y\n'), 'overwrite');
+    assert.equal((await runCase('expand.ts', 'y\n')).answer, 'overwrite');
   });
 
   it('runs password prompt', async () => {
-    assert.equal(await runCase('password.ts', 'hunter2\n'), 'hunter2');
+    assert.equal((await runCase('password.ts', 'hunter2\n')).answer, 'hunter2');
   });
 
   it('runs search prompt', async () => {
-    assert.equal(await runCase('search.ts', '\n'), 'banana');
+    assert.equal((await runCase('search.ts', '\n')).answer, 'banana');
   });
 
   it('runs i18n prompt with locale detection', async () => {
-    const { answer, screen } = await runCase('i18n-confirm.ts', 'y\n');
+    const { answer, screen } = (await runCase('i18n-confirm.ts', 'y\n')).answer;
     assert.equal(answer, true);
     assert.match(screen, /Oui/);
   });
 
   it('runs legacy inquirer package', async () => {
-    assert.deepEqual(await runCase('inquirer-legacy.ts', 'Simon\n'), { name: 'Simon' });
+    assert.deepEqual((await runCase('inquirer-legacy.ts', 'Simon\n')).answer, {
+      name: 'Simon',
+    });
   });
 
   it('renders figures symbols', async () => {
-    assert.ok((await runCase('figures.ts', '')).length > 0);
+    assert.ok((await runCase('figures.ts', '')).answer.length > 0);
   });
 
   it('surfaces prompt errors with a non-zero exit', async () => {
-    const { stderr } = await runCase('fixture-error.ts', '', { expectFailure: true });
+    const { code, stderr } = await runCase('fixture-error.ts', '');
+    assert.notEqual(code, 0);
     assert.match(stderr, /boom/);
   });
 });
