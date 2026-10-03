@@ -25,6 +25,18 @@ yarn add @inquirer/ansi
 
 </td>
 </tr>
+<tr>
+<th colSpan="2">deno</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+deno add npm:@inquirer/ansi
+```
+
+</td>
+</tr>
 </table>
 
 ## Usage

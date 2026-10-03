@@ -26,6 +26,18 @@ yarn add @inquirer/prompts
 </td>
 </tr>
 <tr>
+<th colSpan="2">deno</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+deno add npm:@inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
 <td colSpan="2" align="center">Or</td>
 </tr>
 <tr>
@@ -40,6 +52,18 @@ npm install @inquirer/number
 
 ```sh
 yarn add @inquirer/number
+```
+
+</td>
+</tr>
+<tr>
+<th colSpan="2">deno</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+deno add npm:@inquirer/number
 ```
 
 </td>

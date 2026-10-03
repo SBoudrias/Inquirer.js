@@ -12,9 +12,6 @@ Internationalized Inquirer prompts — a 100% drop-in replacement for `@inquirer
 <tr>
   <th>npm</th>
   <th>yarn</th>
-  <th>pnpm</th>
-  <th>bun</th>
-  <th>deno</th>
 </tr>
 <tr>
 <td>
@@ -31,6 +28,12 @@ yarn add @inquirer/i18n
 ```
 
 </td>
+</tr>
+<tr>
+  <th>pnpm</th>
+  <th>bun</th>
+</tr>
+<tr>
 <td>
 
 ```sh
@@ -45,7 +48,12 @@ bun add @inquirer/i18n
 ```
 
 </td>
-<td>
+</tr>
+<tr>
+  <th colSpan="2">deno</th>
+</tr>
+<tr>
+<td colSpan="2">
 
 ```sh
 deno add npm:@inquirer/i18n
@@ -54,6 +62,8 @@ deno add npm:@inquirer/i18n
 </td>
 </tr>
 </table>
+
+On Deno, locale detection reads the `LANGUAGE`, `LC_ALL`, `LC_MESSAGES`, and `LANG` environment variables, so run your script with `--allow-env`.
 
 # Usage
 

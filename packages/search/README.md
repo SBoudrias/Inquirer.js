@@ -28,6 +28,18 @@ yarn add @inquirer/prompts
 </td>
 </tr>
 <tr>
+<th colSpan="2">deno</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+deno add npm:@inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
 <td>
 
 ```sh
@@ -39,6 +51,18 @@ npm install @inquirer/search
 
 ```sh
 yarn add @inquirer/search
+```
+
+</td>
+</tr>
+<tr>
+<th colSpan="2">deno</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+deno add npm:@inquirer/search
 ```
 
 </td>
