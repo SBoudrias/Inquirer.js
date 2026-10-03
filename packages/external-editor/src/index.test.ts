@@ -16,7 +16,7 @@ describe('main', () => {
 
   beforeAll(() => {
     previousVisual = process.env['VISUAL'];
-    process.env['VISUAL'] = 'truncate --size 10';
+    process.env['VISUAL'] = 'truncate -s 10';
   });
 
   beforeEach(() => {
