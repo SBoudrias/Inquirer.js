@@ -6,6 +6,8 @@ export interface ConfirmStrings {
   yesLabel: string;
   /** Label for "No" — also the keyword accepted as "no" (prefix-matched) */
   noLabel: string;
+  /** Message shown when the submitted input matches no keyword (receives the localized labels) */
+  invalidAnswer: (yesLabel: string, noLabel: string) => string;
 }
 
 /**

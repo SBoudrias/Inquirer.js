@@ -124,7 +124,7 @@ describe('confirm prompt', () => {
     await expect(answer).resolves.toEqual(true);
   });
 
-  it('uses default on gibberish input', async () => {
+  it('shows an error and keeps prompting on unrecognized input', async () => {
     const { answer, events, getScreen } = await render(confirm, {
       message: 'Do you want to proceed?',
       default: true,
@@ -135,8 +135,43 @@ describe('confirm prompt', () => {
     events.type('foobar');
     events.keypress('enter');
 
+    // The unrecognized input is rejected: the prompt stays active and an
+    // error is shown instead of silently falling back on the default.
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Do you want to proceed? (Y/n) foobar
+      > You must answer with "Yes" or "No""
+    `);
+
+    // The user can edit the rejected input and answer again.
+    for (const _ of 'foobar') events.keypress('backspace');
+    events.type('n');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual(false);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? No"`);
+  });
+
+  it('allows customizing the error message from the theme', async () => {
+    const { answer, events, getScreen } = await render(confirm, {
+      message: 'Do you want to proceed?',
+      theme: {
+        keywords: { error: () => 'Nope!' },
+      },
+    });
+
+    events.type('foobar');
+    events.keypress('enter');
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Do you want to proceed? (Y/n) foobar
+      > Nope!"
+    `);
+
+    for (const _ of 'foobar') events.keypress('backspace');
+    events.type('y');
+    events.keypress('enter');
+
     await expect(answer).resolves.toEqual(true);
-    expect(getScreen()).toMatchInlineSnapshot(`"✔ Do you want to proceed? Yes"`);
   });
 
   it('supports transformer option', async () => {
@@ -172,15 +207,16 @@ describe('confirm prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"✔ Voulez-vous continuer? Oui"');
   });
 
-  it('falls back on the default when the input matches no keyword', async () => {
+  it('accepts y/n even when the keywords are localized', async () => {
     const { answer, events } = await render(confirm, {
-      message: 'Voulez-vous continuer?',
-      default: true,
+      message: '确认?',
+      default: false,
       theme: {
-        keywords: { yes: 'Oui', no: 'Non' },
+        keywords: { yes: '是', no: '否' },
       },
     });
 
+    // Typing y/n is the terminal muscle memory, whatever the locale is.
     events.type('y');
     events.keypress('enter');
 
