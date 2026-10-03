@@ -12,11 +12,10 @@
     "@inquirer/figures": "workspace:*",
     "@inquirer/i18n": "workspace:*",
     "@inquirer/prompts": "workspace:*",
-    "@types/node": "^26.1.1",
     "inquirer": "workspace:*"
   },
   "engines": {
     "node": ">=23.5.0 || ^22.13.0 || ^20.17.0"
   },
-  "packageManager": "yarn@4.15.0+sha512.07ec708ac11e2eaa4ea2b04cfbb272812f7e74a753f1595eaef4486c663a98306a30cca3e6fc40f7a0b168dcfb3a2490b6a5e0501e20fb69cc36f563dd161c53"
+  "packageManager": "yarn@4.18.1+sha512.b2e1e7524f654f2749d32b4ebcb4622473cb5bcbc485df2007e12a154e50162a4d795526768bc5f5b8f81717bfd79deb2472813d86fb5ae2eb551fa9c872b08f"
 }

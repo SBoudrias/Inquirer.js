@@ -42,7 +42,7 @@ function it(name, fn) {
  *
  * @param {string} caseFile file under cases/, relative to this file
  * @param {string} input answers piped to the case's stdin
- * @returns {Promise<{ code: number | null, answer?: unknown, stderr: string }>}
+ * @returns {Promise<{ code: number | null, answer?: unknown, stdout: string, stderr: string }>}
  *   `answer` is the JSON value printed after the last `RESULT ` marker; it
  *   is only set when the case exited cleanly. Tests that expect a failure
  *   assert on `code` and `stderr` instead.
@@ -78,13 +78,13 @@ async function runCase(caseFile, input) {
     );
 
     if (code !== 0) {
-      return { code, stderr: err };
+      return { code, stdout: out, stderr: err };
     }
 
     const marker = out.lastIndexOf('RESULT ');
     assert.notEqual(marker, -1, `No RESULT marker in output:\n${out}${err}`);
     const answer = JSON.parse(out.slice(marker + 'RESULT '.length).split('\n')[0]);
-    return { code, answer, stderr: err };
+    return { code, answer, stdout: out, stderr: err };
   } finally {
     clearTimeout(timeout);
   }
@@ -137,9 +137,9 @@ describe('Deno Integration', () => {
   });
 
   it('runs i18n prompt with locale detection', async () => {
-    const { answer, screen } = (await runCase('i18n-confirm.ts', 'y\n')).answer;
+    const { answer, stdout } = await runCase('i18n-confirm.ts', 'y\n');
     assert.equal(answer, true);
-    assert.match(screen, /Oui/);
+    assert.match(stdout, /Oui/);
   });
 
   it('runs legacy inquirer package', async () => {
