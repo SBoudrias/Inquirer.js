@@ -394,6 +394,7 @@ __metadata:
     "@inquirer/figures": "workspace:*"
     "@inquirer/i18n": "workspace:*"
     "@inquirer/prompts": "workspace:*"
+    "@types/node": "npm:^26.1.1"
     inquirer: "workspace:*"
   languageName: unknown
   linkType: soft

@@ -12,6 +12,7 @@
     "@inquirer/figures": "workspace:*",
     "@inquirer/i18n": "workspace:*",
     "@inquirer/prompts": "workspace:*",
+    "@types/node": "^26.1.1",
     "inquirer": "workspace:*"
   },
   "engines": {
