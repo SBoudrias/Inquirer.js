@@ -101,39 +101,48 @@ describe('Deno Integration', () => {
   });
 
   it('runs input prompt', async () => {
-    assert.equal((await runCase('input.ts', 'Simon\n')).answer, 'Simon');
+    const { answer } = await runCase('input.ts', 'Simon\n');
+    assert.equal(answer, 'Simon');
   });
 
   it('runs confirm prompt', async () => {
-    assert.equal((await runCase('confirm.ts', 'y\n')).answer, true);
+    const { answer } = await runCase('confirm.ts', 'y\n');
+    assert.equal(answer, true);
   });
 
   it('runs number prompt', async () => {
-    assert.equal((await runCase('number.ts', '42\n')).answer, 42);
+    const { answer } = await runCase('number.ts', '42\n');
+    assert.equal(answer, 42);
   });
 
   it('runs select prompt (first choice on enter)', async () => {
-    assert.equal((await runCase('select.ts', '\n')).answer, 'first');
+    const { answer } = await runCase('select.ts', '\n');
+    assert.equal(answer, 'first');
   });
 
   it('runs checkbox prompt (empty selection)', async () => {
-    assert.deepEqual((await runCase('checkbox.ts', '\n')).answer, []);
+    const { answer } = await runCase('checkbox.ts', '\n');
+    assert.deepEqual(answer, []);
   });
 
   it('runs rawlist prompt', async () => {
-    assert.equal((await runCase('rawlist.ts', '2\n')).answer, 2);
+    const { answer } = await runCase('rawlist.ts', '2\n');
+    assert.equal(answer, 2);
   });
 
   it('runs expand prompt', async () => {
-    assert.equal((await runCase('expand.ts', 'y\n')).answer, 'overwrite');
+    const { answer } = await runCase('expand.ts', 'y\n');
+    assert.equal(answer, 'overwrite');
   });
 
   it('runs password prompt', async () => {
-    assert.equal((await runCase('password.ts', 'hunter2\n')).answer, 'hunter2');
+    const { answer } = await runCase('password.ts', 'hunter2\n');
+    assert.equal(answer, 'hunter2');
   });
 
   it('runs search prompt', async () => {
-    assert.equal((await runCase('search.ts', '\n')).answer, 'banana');
+    const { answer } = await runCase('search.ts', '\n');
+    assert.equal(answer, 'banana');
   });
 
   it('runs i18n prompt with locale detection', async () => {
@@ -143,13 +152,13 @@ describe('Deno Integration', () => {
   });
 
   it('runs legacy inquirer package', async () => {
-    assert.deepEqual((await runCase('inquirer-legacy.ts', 'Simon\n')).answer, {
-      name: 'Simon',
-    });
+    const { answer } = await runCase('inquirer-legacy.ts', 'Simon\n');
+    assert.deepEqual(answer, { name: 'Simon' });
   });
 
   it('renders figures symbols', async () => {
-    assert.ok((await runCase('figures.ts', '')).answer.length > 0);
+    const { answer } = await runCase('figures.ts', '');
+    assert.ok(answer.length > 0);
   });
 
   it('surfaces prompt errors with a non-zero exit', async () => {
