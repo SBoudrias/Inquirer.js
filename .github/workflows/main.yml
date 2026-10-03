@@ -193,6 +193,7 @@ jobs:
       - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
         with:
           deno-version: ${{ matrix.deno-version }}
+      - run: corepack enable
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: deno-integration-tests
@@ -201,4 +202,4 @@ jobs:
         run: |
           tar -xzf "${RUNNER_TEMP}/deno-integration-tests.tar.gz" -C "${RUNNER_TEMP}"
           cd "${RUNNER_TEMP}/deno"
-          deno test --allow-env --allow-run=deno integration.test.mjs
+          yarn test:deno

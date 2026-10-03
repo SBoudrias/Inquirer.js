@@ -8,9 +8,10 @@ import { describe, it as registerTest } from 'node:test';
  * the minimal permission set: if a future change requires more permissions
  * than documented, these tests fail and flag it.
  *
- * Run under `deno test` (CI matrix, or `yarn test:deno` locally) — using the
- * node:test API, which Deno implements natively. Child processes are
- * restricted to spawning deno itself via --allow-run=deno.
+ * Run via `yarn test:deno` — locally or in the CI matrix, which runs it
+ * against every supported Deno version — using the node:test API, which
+ * Deno implements natively. Child processes are restricted to spawning
+ * deno itself via --allow-run=deno.
  */
 
 const CASE_TIMEOUT = 30_000;
