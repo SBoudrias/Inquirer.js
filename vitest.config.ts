@@ -2,6 +2,7 @@ import { defineConfig, defaultExclude, coverageConfigDefaults } from 'vitest/con
 
 export default defineConfig({
   test: {
+    fsModuleCache: true,
     exclude: ['integration/**', ...defaultExclude],
     coverage: {
       provider: 'v8',
