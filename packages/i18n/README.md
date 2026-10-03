@@ -14,6 +14,7 @@ Internationalized Inquirer prompts — a 100% drop-in replacement for `@inquirer
   <th>yarn</th>
   <th>pnpm</th>
   <th>bun</th>
+  <th>deno</th>
 </tr>
 <tr>
 <td>
@@ -41,6 +42,13 @@ pnpm add @inquirer/i18n
 
 ```sh
 bun add @inquirer/i18n
+```
+
+</td>
+<td>
+
+```sh
+deno add npm:@inquirer/i18n
 ```
 
 </td>
