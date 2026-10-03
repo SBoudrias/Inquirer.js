@@ -24,10 +24,17 @@ type ConfirmTheme = {
    * Words accepted as "yes" and "no" answers. Matching is prefix-based and
    * case-insensitive, and the first character of each word is shown in the
    * hint. These words are also displayed once the prompt is answered.
+   * Regardless of these keywords, the built-in `y`/`n`/`yes`/`no` answers are
+   * always accepted.
    */
   keywords: {
     yes: string;
     no: string;
+    /**
+     * Message shown when the submitted input matches no keyword. Receives the
+     * yes/no keywords; this is how `@inquirer/i18n` localizes the message.
+     */
+    error: (keywords: { yes: string; no: string }) => string;
   };
   style: {
     /**
@@ -43,6 +50,7 @@ const confirmTheme: ConfirmTheme = {
   keywords: {
     yes: 'Yes',
     no: 'No',
+    error: ({ yes, no }) => `You must answer with "${yes}" or "${no}"`,
   },
   style: {
     confirmDefault: (text: string) => {
@@ -58,6 +66,7 @@ const confirmTheme: ConfirmTheme = {
 export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   const [status, setStatus] = useState<Status>('idle');
   const [value, setValue] = useState('');
+  const [errorMsg, setError] = useState<string>();
   const theme = makeTheme<ConfirmTheme>(confirmTheme, config.theme);
   const prefix = usePrefix({ status, theme });
 
@@ -76,29 +85,45 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   }
   const { transformer = boolToString } = config;
 
-  function getBooleanValue(value: string, defaultValue?: boolean): boolean {
+  // Note: the built-in English `y`/`n`/`yes`/`no` answers are always accepted,
+  // whatever the localized keywords are; typing a single ASCII key is the
+  // terminal muscle memory, even in non-Latin locales.
+  function getBooleanValue(value: string): boolean | undefined {
     const v = value.trim().toLowerCase();
-    if (v === '') return defaultValue !== false;
+    // Empty input selects the default answer (the one highlighted in the hint).
+    if (v === '') return config.default !== false;
     if (yes.toLowerCase().startsWith(v)) return true;
     if (no.toLowerCase().startsWith(v)) return false;
-    return defaultValue !== false;
+    if ('yes'.startsWith(v)) return true;
+    if ('no'.startsWith(v)) return false;
+    // Unrecognized input is rejected by the caller (shows an error).
+    return undefined;
   }
 
   useKeypress((key, rl) => {
     if (status !== 'idle') return;
 
     if (isEnterKey(key)) {
-      const answer = getBooleanValue(value, config.default);
+      const answer = getBooleanValue(value);
+      if (answer === undefined) {
+        // Reject unrecognized input instead of silently falling back on the
+        // default. Restore the typed input (the line event cleared it).
+        rl.write(value);
+        setError(theme.keywords.error({ yes, no }));
+        return;
+      }
+
       setValue(transformer(answer));
       setStatus('done');
       done(answer);
     } else if (isTabKey(key)) {
-      const answer = boolToString(!getBooleanValue(value, config.default));
+      const answer = boolToString(!(getBooleanValue(value) ?? config.default !== false));
       rl.clearLine(0); // Remove the tab character.
       rl.write(answer);
       setValue(answer);
     } else {
       setValue(rl.line);
+      setError(undefined);
     }
   });
 
@@ -111,5 +136,10 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   }
 
   const message = theme.style.message(config.message, status);
-  return `${prefix} ${message}${defaultValue} ${formattedValue}`;
+  let error = '';
+  if (errorMsg) {
+    error = theme.style.error(errorMsg);
+  }
+
+  return [`${prefix} ${message}${defaultValue} ${formattedValue}`, error];
 });

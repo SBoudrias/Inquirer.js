@@ -5,6 +5,7 @@ export const locale: Locale = {
   confirm: {
     yesLabel: '是',
     noLabel: '否',
+    invalidAnswer: (yes, no) => `请输入“${yes}”或“${no}”`,
   },
   select: {
     helpNavigate: '导航',
