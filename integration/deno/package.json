@@ -1,0 +1,21 @@
+{
+  "name": "@inquirer/deno-integration-tests",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "test:deno": "deno test --allow-env --allow-run=deno integration.test.mjs"
+  },
+  "devDependencies": {
+    "@inquirer/core": "workspace:*",
+    "@inquirer/figures": "workspace:*",
+    "@inquirer/i18n": "workspace:*",
+    "@inquirer/prompts": "workspace:*",
+    "inquirer": "workspace:*"
+  },
+  "engines": {
+    "node": ">=23.5.0 || ^22.13.0 || ^20.17.0"
+  },
+  "packageManager": "yarn@4.18.1+sha512.b2e1e7524f654f2749d32b4ebcb4622473cb5bcbc485df2007e12a154e50162a4d795526768bc5f5b8f81717bfd79deb2472813d86fb5ae2eb551fa9c872b08f"
+}
