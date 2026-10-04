@@ -1,10 +1,9 @@
 import * as readline from 'node:readline';
 import { AsyncResource } from 'node:async_hooks';
-import { type Prompt } from '@inquirer/type';
+import { type Prompt, withResolver } from '@inquirer/type';
 import MuteStream from 'mute-stream';
 import { onExit as onSignalExit } from 'signal-exit';
 import ScreenManager from './screen-manager.ts';
-import { PromisePolyfill } from './promise-polyfill.ts';
 import { type InquirerReadline } from '@inquirer/type';
 import { withHooks, effectScheduler } from './hook-engine.ts';
 import { AbortPromptError, CancelPromptError, ExitPromptError } from './errors.ts';
@@ -98,7 +97,7 @@ export function createPrompt<Value, Config>(
     output.mute();
     const screen = new ScreenManager(rl);
 
-    const { promise, resolve, reject } = PromisePolyfill.withResolver<Value>();
+    const { promise, resolve, reject } = withResolver<Value>();
 
     return withHooks(rl, (cycle) => {
       // Clear hook effects synchronously before the prompt settles: readline

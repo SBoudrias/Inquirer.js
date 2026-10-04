@@ -1,5 +1,6 @@
-import { describe, it, expect, expectTypeOf } from 'vitest';
+import { describe, it, expect, expectTypeOf, vi } from 'vitest';
 import { render } from '@inquirer/testing';
+import { withResolver } from '@inquirer/type';
 import search, { Separator } from './src/index.ts';
 
 // Array of all countries names as string
@@ -39,6 +40,52 @@ function getListSearch(
 }
 
 describe('search prompt', () => {
+  it('does not submit stale choices and keeps the search term while a search is pending', async () => {
+    const { promise: resultsPromise, resolve: resolveResults } =
+      withResolver<Array<string>>();
+    const terms: Array<string | undefined> = [];
+    const { answer, events, nextRender } = await render(search, {
+      message: 'Select a Canadian province',
+      source: (term: string | undefined) => {
+        terms.push(term);
+        return term ? resultsPromise : ['Alberta'];
+      },
+    });
+
+    // A first enter while the search for "Que" is still pending must not
+    // submit any stale choice.
+    events.type('Que');
+    await nextRender();
+    events.keypress('enter');
+
+    // The search term must survive the enter keypress.
+    events.type('bec');
+    await nextRender();
+
+    resolveResults(['Quebec']);
+    await nextRender();
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('Quebec');
+    expect(terms.at(-1)).toBe('Quebec');
+  });
+
+  it('does not start another validation while one is pending', async () => {
+    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const validate = vi.fn(() => validation);
+    const { answer, events } = await render(search, {
+      message: 'Select a Canadian province',
+      source: () => ['Quebec'],
+      validate,
+    });
+
+    events.keypress('enter');
+    events.keypress('enter');
+    resolveValidation(true);
+
+    await expect(answer).resolves.toEqual('Quebec');
+    expect(validate).toHaveBeenCalledOnce();
+  });
+
   it('allows to search', async () => {
     const { answer, events, getScreen, nextRender } = await render(search, {
       message: 'Select a Canadian province',
