@@ -2,23 +2,30 @@
 // Property 'TERM' comes from an index signature, so it must be accessed with ['TERM'].ts(4111)
 /* eslint dot-notation: ["off"] */
 import process from 'node:process';
+import { canReadEnv, readEnvVar } from '@inquirer/type';
 
 // Ported from is-unicode-supported
 function isUnicodeSupported() {
   if (!process.platform.startsWith('win')) {
-    return process.env['TERM'] !== 'linux'; // Linux console (kernel)
+    // Linux console (kernel). When env access is unavailable (e.g. Deno
+    // without --allow-env), this resolves to `undefined !== 'linux'` and we
+    // assume unicode support.
+    return readEnvVar('TERM') !== 'linux';
   }
 
+  // Assume unicode support when env access is unavailable.
+  if (!canReadEnv()) return true;
+
   return (
-    Boolean(process.env['CI']) || // CI environments generally support unicode
-    Boolean(process.env['WT_SESSION']) || // Windows Terminal
-    Boolean(process.env['TERMINUS_SUBLIME']) || // Terminus (<0.2.27)
-    process.env['ConEmuTask'] === '{cmd::Cmder}' || // ConEmu and cmder
-    process.env['TERM_PROGRAM'] === 'Terminus-Sublime' ||
-    process.env['TERM_PROGRAM'] === 'vscode' ||
-    process.env['TERM'] === 'xterm-256color' ||
-    process.env['TERM'] === 'alacritty' ||
-    process.env['TERMINAL_EMULATOR'] === 'JetBrains-JediTerm'
+    Boolean(readEnvVar('CI')) || // CI environments generally support unicode
+    Boolean(readEnvVar('WT_SESSION')) || // Windows Terminal
+    Boolean(readEnvVar('TERMINUS_SUBLIME')) || // Terminus (<0.2.27)
+    readEnvVar('ConEmuTask') === '{cmd::Cmder}' || // ConEmu and cmder
+    readEnvVar('TERM_PROGRAM') === 'Terminus-Sublime' ||
+    readEnvVar('TERM_PROGRAM') === 'vscode' ||
+    readEnvVar('TERM') === 'xterm-256color' ||
+    readEnvVar('TERM') === 'alacritty' ||
+    readEnvVar('TERMINAL_EMULATOR') === 'JetBrains-JediTerm'
   );
 }
 

@@ -10,8 +10,7 @@ import {
   search as searchPrompt,
   select as selectPrompt,
 } from '@inquirer/prompts';
-import { makeTheme } from '@inquirer/core';
-import { styleText } from 'node:util';
+import { makeTheme, styleText } from '@inquirer/core';
 import type { Locale } from './types.ts';
 
 export type { Locale } from './types.ts';

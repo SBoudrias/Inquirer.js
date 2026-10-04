@@ -5,6 +5,7 @@ import * as pt from './locales/pt.ts';
 import * as zh from './locales/zh.ts';
 
 import { createLocalizedPrompts } from './create.ts';
+import { readEnvVar } from '@inquirer/type';
 
 export * from './create.ts';
 
@@ -40,14 +41,14 @@ function normalize(value: string): string {
 
 function detectLocale(): string {
   // 1. LANGUAGE (GNU/Linux colon-separated preference list)
-  for (const seg of (process.env['LANGUAGE'] ?? '').split(':')) {
+  for (const seg of (readEnvVar('LANGUAGE') ?? '').split(':')) {
     const lang = normalize(seg);
     if (lang && lang in localeMap) return lang;
   }
 
   // 2–4. LC_ALL, LC_MESSAGES, LANG
   for (const key of ['LC_ALL', 'LC_MESSAGES', 'LANG'] as const) {
-    const lang = normalize(process.env[key] ?? '');
+    const lang = normalize(readEnvVar(key) ?? '');
     if (lang && lang in localeMap) return lang;
   }
 
@@ -68,7 +69,7 @@ let cachedLocale: LocaleModule | undefined;
 let cachedEnvKey: string | undefined;
 
 function getLocale(): LocaleModule {
-  const envKey = `${process.env['LANGUAGE'] ?? ''}|${process.env['LC_ALL'] ?? ''}|${process.env['LC_MESSAGES'] ?? ''}|${process.env['LANG'] ?? ''}`;
+  const envKey = `${readEnvVar('LANGUAGE') ?? ''}|${readEnvVar('LC_ALL') ?? ''}|${readEnvVar('LC_MESSAGES') ?? ''}|${readEnvVar('LANG') ?? ''}`;
   if (cachedLocale && envKey === cachedEnvKey) return cachedLocale;
   cachedEnvKey = envKey;
   cachedLocale = localeMap[detectLocale()] ?? en;

@@ -9,12 +9,12 @@ import {
   isUpKey,
   Separator,
   makeTheme,
+  styleText,
   type Theme,
   type Status,
   ValidationError,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
-import { styleText } from 'node:util';
 
 const numberRegex = /\d+/;
 

@@ -1,7 +1,7 @@
-import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 import type { Prettify } from '@inquirer/type';
 import { getDefaultKeybindings, type Keybinding } from './key.ts';
+import { styleText } from './style.ts';
 
 /**
  * Union type representing the possible statuses of a prompt.

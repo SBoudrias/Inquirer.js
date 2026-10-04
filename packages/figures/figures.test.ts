@@ -1,7 +1,11 @@
-import { vi, it, expect, afterAll } from 'vitest';
+import { vi, it, expect, afterAll, afterEach } from 'vitest';
 
 afterAll(() => {
   vi.unstubAllEnvs();
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
 });
 
 it('falls back to ascii figures when unicode is not supported', async () => {
@@ -487,4 +491,18 @@ it('falls back to ascii figures when unicode is not supported', async () => {
       "warning": "‼",
     }
   `);
+});
+
+it('falls back to unicode figures when env access is unavailable', async () => {
+  // Deno without --allow-env: readEnvVar() returns undefined for every
+  // variable, which must assume unicode support instead of throwing.
+  vi.resetModules();
+  vi.stubGlobal('Deno', {
+    permissions: {
+      querySync: () => ({ state: 'prompt' }),
+    },
+  });
+  const { default: figures } = await import('@inquirer/figures');
+
+  expect(figures.tick).toBe('✔');
 });

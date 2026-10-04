@@ -1,3 +1,5 @@
+import { readEnvVar } from '@inquirer/type';
+
 export type KeypressEvent = {
   name: string;
   ctrl: boolean;
@@ -14,7 +16,7 @@ function isKeybinding(value: string): value is Keybinding {
 }
 
 export function getDefaultKeybindings(): ReadonlyArray<Keybinding> {
-  const env = process.env['INQUIRER_KEYBINDINGS'];
+  const env = readEnvVar('INQUIRER_KEYBINDINGS');
   if (!env) return [];
 
   return Array.from(

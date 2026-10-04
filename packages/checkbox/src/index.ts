@@ -6,6 +6,7 @@ import {
   usePagination,
   useMemo,
   makeTheme,
+  styleText,
   isUpKey,
   isDownKey,
   isSpaceKey,
@@ -18,7 +19,6 @@ import {
 } from '@inquirer/core';
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
-import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 
 type CheckboxTheme = {

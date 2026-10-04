@@ -78,6 +78,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
+    "@inquirer/type": "^4.1.1",
     "chardet": "^2.1.1",
     "iconv-lite": "^0.7.2"
   },

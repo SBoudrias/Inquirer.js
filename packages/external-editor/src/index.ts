@@ -11,6 +11,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { randomUUID } from 'node:crypto';
 import iconv from 'iconv-lite';
+import { readEnvVar } from '@inquirer/type';
 import {
   CreateFileError,
   LaunchEditorError,
@@ -76,8 +77,8 @@ export class ExternalEditor {
     this.fileOptions = fileOptions;
 
     this.editor = parseEditorCommand(
-      process.env['VISUAL'] ??
-        process.env['EDITOR'] ??
+      readEnvVar('VISUAL') ??
+        readEnvVar('EDITOR') ??
         (process.platform.startsWith('win') ? 'notepad' : 'vim'),
     );
   }

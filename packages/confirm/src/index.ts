@@ -6,11 +6,11 @@ import {
   isTabKey,
   usePrefix,
   makeTheme,
+  styleText,
   type Theme,
   type Status,
 } from '@inquirer/core';
 import type { PartialDeep } from '@inquirer/type';
-import { styleText } from 'node:util';
 
 type ConfirmConfig = {
   message: string;

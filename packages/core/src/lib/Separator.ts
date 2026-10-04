@@ -1,5 +1,5 @@
-import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
+import { styleText } from './style.ts';
 
 /**
  * Separator object

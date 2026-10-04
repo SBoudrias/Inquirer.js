@@ -3,10 +3,13 @@ import assert from 'node:assert/strict';
 import { describe, it as registerTest } from 'node:test';
 
 /**
- * Each case file runs one prompt in its own `deno run --allow-env` process
- * with answers piped to stdin (CI has no TTY). Deno is deliberately granted
- * the minimal permission set: if a future change requires more permissions
- * than documented, these tests fail and flag it.
+ * Each case file runs one prompt in its own `deno run` process with answers
+ * piped to stdin (CI has no TTY). Most cases are granted `--allow-env`; the
+ * last group deliberately grants no permission at all, checking the prompts
+ * fall back to sensible defaults (unicode + color assumed) instead of
+ * crashing on env reads. Deno is otherwise granted the minimal permission
+ * set: if a future change requires more permissions than documented, these
+ * tests fail and flag it.
  *
  * Run via `yarn test:deno` — locally or in the CI matrix, which runs it
  * against every supported Deno version — using the node:test API, which
@@ -42,13 +45,15 @@ function it(name, fn) {
  *
  * @param {string} caseFile file under cases/, relative to this file
  * @param {string} input answers piped to the case's stdin
+ * @param {string[]} [args] extra `deno run` arguments (defaults to
+ *   `['--allow-env']`; pass `[]` to grant no permission at all)
  * @returns {Promise<{ code: number | null, answer?: unknown, stdout: string, stderr: string }>}
  *   `answer` is the JSON value printed after the last `RESULT ` marker; it
  *   is only set when the case exited cleanly. Tests that expect a failure
  *   assert on `code` and `stderr` instead.
  */
-async function runCase(caseFile, input) {
-  const child = spawn('deno', ['run', '--allow-env', `cases/${caseFile}`], {
+async function runCase(caseFile, input, args = ['--allow-env']) {
+  const child = spawn('deno', ['run', ...args, `cases/${caseFile}`], {
     cwd: new URL('.', import.meta.url).pathname,
   });
   const stdout = [];
@@ -165,5 +170,29 @@ describe('Deno Integration', () => {
     const { code, stderr } = await runCase('fixture-error.ts', '');
     assert.notEqual(code, 0);
     assert.match(stderr, /boom/);
+  });
+
+  // A bare `deno run` grants nothing: env reads must fall back to sensible
+  // defaults (unicode + color assumed) instead of throwing NotCapable before
+  // the first prompt renders.
+  it('runs input prompt without --allow-env', async () => {
+    const { answer } = await runCase('input.ts', 'Simon\n', []);
+    assert.equal(answer, 'Simon');
+  });
+
+  it('runs confirm prompt without --allow-env', async () => {
+    const { answer } = await runCase('confirm.ts', 'y\n', []);
+    assert.equal(answer, true);
+  });
+
+  it('runs select prompt without --allow-env', async () => {
+    const { answer } = await runCase('select.ts', '\n', []);
+    assert.equal(answer, 'first');
+  });
+
+  it('renders unicode figures without --allow-env', async () => {
+    const { answer } = await runCase('figures.ts', '', []);
+    // Unicode support is the fallback when TERM cannot be read.
+    assert.equal(answer, '✔');
   });
 });

@@ -15,12 +15,12 @@ import {
   Separator,
   ValidationError,
   makeTheme,
+  styleText,
   type Theme,
   type Status,
 } from '@inquirer/core';
 import { cursorHide } from '@inquirer/ansi';
 import type { PartialDeep } from '@inquirer/type';
-import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 
 type SelectTheme = {

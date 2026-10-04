@@ -25,5 +25,11 @@ export function breakLines(content: string, width: number): string {
  * @returns {number}
  */
 export function readlineWidth(): number {
-  return cliWidth({ defaultWidth: 80, output: readline().output });
+  try {
+    return cliWidth({ defaultWidth: 80, output: readline().output });
+  } catch {
+    // cli-width reads `process.env.CLI_WIDTH` as a last resort, which throws
+    // on runtimes denying env access (e.g. Deno without --allow-env).
+    return 80;
+  }
 }
