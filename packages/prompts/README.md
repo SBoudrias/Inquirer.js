@@ -19,19 +19,10 @@ npx @inquirer/demo@latest
 
 <table>
 <tr>
-  <th>npm</th>
   <th>yarn</th>
   <th>pnpm</th>
-  <th>bun</th>
 </tr>
 <tr>
-<td>
-
-```sh
-npm install @inquirer/prompts
-```
-
-</td>
 <td>
 
 ```sh
@@ -46,6 +37,12 @@ pnpm add @inquirer/prompts
 ```
 
 </td>
+</tr>
+<tr>
+  <th>bun</th>
+  <th>deno</th>
+</tr>
+<tr>
 <td>
 
 ```sh
@@ -53,8 +50,29 @@ bun add @inquirer/prompts
 ```
 
 </td>
+<td>
+
+```sh
+deno add npm:@inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<th colSpan="2">npm</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+npm install @inquirer/prompts
+```
+
+</td>
 </tr>
 </table>
+
+On Deno, prompts detect the terminal's unicode and color support from the environment, so run your script with `--allow-env`.
 
 > [!NOTE]
 > Inquirer recently underwent a rewrite from the ground up to reduce the package size and improve performance. The previous version of the package is still maintained (though not actively developed), and offered hundreds of community contributed prompts that might not have been migrated to the latest API. If this is what you're looking for, the [previous package is over here](https://github.com/SBoudrias/Inquirer.js/tree/main/packages/inquirer).

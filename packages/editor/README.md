@@ -8,21 +8,53 @@ The editor launched is the one [defined by the user's `EDITOR` environment varia
 
 <table>
 <tr>
-  <th>npm</th>
   <th>yarn</th>
+  <th>pnpm</th>
 </tr>
 <tr>
 <td>
 
 ```sh
-npm install @inquirer/prompts
+yarn add @inquirer/prompts
 ```
 
 </td>
 <td>
 
 ```sh
-yarn add @inquirer/prompts
+pnpm add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+  <th>bun</th>
+  <th>deno</th>
+</tr>
+<tr>
+<td>
+
+```sh
+bun add @inquirer/prompts
+```
+
+</td>
+<td>
+
+```sh
+deno add npm:@inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<th colSpan="2">npm</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+npm install @inquirer/prompts
 ```
 
 </td>
@@ -31,13 +63,10 @@ yarn add @inquirer/prompts
 <td colSpan="2" align="center">Or</td>
 </tr>
 <tr>
-<td>
-
-```sh
-npm install @inquirer/editor
-```
-
-</td>
+  <th>yarn</th>
+  <th>pnpm</th>
+</tr>
+<tr>
 <td>
 
 ```sh
@@ -45,8 +74,49 @@ yarn add @inquirer/editor
 ```
 
 </td>
+<td>
+
+```sh
+pnpm add @inquirer/editor
+```
+
+</td>
+</tr>
+<tr>
+  <th>bun</th>
+  <th>deno</th>
+</tr>
+<tr>
+<td>
+
+```sh
+bun add @inquirer/editor
+```
+
+</td>
+<td>
+
+```sh
+deno add npm:@inquirer/editor
+```
+
+</td>
+</tr>
+<tr>
+<th colSpan="2">npm</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+npm install @inquirer/editor
+```
+
+</td>
 </tr>
 </table>
+
+On Deno, prompts detect the terminal's unicode and color support from the environment, so run your script with `--allow-env`.
 
 # Usage
 

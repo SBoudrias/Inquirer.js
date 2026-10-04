@@ -6,21 +6,41 @@ The `@inquirer/testing` package is Inquirer's answer to testing prompts [built w
 
 <table>
 <tr>
-  <th>npm</th>
   <th>yarn</th>
+  <th>pnpm</th>
 </tr>
 <tr>
 <td>
 
 ```sh
-npm install @inquirer/testing --save-dev
+yarn add @inquirer/testing --dev
 ```
 
 </td>
 <td>
 
 ```sh
-yarn add @inquirer/testing --dev
+pnpm add -D @inquirer/testing
+```
+
+</td>
+</tr>
+<tr>
+  <th>bun</th>
+  <th>npm</th>
+</tr>
+<tr>
+<td>
+
+```sh
+bun add -d @inquirer/testing
+```
+
+</td>
+<td>
+
+```sh
+npm install @inquirer/testing --save-dev
 ```
 
 </td>

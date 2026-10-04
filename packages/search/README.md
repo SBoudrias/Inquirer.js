@@ -8,17 +8,10 @@ Interactive search prompt component for command line interfaces.
 
 <table>
 <tr>
-  <th>npm</th>
   <th>yarn</th>
+  <th>pnpm</th>
 </tr>
 <tr>
-<td>
-
-```sh
-npm install @inquirer/prompts
-```
-
-</td>
 <td>
 
 ```sh
@@ -26,15 +19,51 @@ yarn add @inquirer/prompts
 ```
 
 </td>
+<td>
+
+```sh
+pnpm add @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+  <th>bun</th>
+  <th>deno</th>
 </tr>
 <tr>
 <td>
 
 ```sh
-npm install @inquirer/search
+bun add @inquirer/prompts
 ```
 
 </td>
+<td>
+
+```sh
+deno add npm:@inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+<th colSpan="2">npm</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+npm install @inquirer/prompts
+```
+
+</td>
+</tr>
+<tr>
+  <th>yarn</th>
+  <th>pnpm</th>
+</tr>
+<tr>
 <td>
 
 ```sh
@@ -42,8 +71,49 @@ yarn add @inquirer/search
 ```
 
 </td>
+<td>
+
+```sh
+pnpm add @inquirer/search
+```
+
+</td>
+</tr>
+<tr>
+  <th>bun</th>
+  <th>deno</th>
+</tr>
+<tr>
+<td>
+
+```sh
+bun add @inquirer/search
+```
+
+</td>
+<td>
+
+```sh
+deno add npm:@inquirer/search
+```
+
+</td>
+</tr>
+<tr>
+<th colSpan="2">npm</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+npm install @inquirer/search
+```
+
+</td>
 </tr>
 </table>
+
+On Deno, prompts detect the terminal's unicode and color support from the environment, so run your script with `--allow-env`.
 
 # Usage
 

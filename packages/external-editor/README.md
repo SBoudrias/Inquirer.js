@@ -9,21 +9,53 @@ A Node.js module to edit a string with the user's preferred text editor using $V
 
 <table>
 <tr>
-  <th>npm</th>
   <th>yarn</th>
+  <th>pnpm</th>
 </tr>
 <tr>
 <td>
 
 ```sh
-npm install @inquirer/external-editor
+yarn add @inquirer/external-editor
 ```
 
 </td>
 <td>
 
 ```sh
-yarn add @inquirer/external-editor
+pnpm add @inquirer/external-editor
+```
+
+</td>
+</tr>
+<tr>
+  <th>bun</th>
+  <th>deno</th>
+</tr>
+<tr>
+<td>
+
+```sh
+bun add @inquirer/external-editor
+```
+
+</td>
+<td>
+
+```sh
+deno add npm:@inquirer/external-editor
+```
+
+</td>
+</tr>
+<tr>
+<th colSpan="2">npm</th>
+</tr>
+<tr>
+<td colSpan="2">
+
+```sh
+npm install @inquirer/external-editor
 ```
 
 </td>
