@@ -190,7 +190,7 @@ export default createPrompt(
 
     useKeypress(async (key, rl) => {
       if (isEnterKey(key)) {
-        if (selectedChoice) {
+        if (selectedChoice && status === 'idle') {
           setStatus('loading');
           const isValid = await validate(selectedChoice.value);
           setStatus('idle');
