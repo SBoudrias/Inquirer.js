@@ -81,6 +81,14 @@
     "@types/node": "^26.1.1",
     "typescript": "^6.0.2"
   },
+  "peerDependencies": {
+    "@types/node": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "@types/node": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": ">=23.5.0 || ^22.13.0 || ^20.17.0"
   }

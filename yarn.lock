@@ -470,6 +470,11 @@ __metadata:
     "@repo/tsconfig": "workspace:*"
     "@types/node": "npm:^26.1.1"
     typescript: "npm:^6.0.2"
+  peerDependencies:
+    "@types/node": ">=18"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
   languageName: unknown
   linkType: soft
 
