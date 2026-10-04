@@ -91,7 +91,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/type": "^4.1.2",
+    "@inquirer/type": "^4.2.0",
     "@xterm/headless": "^6.0.0",
     "mute-stream": "^3.0.0"
   },
