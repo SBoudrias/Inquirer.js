@@ -261,6 +261,36 @@ describe('editor prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
 
+  it('ignores keypresses while validation is running', async () => {
+    let resolveValidation: () => void;
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      validate: () =>
+        new Promise<boolean>((resolve) => {
+          resolveValidation = () => resolve(true);
+        }),
+    });
+
+    expect(editAsync).not.toHaveBeenCalled();
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledOnce();
+
+    await editorAction(undefined, 'value from editor');
+
+    // The prompt is now in the loading state, waiting on validate()
+    expect(getScreen()).toMatchInlineSnapshot(`"? Add a description Validating..."`);
+
+    // Neither enter nor typed input should launch the editor again
+    events.type('foo');
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledOnce();
+
+    resolveValidation!();
+
+    await expect(answer).resolves.toEqual('value from editor');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
+  });
+
   it('surfaces external-editor errors', async () => {
     const { answer, events, getScreen } = await render(editor, {
       message: 'Add a description',
