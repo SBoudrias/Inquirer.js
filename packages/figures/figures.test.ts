@@ -4,8 +4,9 @@ afterAll(() => {
   vi.unstubAllEnvs();
 });
 
-it('falls back to ascii figures when unicode is not supported', async () => {
-  const { default: unicodeFigures } = await import('@inquirer/figures');
+// Simulates a terminal without Unicode support, regardless of the platform
+// the test suite runs on.
+function stubNonUnicodeTerminal() {
   vi.resetModules();
   if (process.platform.startsWith('win')) {
     vi.stubEnv('CI', undefined)
@@ -18,6 +19,19 @@ it('falls back to ascii figures when unicode is not supported', async () => {
   } else {
     vi.stubEnv('TERM', 'linux');
   }
+}
+
+// Simulates a terminal with Unicode support, regardless of the platform the
+// test suite runs on. xterm-256color is detected as Unicode-capable on every
+// platform.
+function stubUnicodeTerminal() {
+  vi.resetModules();
+  vi.stubEnv('TERM', 'xterm-256color');
+}
+
+it('falls back to ascii figures when unicode is not supported', async () => {
+  const { default: unicodeFigures } = await import('@inquirer/figures');
+  stubNonUnicodeTerminal();
   const { default: asciiFigures } = await import('@inquirer/figures');
 
   expect(asciiFigures.checkboxOn).not.toEqual(unicodeFigures.checkboxOn);
@@ -487,4 +501,42 @@ it('falls back to ascii figures when unicode is not supported', async () => {
       "warning": "‼",
     }
   `);
+});
+
+it('replaceSymbols keeps unicode symbols when they are supported', async () => {
+  stubUnicodeTerminal();
+  const { replaceSymbols } = await import('@inquirer/figures');
+
+  expect(replaceSymbols('✔ checkbox ☒ done')).toEqual('✔ checkbox ☒ done');
+});
+
+it('replaceSymbols substitutes fallback symbols by default on non-unicode terminals', async () => {
+  stubNonUnicodeTerminal();
+  const { replaceSymbols } = await import('@inquirer/figures');
+
+  expect(replaceSymbols('✔ checkbox ☒ done')).toEqual('√ checkbox [×] done');
+});
+
+it('replaceSymbols can force fallback symbols on unicode terminals', async () => {
+  stubUnicodeTerminal();
+  const { replaceSymbols, mainSymbols } = await import('@inquirer/figures');
+
+  expect(replaceSymbols('✔ checkbox ☒ done', { useFallback: true })).toEqual(
+    '√ checkbox [×] done',
+  );
+  // Strings without any special symbol are returned unchanged
+  expect(replaceSymbols('hello world', { useFallback: true })).toEqual('hello world');
+  // Common symbols shared between the main & fallback sets are untouched
+  expect(
+    replaceSymbols(`├ ${mainSymbols.lineDownRight} ┤`, { useFallback: true }),
+  ).toEqual(`├ ${mainSymbols.lineDownRight} ┤`);
+});
+
+it('replaceSymbols can keep unicode symbols on non-unicode terminals', async () => {
+  stubNonUnicodeTerminal();
+  const { replaceSymbols } = await import('@inquirer/figures');
+
+  expect(replaceSymbols('✔ checkbox ☒ done', { useFallback: false })).toEqual(
+    '✔ checkbox ☒ done',
+  );
 });
