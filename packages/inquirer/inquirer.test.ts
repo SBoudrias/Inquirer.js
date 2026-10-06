@@ -16,6 +16,7 @@ import { screen } from '@inquirer/testing/vitest';
 import inquirer from './src/index.ts';
 import type { QuestionMap, Answers, Question, DistinctQuestion } from './src/index.ts';
 import type { StreamOptions } from './src/types.ts';
+import type { Observable, Observer, SubscriptionLike } from './src/utils/observable.ts';
 import { _ } from './src/ui/prompt.ts';
 
 const actualCreateInterface = readline.createInterface;
@@ -92,6 +93,72 @@ function createTestPromptModule(options: StreamOptions = {}) {
 
 const promptModule = createTestPromptModule();
 
+function armUncaughtErrorCapture(): {
+  failure: Promise<unknown>;
+  stop: () => void;
+} {
+  let resolve: (error: unknown) => void;
+  const failure = new Promise<unknown>((r) => {
+    resolve = r;
+  });
+  const handler = (error: unknown) => {
+    process.removeListener('uncaughtException', handler);
+    resolve(error);
+  };
+  process.on('uncaughtException', handler);
+  return {
+    failure,
+    stop: () => process.removeListener('uncaughtException', handler),
+  };
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
+type LeakyQuestionSource = {
+  questions: Observable<Question>;
+  emitNext: (question: Question) => void;
+  emitError: (error: unknown) => void;
+  emitComplete: () => void;
+  unsubscribeCount: () => number;
+};
+
+// A question source that keeps emitting after the run stopped listening to
+// it, the way a misbehaving Observable would.
+function createLeakyQuestionSource(): LeakyQuestionSource {
+  let observer: Observer<Question> | undefined;
+  let unsubscribed = 0;
+
+  const questions: Observable<Question> = {
+    subscribe: (observerOrNext): SubscriptionLike => {
+      observer =
+        typeof observerOrNext === 'function'
+          ? { next: observerOrNext }
+          : (observerOrNext ?? {});
+      return {
+        unsubscribe: () => {
+          unsubscribed += 1;
+        },
+      };
+    },
+  };
+
+  return {
+    questions,
+    emitNext: (question) => {
+      observer?.next?.(question);
+    },
+    emitError: (error) => {
+      observer?.error?.(error);
+    },
+    emitComplete: () => {
+      observer?.complete?.();
+    },
+    unsubscribeCount: () => unsubscribed,
+  };
+}
+
 beforeEach(() => {
   vi.resetAllMocks();
   inquirer.restoreDefaultPrompts();
@@ -135,7 +202,10 @@ describe('exported types', () => {
         message: 'message',
       },
     ] as const satisfies Question[];
-    expectTypeOf(await promptModule(questions)).toEqualTypeOf<{ q1: any; q2: any }>();
+    expectTypeOf(await promptModule(questions)).toEqualTypeOf<{
+      q1: any;
+      q2: any;
+    }>();
 
     const questions2 = [
       {
@@ -151,7 +221,10 @@ describe('exported types', () => {
         when: false,
       },
     ] as const satisfies DistinctQuestion[];
-    expectTypeOf(await promptModule(questions2)).toEqualTypeOf<{ q1: any; q2: any }>();
+    expectTypeOf(await promptModule(questions2)).toEqualTypeOf<{
+      q1: any;
+      q2: any;
+    }>();
   });
 
   it('exported Answers type is not any', () => {
@@ -310,6 +383,77 @@ describe('promptModule(...)', () => {
 
       await expect(promise).rejects.toBe(error);
       expect(onError).toHaveBeenCalledWith(error);
+    });
+
+    it('resolves with no answers when the Observable completes before emitting', async () => {
+      const questions = new Subject<Question>();
+
+      const promise = promptModule(questions);
+      questions.complete();
+
+      await expect(promise).resolves.toEqual({});
+    });
+
+    it('wraps non-Error failures coming from the Observable question source', async () => {
+      const questions = new Subject<Question>();
+      const promise = promptModule(questions);
+
+      questions.error('Question source failed');
+
+      await expect(promise).rejects.toMatchObject({
+        message: 'Question source failed',
+      });
+    });
+
+    it('rejects when the Observable throws while subscribing', async () => {
+      const failure = new Error('Question source subscription failed');
+      const questions: Observable<Question> = {
+        subscribe() {
+          throw failure;
+        },
+      };
+
+      await expect(promptModule(questions)).rejects.toBe(failure);
+    });
+
+    it('ignores questions emitted after the Observable errored', async () => {
+      const leaky = createLeakyQuestionSource();
+      const promise = promptModule(leaky.questions);
+
+      leaky.emitError(new Error('Question source failed'));
+      leaky.emitNext({ type: 'stub', name: 'q1', message: 'message' });
+      leaky.emitComplete();
+
+      await expect(promise).rejects.toThrow('Question source failed');
+    });
+
+    it('ignores questions emitted after the Observable completed', async () => {
+      const leaky = createLeakyQuestionSource();
+
+      const promise = promptModule(leaky.questions);
+      leaky.emitNext({ type: 'stub', name: 'q1', message: 'message' });
+      leaky.emitComplete();
+      leaky.emitNext({ type: 'stub', name: 'q2', message: 'message' });
+      leaky.emitError(new Error('too late'));
+
+      await expect(promise).resolves.toEqual({ q1: 'bar' });
+    });
+
+    it('unsubscribes from the Observable when a prompt fails mid-run', async () => {
+      const leaky = createLeakyQuestionSource();
+      const promise = promptModule(leaky.questions);
+
+      leaky.emitNext({ type: 'failing', name: 'q1', message: 'message' });
+
+      await expect(promise).rejects.toThrow('This test prompt always reject');
+
+      // The failed run tore down its subscription: emitting more questions
+      // neither runs prompts nor crashes the process.
+      leaky.emitNext({ type: 'stub', name: 'q2', message: 'message' });
+      leaky.emitError(new Error('too late'));
+      leaky.emitComplete();
+
+      expect(leaky.unsubscribeCount()).toBe(1);
     });
   });
 
@@ -732,6 +876,165 @@ describe('promptModule(...)', () => {
     expect(processEvents).toEqual(['name1:bar', 'name:doe']);
   });
 
+  it('should notify process subscribers on error and completion', async () => {
+    const events: string[] = [];
+
+    const failing = promptModule([{ type: 'failing', name: 'q1', message: 'message' }]);
+    failing.ui.process.subscribe(
+      ({ name }) => events.push(`next:${name}`),
+      (error) => events.push(`error:${errorMessage(error)}`),
+      () => events.push('complete'),
+    );
+
+    await expect(failing).rejects.toThrow('This test prompt always reject');
+    expect(events).toEqual(['error:This test prompt always reject']);
+
+    const completing = promptModule([
+      { type: 'stub', name: 'q1', message: 'message', answer: 'bar' },
+    ]);
+    completing.ui.process.subscribe(
+      ({ name }) => events.push(`next:${name}`),
+      (error) => events.push(`error:${errorMessage(error)}`),
+      () => events.push('complete'),
+    );
+
+    await expect(completing).resolves.toEqual({ q1: 'bar' });
+    expect(events).toEqual([
+      'error:This test prompt always reject',
+      'next:q1',
+      'complete',
+    ]);
+  });
+
+  it('should stop notifying subscribers that unsubscribe while an answer is being processed', async () => {
+    const seen: string[] = [];
+    const promise = promptModule([
+      { type: 'stub', name: 'q1', message: 'message' },
+      { type: 'stub', name: 'q2', message: 'message' },
+    ]);
+
+    const subscription = promise.ui.process.subscribe(({ name }) => {
+      seen.push(name);
+      subscription.unsubscribe();
+    });
+
+    await promise;
+    expect(seen).toEqual(['q1']);
+  });
+
+  it('should report errors thrown inside process observers instead of failing the run', async () => {
+    const { failure, stop } = armUncaughtErrorCapture();
+
+    const promise = promptModule([
+      { type: 'stub', name: 'q1', message: 'message', answer: 'bar' },
+    ]);
+    promise.ui.process.subscribe(({ name }) => {
+      throw new Error(`observer blew up on ${name}`);
+    });
+
+    await expect(promise).resolves.toEqual({ q1: 'bar' });
+    await expect(failure).resolves.toMatchObject({
+      message: 'observer blew up on q1',
+    });
+    stop();
+  });
+
+  it('should report process errors as uncaught when no error handler subscribed', async () => {
+    const { failure, stop } = armUncaughtErrorCapture();
+
+    const promise = promptModule([{ type: 'failing', name: 'q1', message: 'message' }]);
+    promise.ui.process.subscribe(({ name }) => name);
+    const rejection = expect(promise).rejects.toThrow('This test prompt always reject');
+
+    await expect(failure).resolves.toMatchObject({
+      message: 'This test prompt always reject',
+    });
+    await rejection;
+    stop();
+  });
+
+  it('should replay completion to subscribers joining after the run finished', async () => {
+    const events: string[] = [];
+    const promise = promptModule([]);
+    await promise;
+
+    const subscription = promise.ui.process.subscribe({
+      complete: () => events.push('complete'),
+    });
+
+    expect(events).toEqual(['complete']);
+    expect(subscription.closed).toBe(true);
+  });
+
+  it('should support iterating the process as an async stream of answers', async () => {
+    const events: Array<{ name: string; answer: unknown }> = [];
+    const promise = promptModule([
+      { type: 'stub', name: 'q1', message: 'message', answer: 'bar' },
+      { type: 'stub', name: 'q2', message: 'message', answer: 'doe' },
+    ]);
+
+    const iteration = (async () => {
+      for await (const event of promise.ui.process) {
+        events.push(event);
+      }
+    })();
+
+    await promise;
+    await iteration;
+
+    expect(events).toEqual([
+      { name: 'q1', answer: 'bar' },
+      { name: 'q2', answer: 'doe' },
+    ]);
+  });
+
+  it('should expose the process observable through interop accessors', async () => {
+    const promise = promptModule([{ type: 'stub', name: 'q1', message: 'message' }]);
+
+    expect(promise.ui.process['@@observable']()).toBe(promise.ui.process);
+
+    await promise;
+  });
+
+  it('should expose a completed process stream before the runner is started', () => {
+    const runner = new inquirer.ui.Prompt({});
+
+    const events: string[] = [];
+    const subscription = runner.process.subscribe({
+      complete: () => events.push('complete'),
+    });
+
+    expect(events).toEqual(['complete']);
+    expect(subscription.closed).toBe(true);
+  });
+
+  it('should replay errors to subscribers joining after the run failed', async () => {
+    const seenErrors: unknown[] = [];
+    const promise = promptModule([{ type: 'failing', name: 'q1', message: 'message' }]);
+
+    await expect(promise).rejects.toThrow('This test prompt always reject');
+
+    const subscription = promise.ui.process.subscribe({
+      error: (error) => seenErrors.push(error),
+    });
+
+    expect(seenErrors).toHaveLength(1);
+    expect(seenErrors[0]).toBeInstanceOf(Error);
+    expect(seenErrors[0]).toMatchObject({
+      message: 'This test prompt always reject',
+    });
+    expect(subscription.closed).toBe(true);
+  });
+
+  it('should tolerate subscribing to the process without any handler', async () => {
+    const promise = promptModule([{ type: 'stub', name: 'q1', message: 'message' }]);
+
+    const subscription = promise.ui.process.subscribe();
+
+    await expect(promise).resolves.toEqual({ q1: 'bar' });
+    expect(subscription.closed).toBe(true);
+  });
+
   it('should expose the UI', async () => {
     const promise = promptModule([]);
     expect(promise.ui.answers).toBeTypeOf('object');
@@ -1127,7 +1430,11 @@ describe('promptModule(...)', () => {
           _rl: InquirerReadline,
           answers: Answers,
         ) {
-          expect(question).toEqual({ type: 'stub2', name: 'foo', message: 'message' });
+          expect(question).toEqual({
+            type: 'stub2',
+            name: 'foo',
+            message: 'message',
+          });
           expect(answers).toEqual({ extra: 'bar' });
         }
 
@@ -1174,7 +1481,11 @@ describe('AbortSignal support', () => {
     });
     localPrompt.registerPrompt('stub', StubEventuallyFailingPrompt);
 
-    const promise = localPrompt({ type: 'stub', name: 'q1', message: 'message' });
+    const promise = localPrompt({
+      type: 'stub',
+      name: 'q1',
+      message: 'message',
+    });
     await expect(promise).rejects.toThrow(AbortPromptError);
   });
 
@@ -1185,7 +1496,11 @@ describe('AbortSignal support', () => {
     });
     localPrompt.registerPrompt('stub', StubEventuallyFailingPrompt);
 
-    const promise = localPrompt({ type: 'stub', name: 'q1', message: 'message' });
+    const promise = localPrompt({
+      type: 'stub',
+      name: 'q1',
+      message: 'message',
+    });
     setTimeout(() => abortController.abort(), 0);
     await expect(promise).rejects.toThrow(AbortPromptError);
   });
@@ -1200,7 +1515,11 @@ describe('AbortSignal support', () => {
       createPrompt(() => 'dummy prompt'),
     );
 
-    const promise = localPrompt({ type: 'stub', name: 'q1', message: 'message' });
+    const promise = localPrompt({
+      type: 'stub',
+      name: 'q1',
+      message: 'message',
+    });
     abortController.abort();
     await expect(promise).rejects.toThrow(AbortPromptError);
   });
@@ -1212,7 +1531,11 @@ describe('AbortSignal support', () => {
       createPrompt(() => 'dummy prompt'),
     );
 
-    const promise = localPrompt({ type: 'stub', name: 'q1', message: 'message' });
+    const promise = localPrompt({
+      type: 'stub',
+      name: 'q1',
+      message: 'message',
+    });
     promise.ui.close();
     await expect(promise).rejects.toThrow(AbortPromptError);
   });
