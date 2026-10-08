@@ -1,5 +1,6 @@
 import { afterEach, describe, it, expect, expectTypeOf, vi } from 'vitest';
 import { render } from '@inquirer/testing';
+import { withResolver } from '@inquirer/type';
 import { ValidationError } from '@inquirer/core';
 import checkbox, { Separator } from './src/index.ts';
 
@@ -786,6 +787,166 @@ describe('checkbox prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual([1]);
+  });
+
+  it('ignores keypresses while validation is pending', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'setInterval'] });
+    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const validate = vi.fn(() => validation);
+    const { answer, events, getScreen, nextRender } = await render(checkbox, {
+      message: 'Select packages',
+      choices: ['alpha', 'beta'],
+      validate,
+    });
+
+    events.keypress('space');
+    events.keypress('enter');
+    await nextRender();
+
+    // While validation is pending, the prompt shows its loading state.
+    vi.advanceTimersByTime(380);
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "⠋ Select packages
+      ❯◉ alpha
+       ◯ beta
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+    `);
+
+    // None of these keypresses change the selection or trigger another
+    // validation while one is already pending.
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('a');
+    events.keypress('i');
+    events.keypress('2');
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "⠋ Select packages
+      ❯◉ alpha
+       ◯ beta
+
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+    `);
+
+    vi.useRealTimers();
+    resolveValidation(true);
+
+    await expect(answer).resolves.toEqual(['alpha']);
+    expect(validate).toHaveBeenCalledOnce();
+  });
+
+  it('keeps the submitted answer when keys are pressed while validation is pending', async () => {
+    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Pick modules',
+      choices: ['parser', 'writer'],
+      validate: () => validation,
+    });
+
+    events.keypress('space');
+    events.keypress('enter');
+    events.keypress('down');
+    events.keypress('space');
+    resolveValidation(true);
+
+    await expect(answer).resolves.toEqual(['parser']);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Pick modules parser"`);
+  });
+
+  it('allows selecting a choice after a pending validation rejects an empty selection', async () => {
+    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const validate = vi.fn().mockReturnValueOnce(validation).mockReturnValueOnce(true);
+    const { answer, events, getScreen, nextRender } = await render(checkbox, {
+      message: 'Pick modules',
+      choices: ['parser', { value: 'locked', disabled: true }],
+      required: true,
+      validate,
+    });
+
+    events.keypress('enter');
+    // Ignored while validation is pending
+    events.keypress('space');
+    resolveValidation(true);
+    await nextRender();
+
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Pick modules
+      ❯◯ parser
+       - locked (disabled)
+
+      > At least one choice must be selected
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+    `);
+
+    events.keypress('space');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(['parser']);
+  });
+
+  it('includes disabled checked choices while validation is pending', async () => {
+    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const validate = vi.fn(() => validation);
+    const { answer, events, getScreen } = await render(checkbox, {
+      message: 'Pick modules',
+      choices: [
+        { value: 'locked', disabled: true, checked: true },
+        { value: 'parser', checked: true },
+      ],
+      required: true,
+      validate,
+    });
+
+    events.keypress('enter');
+    resolveValidation(true);
+
+    await expect(answer).resolves.toEqual(['locked', 'parser']);
+    expect(validate).toHaveBeenCalledWith([
+      expect.objectContaining({ value: 'locked', disabled: true, checked: true }),
+      expect.objectContaining({ value: 'parser', checked: true }),
+    ]);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Pick modules locked, parser"`);
+  });
+
+  it('can abort while validation is pending', async () => {
+    const controller = new AbortController();
+    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const { answer, events } = await render(
+      checkbox,
+      { message: 'Pick modules', choices: ['parser'], validate: () => validation },
+      { signal: controller.signal },
+    );
+
+    events.keypress('space');
+    events.keypress('enter');
+    const rejected = expect(answer).rejects.toThrow();
+    controller.abort();
+    await rejected;
+    resolveValidation(true);
+  });
+
+  it('allows changing the selection after a pending validation fails', async () => {
+    const { promise: validation, resolve: resolveValidation } = withResolver<
+      boolean | string
+    >();
+    const validate = vi.fn().mockReturnValueOnce(validation).mockReturnValueOnce(true);
+    const { answer, events, nextRender } = await render(checkbox, {
+      message: 'Select packages',
+      choices: ['alpha', 'beta'],
+      validate,
+    });
+
+    events.keypress('space');
+    events.keypress('enter');
+    resolveValidation('Choose beta instead');
+    await nextRender();
+
+    events.keypress('space');
+    events.keypress('down');
+    events.keypress('space');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(['beta']);
+    expect(validate).toHaveBeenCalledTimes(2);
   });
 
   it('shows description of the highlighted choice', async () => {
