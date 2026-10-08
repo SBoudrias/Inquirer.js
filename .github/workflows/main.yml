@@ -137,6 +137,13 @@ jobs:
           yarn install
           yarn test
           cd -
+      - name: Run jest integration tests
+        run: |
+          cd $(yarn isolate-monorepo-package @inquirer/jest-integration-tests)
+          yarn set version stable
+          yarn install
+          yarn test
+          cd -
 
   deno-pack:
     name: Deno Pack

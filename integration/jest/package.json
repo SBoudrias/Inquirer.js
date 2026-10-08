@@ -1,0 +1,36 @@
+{
+  "name": "@inquirer/jest-integration-tests",
+  "version": "0.0.1",
+  "private": true,
+  "sideEffects": false,
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.26.0",
+    "@inquirer/checkbox": "workspace:*",
+    "@inquirer/confirm": "workspace:*",
+    "@inquirer/core": "workspace:*",
+    "@inquirer/editor": "workspace:*",
+    "@inquirer/expand": "workspace:*",
+    "@inquirer/external-editor": "workspace:*",
+    "@inquirer/input": "workspace:*",
+    "@inquirer/number": "workspace:*",
+    "@inquirer/password": "workspace:*",
+    "@inquirer/prompts": "workspace:*",
+    "@inquirer/rawlist": "workspace:*",
+    "@inquirer/search": "workspace:*",
+    "@inquirer/select": "workspace:*",
+    "@inquirer/testing": "workspace:*",
+    "@types/jest": "^30.0.0",
+    "@xterm/headless": "^6.0.0",
+    "babel-plugin-istanbul": "^8.0.0",
+    "jest": "^30.0.0"
+  },
+  "engines": {
+    "node": ">=23.5.0 || ^22.13.0 || ^20.17.0"
+  }
+}
