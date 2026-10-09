@@ -191,9 +191,13 @@ export default createPrompt(
     const [errorMsg, setError] = useState<string>();
 
     useKeypress(async (key) => {
+      if (status !== 'idle') return;
+
       if (isEnterKey(key)) {
+        setStatus('loading');
         const selection = items.filter(isChecked);
         const isValid = await validate([...selection]);
+        setStatus('idle');
         if (required && !selection.length) {
           setError('At least one choice must be selected');
         } else if (isValid === true) {
