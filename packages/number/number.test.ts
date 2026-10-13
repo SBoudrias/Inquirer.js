@@ -291,6 +291,38 @@ describe('number prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 1"`);
   });
 
+  it('treats whitespace-only input as empty', async () => {
+    const { answer, events, getScreen } = await render(number, {
+      message: 'What is your age',
+      default: 35,
+    });
+
+    events.type('  ');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(35);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 35"`);
+  });
+
+  it('rejects whitespace-only input when required', async () => {
+    const { answer, events, getScreen, nextRender } = await render(number, {
+      message: 'What is your age',
+      required: true,
+    });
+
+    events.type('  ');
+    events.keypress('enter');
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? What is your age
+      > You must provide a valid numeric value"
+    `);
+
+    events.type('1');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(1);
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 1"`);
+  });
+
   it('handle editing the default option', async () => {
     const { answer, events, getScreen } = await render(number, {
       message: 'What is your age',

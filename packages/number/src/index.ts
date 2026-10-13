@@ -82,7 +82,7 @@ export default createPrompt(
       }
 
       if (isEnterKey(key)) {
-        const input = value || defaultValue;
+        const input = value.trim() || defaultValue;
         const answer = input === '' ? undefined : Number(input);
         setStatus('loading');
 
