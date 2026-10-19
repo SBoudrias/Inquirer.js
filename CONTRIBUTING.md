@@ -74,6 +74,8 @@ yarn demo
 
 Releases are staged. CI builds and stages the packages when a release commit lands on `main`; a maintainer approves the staged versions with 2FA before they go live. Publishing authenticates via GitHub OIDC → npm Trusted Publishing — there is no npm token to steal.
 
+Test-file patterns are declared in three places and must stay in sync: `lerna.json` (`ignoreChanges`, controls which packages get version-bumped for test-only changes), `vitest.config.ts` (test discovery), and `turbo.json` (test task inputs). When adding a new test-file naming convention, update all three.
+
 ### Cut a release
 
 ```sh
