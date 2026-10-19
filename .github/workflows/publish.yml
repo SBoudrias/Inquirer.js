@@ -135,4 +135,9 @@ jobs:
       - name: Build packages
         run: yarn tsc
       - name: Stage npm release
-        run: yarn lerna publish from-git --stage --concurrency 1 --yes --no-git-reset
+        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
+        with:
+          timeout_minutes: 30
+          max_attempts: 5
+          retry_wait_seconds: 60
+          command: yarn lerna publish from-git --stage --concurrency 1 --yes --no-git-reset
