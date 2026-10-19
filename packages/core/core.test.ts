@@ -2,6 +2,7 @@ import { EventEmitter, PassThrough } from 'node:stream';
 import { afterEach, describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import { stripVTControlCharacters } from 'node:util';
+import { setImmediate } from 'node:timers/promises';
 import {
   createPrompt,
   useEffect,
@@ -481,6 +482,98 @@ describe('createPrompt()', () => {
     // closes the readline interface (screen.done() + output.end()).
     const fullOutput = await getFullOutput({ raw: true });
     expect(fullOutput).toContain(cursorShow);
+  });
+
+  it('settlement: cancels the pending initial render on cancel', async () => {
+    const Prompt = (config: { message: string }) => config.message;
+
+    const prompt = createPrompt(Prompt);
+    const input = new PassThrough();
+    const output = new PassThrough();
+
+    const answer = prompt({ message: 'Question' }, { input, output });
+
+    // The prompt settles before the deferred initial render runs.
+    // `render` types the answer as a bare promise; the runtime instance exposes
+    // the untyped `cancel()` API.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+    (answer as Promise<string> & { cancel: () => void }).cancel();
+
+    await expect(answer).rejects.toThrow(CancelPromptError);
+    await setImmediate();
+    // The deferred initial render was cancelled: no keypress listeners were
+    // left attached to the input stream.
+    expect(input.listenerCount('keypress')).toBe(0);
+  });
+
+  it('settlement: cancels the pending initial render on abort', async () => {
+    const Prompt = (config: { message: string }) => config.message;
+
+    const prompt = createPrompt(Prompt);
+    const input = new PassThrough();
+    const output = new PassThrough();
+    const abortController = new AbortController();
+
+    const answer = prompt(
+      { message: 'Question' },
+      { input, output, signal: abortController.signal },
+    );
+
+    abortController.abort();
+
+    await expect(answer).rejects.toThrow(AbortPromptError);
+    await setImmediate();
+    expect(input.listenerCount('keypress')).toBe(0);
+  });
+
+  it('settlement: cancels the pending initial render on cancel with mocked timers', async () => {
+    vi.useFakeTimers();
+
+    const Prompt = (config: { message: string }) => config.message;
+
+    const prompt = createPrompt(Prompt);
+    const input = new PassThrough();
+    const output = new PassThrough();
+
+    const answer = prompt({ message: 'Question' }, { input, output });
+
+    // `render` types the answer as a bare promise; the runtime instance exposes
+    // the untyped `cancel()` API.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+    (answer as Promise<string> & { cancel: () => void }).cancel();
+
+    await expect(answer).rejects.toThrow(CancelPromptError);
+    // `node:timers/promises` bypasses the mocked timers, so this settles the
+    // real setImmediate the initial render was deferred with.
+    await setImmediate();
+    expect(input.listenerCount('keypress')).toBe(0);
+  });
+
+  it('settlement: starts the deferred initial render and answers normally', async () => {
+    const Prompt = (config: { message: string }, done: (value: string) => void) => {
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done('done');
+        }
+      });
+
+      return config.message;
+    };
+
+    const prompt = createPrompt(Prompt);
+    const input = new PassThrough();
+    const output = new PassThrough();
+    output.write = () => true; // suppress output
+
+    const answer = prompt({ message: 'Question' }, { input, output });
+
+    await setImmediate();
+    // The deferred initial render ran: the readline interface is live and
+    // listening for keypresses.
+    expect(input.listenerCount('keypress')).toBeGreaterThan(0);
+
+    input.write('\r');
+    await expect(answer).resolves.toBe('done');
   });
 
   it('useEffect: a throwing cleanup rejects the prompt and drops the answer', async () => {
