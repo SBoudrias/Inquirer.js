@@ -12,6 +12,7 @@ import path from 'node:path';
 // Capture the real setImmediate at module load time so it works even when test
 // frameworks mock timers with vi.useFakeTimers() or similar.
 const nativeSetImmediate = globalThis.setImmediate;
+const nativeClearImmediate = globalThis.clearImmediate;
 
 /**
  * Register an event listener and return its disposer, so registrations collapse
@@ -232,7 +233,8 @@ export function createPrompt<Value, Config>(
       //
       // @see https://github.com/SBoudrias/Inquirer.js/issues/1303
       if ('readableFlowing' in input) {
-        nativeSetImmediate(startCycle);
+        const immediate = nativeSetImmediate(startCycle);
+        cleanups.add(() => nativeClearImmediate(immediate));
       } else {
         startCycle();
       }
