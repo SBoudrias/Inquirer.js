@@ -2,5 +2,6 @@
   "npmClient": "yarn",
   "version": "independent",
   "useWorkspaces": true,
-  "syncWorkspaceLock": true
+  "syncWorkspaceLock": true,
+  "ignoreChanges": ["**/*.test.ts", "**/__snapshots__/**", "**/*.snap"]
 }
