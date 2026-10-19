@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/expand",
-  "version": "5.1.6",
+  "version": "5.1.7",
   "description": "Inquirer checkbox prompt",
   "keywords": [
     "answer",
@@ -73,7 +73,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/core": "^12.0.4",
+    "@inquirer/core": "^12.0.5",
     "@inquirer/type": "^4.2.0"
   },
   "devDependencies": {
