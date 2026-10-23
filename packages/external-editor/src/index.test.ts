@@ -1,4 +1,13 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  afterEach,
+} from 'vitest';
 import { existsSync, readFileSync, unlinkSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import os from 'node:os';
@@ -95,6 +104,29 @@ describe('parseEditorCommand', () => {
   it('unmatched quote treats rest as binary', () => {
     expect(parseEditorCommand('"unclosed path')).toEqual({
       bin: 'unclosed path',
+      args: [],
+    });
+  });
+});
+
+describe('editor detection', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it('falls back to EDITOR when VISUAL is empty', () => {
+    vi.stubEnv('VISUAL', '');
+    vi.stubEnv('EDITOR', 'nano');
+
+    expect(new ExternalEditor().editor).toEqual({ bin: 'nano', args: [] });
+  });
+
+  it('falls back to the platform default when VISUAL and EDITOR are empty', () => {
+    vi.stubEnv('VISUAL', '');
+    vi.stubEnv('EDITOR', '');
+
+    expect(new ExternalEditor().editor).toEqual({
+      bin: process.platform.startsWith('win') ? 'notepad' : 'vim',
       args: [],
     });
   });

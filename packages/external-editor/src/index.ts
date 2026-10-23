@@ -76,8 +76,8 @@ export class ExternalEditor {
     this.fileOptions = fileOptions;
 
     this.editor = parseEditorCommand(
-      process.env['VISUAL'] ??
-        process.env['EDITOR'] ??
+      process.env['VISUAL'] ||
+        process.env['EDITOR'] ||
         (process.platform.startsWith('win') ? 'notepad' : 'vim'),
     );
   }
