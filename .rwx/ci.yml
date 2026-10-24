@@ -1,0 +1,93 @@
+on:
+  github:
+    push:
+      if: ${{ event.git.branch == 'main' }}
+      init:
+        commit-sha: ${{ event.git.sha }}
+    pull_request:
+      init:
+        commit-sha: ${{ event.git.sha }}
+  cli:
+    init:
+      commit-sha: ${{ event.git.sha }}
+
+# Mirror of .github/workflows/main.yml (Compile, Linting, Unit Tests matrix).
+# The publish workflow (.github/workflows/publish.yml) is intentionally not
+# migrated: it is part of the npm Trusted Publisher configuration.
+base:
+  image: ubuntu:26.04
+  config: rwx/base 1.2.0
+
+defaults:
+  # GitHub's ubuntu-latest runners have 4 vCPUs / 16 GB; match that.
+  runner:
+    cpus: 4
+    memory: 16gb
+
+tool-cache:
+  vault: default
+
+tasks:
+  - key: code
+    call: git/clone 2.2.0
+    with:
+      repository: https://github.com/SBoudrias/Inquirer.js.git
+      ref: ${{ init.commit-sha }}
+      # Keep .git so the lint task can run the repo's own
+      # `git diff --exit-code` setup validation.
+      preserve-git-dir: true
+
+  - key: node
+    call: nodejs/install 1.2.0
+    with:
+      node-version: 26.12.1
+
+  - key: yarn-install
+    use: [code, node]
+    tool-cache: ci-yarn-install
+    # Node >= 25 no longer bundles corepack; install it from npm first.
+    run: |
+      npm install --global corepack
+      corepack enable
+      yarn install --immutable
+    filter:
+      - package.json
+      - yarn.lock
+      - .yarnrc.yml
+      - packages/*/package.json
+      - integration/*/package.json
+      - tools/*/package.json
+
+  - key: compile
+    use: yarn-install
+    # 16 vCPUs cut `yarn tsc` from ~18s to ~11s; measured to be worth the
+    # extra vCPU-seconds on this critical-path task (see PR description).
+    runner:
+      cpus: 16
+      memory: 64gb
+    run: yarn tsc
+    timeout: 20m
+
+  - key: lint
+    use: compile
+    run: |
+      yarn oxlint .
+      yarn oxfmt --check .
+      yarn eslint .
+      yarn package lint --check
+      yarn setup
+      git diff --exit-code -- . ":(exclude).yarn"
+    timeout: 20m
+
+  # GitHub Actions matrix (os: [ubuntu, windows] x node: [20, 22, 24, 26]).
+  # RWX runs Linux containers only, so the os dimension drops out; the node
+  # dimension becomes a matrix of embedded runs, each with its own isolated
+  # clone -> install -> test pipeline.
+  - key: unit-tests
+    parallel:
+      matrix:
+        node-version: ['20.20.2', '22.23.4', '24.22.1', '26.12.1']
+    call: ${{ run.dir }}/unit-tests.yml
+    init:
+      commit-sha: ${{ init.commit-sha }}
+      node-version: ${{ parallel.node-version }}
