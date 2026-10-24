@@ -183,8 +183,11 @@ export async function setupPackages({ check }: { check: boolean }): Promise<stri
       return;
     }
 
+    // globby reports POSIX-style paths; keep messages consistent on Windows.
+    const reportPath = filepath.replaceAll('\\', '/');
+
     if (!(await fileExists(filepath))) {
-      drift.push(`${filepath} is missing`);
+      drift.push(`${reportPath} is missing`);
       return;
     }
 
@@ -193,7 +196,7 @@ export async function setupPackages({ check }: { check: boolean }): Promise<stri
     if (paths.length > 0) {
       const summary =
         paths.length > 10 ? `${paths.slice(0, 10).join(', ')}, …` : paths.join(', ');
-      drift.push(`${filepath} is outdated (${summary})`);
+      drift.push(`${reportPath} is outdated (${summary})`);
     }
   }
 

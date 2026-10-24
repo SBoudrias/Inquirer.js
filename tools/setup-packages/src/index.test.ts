@@ -85,9 +85,7 @@ describe('setupPackages', () => {
 
     const outdated = drift.find((line) => line.includes('package.json is outdated'));
     expect(outdated).toContain('engines');
-    expect(drift).toContain(
-      `${path.join('packages', 'app', 'tsconfig.json')} is missing`,
-    );
+    expect(drift).toContain('packages/app/tsconfig.json is missing');
     // Nothing was written
     expect(await readJson(packagePath)).toEqual(originalPackageJson);
     expect(
@@ -139,9 +137,7 @@ describe('setupPackages', () => {
 
     const drift = await setupPackages({ check: true });
 
-    expect(drift).toEqual([
-      `${path.join('packages', 'app', 'package.json')} is outdated (scripts.tsc)`,
-    ]);
+    expect(drift).toEqual(['packages/app/package.json is outdated (scripts.tsc)']);
   });
 
   it('ignores array and object key ordering differences (oxfmt normalizes them)', async () => {
