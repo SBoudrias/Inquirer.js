@@ -2,7 +2,7 @@
 import { defineConfig } from 'eslint/config';
 import eslint from '@eslint/js';
 import globals from 'globals';
-import tseslintParser from '@typescript-eslint/parser';
+import tseslintParser from '@repo/eslint-parser';
 import nodePlugin from 'eslint-plugin-n';
 import oxlint from 'eslint-plugin-oxlint';
 

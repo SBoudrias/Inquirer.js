@@ -599,10 +599,10 @@ __metadata:
     "@eslint/js": "npm:^10.0.1"
     "@lerna-lite/cli": "npm:^5.6.0"
     "@lerna-lite/publish": "npm:^5.6.0"
+    "@repo/eslint-parser": "workspace:*"
     "@repo/tsconfig": "workspace:*"
     "@sboudrias/package": "workspace:*"
     "@types/node": "npm:^26.1.1"
-    "@typescript-eslint/parser": "npm:^8.58.0"
     "@vitest/coverage-v8": "npm:^5.0.0"
     "@vitest/ui": "npm:^5.0.0"
     eslint: "npm:^10.2.0"
@@ -1703,6 +1703,15 @@ __metadata:
   checksum: 10/00baec4458ac86ca27edf7ce807ccfad97cd1d4b67bdedaf3401a9e755757588f3331e891290d1deea52d88df2bf2387caf8d94a6835b614d5b37b638a688273
   languageName: node
   linkType: hard
+
+"@repo/eslint-parser@workspace:*, @repo/eslint-parser@workspace:tools/eslint-parser":
+  version: 0.0.0-use.local
+  resolution: "@repo/eslint-parser@workspace:tools/eslint-parser"
+  dependencies:
+    "@typescript-eslint/parser": "npm:^8.58.0"
+    typescript: "npm:6.0.3"
+  languageName: unknown
+  linkType: soft
 
 "@repo/tsconfig@workspace:*, @repo/tsconfig@workspace:tools/tsconfig":
   version: 0.0.0-use.local
@@ -6345,6 +6354,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typescript@npm:6.0.3":
+  version: 6.0.3
+  resolution: "typescript@npm:6.0.3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10/0ef2357a4cffd916b52b683a021cdab0f81eea4e9aa35f2d254581c9a5106da02224e3392e1b0ed42b7a48f80c966e5f52b8e1a27941fa0523c1705a9c2e0330
+  languageName: node
+  linkType: hard
+
 "typescript@npm:^7.0.2":
   version: 7.0.2
   resolution: "typescript@npm:7.0.2"
@@ -6413,6 +6432,16 @@ __metadata:
   bin:
     tsc: bin/tsc
   checksum: 10/b0179005349b43dc1febb35c4e79162cdf89b84eae60f6deac142429109041e07582e69a6aacf5a897e085869686d4512ea444a10acf5b5aa2b60910f82a19ca
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A6.0.3#optional!builtin<compat/typescript>":
+  version: 6.0.3
+  resolution: "typescript@patch:typescript@npm%3A6.0.3#optional!builtin<compat/typescript>::version=6.0.3&hash=5786d5"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10/22b67a18dafedf9b1468b64ca20d9aa02ea61d449b65413d8aa6552aeb63f52ef369e86beb25b6b4c91a803d9726ee5c196f391a9b64201263263410a4223ee6
   languageName: node
   linkType: hard
 
