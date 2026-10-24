@@ -13,6 +13,38 @@
     "perf": "error"
   },
   "rules": {
+    "no-array-constructor": "error",
+    "no-case-declarations": "error",
+    "no-empty": "error",
+    "no-fallthrough": "error",
+    "no-prototype-builtins": "error",
+    "no-regex-spaces": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+    "typescript/ban-ts-comment": "error",
+    "typescript/no-dynamic-delete": "error",
+    "typescript/no-empty-object-type": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-namespace": "error",
+    "typescript/no-non-null-asserted-nullish-coalescing": "error",
+    "typescript/no-require-imports": "error",
+    "typescript/no-unnecessary-condition": "error",
+    "typescript/no-unsafe-argument": "error",
+    "typescript/no-unsafe-assignment": "error",
+    "typescript/no-unsafe-call": "error",
+    "typescript/no-unsafe-function-type": "error",
+    "typescript/no-unsafe-member-access": "error",
+    "typescript/no-unsafe-return": "error",
+    "typescript/prefer-literal-enum-member": "error",
+    "typescript/prefer-reduce-type-parameter": "error",
+    "typescript/prefer-return-this-type": "error",
+    "typescript/related-getter-setter-pairs": "error",
+    "typescript/require-await": "error",
+    "typescript/return-await": ["error", "error-handling-correctness-only"],
+    "typescript/unified-signatures": "error",
+    "typescript/use-unknown-in-catch-callback-variable": "error",
     "no-await-in-loop": "off",
     "no-map-spread": "off",
     "no-shadow": "off",
@@ -23,13 +55,18 @@
     "typescript/no-mixed-enums": "error",
     "typescript/switch-exhaustiveness-check": "error",
     "typescript/restrict-plus-operands": "error",
-    "typescript/prefer-promise-reject-errors": "error"
+    "typescript/prefer-promise-reject-errors": "error",
+    "no-redeclare": "error",
+    "node/no-exports-assign": "error"
   },
   "overrides": [
     {
       "files": ["integration/**/*.cjs", "integration/**/*.mjs"],
       "rules": {
-        "typescript/no-floating-promises": "off"
+        "typescript/no-floating-promises": "off",
+        "typescript/no-unsafe-argument": "off",
+        "typescript/no-unsafe-assignment": "off",
+        "typescript/require-await": "off"
       }
     },
     {
@@ -37,6 +74,12 @@
       "rules": {
         "unicorn/consistent-function-scoping": "off",
         "typescript/unbound-method": "off"
+      }
+    },
+    {
+      "files": ["**/*.cjs"],
+      "rules": {
+        "typescript/no-require-imports": "off"
       }
     }
   ]

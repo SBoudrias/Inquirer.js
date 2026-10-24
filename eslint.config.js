@@ -8,6 +8,15 @@ import oxlint from 'eslint-plugin-oxlint';
 
 export default defineConfig(
   {
+    // Rules enforced by oxlint are turned off below via eslint-plugin-oxlint,
+    // so eslint-disable directives suppressing them now read as "unused".
+    // oxlint honors these same directives, so they must not be reported (or
+    // auto-removed by `eslint --fix`) while the rule still runs in oxlint.
+    linterOptions: {
+      reportUnusedDisableDirectives: 'off',
+    },
+  },
+  {
     ignores: [
       '.git',
       'node_modules',
