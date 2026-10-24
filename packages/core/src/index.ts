@@ -1,3 +1,4 @@
+// Exported key helpers used across all prompts.
 export {
   isUpKey,
   isDownKey,
