@@ -43,7 +43,11 @@ tasks:
   - key: captain
     call: rwx/install-captain 1.2.0
 
+  # Captain partitions the suite's test files across 4 parallel tasks using
+  # its per-file timing history; RWX feeds partition-index/total to captain
+  # automatically. Measured ~2x faster suite wall-time than a single task.
   - key: unit-tests
     use: [yarn-install, captain]
-    run: captain run inquirer-vitest
+    parallel: 4
+    run: captain run inquirer-vitest-partitioned
     timeout: 20m
