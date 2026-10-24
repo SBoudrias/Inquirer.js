@@ -213,8 +213,12 @@ export async function setupPackages({ check }: { check: boolean }): Promise<stri
       '[Inquirer] The scaffolding tool requires `workspaces` and `engines.node` in the root package.json',
     );
   }
+  // Globby expects POSIX-style patterns; `path.join` yields backslashes on
+  // Windows, which are treated as escape characters and match nothing.
   const paths = await globby([
-    ...rootPkg.workspaces.map((workspace) => path.join(workspace, 'package.json')),
+    ...rootPkg.workspaces.map(
+      (workspace) => workspace.replaceAll('\\', '/') + '/package.json',
+    ),
     '!**/node_modules',
   ]);
 
