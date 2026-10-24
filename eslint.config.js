@@ -2,9 +2,34 @@
 import { defineConfig } from 'eslint/config';
 import eslint from '@eslint/js';
 import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import tseslintParser from '@typescript-eslint/parser';
 import nodePlugin from 'eslint-plugin-n';
 import oxlint from 'eslint-plugin-oxlint';
+
+// `eslint-disable` directives suppressing rules that moved to oxlint still
+// use `@typescript-eslint/*` names — and oxlint honors those same directives,
+// so they must keep working. eslint no longer registers these rules (typed
+// lint lives in `yarn oxlint --type-aware`), so we register inert
+// placeholders, derived from the oxlint plugin's own migration list, to keep
+// the directives from being reported as unknown rules.
+const oxlintConfigs = oxlint.buildFromOxlintConfigFile('./.oxlintrc.json');
+/** @type {Set<string>} */
+const migratedTseslintRuleNames = new Set();
+for (const config of oxlintConfigs) {
+  for (const ruleName of Object.keys(config.rules ?? {})) {
+    if (ruleName.startsWith('@typescript-eslint/')) {
+      migratedTseslintRuleNames.add(ruleName);
+    }
+  }
+}
+const inertTseslintPlugin = {
+  rules: Object.fromEntries(
+    [...migratedTseslintRuleNames].map((qualifiedName) => [
+      qualifiedName.slice('@typescript-eslint/'.length),
+      { create: () => ({}) },
+    ]),
+  ),
+};
 
 export default defineConfig(
   {
@@ -29,14 +54,12 @@ export default defineConfig(
       'integration/*/dist/**',
       'integration/*/node_modules/**',
       // Deno fixture scripts: type-checked by `deno check` in CI and linted by
-      // oxlint. The typed-lint project service requires tsconfig coverage,
-      // which conflicts with Deno's own config discovery.
+      // oxlint. They run under Deno's runtime and config discovery, not Node's.
       'integration/deno/cases/**',
       'packages/*/__snapshots__/**',
     ],
   },
   eslint.configs.recommended,
-  tseslint.configs.recommended,
   nodePlugin.configs['flat/recommended-module'],
   {
     languageOptions: {
@@ -66,18 +89,22 @@ export default defineConfig(
     },
   },
   {
+    // The `n/*` module-resolution rules need a parser that understands
+    // TypeScript syntax; espree can't. This is parse-only: no TS language
+    // service (no typed-lint), which keeps eslint decoupled from the
+    // TypeScript version. Typed-lint lives in `yarn oxlint --type-aware`.
     files: ['**/*.mts', '**/*.ts'],
-    extends: [...tseslint.configs.strictTypeChecked],
+    plugins: {
+      '@typescript-eslint': inertTseslintPlugin,
+    },
     languageOptions: {
-      parserOptions: {
-        projectService: true,
-      },
+      parser: tseslintParser,
     },
     rules: {
-      '@typescript-eslint/no-invalid-void-type': 'off',
-      '@typescript-eslint/no-non-null-assertion': 'off',
-      '@typescript-eslint/no-confusing-void-expression': 'off',
-      '@typescript-eslint/no-unnecessary-type-parameters': 'off',
+      // `no-undef` is unreliable on TypeScript files (it flags type-only
+      // globals); undefined-identifier checks are owned by the TypeScript
+      // compiler and `yarn tsc`.
+      'no-undef': 'off',
       'n/no-missing-import': ['error', { ignoreTypeImport: true }],
     },
   },
@@ -88,9 +115,6 @@ export default defineConfig(
       globals: {
         ...globals.node,
       },
-    },
-    rules: {
-      '@typescript-eslint/no-require-imports': 'off',
     },
   },
   {
@@ -127,5 +151,5 @@ export default defineConfig(
       ],
     },
   },
-  ...oxlint.buildFromOxlintConfigFile('./.oxlintrc.json'),
+  ...oxlintConfigs,
 );
