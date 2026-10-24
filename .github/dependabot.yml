@@ -25,7 +25,6 @@ updates:
           - 'eslint-plugin-*'
           - 'oxlint'
           - 'oxlint-*'
-          - 'typescript-eslint'
           - 'globals'
       # Group formatting tools
       formatting:
