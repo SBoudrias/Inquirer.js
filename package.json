@@ -60,6 +60,7 @@
     "prepack": "find packages/* -maxdepth 1 -type f -name 'README*' -exec sed -i.bak -e 's/utm_source=github/utm_source=npmjs/g' {} + && find packages/* -maxdepth 1 -type f -name 'README*.bak' -delete && package normalize && package pin @inquirer/type",
     "postpack": "git -c hook.auto-install.event= restore packages/*/README.md",
     "setup": "setup-packages && package lint && oxfmt . --no-error-on-unmatched-pattern",
+    "setup:check": "setup-packages --check",
     "pretest": "yarn tsc && oxlint . && oxfmt --check . && eslint .",
     "test": "vitest --run packages && turbo test",
     "tsc": "turbo tsc && tsc -p tsconfig.json"
