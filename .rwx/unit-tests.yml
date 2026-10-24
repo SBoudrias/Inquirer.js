@@ -1,0 +1,49 @@
+base:
+  image: ubuntu:26.04
+  config: rwx/base 1.2.0
+
+defaults:
+  runner:
+    cpus: 4
+    memory: 16gb
+
+tool-cache:
+  vault: default
+
+tasks:
+  - key: code
+    call: git/clone 2.2.0
+    with:
+      repository: https://github.com/SBoudrias/Inquirer.js.git
+      ref: ${{ init.commit-sha }}
+  - key: node
+    call: nodejs/install 1.2.0
+    with:
+      node-version: ${{ init.node-version }}
+
+  - key: yarn-install
+    use: [code, node]
+    tool-cache: unit-tests-${{ init.node-version }}-yarn-install
+    # Node >= 25 no longer bundles corepack; install it from npm first.
+    run: |
+      npm install --global corepack
+      corepack enable
+      yarn install --immutable
+    filter:
+      - package.json
+      - yarn.lock
+      - .yarnrc.yml
+      - packages/*/package.json
+      - integration/*/package.json
+      - tools/*/package.json
+
+  # Captain runs the suite and streams results to RWX/Captain Cloud:
+  # inline failure insights, flake detection, and retry of failed tests
+  # (see .captain/config.yml). No token needed inside RWX runs.
+  - key: captain
+    call: rwx/install-captain 1.2.0
+
+  - key: unit-tests
+    use: [yarn-install, captain]
+    run: captain run inquirer-vitest
+    timeout: 20m
