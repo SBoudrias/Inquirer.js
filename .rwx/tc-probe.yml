@@ -1,0 +1,19 @@
+base:
+  image: ubuntu:26.04
+  config: rwx/base 1.2.0
+
+tool-cache:
+  vault: default
+
+tasks:
+  - key: tc-probe
+    tool-cache: tc-probe-test
+    run: |
+      # bust content cache: v2
+      if [ -f toolcache-probe ]; then
+        echo "TOOL-CACHE-RESTORED: probe file present from previous execution"
+      else
+        echo "TOOL-CACHE-COLD: first execution"
+        echo "created" > toolcache-probe
+      fi
+      ls -la

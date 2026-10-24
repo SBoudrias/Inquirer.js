@@ -60,6 +60,11 @@ tasks:
 
   - key: compile
     use: yarn-install
+    # 16 vCPUs cut `yarn tsc` from ~18s to ~11s; measured to be worth the
+    # extra vCPU-seconds on this critical-path task (see PR description).
+    runner:
+      cpus: 16
+      memory: 64gb
     run: yarn tsc
     timeout: 20m
 

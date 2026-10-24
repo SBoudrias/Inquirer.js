@@ -10,3 +10,17 @@ test-suites:
     retries:
       attempts: 2
       command: yarn vitest '{{ file }}' --testNamePattern '{{ testNamePattern }}' --reporter=default --reporter=json --outputFile=./tmp/vitest.json
+
+  # Same suite, partitioned across parallel CI tasks (see .rwx/ci.yml's
+  # partitioned matrix). Captain balances partitions using test-file timings.
+  inquirer-vitest-partitioned:
+    command: yarn vitest --run --reporter=default --reporter=json --outputFile=./tmp/vitest.json
+    results:
+      path: tmp/vitest.json
+    output:
+      print-summary: true
+    partition:
+      command: yarn vitest {{ testFiles }} --run --reporter=default --reporter=json --outputFile=./tmp/vitest.json
+      globs:
+        - packages/**/*.test.ts
+        - tools/**/*.test.ts
