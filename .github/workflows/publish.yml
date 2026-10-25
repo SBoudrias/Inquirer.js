@@ -67,8 +67,9 @@ jobs:
         with:
           node-version: 24
           package-manager-cache: false # no cache poisoning risk in a release workflow
-      - name: Enable Corepack
-        run: corepack enable
+      # Bootstrap Yarn from the release vendored in .yarn/releases (pinned via
+      # `packageManager` + `yarnPath`); no Corepack involved.
+      - uses: $/.github/actions/setup-yarn
       - name: Install dependencies
         run: yarn install --immutable
       - name: Run tests
@@ -90,8 +91,9 @@ jobs:
         with:
           node-version: 24
           package-manager-cache: false # no cache poisoning risk
-      - name: Enable Corepack
-        run: corepack enable
+      # Bootstrap Yarn from the release vendored in .yarn/releases (pinned via
+      # `packageManager` + `yarnPath`); no Corepack involved.
+      - uses: $/.github/actions/setup-yarn
       - name: Install dependencies
         run: yarn install --immutable
       - name: Build packages
@@ -123,8 +125,9 @@ jobs:
           node-version: 24
           registry-url: https://registry.npmjs.org
           package-manager-cache: false
-      - name: Enable Corepack
-        run: corepack enable
+      # Bootstrap Yarn from the release vendored in .yarn/releases (pinned via
+      # `packageManager` + `yarnPath`); no Corepack involved.
+      - uses: $/.github/actions/setup-yarn
       - name: Install dependencies
         run: yarn install --immutable
       # Build first (mirrors the Compile job in main.yml) so the turbo cache is

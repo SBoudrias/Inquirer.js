@@ -396,11 +396,17 @@ export async function setupIsolatedEnvironment(
     );
   }
 
-  // Copy yarn configuration
-  await fsPromises.copyFile(
-    path.join(rootDir, '.yarnrc.yml'),
-    path.join(packageDestDir, '.yarnrc.yml'),
-  );
+  // Copy the yarn configuration, without `yarnPath`: it points at the root
+  // checkout's vendored .yarn/releases binary, which is not copied into the
+  // isolated directory, and a dangling yarnPath makes every yarn command
+  // crash. The `packageManager` field still pins the release, so the isolated
+  // workspace bootstraps itself the way an end user's checkout would.
+  const yarnrc = await fsPromises.readFile(path.join(rootDir, '.yarnrc.yml'), 'utf8');
+  const isolatedYarnrc = yarnrc
+    .split('\n')
+    .filter((line) => !/^\s*yarnPath\s*:/.test(line))
+    .join('\n');
+  await fsPromises.writeFile(path.join(packageDestDir, '.yarnrc.yml'), isolatedYarnrc);
   if (verbose) {
     console.error(`[isolate-monorepo-package]   Copied .yarnrc.yml to ${packageDestDir}`);
   }

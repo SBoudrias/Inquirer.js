@@ -1,0 +1,25 @@
+name: 'Setup Yarn'
+description: >-
+  Expose the Yarn release vendored under .yarn/releases as `yarn` on PATH,
+  replacing the retired Corepack bootstrap.
+runs:
+  using: 'composite'
+  steps:
+    - name: Put the vendored Yarn release on PATH
+      shell: bash
+      run: |
+        set -euo pipefail
+        shopt -s nullglob
+        releases=(.yarn/releases/yarn-*.cjs)
+        if [ "${#releases[@]}" -ne 1 ]; then
+          echo "::error::Expected exactly one .yarn/releases/yarn-*.cjs release file, found ${#releases[@]}."
+          exit 1
+        fi
+        release="$(pwd)/${releases[0]}"
+        # Shim the release into the Node install's bin directory (the same
+        # location `corepack enable` used to place its shims): it is already
+        # on PATH for every later step, so no environment file writes are
+        # needed.
+        node_bin_dir="$(dirname "$(command -v node)")"
+        ln -sf "$release" "$node_bin_dir/yarn"
+        "$node_bin_dir/yarn" --version

@@ -1,1 +1,4 @@
 * text=auto
+# The vendored Yarn release must stay byte-for-byte identical on every
+# platform; Git for Windows would otherwise check it out with CRLF.
+.yarn/releases/*.cjs -text

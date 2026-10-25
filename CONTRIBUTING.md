@@ -18,11 +18,10 @@ The other packages, `packages/input`, `packages/checkbox`, `packages/*` are the 
 
 This guide assumes you have an [LTS Node.js](https://nodejs.org/en/about/previous-releases) installed (double check with `node --version`.) You're free to manage the Node install & versions on your own - personally I like [Volta](https://docs.volta.sh/guide/getting-started).
 
-Inquirer is relying on Yarn, you'll need it for things to work as expected. This is now built-in with Node corepack:
+Inquirer is relying on Yarn, you'll need it for things to work as expected. The exact Yarn release is vendored in the repository under `.yarn/releases/` and referenced by the `yarnPath` setting in `.yarnrc.yml`, so any Yarn ≥ 4 already on your machine will delegate to it automatically. If you don't have Yarn, either install it ([via Corepack](https://yarnpkg.com/corepack) or [standalone](https://yarnpkg.com/getting-started/install)), or skip the global install entirely and run the vendored binary directly:
 
 ```sh
-corepack enable
-yarn install
+node .yarn/releases/yarn-*.cjs install
 ```
 
 At this point you should be good to go!

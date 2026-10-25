@@ -2,7 +2,8 @@ node_modules
 dist
 coverage
 .idea
-.yarn
+.yarn/*
+!.yarn/releases
 .turbo
 .DS_Store
 
