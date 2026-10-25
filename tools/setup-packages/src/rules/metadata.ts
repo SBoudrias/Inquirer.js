@@ -47,9 +47,26 @@ export async function applyMetadataRules(
   }
   pkg.publishConfig = { access: 'public' };
 
-  if (await fileExists(path.join(dir, 'README.md'))) {
-    pkg.homepage = `https://github.com/SBoudrias/Inquirer.js/blob/main/${dir}/README.md`;
+  const repoUrl = githubUrl(rootPkg.repository);
+  if (repoUrl && (await fileExists(path.join(dir, 'README.md')))) {
+    // GitHub serves `blob/HEAD` from the default branch, whatever its name.
+    pkg.homepage = `${repoUrl}/blob/HEAD/${dir}/README.md`;
   }
+}
+
+/**
+ * `https://github.com/<owner>/<repo>` from a package.json `repository` field:
+ * a URL (https, ssh, `git+` prefixed) or the `github:o/r` and `o/r` shorthands.
+ * Undefined when the field is missing or not a GitHub repository.
+ */
+export function githubUrl(repository: PackageJson['repository']) {
+  const url = typeof repository === 'string' ? repository : repository?.url;
+  const match =
+    url &&
+    /^(?:github:|(?:git\+)?(?:https|ssh):\/\/(?:git@)?github\.com\/|git@github\.com:)?([^/:]+\/[^/]+?)(?:\.git)?$/.exec(
+      url,
+    );
+  return match ? `https://github.com/${match[1]}` : undefined;
 }
 
 /**

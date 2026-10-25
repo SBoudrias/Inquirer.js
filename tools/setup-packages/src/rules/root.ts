@@ -1,5 +1,6 @@
 import { validRange } from 'semver';
 import type { PackageJson } from 'type-fest';
+import { githubUrl } from './metadata.ts';
 
 /**
  * Validate the root package.json, and return it typed with what the other
@@ -15,6 +16,15 @@ export function validateRootPackage(rootPkg: PackageJson) {
   ) {
     throw new Error(
       'The scaffolding tool requires `workspaces` and `engines.node` in the root package.json',
+    );
+  }
+
+  // Warned once here: the metadata rule then skips the homepage of every package.
+  const { repository } = rootPkg;
+  if (repository !== undefined && githubUrl(repository) === undefined) {
+    const url = typeof repository === 'string' ? repository : repository.url;
+    console.warn(
+      `Cannot link package READMEs from repository "${url}": only GitHub repositories are supported`,
     );
   }
 
