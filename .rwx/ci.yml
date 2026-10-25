@@ -33,9 +33,6 @@ tasks:
     with:
       repository: https://github.com/SBoudrias/Inquirer.js.git
       ref: ${{ init.commit-sha }}
-      # Keep .git so the lint task can run the repo's own
-      # `git diff --exit-code` setup validation.
-      preserve-git-dir: true
 
   - key: node
     call: nodejs/install 1.2.0
@@ -75,8 +72,7 @@ tasks:
       yarn oxfmt --check .
       yarn eslint .
       yarn package lint --check
-      yarn setup
-      git diff --exit-code -- . ":(exclude).yarn"
+      yarn setup-packages --check
     timeout: 20m
 
   # GitHub Actions matrix (os: [ubuntu, windows] x node: [20, 22, 24, 26]).
