@@ -131,7 +131,7 @@ it('shows a validation error', async () => {
 
 ### Unit Testing Example
 
-You can refer to the [`@inquirer/input` test suite](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/input.test.ts) for a comprehensive unit testing example using `render()`.
+You can refer to the [`@inquirer/input` test suite](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/input/input.vitest.ts) for a comprehensive unit testing example using `render()`.
 
 ## E2E Testing with `screen`
 
@@ -238,7 +238,7 @@ jest.mock('@my-company/custom-prompt', () => {
 
 ### E2E Testing Example
 
-You can refer to the [`@inquirer/demo` test suite](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/demo/demo.test.ts) for a comprehensive E2E testing example using `screen`.
+You can refer to the [`@inquirer/demo` test suite](https://github.com/SBoudrias/Inquirer.js/blob/main/packages/demo/demo.vitest.ts) for a comprehensive E2E testing example using `screen`.
 
 # License
 

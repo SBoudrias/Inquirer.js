@@ -4,7 +4,13 @@
     "tsc": {
       "dependsOn": ["^tsc"],
       "outputs": ["dist/**"],
-      "inputs": ["../../package.json", "package.json", "src/*", "!**/*.test.ts"]
+      "inputs": [
+        "../../package.json",
+        "package.json",
+        "src/*",
+        "!**/*.vitest.ts",
+        "!**/*.jest.ts"
+      ]
     },
     "test": {
       "dependsOn": ["^tsc", "@inquirer/testing#tsc"],

@@ -118,7 +118,7 @@ export default defineConfig(
     },
   },
   {
-    files: ['packages/inquirer/test/**', 'packages/**/*.test.*'],
+    files: ['packages/inquirer/test/**', 'packages/**/*.vitest.*'],
     rules: {
       'n/no-extraneous-import': [
         'error',
