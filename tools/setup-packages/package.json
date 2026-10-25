@@ -9,9 +9,11 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
+    "clipanion": "^4.0.0-rc.4",
     "globby": "^16.2.0",
     "jsonc-parser": "^3.3.1",
-    "semver": "^7.7.4"
+    "semver": "^7.7.4",
+    "typanion": "^3.14.0"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
