@@ -3,6 +3,8 @@ import { defineConfig, defaultExclude, coverageConfigDefaults } from 'vitest/con
 export default defineConfig({
   test: {
     fsModuleCache: true,
+    // Required by Captain (RWX) to identify tests in its insights.
+    includeTaskLocation: true,
     exclude: ['integration/**', ...defaultExclude],
     coverage: {
       provider: 'v8',

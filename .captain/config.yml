@@ -1,0 +1,26 @@
+# Captain CLI configuration. Used by the RWX showcase CI (.rwx/) to run the
+# vitest suite through Captain so test results flow into RWX/Captain insights.
+test-suites:
+  inquirer-vitest:
+    command: yarn vitest --run --coverage --reporter=default --reporter=json --outputFile=./tmp/vitest.json
+    results:
+      path: tmp/vitest.json
+    output:
+      print-summary: true
+    retries:
+      attempts: 2
+      command: yarn vitest '{{ file }}' --testNamePattern '{{ testNamePattern }}' --reporter=default --reporter=json --outputFile=./tmp/vitest.json
+
+  # Same suite, partitioned across parallel CI tasks (see .rwx/ci.yml's
+  # partitioned matrix). Captain balances partitions using test-file timings.
+  inquirer-vitest-partitioned:
+    command: yarn vitest --run --reporter=default --reporter=json --outputFile=./tmp/vitest.json
+    results:
+      path: tmp/vitest.json
+    output:
+      print-summary: true
+    partition:
+      command: yarn vitest {{ testFiles }} --run --reporter=default --reporter=json --outputFile=./tmp/vitest.json
+      globs:
+        - packages/**/*.test.ts
+        - tools/**/*.test.ts
