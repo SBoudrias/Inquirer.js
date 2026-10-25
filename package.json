@@ -61,7 +61,8 @@
     "postpack": "git -c hook.auto-install.event= restore packages/*/README.md",
     "setup": "setup-packages && package lint && oxfmt . --no-error-on-unmatched-pattern",
     "pretest": "yarn tsc && oxlint . && oxfmt --check . && eslint .",
-    "test": "vitest --run packages && turbo test",
+    "test": "vitest --run packages && jest && turbo test",
+    "test:jest": "jest",
     "tsc": "turbo tsc && tsc -p tsconfig.json"
   },
   "devDependencies": {
@@ -71,6 +72,9 @@
     "@repo/eslint-parser": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@sboudrias/package": "workspace:*",
+    "@swc/core": "^1.16.20",
+    "@swc/jest": "^0.2.39",
+    "@types/jest": "^30.0.0",
     "@types/node": "^26.1.1",
     "@vitest/coverage-v8": "^5.0.0",
     "@vitest/ui": "^5.0.0",
@@ -79,6 +83,7 @@
     "eslint-plugin-oxlint": "^1.58.0",
     "globals": "^17.4.0",
     "isolate-monorepo-package": "workspace:*",
+    "jest": "^30.5.2",
     "nano-staged": "^1.0.2",
     "oxfmt": "^0.73.0",
     "oxlint": "^1.58.0",

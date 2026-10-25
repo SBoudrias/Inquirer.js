@@ -10,5 +10,5 @@
     "lib": ["es2023", "dom"]
   },
   "include": ["src"],
-  "exclude": ["src/**/*.test.ts"]
+  "exclude": ["src/**/*.test.ts", "src/**/*.jest.ts"]
 }

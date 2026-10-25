@@ -4,11 +4,13 @@
     "vitest.*.ts",
     "tools/**/*",
     "**/*.test.ts",
+    "**/*.jest.ts",
     "**/*.d.ts",
     "**/examples/**/*"
   ],
   "compilerOptions": {
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": ["node", "jest"]
   }
 }

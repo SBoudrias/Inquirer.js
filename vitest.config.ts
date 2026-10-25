@@ -9,6 +9,9 @@ export default defineConfig({
       include: ['packages/**/src/**/*.{ts,tsx,mts}'],
       exclude: [
         ...coverageConfigDefaults.exclude,
+        // *.jest.ts files are Jest test files; without this they'd be
+        // counted as uncovered source by vitest's report.
+        '**/*.jest.ts',
         'tools/**',
         'packages/*/dist/**',
         'packages/*/examples/**',
