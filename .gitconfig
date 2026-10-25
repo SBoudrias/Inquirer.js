@@ -4,7 +4,9 @@
 
 [hook "auto-install"]
 	event = post-checkout
-	command = sh -c 'yarn install'
+	# Tolerate environments without `yarn` on PATH (e.g. fresh CI or tool
+	# managers like mise); the developer/agent installs deps when present.
+	command = sh -c 'command -v yarn >/dev/null 2>&1 && yarn install || true'
 
 [hook "full-test"]
 	event = pre-push
