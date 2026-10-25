@@ -72,7 +72,7 @@ const promptNames = [
 jest.mock('@inquirer/input', () => {
   try {
     const actual = jest.requireActual('@inquirer/input');
-    return { ...actual, default: wrapPrompt(actual.default) };
+    return { __esModule: true, ...actual, default: wrapPrompt(actual.default) };
   } catch {
     return {};
   }
@@ -81,7 +81,7 @@ jest.mock('@inquirer/input', () => {
 jest.mock('@inquirer/select', () => {
   try {
     const actual = jest.requireActual('@inquirer/select');
-    return { ...actual, default: wrapPrompt(actual.default) };
+    return { __esModule: true, ...actual, default: wrapPrompt(actual.default) };
   } catch {
     return {};
   }
@@ -90,7 +90,7 @@ jest.mock('@inquirer/select', () => {
 jest.mock('@inquirer/confirm', () => {
   try {
     const actual = jest.requireActual('@inquirer/confirm');
-    return { ...actual, default: wrapPrompt(actual.default) };
+    return { __esModule: true, ...actual, default: wrapPrompt(actual.default) };
   } catch {
     return {};
   }
@@ -99,7 +99,7 @@ jest.mock('@inquirer/confirm', () => {
 jest.mock('@inquirer/checkbox', () => {
   try {
     const actual = jest.requireActual('@inquirer/checkbox');
-    return { ...actual, default: wrapPrompt(actual.default) };
+    return { __esModule: true, ...actual, default: wrapPrompt(actual.default) };
   } catch {
     return {};
   }
@@ -108,7 +108,7 @@ jest.mock('@inquirer/checkbox', () => {
 jest.mock('@inquirer/password', () => {
   try {
     const actual = jest.requireActual('@inquirer/password');
-    return { ...actual, default: wrapPrompt(actual.default) };
+    return { __esModule: true, ...actual, default: wrapPrompt(actual.default) };
   } catch {
     return {};
   }
@@ -117,7 +117,7 @@ jest.mock('@inquirer/password', () => {
 jest.mock('@inquirer/expand', () => {
   try {
     const actual = jest.requireActual('@inquirer/expand');
-    return { ...actual, default: wrapPrompt(actual.default) };
+    return { __esModule: true, ...actual, default: wrapPrompt(actual.default) };
   } catch {
     return {};
   }
@@ -126,7 +126,7 @@ jest.mock('@inquirer/expand', () => {
 jest.mock('@inquirer/rawlist', () => {
   try {
     const actual = jest.requireActual('@inquirer/rawlist');
-    return { ...actual, default: wrapPrompt(actual.default) };
+    return { __esModule: true, ...actual, default: wrapPrompt(actual.default) };
   } catch {
     return {};
   }
@@ -135,7 +135,7 @@ jest.mock('@inquirer/rawlist', () => {
 jest.mock('@inquirer/number', () => {
   try {
     const actual = jest.requireActual('@inquirer/number');
-    return { ...actual, default: wrapPrompt(actual.default) };
+    return { __esModule: true, ...actual, default: wrapPrompt(actual.default) };
   } catch {
     return {};
   }
@@ -144,7 +144,7 @@ jest.mock('@inquirer/number', () => {
 jest.mock('@inquirer/search', () => {
   try {
     const actual = jest.requireActual('@inquirer/search');
-    return { ...actual, default: wrapPrompt(actual.default) };
+    return { __esModule: true, ...actual, default: wrapPrompt(actual.default) };
   } catch {
     return {};
   }
@@ -153,7 +153,7 @@ jest.mock('@inquirer/search', () => {
 jest.mock('@inquirer/editor', () => {
   try {
     const actual = jest.requireActual('@inquirer/editor');
-    return { ...actual, default: wrapPrompt(actual.default) };
+    return { __esModule: true, ...actual, default: wrapPrompt(actual.default) };
   } catch {
     return {};
   }
