@@ -60,9 +60,7 @@ jobs:
       - run: yarn eslint .
       - run: yarn package lint --check
       - name: Validate package setup
-        run: |
-          yarn setup
-          git diff --exit-code -- . :^.yarn
+        run: yarn setup-packages --check
 
   Unit:
     name: Unit Tests
