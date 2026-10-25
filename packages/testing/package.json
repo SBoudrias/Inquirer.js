@@ -44,7 +44,7 @@
     "yo",
     "zsh"
   ],
-  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/main/packages/testing/README.md",
+  "homepage": "https://github.com/SBoudrias/Inquirer.js/blob/HEAD/packages/testing/README.md",
   "license": "MIT",
   "author": "Simon Boudrias <admin@simonboudrias.com>",
   "repository": {
