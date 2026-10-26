@@ -85,9 +85,16 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # Windows runners ship a corepack too old for current package manager signatures (#2062).
-      - run: npm install -g corepack --force # zizmor: ignore[adhoc-packages] required to fix broken corepack on windows runners
+      # The windows runner image's C:\npm\prefix yarn shims resolve to yarn
+      # 1.x, so corepack must overwrite them in place. The old workaround
+      # reinstalled corepack with npm (~10s per windows job); overwriting
+      # the shims directly costs 3-4s. The image's corepack validates the
+      # pinned yarn's signature fine (#2062 no longer reproduces), so
+      # integrity checking stays on.
+      - run: corepack enable --install-directory "C:\npm\prefix"
+        if: runner.os == 'Windows'
       - run: corepack enable
+        if: runner.os != 'Windows'
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ matrix.node-version }}
