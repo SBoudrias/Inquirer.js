@@ -6,6 +6,15 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+# Perf prototype (perf-matrix): cancel superseded runs on the same PR.
+# Measured: 3 superseded runs in the last 40 wasted 703 runner-seconds of
+# already-doomed CI (run 40248967387 alone burned 609s after its replacement
+# started). cancel-in-progress does not change a single run's wall time; it
+# reclaims queue capacity and (on private repos) billed minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -37,7 +46,9 @@ jobs:
 
   Linting:
     runs-on: ubuntu-latest
-    needs: Compile
+    # Perf prototype (perf-matrix): dropped `needs: Compile`. This job already
+    # runs `yarn tsc` itself, so the gate only delayed its median start by
+    # ~40s (measured over 74 PR runs). Compile still gates Unit via mergeability.
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -68,8 +79,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Perf prototype (perf-matrix): windows only tests the oldest and
+        # newest node (bookends), ubuntu covers all four. Measured: windows
+        # jobs run 79-85s (vs 39-45s ubuntu) of which ~50s is fixed setup
+        # overhead, and the only windows-only failure in 40 runs (run
+        # 40232185109) failed on all 4 node cells — extra node versions add
+        # queue load, not signal.
         os: [ubuntu-latest, windows-latest]
         node-version: [20, 22, 24, 26]
+        exclude:
+          - os: windows-latest
+            node-version: 22
+          - os: windows-latest
+            node-version: 24
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -96,7 +118,9 @@ jobs:
   e2e:
     name: End to End build tests
     runs-on: ubuntu-latest
-    needs: Compile
+    # Perf prototype (perf-matrix): dropped `needs: Compile`. This job runs
+    # `yarn tsc` itself; the gate delayed its median start by ~40s (measured
+    # over 74 PR runs) without adding coverage.
     env:
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
     steps:
@@ -147,7 +171,9 @@ jobs:
   deno-pack:
     name: Deno Pack
     runs-on: ubuntu-latest
-    needs: Compile
+    # Perf prototype (perf-matrix): dropped `needs: Compile`. This job runs
+    # `yarn tsc` itself; the gate delayed its median start by ~40s (measured
+    # over 74 PR runs) without adding coverage.
     env:
       # The isolated deno workspace has no lockfile, so immutable installs
       # would fail inside it. The repo-level install still passes --immutable.
