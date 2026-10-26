@@ -35,9 +35,11 @@ jobs:
       - name: Typescript
         run: yarn tsc
 
+  # This job (like e2e and deno-pack below) runs its own `yarn install` and
+  # `yarn tsc`; it does not consume any artifact from Compile, so it can start
+  # in parallel with it instead of waiting ~40s for it to finish.
   Linting:
     runs-on: ubuntu-latest
-    needs: Compile
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -96,7 +98,6 @@ jobs:
   e2e:
     name: End to End build tests
     runs-on: ubuntu-latest
-    needs: Compile
     env:
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
     steps:
@@ -147,7 +148,6 @@ jobs:
   deno-pack:
     name: Deno Pack
     runs-on: ubuntu-latest
-    needs: Compile
     env:
       # The isolated deno workspace has no lockfile, so immutable installs
       # would fail inside it. The repo-level install still passes --immutable.
