@@ -74,7 +74,7 @@ yarn demo
 
 Releases are staged. CI builds and stages the packages when a release commit lands on `main`; a maintainer approves the staged versions with 2FA before they go live. Publishing authenticates via GitHub OIDC → npm Trusted Publishing — there is no npm token to steal.
 
-Test-file patterns are declared in several places and must stay in sync: `vitest.config.ts` (test discovery and coverage excludes), `lerna.json` (`ignoreChanges`, controls which packages get version-bumped for test-only changes), `turbo.json` and package-level `turbo.json` files (build task inputs), `tools/setup-packages/src/rules/build.ts` (generates every package tsconfig's test excludes), the root `tsconfig.json`, `eslint.config.js`, and `.oxlintrc.json`. When adding a new test-file naming convention, update all of them.
+Test-file patterns are declared in several places and must stay in sync: `vitest.config.ts` (test discovery and coverage excludes), `lerna.json` (`ignoreChanges`, controls which packages get version-bumped for test-only changes), `turbo.json` and package-level `turbo.json` files (build task inputs), `tools/setup-packages/src/rules/build.ts` (generates every package tsconfig's test excludes), the root `tsconfig.json`, `eslint.config.js`, and `.oxlintrc.json`. When adding a new test-file naming convention, update all of them. The convention is name-means-tool for unit tests (`*.vitest.ts` for Vitest, `*.jest.ts` for Jest); the shared integration runners keep their own naming — `integration/{cjs,esm}` use `*.test.cjs`/`*.test.mjs` (node --test), and `integration/deno` runs `integration.test.mjs` under `deno test` (spawning `cases/*.ts` scripts) — all in private packages that lerna never publishes.
 
 ### Cut a release
 

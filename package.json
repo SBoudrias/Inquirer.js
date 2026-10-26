@@ -62,7 +62,6 @@
     "setup": "setup-packages && package lint && oxfmt . --no-error-on-unmatched-pattern",
     "pretest": "yarn tsc && oxlint . && oxfmt --check . && eslint .",
     "test": "vitest --run packages && jest && turbo test",
-    "test:jest": "jest",
     "tsc": "turbo tsc && tsc -p tsconfig.json"
   },
   "devDependencies": {
