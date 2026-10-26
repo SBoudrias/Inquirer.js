@@ -1,6 +1,8 @@
 name: Perf Probe
 
-on: workflow_dispatch
+on:
+  pull_request:
+    types: [opened, synchronize]
 
 permissions:
   contents: read
