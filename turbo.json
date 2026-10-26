@@ -7,7 +7,7 @@
       "inputs": [
         "../../package.json",
         "package.json",
-        "src/*",
+        "src/**",
         "!**/*.vitest.ts",
         "!**/*.jest.ts"
       ]
