@@ -1,0 +1,46 @@
+name: Coverage Diff Probe
+
+# Perf research (PR #2349): is coverage OS-dependent? Runs vitest --coverage
+# once per OS at node 22 and prints per-file covered/total statements, so the
+# ubuntu vs windows coverage gap of dropping one OS can be diffed offline.
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - .github/workflows/coverage-diff.yml
+
+permissions:
+  contents: read
+
+jobs:
+  covdiff:
+    name: Coverage ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: npm install -g corepack --force # zizmor: ignore[adhoc-packages] required to fix broken corepack on windows runners
+      - run: corepack enable
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn vitest --run --coverage
+      - name: Per-file covered statements
+        shell: bash
+        run: |
+          node -e '
+            const cov = require("./coverage/vitest/coverage-final.json");
+            for (const [file, data] of Object.entries(cov)) {
+              const total = Object.keys(data.statementMap).length;
+              const covered = Object.values(data.s).filter((c) => c > 0).length;
+              console.log(`COVDIFF ${process.platform} ${covered}/${total} ${file}`);
+            }
+          '
