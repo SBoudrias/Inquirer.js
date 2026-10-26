@@ -3,7 +3,7 @@
   "include": [
     "vitest.*.ts",
     "tools/**/*",
-    "**/*.test.ts",
+    "**/*.vitest.ts",
     "**/*.jest.ts",
     "**/*.d.ts",
     "**/examples/**/*"

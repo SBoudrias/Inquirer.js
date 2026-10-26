@@ -38,7 +38,7 @@ export async function applyTypeScriptRules(
   }
 
   tsconfig.include = ['src'];
-  tsconfig.exclude = ['src/**/*.test.ts', 'src/**/*.jest.ts'];
+  tsconfig.exclude = ['src/**/*.vitest.ts', 'src/**/*.jest.ts'];
   tsconfig.compilerOptions ??= {};
   tsconfig.compilerOptions.outDir = 'dist';
   tsconfig.compilerOptions.rootDir = 'src';

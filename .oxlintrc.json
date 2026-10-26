@@ -70,13 +70,7 @@
       }
     },
     {
-      "files": [
-        "**/*.test.ts",
-        "**/*.test.mts",
-        "**/*.test.mjs",
-        "**/*.test.cjs",
-        "**/*.jest.ts"
-      ],
+      "files": ["**/*.vitest.ts", "**/*.jest.ts", "**/*.test.mjs", "**/*.test.cjs"],
       "rules": {
         "unicorn/consistent-function-scoping": "off",
         "typescript/unbound-method": "off"

@@ -3,5 +3,5 @@
   "version": "independent",
   "useWorkspaces": true,
   "syncWorkspaceLock": true,
-  "ignoreChanges": ["**/*.test.ts", "**/__snapshots__/**", "**/*.snap"]
+  "ignoreChanges": ["**/*.vitest.ts", "**/*.jest.ts", "**/__snapshots__/**", "**/*.snap"]
 }
