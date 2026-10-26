@@ -96,17 +96,37 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # Windows runners ship a corepack too old for current package manager signatures (#2062).
-      - run: npm install -g corepack --force # zizmor: ignore[adhoc-packages] required to fix broken corepack on windows runners
+      # Stacked perf probe (perf-caching, PR #2350): the runner image's
+      # corepack fails on current package-manager signatures (#2062), and
+      # its C:\npm\prefix yarn shims resolve to yarn 1.x. Instead of
+      # reinstalling corepack with npm (~10s per windows job), skip the
+      # integrity check and make corepack overwrite the stale shims in
+      # place. The pinned yarn still carries its own SHA512 in package.json.
+      - run: corepack enable --install-directory "C:\npm\prefix"
+        if: runner.os == 'Windows'
+        env:
+          COREPACK_INTEGRITY_KEYS: '0'
       - run: corepack enable
+        if: runner.os != 'Windows'
+        env:
+          COREPACK_INTEGRITY_KEYS: '0'
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
       - run: yarn install --immutable
+      # Stacked perf probe (perf-runtime, PR #2349): coverage runs on one
+      # matrix cell only; every other cell runs the suites bare.
       - run: yarn vitest --run --coverage
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == 22
+      - run: yarn vitest --run
+        if: ${{ !(matrix.os == 'ubuntu-latest' && matrix.node-version == 22) }}
       - run: yarn jest --coverage
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == 22
+      - run: yarn jest
+        if: ${{ !(matrix.os == 'ubuntu-latest' && matrix.node-version == 22) }}
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == 22
         with:
           # Each tool writes its own subdirectory (vitest: coverage/vitest,
           # jest: coverage/jest) and emits istanbul JSON; coverage ownership
