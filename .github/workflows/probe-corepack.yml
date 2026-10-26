@@ -1,0 +1,41 @@
+name: Corepack integrity probe
+
+# Research probe (perf-caching): decompose PR #2352's corepack lever.
+# Does the windows runner image's bundled corepack validate yarn 4.18.1's
+# signature at all (integrity on), and what does the enable step cost
+# with integrity on vs off? Run manually on a probe branch only.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-integrity-on:
+    runs-on: windows-latest
+    steps:
+      - name: corepack enable (integrity on)
+        run: corepack enable --install-directory "C:\npm\prefix"
+      - name: yarn --version (exercises fetch + signature check)
+        run: yarn --version
+
+  windows-integrity-off:
+    runs-on: windows-latest
+    steps:
+      - name: corepack enable (integrity off)
+        run: corepack enable --install-directory "C:\npm\prefix"
+        env:
+          COREPACK_INTEGRITY_KEYS: '0'
+      - name: yarn --version (exercises fetch, skips check)
+        run: yarn --version
+        env:
+          COREPACK_INTEGRITY_KEYS: '0'
+
+  ubuntu-integrity-on:
+    runs-on: ubuntu-latest
+    steps:
+      - name: corepack enable (integrity on)
+        run: corepack enable
+      - name: yarn --version (exercises fetch + signature check)
+        run: yarn --version
