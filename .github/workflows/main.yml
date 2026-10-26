@@ -75,11 +75,17 @@ jobs:
         with:
           persist-credentials: false
       # Perf prototype round 2: the runner image's corepack fails on current
-      # package-manager signatures (#2062). Instead of reinstalling corepack
-      # with npm (~10s per windows job), skip its integrity check; corepack
-      # then fetches the pinned yarn from packageManager, which still carries
+      # package-manager signatures (#2062), and its C:\npm\prefix yarn shims
+      # resolve to yarn 1.x. Instead of reinstalling corepack with npm (~10s
+      # per windows job), skip the integrity check and make corepack
+      # overwrite the stale shims in place. The pinned yarn still carries
       # its own SHA512 in package.json. Measured in #2350.
+      - run: corepack enable --install-directory "C:\npm\prefix"
+        if: runner.os == 'Windows'
+        env:
+          COREPACK_INTEGRITY_KEYS: '0'
       - run: corepack enable
+        if: runner.os != 'Windows'
         env:
           COREPACK_INTEGRITY_KEYS: '0'
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
