@@ -74,38 +74,18 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # Perf prototype: on Windows, one combined cache (corepack global
-      # install, yarn package cache and the linked node_modules) removes the
-      # three slowest setup steps (npm i -g corepack ~10s, cache download
-      # ~3s, yarn link step ~7s). Ubuntu keeps the setup-node yarn cache;
-      # its install is already ~8s.
-      - name: Cache Windows toolchain and dependencies
-        id: win-cache
-        if: runner.os == 'Windows'
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: |
-            C:\npm\prefix
-            .yarn\cache
-            .yarn\install-state.gz
-            node_modules
-          # One cache shared by the 4 Windows node versions: with
-          # enableScripts false there are no install-time builds, and the
-          # native deps (@parcel/watcher, @swc/core, unrs-resolver) ship
-          # N-API prebuilds, so node_modules is node-version agnostic.
-          key: unit-${{ runner.os }}-${{ hashFiles('yarn.lock', 'package.json') }}
-          restore-keys: unit-${{ runner.os }}-
-      - run: npm install -g corepack --force # zizmor: ignore[adhoc-packages] required to fix broken corepack on windows runners
-        if: runner.os != 'Windows' || steps.win-cache.outputs.cache-hit != 'true'
+      # Perf prototype round 2: the runner image's corepack fails on current
+      # package-manager signatures (#2062). Instead of reinstalling corepack
+      # with npm (~10s per windows job), skip its integrity check; corepack
+      # then fetches the pinned yarn from packageManager, which still carries
+      # its own SHA512 in package.json. Measured in #2350.
       - run: corepack enable
+        env:
+          COREPACK_INTEGRITY_KEYS: '0'
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ matrix.node-version }}
-          # On Windows the combined cache above restores .yarn/cache and
-          # node_modules, so the setup-node yarn cache would restore the same
-          # data twice. Keep it on Ubuntu, where install is already fast.
-          cache: ${{ runner.os != 'Windows' && 'yarn' || '' }}
-          package-manager-cache: ${{ runner.os != 'Windows' }}
+          cache: 'yarn'
       - run: yarn install --immutable
       - run: yarn vitest --run --coverage
       - run: yarn jest --coverage
