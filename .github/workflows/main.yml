@@ -6,6 +6,15 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+# Cancel superseded runs on the same PR. Measured: 3 superseded runs in the
+# last 40 wasted 703 runner-seconds of already-doomed CI (run 40248967387
+# alone burned 609s after its replacement started). cancel-in-progress does
+# not change a single run's wall time; it reclaims queue capacity and (on
+# private repos) billed minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
