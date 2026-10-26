@@ -3,6 +3,8 @@ name: Perf Probe
 on:
   pull_request:
     types: [opened, synchronize]
+    paths:
+      - .github/workflows/perf-probe.yml
 
 permissions:
   contents: read

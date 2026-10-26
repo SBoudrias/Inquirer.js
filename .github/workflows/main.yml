@@ -82,9 +82,18 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
       - run: yarn install --immutable
+      # Perf research (PR #2349): coverage runs on one matrix cell only;
+      # every other cell runs the suites bare. Measure the Unit job time.
       - run: yarn vitest --run --coverage
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == 22
+      - run: yarn vitest --run
+        if: !(matrix.os == 'ubuntu-latest' && matrix.node-version == 22)
       - run: yarn jest --coverage
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == 22
+      - run: yarn jest
+        if: !(matrix.os == 'ubuntu-latest' && matrix.node-version == 22)
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == 22
         with:
           # Each tool writes its own subdirectory (vitest: coverage/vitest,
           # jest: coverage/jest) and emits istanbul JSON; coverage ownership
