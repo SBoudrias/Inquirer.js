@@ -6,7 +6,8 @@ name: Corepack integrity probe
 # with integrity on vs off? Run manually on a probe branch only.
 
 on:
-  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize]
 
 permissions:
   contents: read
