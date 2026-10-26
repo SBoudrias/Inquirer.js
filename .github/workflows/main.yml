@@ -235,4 +235,3 @@ jobs:
           tar -xzf "${RUNNER_TEMP}/deno-integration-tests.tar.gz" -C "${RUNNER_TEMP}"
           cd "${RUNNER_TEMP}/deno"
           yarn test:deno
-
