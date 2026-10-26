@@ -228,11 +228,18 @@ export function createPrompt<Value, Config>(
       // poll) lets that stale data flow through readline harmlessly—no keypress
       // handlers are registered yet and the output is muted, so the stale
       // keystrokes are silently discarded.
+      // This only applies to TTY inputs, where early data is stale keystrokes
+      // the user typed before the prompt started. Piped input (stdin from a
+      // script or test harness) is intentional: deferring there risks dropping
+      // the answer itself, since data already waiting on the pipe flows
+      // through readline during the deferral tick and is then discarded,
+      // leaving the prompt waiting forever (seen as intermittent 30s timeouts
+      // in the Deno integration suite).
       // Old-style streams (like MuteStream) have no such buffering, so the
       // render cycle starts immediately.
       //
       // @see https://github.com/SBoudrias/Inquirer.js/issues/1303
-      if ('readableFlowing' in input) {
+      if ('readableFlowing' in input && input.isTTY) {
         const immediate = nativeSetImmediate(startCycle);
         cleanups.add(() => nativeClearImmediate(immediate));
       } else {
