@@ -87,11 +87,11 @@ jobs:
       - run: yarn vitest --run --coverage
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == 22
       - run: yarn vitest --run
-        if: !(matrix.os == 'ubuntu-latest' && matrix.node-version == 22)
+        if: ${{ !(matrix.os == 'ubuntu-latest' && matrix.node-version == 22) }}
       - run: yarn jest --coverage
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == 22
       - run: yarn jest
-        if: !(matrix.os == 'ubuntu-latest' && matrix.node-version == 22)
+        if: ${{ !(matrix.os == 'ubuntu-latest' && matrix.node-version == 22) }}
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == 22
         with:
