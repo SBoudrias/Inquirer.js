@@ -112,7 +112,12 @@ describe('@inquirer/demo E2E tests', () => {
         `"? (Slow validation) provide a number: 42"`,
       );
 
+      // Use fake timers to skip the 3s validation delay in the demo
+      vi.useFakeTimers({ toFake: ['setTimeout'] });
       screen.keypress('enter');
+      await vi.runAllTimersAsync();
+      vi.useRealTimers();
+
       await demo;
 
       expect(await screen.getFullOutput()).toMatchInlineSnapshot(`
@@ -120,7 +125,7 @@ describe('@inquirer/demo E2E tests', () => {
         ✔ Enter an hex color? fff
         ✔ (Slow validation) provide a number: 42"
       `);
-    }, 10000);
+    });
   });
 
   describe('screen.keypress()', () => {
