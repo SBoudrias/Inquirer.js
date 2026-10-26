@@ -903,7 +903,7 @@ it('allow aborting the prompt using signals', async () => {
   await expect(answer).rejects.toThrow(AbortPromptError);
 });
 
-it('should ignore keypresses buffered before prompt creation', async () => {
+it('should ignore keypresses buffered before prompt creation on a TTY', async () => {
   const prompt = createPrompt(
     (_config: { message: string }, done: (value: string) => void) => {
       useKeypress((key: KeypressEvent) => {
@@ -917,9 +917,11 @@ it('should ignore keypresses buffered before prompt creation', async () => {
   );
 
   // Use PassThrough which has proper stream buffering (like real process.stdin)
-  const input = new PassThrough();
+  const input = Object.assign(new PassThrough(), { isTTY: true });
   const output = new PassThrough();
   output.write = () => true; // suppress output
+  // On a terminal, keys typed before the prompt started are stale user input
+  // (see issue #1303): the first render defers one tick and discards them.
 
   // Buffer an Enter keypress BEFORE the prompt exists
   input.write('\r');
@@ -935,6 +937,34 @@ it('should ignore keypresses buffered before prompt creation', async () => {
 
   // A real Enter AFTER creation should still work
   input.write('\r');
+  await expect(answer).resolves.toBe('submitted');
+});
+
+it('should consume input piped into non-TTY stdin before the prompt starts', async () => {
+  const prompt = createPrompt(
+    (_config: { message: string }, done: (value: string) => void) => {
+      useKeypress((key: KeypressEvent) => {
+        if (isEnterKey(key)) {
+          done('submitted');
+        }
+      });
+
+      return 'Question?';
+    },
+  );
+
+  const input = new PassThrough();
+  const output = new PassThrough();
+  output.write = () => true; // suppress output
+
+  // Piped stdin (no isTTY) is intentional input, e.g. answers written to a
+  // child process's stdin the moment it is spawned. It must not be dropped
+  // by the first-render deferral, or the prompt waits forever — the cause
+  // of the intermittent 30s timeouts in the Deno integration suite.
+  input.write('\r');
+
+  const answer = prompt({ message: 'test' }, { input, output });
+
   await expect(answer).resolves.toBe('submitted');
 });
 
