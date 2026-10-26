@@ -78,9 +78,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
+      # Windows runs node 26 only: each windows cell cost ~80s (~50s of it
+      # fixed setup: checkout, corepack shim overwrite, install) and history
+      # shows no failures unique to windows node 20/22/24, so the other three
+      # cells duplicated ubuntu's signal at ~240s of runner time per run.
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
         node-version: [20, 22, 24, 26]
+        include:
+          - os: windows-latest
+            node-version: 26
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
