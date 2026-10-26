@@ -35,11 +35,14 @@ jobs:
           probe() {
             local label="$1"; shift
             local start=$(ms)
-            "$@" > "probe-$label.log" 2>&1
-            local rc=$?
+            local rc=0
+            "$@" > "probe-$label.log" 2>&1 || rc=$?
             local end=$(ms)
             echo "PROBE RESULT: $label wall_ms=$((end-start)) rc=$rc"
-            grep -aE "Test Files|Duration" "probe-$label.log" | sed "s/^/PROBE $label: /" | tail -2
+            if [ "$rc" -ne 0 ]; then
+              tail -30 "probe-$label.log" | sed "s/^/PROBE $label (tail): /" || true
+            fi
+            grep -aE "Test Files|Duration" "probe-$label.log" | sed "s/^/PROBE $label: /" | tail -2 || true
             return 0
           }
 
