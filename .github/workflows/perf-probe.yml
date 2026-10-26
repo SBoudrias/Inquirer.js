@@ -1,0 +1,65 @@
+name: Perf Probe
+
+on: workflow_dispatch
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    name: Probe ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: corepack enable
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - name: Run probe matrix
+        shell: bash
+        run: |
+          ms() { date +%s%3N; }
+          probe() {
+            local label="$1"; shift
+            local start=$(ms)
+            "$@" > "probe-$label.log" 2>&1
+            local rc=$?
+            local end=$(ms)
+            echo "PROBE RESULT: $label wall_ms=$((end-start)) rc=$rc"
+            grep -aE "Test Files|Duration" "probe-$label.log" | sed "s/^/PROBE $label: /" | tail -2
+            return 0
+          }
+
+          probe base-nocov yarn vitest --run
+          probe base-cov yarn vitest --run --coverage
+          probe cov-threads yarn vitest --run --coverage --pool=threads
+          probe cov-w1 yarn vitest --run --coverage --maxWorkers=1
+          probe nocov-w1 yarn vitest --run --maxWorkers=1
+
+          probe jest-cov yarn jest --coverage
+
+          # Sharding: per-shard duration with coverage (CI mode)
+          probe shard-1of2-cov yarn vitest --run --coverage --shard 1/2
+          probe shard-2of2-cov yarn vitest --run --coverage --shard 2/2
+          probe shard-1of4-cov yarn vitest --run --coverage --shard 1/4
+          probe shard-2of4-cov yarn vitest --run --coverage --shard 2/4
+          probe shard-3of4-cov yarn vitest --run --coverage --shard 3/4
+          probe shard-4of4-cov yarn vitest --run --coverage --shard 4/4
+
+          # Fix the two deliberate 3000ms demo sleeps, re-measure
+          perl -pi -e 's/3000/50/g' packages/demo/src/demos/input.ts packages/demo/src/demos/editor.ts
+          probe demofix-nocov yarn vitest --run
+          probe demofix-cov yarn vitest --run --coverage
+          probe demofix-cov-threads yarn vitest --run --coverage --pool=threads
+
+          # fsModuleCache off
+          perl -pi -e 's/fsModuleCache: true/fsModuleCache: false/' vitest.config.ts
+          probe demofix-cov-nofs yarn vitest --run --coverage
