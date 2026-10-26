@@ -113,6 +113,16 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == 26
       - run: yarn jest
         if: ${{ !(matrix.os == 'ubuntu-latest' && matrix.node-version == 26) }}
+      # The codecov upload stays inline on this cell by measurement, not
+      # inertia. The step costs 2-3s across recent runs, and this cell is
+      # never the wall-time pole: every sampled run's slowest job is a
+      # windows unit cell finishing 22-55s after this one
+      # (runs 40412664559, 40412071332, 40413862393, 40411841501,
+      # 40411874257). Making the upload async would buy nothing: a
+      # dedicated job adds ~30s of fixed setup for an artifact hand-off,
+      # and step-level continue-on-error only hides errors the action
+      # already soft-fails (fail_ci_if_error defaults to false, so an
+      # upload failure exits 0 with a warning annotation).
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == 26
         with:
