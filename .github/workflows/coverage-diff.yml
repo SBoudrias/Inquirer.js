@@ -33,14 +33,17 @@ jobs:
           cache: 'yarn'
       - run: yarn install --immutable
       - run: yarn vitest --run --coverage
+      - run: yarn jest --coverage
       - name: Per-file covered statements
         shell: bash
         run: |
           node -e '
-            const cov = require("./coverage/vitest/coverage-final.json");
-            for (const [file, data] of Object.entries(cov)) {
-              const total = Object.keys(data.statementMap).length;
-              const covered = Object.values(data.s).filter((c) => c > 0).length;
-              console.log(`COVDIFF ${process.platform} ${covered}/${total} ${file}`);
+            for (const tool of ["vitest", "jest"]) {
+              const cov = require("./coverage/" + tool + "/coverage-final.json");
+              for (const [file, data] of Object.entries(cov)) {
+                const total = Object.keys(data.statementMap).length;
+                const covered = Object.values(data.s).filter((c) => c > 0).length;
+                console.log(`COVDIFF-${tool} ${process.platform} ${covered}/${total} ${file}`);
+              }
             }
           '
