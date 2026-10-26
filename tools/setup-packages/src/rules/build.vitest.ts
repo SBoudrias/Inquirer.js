@@ -32,7 +32,7 @@ describe('applyTypeScriptRules', () => {
     expect(await apply({ exports: { '.': './src/index.ts' } })).toEqual({
       extends: '@repo/tsconfig',
       include: ['src'],
-      exclude: ['src/**/*.test.ts', 'src/**/*.jest.ts'],
+      exclude: ['src/**/*.vitest.ts', 'src/**/*.jest.ts'],
       compilerOptions: { outDir: 'dist', rootDir: 'src', types: ['node'] },
     });
   });

@@ -18,7 +18,7 @@ Prioritize type safety and leverage existing types from the codebase. Use `Quest
 
 ## Testing Guidelines
 
-Vitest owns unit coverage via `vitest.config.ts`, with `coverage.all = true` so untested files fail CI. Co-locate specs as `*.test.ts` next to source, and model cross-package flows under `integration/**/**/*.test.ts`. Iterate with `yarn vitest --run packages`, then finish with `yarn test` to exercise the full matrix. Update snapshots using `yarn vitest --update`.
+Vitest owns unit coverage via `vitest.config.ts`. Co-locate specs as `*.vitest.ts` next to source, and model cross-package flows under `integration/**/**/*.test.ts`. Iterate with `yarn vitest --run packages`, then finish with `yarn test` to exercise the full matrix. Update snapshots using `yarn vitest --update`.
 
 Keep tests simple and focused. Reuse existing test stubs and fixtures rather than creating custom mocks. If a behavior affects all prompts, test it with an existing prompt type rather than creating a specialized stub. Write tests that verify actual behavior rather than implementation details. Prefer straightforward assertions over complex validation logic.
 
@@ -47,7 +47,7 @@ All async operations must be Promise-based. Do not use Node-style callbacks `(er
 
 ### Test File Location
 
-Unit tests must be co-located as `*.test.ts` files beside their source files inside `src/`. Separate `test/` directories are not used.
+Unit tests must be co-located as `*.vitest.ts` files beside their source files inside `src/` (Jest suites use `*.jest.ts`). Separate `test/` directories are not used.
 
 ## Commit & Pull Request Guidelines
 

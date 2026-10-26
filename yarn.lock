@@ -1046,6 +1046,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@inquirer/testing@workspace:packages/testing"
   dependencies:
+    "@inquirer/core": "npm:^12.0.5"
     "@inquirer/type": "npm:^4.2.0"
     "@repo/tsconfig": "workspace:*"
     "@types/jest": "npm:^30.0.0"

@@ -83,8 +83,15 @@ jobs:
           cache: 'yarn'
       - run: yarn install --immutable
       - run: yarn vitest --run --coverage
-      - run: yarn test:jest
+      - run: yarn jest --coverage
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          # Each tool writes its own subdirectory (vitest: coverage/vitest,
+          # jest: coverage/jest) and emits istanbul JSON; coverage ownership
+          # between them is disjoint (see vitest.config.ts and jest.config.js),
+          # so codecov merges the uploads. Each tool cleans only its own
+          # subdirectory at start, so run order doesn't matter.
+          files: coverage/vitest/coverage-final.json,coverage/jest/coverage-final.json
 
   e2e:
     name: End to End build tests

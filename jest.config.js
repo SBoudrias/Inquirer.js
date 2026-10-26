@@ -23,4 +23,12 @@ export default {
   transformIgnorePatterns: [
     '/node_modules/(?!(fast-wrap-ansi|fast-string-width|fast-string-truncated-width|wrap-ansi)/)',
   ],
+  // Coverage ownership is disjoint between the two runners: vitest covers
+  // everything except each package's jest adapter source (excluded in
+  // vitest.config.ts — it needs the jest globals), Jest covers exactly those
+  // adapter files (src/jest.ts, the tool-named entry). Codecov merges the two
+  // uploads; a per-file istanbul merge would double-count.
+  collectCoverageFrom: ['<rootDir>/packages/*/src/jest.ts'],
+  coverageDirectory: '<rootDir>/coverage/jest',
+  coverageProvider: 'v8',
 };

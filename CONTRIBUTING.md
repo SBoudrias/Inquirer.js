@@ -74,7 +74,7 @@ yarn demo
 
 Releases are staged. CI builds and stages the packages when a release commit lands on `main`; a maintainer approves the staged versions with 2FA before they go live. Publishing authenticates via GitHub OIDC → npm Trusted Publishing — there is no npm token to steal.
 
-Test-file patterns are declared in three places and must stay in sync: `lerna.json` (`ignoreChanges`, controls which packages get version-bumped for test-only changes), `vitest.config.ts` (test discovery), and `turbo.json` (test task inputs). When adding a new test-file naming convention, update all three.
+Test-file patterns are declared in several places and must stay in sync: `vitest.config.ts` (test discovery and coverage excludes), `lerna.json` (`ignoreChanges`, controls which packages get version-bumped for test-only changes), `turbo.json` and package-level `turbo.json` files (build task inputs), `tools/setup-packages/src/rules/build.ts` (generates every package tsconfig's test excludes), the root `tsconfig.json`, `eslint.config.js`, and `.oxlintrc.json`. When adding a new test-file naming convention, update all of them.
 
 ### Cut a release
 
