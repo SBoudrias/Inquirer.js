@@ -1,4 +1,14 @@
-import xterm from '@xterm/headless';
+import * as xtermModule from '@xterm/headless';
+
+type Xterm = typeof xtermModule;
+
+// @xterm/headless is a CommonJS bundle. Node's ESM loader only exposes it as
+// `default` (its exports aren't statically detectable), while CommonJS
+// transforms (e.g. Jest + SWC) expose `Terminal` on the namespace directly.
+function resolveXterm(mod: Xterm | { default: Xterm }): Xterm {
+  return 'Terminal' in mod ? mod : mod.default;
+}
+const xterm = resolveXterm(xtermModule);
 
 export async function interpretTerminalOutput(
   rawOutput: string,
