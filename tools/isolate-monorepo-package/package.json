@@ -1,6 +1,6 @@
 {
   "name": "isolate-monorepo-package",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Tool for testing package isolation in Yarn workspace monorepo",
   "bin": "./src/bin.ts",

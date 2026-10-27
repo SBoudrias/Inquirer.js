@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/testing",
-  "version": "3.3.15",
+  "version": "3.3.16",
   "description": "Inquirer testing utilities",
   "keywords": [
     "answer",
@@ -91,12 +91,12 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/type": "^4.2.0",
+    "@inquirer/type": "^4.2.1",
     "@xterm/headless": "^6.0.0",
     "mute-stream": "^3.0.0"
   },
   "devDependencies": {
-    "@inquirer/core": "^12.0.5",
+    "@inquirer/core": "^12.0.6",
     "@repo/tsconfig": "workspace:*",
     "@types/jest": "^30.0.0",
     "@types/mute-stream": "^0.0.4",

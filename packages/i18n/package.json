@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/i18n",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "Internationalized Inquirer prompts - drop-in package with i18n support",
   "keywords": [
     "answer",
@@ -109,8 +109,8 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/core": "^12.0.5",
-    "@inquirer/prompts": "^8.7.4"
+    "@inquirer/core": "^12.0.6",
+    "@inquirer/prompts": "^8.7.5"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
