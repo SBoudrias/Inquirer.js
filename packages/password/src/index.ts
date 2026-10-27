@@ -97,7 +97,7 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
     formattedValue += cursorHide;
   }
 
-  const content = [prefix, message, formattedValue].filter(Boolean).join(' ');
+  const content = [prefix, message, formattedValue].join(' ');
   const bottomContent = [
     errorMsg ? theme.style.error(errorMsg) : '',
     toggleMask && status === 'idle'
