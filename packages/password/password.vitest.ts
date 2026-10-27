@@ -1,8 +1,35 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
+import { cursorTo } from '@inquirer/ansi';
+import { stripVTControlCharacters } from 'node:util';
 import password from './src/index.ts';
 
 describe('password prompt', () => {
+  it('keeps a trailing space after the message before the first character is typed', async () => {
+    // Regression test for #2360: while the masked value is empty, the prompt
+    // line must still claim the separator slot after the message, so the
+    // cursor sits one column past it (as if a space was typed) instead of
+    // right against the message. The renderer trims trailing spaces from the
+    // visible line, so assert on the raw render's final cursor position.
+    const { events, getScreen } = await render(password, {
+      message: 'Enter your password',
+      mask: true,
+    });
+
+    const raw = getScreen({ raw: true });
+    const promptLine = stripVTControlCharacters(raw).split('\n')[0] ?? '';
+    expect(promptLine).toBe('? Enter your password');
+    // One 1-indexed column for the separator space, one for the cursor itself.
+    expect(raw.endsWith(cursorTo(promptLine.length + 1))).toBe(true);
+
+    events.type('J');
+    const typedRaw = getScreen({ raw: true });
+    const typedLine = stripVTControlCharacters(typedRaw).split('\n')[0] ?? '';
+    expect(typedLine).toBe('? Enter your password *');
+    // Once the value is non-empty, the mask character takes the separator slot.
+    expect(typedRaw.endsWith(cursorTo(typedLine.length))).toBe(true);
+  });
+
   it('handle muted input', async () => {
     const { answer, events, getScreen } = await render(password, {
       message: 'Enter your password',
