@@ -56,7 +56,7 @@ export function createLocalizedPrompts(locale: Locale) {
     },
 
     select<Value>(this: void, config: SelectConfig<Value>, context?: Context) {
-      const theme = makeTheme(config.theme, {
+      const localeTheme = {
         style: {
           keysHelpTip: (keys: Array<[string, string]>) => {
             const localizedKeys = keys.map(([key, label]): [string, string] => {
@@ -69,13 +69,14 @@ export function createLocalizedPrompts(locale: Locale) {
               .join(styleText('dim', ' • '));
           },
         },
-      });
+      };
+      const theme = makeTheme(localeTheme, config.theme);
 
       return selectPrompt({ ...config, theme }, context);
     },
 
     checkbox<Value>(this: void, config: CheckboxConfig<Value>, context?: Context) {
-      const theme = makeTheme(config.theme, {
+      const localeTheme = {
         style: {
           keysHelpTip: (keys: Array<[string, string]>) => {
             const localizedKeys = keys.map(([key, label]): [string, string] => {
@@ -91,13 +92,14 @@ export function createLocalizedPrompts(locale: Locale) {
               .join(styleText('dim', ' • '));
           },
         },
-      });
+      };
+      const theme = makeTheme(localeTheme, config.theme);
 
       return checkboxPrompt({ ...config, theme }, context);
     },
 
     search<Value>(this: void, config: SearchConfig<Value>, context?: Context) {
-      const theme = makeTheme(config.theme, {
+      const localeTheme = {
         style: {
           keysHelpTip: (keys: Array<[string, string]>) => {
             const localizedKeys = keys.map(([key, label]): [string, string] => {
@@ -110,7 +112,8 @@ export function createLocalizedPrompts(locale: Locale) {
               .join(styleText('dim', ' • '));
           },
         },
-      });
+      };
+      const theme = makeTheme(localeTheme, config.theme);
 
       return searchPrompt({ ...config, theme }, context);
     },
@@ -124,12 +127,13 @@ export function createLocalizedPrompts(locale: Locale) {
     },
 
     editor(this: void, config: EditorConfig, context?: Context) {
-      const theme = makeTheme(config.theme, {
+      const localeTheme = {
         style: {
           loadingMessage: locale.editor.loadingMessage,
           waitingMessage: locale.editor.waitingMessage,
         },
-      });
+      };
+      const theme = makeTheme(localeTheme, config.theme);
 
       return editorPrompt({ ...config, theme }, context);
     },
@@ -147,7 +151,7 @@ export function createLocalizedPrompts(locale: Locale) {
     },
 
     password(this: void, config: PasswordConfig, context?: Context) {
-      const theme = makeTheme(config.theme, {
+      const localeTheme = {
         style: {
           maskedText: locale.password.maskedText,
           keysHelpTip: (keys: Array<[string, string]>) => {
@@ -160,7 +164,8 @@ export function createLocalizedPrompts(locale: Locale) {
               .join(styleText('dim', ' • '));
           },
         },
-      });
+      };
+      const theme = makeTheme(localeTheme, config.theme);
 
       return passwordPrompt({ ...config, theme }, context);
     },

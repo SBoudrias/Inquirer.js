@@ -36,4 +36,19 @@ describe('password (zh)', () => {
     await expect(answer).resolves.toBe('secret');
     expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ 请输入密码"`);
   });
+
+  it('uses the masked text from the theme', async () => {
+    const answer = password({
+      message: '请输入密码',
+      theme: { style: { maskedText: '[***]' } },
+    });
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
+      "? 请输入密码 [***]
+      ctrl+t 切换可见性"
+    `);
+
+    screen.type('secret');
+    screen.keypress('enter');
+    await answer;
+  });
 });

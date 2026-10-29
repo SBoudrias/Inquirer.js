@@ -37,4 +37,21 @@ describe('select (zh)', () => {
     await expect(answer).resolves.toBe('1');
     expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ 请选择 选项一"`);
   });
+
+  it('lets the theme hide the help tip', async () => {
+    const answer = select({
+      message: '请选择',
+      choices,
+      theme: { style: { keysHelpTip: () => undefined } },
+    });
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
+      "? 请选择
+      ❯ 选项一
+        选项二
+        选项三"
+    `);
+
+    screen.keypress('enter');
+    await answer;
+  });
 });
