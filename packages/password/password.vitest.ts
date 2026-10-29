@@ -11,7 +11,7 @@ describe('password prompt', () => {
     // cursor sits one column past it (as if a space was typed) instead of
     // right against the message. The renderer trims trailing spaces from the
     // visible line, so assert on the raw render's final cursor position.
-    const { events, getScreen } = await render(password, {
+    const { answer, events, getScreen } = await render(password, {
       message: 'Enter your password',
       mask: true,
     });
@@ -28,6 +28,11 @@ describe('password prompt', () => {
     expect(typedLine).toBe('? Enter your password *');
     // Once the value is non-empty, the mask character takes the separator slot.
     expect(typedRaw.endsWith(cursorTo(typedLine.length))).toBe(true);
+
+    // Settle the prompt: leaving it pending makes the harness reject it with an
+    // unhandled ExitPromptError when the test worker tears down (flaky CI runs).
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('J');
   });
 
   it('handle muted input', async () => {
