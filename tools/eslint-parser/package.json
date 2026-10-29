@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@typescript-eslint/parser": "^8.58.0",
-    "typescript": "6.0.3"
+    "typescript": "7.0.2"
   },
   "engines": {
     "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
