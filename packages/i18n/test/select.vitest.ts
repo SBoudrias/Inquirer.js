@@ -54,4 +54,29 @@ describe('select (zh)', () => {
     screen.keypress('enter');
     await answer;
   });
+
+  it('passes translated labels to a custom keysHelpTip formatter', async () => {
+    const answer = select({
+      message: '请选择',
+      choices,
+      theme: {
+        style: {
+          keysHelpTip: (keys: Array<[string, string]>) =>
+            keys.map(([key, label]) => `${key}:${label}`).join(' '),
+        },
+      },
+    });
+    // The formatter receives the Chinese labels, not the English ones.
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
+      "? 请选择
+      ❯ 选项一
+        选项二
+        选项三
+
+      ↑↓:导航 ⏎:选择"
+    `);
+
+    screen.keypress('enter');
+    await answer;
+  });
 });

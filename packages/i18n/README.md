@@ -107,7 +107,11 @@ import { createLocalizedPrompts, registerLocale } from '@inquirer/i18n';
 import type { Locale } from '@inquirer/i18n';
 
 const deLocale: Locale = {
-  confirm: { yesLabel: 'Ja', noLabel: 'Nein' },
+  confirm: {
+    yesLabel: 'Ja',
+    noLabel: 'Nein',
+    invalidAnswer: (yes, no) => `Sie müssen mit "${yes}" oder "${no}" antworten.`,
+  },
   select: { helpNavigate: 'Navigieren', helpSelect: 'Auswählen' },
   checkbox: {
     helpNavigate: 'Navigieren',
@@ -121,7 +125,10 @@ const deLocale: Locale = {
     loadingMessage: () => 'Überprüfung...',
     waitingMessage: (enterKey) => `Drücken Sie ${enterKey}, um Ihren Editor zu öffnen.`,
   },
-  password: { maskedText: '[Eingabe verborgen]' },
+  password: {
+    maskedText: '[Eingabe verborgen]',
+    helpToggle: 'Sichtbarkeit umschalten',
+  },
 };
 
 // Option A — use directly
@@ -134,6 +141,33 @@ registerLocale('de', createLocalizedPrompts(deLocale));
 `registerLocale` must be called before any prompt is invoked. After registration,
 `import { confirm } from '@inquirer/i18n'` will pick the German locale automatically
 whenever `LANG` (or the other sources) resolve to `de`.
+
+# Themes and locales
+
+The strings above are the localized defaults. A `theme` passed to a prompt applies
+in every language — it overrides the locale strings, exactly as it overrides the
+built-in English ones in `@inquirer/prompts`. For example
+`password({ message, theme: { style: { maskedText: '[***]' } } })` renders `[***]`
+under every locale.
+
+To change the words of a single language, don't put them in the theme: build a
+locale with `createLocalizedPrompts` and register it with `registerLocale` instead:
+
+```js
+import { createLocalizedPrompts, registerLocale } from '@inquirer/i18n';
+import { locale as zh } from '@inquirer/i18n/zh';
+
+registerLocale(
+  'zh',
+  createLocalizedPrompts({
+    ...zh,
+    password: { ...zh.password, maskedText: '[已隐藏]' },
+  }),
+);
+```
+
+Note: a custom `keysHelpTip` formatter receives the help-line labels already
+translated into the active language (e.g. `导航` for `navigate` under `zh`).
 
 # License
 
