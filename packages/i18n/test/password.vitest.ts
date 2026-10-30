@@ -36,4 +36,52 @@ describe('password (zh)', () => {
     await expect(answer).resolves.toBe('secret');
     expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ 请输入密码"`);
   });
+
+  it('uses the masked text from the theme', async () => {
+    const answer = password({
+      message: '请输入密码',
+      theme: { style: { maskedText: '[***]' } },
+    });
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
+      "? 请输入密码 [***]
+      ctrl+t 切换可见性"
+    `);
+
+    screen.type('secret');
+    screen.keypress('enter');
+    await answer;
+  });
+
+  it('passes translated labels to a custom keysHelpTip formatter', async () => {
+    const answer = password({
+      message: '请输入密码',
+      theme: {
+        style: {
+          keysHelpTip: (keys: Array<[string, string]>) =>
+            keys.map(([key, label]) => `${key}:${label}`).join(' '),
+        },
+      },
+    });
+    // The formatter receives the Chinese label, not the English one.
+    expect(screen.getScreen()).toMatchInlineSnapshot(`
+      "? 请输入密码 [输入已隐藏]
+      ctrl+t:切换可见性"
+    `);
+
+    screen.type('secret');
+    screen.keypress('enter');
+    await answer;
+  });
+
+  it('lets the theme hide the help tip', async () => {
+    const answer = password({
+      message: '请输入密码',
+      theme: { style: { keysHelpTip: () => undefined } },
+    });
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"? 请输入密码 [输入已隐藏]"`);
+
+    screen.type('secret');
+    screen.keypress('enter');
+    await answer;
+  });
 });

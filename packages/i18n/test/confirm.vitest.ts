@@ -4,7 +4,11 @@ import { describe, it, expect } from 'vitest';
 import { screen, wrapPrompt } from '@inquirer/testing/vitest';
 import type { Locale } from '@inquirer/i18n';
 
-type ConfirmFn = (config: { message: string; default?: boolean }) => Promise<boolean>;
+type ConfirmFn = (config: {
+  message: string;
+  default?: boolean;
+  theme?: { keywords?: { yes?: string; no?: string } };
+}) => Promise<boolean>;
 
 // Glob over every locale module so new locales are covered automatically. Each
 // localized module exports its strings as `locale`; `en.ts` re-exports the plain
@@ -81,6 +85,47 @@ describe('confirm (zh)', () => {
     screen.type('否');
     screen.keypress('enter');
     await expect(no).resolves.toBe(false);
+  });
+
+  it('lets the theme override the locale keywords', async () => {
+    const answer = zh.confirm({
+      message: '确认?',
+      default: false,
+      theme: { keywords: { yes: 'Ya', no: 'Nein' } },
+    });
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"? 确认? (y/N)"`);
+
+    screen.type('Ya');
+    screen.keypress('enter');
+    await expect(answer).resolves.toBe(true);
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"✔ 确认? Ya"`);
+  });
+
+  it('keeps the locale keyword when the theme overrides only one', async () => {
+    const answer = zh.confirm({
+      message: '确认?',
+      theme: { keywords: { yes: 'Ya' } },
+    });
+    expect(screen.getScreen()).toMatchInlineSnapshot(`"? 确认? (Y/否)"`);
+
+    screen.type('Ya');
+    screen.keypress('enter');
+    await expect(answer).resolves.toBe(true);
+  });
+
+  it('formats the invalid-answer error with the effective keywords', async () => {
+    const answer = zh.confirm({
+      message: '确认?',
+      theme: { keywords: { yes: 'Ya', no: 'Nein' } },
+    });
+    screen.type('foobar');
+    screen.keypress('enter');
+    expect(screen.getScreen()).toContain('请输入“Ya”或“Nein”');
+
+    for (const _ of 'foobar') screen.keypress('backspace');
+    screen.type('Nein');
+    screen.keypress('enter');
+    await expect(answer).resolves.toBe(false);
   });
 });
 
