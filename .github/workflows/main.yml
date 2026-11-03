@@ -89,6 +89,49 @@ jobs:
           - os: windows-latest
             node-version: 26
     steps:
+      # Windows file IO (git checkout, yarn install, the test suites) pays
+      # real-time antivirus scanning and NTFS metadata costs; a Dev Drive
+      # (ReFS in dev mode) filters that. Adapted from openai/codex's
+      # setup-dev-drive.ps1 (Apache-2.0): instead of routing each build
+      # directory through env vars, the workspace itself becomes a junction
+      # onto the drive, so the checkout, the in-repo yarn cache
+      # (enableGlobalCache: false) and node_modules land on it with no
+      # per-step changes. TEMP/TMP move there too (setup-node unpacks the
+      # node archive through them). Costs ~2-4s of drive creation per run;
+      # before/after timings are measured in the PR that adds this.
+      - name: Put the workspace on a Dev Drive
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $vhd = Join-Path $env:RUNNER_TEMP 'dev-drive.vhdx'
+          New-VHD -Path $vhd -SizeBytes 64GB -Dynamic | Out-Null
+          $mounted = Mount-VHD -Path $vhd -Passthru
+          $disk = $mounted | Get-Disk
+          $disk | Initialize-Disk -PartitionStyle GPT
+          $partition = $disk | New-Partition -AssignDriveLetter -UseMaximumSize
+          $volume = $partition | Format-Volume -FileSystem ReFS -NewFileSystemLabel 'InquirerDevDrive' -DevDrive -Confirm:$false -Force
+          $drive = "$($volume.DriveLetter):"
+          fsutil devdrv query $drive *> $null
+          if ($LASTEXITCODE -ne 0) {
+            throw "volume at $drive did not register as a Dev Drive"
+          }
+          # Trust is what switches real-time AV scanning off for the volume;
+          # it is policy-dependent, so a failure only warns (matches codex).
+          fsutil devdrv trust $drive *> $null
+          if ($LASTEXITCODE -ne 0) {
+            Write-Warning "could not trust the Dev Drive at $drive"
+          }
+          # The runner pre-creates GITHUB_WORKSPACE as an empty directory;
+          # replace it with a junction so every following step writes onto
+          # the Dev Drive transparently. Steps run with it as cwd, so move
+          # out before removing it.
+          New-Item -ItemType Directory -Path "$drive\ws" -Force | Out-Null
+          Set-Location $env:RUNNER_TEMP
+          Remove-Item -LiteralPath $env:GITHUB_WORKSPACE
+          New-Item -ItemType Junction -Path $env:GITHUB_WORKSPACE -Target "$drive\ws" | Out-Null
+          New-Item -ItemType Directory -Path "$drive\temp" -Force | Out-Null
+          @("TEMP=$drive\temp", "TMP=$drive\temp") | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
