@@ -116,6 +116,10 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          # Two commits deep so that, on pull_request runs, the PR merge ref
+          # fetched below brings its first parent (the base branch head)
+          # along: the affected-test selection diffs against it.
+          fetch-depth: 2
       # The windows runner image's C:\npm\prefix yarn shims resolve to yarn
       # 1.x, so corepack must overwrite them in place. The old workaround
       # reinstalled corepack with npm (~10s per windows job); overwriting
@@ -131,6 +135,51 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
       - run: yarn install --immutable
+      # Affected-test selection, PR runs on the bare cells only. push runs
+      # keep the full matrix, and the coverage cell below always runs the
+      # whole suite so codecov still sees every file. The step only decides
+      # whether a selection is safe; the vitest step below resolves which
+      # suites import the changed files (vitest's module graph follows real
+      # imports, including the cross-package ones some manifests don't
+      # declare). Every uncertain case runs the full suite instead.
+      - name: Select affected test suites
+        if: github.event_name == 'pull_request' && !(matrix.os == 'ubuntu-latest' && matrix.node-version == 26)
+        shell: bash
+        run: |
+          set -euo pipefail
+          full() {
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+            exit 0
+          }
+          # The selector must never fail a required check: any unexpected
+          # error (git failure, broken pipe) selects the full suite.
+          trap full ERR
+          # Require a merge commit: on pull_request, HEAD is the PR merge
+          # ref and its first parent is the base branch head, so the diff
+          # below is exactly the PR's changes. push runs are excluded by
+          # the step condition; this guards any other shape anyway.
+          git rev-parse --verify -q HEAD^2 > /dev/null || full
+          base=$(git rev-parse HEAD^1)
+          files=$(git diff --no-renames --name-only "$base" HEAD)
+          # Empty diff: full suite.
+          [ -n "$files" ] || full
+          # Deleted or renamed files change importers in ways the module
+          # graph can't see from the surviving files alone.
+          [ -z "$(git diff --no-renames --name-only --diff-filter=D "$base" HEAD)" ] || full
+          # Only plain packages/ or tools/ paths select; the charset
+          # rejects whitespace and shell metacharacters (the list feeds a
+          # command line in the vitest step below). Anything else — root
+          # configs, .github, the lockfile — runs the full suite.
+          if printf '%s\n' "$files" | grep -qvE '^(packages|tools)/[A-Za-z0-9/._-]+$'; then
+            full
+          fi
+          # A near-repo-wide diff gains nothing from selection and risks
+          # windows' ~32k command-line limit.
+          n=$(printf '%s\n' "$files" | wc -l)
+          [ "$n" -le 300 ] || full
+          printf '%s\n' "$files" > "$RUNNER_TEMP/affected-tests.txt"
+          echo "mode=affected" >> "$GITHUB_OUTPUT"
+          echo "selected $n changed file(s); running affected vitest suites only"
       # Coverage runs on one matrix cell only; every other cell runs the
       # suites bare. The per-OS coverage parity check measured identical
       # coverage on linux and windows (54 files, 1850/1934 vitest and
@@ -138,8 +187,22 @@ jobs:
       # sees everything. Bare vitest is 10-16s on windows instead of 28s.
       - run: yarn vitest --run --coverage
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == 26
-      - run: yarn vitest --run
+      # On PR runs whose changes the step above deemed selectable, run only
+      # the suites importing the changed files (vitest `related`); every
+      # other case — push runs, the coverage cell, unselectable diffs —
+      # runs the full suite. `related` resolves the real import graph, so
+      # a core change still pulls in every prompt suite that imports it.
+      - name: Run vitest suites
         if: ${{ !(matrix.os == 'ubuntu-latest' && matrix.node-version == 26) }}
+        shell: bash
+        run: |
+          if [ -f "$RUNNER_TEMP/affected-tests.txt" ]; then
+            yarn vitest related --run --passWithNoTests $(cat "$RUNNER_TEMP/affected-tests.txt")
+          else
+            yarn vitest --run
+          fi
+      # Jest runs the two CJS adapter suites (~2s bare); they stay full in
+      # all cells — a second selector for them wouldn't pay for itself.
       - run: yarn jest --coverage
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == 26
       - run: yarn jest
