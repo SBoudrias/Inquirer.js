@@ -5,6 +5,17 @@ export default defineConfig({
     fsModuleCache: true,
     include: ['**/*.vitest.ts'],
     exclude: ['integration/**', ...defaultExclude],
+    // Affected-test selection (CI: `vitest --changed`) resolves tests through
+    // the import graph. Files that change how modules resolve or compile are
+    // invisible to that graph — a workspace package.json (dependency or
+    // exports map change) or tsconfig.json (module resolution, TS syntax
+    // transforms) can alter runtime behavior with no import edge to follow —
+    // so they rerun the full suite instead of a selection.
+    forceRerunTriggers: [
+      '**/package.json',
+      '**/{vitest,vite}.config.*',
+      '**/tsconfig.json',
+    ],
     coverage: {
       provider: 'v8',
       // Symmetric with jest's coverage/jest: each tool writes its own

@@ -116,6 +116,10 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          # Two commits deep so that, on pull_request runs, the PR merge ref
+          # brings its first parent (the base branch head) along: vitest's
+          # --changed below diffs against it.
+          fetch-depth: 2
       # The windows runner image's C:\npm\prefix yarn shims resolve to yarn
       # 1.x, so corepack must overwrite them in place. The old workaround
       # reinstalled corepack with npm (~10s per windows job); overwriting
@@ -138,8 +142,22 @@ jobs:
       # sees everything. Bare vitest is 10-16s on windows instead of 28s.
       - run: yarn vitest --run --coverage
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == 26
+      # PR runs: only the suites affected by the PR's changes. vitest's
+      # --changed diffs against HEAD^1 — on pull_request, HEAD is the PR
+      # merge ref and its first parent is the base branch head (present
+      # thanks to fetch-depth: 2 above), so the diff is exactly the PR's
+      # changes — then keeps the suites importing them through the real
+      # module graph, cross-package imports included. A diff with no test
+      # impact (docs, .github) runs zero suites and exits 0; changes to a
+      # package.json or a vitest/vite/tsconfig config rerun the full suite
+      # (forceRerunTriggers in vitest.config.ts); a deleted file is caught
+      # by the Compile job's type-check. push runs keep the full matrix.
+      - run: yarn vitest --run --changed HEAD^1
+        if: github.event_name == 'pull_request' && !(matrix.os == 'ubuntu-latest' && matrix.node-version == 26)
       - run: yarn vitest --run
-        if: ${{ !(matrix.os == 'ubuntu-latest' && matrix.node-version == 26) }}
+        if: github.event_name != 'pull_request' && !(matrix.os == 'ubuntu-latest' && matrix.node-version == 26)
+      # Jest runs the two CJS adapter suites (~2s bare); they stay full in
+      # all cells — a second selector for them wouldn't pay for itself.
       - run: yarn jest --coverage
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == 26
       - run: yarn jest
