@@ -66,12 +66,32 @@ jobs:
           path: ${{ runner.temp }}/deno-integration-tests.tar.gz
           if-no-files-found: error
           retention-days: 1
+      - name: Pack isolated demo project
+        run: |
+          DIR=$(yarn isolate-monorepo-package @inquirer/demo)
+          # The isolated directory references the packed dependency tarballs
+          # by absolute path. Vendor them inside the directory and rewrite the
+          # manifest references, so the archive is self-contained wherever it
+          # is restored.
+          TGZ_DIR=$(grep -o 'file:[^"]*\.tgz' "$DIR/package.json" \
+            | head -1 | sed 's/^file://' | xargs dirname)
+          mkdir "$DIR/vendor"
+          cp "$TGZ_DIR"/*.tgz "$DIR/vendor/"
+          sed -i "s#$TGZ_DIR#./vendor#g" "$DIR/package.json"
+          tar -czf "${RUNNER_TEMP}/demo-integration-tests.tar.gz" \
+            -C "$(dirname "$DIR")" "$(basename "$DIR")"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: demo-integration-tests
+          path: ${{ runner.temp }}/demo-integration-tests.tar.gz
+          if-no-files-found: error
+          retention-days: 1
 
-  # This job (like e2e below) runs its own `yarn install`; it does not
-  # consume any artifact from Compile, so it can start in parallel with it
-  # instead of waiting ~40s for it to finish. The lint steps below don't
-  # need built dist/ output, so the full type-check (`yarn tsc`) runs in
-  # the Compile job only.
+  # This job (like the three self-contained e2e lanes below) runs its own
+  # `yarn install`; it does not consume any artifact from Compile, so it can
+  # start in parallel with it instead of waiting ~40s for it to finish. The
+  # lint steps below don't need built dist/ output, so the full type-check
+  # (`yarn tsc`) runs in the Compile job only.
   Linting:
     runs-on: ubuntu-latest
     steps:
@@ -161,34 +181,36 @@ jobs:
   # tarballs that the isolated suite below consumes. The full-repo
   # type-check (`yarn tsc` also runs `tsc -p tsconfig.json`) lives in the
   # Compile job only, so the validation is not duplicated here.
+  #
+  # The demo suite departs from that pattern: Compile already builds the
+  # whole workspace and packs it into tarballs, so it also isolates the
+  # demo project there and publishes it as an artifact. This lane only
+  # downloads it and runs the install/build steps a user of the published
+  # packages would run: no repo checkout, no monorepo install, no rebuild.
+  # The other three suites keep their own full setup.
   e2e-demo-yarn:
     runs-on: ubuntu-latest
+    needs: Compile
     env:
+      # The isolated demo workspace has no lockfile, so immutable installs
+      # would fail inside it.
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - name: Cache turbo build setup
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-turbo-
       - run: corepack enable
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: latest
-          cache: 'yarn'
-      - run: yarn install --immutable
-      - run: yarn turbo tsc
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: demo-integration-tests
+          path: ${{ runner.temp }}
       - name: Test isolated build of @inquirer/demo
         run: |
-          cd $(yarn isolate-monorepo-package @inquirer/demo)
+          tar -xzf "${RUNNER_TEMP}/demo-integration-tests.tar.gz" -C "${RUNNER_TEMP}"
+          cd "${RUNNER_TEMP}/demo"
           yarn set version stable
           yarn install
           yarn tsc
-          cd -
 
   e2e-demo-npm:
     runs-on: ubuntu-latest
