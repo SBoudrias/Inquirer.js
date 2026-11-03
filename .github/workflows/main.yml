@@ -23,11 +23,10 @@ permissions:
   contents: read
 
 jobs:
-  # Deno Pack used to be its own job (~31s: ~19s of setup around ~10s of
-  # work); it is folded in here because its setup was identical to this
-  # job's and its pack step needs the `dist/` output of `yarn tsc` (the
-  # workspace packages it packs ship `files: ["dist"]` only), which this
-  # job already builds.
+  # Type-checks and builds all packages, then packs the deno integration
+  # project into the artifact the `deno` matrix below consumes. Packing
+  # must run after `yarn tsc`: the workspace packages it tarballs publish
+  # `dist/` only, so packing without a prior build yields empty tarballs.
   Compile:
     runs-on: ubuntu-latest
     env:
