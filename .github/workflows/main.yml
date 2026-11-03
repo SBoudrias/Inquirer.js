@@ -44,9 +44,11 @@ jobs:
       - name: Typescript
         run: yarn tsc
 
-  # This job (like e2e and deno-pack below) runs its own `yarn install` and
-  # `yarn tsc`; it does not consume any artifact from Compile, so it can start
-  # in parallel with it instead of waiting ~40s for it to finish.
+  # This job (like e2e and deno-pack below) runs its own `yarn install`; it
+  # does not consume any artifact from Compile, so it can start in parallel
+  # with it instead of waiting ~40s for it to finish. The lint steps below
+  # don't need built dist/ output, so the full type-check (`yarn tsc`) runs
+  # in the Compile job only.
   Linting:
     runs-on: ubuntu-latest
     steps:
@@ -65,7 +67,6 @@ jobs:
           node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable
-      - run: yarn tsc
       - run: yarn oxlint .
       - run: yarn oxfmt --check .
       - run: yarn eslint .
@@ -151,7 +152,11 @@ jobs:
           node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable
-      - run: yarn tsc
+      # Build only: dist/ is packed into the tarballs that the isolated
+      # builds below consume. The full-repo type-check (`yarn tsc` also runs
+      # `tsc -p tsconfig.json`) lives in the Compile job only, so the
+      # validation is not duplicated here.
+      - run: yarn turbo tsc
       - name: Test isolated build of @inquirer/demo
         run: |
           cd $(yarn isolate-monorepo-package @inquirer/demo)
@@ -203,7 +208,9 @@ jobs:
           node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable
-      - run: yarn tsc
+      # Build only (same rationale as the e2e job): dist/ is packed into the
+      # tarball uploaded below; the type-check itself lives in Compile.
+      - run: yarn turbo tsc
       - name: Pack isolated deno test project
         run: |
           DIR=$(yarn isolate-monorepo-package @inquirer/deno-integration-tests)
