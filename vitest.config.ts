@@ -5,7 +5,7 @@ export default defineConfig({
     fsModuleCache: true,
     include: ['**/*.vitest.ts'],
     exclude: ['integration/**', ...defaultExclude],
-    // Affected-test selection (CI: `vitest related`) resolves tests through
+    // Affected-test selection (CI: `vitest --changed`) resolves tests through
     // the import graph. Files that change how modules resolve or compile are
     // invisible to that graph — a workspace package.json (dependency or
     // exports map change) or tsconfig.json (module resolution, TS syntax
