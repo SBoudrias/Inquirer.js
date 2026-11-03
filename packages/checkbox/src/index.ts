@@ -330,3 +330,5 @@ export default createPrompt(
 );
 
 export { Separator } from '@inquirer/core';
+
+// probe: affected-selection re-measurement on simplified wiring
