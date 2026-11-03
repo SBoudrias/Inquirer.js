@@ -154,8 +154,14 @@ jobs:
           # subdirectory at start, so run order doesn't matter.
           files: coverage/vitest/coverage-final.json,coverage/jest/coverage-final.json
 
-  e2e:
-    name: End to End build tests
+  # The four e2e suites each run in their own isolated install (spawned by
+  # `yarn isolate-monorepo-package`) and don't read each other's output, so
+  # they run as four parallel jobs to overlap their fixed setup instead of
+  # queuing behind each other. Each builds first: dist/ is packed into the
+  # tarballs that the isolated suite below consumes. The full-repo
+  # type-check (`yarn tsc` also runs `tsc -p tsconfig.json`) lives in the
+  # Compile job only, so the validation is not duplicated here.
+  e2e-demo-yarn:
     runs-on: ubuntu-latest
     env:
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
@@ -175,10 +181,6 @@ jobs:
           node-version: latest
           cache: 'yarn'
       - run: yarn install --immutable
-      # Build only: dist/ is packed into the tarballs that the isolated
-      # builds below consume. The full-repo type-check (`yarn tsc` also runs
-      # `tsc -p tsconfig.json`) lives in the Compile job only, so the
-      # validation is not duplicated here.
       - run: yarn turbo tsc
       - name: Test isolated build of @inquirer/demo
         run: |
@@ -187,12 +189,56 @@ jobs:
           yarn install
           yarn tsc
           cd -
+
+  e2e-demo-npm:
+    runs-on: ubuntu-latest
+    env:
+      YARN_ENABLE_IMMUTABLE_INSTALLS: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Cache turbo build setup
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-turbo-
+      - run: corepack enable
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: latest
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn turbo tsc
       - name: Test isolated build of @inquirer/demo (with npm)
         run: |
           cd $(yarn isolate-monorepo-package @inquirer/demo)
           npm install
           npm run tsc
           cd -
+
+  e2e-esm-integration:
+    runs-on: ubuntu-latest
+    env:
+      YARN_ENABLE_IMMUTABLE_INSTALLS: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Cache turbo build setup
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-turbo-
+      - run: corepack enable
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: latest
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn turbo tsc
       - name: Run esm integration tests
         run: |
           cd $(yarn isolate-monorepo-package @inquirer/esm-integration-tests)
@@ -200,6 +246,28 @@ jobs:
           yarn install
           yarn test
           cd -
+
+  e2e-cjs-integration:
+    runs-on: ubuntu-latest
+    env:
+      YARN_ENABLE_IMMUTABLE_INSTALLS: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Cache turbo build setup
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-turbo-
+      - run: corepack enable
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: latest
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn turbo tsc
       - name: Run cjs integration tests
         run: |
           cd $(yarn isolate-monorepo-package @inquirer/cjs-integration-tests)
@@ -207,6 +275,17 @@ jobs:
           yarn install
           yarn test
           cd -
+
+  # Required check (main ruleset): keeps the 'End to End build tests' name
+  # reporting while the suites themselves run in the four e2e jobs above.
+  # It needs no runner work of its own: it joins the suite results.
+  e2e:
+    name: End to End build tests
+    runs-on: ubuntu-latest
+    needs: [e2e-demo-yarn, e2e-demo-npm, e2e-esm-integration, e2e-cjs-integration]
+    steps:
+      - name: All e2e suites passed
+        run: echo "The e2e suites passed; this job reports their result as the required 'End to End build tests' check."
 
   deno:
     name: Deno Tests (${{ matrix.deno-version }})
