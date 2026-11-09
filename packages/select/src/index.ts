@@ -23,6 +23,11 @@ import type { PartialDeep } from '@inquirer/type';
 import { styleText } from 'node:util';
 import figures from '@inquirer/figures';
 
+// Only treat the typed line as a numeric index when it's plain digits from
+// start to finish, so JS-numeric forms like `2e1` or `0x2` don't jump the
+// cursor to a bogus index.
+const numberLineRegex = /^\d+$/;
+
 type SelectTheme = {
   icon: { cursor: string };
   style: {
@@ -191,7 +196,7 @@ export default createPrompt(
           } while (!isNavigable(items[next]!));
           setActive(next);
         }
-      } else if (isNumberKey(key) && !Number.isNaN(Number(rl.line))) {
+      } else if (isNumberKey(key) && numberLineRegex.test(rl.line)) {
         const selectedIndex = Number(rl.line) - 1;
 
         // Find the nth item (ignoring separators)
