@@ -213,6 +213,24 @@ describe('number prompt', () => {
     await expect(answer).resolves.toEqual(2);
   });
 
+  it('calls validate with undefined when an optional prompt is left empty', async () => {
+    const { answer, events, getScreen, nextRender } = await render(number, {
+      message: 'How many?',
+      validate: (value?: number) => value !== undefined || 'Please enter a number',
+    });
+
+    events.keypress('enter');
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? How many?
+      > Please enter a number"
+    `);
+
+    events.type('3');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(3);
+  });
+
   it('handle default option', async () => {
     const { answer, events, getScreen } = await render(number, {
       message: 'What is your age',
