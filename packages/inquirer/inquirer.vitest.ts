@@ -755,6 +755,64 @@ describe('promptModule(...)', () => {
     expect(answers['last_name']).toEqual('Doe');
   });
 
+  it('should resolve asynchronous `filter`', async () => {
+    const answers = await promptModule([
+      {
+        type: 'stub',
+        name: 'name1',
+        message: 'message',
+        answer: 'bar',
+        filter: (value: string) => Promise.resolve(value.toUpperCase()),
+      },
+      {
+        type: 'stub',
+        name: 'name2',
+        message: 'message',
+        when(answers) {
+          expect(answers).toEqual({ name1: 'BAR' });
+          return true;
+        },
+      },
+    ]);
+
+    expect(answers).toEqual({ name1: 'BAR', name2: 'bar' });
+  });
+
+  it('should resolve a `filter` using the legacy this.async() callback', async () => {
+    const legacyFilter = function (
+      this: { async: () => (error: Error | null, value: string) => void },
+      value: string,
+    ) {
+      const done = this.async();
+      setTimeout(() => done(null, value.toUpperCase()), 5);
+    };
+
+    const answers = await promptModule([
+      {
+        type: 'stub',
+        name: 'name1',
+        message: 'message',
+        answer: 'bar',
+        filter: legacyFilter,
+      },
+    ]);
+
+    expect(answers).toEqual({ name1: 'BAR' });
+  });
+
+  it('should reject when an asynchronous `filter` rejects', async () => {
+    await expect(
+      promptModule([
+        {
+          type: 'stub',
+          name: 'name1',
+          message: 'message',
+          filter: () => Promise.reject(new Error('filter failed')),
+        },
+      ]),
+    ).rejects.toThrow('filter failed');
+  });
+
   it('should parse `choices` if passed as a function', async () => {
     const stubChoices = ['foo', 'bar'];
 
