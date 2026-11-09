@@ -341,6 +341,33 @@ describe('rawlist prompt', () => {
     await expect(answer).rejects.toThrow();
   });
 
+  it('errors when the input only starts with a valid index', async () => {
+    const abortController = new AbortController();
+    const { answer, events, getScreen } = await render(
+      rawlist,
+      {
+        message: 'Select a number',
+        choices: numberedChoices,
+      },
+      { signal: abortController.signal },
+    );
+
+    events.type('2x');
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number 2x
+        1) 1
+        2) 2
+        3) 3
+        4) 4
+        5) 5
+      > "2x" isn't an available option"
+    `);
+
+    abortController.abort();
+    await expect(answer).rejects.toThrow();
+  });
+
   it('allow setting custom keys', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select a number',
