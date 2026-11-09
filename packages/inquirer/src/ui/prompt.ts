@@ -407,9 +407,9 @@ export default class PromptsRunner<A extends Answers> {
     const { filter = (value) => value } = question;
     const { signal } = this.abortController;
     return promptFn(question, { ...this.opt, signal })
-      .then((answer: unknown) => ({
+      .then(async (answer: unknown) => ({
         name: question.name,
-        answer: filter(answer, this.answers),
+        answer: await runAsync(filter)(answer, this.answers),
       }))
       .finally(() => {
         cleanupSignal?.();

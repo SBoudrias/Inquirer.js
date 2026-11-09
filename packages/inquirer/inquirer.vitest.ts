@@ -755,6 +755,29 @@ describe('promptModule(...)', () => {
     expect(answers['last_name']).toEqual('Doe');
   });
 
+  it('should resolve asynchronous `filter`', async () => {
+    const answers = await promptModule([
+      {
+        type: 'stub',
+        name: 'name1',
+        message: 'message',
+        answer: 'bar',
+        filter: (value: string) => Promise.resolve(value.toUpperCase()),
+      },
+      {
+        type: 'stub',
+        name: 'name2',
+        message: 'message',
+        when(answers) {
+          expect(answers).toEqual({ name1: 'BAR' });
+          return true;
+        },
+      },
+    ]);
+
+    expect(answers).toEqual({ name1: 'BAR', name2: 'bar' });
+  });
+
   it('should parse `choices` if passed as a function', async () => {
     const stubChoices = ['foo', 'bar'];
 
