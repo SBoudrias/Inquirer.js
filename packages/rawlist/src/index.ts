@@ -104,7 +104,7 @@ function getSelectedChoice<Value>(
 
   // If no custom key match and input is numeric, try 1-based index
   if (!selectedChoice && numberRegex.test(trimmedInput)) {
-    const answer = Number.parseInt(input, 10) - 1;
+    const answer = Number.parseInt(trimmedInput, 10) - 1;
     selectedChoice = selectableChoices[answer];
   }
 

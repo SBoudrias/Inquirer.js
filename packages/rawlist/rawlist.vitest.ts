@@ -429,6 +429,22 @@ describe('rawlist prompt', () => {
     await expect(answer).resolves.toEqual('no');
   });
 
+  it('selects by index with surrounding whitespace when custom keys are set', async () => {
+    const { answer, events } = await render(rawlist, {
+      message: 'Select a number',
+      choices: [
+        { key: 'a', name: 'Alpha', value: 'A' },
+        { key: 'b', name: 'Bravo', value: 'B' },
+        { key: 'c', name: 'Charlie', value: 'C' },
+      ],
+    });
+
+    events.type(' 2 ');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual('B');
+  });
+
   it('allow using numeric keys (0, 1, 2)', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select an option',
