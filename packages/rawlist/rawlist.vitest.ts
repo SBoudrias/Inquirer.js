@@ -341,6 +341,33 @@ describe('rawlist prompt', () => {
     await expect(answer).rejects.toThrow();
   });
 
+  it('errors when the input only starts with a valid index', async () => {
+    const abortController = new AbortController();
+    const { answer, events, getScreen } = await render(
+      rawlist,
+      {
+        message: 'Select a number',
+        choices: numberedChoices,
+      },
+      { signal: abortController.signal },
+    );
+
+    events.type('2x');
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number 2x
+        1) 1
+        2) 2
+        3) 3
+        4) 4
+        5) 5
+      > "2x" isn't an available option"
+    `);
+
+    abortController.abort();
+    await expect(answer).rejects.toThrow();
+  });
+
   it('allow setting custom keys', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select a number',
@@ -400,6 +427,22 @@ describe('rawlist prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"✔ Select a number No"');
 
     await expect(answer).resolves.toEqual('no');
+  });
+
+  it('selects by index with surrounding whitespace when custom keys are set', async () => {
+    const { answer, events } = await render(rawlist, {
+      message: 'Select a number',
+      choices: [
+        { key: 'a', name: 'Alpha', value: 'A' },
+        { key: 'b', name: 'Bravo', value: 'B' },
+        { key: 'c', name: 'Charlie', value: 'C' },
+      ],
+    });
+
+    events.type(' 2 ');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual('B');
   });
 
   it('allow using numeric keys (0, 1, 2)', async () => {

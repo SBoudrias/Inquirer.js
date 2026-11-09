@@ -16,7 +16,7 @@ import {
 import type { PartialDeep } from '@inquirer/type';
 import { styleText } from 'node:util';
 
-const numberRegex = /\d+/;
+const numberRegex = /^\d+$/;
 
 type RawlistTheme = {
   style: {
@@ -103,8 +103,8 @@ function getSelectedChoice<Value>(
   );
 
   // If no custom key match and input is numeric, try 1-based index
-  if (!selectedChoice && numberRegex.test(input)) {
-    const answer = Number.parseInt(input, 10) - 1;
+  if (!selectedChoice && numberRegex.test(trimmedInput)) {
+    const answer = Number.parseInt(trimmedInput, 10) - 1;
     selectedChoice = selectableChoices[answer];
   }
 
