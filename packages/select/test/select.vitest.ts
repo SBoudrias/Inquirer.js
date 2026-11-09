@@ -224,6 +224,32 @@ describe('select prompt', () => {
     await expect(answer).resolves.toEqual('7.1');
   });
 
+  it('does not select an option by index when the line is not plain digits (2e1)', async () => {
+    const { answer, events, getScreen } = await render(select, {
+      message: 'Select a number',
+      choices: Array.from({ length: 25 }, (_, index) => ({ value: index + 1 })),
+    });
+
+    events.type('2e1');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a number
+        1
+      ❯ 2
+        3
+        4
+        5
+        6
+        7
+
+      ↑↓ navigate • ⏎ select"
+    `);
+
+    events.keypress('enter');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Select a number 2"`);
+
+    await expect(answer).resolves.toEqual(2);
+  });
+
   it('allow setting a smaller page size', async () => {
     const { answer, events, getScreen } = await render(select, {
       message: 'Select a number',
