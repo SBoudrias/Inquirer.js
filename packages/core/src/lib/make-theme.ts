@@ -17,6 +17,9 @@ function deepMerge<T extends object>(...objects: Partial<T>[]): T {
 
   for (const obj of objects) {
     for (const [key, value] of Object.entries(obj)) {
+      // A key explicitly set to `undefined` keeps the value from the previous theme.
+      if (value === undefined) continue;
+
       const prevValue = output[key];
 
       output[key] =
