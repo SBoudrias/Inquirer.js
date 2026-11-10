@@ -29,7 +29,10 @@ CONTRIBUTING.md ("Publishing new versions") is the source of truth; follow it. T
 ```md
 ## <package>@<version>
 
-### Breaking changes # only when engines/node support dropped
+### Breaking changes # whenever the release has one: engines/node
+
+                          # drops, removed or renamed APIs, changed
+                          # default behavior, new required peer deps, …
 
 ### What's new
 
