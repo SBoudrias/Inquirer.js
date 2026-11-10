@@ -82,9 +82,19 @@ Test-file patterns are declared in several places and must stay in sync: `vitest
 git checkout main
 git pull
 
-yarn lerna version           # interactive: pick the bump per package
-# → updates each package.json + CHANGELOG
-# → commits and creates tags like @inquirer/core@1.2.3
+yarn install
+yarn lerna version --no-private --no-push
+# → prompts for a bump per changed package (patch/minor/major each),
+#   so a dependency-only bump can stay a patch while a feature ships as
+#   a minor. --no-private skips the private workspaces (@repo/*,
+#   setup-packages, isolate-monorepo-package and the integration-tests
+#   packages), so they are not versioned or tagged. --no-push leaves the
+#   commit and tags local for verification before pushing.
+#
+#   Non-interactive alternative (CI or agents without a tty):
+#   `yarn lerna version --conventional-commits --no-private --yes --no-push`
+#   derives each package's bump from its commit types (feat → minor,
+#   fix → patch, BREAKING CHANGE → major).
 
 git push origin main --follow-tags   # required: the tags must ride along with the push
 ```
