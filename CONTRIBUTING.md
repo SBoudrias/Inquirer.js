@@ -90,6 +90,11 @@ yarn lerna version --no-private --no-push
 #   setup-packages, isolate-monorepo-package and the integration-tests
 #   packages), so they are not versioned or tagged. --no-push leaves the
 #   commit and tags local for verification before pushing.
+#
+#   Non-interactive alternative (CI or agents without a tty):
+#   `yarn lerna version --conventional-commits --no-private --yes --no-push`
+#   derives each package's bump from its commit types (feat → minor,
+#   fix → patch, BREAKING CHANGE → major).
 
 git push origin main --follow-tags   # required: the tags must ride along with the push
 ```
