@@ -90,8 +90,14 @@ export default createPrompt(
         if (required || answer != null) {
           isValid = validateNumber(answer, { min, max, step });
         }
-        if (isValid === true && answer != null) {
-          isValid = await validate(answer);
+        // An optional prompt left empty skips the range checks above but
+        // still calls validate with `undefined`, so it can reject an empty
+        // answer.
+        if (isValid === true) {
+          isValid = await validate(
+            // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+            answer as Required extends true ? number : number | undefined,
+          );
         }
 
         if (isValid === true) {
