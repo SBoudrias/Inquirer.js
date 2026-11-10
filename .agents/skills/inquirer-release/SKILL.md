@@ -12,10 +12,11 @@ Follow CONTRIBUTING.md ("Publishing new versions"). This skill adds the operatio
 ```sh
 cd /Users/simon.boudrias/github/Inquirer.js   # adjust if the repo moved
 git checkout main && git pull --ff-only origin main
+yarn install
 ```
 
 - Unreleased user-facing commits decide the bump: `git log --oneline <last-tag>..HEAD` (patch for fixes, minor for features or engine/node drops — a node-support drop is breaking and ships in a minor with a "Breaking changes" section in the notes).
-- The standalone switch yarn does not put `node_modules/.bin` on PATH: prefix every yarn script with `PATH="$PWD/node_modules/.bin:$PATH"`. If a hook or lerna step fails on a missing binary (`jest`, `oxfmt`), run `yarn install` first — a stale tree has bitten two releases in a row.
+- `yarn install` first, always: the hooks resolve workspace binaries through `yarn run`, and a stale `node_modules` (a dependency bump merged since the last install) makes them fail with "command not found" for jest/oxfmt/lerna. That has bitten two releases in a row.
 
 ## 2. Version
 
