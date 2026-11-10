@@ -24,7 +24,9 @@ import {
   type KeypressEvent,
   makeTheme,
   type Status,
+  type Theme,
 } from './src/index.ts';
+import type { PartialDeep } from '@inquirer/type';
 import { cursorLeft, cursorShow, eraseLines } from '@inquirer/ansi';
 
 afterEach(() => {
@@ -1101,6 +1103,37 @@ describe('Separator', () => {
       '"──────────────"',
     );
     expect(new Separator('===').separator).toEqual('===');
+  });
+});
+
+describe('makeTheme()', () => {
+  it('keeps the default for theme keys set to undefined', async () => {
+    const prompt = createPrompt(
+      (
+        config: { message: string; theme?: PartialDeep<Theme> },
+        done: (value: string) => void,
+      ) => {
+        const theme = makeTheme(config.theme);
+        const prefix = usePrefix({ theme });
+
+        useKeypress((event: KeypressEvent) => {
+          if (isEnterKey(event)) {
+            done('done');
+          }
+        });
+
+        return `${prefix} ${theme.style.message(config.message, 'idle')}`;
+      },
+    );
+
+    const { answer, events, getScreen } = await render(prompt, {
+      message: 'Question',
+      theme: { prefix: undefined, style: { message: undefined } },
+    });
+    expect(getScreen()).toMatchInlineSnapshot(`"? Question"`);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('done');
   });
 });
 
