@@ -82,12 +82,11 @@ Test-file patterns are declared in several places and must stay in sync: `vitest
 git checkout main
 git pull
 
-# Depending on how you installed yarn (e.g. the standalone "yarn pressure
-# switch" binary), `yarn lerna` may fail with "Couldn't find a script named
-# lerna" even though the repo is fully installed: that yarn resolves scripts
-# from package.json but does not add the workspace node_modules/.bin to the
-# PATH it passes them. Prefix the command with the workspace bin directory:
-#   PATH="$PWD/node_modules/.bin:$PATH" yarn lerna version ...
+# If a hook or script fails with "Couldn't find a script named <x>" or
+# "command not found" for a workspace binary (jest, oxfmt, lerna), the
+# checkout's node_modules is stale — refresh it with `yarn install` and
+# re-run. Hooks resolve workspace binaries through `yarn run` and don't
+# need any PATH setup.
 yarn lerna version minor --no-private --yes --no-push
 # → updates each package.json + CHANGELOG, commits and creates tags like
 #   @inquirer/core@1.2.3; --no-private skips the private workspaces
