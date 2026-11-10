@@ -82,9 +82,12 @@ Test-file patterns are declared in several places and must stay in sync: `vitest
 git checkout main
 git pull
 
-# The PATH prefix is needed if your yarn doesn't put node_modules/.bin on
-# PATH (e.g. the standalone switch yarn); skip it if `yarn lerna --help`
-# already works.
+# Depending on how you installed yarn (e.g. the standalone "yarn pressure
+# switch" binary), `yarn lerna` may fail with "Couldn't find a script named
+# lerna" even though the repo is fully installed: that yarn resolves scripts
+# from package.json but does not add the workspace node_modules/.bin to the
+# PATH it passes them. Prefix the command with the workspace bin directory:
+#   PATH="$PWD/node_modules/.bin:$PATH" yarn lerna version ...
 yarn lerna version minor --no-private --yes --no-push
 # → updates each package.json + CHANGELOG, commits and creates tags like
 #   @inquirer/core@1.2.3; --no-private skips the private workspaces
