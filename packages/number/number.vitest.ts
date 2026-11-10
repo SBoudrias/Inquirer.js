@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
 import number from './src/index.ts';
 
@@ -229,6 +229,50 @@ describe('number prompt', () => {
     events.type('3');
     events.keypress('enter');
     await expect(answer).resolves.toEqual(3);
+  });
+
+  it('does not call validate when a required prompt is left empty', async () => {
+    const validate = vi.fn(() => true);
+    const { answer, events, getScreen, nextRender } = await render(number, {
+      message: 'How many?',
+      required: true,
+      validate,
+    });
+
+    events.keypress('enter');
+    await nextRender();
+    expect(validate).not.toHaveBeenCalled();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? How many?
+      > You must provide a valid numeric value"
+    `);
+
+    events.type('3');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(3);
+    expect(validate).toHaveBeenCalledTimes(1);
+  });
+
+  it('calls validate with undefined before range checks when an optional prompt with min/max is left empty', async () => {
+    const seen: Array<unknown[]> = [];
+    const { answer, events, nextRender } = await render(number, {
+      message: 'How many?',
+      min: 5,
+      max: 10,
+      validate(value?: number) {
+        seen.push([value]);
+        return value !== undefined || 'Please enter a number';
+      },
+    });
+
+    events.keypress('enter');
+    await nextRender();
+    expect(seen).toEqual([[undefined]]);
+
+    events.type('7');
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(7);
+    expect(seen).toEqual([[undefined], [7]]);
   });
 
   it('handle default option', async () => {

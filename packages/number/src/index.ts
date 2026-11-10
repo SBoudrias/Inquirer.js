@@ -13,6 +13,29 @@ import {
 import type { PartialDeep } from '@inquirer/type';
 import { isStepOf } from './is-step-of.ts';
 
+// The answer's type follows the prompt mode: a required prompt always
+// produces a number, an optional one can be left empty.
+type Answer<Required extends boolean> = Required extends true
+  ? number
+  : number | undefined;
+
+// `Answer`'s conditional is resolved by each caller, but this implementation
+// only knows the mode at runtime; TypeScript cannot produce a value for an
+// unresolved conditional, so the runtime check below carries the invariant
+// and a single assertion replaces the casts at every call site. A required
+// prompt never resolves without an answer (validateNumber rejects empty
+// input first).
+function answerForMode<Required extends boolean>(
+  answer: number | undefined,
+  required: boolean,
+): Answer<Required> {
+  if (required && answer === undefined) {
+    throw new Error('A required prompt cannot resolve without an answer');
+  }
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+  return answer as Answer<Required>;
+}
+
 type NumberConfig<Required extends boolean = boolean> = {
   message: string;
   default?: number | undefined;
@@ -20,9 +43,7 @@ type NumberConfig<Required extends boolean = boolean> = {
   max?: number;
   step?: number | 'any';
   required?: Required;
-  validate?: (
-    value: Required extends true ? number : number | undefined,
-  ) => boolean | string | Promise<string | boolean>;
+  validate?: (value: Answer<Required>) => boolean | string | Promise<string | boolean>;
   theme?: PartialDeep<Theme>;
 };
 
@@ -52,7 +73,7 @@ function validateNumber(
 export default createPrompt(
   <Required extends boolean>(
     config: NumberConfig<Required>,
-    done: (value: Required extends true ? number : number | undefined) => void,
+    done: (value: Answer<Required>) => void,
   ) => {
     const {
       validate = () => true,
@@ -90,18 +111,17 @@ export default createPrompt(
         if (required || answer != null) {
           isValid = validateNumber(answer, { min, max, step });
         }
+        // An optional prompt left empty skips the range checks above but
+        // still calls validate with `undefined`, so it can reject an empty
+        // answer.
         if (isValid === true) {
-          isValid = await validate(
-            // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-            answer as Required extends true ? number : number | undefined,
-          );
+          isValid = await validate(answerForMode(answer, required));
         }
 
         if (isValid === true) {
           setValue(String(answer ?? ''));
           setStatus('done');
-          // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-          done(answer as Required extends true ? number : number | undefined);
+          done(answerForMode(answer, required));
         } else {
           // Reset the readline line value to the previous value. On line event, the value
           // get cleared, forcing the user to re-enter the value instead of fixing it.
