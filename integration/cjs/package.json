@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/cjs-integration-tests",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "private": true,
   "sideEffects": false,
   "scripts": {
