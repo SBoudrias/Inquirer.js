@@ -4,7 +4,7 @@ on:
   push:
     branches: ['main']
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, edited]
 
 # Cancel superseded runs on the same PR. Measured: 3 superseded runs in the
 # last 40 wasted 703 runner-seconds of already-doomed CI (run 40248967387
@@ -92,6 +92,13 @@ jobs:
       - run: yarn install --immutable
       - run: yarn oxlint .
       - run: yarn oxfmt --check .
+      # Conventional Commits gate: on pull_request runs lints the PR title
+      # (squash-merged titles become the commit subjects on main), on push
+      # runs to main lints the subjects the push introduced. The GitHub
+      # runner provides GITHUB_EVENT_PATH; the rules live in
+      # commitlint.config.mjs at the repo root.
+      - name: Lint commit subjects
+        run: node .github/scripts/commit-lint.mjs
       - run: yarn eslint .
       - run: yarn package lint --check
       - name: Validate package setup
