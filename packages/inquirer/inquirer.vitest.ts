@@ -851,35 +851,57 @@ describe('promptModule(...)', () => {
     await expect(answers).resolves.toEqual({ name1: '42' });
   });
 
-  it('should still reject when `validate` throws an error', async () => {
-    class ValidatingPrompt {
-      question: { validate: (value: string) => Promise<boolean | string> };
-
-      constructor(question: ValidatingPrompt['question']) {
-        this.question = question;
-      }
-
-      run() {
-        return this.question.validate('bar');
-      }
-
-      close() {}
-    }
-    const localPromptModule = createTestPromptModule();
-    localPromptModule.registerPrompt('stub2', ValidatingPrompt);
-
-    await expect(
-      localPromptModule([
-        {
-          type: 'stub2',
-          name: 'name1',
-          message: 'message',
-          validate: () => {
-            throw new Error('validate failed');
-          },
+  it('should show the message when `validate` rejects with a string', async () => {
+    let calls = 0;
+    const answers = promptModule([
+      {
+        type: 'input',
+        name: 'name1',
+        message: 'message',
+        // A string rejection is a validation message (v9 behavior), not an error.
+        validate: () => {
+          /* eslint-disable-next-line prefer-promise-reject-errors */
+          /* oxlint-disable-next-line typescript/prefer-promise-reject-errors */
+          return calls++ === 0 ? Promise.reject('nope') : true;
         },
-      ]),
-    ).rejects.toThrow('validate failed');
+      },
+    ]);
+
+    await screen.next();
+    screen.type('1');
+    screen.keypress('enter');
+    await screen.next();
+    expect(screen.getScreen()).toContain('nope');
+
+    screen.keypress('enter');
+    await expect(answers).resolves.toEqual({ name1: '1' });
+  });
+
+  it('should show the default message when the legacy this.async() callback reports false', async () => {
+    let calls = 0;
+    const legacyValidate = function (this: {
+      async: () => (error: string | null, value?: boolean) => void;
+    }) {
+      const done = this.async();
+      setTimeout(() => done(null, calls++ > 0), 5);
+    };
+    const answers = promptModule([
+      {
+        type: 'input',
+        name: 'name1',
+        message: 'message',
+        validate: legacyValidate,
+      },
+    ]);
+
+    await screen.next();
+    screen.type('1');
+    screen.keypress('enter');
+    await screen.next();
+    expect(screen.getScreen()).toContain('You must provide a valid value');
+
+    screen.keypress('enter');
+    await expect(answers).resolves.toEqual({ name1: '1' });
   });
 
   it('should parse `choices` if passed as a function', async () => {
