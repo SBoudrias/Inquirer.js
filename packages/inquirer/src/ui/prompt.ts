@@ -311,7 +311,13 @@ export default class PromptsRunner<A extends Answers> {
     if (question.validate) {
       const originalValidate = question.validate;
       wrappedQuestion.validate = (value: any) => {
-        return originalValidate(value, this.answers);
+        // Run through runAsync for the legacy this.async() callback. A string
+        // rejection (done('msg'), Promise.reject('msg')) is a validation
+        // message, like in v9.
+        return runAsync(originalValidate)(value, this.answers).catch((error: unknown) => {
+          if (typeof error === 'string') return error;
+          throw error;
+        });
       };
     }
 

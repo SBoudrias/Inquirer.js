@@ -813,6 +813,97 @@ describe('promptModule(...)', () => {
     ).rejects.toThrow('filter failed');
   });
 
+  it('should support a `validate` using the legacy this.async() callback', async () => {
+    const legacyValidate = function (
+      this: { async: () => (error: string | null, value?: boolean) => void },
+      value: string,
+    ) {
+      const done = this.async();
+      setTimeout(() => {
+        if (value === '42') {
+          done(null, true);
+        } else {
+          done('You need to provide 42');
+        }
+      }, 5);
+    };
+
+    const answers = promptModule([
+      /* oxlint-disable typescript/no-unsafe-type-assertion */
+      {
+        type: 'input',
+        name: 'name1',
+        message: 'message',
+        validate: legacyValidate,
+      } as any,
+      /* oxlint-enable typescript/no-unsafe-type-assertion */
+    ]);
+
+    await screen.next();
+    screen.type('1');
+    screen.keypress('enter');
+    await screen.next();
+    expect(screen.getScreen()).toContain('You need to provide 42');
+
+    screen.keypress('backspace');
+    screen.type('42');
+    screen.keypress('enter');
+    await expect(answers).resolves.toEqual({ name1: '42' });
+  });
+
+  it('should show the message when `validate` rejects with a string', async () => {
+    let calls = 0;
+    const answers = promptModule([
+      {
+        type: 'input',
+        name: 'name1',
+        message: 'message',
+        // A string rejection is a validation message (v9 behavior), not an error.
+        validate: () => {
+          /* eslint-disable-next-line prefer-promise-reject-errors */
+          /* oxlint-disable-next-line typescript/prefer-promise-reject-errors */
+          return calls++ === 0 ? Promise.reject('nope') : true;
+        },
+      },
+    ]);
+
+    await screen.next();
+    screen.type('1');
+    screen.keypress('enter');
+    await screen.next();
+    expect(screen.getScreen()).toContain('nope');
+
+    screen.keypress('enter');
+    await expect(answers).resolves.toEqual({ name1: '1' });
+  });
+
+  it('should show the default message when the legacy this.async() callback reports false', async () => {
+    let calls = 0;
+    const legacyValidate = function (this: {
+      async: () => (error: string | null, value?: boolean) => void;
+    }) {
+      const done = this.async();
+      setTimeout(() => done(null, calls++ > 0), 5);
+    };
+    const answers = promptModule([
+      {
+        type: 'input',
+        name: 'name1',
+        message: 'message',
+        validate: legacyValidate,
+      },
+    ]);
+
+    await screen.next();
+    screen.type('1');
+    screen.keypress('enter');
+    await screen.next();
+    expect(screen.getScreen()).toContain('You must provide a valid value');
+
+    screen.keypress('enter');
+    await expect(answers).resolves.toEqual({ name1: '1' });
+  });
+
   it('should parse `choices` if passed as a function', async () => {
     const stubChoices = ['foo', 'bar'];
 
