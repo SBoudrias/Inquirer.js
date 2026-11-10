@@ -82,11 +82,7 @@ Test-file patterns are declared in several places and must stay in sync: `vitest
 git checkout main
 git pull
 
-# If a hook or script fails with "Couldn't find a script named <x>" or
-# "command not found" for a workspace binary (jest, oxfmt, lerna), the
-# checkout's node_modules is stale — refresh it with `yarn install` and
-# re-run. Hooks resolve workspace binaries through `yarn run` and don't
-# need any PATH setup.
+yarn install
 yarn lerna version minor --no-private --yes --no-push
 # → updates each package.json + CHANGELOG, commits and creates tags like
 #   @inquirer/core@1.2.3; --no-private skips the private workspaces
