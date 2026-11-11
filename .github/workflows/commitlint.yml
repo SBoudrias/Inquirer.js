@@ -40,15 +40,25 @@ jobs:
       # main), or the subjects of the commits a push introduced — capped at
       # 20 by GitHub; a push that rewrote history omits `before` and is
       # skipped so a force-push cannot fail on pre-existing history.
-      # commitlint reads stdin as a single message, so each subject is
-      # linted in its own run; batching them would let a bad subject hide
-      # in the body of the message before it. Rules: commitlint.config.mjs
-      # at the repo root.
+      # Dependabot is excluded on both paths: its generated subjects
+      # ("Bump X from A to B") are sentence-cased, which the stock
+      # config-conventional rules reject, and we cannot rewrite them. The
+      # exclusion is by author login on pushes and PR author on
+      # pull_request — the automerge pushes show up as github-actions[bot],
+      # so the pusher name is not a usable signal. commitlint reads stdin
+      # as a single message, so each subject is linted in its own run;
+      # batching them would let a bad subject hide in the body of the
+      # message before it. Rules: commitlint.config.mjs at the repo root.
       - name: Lint commit subjects
         run: |
-          jq -r 'if .pull_request then .pull_request.title
+          jq -r 'if .pull_request
+                 then if .pull_request.user.login == "dependabot[bot]"
+                      then empty
+                      else .pull_request.title end
                  elif .before and (.before != "0000000000000000000000000000000000000000")
-                 then .commits[]?.message | split("\n")[0]
+                 then .commits[]?
+                   | select((.author.username // .author.email // "") | test("dependabot") | not)
+                   | .message | split("\n")[0]
                  else empty end' "$GITHUB_EVENT_PATH" |
             while IFS= read -r subject; do
               printf '%s\n' "$subject" | yarn commitlint
