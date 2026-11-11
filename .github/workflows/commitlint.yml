@@ -1,0 +1,55 @@
+name: Commitlint
+
+# Conventional Commits gate, kept in its own workflow so a pure subject
+# check neither re-triggers the main CI matrix nor is coupled to its
+# re-run conditions. Informational for now: not in the required-checks
+# ruleset, so it reports on PRs without blocking them.
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    types: [opened, synchronize, edited]
+
+permissions:
+  contents: read
+
+# Same rationale as main.yml: cancel superseded runs on the same PR to
+# reclaim queue capacity. This check is fast, so the saving is small, but
+# it keeps every workflow in the repo on one pattern.
+concurrency:
+  group: commitlint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  commitlint:
+    name: Commitlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: corepack enable
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: latest
+          cache: 'yarn'
+      - run: yarn install --immutable
+      # Pulls the subjects to lint out of the GitHub event payload the
+      # runner exposes at $GITHUB_EVENT_PATH: the PR title on pull_request
+      # runs (the repo squash-merges, so titles become the subjects on
+      # main), or the subjects of the commits a push introduced — capped at
+      # 20 by GitHub; a push that rewrote history omits `before` and is
+      # skipped so a force-push cannot fail on pre-existing history.
+      # commitlint reads stdin as a single message, so each subject is
+      # linted in its own run; batching them would let a bad subject hide
+      # in the body of the message before it. Rules: commitlint.config.mjs
+      # at the repo root.
+      - name: Lint commit subjects
+        run: |
+          jq -r 'if .pull_request then .pull_request.title
+                 elif .before and (.before != "0000000000000000000000000000000000000000")
+                 then .commits[]?.message | split("\n")[0]
+                 else empty end' "$GITHUB_EVENT_PATH" |
+            while IFS= read -r subject; do
+              printf '%s\n' "$subject" | yarn commitlint
+            done

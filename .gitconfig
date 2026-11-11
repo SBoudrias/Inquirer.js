@@ -10,4 +10,9 @@
 
 [hook "full-test"]
 	event = pre-push
-	command = sh -c 'CI=true yarn pretest && yarn test'
+	# Commitlint runs first, so a non-conventional subject fails fast
+	# instead of after the full test suite (~1-2min). Guarded on the
+	# origin/main..HEAD count because this hook fires on every push,
+	# including no-op ones, where an empty range would make commitlint
+	# exit 9 (--from equals --to).
+	command = sh -c 'if [ "$(git rev-list --count origin/main..HEAD)" -gt 0 ]; then yarn commitlint --from origin/main --to HEAD; fi && CI=true yarn pretest && yarn test'

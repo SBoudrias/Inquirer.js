@@ -1,10 +1,14 @@
 /**
- * Conventional Commits gate, run by the Linting job in
- * .github/workflows/main.yml via .github/scripts/commit-lint.mjs.
+ * Conventional Commits rules, shared by three gates:
+ *
+ * - the Commitlint workflow (.github/workflows/commitlint.yml), which
+ *   lints the PR title on pull_request runs and the pushed subjects on
+ *   push runs to main;
+ * - the pre-push hook (.gitconfig [hook "full-test"]), which lints the
+ *   commits being pushed via `yarn commitlint --from origin/main --to HEAD`.
  *
  * The repo squash-merges, so a PR title becomes the commit subject on
- * `main`: CI lints the PR title on pull_request runs and every pushed
- * subject on push runs.
+ * `main`.
  *
  * This extends the shared @commitlint/config-conventional rules with one
  * override: `sentence-case` is not rejected. The house style writes
