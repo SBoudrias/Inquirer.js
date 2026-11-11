@@ -10,4 +10,11 @@
 
 [hook "full-test"]
 	event = pre-push
-	command = sh -c 'CI=true yarn pretest && yarn test'
+	# Commitlint runs first, so a non-conventional subject fails the push
+	# in seconds instead of after the full test suite (~1-2min). The grep
+	# skips it when the branch has no commits over origin/main — the hook
+	# fires on every push, including no-op ones, and commitlint exits 9
+	# when --from equals --to. Written without double quotes or semicolons:
+	# git config strips the former and cuts the value at the latter. Needs
+	# origin/main to exist locally (it does after any clone or fetch).
+	command = sh -c 'git rev-list --count origin/main..HEAD | grep -q ^0$ || yarn commitlint --from origin/main --to HEAD && CI=true yarn pretest && yarn test'

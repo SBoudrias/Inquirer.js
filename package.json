@@ -65,6 +65,8 @@
     "tsc": "turbo tsc && tsc -p tsconfig.json"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
     "@eslint/js": "^10.0.1",
     "@lerna-lite/cli": "^5.6.0",
     "@lerna-lite/publish": "^5.6.0",
