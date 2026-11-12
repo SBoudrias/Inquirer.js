@@ -114,18 +114,20 @@ type KeyValueOrAsyncGetterFunction<T, k extends string, A extends Answers> =
   T extends Record<string, any> ? MaybeAsyncValue<T[k], A> : never;
 
 export type Question<A extends Answers = Answers, Type extends string = string> = {
-  type?: Type;
+  type?: Type | undefined;
   name: string;
   message: MaybeAsyncValue<string, A>;
   default?: any;
   choices?: any;
-  validate?: (
-    value: any,
-    answers: NoInfer<Partial<A>>,
-  ) => boolean | string | Promise<boolean | string>;
-  filter?: (answer: any, answers: NoInfer<Partial<A>>) => any;
-  askAnswered?: boolean;
-  when?: MaybeAsyncValue<boolean, A>;
+  validate?:
+    | ((
+        value: any,
+        answers: NoInfer<Partial<A>>,
+      ) => boolean | string | Promise<boolean | string>)
+    | undefined;
+  filter?: ((answer: any, answers: NoInfer<Partial<A>>) => any) | undefined;
+  askAnswered?: boolean | undefined;
+  when?: MaybeAsyncValue<boolean, A> | undefined;
 };
 
 type QuestionWithGetters<
@@ -138,7 +140,7 @@ type QuestionWithGetters<
     type: Type;
     askAnswered?: boolean;
     when?: MaybeAsyncValue<boolean, A>;
-    filter?(input: any, answers: NoInfer<A>): any;
+    filter?(input: any, answers: NoInfer<Partial<A>>): any;
     message: KeyValueOrAsyncGetterFunction<Q, 'message', A>;
     default?: KeyValueOrAsyncGetterFunction<Q, 'default', A>;
     choices?: KeyValueOrAsyncGetterFunction<Q, 'choices', A>;

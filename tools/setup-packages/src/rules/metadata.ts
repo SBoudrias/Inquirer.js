@@ -39,9 +39,11 @@ export async function applyMetadataRules(
 
   if (pkg.private === true) return;
 
-  pkg.author = rootPkg.author;
-  pkg.license = rootPkg.license;
-  pkg.repository = rootPkg.repository;
+  // Mirror the root metadata; guards keep fields the root doesn't set absent
+  // rather than writing `undefined` into them.
+  if (rootPkg.author !== undefined) pkg.author = rootPkg.author;
+  if (rootPkg.license !== undefined) pkg.license = rootPkg.license;
+  if (rootPkg.repository !== undefined) pkg.repository = rootPkg.repository;
   if (!dir.startsWith('tools/')) {
     pkg.keywords = [...new Set([...(rootPkg.keywords ?? []), ...(pkg.keywords ?? [])])];
   }

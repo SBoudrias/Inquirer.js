@@ -79,13 +79,18 @@ function normalizeChoices<Value>(
     }
 
     const name = choice.name ?? String(choice.value);
-    return {
+    const normalizedChoice: NormalizedChoice<Value> = {
       value: choice.value,
       name,
       short: choice.short ?? name,
       key: choice.key ?? String(index),
-      description: choice.description,
     };
+
+    if (choice.description) {
+      normalizedChoice.description = choice.description;
+    }
+
+    return normalizedChoice;
   });
 }
 

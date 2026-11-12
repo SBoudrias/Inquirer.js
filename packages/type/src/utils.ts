@@ -19,9 +19,14 @@ export type Prettify<T> = T extends (...args: never[]) => unknown
           : { [K in keyof T]: Prettify<T[K]> } & {}
         : T;
 
+/**
+ * A deep partial where every optional key also accepts an explicit `undefined`
+ * value. Keys set to `undefined` are how callers opt out of a default when
+ * merging themes (`makeTheme` keeps the previous value for those keys).
+ */
 export type PartialDeep<T> = T extends object
   ? {
-      [P in keyof T]?: PartialDeep<T[P]>;
+      [P in keyof T]?: PartialDeep<T[P]> | undefined;
     }
   : T;
 

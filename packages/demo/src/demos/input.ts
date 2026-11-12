@@ -21,7 +21,7 @@ const demo = async () => {
     transformer(value = '', { isFinal }) {
       return isFinal ? styleText('underline', value) : value;
     },
-    validate: (value = '') => isHex(value) || 'Pass a valid hex value',
+    validate: (value) => isHex(value) || 'Pass a valid hex value',
   });
   console.log('Answer:', answer);
 
