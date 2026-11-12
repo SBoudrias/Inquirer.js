@@ -11,9 +11,11 @@ test('DistributiveMerge', () => {
 });
 
 test('PartialDeep', () => {
-  expectTypeOf<PartialDeep<{ a: string }>>().toEqualTypeOf<{ a?: string }>();
+  expectTypeOf<PartialDeep<{ a: string }>>().toEqualTypeOf<{
+    a?: string | undefined;
+  }>();
   expectTypeOf<PartialDeep<{ a: { b: string } }>>().toEqualTypeOf<{
-    a?: { b?: string };
+    a?: { b?: string | undefined } | undefined;
   }>();
 });
 

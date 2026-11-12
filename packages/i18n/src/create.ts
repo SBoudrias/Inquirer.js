@@ -56,7 +56,7 @@ function defaultKeysHelpTip(keys: Array<[string, string]>): string {
  * returns the fully typed theme, restoring it.
  */
 function resolveKeysHelpTip(
-  userTheme: { style?: { keysHelpTip?: object } } | undefined,
+  userTheme: { style?: { keysHelpTip?: object | undefined } | undefined } | undefined,
 ): KeysHelpTip {
   const theme = makeTheme<KeysHelpTipTheme>(
     { style: { keysHelpTip: defaultKeysHelpTip } },
@@ -83,9 +83,9 @@ function localizedKeysHelpTip(
  * translated labels. Keeping the original in the merge would override the
  * composer and pass English labels straight through.
  */
-function themeWithoutKeysHelpTip<T extends { style?: { keysHelpTip?: unknown } }>(
-  theme: T,
-): T {
+function themeWithoutKeysHelpTip<
+  T extends { style?: { keysHelpTip?: unknown } | undefined },
+>(theme: T): T {
   const style = { ...theme.style };
   delete style.keysHelpTip;
   return { ...theme, style };

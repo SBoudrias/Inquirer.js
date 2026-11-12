@@ -2771,7 +2771,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@repo/tsconfig@workspace:tools/tsconfig"
   dependencies:
-    "@sindresorhus/tsconfig": "npm:^8.1.0"
+    "@sindresorhus/tsconfig": "npm:^9.0.0"
   languageName: unknown
   linkType: soft
 
@@ -3014,10 +3014,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sindresorhus/tsconfig@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "@sindresorhus/tsconfig@npm:8.1.0"
-  checksum: 10/4c000cb3c10c672b7df127c6a9a4343d4887a941ff943c41ee8098c04a756077ebe9a22293085ad6afd1362a28d4f9b6fc2694182cde641fbf42ae7740c8e234
+"@sindresorhus/tsconfig@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@sindresorhus/tsconfig@npm:9.0.0"
+  checksum: 10/a4d4695cf4af3bec1a2e022db8efe8a0c15594418997988471700677d1ddc516a46dc9c66b67bb9d5d57738884afe9aeae7cfbff1c2e0f462789b640522dd9b5
   languageName: node
   linkType: hard
 
