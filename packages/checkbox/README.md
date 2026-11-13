@@ -222,7 +222,7 @@ type Theme = {
     help: (text: string) => string;
     highlight: (text: string) => string;
     key: (text: string) => string;
-    disabledChoice: (text: string) => string;
+    disabled: (text: string) => string;
     description: (text: string) => string;
     renderSelectedChoices: <T>(
       selectedChoices: ReadonlyArray<Choice<T>>,
@@ -234,7 +234,10 @@ type Theme = {
     checked: string;
     unchecked: string;
     cursor: string;
+    disabledChecked: string;
+    disabledUnchecked: string;
   };
+  i18n: { disabledError: string };
   keybindings: readonly ('emacs' | 'vim')[];
 };
 ```
