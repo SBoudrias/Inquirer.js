@@ -282,8 +282,10 @@ Listening for keypress events inside an inquirer prompt is a very common pattern
 - `isEnterKey()`
 - `isBackspaceKey()`
 - `isSpaceKey()`
-- `isUpKey()` - Note: this utility will handle vim and emacs keybindings (up, `k`, and `ctrl+p`)
-- `isDownKey()` - Note: this utility will handle vim and emacs keybindings (down, `j`, and `ctrl+n`)
+- `isTabKey()`
+- `isShiftKey()` - true when shift is held
+- `isUpKey()` - Note: pass `theme.keybindings` as the second argument to also handle vim and emacs keybindings (`k` and `ctrl+p`); without it, only the up arrow matches
+- `isDownKey()` - Note: pass `theme.keybindings` as the second argument to also handle vim and emacs keybindings (`j` and `ctrl+n`); without it, only the down arrow matches
 - `isNumberKey()` one of 1, 2, 3, 4, 5, 6, 7, 8, 9, 0
 
 Set `INQUIRER_KEYBINDINGS=vim`, `INQUIRER_KEYBINDINGS=emacs`, or `INQUIRER_KEYBINDINGS=vim,emacs` to enable alternative navigation keybindings globally. Prompt-level `theme.keybindings` values override the environment variable.
