@@ -220,6 +220,7 @@ type Theme = {
   icon: {
     cursor: string;
   };
+  i18n: { disabledError: string };
   indexMode: 'hidden' | 'number';
   keybindings: readonly ('emacs' | 'vim')[];
 };
