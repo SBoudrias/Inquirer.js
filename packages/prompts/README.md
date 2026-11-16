@@ -557,20 +557,6 @@ Directory size: 123M
   Delete
 ```
 
-[**Ordered Checkbox Prompt**](https://github.com/kyou-izumi/inquirer-ordered-checkbox)<br/>
-A sortable checkbox prompt that maintains the order of selection. Perfect for prioritizing tasks or ranking options.
-
-```
-? Configure your development workflow:
-  [1] Set up CI/CD pipeline
-❯ [3] Code quality tools
-  [ ] Documentation
-  [2] Performance monitoring
- ──────────────
-- Legacy system (disabled)
-(Linting, formatting, and analysis)
-```
-
 [**Checkbox Plus Plus Prompt**](https://github.com/behnamazimi/inquirer-checkbox-plus-plus)<br/>
 A modern multiselect checkbox prompt with search and filter capabilities, highlighting, autocomplete, and improved UX. Supports both ESM and CommonJS and is compatible with @inquirer/core v10+.
 
