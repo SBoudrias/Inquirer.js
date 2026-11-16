@@ -78,6 +78,8 @@ export default createPrompt<string, InputConfig>((config, done) => {
         setStatus('done');
         done(answer);
       } else {
+        // Keys pressed while validating were ignored, but readline still added them to its line.
+        rl.clearLine(0);
         if (theme.validationFailureMode === 'clear') {
           setValue('');
         } else {

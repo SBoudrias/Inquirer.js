@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
+import { withResolver } from '@inquirer/type';
 import input from './src/index.ts';
 
 describe('input prompt', () => {
@@ -118,6 +119,62 @@ describe('input prompt', () => {
     `);
 
     events.keypress('backspace');
+    events.type('2');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 2"`);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('2');
+  });
+
+  it('ignores keys typed while asynchronous validation is pending', async () => {
+    const { promise: validation, resolve: resolveValidation } = withResolver<string>();
+    const { answer, events, getScreen, nextRender } = await render(input, {
+      message: 'Answer 2 ===',
+      validate: (value: string) => value === '2' || validation,
+    });
+
+    events.type('1');
+    events.keypress('enter');
+    await nextRender();
+
+    events.type('x');
+    resolveValidation('Answer must be 2');
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Answer 2 === 1
+      > Answer must be 2"
+    `);
+
+    events.keypress('backspace');
+    events.type('2');
+    expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 2"`);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('2');
+  });
+
+  it('ignores keys typed while asynchronous validation is pending when clearing the value', async () => {
+    const { promise: validation, resolve: resolveValidation } = withResolver<string>();
+    const { answer, events, getScreen, nextRender } = await render(input, {
+      message: 'Answer 2 ===',
+      validate: (value: string) => value === '2' || validation,
+      theme: {
+        validationFailureMode: 'clear',
+      },
+    });
+
+    events.type('1');
+    events.keypress('enter');
+    await nextRender();
+
+    events.type('x');
+    resolveValidation('Answer must be 2');
+    await nextRender();
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Answer 2 ===
+      > Answer must be 2"
+    `);
+
     events.type('2');
     expect(getScreen()).toMatchInlineSnapshot(`"? Answer 2 === 2"`);
 
