@@ -90,6 +90,7 @@ type NormalizedChoice<Value> = {
 
 type CheckboxConfig<Value = string> = {
   message: string;
+  /** @deprecated Has no effect. Use `theme.prefix` instead. */
   prefix?: string;
   pageSize?: number;
   choices: ReadonlyArray<Value | Choice<Value> | Separator>;
