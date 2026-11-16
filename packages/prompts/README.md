@@ -557,7 +557,7 @@ Directory size: 123M
   Delete
 ```
 
-[**Ordered Checkbox Prompt**](https://github.com/kyou-izumi/inquirer-ordered-checkbox)<br/>
+[**Ordered Checkbox Prompt**](https://www.npmjs.com/package/@kyou-izumi/inquirer-ordered-checkbox)<br/>
 A sortable checkbox prompt that maintains the order of selection. Perfect for prioritizing tasks or ranking options.
 
 ```
