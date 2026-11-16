@@ -568,9 +568,6 @@ A table editing prompt for Inquirer.<br>
 <br>
 ![inquirer-table-prompt](https://raw.githubusercontent.com/edelciomolina/inquirer-table-input/master/screen-capture.gif)
 
-[**inquirer-interrupted-prompt**](https://www.npmjs.com/package/inquirer-interrupted-prompt)<br>
-Turning any existing inquirer and its plugin prompts into prompts that can be interrupted with a custom key.<br>
-
 [**inquirer-press-to-continue**](https://github.com/leonzalion/inquirer-press-to-continue)<br>
 A "press any key to continue" prompt for Inquirer.js<br>
 <br>
