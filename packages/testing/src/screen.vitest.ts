@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 // The adapter must be imported BEFORE the prompt imports so its mocks
 // intercept them, and through the package's exports map, the way consumers
 // use it. This suite drives the shared `screen` it exposes — the public
@@ -7,6 +7,8 @@ import { screen } from '@inquirer/testing/vitest';
 
 import input from '@inquirer/input';
 import select from '@inquirer/select';
+
+afterEach(() => vi.unstubAllEnvs());
 
 describe('screen', () => {
   it('shows the first render of a prompt immediately', async () => {
@@ -73,17 +75,22 @@ describe('screen', () => {
     await expect(answer).resolves.toBe('b');
   });
 
-  it('supports line editing through keypress names', async () => {
-    const answer = input({ message: 'Question?' });
+  it.each(['dumb', 'xterm-256color'])(
+    'supports line editing with TERM=%s',
+    async (term) => {
+      vi.stubEnv('TERM', term);
+      const answer = input({ message: 'Question?' });
 
-    screen.type('12');
-    screen.keypress('backspace');
-    screen.type('3');
-    expect(screen.getScreen()).toBe('? Question? 13');
+      expect(process.env['TERM']).toBe(term);
+      screen.type('12');
+      screen.keypress('backspace');
+      screen.type('3');
+      expect(screen.getScreen()).toBe('? Question? 13');
 
-    screen.keypress('enter');
-    await expect(answer).resolves.toBe('13');
-  });
+      screen.keypress('enter');
+      await expect(answer).resolves.toBe('13');
+    },
+  );
 
   it('exposes the shared muted input stream driving the prompts', async () => {
     expect(screen.input.isTTY).not.toBe(true);

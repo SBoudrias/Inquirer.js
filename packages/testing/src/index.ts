@@ -4,6 +4,7 @@ import type { Prompt, Context } from '@inquirer/type';
 
 type RenderOptions = Omit<Context, 'input' | 'output'>;
 import { BufferedStream } from './buffered-stream.ts';
+import { withEditableTerminal } from './with-editable-terminal.ts';
 import { interpretTerminalOutput } from './terminal.ts';
 
 export async function render<Value, const Config>(
@@ -29,21 +30,9 @@ export async function render<Value, const Config>(
   const output = new BufferedStream();
   const firstRender = new Promise<void>((resolve) => output.once('render', resolve));
 
-  // Node's readline disables line editing (backspace, arrows, etc.) when
-  // `TERM=dumb` is set, regardless of whether the input is a real terminal.
-  // Environments like GitLab CI or Emacs shells set `TERM=dumb`, which would
-  // silently break the keypress simulation below. The check only happens when
-  // the readline interface is created (synchronously inside `prompt()`), so
-  // overriding `TERM` for the prompt construction alone is sufficient.
-  // @see https://github.com/SBoudrias/Inquirer.js/issues/2180
-  const savedTerm = process.env['TERM'];
-  if (savedTerm === 'dumb') process.env['TERM'] = 'xterm-256color';
-  let answer: Promise<Value>;
-  try {
-    answer = prompt(config, { ...options, input, output });
-  } finally {
-    if (savedTerm === 'dumb') process.env['TERM'] = 'dumb';
-  }
+  const answer = withEditableTerminal(() =>
+    prompt(config, { ...options, input, output }),
+  );
 
   // The first render is synchronous. If our BufferedStream received a write, we're ready.
   if (output.writeCount === 0) {
