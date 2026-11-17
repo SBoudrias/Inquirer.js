@@ -158,10 +158,14 @@ type Theme = {
     error: (text: string) => string;
     help: (text: string) => string;
     key: (text: string) => string;
+    loadingMessage: () => string;
+    waitingMessage: (enterKey: string) => string;
   };
   validationFailureMode: 'keep' | 'clear';
 };
 ```
+
+`theme.style.waitingMessage` returns the help tip shown while the prompt waits for the user to open the editor; it receives the already styled enter key (`theme.style.key('enter')`). `theme.style.loadingMessage` returns the text shown while the submitted value is being validated. Both can be used to localize the prompt.
 
 `validationFailureMode` defines the behavior of the prompt when the value submitted is invalid. By default, we'll keep the value allowing the user to edit it. When the theme option is set to `clear`, we'll remove and reset to the default value or empty string.
 
