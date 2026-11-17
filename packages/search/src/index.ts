@@ -123,7 +123,6 @@ export default createPrompt(
     const [searchResults, setSearchResults] = useState<ReadonlyArray<Item<Value>>>([]);
     const [searchError, setSearchError] = useState<string>();
     const defaultApplied = useRef(false);
-    const validationInProgress = useRef(false);
 
     const prefix = usePrefix({ status, theme });
 
@@ -190,17 +189,15 @@ export default createPrompt(
     const selectedChoice = searchResults[active] as NormalizedChoice<Value> | void;
 
     useKeypress(async (key, rl) => {
-      if (validationInProgress.current) {
+      if (status === 'validating') {
         rl.clearLine(0);
         rl.write(searchTerm);
         return;
       }
       if (isEnterKey(key)) {
         if (selectedChoice && status === 'idle') {
-          setStatus('loading');
-          validationInProgress.current = true;
+          setStatus('validating');
           const isValid = await validate(selectedChoice.value);
-          validationInProgress.current = false;
           setStatus('idle');
 
           if (isValid === true) {
