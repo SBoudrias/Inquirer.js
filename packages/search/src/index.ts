@@ -124,7 +124,10 @@ export default createPrompt(
     const [searchError, setSearchError] = useState<string>();
     const defaultApplied = useRef(false);
 
-    const prefix = usePrefix({ status, theme });
+    const prefix = usePrefix({
+      status: status === 'validating' ? 'loading' : status,
+      theme,
+    });
 
     const bounds = useMemo(() => {
       const first = searchResults.findIndex(isSelectable);
@@ -238,7 +241,10 @@ export default createPrompt(
       }
     });
 
-    const message = theme.style.message(config.message, status);
+    const message = theme.style.message(
+      config.message,
+      status === 'validating' ? 'loading' : status,
+    );
 
     const helpLine = theme.style.keysHelpTip([
       ['↑↓', 'navigate'],
