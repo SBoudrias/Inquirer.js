@@ -86,6 +86,50 @@ describe('search prompt', () => {
     expect(validate).toHaveBeenCalledOnce();
   });
 
+  it('ignores query edits while validating the selected choice', async () => {
+    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const source = vi.fn(getListSearch(PROVINCES));
+    const { answer, events, getScreen } = await render(search, {
+      message: 'Select a Canadian province',
+      source,
+      validate: () => validation,
+    });
+
+    events.keypress('enter');
+    events.type('Que');
+    resolveValidation(true);
+
+    await expect(answer).resolves.toEqual('AB');
+    expect(source).toHaveBeenCalledOnce();
+    expect(getScreen()).toContain('Alberta');
+  });
+
+  it('restores the completed query after validation fails despite ignored typing', async () => {
+    const controller = new AbortController();
+    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const source = vi.fn(getListSearch(PROVINCES));
+    const { answer, events, nextRender } = await render(
+      search,
+      {
+        message: 'Select a Canadian province',
+        initialValue: 'Al',
+        source,
+        validate: () => validation,
+      },
+      { signal: controller.signal },
+    );
+
+    events.keypress('enter');
+    events.type('ignored');
+    resolveValidation(false);
+    await nextRender();
+    events.type('x');
+
+    expect(source).toHaveBeenLastCalledWith('Albertax', expect.anything());
+    controller.abort();
+    await expect(answer).rejects.toThrow();
+  });
+
   it('allows to search', async () => {
     const { answer, events, getScreen, nextRender } = await render(search, {
       message: 'Select a Canadian province',
