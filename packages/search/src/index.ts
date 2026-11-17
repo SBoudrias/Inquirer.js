@@ -124,7 +124,10 @@ export default createPrompt(
     const [searchError, setSearchError] = useState<string>();
     const defaultApplied = useRef(false);
 
-    const prefix = usePrefix({ status, theme });
+    const prefix = usePrefix({
+      status: status === 'validating' ? 'loading' : status,
+      theme,
+    });
 
     const bounds = useMemo(() => {
       const first = searchResults.findIndex(isSelectable);
@@ -189,9 +192,14 @@ export default createPrompt(
     const selectedChoice = searchResults[active] as NormalizedChoice<Value> | void;
 
     useKeypress(async (key, rl) => {
+      if (status === 'validating') {
+        rl.clearLine(0);
+        rl.write(searchTerm);
+        return;
+      }
       if (isEnterKey(key)) {
         if (selectedChoice && status === 'idle') {
-          setStatus('loading');
+          setStatus('validating');
           const isValid = await validate(selectedChoice.value);
           setStatus('idle');
 
@@ -202,6 +210,7 @@ export default createPrompt(
             setSearchError(isValid || 'You must provide a valid value');
           } else {
             // Reset line with new search term
+            rl.clearLine(0);
             rl.write(selectedChoice.name);
             setSearchTerm(selectedChoice.name);
           }
@@ -232,7 +241,10 @@ export default createPrompt(
       }
     });
 
-    const message = theme.style.message(config.message, status);
+    const message = theme.style.message(
+      config.message,
+      status === 'validating' ? 'loading' : status,
+    );
 
     const helpLine = theme.style.keysHelpTip([
       ['↑↓', 'navigate'],
