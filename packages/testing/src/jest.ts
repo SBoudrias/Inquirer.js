@@ -3,6 +3,7 @@
 
 import type { Prompt } from '@inquirer/type';
 import { Screen } from './screen.ts';
+import { withEditableTerminal } from './with-editable-terminal.ts';
 
 // Global screen instance - exported for tests
 const screenInstance: Screen = new Screen();
@@ -41,11 +42,13 @@ export function wrapPrompt<Value, Config>(
   ): Promise<Value> => {
     const output = screenInstance.createOutput();
 
-    const promise = fn(config, {
-      ...context,
-      input: screenInstance.input,
-      output,
-    });
+    const promise = withEditableTerminal(() =>
+      fn(config, {
+        ...context,
+        input: screenInstance.input,
+        output,
+      }),
+    );
 
     screenInstance.setActivePromise(promise);
     return promise;
