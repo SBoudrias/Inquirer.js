@@ -46,6 +46,12 @@ type ConfirmTheme = {
   };
 };
 
+const segmenter = new Intl.Segmenter();
+
+function keywordInitial(keyword: string): string {
+  return segmenter.segment(keyword).containing(0)?.segment.toLowerCase() ?? '';
+}
+
 const confirmTheme: ConfirmTheme = {
   keywords: {
     yes: 'Yes',
@@ -54,11 +60,10 @@ const confirmTheme: ConfirmTheme = {
   },
   style: {
     confirmDefault: (text: string) => {
-      const first = text[0] ?? '';
-      if (first.toLowerCase() === first.toUpperCase()) {
+      if (text.toLowerCase() === text.toUpperCase()) {
         return styleText('cyan', text);
       }
-      return first.toUpperCase() + text.slice(1);
+      return text.toUpperCase();
     },
   },
 };
@@ -73,8 +78,8 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
   const { yes, no } = theme.keywords;
   // The hint shows the first character of each label, lowercased; the default
   // side is then uppercased (or colored) by `confirmDefault`.
-  const yesHint = (yes[0] ?? '').toLowerCase();
-  const noHint = (no[0] ?? '').toLowerCase();
+  const yesHint = keywordInitial(yes);
+  const noHint = keywordInitial(no);
   const hint =
     config.default === false
       ? `${yesHint}/${theme.style.confirmDefault(noHint)}`
