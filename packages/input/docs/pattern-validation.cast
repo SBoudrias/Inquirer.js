@@ -1,0 +1,5 @@
+{"version":2,"width":75,"height":10,"title":"Repeated input pattern validation"}
+[0.0065856,"o","\u001b[2J\u001b[HBefore: first submission (custom validator rejects)\r\n\r\n? Number 123\r\n> Try again"]
+[1.5131485,"o","\u001b[2J\u001b[HBefore: resubmit the same valid input\r\n\r\n? Number 123\r\n> Invalid input"]
+[4.0235264,"o","\u001b[2J\u001b[HAfter: first submission (custom validator rejects)\r\n\r\n? Number 123\r\n> Try again"]
+[5.5370696,"o","\u001b[2J\u001b[HAfter: resubmit the same valid input\r\n\r\n✔ Number 123"]

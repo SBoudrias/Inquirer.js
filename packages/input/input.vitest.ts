@@ -4,6 +4,67 @@ import { withResolver } from '@inquirer/type';
 import input from './src/index.ts';
 
 describe('input prompt', () => {
+  it.each(['', 'g', 'y', 'gy'])(
+    'preserves a supplied %s pattern cursor',
+    async (flags) => {
+      const pattern = new RegExp('^[0-9]+$', flags);
+      pattern.lastIndex = 2;
+      const controller = new AbortController();
+      const { answer, events, getScreen, nextRender } = await render(
+        input,
+        {
+          message: 'Number',
+          pattern,
+        },
+        { signal: controller.signal },
+      );
+
+      try {
+        events.type('123');
+        events.keypress('enter');
+        await nextRender();
+        expect(getScreen()).toContain('✔ Number 123');
+        await expect(answer).resolves.toBe('123');
+        expect(pattern.lastIndex).toBe(2);
+      } finally {
+        controller.abort();
+        await answer.catch(() => {});
+      }
+    },
+  );
+
+  it.each(['g', 'y', 'gy'])(
+    'rechecks %s patterns after a validation failure',
+    async (flags) => {
+      const pattern = new RegExp('^[0-9]+$', flags);
+      let validations = 0;
+      const controller = new AbortController();
+      const { answer, events, nextRender, getScreen } = await render(
+        input,
+        {
+          message: 'Number',
+          pattern,
+          validate: () => ++validations > 1 || 'Try again',
+        },
+        { signal: controller.signal },
+      );
+
+      try {
+        events.type('123');
+        events.keypress('enter');
+        await nextRender();
+        expect(getScreen()).toContain('Try again');
+        events.keypress('enter');
+        await nextRender();
+        expect(validations).toBe(2);
+        await expect(answer).resolves.toBe('123');
+      } finally {
+        controller.abort();
+        await answer.catch(() => {});
+      }
+    },
+  );
+
   it('handle simple use case', async () => {
     const { answer, events, getScreen } = await render(input, {
       message: 'What is your name',
