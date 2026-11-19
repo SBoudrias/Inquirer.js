@@ -5032,13 +5032,13 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-oxlint@npm:^1.58.0":
-  version: 1.90.0
-  resolution: "eslint-plugin-oxlint@npm:1.90.0"
+  version: 1.93.0
+  resolution: "eslint-plugin-oxlint@npm:1.93.0"
   dependencies:
     jsonc-parser: "npm:^3.3.1"
   peerDependencies:
-    oxlint: ~1.90.0
-  checksum: 10/7d439d3c8a39f86adc3142820bd731a8f95016fae6de3e3a060a3778bb0d9184fdbc241f2479a8bd279d9fa913f25feede7e3c934419972352e76b6055a020d2
+    oxlint: ~1.93.0
+  checksum: 10/df1d24a2063606c1215707f411b7f8b2b5c672d869ec6863db3e49b20f77481d43a13281bb9e16984432768bfe04724ef4d6ab9cef72dd06909715cac12b3cd5
   languageName: node
   linkType: hard
 
