@@ -1,10 +1,30 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
+import { withResolver } from '@inquirer/type';
 import { cursorTo } from '@inquirer/ansi';
 import { stripVTControlCharacters } from 'node:util';
 import password from './src/index.ts';
 
 describe('password prompt', () => {
+  it('discards keys typed during validation before restoring a rejected answer', async () => {
+    const { promise, resolve } = withResolver<string>();
+    const { answer, events, nextRender } = await render(password, {
+      message: 'Value',
+      validate: (value) => value !== '12' || promise,
+    });
+
+    events.type('12');
+    events.keypress('enter');
+    await nextRender();
+    events.type('9');
+    resolve('Try again');
+    await nextRender();
+    events.type('3');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toBe('123');
+  });
+
   it('keeps a trailing space after the message before the first character is typed', async () => {
     // Regression test for #2360: while the masked value is empty, the prompt
     // line must still claim the separator slot after the message, so the
