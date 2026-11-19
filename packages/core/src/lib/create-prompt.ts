@@ -160,14 +160,18 @@ export function createPrompt<Value, Config>(
         ),
       );
 
-      // Reject on terminal EOF (Ctrl+D) while the caller can still handle it.
-      // Piped stdin can close after submitting an answer that is still validating.
-      // This listener is removed before screen.done() closes readline on settlement.
-      const onReadlineClose =
-        'isTTY' in input && input.isTTY
-          ? () =>
-              rejectPrompt(new ExitPromptError('User force closed the prompt with EOF'))
-          : clearEffects;
+      // A TTY closes its readline on Ctrl+D (EOF on an empty line) while the
+      // prompt is pending: reject now, like SIGINT, so the caller can handle
+      // it while the process is still alive — including while a submitted
+      // answer is validating, which cancels that answer. Piped stdin closes
+      // as soon as the pipe drains, possibly mid-validation too, so there
+      // only clear the effect timers and let the prompt settle on its own.
+      // Settlement removes this listener before screen.done() closes
+      // readline.
+      const isTTY = 'isTTY' in input && input.isTTY;
+      const onReadlineClose = isTTY
+        ? () => rejectPrompt(new ExitPromptError('User force closed the prompt with EOF'))
+        : clearEffects;
       cleanups.add(listenTo(rl, 'close', onReadlineClose));
 
       const startCycle = () => {
@@ -242,7 +246,7 @@ export function createPrompt<Value, Config>(
       // render cycle starts immediately.
       //
       // @see https://github.com/SBoudrias/Inquirer.js/issues/1303
-      if ('readableFlowing' in input && input.isTTY) {
+      if ('readableFlowing' in input && isTTY) {
         const immediate = nativeSetImmediate(startCycle);
         cleanups.add(() => nativeClearImmediate(immediate));
       } else {

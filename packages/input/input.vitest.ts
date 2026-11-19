@@ -39,8 +39,28 @@ describe('input prompt', () => {
       stdin.write('\u0004');
 
       await expect(answer).rejects.toThrow(ExitPromptError);
+      await expect(answer).rejects.toThrow('User force closed the prompt with EOF');
     },
   );
+
+  it('rejects on Ctrl+D while a TTY answer is still validating', async () => {
+    const stdin = Object.assign(new PassThrough(), { isTTY: true });
+    const stdout = new PassThrough();
+    const answer = input(
+      {
+        message: 'What is your name',
+        validate: () => new Promise<boolean>(() => {}),
+      },
+      { input: stdin, output: stdout },
+    );
+
+    await setImmediate(); // Wait for the deferred first render on a TTY.
+    stdin.write('John');
+    stdin.write('\r');
+    stdin.write('\u0004'); // EOF on the now-empty line, while validation is pending.
+
+    await expect(answer).rejects.toThrow(ExitPromptError);
+  });
 
   it('accepts a piped answer when its validation completes after EOF', async () => {
     const stdin = new PassThrough();
