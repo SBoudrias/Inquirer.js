@@ -160,12 +160,15 @@ export function createPrompt<Value, Config>(
         ),
       );
 
-      // Fallback for readline closing without the prompt settling (e.g. stdin
-      // EOF), so active effect timeouts still get cleared. Every settlement
-      // path already clears effects through settlePrompt; this event triggers
-      // immediately when the user presses ctrl+c, while signal-exit only
-      // triggers after the process is done (after timeouts finish triggering).
-      cleanups.add(listenTo(rl, 'close', clearEffects));
+      // Reject on terminal EOF (Ctrl+D) while the caller can still handle it.
+      // Piped stdin can close after submitting an answer that is still validating.
+      // This listener is removed before screen.done() closes readline on settlement.
+      const onReadlineClose =
+        'isTTY' in input && input.isTTY
+          ? () =>
+              rejectPrompt(new ExitPromptError('User force closed the prompt with EOF'))
+          : clearEffects;
+      cleanups.add(listenTo(rl, 'close', onReadlineClose));
 
       const startCycle = () => {
         // Re-renders only happen when the state change; but the readline cursor could
