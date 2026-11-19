@@ -86,7 +86,7 @@
     "isolate-monorepo-package": "workspace:*",
     "jest": "^30.5.2",
     "nano-staged": "^1.0.2",
-    "oxfmt": "^0.76.0",
+    "oxfmt": "^0.78.0",
     "oxlint": "^1.93.0",
     "setup-packages": "workspace:*",
     "tsrs": "^0.25.0-ts7.1.0-beta",
