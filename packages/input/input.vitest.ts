@@ -1,4 +1,7 @@
+import { PassThrough } from 'node:stream';
+import { setImmediate } from 'node:timers/promises';
 import { describe, it, expect } from 'vitest';
+import { ExitPromptError } from '@inquirer/core';
 import { render } from '@inquirer/testing';
 import { withResolver } from '@inquirer/type';
 import input from './src/index.ts';
@@ -19,6 +22,63 @@ describe('input prompt', () => {
 
     await expect(answer).resolves.toEqual('John');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name John"`);
+  });
+
+  it(
+    'rejects when Ctrl+D closes an empty terminal prompt',
+    { timeout: 1000 },
+    async () => {
+      const stdin = Object.assign(new PassThrough(), { isTTY: true });
+      const stdout = new PassThrough();
+      const answer = input(
+        { message: 'What is your name' },
+        { input: stdin, output: stdout },
+      );
+
+      await setImmediate(); // Wait for the deferred first render on a TTY.
+      stdin.write('\u0004');
+
+      await expect(answer).rejects.toThrow(ExitPromptError);
+      await expect(answer).rejects.toThrow('User force closed the prompt with EOF');
+    },
+  );
+
+  it('rejects on Ctrl+D while a TTY answer is still validating', async () => {
+    const stdin = Object.assign(new PassThrough(), { isTTY: true });
+    const stdout = new PassThrough();
+    const answer = input(
+      {
+        message: 'What is your name',
+        validate: () => new Promise<boolean>(() => {}),
+      },
+      { input: stdin, output: stdout },
+    );
+
+    await setImmediate(); // Wait for the deferred first render on a TTY.
+    stdin.write('John');
+    stdin.write('\r');
+    stdin.write('\u0004'); // EOF on the now-empty line, while validation is pending.
+
+    await expect(answer).rejects.toThrow(ExitPromptError);
+  });
+
+  it('accepts a piped answer when its validation completes after EOF', async () => {
+    const stdin = new PassThrough();
+    const stdout = new PassThrough();
+    const answer = input(
+      {
+        message: 'What is your name',
+        validate: async () => {
+          await setImmediate();
+          return true;
+        },
+      },
+      { input: stdin, output: stdout },
+    );
+
+    stdin.end('John\n');
+
+    await expect(answer).resolves.toBe('John');
   });
 
   it('handle transformer', async () => {
