@@ -829,6 +829,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fast-check/vitest@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@fast-check/vitest@npm:0.5.0"
+  dependencies:
+    fast-check: "npm:^3.0.0 || ^4.0.0"
+  peerDependencies:
+    vitest: ^4.1.0 || ^5.0.0
+  checksum: 10/4b9c20cfed4e97a7046f2a4ae30bb29ef166400dfdd47cef4c2dc61b80d7131a648ffebaf7f8e8d111f9325483e8724dc0777c09cb9101b195639e29fcbaab45
+  languageName: node
+  linkType: hard
+
 "@gar/promise-retry@npm:^1.0.0, @gar/promise-retry@npm:^1.0.2":
   version: 1.0.3
   resolution: "@gar/promise-retry@npm:1.0.3"
@@ -1180,6 +1191,7 @@ __metadata:
     "@commitlint/cli": "npm:^21.2.4"
     "@commitlint/config-conventional": "npm:^21.2.4"
     "@eslint/js": "npm:^10.0.1"
+    "@fast-check/vitest": "npm:^0.5.0"
     "@lerna-lite/cli": "npm:^5.6.0"
     "@lerna-lite/publish": "npm:^5.6.0"
     "@repo/eslint-parser": "workspace:*"
@@ -1194,6 +1206,7 @@ __metadata:
     eslint: "npm:^10.2.0"
     eslint-plugin-n: "npm:^18.0.1"
     eslint-plugin-oxlint: "npm:^1.58.0"
+    fast-check: "npm:^4.10.2"
     globals: "npm:^17.4.0"
     isolate-monorepo-package: "workspace:*"
     jest: "npm:^30.5.2"
@@ -5292,6 +5305,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-check@npm:^3.0.0 || ^4.0.0, fast-check@npm:^4.10.2":
+  version: 4.10.2
+  resolution: "fast-check@npm:4.10.2"
+  dependencies:
+    pure-rand: "npm:^8.0.0"
+  checksum: 10/bfc74fc464d3d0447b47711f33d036b92438df7b3203f07a35db0c52e1a2b63df3df77dbfc07e881e5f39c0cd0c8cb2dd171c4060ea7d37acf5d3e3d67658910
+  languageName: node
+  linkType: hard
+
 "fast-content-type-parse@npm:^3.0.0":
   version: 3.0.0
   resolution: "fast-content-type-parse@npm:3.0.0"
@@ -8241,6 +8263,13 @@ __metadata:
   version: 7.0.1
   resolution: "pure-rand@npm:7.0.1"
   checksum: 10/c61a576fda5032ec9763ecb000da4a8f19263b9e2f9ae9aa2759c8fbd9dc6b192b2ce78391ebd41abb394a5fedb7bcc4b03c9e6141ac8ab20882dd5717698b80
+  languageName: node
+  linkType: hard
+
+"pure-rand@npm:^8.0.0":
+  version: 8.4.2
+  resolution: "pure-rand@npm:8.4.2"
+  checksum: 10/6c118f0ef4e1d5856cc9085a172c2e3c9b2b5009c9437d96df55515585847cc4a5c4abcdc5c62692f352b3343b6eebd694c8ff609705a1d45cf524dc429e20d1
   languageName: node
   linkType: hard
 
