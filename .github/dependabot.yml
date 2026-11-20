@@ -17,6 +17,8 @@ updates:
         patterns:
           - 'vitest'
           - '@vitest/*'
+          - 'fast-check'
+          - '@fast-check/*'
       # Group all linting related packages
       linting:
         patterns:
