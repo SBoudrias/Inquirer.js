@@ -372,4 +372,30 @@ describe('editor prompt', () => {
     await expect(answer).resolves.toEqual('test value with loading message');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
+
+  it('returns to idle status and allows retry when validate throws', async () => {
+    let attempts = 0;
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      validate: async (value: string) => {
+        attempts += 1;
+        if (attempts === 1) {
+          throw new Error('Validator crashed');
+        }
+        return value === 'fixed';
+      },
+    });
+
+    events.keypress('enter');
+    await editorAction(undefined, 'first attempt');
+
+    expect(getScreen()).toContain('Press <enter> to launch your preferred editor.');
+    expect(getScreen()).toContain('Error: Validator crashed');
+
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledTimes(2);
+    await editorAction(undefined, 'fixed');
+
+    await expect(answer).resolves.toEqual('fixed');
+  });
 });
