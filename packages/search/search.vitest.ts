@@ -89,6 +89,72 @@ describe('search prompt', () => {
     expect(terms.at(-1)).toBe('Quebec');
   });
 
+  // Surface the prompt status in the message text: the default theme only
+  // distinguishes `loading` through the spinner prefix (delayed 300ms), while
+  // these tests assert the status painted at the moment a keystroke-triggered
+  // search starts.
+  const statusMessage = (text: string, status: string) => `«${status}» ${text}`;
+
+  it('paints the loading status while a search triggered by typing is pending', async () => {
+    const abortController = new AbortController();
+    const { promise: pendingResults } = withResolver<Array<string>>();
+    const { answer, events, getScreen, nextRender } = await render(
+      search,
+      {
+        message: 'Select a Canadian province',
+        source: (term: string | undefined) => (term ? pendingResults : ['Alberta']),
+        theme: { style: { message: statusMessage } },
+      },
+      { signal: abortController.signal },
+    );
+
+    // The fetch triggered by the keystroke is pending: the `loading` status
+    // set by the search effect must be on screen without waiting for the
+    // fetch to settle.
+    events.type('N');
+    await nextRender();
+    expect(getScreen()).toContain('«loading» Select a Canadian province N');
+
+    abortController.abort();
+    await expect(answer).rejects.toThrow();
+  });
+
+  it('clears a previous search error as soon as the retry starts', async () => {
+    const abortController = new AbortController();
+    const { promise: retryResults, resolve: resolveRetry } =
+      withResolver<Array<string>>();
+    const { answer, events, getScreen, nextRender } = await render(
+      search,
+      {
+        message: 'Select a Canadian province',
+        source: (term: string | undefined) => {
+          if (!term) return ['Alberta'];
+          if (term === 'N') throw new Error("You're being rate limited");
+          return retryResults;
+        },
+        theme: { style: { message: statusMessage } },
+      },
+      { signal: abortController.signal },
+    );
+
+    // The first search fails: its error reaches the screen.
+    events.type('N');
+    await nextRender();
+    expect(getScreen()).toContain("You're being rate limited");
+
+    // Typing again starts a new search: the error must leave the screen as
+    // soon as the retry is pending, together with the loading status.
+    events.type('e');
+    await nextRender();
+    expect(getScreen()).toContain('«loading» Select a Canadian province Ne');
+    expect(getScreen()).not.toContain("You're being rate limited");
+
+    resolveRetry(['New Brunswick']);
+    await nextRender();
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('New Brunswick');
+  });
+
   it('does not start another validation while one is pending', async () => {
     const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
     const validate = vi.fn(() => validation);
