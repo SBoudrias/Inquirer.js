@@ -4,6 +4,11 @@ import { AsyncLocalStorage, AsyncResource } from 'node:async_hooks';
 import type { InquirerReadline } from '@inquirer/type';
 import { HookError, ValidationError } from './errors.ts';
 
+// Capture the real queueMicrotask at module load time so it keeps working
+// when test frameworks mock timers (vi.useFakeTimers()) — a deferred paint
+// must never be held hostage by a mocked clock.
+const nativeQueueMicrotask = globalThis.queueMicrotask;
+
 type HookStore = {
   rl: InquirerReadline;
   hooks: unknown[];
@@ -11,6 +16,11 @@ type HookStore = {
   hooksEffect: Array<() => void>;
   index: number;
   handleChange: () => void;
+  // A paint deferred because it couldn't run inside the flush that wanted it
+  // (see `withUpdates`). `null` when none is pending. Cleared when the prompt
+  // settles (see `effectScheduler.clearAll`) so a settled prompt never renders
+  // again.
+  deferredPaint: (() => void) | null;
 };
 
 const hookStorage = new AsyncLocalStorage<HookStore>();
@@ -23,6 +33,7 @@ function createStore(rl: InquirerReadline) {
     hooksEffect: [],
     index: 0,
     handleChange() {},
+    deferredPaint: null,
   };
   return store;
 }
@@ -69,21 +80,70 @@ export function withUpdates<Args extends unknown[], R>(
     const store = getStore();
     let shouldUpdate = false as boolean;
     const oldHandleChange = store.handleChange;
-    store.handleChange = () => {
+    const recordChange = () => {
       shouldUpdate = true;
     };
+    store.handleChange = recordChange;
 
     const returnValue = fn(...args);
 
     if (shouldUpdate) {
+      // Flush the merged render, recording any change made while it flushes
+      // into a fresh flag. A `withUpdates` wrapper started by the render
+      // itself (the effect runner a re-render triggers) captures the current
+      // recorder as its own `oldHandleChange`, so its flush records into
+      // `flushedUpdate` instead of rendering inside ours — nested renders
+      // never re-enter this flush.
+      let flushedUpdate = false as boolean;
+      store.handleChange = () => {
+        flushedUpdate = true;
+      };
       oldHandleChange();
+      store.handleChange = oldHandleChange;
+
+      if (flushedUpdate) {
+        // State changed while the render was flushing: effects triggered by
+        // the render set state (e.g. a search prompt flipping to `loading`
+        // when its term changes), and those updates were recorded after the
+        // single flush above already ran — nothing painted them. The
+        // canonical symptom is a spinner-less "idle" screen while an async
+        // fetch started by the last keystroke is still pending.
+        //
+        // The paint cannot run here either. Restoring `handleChange` early
+        // and letting the nested flush render synchronously paints
+        // effect-set state before the current synchronous batch of input
+        // events is done: a same-tick keypress then reads it (e.g. the
+        // `loading` status right after Tab autocompletes) and behaves as if
+        // the batch had been interleaved — search's tab autocomplete stops
+        // submitting. Defer one paint to a microtask instead: it runs after
+        // the current synchronous batch of updates (same-tick keypresses
+        // keep reading their pre-paint state) but before any next input
+        // event, timer or I/O. A newer render supersedes the pending paint,
+        // and settlement cancels it (see `effectScheduler.clearAll`).
+        scheduleDeferredPaint(store, oldHandleChange);
+      }
+    } else {
+      store.handleChange = oldHandleChange;
     }
-    store.handleChange = oldHandleChange;
 
     return returnValue;
   };
 
   return AsyncResource.bind(wrapped);
+}
+
+// Schedule the single pending deferred paint of a store. Only one is ever
+// needed: the paint renders the current state, so a newer request never has
+// to queue a second one — keeping the slot filled is enough.
+function scheduleDeferredPaint(store: HookStore, paint: () => void): void {
+  if (store.deferredPaint !== null) return;
+  store.deferredPaint = AsyncResource.bind(paint);
+  nativeQueueMicrotask(() => {
+    const pending = store.deferredPaint;
+    if (pending === null) return;
+    store.deferredPaint = null;
+    pending();
+  });
 }
 
 type Pointer<Value> = {
@@ -154,5 +214,9 @@ export const effectScheduler = {
 
     store.hooksEffect.length = 0;
     store.hooksCleanup.length = 0;
+    // The prompt is settling: any deferred paint scheduled by `withUpdates`
+    // must not run anymore, or the settled prompt would render once more
+    // after its screen was torn down.
+    store.deferredPaint = null;
   },
 };
