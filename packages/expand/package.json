@@ -1,6 +1,6 @@
 {
   "name": "@inquirer/expand",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "Inquirer checkbox prompt",
   "keywords": [
     "answer",
@@ -73,8 +73,8 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@inquirer/core": "^12.1.0",
-    "@inquirer/type": "^4.3.0"
+    "@inquirer/core": "^12.1.1",
+    "@inquirer/type": "^4.3.1"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
