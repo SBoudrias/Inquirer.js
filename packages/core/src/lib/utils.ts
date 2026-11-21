@@ -10,14 +10,26 @@ import { readline } from './hook-engine.ts';
  * @return {string}
  */
 export function breakLines(content: string, width: number): string {
-  return content
+  return wrapContent(content, width).text;
+}
+
+export function wrapContent(
+  content: string,
+  width: number,
+): { text: string; lastRow: string; finalLineRows: number } {
+  const wrappedLines = content
     .split('\n')
-    .flatMap((line) =>
-      wrapAnsi(line, width, { trim: false, wordWrap: false })
-        .split('\n')
-        .map((str) => str.trimEnd()),
-    )
-    .join('\n');
+    .map((line) => wrapAnsi(line, width, { trim: false, wordWrap: false }).split('\n'));
+  const finalLine = wrappedLines.at(-1) ?? [];
+
+  return {
+    text: wrappedLines
+      .flat()
+      .map((line) => line.trimEnd())
+      .join('\n'),
+    lastRow: finalLine.at(-1) ?? '',
+    finalLineRows: finalLine.length,
+  };
 }
 
 /**
