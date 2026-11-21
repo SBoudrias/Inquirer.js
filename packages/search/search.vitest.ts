@@ -40,6 +40,26 @@ function getListSearch(
 }
 
 describe('search prompt', () => {
+  it.each(['up', 'down'] as const)(
+    'preserves the query when typing after %s navigation',
+    async (key) => {
+      const source = vi.fn(getListSearch(PROVINCES));
+      const { answer, events, nextRender } = await render(search, {
+        message: 'Select a Canadian province',
+        source,
+      });
+
+      events.type('New');
+      await nextRender();
+      events.keypress(key);
+      events.type('f');
+      await nextRender();
+      expect(source).toHaveBeenLastCalledWith('Newf', expect.anything());
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual('NL');
+    },
+  );
+
   it('does not submit stale choices and keeps the search term while a search is pending', async () => {
     const { promise: resultsPromise, resolve: resolveResults } =
       withResolver<Array<string>>();
