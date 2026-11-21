@@ -377,20 +377,22 @@ describe('editor prompt', () => {
     let attempts = 0;
     const { answer, events, getScreen } = await render(editor, {
       message: 'Add a description',
-      validate: async (value: string) => {
+      validate: () => {
         attempts += 1;
         if (attempts === 1) {
           throw new Error('Validator crashed');
         }
-        return value === 'fixed';
+        return true;
       },
     });
 
     events.keypress('enter');
     await editorAction(undefined, 'first attempt');
 
-    expect(getScreen()).toContain('Press <enter> to launch your preferred editor.');
-    expect(getScreen()).toContain('Error: Validator crashed');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Add a description Press <enter> to launch your preferred editor.
+      > Error: Validator crashed"
+    `);
 
     events.keypress('enter');
     expect(editAsync).toHaveBeenCalledTimes(2);
