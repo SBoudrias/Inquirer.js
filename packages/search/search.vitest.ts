@@ -445,6 +445,57 @@ describe('search prompt', () => {
     await expect(answer).rejects.toThrow();
   });
 
+  it('stops loading after a source failure and lets the user search again', async () => {
+    const { promise: failedSearch, reject } = withResolver<string[]>();
+    const controller = new AbortController();
+    const validate = vi.fn(() => true);
+    const source = vi.fn((term: string | undefined) => {
+      if (term === 'Q') return failedSearch;
+      return term ? ['Quebec'] : ['Alberta', 'Manitoba'];
+    });
+    const { answer, events, getScreen, nextRender } = await render(
+      search<string>,
+      {
+        message: 'Select a Canadian province',
+        source,
+        validate,
+        theme: {
+          style: { message: (text: string, status: string) => `${status} ${text}` },
+        },
+      },
+      { signal: controller.signal },
+    );
+
+    try {
+      expect(getScreen()).toContain('❯ Alberta');
+      events.keypress('down');
+      await nextRender();
+      expect(getScreen()).toContain('❯ Manitoba');
+      events.type('Q');
+      expect(source).toHaveBeenLastCalledWith('Q', expect.anything());
+
+      reject(new Error('Search request failed'));
+      await nextRender();
+      expect(getScreen()).toContain('Search request failed');
+      expect(getScreen()).toContain('idle Select a Canadian province Q');
+
+      events.keypress('up');
+      events.keypress('enter');
+      expect(validate).not.toHaveBeenCalled();
+
+      events.type('ue');
+      await vi.waitFor(() => {
+        expect(getScreen()).toContain('idle Select a Canadian province Que');
+        expect(getScreen()).toContain('❯ Quebec');
+      });
+      events.keypress('enter');
+      await expect(answer).resolves.toBe('Quebec');
+    } finally {
+      controller.abort();
+      await answer.catch(() => {});
+    }
+  });
+
   it('handles empty results', async () => {
     const abortController = new AbortController();
     const { answer, events, getScreen, nextRender } = await render(

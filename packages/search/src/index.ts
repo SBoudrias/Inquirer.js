@@ -174,8 +174,13 @@ export default createPrompt(
             setStatus('idle');
           }
         } catch (error: unknown) {
-          if (!controller.signal.aborted && error instanceof Error) {
-            setSearchError(error.message);
+          if (!controller.signal.aborted) {
+            const message =
+              error instanceof Error && error.message ? error.message : 'Search failed';
+            setSearchError(message);
+            setActive(undefined);
+            setSearchResults([]);
+            setStatus('idle');
           }
         }
       };
