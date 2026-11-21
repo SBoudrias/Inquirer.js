@@ -1,4 +1,7 @@
+import { PassThrough } from 'node:stream';
+import { setImmediate } from 'node:timers/promises';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { ExitPromptError } from '@inquirer/core';
 import { render } from '@inquirer/testing';
 import { editAsync } from '@inquirer/external-editor';
 import editor from './src/index.ts';
@@ -21,6 +24,22 @@ beforeEach(() => {
 afterEach(() => {
   vi.mocked(editAsync).mockClear();
 });
+
+// Captures unhandled promise rejections for the current test, so a test can
+// assert that none happened. Without this, an unhandled rejection would
+// surface in whatever test runs next (or crash the worker outright), far
+// from the code that caused it.
+function withUnhandledRejections() {
+  const reasons: unknown[] = [];
+  const onUnhandled = (reason: unknown) => {
+    reasons.push(reason);
+  };
+  process.on('unhandledRejection', onUnhandled);
+  return () => {
+    process.removeListener('unhandledRejection', onUnhandled);
+    return reasons;
+  };
+}
 
 async function editorAction(error: undefined | Error, value?: string) {
   if (error) {
@@ -371,5 +390,51 @@ describe('editor prompt', () => {
 
     await expect(answer).resolves.toEqual('test value with loading message');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
+  });
+
+  it('keeps the process alive when a validate throw races EOF', async () => {
+    // Regression test for the split try/catch around editAsync vs. validate:
+    // EOF (#2428) rejects the prompt with ExitPromptError while the submitted
+    // answer is still validating, and closes the readline. If the pending
+    // validate() then throws, the old shared catch called rl.resume() on the
+    // closed readline — an unhandled ERR_USE_AFTER_CLOSE out of the
+    // fire-and-forget startEditor(), crashing the process after the caller
+    // had already handled the exit.
+    const stdin = Object.assign(new PassThrough(), { isTTY: true });
+    const stdout = new PassThrough();
+    let rejectValidate!: (error: Error) => void;
+    const unhandled = withUnhandledRejections();
+    const answer = editor(
+      {
+        message: 'Add a description',
+        validate: () =>
+          new Promise<boolean>((_resolve, reject) => {
+            rejectValidate = reject;
+          }),
+      },
+      { input: stdin, output: stdout },
+    );
+
+    await setImmediate(); // Wait for the deferred first render on a TTY.
+    stdin.write('\r'); // Launch the editor.
+    await setImmediate();
+    resolveEdit('value from editor'); // The mock resolves editAsync.
+    await setImmediate();
+    await setImmediate(); // The prompt is now in the 'Validating...' phase.
+
+    // Attach the rejection handler before the EOF, so the ExitPromptError is
+    // never left unhandled across a macrotask boundary.
+    const onExit = expect(answer).rejects.toThrow(ExitPromptError);
+    stdin.write('\u0004'); // EOF: closes readline, prompt rejects with ExitPromptError.
+    await onExit;
+
+    // The pending validate throws — after the readline is closed. The prompt
+    // already settled, so nothing may throw out of startEditor() here: an
+    // unhandled rejection would take down the process.
+    rejectValidate(new Error('Validator crashed'));
+    await setImmediate();
+    await setImmediate();
+    await setImmediate();
+    expect(unhandled()).toEqual([]);
   });
 });

@@ -55,10 +55,22 @@ export default createPrompt<string, EditorConfig>((config, done) => {
   async function startEditor(rl: InquirerReadline) {
     rl.pause();
 
+    let answer: string;
     try {
-      const answer = await editAsync(value, { postfix, ...fileProps });
+      answer = await editAsync(value, { postfix, ...fileProps });
+    } catch (error: unknown) {
+      // Only the external editor failed here, so the readline is guaranteed
+      // to still be open (it stays paused across editAsync): resume it so the
+      // user can retry, and surface the error.
       rl.resume();
-      setStatus('loading');
+      setError(String(error));
+      return;
+    }
+
+    rl.resume();
+    setStatus('loading');
+
+    try {
       const isValid = await validate(answer);
       if (isValid === true) {
         setError(undefined);
@@ -74,8 +86,14 @@ export default createPrompt<string, EditorConfig>((config, done) => {
         setStatus('idle');
       }
     } catch (error: unknown) {
-      rl.resume();
+      // The readline was already resumed above, before validation started, so
+      // there is nothing to resume here — and it may already be closed: on
+      // EOF (#2428) the prompt rejects with ExitPromptError while a submitted
+      // answer is still validating. Resuming the closed readline there would
+      // raise an unhandled ERR_USE_AFTER_CLOSE after the caller already
+      // handled the exit. Surface the error and let the user retry instead.
       setError(String(error));
+      setStatus('idle');
     }
   }
 
