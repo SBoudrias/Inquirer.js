@@ -223,6 +223,51 @@ describe('confirm prompt', () => {
     await expect(answer).resolves.toEqual(true);
   });
 
+  it('answers no when the no-keyword is a prefix of the yes-keyword', async () => {
+    // Typing the full no-keyword used to answer yes: "No" is a prefix of
+    // "Nope-not", and prefix matching checked the yes-keyword first.
+    const { answer, events } = await render(confirm, {
+      message: 'Proceed?',
+      theme: {
+        keywords: { yes: 'Nope-not', no: 'No' },
+      },
+    });
+
+    events.type('No');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual(false);
+  });
+
+  it('keeps the built-in n answering no when the yes-keyword starts with n', async () => {
+    // A single "n" used to answer yes: the custom yes-keyword "Nai" starts
+    // with "n" and prefix matching ran before the built-in short answers.
+    const { answer, events } = await render(confirm, {
+      message: 'Proceed?',
+      theme: {
+        keywords: { yes: 'Nai', no: 'Ochi' },
+      },
+    });
+
+    events.type('n');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual(false);
+
+    // Typing the custom keyword in full still answers yes.
+    const { answer: yesAnswer, events: yesEvents } = await render(confirm, {
+      message: 'Proceed?',
+      theme: {
+        keywords: { yes: 'Nai', no: 'Ochi' },
+      },
+    });
+
+    yesEvents.type('nai');
+    yesEvents.keypress('enter');
+
+    await expect(yesAnswer).resolves.toEqual(true);
+  });
+
   it('highlights the default keyword in scripts without case (e.g. Chinese)', async () => {
     vi.stubEnv('FORCE_COLOR', '1');
     const { answer, events, getScreen } = await render(confirm, {
