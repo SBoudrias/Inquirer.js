@@ -398,7 +398,7 @@ describe('editor prompt', () => {
       validate: (value: string) => value === 'ok',
       theme: {
         style: {
-          validationError: () => 'Nope',
+          validationError: 'Nope',
         },
       },
     });

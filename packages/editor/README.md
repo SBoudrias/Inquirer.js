@@ -160,7 +160,7 @@ type Theme = {
     key: (text: string) => string;
     loadingMessage: () => string;
     waitingMessage: (enterKey: string) => string;
-    validationError: () => string;
+    validationError: string;
   };
   validationFailureMode: 'keep' | 'clear';
 };

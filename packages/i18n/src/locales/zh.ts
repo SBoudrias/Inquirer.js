@@ -25,7 +25,7 @@ export const locale: Locale = {
   editor: {
     loadingMessage: () => '验证中...',
     waitingMessage: (enterKey) => `按 ${enterKey} 键启动您的首选编辑器。`,
-    validationError: () => '您必须提供有效的值',
+    validationError: '您必须提供有效的值',
   },
   password: {
     maskedText: '[输入已隐藏]',

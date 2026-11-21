@@ -25,7 +25,7 @@ export const locale: Locale = {
   editor: {
     loadingMessage: () => 'Validando...',
     waitingMessage: (enterKey) => `Presione ${enterKey} para lanzar su editor preferido.`,
-    validationError: () => 'Debe proporcionar un valor válido',
+    validationError: 'Debe proporcionar un valor válido',
   },
   password: {
     maskedText: '[entrada oculta]',

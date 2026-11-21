@@ -47,7 +47,7 @@ describe('editor (zh)', () => {
     const answer = editor({
       message: '请输入描述',
       validate: (value: string) => value === 'ok',
-      theme: { style: { validationError: () => 'Nope' } },
+      theme: { style: { validationError: 'Nope' } },
     });
     screen.keypress('enter');
     screen.type('no');

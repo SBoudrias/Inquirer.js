@@ -26,7 +26,7 @@ export const locale: Locale = {
     loadingMessage: () => 'Validation en cours...',
     waitingMessage: (enterKey) =>
       `Appuyez sur ${enterKey} pour lancer votre éditeur préféré.`,
-    validationError: () => 'Vous devez fournir une valeur valide',
+    validationError: 'Vous devez fournir une valeur valide',
   },
   password: {
     maskedText: '[saisie masquée]',

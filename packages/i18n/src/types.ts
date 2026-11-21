@@ -55,7 +55,7 @@ export interface EditorStrings {
   /** Message shown while waiting for user to open editor (receives formatted enter key) */
   waitingMessage: (enterKey: string) => string;
   /** Message shown when the submitted value fails validation without an explicit message */
-  validationError: () => string;
+  validationError: string;
 }
 
 /**
