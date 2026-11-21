@@ -76,6 +76,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     } catch (error: unknown) {
       rl.resume();
       setError(String(error));
+      setStatus('idle');
     }
   }
 
