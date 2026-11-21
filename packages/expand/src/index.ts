@@ -117,6 +117,9 @@ const expand = createPrompt(
       if (isEnterKey(event)) {
         const answer = (value.trim() || defaultKey).toLowerCase();
         if (answer === 'h' && !expanded) {
+          // The line event cleared readline's line, but the typed "h" would
+          // stay displayed; clear it so the next keystroke starts fresh.
+          setValue('');
           setExpanded(true);
         } else {
           const selectedChoice = choices.find(

@@ -648,4 +648,78 @@ describe('input prompt', () => {
     await expect(answer).resolves.toEqual('123');
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a number 123"`);
   });
+
+  // The displayed answer and readline's line must stay in sync: after any
+  // handler rewrites the shown value, the next keystroke edits what is shown
+  // — typing appends, Backspace removes one character.
+  describe('the shown answer stays editable after the prompt rewrites it', () => {
+    type Step = 'enter' | 'backspace' | 'tab' | { type: string };
+
+    const cases: Array<{
+      after: string;
+      steps: Step[];
+      shown: string;
+      probe: string;
+      typed: string;
+      edited: string;
+      settle: Step[];
+      answer: string;
+      validate?: (value: string) => string | boolean;
+      default?: string;
+    }> = [
+      {
+        after: 'a rejected answer',
+        steps: [{ type: 'o' }, 'enter'],
+        shown: 'o',
+        probe: 'k',
+        typed: 'ok',
+        edited: 'o',
+        settle: [{ type: 'k' }, 'enter'],
+        answer: 'ok',
+        validate: (value: string) => value === 'ok' || 'Try again',
+      },
+      {
+        after: 'the tab-completed default',
+        steps: ['tab'],
+        shown: 'Mike',
+        probe: 'y',
+        typed: 'Mikey',
+        edited: 'Mike',
+        settle: ['enter'],
+        answer: 'Mike',
+        default: 'Mike',
+      },
+    ];
+
+    it.each(cases)('after $after', async (row) => {
+      const { answer, events, getScreen, nextRender } = await render(input, {
+        message: 'What is your name',
+        ...(row.validate === undefined ? {} : { validate: row.validate }),
+        ...(row.default === undefined ? {} : { default: row.default }),
+      });
+
+      const send = async (steps: Step[]) => {
+        for (const step of steps) {
+          if (typeof step === 'string') events.keypress(step);
+          else events.type(step.type);
+          await nextRender();
+        }
+      };
+      const promptLine = () => (getScreen().split('\n')[0] ?? '').trimEnd();
+
+      await send(row.steps);
+      expect(promptLine()).toBe(`? What is your name ${row.shown}`);
+
+      // Typing appends to the shown value...
+      await send([{ type: row.probe }]);
+      expect(promptLine()).toBe(`? What is your name ${row.typed}`);
+
+      // ...and Backspace removes exactly one character.
+      await send(['backspace']);
+      expect(promptLine()).toBe(`? What is your name ${row.edited}`);
+
+      await send(row.settle);
+      await expect(answer).resolves.toEqual(row.answer);
+    });
+  });
 });

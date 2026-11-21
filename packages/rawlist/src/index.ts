@@ -168,6 +168,10 @@ export default createPrompt(
           setError(`"${styleText('red', value)}" isn't an available option`);
         }
       } else if (isUpKey(key, keybindings) || isDownKey(key, keybindings)) {
+        // An arrow pick rewrites the displayed key while readline's line was
+        // cleared by the clearLine below; write the shown key back so the
+        // next keystroke edits it instead of replacing it.
+        const lineHadInput = rl.line !== '';
         rl.clearLine(0);
 
         const [selectedChoice, active] = getSelectedChoice(value, choices);
@@ -176,6 +180,7 @@ export default createPrompt(
             ? choices.find(isSelectableChoice)!
             : choices.findLast(isSelectableChoice)!;
           setValue(firstChoice.key);
+          rl.write(firstChoice.key);
         } else if (
           loop ||
           (isUpKey(key, keybindings) && active !== bounds.first) ||
@@ -189,6 +194,11 @@ export default createPrompt(
             nextChoice = choices[next];
           } while (!isSelectableChoice(nextChoice));
           setValue(nextChoice.key);
+          rl.write(nextChoice.key);
+        } else if (lineHadInput) {
+          // Stopped at the edge: the typed input stays displayed, so restore
+          // the line the clearLine above emptied.
+          rl.write(value);
         }
       } else {
         setValue(rl.line);

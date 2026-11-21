@@ -548,4 +548,78 @@ describe('number prompt', () => {
     await expect(answer).resolves.toEqual(1.001);
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Enter a value 1.001"`);
   });
+
+  // The displayed answer and readline's line must stay in sync: after any
+  // handler rewrites the shown value, the next keystroke edits what is shown
+  // — typing appends, Backspace removes one character.
+  describe('the shown answer stays editable after the prompt rewrites it', () => {
+    type Step = 'enter' | 'backspace' | 'tab' | { type: string };
+
+    const cases: Array<{
+      after: string;
+      steps: Step[];
+      shown: string;
+      probe: string;
+      typed: string;
+      edited: string;
+      settle: Step[];
+      answer: number;
+      validate?: (value?: number) => boolean | string;
+      default?: number;
+    }> = [
+      {
+        after: 'a rejected answer',
+        steps: [{ type: '12' }, 'enter'],
+        shown: '12',
+        probe: '3',
+        typed: '123',
+        edited: '12',
+        settle: [{ type: '3' }, 'enter'],
+        answer: 123,
+        validate: (value?: number) => value !== 12,
+      },
+      {
+        after: 'the tab-completed default',
+        steps: ['tab'],
+        shown: '35',
+        probe: '7',
+        typed: '357',
+        edited: '35',
+        settle: ['enter'],
+        answer: 35,
+        default: 35,
+      },
+    ];
+
+    it.each(cases)('after $after', async (row) => {
+      const { answer, events, getScreen, nextRender } = await render(number, {
+        message: 'What is your age',
+        ...(row.validate === undefined ? {} : { validate: row.validate }),
+        ...(row.default === undefined ? {} : { default: row.default }),
+      });
+
+      const send = async (steps: Step[]) => {
+        for (const step of steps) {
+          if (typeof step === 'string') events.keypress(step);
+          else events.type(step.type);
+          await nextRender();
+        }
+      };
+      const promptLine = () => (getScreen().split('\n')[0] ?? '').trimEnd();
+
+      await send(row.steps);
+      expect(promptLine()).toBe(`? What is your age ${row.shown}`);
+
+      // Typing appends to the shown value...
+      await send([{ type: row.probe }]);
+      expect(promptLine()).toBe(`? What is your age ${row.typed}`);
+
+      // ...and Backspace removes exactly one character.
+      await send(['backspace']);
+      expect(promptLine()).toBe(`? What is your age ${row.edited}`);
+
+      await send(row.settle);
+      await expect(answer).resolves.toBe(row.answer);
+    });
+  });
 });

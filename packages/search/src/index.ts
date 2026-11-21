@@ -215,6 +215,9 @@ export default createPrompt(
             setStatus('done');
             done(selectedChoice.value);
           } else if (selectedChoice.name === searchTerm) {
+            // The line event cleared readline's line; restore the rejected
+            // term so the user can fix it instead of retyping it.
+            rl.write(searchTerm);
             setSearchError(isValid || 'You must provide a valid value');
           } else {
             // Reset line with new search term

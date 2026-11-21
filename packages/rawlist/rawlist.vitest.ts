@@ -625,6 +625,138 @@ describe('rawlist prompt', () => {
       await expect(answer).resolves.toEqual('apple');
     });
   });
+
+  // The displayed answer and readline's line must stay in sync: after any
+  // handler rewrites the shown value, the next keystroke edits what is shown
+  // — typing appends, Backspace removes one character.
+  describe('the shown answer stays editable after the prompt rewrites it', () => {
+    type Step = 'up' | 'down' | 'enter' | 'backspace' | { type: string };
+
+    const cases: Array<{
+      after: string;
+      steps: Step[];
+      shown: string;
+      probe: string;
+      typed: string;
+      edited: string;
+      settle: Step[];
+      answer: number;
+      loop?: boolean;
+      default?: number;
+    }> = [
+      {
+        after: 'a rejected answer',
+        steps: [{ type: '4x' }, 'enter'],
+        shown: '4x',
+        probe: '3',
+        typed: '4x3',
+        edited: '4x',
+        settle: ['backspace', 'enter'],
+        answer: 4,
+      },
+      {
+        after: 'an arrow pick',
+        steps: ['down'],
+        shown: '1',
+        probe: '0',
+        typed: '10',
+        edited: '1',
+        settle: ['enter'],
+        answer: 1,
+      },
+      {
+        after: 'an arrow pick over typed input',
+        steps: [{ type: '1' }, 'down'],
+        shown: '2',
+        probe: '0',
+        typed: '20',
+        edited: '2',
+        settle: ['enter'],
+        answer: 2,
+      },
+      {
+        after: 'an arrow stopped at the list edge',
+        steps: [{ type: '1' }, 'up'],
+        shown: '1',
+        probe: '0',
+        typed: '10',
+        edited: '1',
+        settle: ['enter'],
+        answer: 1,
+        loop: false,
+      },
+      {
+        // The default is a prefill, not line content, so typing replaces it
+        // (the same semantics as input/number's default hint) — this row pins
+        // that replace-on-type behavior on purpose.
+        after: 'the default key is shown',
+        steps: [],
+        shown: '1',
+        probe: '0',
+        typed: '0',
+        edited: '',
+        settle: [{ type: '2' }, 'enter'],
+        answer: 2,
+        default: 1,
+      },
+    ];
+
+    it.each(cases)('after $after', async (row) => {
+      const { answer, events, getScreen } = await render(rawlist, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        ...(row.loop === undefined ? {} : { loop: row.loop }),
+        ...(row.default === undefined ? {} : { default: row.default }),
+      });
+
+      const press = (steps: Step[]) => {
+        for (const step of steps) {
+          if (typeof step === 'string') events.keypress(step);
+          else events.type(step.type);
+        }
+      };
+      const promptLine = () => (getScreen().split('\n')[0] ?? '').trimEnd();
+
+      press(row.steps);
+      expect(promptLine()).toBe(`? Select a number ${row.shown}`.trimEnd());
+
+      // Typing appends to the shown value...
+      press([{ type: row.probe }]);
+      expect(promptLine()).toBe(`? Select a number ${row.typed}`.trimEnd());
+
+      // ...and Backspace removes exactly one character.
+      press(['backspace']);
+      expect(promptLine()).toBe(`? Select a number ${row.edited}`.trimEnd());
+
+      press(row.settle);
+      await expect(answer).resolves.toBe(row.answer);
+    });
+
+    it('after an arrow pick of a multi-character key', async () => {
+      const { answer, events, getScreen } = await render(rawlist, {
+        message: 'Select a letter',
+        choices: [
+          { key: 'ab', name: 'Alpha', value: 'alpha' },
+          { key: 'cd', name: 'Beta', value: 'beta' },
+        ],
+      });
+      const promptLine = () => (getScreen().split('\n')[0] ?? '').trimEnd();
+
+      events.keypress('down');
+      expect(promptLine()).toBe('? Select a letter ab');
+
+      // Typing appends to the multi-character key...
+      events.type('c');
+      expect(promptLine()).toBe('? Select a letter abc');
+
+      // ...and Backspace removes exactly one character.
+      events.keypress('backspace');
+      expect(promptLine()).toBe('? Select a letter ab');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toBe('alpha');
+    });
+  });
 });
 
 describe('rawlist types', () => {
