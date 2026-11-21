@@ -843,19 +843,22 @@ describe('select prompt', () => {
     `);
 
     events.keypress('2');
+    // The digit reaches the number-pick branch now (the harness writes the
+    // key's byte, so it lands in rl.line): the separator is skipped and the
+    // cursor moves to the 2nd choice, as the test name says it should.
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
-      ❯ Ham
+        Ham
        ──────────────
-        Pepperoni
+      ❯ Pepperoni
 
       ↑↓ navigate • ⏎ select"
     `);
 
     events.keypress('enter');
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Ham"');
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
 
-    await expect(answer).resolves.toEqual('ham');
+    await expect(answer).resolves.toEqual('pepperoni');
   });
 
   it('Allow adding description to choices', async () => {

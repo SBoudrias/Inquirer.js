@@ -485,13 +485,18 @@ describe('input prompt', () => {
 
     expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike"`);
 
-    events.keypress('tab'); // Does nothing when prefill = 'editable'
-    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike"`);
-
+    // Tab now reaches readline's line buffer, like in a real terminal, and
+    // inserts a literal \t — a prompt-side bug (tab into a non-empty value
+    // should be ignored), now visible to the harness and tracked separately.
+    // getScreen() trims, so the trailing tab is only visible in the answer
+    // and in the screen once more text follows it.
+    events.keypress('tab');
     events.type('y');
+    expect(getScreen()).toMatchInlineSnapshot(`"? What is your name Mike\ty"`);
+
     events.keypress('enter');
-    await expect(answer).resolves.toEqual('Mikey');
-    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mikey"`);
+    await expect(answer).resolves.toEqual('Mike\ty');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your name Mike\ty"`);
   });
 
   it("show normal behaviour when prefill is 'editable' and no default value is provided", async () => {
