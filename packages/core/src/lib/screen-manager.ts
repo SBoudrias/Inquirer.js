@@ -1,4 +1,7 @@
 import { stripVTControlCharacters } from 'node:util';
+// Measures wide characters for the right-edge check below; it is the same
+// package fast-wrap-ansi measures with internally, and both must stay on the
+// same major so a wrapped row is never judged one column off by one side.
 import stringWidth from 'fast-string-width';
 import { breakLines, readlineWidth, wrapContent } from './utils.ts';
 import {
@@ -58,11 +61,16 @@ export default class ScreenManager {
     content = wrapped.text;
     bottomContent = breakLines(bottomContent, width);
     const lastRowWidth = stringWidth(stripVTControlCharacters(wrapped.lastRow));
-    const atRightEdge = lastRowWidth === width;
+    // `>=` rather than `===` so a degenerate 1-column terminal (where every
+    // row is the full width) still inserts the extra line.
+    const atRightEdge = lastRowWidth >= width;
 
     // Manually insert an extra line if we're at the end of the line.
     // This prevent the cursor from appearing at the beginning of the
-    // current line.
+    // current line. The `rawPromptLine.length === 0` half keeps the old
+    // `0 % width === 0` behavior for an empty or ANSI-only prompt line,
+    // where `atRightEdge` alone would be false but a line break is still
+    // needed before the bottom content.
     if (atRightEdge || rawPromptLine.length === 0) {
       content += '\n';
     }

@@ -13,6 +13,12 @@ export function breakLines(content: string, width: number): string {
   return wrapContent(content, width).text;
 }
 
+// Wraps `content` and reports the geometry of its final logical line:
+// `lastRow` is the last physical row of that line and `finalLineRows` is how
+// many rows it spans (used by the screen manager to place the cursor back on
+// the prompt line). `lastRow` is deliberately left untrimmed: readline counts
+// trailing spaces when reporting the cursor position, so trimming here would
+// make a line that ends exactly at the terminal edge look one column short.
 export function wrapContent(
   content: string,
   width: number,
