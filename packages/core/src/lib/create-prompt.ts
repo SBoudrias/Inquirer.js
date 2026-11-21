@@ -160,12 +160,19 @@ export function createPrompt<Value, Config>(
         ),
       );
 
-      // Fallback for readline closing without the prompt settling (e.g. stdin
-      // EOF), so active effect timeouts still get cleared. Every settlement
-      // path already clears effects through settlePrompt; this event triggers
-      // immediately when the user presses ctrl+c, while signal-exit only
-      // triggers after the process is done (after timeouts finish triggering).
-      cleanups.add(listenTo(rl, 'close', clearEffects));
+      // A TTY closes its readline on Ctrl+D (EOF on an empty line) while the
+      // prompt is pending: reject now, like SIGINT, so the caller can handle
+      // it while the process is still alive — including while a submitted
+      // answer is validating, which cancels that answer. Piped stdin closes
+      // as soon as the pipe drains, possibly mid-validation too, so there
+      // only clear the effect timers and let the prompt settle on its own.
+      // Settlement removes this listener before screen.done() closes
+      // readline.
+      const isTTY = 'isTTY' in input && input.isTTY;
+      const onReadlineClose = isTTY
+        ? () => rejectPrompt(new ExitPromptError('User force closed the prompt with EOF'))
+        : clearEffects;
+      cleanups.add(listenTo(rl, 'close', onReadlineClose));
 
       const startCycle = () => {
         // Re-renders only happen when the state change; but the readline cursor could
@@ -239,7 +246,7 @@ export function createPrompt<Value, Config>(
       // render cycle starts immediately.
       //
       // @see https://github.com/SBoudrias/Inquirer.js/issues/1303
-      if ('readableFlowing' in input && input.isTTY) {
+      if ('readableFlowing' in input && isTTY) {
         const immediate = nativeSetImmediate(startCycle);
         cleanups.add(() => nativeClearImmediate(immediate));
       } else {
