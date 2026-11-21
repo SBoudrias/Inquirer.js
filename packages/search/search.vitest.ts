@@ -413,6 +413,7 @@ describe('search prompt', () => {
 
   it('handles search errors', async () => {
     const abortController = new AbortController();
+    let failWith: string | Error = new Error("You're being rate limited");
     const { answer, events, getScreen, nextRender } = await render(
       search,
       {
@@ -420,7 +421,10 @@ describe('search prompt', () => {
         source: (term: string | void) => {
           if (!term) return Promise.resolve([]);
 
-          throw new Error("You're being rate limited");
+          // A non-Error rejection is the fallback's input; that is the case tested here.
+          /* eslint-disable-next-line prefer-promise-reject-errors */
+          /* oxlint-disable-next-line typescript/prefer-promise-reject-errors */
+          return Promise.reject(failWith);
         },
       },
       { signal: abortController.signal },
@@ -440,6 +444,13 @@ describe('search prompt', () => {
 
       ↑↓ navigate • ⏎ select"
     `);
+
+    // A rejection that carries no usable message (a non-Error, or an empty
+    // Error) shows the generic fallback instead of nothing at all.
+    failWith = 'not an Error';
+    events.type('!');
+    await nextRender();
+    expect(getScreen()).toContain('Search failed');
 
     abortController.abort();
     await expect(answer).rejects.toThrow();
