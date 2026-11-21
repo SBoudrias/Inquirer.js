@@ -904,6 +904,31 @@ describe('promptModule(...)', () => {
     await expect(answers).resolves.toEqual({ name1: '1' });
   });
 
+  it('should recheck a reused global-pattern question across prompt modules', async () => {
+    // A question object shared between createPromptModule() calls keeps its
+    // pattern regex between asks; a global-flag regex must not stay stuck at
+    // its moved lastIndex and reject the second submission.
+    const question = {
+      type: 'input',
+      name: 'name1',
+      message: 'message',
+      pattern: /^[0-9]+$/g,
+    };
+
+    const firstAnswers = promptModule([{ ...question }]);
+    await screen.next();
+    screen.type('42');
+    screen.keypress('enter');
+    await expect(firstAnswers).resolves.toEqual({ name1: '42' });
+
+    const localPromptModule = createTestPromptModule();
+    const secondAnswers = localPromptModule([{ ...question }]);
+    await screen.next();
+    screen.type('42');
+    screen.keypress('enter');
+    await expect(secondAnswers).resolves.toEqual({ name1: '42' });
+  });
+
   it('should parse `choices` if passed as a function', async () => {
     const stubChoices = ['foo', 'bar'];
 
