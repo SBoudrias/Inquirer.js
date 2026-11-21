@@ -17,6 +17,7 @@ type EditorTheme = {
   style: {
     loadingMessage: () => string;
     waitingMessage: (enterKey: string) => string;
+    validationError: () => string;
   };
 };
 
@@ -25,6 +26,7 @@ const editorTheme: EditorTheme = {
   style: {
     loadingMessage: () => 'Validating...',
     waitingMessage: (enterKey) => `Press ${enterKey} to launch your preferred editor.`,
+    validationError: () => 'You must provide a valid value',
   },
 };
 
@@ -89,7 +91,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
         setStatus('done');
         done(answer);
       } else {
-        validationFailed(isValid || 'You must provide a valid value');
+        validationFailed(isValid || theme.style.validationError());
       }
     } catch (error: unknown) {
       // The readline was already resumed above, before validation started, so

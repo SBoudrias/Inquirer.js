@@ -200,6 +200,7 @@ export function createLocalizedPrompts(locale: Locale) {
         style: {
           loadingMessage: locale.editor.loadingMessage,
           waitingMessage: locale.editor.waitingMessage,
+          validationError: locale.editor.validationError,
         },
       };
       const theme = makeTheme(localeTheme, config.theme);

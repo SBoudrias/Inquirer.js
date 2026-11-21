@@ -163,6 +163,7 @@ describe('auto locale detection', () => {
         editor: {
           loadingMessage: () => 'Überprüfung...',
           waitingMessage: (key) => `Drücken Sie ${key} um Ihren Editor zu öffnen.`,
+          validationError: () => 'Sie müssen einen gültigen Wert angeben',
         },
         password: {
           maskedText: '[Eingabe verborgen]',
