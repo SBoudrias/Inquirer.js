@@ -368,6 +368,30 @@ describe('rawlist prompt', () => {
     await expect(answer).rejects.toThrow();
   });
 
+  it('lets the user edit the rejected choice with Backspace', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a number',
+      choices: numberedChoices,
+    });
+
+    events.type('2x');
+    events.keypress('enter');
+    expect(getScreen()).toContain('"2x" isn\'t an available option');
+
+    // The rejected input stays on the line, so typing appends to it and
+    // Backspace edits it instead of starting over.
+    events.type('3');
+    expect(getScreen()).toContain('? Select a number 2x3');
+
+    // Backspace edits down to '2', which the plain-digit rule accepts.
+    events.keypress('backspace');
+    events.keypress('backspace');
+    expect(getScreen()).toContain('? Select a number 2');
+
+    events.keypress('enter');
+    await expect(answer).resolves.toBe(2);
+  });
+
   it('allow setting custom keys', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select a number',
