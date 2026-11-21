@@ -337,6 +337,32 @@ describe('expand prompt', () => {
     await expect(answer).rejects.toThrow();
   });
 
+  it('lets the user edit the rejected choice with Backspace', async () => {
+    const { answer, events, getScreen } = await render(expand, {
+      message: 'Overwrite this file?',
+      choices: overwriteChoices,
+    });
+
+    events.type('yq');
+    events.keypress('enter');
+    expect(getScreen()).toContain('"yq" isn\'t an available option');
+
+    // The rejected input stays on the line, so typing appends to it and
+    // Backspace edits it instead of starting over.
+    events.type('z');
+    expect(getScreen()).toContain('? Overwrite this file? (yadxH) yqz');
+
+    events.keypress('backspace');
+    events.keypress('backspace');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Overwrite this file? (yadxH) y
+      >> Overwrite"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toBe('overwrite');
+  });
+
   it('selects without name', async () => {
     const { answer, events, getScreen } = await render(expand, {
       message: 'Overwrite this file?',
