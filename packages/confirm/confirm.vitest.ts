@@ -291,6 +291,24 @@ describe('confirm prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot('"✔ 确认? 是"');
   });
 
+  it.each([
+    ['👍', '👎', true, '(👍/👎)'],
+    ['𐐨', '𐐩', false, '(𐐨/𐐁)'],
+    // The screen renderer NFC-normalizes its output, so the decomposed
+    // E + combining acute in the keyword surfaces as the precomposed É.
+    ['E\u0301videmment', 'Non', true, '(\u00c9/n)'],
+  ] as const)('shows complete initials for %s and %s', async (yes, no, value, hint) => {
+    const { answer, events, getScreen } = await render(confirm, {
+      message: 'Continue?',
+      default: value,
+      theme: { keywords: { yes, no } },
+    });
+
+    expect(getScreen()).toContain(hint);
+    events.keypress('enter');
+    await expect(answer).resolves.toBe(value);
+  });
+
   it('toggle between values with the tab key', async () => {
     const { answer, events, getScreen } = await render(confirm, {
       message: 'Do you want to proceed?',
