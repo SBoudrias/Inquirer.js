@@ -235,8 +235,10 @@ export default createPrompt(
         }
       } else if (key.name === shortcuts.all) {
         const selectAll = items.some((choice) => isSelectable(choice) && !choice.checked);
+        setError(undefined);
         setItems(items.map(check(selectAll)));
       } else if (key.name === shortcuts.invert) {
+        setError(undefined);
         setItems(items.map(toggle));
       } else if (isNumberKey(key)) {
         const selectedIndex = Number(key.name) - 1;
@@ -252,6 +254,7 @@ export default createPrompt(
 
         const selectedItem = items[position];
         if (selectedItem && isSelectable(selectedItem)) {
+          setError(undefined);
           setActive(position);
           setItems(items.map((choice, i) => (i === position ? toggle(choice) : choice)));
         }

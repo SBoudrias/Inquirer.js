@@ -1670,6 +1670,40 @@ describe('checkbox prompt', () => {
       events.keypress('enter');
       await expect(answer).resolves.toEqual([]);
     });
+
+    it('clears error message when toggling with all, invert, or number shortcuts', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Pick modules',
+        choices: ['parser', 'lexer'],
+        required: true,
+      });
+
+      events.keypress('enter');
+      await Promise.resolve();
+      expect(getScreen()).toContain('At least one choice must be selected');
+
+      events.keypress('a');
+      expect(getScreen()).not.toContain('At least one choice must be selected');
+
+      events.keypress('a');
+      events.keypress('enter');
+      await Promise.resolve();
+      expect(getScreen()).toContain('At least one choice must be selected');
+
+      events.keypress('i');
+      expect(getScreen()).not.toContain('At least one choice must be selected');
+
+      events.keypress('i');
+      events.keypress('enter');
+      await Promise.resolve();
+      expect(getScreen()).toContain('At least one choice must be selected');
+
+      events.keypress('1');
+      expect(getScreen()).not.toContain('At least one choice must be selected');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['parser']);
+    });
   });
 });
 
