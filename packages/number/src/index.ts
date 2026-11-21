@@ -124,8 +124,10 @@ export default createPrompt(
           // oxlint-disable-next-line typescript/no-unsafe-type-assertion
           done(answer as Required extends true ? number : number | undefined);
         } else {
+          // Keys pressed while validating were ignored, but readline still added them to its line.
           // Reset the readline line value to the previous value. On line event, the value
           // get cleared, forcing the user to re-enter the value instead of fixing it.
+          rl.clearLine(0);
           rl.write(value);
           setError(isValid || 'You must provide a valid numeric value');
           setStatus('idle');

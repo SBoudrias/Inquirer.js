@@ -63,8 +63,10 @@ export default createPrompt<string, PasswordConfig>((config, done) => {
         setStatus('done');
         done(answer);
       } else {
+        // Keys pressed while validating were ignored, but readline still added them to its line.
         // Reset the readline line value to the previous value. On line event, the value
         // get cleared, forcing the user to re-enter the value instead of fixing it.
+        rl.clearLine(0);
         rl.write(value);
         setError(isValid || 'You must provide a valid value');
         setStatus('idle');

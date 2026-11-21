@@ -1,8 +1,28 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
+import { withResolver } from '@inquirer/type';
 import number from './src/index.ts';
 
 describe('number prompt', () => {
+  it('discards keys typed during validation before restoring a rejected answer', async () => {
+    const { promise, resolve } = withResolver<string>();
+    const { answer, events, nextRender } = await render(number, {
+      message: 'Value',
+      validate: (value?: number) => value !== 12 || promise,
+    });
+
+    events.type('12');
+    events.keypress('enter');
+    await nextRender();
+    events.type('9');
+    resolve('Try again');
+    await nextRender();
+    events.type('3');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toBe(123);
+  });
+
   it('handle simple use case', async () => {
     const { answer, events, getScreen } = await render(number, {
       message: 'What is your age',
