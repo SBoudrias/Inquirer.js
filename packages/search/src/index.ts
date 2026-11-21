@@ -225,6 +225,7 @@ export default createPrompt(
         setSearchTerm(selectedChoice.name);
       } else if (status !== 'loading' && (isUpKey(key) || isDownKey(key))) {
         rl.clearLine(0);
+        rl.write(searchTerm);
         if (
           (isUpKey(key) && active !== bounds.first) ||
           (isDownKey(key) && active !== bounds.last)
