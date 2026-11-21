@@ -337,31 +337,31 @@ describe('expand prompt', () => {
     await expect(answer).rejects.toThrow();
   });
 
-  it.each([false, true])(
-    'keeps a rejected choice editable when expanded is %s',
-    async (expanded) => {
-      const controller = new AbortController();
-      const { answer, input, getScreen } = await render(
-        expand,
-        { message: 'Overwrite this file?', choices: overwriteChoices, expanded },
-        { signal: controller.signal },
-      );
+  it('lets the user edit the rejected choice with Backspace', async () => {
+    const { answer, events, getScreen } = await render(expand, {
+      message: 'Overwrite this file?',
+      choices: overwriteChoices,
+    });
 
-      try {
-        input.write('yx\r');
-        expect(getScreen()).toContain('"yx" isn\'t an available option');
+    events.type('yq');
+    events.keypress('enter');
+    expect(getScreen()).toContain('"yq" isn\'t an available option');
 
-        input.write('\u007f');
-        expect(getScreen().split('\n')[0]).toMatch(/ y$/);
+    // The rejected input stays on the line, so typing appends to it and
+    // Backspace edits it instead of starting over.
+    events.type('z');
+    expect(getScreen()).toContain('? Overwrite this file? (yadxH) yqz');
 
-        input.write('\r');
-        await expect(answer).resolves.toBe('overwrite');
-      } finally {
-        controller.abort();
-        await answer.catch(() => {});
-      }
-    },
-  );
+    events.keypress('backspace');
+    events.keypress('backspace');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Overwrite this file? (yadxH) y
+      >> Overwrite"
+    `);
+
+    events.keypress('enter');
+    await expect(answer).resolves.toBe('overwrite');
+  });
 
   it('selects without name', async () => {
     const { answer, events, getScreen } = await render(expand, {
