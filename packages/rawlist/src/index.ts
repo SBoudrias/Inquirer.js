@@ -125,7 +125,7 @@ export default createPrompt(
     const [status, setStatus] = useState<Status>('idle');
     const [value, setValue] = useState<string>(() => {
       const defaultChoice =
-        config.default == null
+        config.default === undefined
           ? undefined
           : choices.find(
               (choice): choice is NormalizedChoice<Value> =>

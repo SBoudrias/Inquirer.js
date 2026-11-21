@@ -562,6 +562,21 @@ describe('rawlist prompt', () => {
       await expect(answer).resolves.toEqual(2);
     });
 
+    it('preselects a choice whose value and default are both null', async () => {
+      const { answer, events, getScreen } = await render(rawlist, {
+        message: 'Select a theme',
+        choices: [
+          { name: 'Dark', value: 'dark' },
+          { name: 'Use system theme', value: null },
+        ],
+        default: null,
+      });
+
+      events.keypress('enter');
+      expect(getScreen()).toContain('✔ Select a theme Use system theme');
+      await expect(answer).resolves.toBeNull();
+    });
+
     it('ignores default value if not found', async () => {
       const { answer, events, getScreen } = await render(rawlist, {
         message: 'Select a fruit',
