@@ -369,26 +369,27 @@ describe('rawlist prompt', () => {
   });
 
   it('lets the user edit the rejected choice with Backspace', async () => {
-    const controller = new AbortController();
-    const { answer, input, getScreen } = await render(
-      rawlist,
-      { message: 'Select a number', choices: numberedChoices },
-      { signal: controller.signal },
-    );
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a number',
+      choices: numberedChoices,
+    });
 
-    try {
-      input.write('2x\r');
-      expect(getScreen()).toContain('"2x" isn\'t an available option');
+    events.type('2x');
+    events.keypress('enter');
+    expect(getScreen()).toContain('"2x" isn\'t an available option');
 
-      input.write('\u007f');
-      expect(getScreen()).toContain('? Select a number 2\n');
+    // The rejected input stays on the line, so typing appends to it and
+    // Backspace edits it instead of starting over.
+    events.type('3');
+    expect(getScreen()).toContain('? Select a number 2x3');
 
-      input.write('\r');
-      await expect(answer).resolves.toBe(2);
-    } finally {
-      controller.abort();
-      await answer.catch(() => {});
-    }
+    // Backspace edits down to '2', which the plain-digit rule accepts.
+    events.keypress('backspace');
+    events.keypress('backspace');
+    expect(getScreen()).toContain('? Select a number 2');
+
+    events.keypress('enter');
+    await expect(answer).resolves.toBe(2);
   });
 
   it('allow setting custom keys', async () => {
