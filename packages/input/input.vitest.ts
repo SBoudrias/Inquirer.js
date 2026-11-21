@@ -1,5 +1,6 @@
 import { PassThrough } from 'node:stream';
 import { setImmediate } from 'node:timers/promises';
+import { stripVTControlCharacters } from 'node:util';
 import { describe, it, expect } from 'vitest';
 import { ExitPromptError } from '@inquirer/core';
 import { render } from '@inquirer/testing';
@@ -121,6 +122,30 @@ describe('input prompt', () => {
 
     await expect(answer).resolves.toBe('John');
   });
+
+  it.each([
+    { message: 'ABCDEF', columns: 9, expected: '? ABCDEF\n' },
+    { message: '界界界', columns: 9, expected: '? 界界界\n' },
+    { message: '界界界', columns: 5, expected: '? 界\n界界\n' },
+    { message: '界界界界界界', columns: 7, expected: '? 界界\n界界界\n界' },
+  ])(
+    'wraps "$message" in $columns terminal columns',
+    async ({ message, columns, expected }) => {
+      const stdin = new PassThrough();
+      const stdout = Object.assign(new PassThrough(), { columns });
+      let screen = '';
+      stdout.setEncoding('utf8').on('data', (chunk: string) => {
+        screen += chunk;
+      });
+
+      const answer = input({ message }, { input: stdin, output: stdout });
+      const initial = stripVTControlCharacters(screen);
+
+      stdin.write('\r');
+      await expect(answer).resolves.toEqual('');
+      expect(initial).toBe(expected);
+    },
+  );
 
   it('handle transformer', async () => {
     const { answer, events, getScreen } = await render(input, {
