@@ -249,7 +249,9 @@ describe('confirm prompt', () => {
   it.each([
     ['👍', '👎', true, '(👍/👎)'],
     ['𐐨', '𐐩', false, '(𐐨/𐐁)'],
-    ['E\u0301videmment', 'Non', true, '(É/n)'],
+    // The screen renderer NFC-normalizes its output, so the decomposed
+    // E + combining acute in the keyword surfaces as the precomposed É.
+    ['E\u0301videmment', 'Non', true, '(\u00c9/n)'],
   ] as const)('shows complete initials for %s and %s', async (yes, no, value, hint) => {
     const { answer, events, getScreen } = await render(confirm, {
       message: 'Continue?',
