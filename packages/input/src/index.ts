@@ -51,7 +51,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
       return 'You must provide a value';
     }
 
-    if (pattern && !pattern.test(value)) {
+    if (pattern && value.search(pattern) === -1) {
       return patternError;
     }
 
@@ -74,6 +74,7 @@ export default createPrompt<string, InputConfig>((config, done) => {
 
       const isValid = await validate(answer);
       if (isValid === true) {
+        setError(undefined);
         setValue(answer);
         setStatus('done');
         done(answer);
