@@ -51,6 +51,44 @@ describe('number prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ What is your age 2"`);
   });
 
+  it('rejects JS-only numeric literals instead of parsing them', async () => {
+    // `Number()` alone would accept these as hex, binary, octal and
+    // underscore-separated literals; a person typing them almost certainly
+    // does not mean 16, 3, 7 and 1000.
+    for (const input of ['0x10', '0b11', '0o7', '1_000', 'Infinity']) {
+      const abort = new AbortController();
+      const { answer, events, getScreen, nextRender } = await render(
+        number,
+        { message: 'What is your age' },
+        { signal: abort.signal },
+      );
+
+      events.type(input);
+      events.keypress('enter');
+      await nextRender();
+      expect(getScreen()).toBe(
+        `? What is your age ${input}\n> You must provide a valid numeric value`,
+      );
+
+      // Rejected input keeps the prompt open; close it through its signal.
+      abort.abort();
+      await answer.catch(() => {});
+    }
+  });
+
+  it('accepts scientific notation as a plain decimal form', async () => {
+    // Unlike radix literals, scientific notation is a legitimate way to
+    // type a large number (and defaults stringify to it past 1e21).
+    const { answer, events } = await render(number, {
+      message: 'How big',
+    });
+
+    events.type('1e3');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual(1000);
+  });
+
   it('supports min/max options', async () => {
     const { answer, events, getScreen, nextRender } = await render(number, {
       message: 'What is your age',
