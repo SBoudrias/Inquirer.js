@@ -174,8 +174,16 @@ export default createPrompt(
             setStatus('idle');
           }
         } catch (error: unknown) {
-          if (!controller.signal.aborted && error instanceof Error) {
-            setSearchError(error.message);
+          if (!controller.signal.aborted) {
+            const message =
+              error instanceof Error && error.message ? error.message : 'Search failed';
+            setSearchError(message);
+            // Reset the cursor with the emptied results: arrow keys are
+            // no-ops only while the active index equals the (empty) bounds,
+            // and a stale index would crash the navigation modulo below.
+            setActive(undefined);
+            setSearchResults([]);
+            setStatus('idle');
           }
         }
       };

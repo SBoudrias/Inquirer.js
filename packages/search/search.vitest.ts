@@ -413,6 +413,7 @@ describe('search prompt', () => {
 
   it('handles search errors', async () => {
     const abortController = new AbortController();
+    let failWith: string | Error = new Error("You're being rate limited");
     const { answer, events, getScreen, nextRender } = await render(
       search,
       {
@@ -420,7 +421,10 @@ describe('search prompt', () => {
         source: (term: string | void) => {
           if (!term) return Promise.resolve([]);
 
-          throw new Error("You're being rate limited");
+          // A non-Error rejection is the fallback's input; that is the case tested here.
+          /* eslint-disable-next-line prefer-promise-reject-errors */
+          /* oxlint-disable-next-line typescript/prefer-promise-reject-errors */
+          return Promise.reject(failWith);
         },
       },
       { signal: abortController.signal },
@@ -441,8 +445,66 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
+    // A rejection that carries no usable message (a non-Error, or an empty
+    // Error) shows the generic fallback instead of nothing at all.
+    failWith = 'not an Error';
+    events.type('!');
+    await nextRender();
+    expect(getScreen()).toContain('Search failed');
+
     abortController.abort();
     await expect(answer).rejects.toThrow();
+  });
+
+  it('stops loading after a source failure and lets the user search again', async () => {
+    const { promise: failedSearch, reject } = withResolver<string[]>();
+    const controller = new AbortController();
+    const validate = vi.fn(() => true);
+    const source = vi.fn((term: string | undefined) => {
+      if (term === 'Q') return failedSearch;
+      return term ? ['Quebec'] : ['Alberta', 'Manitoba'];
+    });
+    const { answer, events, getScreen, nextRender } = await render(
+      search<string>,
+      {
+        message: 'Select a Canadian province',
+        source,
+        validate,
+        theme: {
+          style: { message: (text: string, status: string) => `${status} ${text}` },
+        },
+      },
+      { signal: controller.signal },
+    );
+
+    try {
+      expect(getScreen()).toContain('❯ Alberta');
+      events.keypress('down');
+      await nextRender();
+      expect(getScreen()).toContain('❯ Manitoba');
+      events.type('Q');
+      expect(source).toHaveBeenLastCalledWith('Q', expect.anything());
+
+      reject(new Error('Search request failed'));
+      await nextRender();
+      expect(getScreen()).toContain('Search request failed');
+      expect(getScreen()).toContain('idle Select a Canadian province Q');
+
+      events.keypress('up');
+      events.keypress('enter');
+      expect(validate).not.toHaveBeenCalled();
+
+      events.type('ue');
+      await vi.waitFor(() => {
+        expect(getScreen()).toContain('idle Select a Canadian province Que');
+        expect(getScreen()).toContain('❯ Quebec');
+      });
+      events.keypress('enter');
+      await expect(answer).resolves.toBe('Quebec');
+    } finally {
+      controller.abort();
+      await answer.catch(() => {});
+    }
   });
 
   it('handles empty results', async () => {
