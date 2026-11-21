@@ -318,4 +318,42 @@ describe('password prompt', () => {
     hidden.events.keypress('enter');
     await expect(hidden.answer).resolves.toEqual('John');
   });
+
+  // The displayed answer and readline's line must stay in sync: after any
+  // handler rewrites the shown value, the next keystroke edits what is shown.
+  // The masked display shows one character per keystroke, so the probe below
+  // expects the mask shape, not the underlying letters.
+  describe('the shown answer stays editable after the prompt rewrites it', () => {
+    it('after a rejected answer', async () => {
+      const { answer, events, getScreen, nextRender } = await render(password, {
+        message: 'Enter your password',
+        mask: true,
+        validate: (value) => value !== 'ooh' || 'Try again',
+      });
+
+      const promptLine = () => (getScreen().split('\n')[0] ?? '').trimEnd();
+
+      events.type('ooh');
+      await nextRender();
+      events.keypress('enter');
+      await nextRender();
+      expect(promptLine()).toBe('? Enter your password ***');
+
+      // Typing appends one more mask character to what is shown...
+      events.type('a');
+      await nextRender();
+      expect(promptLine()).toBe('? Enter your password ****');
+
+      // ...and Backspace removes exactly one.
+      events.keypress('backspace');
+      await nextRender();
+      expect(promptLine()).toBe('? Enter your password ***');
+
+      events.keypress('backspace');
+      events.keypress('backspace');
+      events.type('k');
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual('ok');
+    });
+  });
 });

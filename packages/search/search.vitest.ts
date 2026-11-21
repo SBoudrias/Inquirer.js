@@ -909,6 +909,10 @@ describe('search prompt', () => {
       ↑↓ navigate • ⏎ select"
     `);
 
+    // The rejected name is now restored to the readline line: one word
+    // delete leaves "New " behind, so delete the rest before typing the
+    // next query.
+    events.keypress({ name: 'backspace', ctrl: true });
     events.keypress({ name: 'backspace', ctrl: true });
     events.type('Quebec');
     await nextRender();
@@ -1011,6 +1015,104 @@ describe('search prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual('AB');
+  });
+
+  // The displayed query and readline's line must stay in sync: after any
+  // handler rewrites the shown value, the next keystroke edits what is shown
+  // — typing appends, Backspace removes one character.
+  describe('the shown query stays editable after the prompt rewrites it', () => {
+    type Step =
+      | 'enter'
+      | 'tab'
+      | 'up'
+      | 'down'
+      | 'backspace'
+      | 'ctrl+backspace'
+      | { type: string };
+
+    const cases: Array<{
+      after: string;
+      steps: Step[];
+      shown: string;
+      probe: string;
+      typed: string;
+      edited: string;
+      settle: Step[];
+      answer: string;
+      validate?: (value: string) => boolean | string;
+    }> = [
+      {
+        // The selected name is also the exact query: validate rejects it and
+        // the term must stay editable on the line.
+        after: 'a rejected exact-name match',
+        steps: [{ type: 'Alberta' }, 'enter'],
+        shown: 'Alberta',
+        probe: 'x',
+        typed: 'Albertax',
+        edited: 'Alberta',
+        settle: ['ctrl+backspace', { type: 'Yukon' }, 'enter'],
+        answer: 'YT',
+        validate: (value: string) => value !== 'AB',
+      },
+      {
+        after: 'tab autocompletion',
+        steps: [{ type: 'New' }, 'tab'],
+        shown: 'New Brunswick',
+        probe: 's',
+        typed: 'New Brunswicks',
+        edited: 'New Brunswick',
+        settle: ['ctrl+backspace', 'ctrl+backspace', { type: 'Yukon' }, 'enter'],
+        answer: 'YT',
+      },
+      {
+        after: 'arrow navigation',
+        steps: [{ type: 'New' }, 'down'],
+        shown: 'New',
+        probe: 'f',
+        typed: 'Newf',
+        edited: 'New',
+        settle: [{ type: 'foundland' }, 'enter'],
+        answer: 'NL',
+      },
+    ];
+
+    it.each(cases)('after $after', async (row) => {
+      const { answer, events, getScreen, nextRender } = await render(search, {
+        message: 'Select a Canadian province',
+        source: getListSearch(PROVINCES),
+        ...(row.validate === undefined ? {} : { validate: row.validate }),
+      });
+
+      // The source runs asynchronously, so every keystroke needs a render to
+      // settle before the next one (and finally Enter) reads the results.
+      const send = async (steps: Step[]) => {
+        for (const step of steps) {
+          if (step === 'ctrl+backspace') {
+            events.keypress({ name: 'backspace', ctrl: true });
+          } else if (typeof step === 'string') {
+            events.keypress(step);
+          } else {
+            events.type(step.type);
+          }
+          await nextRender();
+        }
+      };
+      const promptLine = () => (getScreen().split('\n')[0] ?? '').trimEnd();
+
+      await send(row.steps);
+      expect(promptLine()).toBe(`? Select a Canadian province ${row.shown}`);
+
+      // Typing appends to the shown query...
+      await send([{ type: row.probe }]);
+      expect(promptLine()).toBe(`? Select a Canadian province ${row.typed}`);
+
+      // ...and Backspace removes exactly one character.
+      await send(['backspace']);
+      expect(promptLine()).toBe(`? Select a Canadian province ${row.edited}`);
+
+      await send(row.settle);
+      await expect(answer).resolves.toEqual(row.answer);
+    });
   });
 });
 

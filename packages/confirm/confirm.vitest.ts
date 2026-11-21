@@ -329,4 +329,33 @@ describe('confirm prompt', () => {
     await expect(answer).resolves.toEqual(false);
     expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? No"');
   });
+
+  // The displayed answer and readline's line must stay in sync: after any
+  // handler rewrites the shown value, the next keystroke edits what is shown
+  // — typing appends, Backspace removes one character. The unrecognized-
+  // input rejection is covered above ("shows an error and keeps prompting").
+  it('keeps the tab-toggled answer editable', async () => {
+    const { answer, events, getScreen } = await render(confirm, {
+      message: 'Do you want to proceed?',
+    });
+
+    events.keypress('tab');
+    expect(getScreen()).toContain('? Do you want to proceed? (Y/n) No');
+
+    // Typing appends to the shown answer...
+    events.type('p');
+    expect(getScreen().split('\n')[0]?.trimEnd()).toBe(
+      '? Do you want to proceed? (Y/n) Nop',
+    );
+
+    // ...and Backspace removes exactly one character.
+    events.keypress('backspace');
+    expect(getScreen().split('\n')[0]?.trimEnd()).toBe(
+      '? Do you want to proceed? (Y/n) No',
+    );
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(false);
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Do you want to proceed? No"');
+  });
 });
