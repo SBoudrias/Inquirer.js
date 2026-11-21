@@ -530,7 +530,7 @@ describe('checkbox prompt', () => {
     await expect(answer).resolves.toEqual(['pineapple']);
   });
 
-  it('skip disabled options by number key', async () => {
+  it('shows the disabled error when a number key lands on a disabled choice', async () => {
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Select a topping',
       choices: [
@@ -549,6 +549,8 @@ describe('checkbox prompt', () => {
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
+    // Pressing 2 targets the disabled Pineapple; the same error the space
+    // key shows appears, and the cursor and selection are left untouched.
     events.keypress('2');
     expect(getScreen()).toMatchInlineSnapshot(`
       "? Select a topping
@@ -556,12 +558,24 @@ describe('checkbox prompt', () => {
        - Pineapple (disabled)
        ◯ Pepperoni
 
+      > This option is disabled and cannot be toggled.
+      ↑↓ navigate • space select • a all • i invert • ⏎ submit"
+    `);
+
+    // A number key landing on a selectable choice clears the error.
+    events.keypress('3');
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Select a topping
+       ◯ Ham
+       - Pineapple (disabled)
+      ❯◉ Pepperoni
+
       ↑↓ navigate • space select • a all • i invert • ⏎ submit"
     `);
 
     events.keypress('enter');
-    await expect(answer).resolves.toEqual([]);
-    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping"');
+    await expect(answer).resolves.toEqual(['pepperoni']);
+    expect(getScreen()).toMatchInlineSnapshot('"✔ Select a topping Pepperoni"');
   });
 
   it('skip separator by arrow keys', async () => {

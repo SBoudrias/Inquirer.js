@@ -243,7 +243,7 @@ export default createPrompt(
       } else if (isNumberKey(key)) {
         const selectedIndex = Number(key.name) - 1;
 
-        // Find the nth item (ignoring separators)
+        // Find the nth choice; separators are skipped, but disabled choices count.
         let selectableIndex = -1;
         const position = items.findIndex((item) => {
           if (Separator.isSeparator(item)) return false;
@@ -253,10 +253,18 @@ export default createPrompt(
         });
 
         const selectedItem = items[position];
-        if (selectedItem && isSelectable(selectedItem)) {
-          setError(undefined);
-          setActive(position);
-          setItems(items.map((choice, i) => (i === position ? toggle(choice) : choice)));
+        if (selectedItem && !Separator.isSeparator(selectedItem)) {
+          if (selectedItem.disabled) {
+            // The digit landed on a disabled choice; show the same error the
+            // space key shows instead of silently ignoring the keypress.
+            setError(theme.i18n.disabledError);
+          } else {
+            setError(undefined);
+            setActive(position);
+            setItems(
+              items.map((choice, i) => (i === position ? toggle(choice) : choice)),
+            );
+          }
         }
       }
     });
