@@ -1439,6 +1439,49 @@ describe('checkbox prompt', () => {
     await expect(answer).resolves.toEqual([]);
   });
 
+  it.each(['a', 'i', '1'])(
+    'clears the required error when toggling with the %s shortcut',
+    async (key) => {
+      const { answer, events, nextRender, getScreen } = await render(checkbox, {
+        message: 'Pick modules',
+        choices: ['parser', 'lexer'],
+        required: true,
+      });
+
+      events.keypress('enter');
+      await nextRender();
+      expect(getScreen()).toContain('At least one choice must be selected');
+
+      events.keypress(key);
+      expect(getScreen()).not.toContain('At least one choice must be selected');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(
+        key === '1' ? ['parser'] : ['parser', 'lexer'],
+      );
+    },
+  );
+
+  it('clears a validation error when toggling with a shortcut', async () => {
+    let attempts = 0;
+    const { answer, events, nextRender, getScreen } = await render(checkbox, {
+      message: 'Pick modules',
+      choices: ['parser', 'lexer'],
+      validate: () => ++attempts > 1 || 'Pick at least two modules',
+    });
+
+    events.keypress('1');
+    events.keypress('enter');
+    await nextRender();
+    expect(getScreen()).toContain('Pick at least two modules');
+
+    events.keypress('a');
+    expect(getScreen()).not.toContain('Pick at least two modules');
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual(['parser', 'lexer']);
+  });
+
   describe('numeric selection with separators', () => {
     it('toggles the correct item when separators are in the middle', async () => {
       const { answer, events, getScreen } = await render(checkbox, {
@@ -1669,40 +1712,6 @@ describe('checkbox prompt', () => {
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual([]);
-    });
-
-    it('clears error message when toggling with all, invert, or number shortcuts', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
-        message: 'Pick modules',
-        choices: ['parser', 'lexer'],
-        required: true,
-      });
-
-      events.keypress('enter');
-      await Promise.resolve();
-      expect(getScreen()).toContain('At least one choice must be selected');
-
-      events.keypress('a');
-      expect(getScreen()).not.toContain('At least one choice must be selected');
-
-      events.keypress('a');
-      events.keypress('enter');
-      await Promise.resolve();
-      expect(getScreen()).toContain('At least one choice must be selected');
-
-      events.keypress('i');
-      expect(getScreen()).not.toContain('At least one choice must be selected');
-
-      events.keypress('i');
-      events.keypress('enter');
-      await Promise.resolve();
-      expect(getScreen()).toContain('At least one choice must be selected');
-
-      events.keypress('1');
-      expect(getScreen()).not.toContain('At least one choice must be selected');
-
-      events.keypress('enter');
-      await expect(answer).resolves.toEqual(['parser']);
     });
   });
 });
