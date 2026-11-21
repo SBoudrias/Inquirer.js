@@ -2,6 +2,7 @@ import { stripVTControlCharacters } from 'node:util';
 import MuteStream from 'mute-stream';
 import { BufferedStream } from './buffered-stream.ts';
 import { interpretTerminalOutput } from './terminal.ts';
+import { keypressSequence } from './key-sequences.ts';
 
 export type KeypressEvent = {
   name?: string;
@@ -149,18 +150,22 @@ export class Screen {
   }
 
   keypress(key: string | KeypressEvent): void {
-    if (typeof key === 'string') {
-      this.#input.emit('keypress', null, { name: key });
+    // Send the terminal's byte sequence when one exists, so the key travels
+    // the same path as a physical keystroke: readline's decoder fires the
+    // keypress and its line editor applies the key. Keys without a
+    // faithful encoding fall back to a synthetic event.
+    const sequence = keypressSequence(key);
+    if (sequence !== null) {
+      this.#input.write(sequence);
     } else {
       this.#input.emit('keypress', null, key);
     }
   }
 
   type(text: string): void {
+    // Writing the bytes is enough: readline's input decoder fires one
+    // keypress per character and its line editor inserts them.
     this.#input.write(text);
-    for (const char of text) {
-      this.#input.emit('keypress', null, { name: char });
-    }
   }
 
   clear(): void {

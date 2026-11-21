@@ -75,6 +75,21 @@ describe('screen', () => {
     await expect(answer).resolves.toBe('b');
   });
 
+  it('delivers special keys to the readline line', async () => {
+    // keypress() writes the terminal's byte sequence, so space and tab reach
+    // rl.line like a physical keystroke. The literal \t is the input prompt's
+    // tab-into-a-non-empty-value bug, made visible by this fidelity fix.
+    const answer = input({ message: 'Question?' });
+
+    screen.type('ab');
+    screen.keypress('space');
+    screen.keypress('tab');
+    screen.type('c');
+
+    screen.keypress('enter');
+    await expect(answer).resolves.toBe('ab \tc');
+  });
+
   it.each(['dumb', 'xterm-256color'])(
     'supports line editing with TERM=%s',
     async (term) => {

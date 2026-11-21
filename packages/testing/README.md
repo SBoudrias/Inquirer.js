@@ -95,7 +95,7 @@ describe('input prompt', () => {
 - `getScreen` (`({ raw?: boolean }) => string`) - Returns the current screen content. By default strips ANSI codes
 - `nextRender` (`() => Promise<void>`) - Wait for the next screen update. Use after triggering async actions (e.g. pressing enter with validation). Coalesces rapid back-to-back renders so a single `await nextRender()` captures the final settled state
 - `events` - Utilities to interact with the prompt:
-  - `keypress(key: string | KeyObject)` - Trigger a keypress event
+  - `keypress(key: string | KeyObject)` - Send a keypress; writes the terminal's byte sequence for the key when one exists, so the key reaches the prompt's readline line (space, tab, printable characters) exactly like a physical keystroke
   - `type(text: string)` - Type text into the prompt
 - `getFullOutput` (`() => Promise<string>`) - Returns the full output interpreted through a virtual terminal, resolving ANSI escape sequences into the actual screen state
 
@@ -197,8 +197,8 @@ The `screen` object provides:
 - `next()` - Wait for the next screen update (prompt transitions, validation errors, async updates). The initial prompt render is available immediately via `getScreen()` — no `next()` needed
 - `getScreen({ raw?: boolean })` - Get the current prompt screen content. By default strips ANSI codes
 - `getFullOutput({ raw?: boolean })` - Get all accumulated output interpreted through a virtual terminal (returns a `Promise`). By default resolves ANSI escape sequences into actual screen state
-- `type(text)` - Type text (writes to stream AND emits keypresses)
-- `keypress(key)` - Send a keypress event
+- `type(text)` - Type text (writes the bytes; readline's decoder fires one keypress per character)
+- `keypress(key)` - Send a keypress; writes the terminal's byte sequence for the key when one exists, so it reaches the readline line like a physical keystroke
 - `clear()` - Reset screen state (called automatically before each test)
 
 ### Mocking Third-Party Prompts

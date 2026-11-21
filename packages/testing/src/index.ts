@@ -6,6 +6,7 @@ type RenderOptions = Omit<Context, 'input' | 'output'>;
 import { BufferedStream } from './buffered-stream.ts';
 import { withEditableTerminal } from './with-editable-terminal.ts';
 import { interpretTerminalOutput } from './terminal.ts';
+import { keypressSequence } from './key-sequences.ts';
 
 export async function render<Value, const Config>(
   prompt: Prompt<Value, Config>,
@@ -52,17 +53,21 @@ export async function render<Value, const Config>(
             shift?: boolean;
           },
     ) {
-      if (typeof key === 'string') {
-        input.emit('keypress', null, { name: key });
+      // Send the terminal's byte sequence when one exists, so the key
+      // travels the same path as a physical keystroke: readline's decoder
+      // fires the keypress and its line editor applies the key. Keys
+      // without a faithful encoding fall back to a synthetic event.
+      const sequence = keypressSequence(key);
+      if (sequence !== null) {
+        input.write(sequence);
       } else {
         input.emit('keypress', null, key);
       }
     },
     type(text: string) {
+      // Writing the bytes is enough: readline's input decoder fires one
+      // keypress per character and its line editor inserts them.
       input.write(text);
-      for (const char of text) {
-        input.emit('keypress', null, { name: char });
-      }
     },
   };
 

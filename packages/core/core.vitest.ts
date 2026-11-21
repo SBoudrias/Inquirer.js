@@ -418,7 +418,9 @@ describe('createPrompt()', () => {
 
     await expect(answer).resolves.toEqual('done');
     expect(handler).toHaveBeenCalledTimes(1);
-    expect(handler).toHaveBeenCalledWith('enter');
+    // keypress() sends the terminal's \r byte for enter, which readline's
+    // decoder reports as the 'return' key — the name a real keystroke gets.
+    expect(handler).toHaveBeenCalledWith('return');
   });
 
   it('useKeypress: ignores keypresses after the prompt is aborted', async () => {
