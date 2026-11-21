@@ -437,4 +437,64 @@ describe('editor prompt', () => {
     await setImmediate();
     expect(unhandled()).toEqual([]);
   });
+
+  it('keeps the user edits when validate throws', async () => {
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      default: 'default value',
+      validate: (value: string) => {
+        if (value === 'edited value') {
+          throw new Error('Validator crashed');
+        }
+        return true;
+      },
+    });
+
+    expect(editAsync).not.toHaveBeenCalled();
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenLastCalledWith('default value', { postfix: '.txt' });
+
+    await editorAction(undefined, 'edited value');
+    expect(getScreen()).toContain('Error: Validator crashed');
+
+    // The default validationFailureMode ('keep') preserves the user's edits:
+    // the editor reopens with the edited value, not the previous (default) one.
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledTimes(2);
+    expect(editAsync).toHaveBeenLastCalledWith('edited value', { postfix: '.txt' });
+
+    await editorAction(undefined, 'new value');
+    await expect(answer).resolves.toEqual('new value');
+  });
+
+  it('goes back to the default value when validate throws in clear mode', async () => {
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      default: 'default value',
+      validate: (value: string) => {
+        if (value === 'edited value') {
+          throw new Error('Validator crashed');
+        }
+        return true;
+      },
+      theme: {
+        validationFailureMode: 'clear',
+      },
+    });
+
+    expect(editAsync).not.toHaveBeenCalled();
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenLastCalledWith('default value', { postfix: '.txt' });
+
+    await editorAction(undefined, 'edited value');
+    expect(getScreen()).toContain('Error: Validator crashed');
+
+    // validationFailureMode 'clear' resets to the configured default.
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledTimes(2);
+    expect(editAsync).toHaveBeenLastCalledWith('default value', { postfix: '.txt' });
+
+    await editorAction(undefined, 'new value');
+    await expect(answer).resolves.toEqual('new value');
+  });
 });

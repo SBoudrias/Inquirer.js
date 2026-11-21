@@ -70,6 +70,18 @@ export default createPrompt<string, EditorConfig>((config, done) => {
     rl.resume();
     setStatus('loading');
 
+    // Validation can fail two ways — the validator returning false/an error
+    // message, or throwing — and the user's edits deserve the same treatment
+    // in both: kept for the next editing round in 'keep' mode, reset to the
+    // config default in 'clear' mode. Applying this on throw too is what
+    // makes the editor reopen with the edited value instead of silently
+    // dropping it.
+    const validationFailed = (errorMsg: string) => {
+      setValue(theme.validationFailureMode === 'clear' ? config.default : answer);
+      setError(errorMsg);
+      setStatus('idle');
+    };
+
     try {
       const isValid = await validate(answer);
       if (isValid === true) {
@@ -77,13 +89,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
         setStatus('done');
         done(answer);
       } else {
-        if (theme.validationFailureMode === 'clear') {
-          setValue(config.default);
-        } else {
-          setValue(answer);
-        }
-        setError(isValid || 'You must provide a valid value');
-        setStatus('idle');
+        validationFailed(isValid || 'You must provide a valid value');
       }
     } catch (error: unknown) {
       // The readline was already resumed above, before validation started, so
@@ -92,8 +98,7 @@ export default createPrompt<string, EditorConfig>((config, done) => {
       // answer is still validating. Resuming the closed readline there would
       // raise an unhandled ERR_USE_AFTER_CLOSE after the caller already
       // handled the exit. Surface the error and let the user retry instead.
-      setError(String(error));
-      setStatus('idle');
+      validationFailed(String(error));
     }
   }
 
