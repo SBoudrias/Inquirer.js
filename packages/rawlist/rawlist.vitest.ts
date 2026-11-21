@@ -368,6 +368,29 @@ describe('rawlist prompt', () => {
     await expect(answer).rejects.toThrow();
   });
 
+  it('lets the user edit the rejected choice with Backspace', async () => {
+    const controller = new AbortController();
+    const { answer, input, getScreen } = await render(
+      rawlist,
+      { message: 'Select a number', choices: numberedChoices },
+      { signal: controller.signal },
+    );
+
+    try {
+      input.write('2x\r');
+      expect(getScreen()).toContain('"2x" isn\'t an available option');
+
+      input.write('\u007f');
+      expect(getScreen()).toContain('? Select a number 2\n');
+
+      input.write('\r');
+      await expect(answer).resolves.toBe(2);
+    } finally {
+      controller.abort();
+      await answer.catch(() => {});
+    }
+  });
+
   it('allow setting custom keys', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select a number',

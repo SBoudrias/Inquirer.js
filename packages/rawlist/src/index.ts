@@ -162,6 +162,8 @@ export default createPrompt(
         } else if (value === '') {
           setError('Please input a value');
         } else {
+          // Enter cleared the readline buffer, but the displayed input is still editable.
+          rl.write(value);
           setError(`"${styleText('red', value)}" isn't an available option`);
         }
       } else if (isUpKey(key, keybindings) || isDownKey(key, keybindings)) {
