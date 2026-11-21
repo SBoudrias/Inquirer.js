@@ -337,6 +337,32 @@ describe('expand prompt', () => {
     await expect(answer).rejects.toThrow();
   });
 
+  it.each([false, true])(
+    'keeps a rejected choice editable when expanded is %s',
+    async (expanded) => {
+      const controller = new AbortController();
+      const { answer, input, getScreen } = await render(
+        expand,
+        { message: 'Overwrite this file?', choices: overwriteChoices, expanded },
+        { signal: controller.signal },
+      );
+
+      try {
+        input.write('yx\r');
+        expect(getScreen()).toContain('"yx" isn\'t an available option');
+
+        input.write('\u007f');
+        expect(getScreen().split('\n')[0]).toMatch(/ y$/);
+
+        input.write('\r');
+        await expect(answer).resolves.toBe('overwrite');
+      } finally {
+        controller.abort();
+        await answer.catch(() => {});
+      }
+    },
+  );
+
   it('selects without name', async () => {
     const { answer, events, getScreen } = await render(expand, {
       message: 'Overwrite this file?',

@@ -131,6 +131,8 @@ const expand = createPrompt(
           } else if (value === '') {
             setError('Please input a value');
           } else {
+            // Enter clears readline's buffer. Restore it so the user can edit the rejected choice.
+            rl.write(value);
             setError(`"${styleText('red', value)}" isn't an available option`);
           }
         }
