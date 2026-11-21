@@ -92,8 +92,21 @@ export default createPrompt<boolean, ConfirmConfig>((config, done) => {
     const v = value.trim().toLowerCase();
     // Empty input selects the default answer (the one highlighted in the hint).
     if (v === '') return config.default !== false;
-    if (yes.toLowerCase().startsWith(v)) return true;
-    if (no.toLowerCase().startsWith(v)) return false;
+    const yesKeyword = yes.toLowerCase();
+    const noKeyword = no.toLowerCase();
+    // Exact matches first, so typing the full no-keyword never answers yes
+    // just because the yes-keyword happens to start the same way (e.g.
+    // yes: "Nope-not", no: "No").
+    if (v === yesKeyword) return true;
+    if (v === noKeyword) return false;
+    // The built-in English short answers come before prefix matching: a
+    // single `n` must answer no even when the yes-keyword starts with `n`
+    // (e.g. yes: "Nai").
+    if (v === 'y' || v === 'yes') return true;
+    if (v === 'n' || v === 'no') return false;
+    // Prefix matching, keywords before built-ins.
+    if (yesKeyword.startsWith(v)) return true;
+    if (noKeyword.startsWith(v)) return false;
     if ('yes'.startsWith(v)) return true;
     if ('no'.startsWith(v)) return false;
     // Unrecognized input is rejected by the caller (shows an error).
