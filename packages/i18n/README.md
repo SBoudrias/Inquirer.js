@@ -124,6 +124,7 @@ const deLocale: Locale = {
   editor: {
     loadingMessage: () => 'Überprüfung...',
     waitingMessage: (enterKey) => `Drücken Sie ${enterKey}, um Ihren Editor zu öffnen.`,
+    validationError: 'Sie müssen einen gültigen Wert angeben',
   },
   password: {
     maskedText: '[Eingabe verborgen]',

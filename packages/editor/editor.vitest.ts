@@ -392,6 +392,36 @@ describe('editor prompt', () => {
     expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
   });
 
+  it('displays custom validationError', async () => {
+    const { answer, events, getScreen } = await render(editor, {
+      message: 'Add a description',
+      validate: (value: string) => value === 'ok',
+      theme: {
+        style: {
+          validationError: 'Nope',
+        },
+      },
+    });
+
+    expect(editAsync).not.toHaveBeenCalled();
+    events.keypress('enter');
+
+    const editPromise = editorAction(undefined, 'not ok');
+    events.type('foo'); // Ignored events while validation runs
+    await editPromise;
+    expect(getScreen()).toMatchInlineSnapshot(`
+      "? Add a description Press <enter> to launch your preferred editor.
+      > Nope"
+    `);
+
+    events.keypress('enter');
+    expect(editAsync).toHaveBeenCalledTimes(2);
+
+    await editorAction(undefined, 'ok');
+    await expect(answer).resolves.toEqual('ok');
+    expect(getScreen()).toMatchInlineSnapshot(`"✔ Add a description"`);
+  });
+
   it('keeps the process alive when a validate throw races EOF', async () => {
     // Regression test for the split try/catch around editAsync vs. validate:
     // EOF (#2428) rejects the prompt with ExitPromptError while the submitted
