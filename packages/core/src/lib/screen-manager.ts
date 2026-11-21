@@ -1,5 +1,9 @@
 import { stripVTControlCharacters } from 'node:util';
-import { breakLines, readlineWidth } from './utils.ts';
+// Measures wide characters for the right-edge check below; it is the same
+// package fast-wrap-ansi measures with internally, and both must stay on the
+// same major so a wrapped row is never judged one column off by one side.
+import stringWidth from 'fast-string-width';
+import { breakLines, readlineWidth, wrapContent } from './utils.ts';
 import {
   cursorDown,
   cursorLeft,
@@ -53,13 +57,21 @@ export default class ScreenManager {
     this.cursorPos = this.rl.getCursorPos();
 
     const width = readlineWidth();
-    content = breakLines(content, width);
+    const wrapped = wrapContent(content, width);
+    content = wrapped.text;
     bottomContent = breakLines(bottomContent, width);
+    const lastRowWidth = stringWidth(stripVTControlCharacters(wrapped.lastRow));
+    // `>=` rather than `===` so a degenerate 1-column terminal (where every
+    // row is the full width) still inserts the extra line.
+    const atRightEdge = lastRowWidth >= width;
 
     // Manually insert an extra line if we're at the end of the line.
     // This prevent the cursor from appearing at the beginning of the
-    // current line.
-    if (rawPromptLine.length % width === 0) {
+    // current line. The `rawPromptLine.length === 0` half keeps the old
+    // `0 % width === 0` behavior for an empty or ANSI-only prompt line,
+    // where `atRightEdge` alone would be false but a line break is still
+    // needed before the bottom content.
+    if (atRightEdge || rawPromptLine.length === 0) {
       content += '\n';
     }
 
@@ -72,7 +84,7 @@ export default class ScreenManager {
     // We need to consider parts of the prompt under the cursor as part of the bottom
     // content in order to correctly cleanup and re-render.
     const promptLineUpDiff =
-      Math.floor(rawPromptLine.length / width) - this.cursorPos.rows;
+      wrapped.finalLineRows - 1 + Number(atRightEdge) - this.cursorPos.rows;
     const bottomContentHeight =
       promptLineUpDiff + (bottomContent ? height(bottomContent) : 0);
 

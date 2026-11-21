@@ -960,6 +960,7 @@ __metadata:
     "@types/mute-stream": "npm:^0.0.4"
     "@types/node": "npm:^26.1.1"
     cli-width: "npm:^4.1.0"
+    fast-string-width: "npm:^3.0.2"
     fast-wrap-ansi: "npm:^0.2.0"
     mute-stream: "npm:^4.0.0"
     signal-exit: "npm:^4.1.0"

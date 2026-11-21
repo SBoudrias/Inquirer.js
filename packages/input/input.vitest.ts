@@ -1,5 +1,6 @@
 import { PassThrough } from 'node:stream';
 import { setImmediate } from 'node:timers/promises';
+import { stripVTControlCharacters } from 'node:util';
 import { describe, it, expect } from 'vitest';
 import { ExitPromptError } from '@inquirer/core';
 import { render } from '@inquirer/testing';
@@ -121,6 +122,94 @@ describe('input prompt', () => {
 
     await expect(answer).resolves.toBe('John');
   });
+
+  it.each([
+    { message: 'ABCDEF', columns: 9, expected: '? ABCDEF\n' },
+    { message: '界界界', columns: 9, expected: '? 界界界\n' },
+    { message: '界界界', columns: 5, expected: '? 界\n界界\n' },
+    { message: '界界界界界界', columns: 7, expected: '? 界界\n界界界\n界' },
+  ])(
+    'wraps "$message" in $columns terminal columns',
+    async ({ message, columns, expected }) => {
+      const stdin = new PassThrough();
+      const stdout = Object.assign(new PassThrough(), { columns });
+      let screen = '';
+      stdout.setEncoding('utf8').on('data', (chunk: string) => {
+        screen += chunk;
+      });
+
+      const answer = input({ message }, { input: stdin, output: stdout });
+      const initial = stripVTControlCharacters(screen);
+
+      stdin.write('\r');
+      await expect(answer).resolves.toEqual('');
+      expect(initial).toBe(expected);
+    },
+  );
+
+  // The cursor must return to the input row after each re-render. These cases
+  // pin the row arithmetic through the raw escape sequences the prompt writes:
+  // a wide character grows the prompt line across a terminal-edge wrap, and
+  // every re-render moves the cursor back up by the rows below the input row.
+  // The counts are whole-session totals (each typed character re-renders and
+  // emits its own cursorUp), so they also pin the arithmetic's stability
+  // across re-renders — on the old length-based row count they come out one
+  // short (or wrong) for wide characters.
+  it.each([
+    {
+      message: '界界界',
+      columns: 5,
+      typed: '界',
+      validate: undefined as ((v: string) => string | boolean) | undefined,
+      cursorUps: 2,
+    },
+    {
+      message: '界界界',
+      columns: 5,
+      typed: '界',
+      validate: (v: string) => v.length > 1 || 'err below',
+      cursorUps: 2,
+    },
+    {
+      message: 'ABCDE',
+      columns: 7,
+      typed: 'F a界b',
+      validate: undefined as ((v: string) => string | boolean) | undefined,
+      cursorUps: 5,
+    },
+  ])(
+    'places the cursor back on the input row for "$message" in $columns columns',
+    async ({ message, columns, typed, validate, cursorUps }) => {
+      const controller = new AbortController();
+      const stdin = new PassThrough();
+      const stdout = Object.assign(new PassThrough(), { columns });
+      let raw = '';
+      stdout.setEncoding('utf8').on('data', (chunk: string) => {
+        raw += chunk;
+      });
+
+      const answer = input(validate ? { message, validate } : { message }, {
+        input: stdin,
+        output: stdout,
+        signal: controller.signal,
+      });
+
+      await setImmediate(); // Wait for the deferred first render on a TTY.
+      stdin.write(typed);
+      await setImmediate();
+
+      // Every re-render emits exactly `cursorUps` total row-moves; a wrong
+      // row count moves the cursor one row too few (or too many) somewhere.
+      // The regex matches the raw CSI escape sequences on purpose.
+      /* eslint-disable-next-line no-control-regex */
+      /* oxlint-disable-next-line eslint/no-control-regex */
+      const ups = raw.match(/\u001B\[\d+A/g) ?? [];
+      expect(ups).toHaveLength(cursorUps);
+
+      controller.abort();
+      await answer.catch(() => {});
+    },
+  );
 
   it('handle transformer', async () => {
     const { answer, events, getScreen } = await render(input, {
