@@ -13,6 +13,13 @@ import {
 import type { PartialDeep } from '@inquirer/type';
 import { isStepOf } from './is-step-of.ts';
 
+// Only plain decimal forms are accepted. `Number()` alone would also parse
+// JS-only numeric literals (`0x10`, `0b11`, `0o7`, `1_000`) and `Infinity`,
+// which are almost never what a person meant to type. Scientific notation
+// (`1e3`) stays accepted: it is a legitimate way to write large numbers, and
+// number defaults stringify to it once they grow past 1e21.
+const PLAIN_DECIMAL = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/;
+
 type NumberConfig<Required extends boolean = boolean> = {
   message: string;
   default?: number | undefined;
@@ -38,7 +45,10 @@ function validateNumber(
     step: number | 'any';
   },
 ): boolean | string {
-  if (value == null || Number.isNaN(value)) {
+  // Non-finite values are rejected too: `Infinity` cannot be typed as a
+  // literal, and a decimal that overflows to it (e.g. `1e999`) should not
+  // answer with a value the user could never have typed.
+  if (value == null || !Number.isFinite(value)) {
     return false;
   } else if (value < min || value > max) {
     return `Value must be between ${min} and ${max}`;
@@ -83,7 +93,15 @@ export default createPrompt(
 
       if (isEnterKey(key)) {
         const input = value.trim() || defaultValue;
-        const answer = input === '' ? undefined : Number(input);
+        // Inputs that are not plain decimals fail as NaN below, so the user
+        // sees the usual numeric-value error instead of `Number()` quietly
+        // parsing a JS literal like `0x10` or `Infinity`.
+        const answer =
+          input === ''
+            ? undefined
+            : PLAIN_DECIMAL.test(input)
+              ? Number(input)
+              : Number.NaN;
         setStatus('loading');
 
         let isValid: string | boolean = true;
