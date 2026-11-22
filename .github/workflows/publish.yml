@@ -37,15 +37,16 @@ jobs:
     outputs:
       has-release: ${{ steps.check.outputs.has-release }}
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0 # need tags to detect release commits
       - name: Check for release tags at HEAD
         id: check
+        # Ask the remote instead of cloning: every release tag points at the
+        # release commit, so a sha match is the whole question. A full fetch of
+        # this repo's ~2400 tags costs 40-115s on the runner; one ls-remote
+        # answers in ~2s. `cut -f1` keeps only the shas, so the exact match
+        # cannot be fooled by a sha appearing inside a tag name.
         run: |
-          if git tag --list 'inquirer@*' '@inquirer/*@*' '@sboudrias/*@*' --points-at HEAD | grep -q .; then
+          TAGS=$(git ls-remote --tags "https://github.com/$GITHUB_REPOSITORY.git" 'inquirer@*' '@inquirer/*@*' '@sboudrias/*@*')
+          if echo "$TAGS" | cut -f1 | grep -qx "$GITHUB_SHA"; then
             echo "has-release=true" >> "$GITHUB_OUTPUT"
           else
             echo "has-release=false" >> "$GITHUB_OUTPUT"
@@ -109,8 +110,29 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          fetch-depth: 0 # `lerna publish from-git` needs the tags pointing at HEAD
-          fetch-tags: true
+          fetch-depth: 1 # history is never walked below; only the tags matter
+      # `lerna publish from-git` reads the release through `git tag --points-at
+      # HEAD` (verified against lerna-lite 5.8.0's source: it never walks
+      # history), so fetching all ~2400 tags costs 45-77s for nothing. Instead,
+      # fetch only the ~21 tags that point at this commit (~1MB, ~2s). The
+      # `refs/tags/<name>^{}` lines are the peeled shas of annotated tags, so
+      # matching them against HEAD catches exactly the release tags.
+      - name: Fetch the release tags at HEAD
+        run: |
+          SHA=$(git rev-parse HEAD)
+          REFS=$(git ls-remote --tags origin 'inquirer@*' '@inquirer/*@*' '@sboudrias/*@*' | grep "^$SHA" | cut -f2)
+          if [ -z "$REFS" ]; then
+            echo "No release tag points at HEAD; nothing to publish." >&2
+            exit 1
+          fi
+          SPECS=""
+          for ref in $REFS; do
+            tag=${ref#refs/tags/}
+            tag=${tag%"^{}"}
+            SPECS="$SPECS +refs/tags/$tag:refs/tags/$tag"
+          done
+          git fetch --no-tags --no-recurse-submodules --depth=1 origin $SPECS
+          git tag --points-at HEAD --list '*@*'
       - name: Cache turbo build setup
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
