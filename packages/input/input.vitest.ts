@@ -4,7 +4,6 @@ import { stripVTControlCharacters } from 'node:util';
 import { describe, it, expect } from 'vitest';
 import { ExitPromptError } from '@inquirer/core';
 import { render } from '@inquirer/testing';
-import { withResolver } from '@inquirer/type';
 import input from './src/index.ts';
 
 describe('input prompt', () => {
@@ -317,7 +316,8 @@ describe('input prompt', () => {
   });
 
   it('ignores keys typed while asynchronous validation is pending', async () => {
-    const { promise: validation, resolve: resolveValidation } = withResolver<string>();
+    const { promise: validation, resolve: resolveValidation } =
+      Promise.withResolvers<string>();
     const { answer, events, getScreen, nextRender } = await render(input, {
       message: 'Answer 2 ===',
       validate: (value: string) => value === '2' || validation,
@@ -344,7 +344,8 @@ describe('input prompt', () => {
   });
 
   it('ignores keys typed while asynchronous validation is pending when clearing the value', async () => {
-    const { promise: validation, resolve: resolveValidation } = withResolver<string>();
+    const { promise: validation, resolve: resolveValidation } =
+      Promise.withResolvers<string>();
     const { answer, events, getScreen, nextRender } = await render(input, {
       message: 'Answer 2 ===',
       validate: (value: string) => value === '2' || validation,

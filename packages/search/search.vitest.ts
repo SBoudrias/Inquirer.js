@@ -1,6 +1,5 @@
 import { describe, it, expect, expectTypeOf, vi } from 'vitest';
 import { render } from '@inquirer/testing';
-import { withResolver } from '@inquirer/type';
 import search, { Separator } from './src/index.ts';
 
 // Array of all countries names as string
@@ -62,7 +61,7 @@ describe('search prompt', () => {
 
   it('does not submit stale choices and keeps the search term while a search is pending', async () => {
     const { promise: resultsPromise, resolve: resolveResults } =
-      withResolver<Array<string>>();
+      Promise.withResolvers<Array<string>>();
     const terms: Array<string | undefined> = [];
     const { answer, events, nextRender } = await render(search, {
       message: 'Select a Canadian province',
@@ -97,7 +96,7 @@ describe('search prompt', () => {
 
   it('paints the loading status while a search triggered by typing is pending', async () => {
     const abortController = new AbortController();
-    const { promise: pendingResults } = withResolver<Array<string>>();
+    const { promise: pendingResults } = Promise.withResolvers<Array<string>>();
     const { answer, events, getScreen, nextRender } = await render(
       search,
       {
@@ -122,7 +121,7 @@ describe('search prompt', () => {
   it('clears a previous search error as soon as the retry starts', async () => {
     const abortController = new AbortController();
     const { promise: retryResults, resolve: resolveRetry } =
-      withResolver<Array<string>>();
+      Promise.withResolvers<Array<string>>();
     const { answer, events, getScreen, nextRender } = await render(
       search,
       {
@@ -156,7 +155,8 @@ describe('search prompt', () => {
   });
 
   it('does not start another validation while one is pending', async () => {
-    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const { promise: validation, resolve: resolveValidation } =
+      Promise.withResolvers<boolean>();
     const validate = vi.fn(() => validation);
     const { answer, events } = await render(search, {
       message: 'Select a Canadian province',
@@ -173,7 +173,8 @@ describe('search prompt', () => {
   });
 
   it('ignores query edits while validating the selected choice', async () => {
-    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const { promise: validation, resolve: resolveValidation } =
+      Promise.withResolvers<boolean>();
     const source = vi.fn(getListSearch(PROVINCES));
     const { answer, events, getScreen } = await render(search, {
       message: 'Select a Canadian province',
@@ -192,7 +193,8 @@ describe('search prompt', () => {
 
   it('restores the completed query after validation fails despite ignored typing', async () => {
     const controller = new AbortController();
-    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const { promise: validation, resolve: resolveValidation } =
+      Promise.withResolvers<boolean>();
     const source = vi.fn(getListSearch(PROVINCES));
     const { answer, events, nextRender } = await render(
       search,
@@ -523,7 +525,7 @@ describe('search prompt', () => {
   });
 
   it('stops loading after a source failure and lets the user search again', async () => {
-    const { promise: failedSearch, reject } = withResolver<string[]>();
+    const { promise: failedSearch, reject } = Promise.withResolvers<string[]>();
     const controller = new AbortController();
     const validate = vi.fn(() => true);
     const source = vi.fn((term: string | undefined) => {
