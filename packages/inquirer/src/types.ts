@@ -11,7 +11,8 @@ import {
   search,
   select,
 } from '@inquirer/prompts';
-import type { Context, DistributiveMerge, Prettify } from '@inquirer/type';
+import type { Context, DistributiveMerge, PartialDeep, Prettify } from '@inquirer/type';
+import type { Theme } from '@inquirer/core';
 import type { Observable } from './utils/observable.ts';
 
 export type Answers<Key extends string = string> = Record<Key, any>;
@@ -113,6 +114,13 @@ export interface QuestionMap {
 type KeyValueOrAsyncGetterFunction<T, k extends string, A extends Answers> =
   T extends Record<string, any> ? MaybeAsyncValue<T[k], A> : never;
 
+export type WhenResult =
+  | boolean
+  | {
+      readonly ask: boolean;
+      readonly display?: boolean | undefined;
+    };
+
 export type Question<A extends Answers = Answers, Type extends string = string> = {
   type?: Type | undefined;
   name: string;
@@ -126,8 +134,10 @@ export type Question<A extends Answers = Answers, Type extends string = string> 
       ) => boolean | string | Promise<boolean | string>)
     | undefined;
   filter?: ((answer: any, answers: NoInfer<Partial<A>>) => any) | undefined;
+  transformer?: ((value: any, options: { isFinal: boolean }) => string) | undefined;
   askAnswered?: boolean | undefined;
-  when?: MaybeAsyncValue<boolean, A> | undefined;
+  when?: MaybeAsyncValue<WhenResult, A> | undefined;
+  theme?: (PartialDeep<Theme> & Record<string, unknown>) | undefined;
 };
 
 type QuestionWithGetters<
@@ -139,7 +149,7 @@ type QuestionWithGetters<
   {
     type: Type;
     askAnswered?: boolean;
-    when?: MaybeAsyncValue<boolean, A>;
+    when?: MaybeAsyncValue<WhenResult, A>;
     filter?(input: any, answers: NoInfer<Partial<A>>): any;
     message: KeyValueOrAsyncGetterFunction<Q, 'message', A>;
     default?: KeyValueOrAsyncGetterFunction<Q, 'default', A>;
@@ -229,7 +239,8 @@ export type PromptModulePublicQuestion<A extends Answers, Flat extends Answers =
   choices?: unknown;
   filter?: (input: any, answers: NoInfer<Partial<A>>) => any;
   askAnswered?: boolean;
-  when?: MaybeAsyncValue<boolean, A>;
+  when?: MaybeAsyncValue<WhenResult, A>;
+  theme?: PartialDeep<Theme> & Record<string, unknown>;
 } & Record<string, unknown>;
 
 export type StreamOptions = Prettify<Context & { skipTTYChecks?: boolean }>;

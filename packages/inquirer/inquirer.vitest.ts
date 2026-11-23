@@ -8,13 +8,20 @@ import os from 'node:os';
 import stream from 'node:stream';
 import tty from 'node:tty';
 import readline from 'node:readline';
+import { stripVTControlCharacters, styleText } from 'node:util';
 import { vi, expect, beforeEach, afterEach, describe, it, expectTypeOf } from 'vitest';
 import { from as observableFrom, map, of, Subject } from 'rxjs';
-import { AbortPromptError, createPrompt } from '@inquirer/core';
+import { AbortPromptError, createPrompt, makeTheme } from '@inquirer/core';
 import type { InquirerReadline } from '@inquirer/type';
 import { screen } from '@inquirer/testing/vitest';
 import inquirer from './src/index.ts';
-import type { QuestionMap, Answers, Question, DistinctQuestion } from './src/index.ts';
+import type {
+  QuestionMap,
+  Answers,
+  Question,
+  DistinctQuestion,
+  WhenResult,
+} from './src/index.ts';
 import type { StreamOptions } from './src/types.ts';
 import type { Observable, Observer, SubscriptionLike } from './src/utils/observable.ts';
 import { _ } from './src/ui/prompt.ts';
@@ -164,6 +171,10 @@ beforeEach(() => {
   inquirer.restoreDefaultPrompts();
 });
 
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
+
 describe('exported types', () => {
   it('Question type is not any', () => {
     expectTypeOf({}).not.toExtend<Question>();
@@ -234,6 +245,21 @@ describe('exported types', () => {
   it('exported Answers type matches any object', () => {
     expectTypeOf({}).toExtend<Answers>();
     expectTypeOf({ foo: 'bar' }).toExtend<Answers>();
+  });
+
+  it('exported WhenResult accepts booleans and { ask, display } objects', () => {
+    expectTypeOf(true).toExtend<WhenResult>();
+    expectTypeOf({ ask: false, display: true }).toExtend<WhenResult>();
+    expectTypeOf({ ask: false }).toExtend<WhenResult>();
+    const questions = [
+      {
+        type: 'confirm',
+        name: 'sweet',
+        message: 'Is it sweet?',
+        when: { ask: false, display: true },
+      },
+    ] as const satisfies DistinctQuestion[];
+    expectTypeOf(questions).toExtend<readonly DistinctQuestion[]>();
   });
 });
 
@@ -1372,6 +1398,311 @@ describe('promptModule(...)', () => {
         },
       ]);
       expect(answers).toEqual({ q: 'foo' });
+    });
+
+    it('should display dimmed skipped question when `when` returns `{ ask: false, display: true }`', async () => {
+      vi.stubEnv('FORCE_COLOR', '1');
+      const localPromptModule = createTestPromptModule();
+      const processSpy = vi.fn();
+
+      const promise = localPromptModule([
+        {
+          type: 'stub',
+          name: 'fruit',
+          message: 'Is it a fruit?',
+          answer: true,
+        },
+        {
+          type: 'confirm',
+          name: 'sweet',
+          message: 'Is it sweet?',
+          default: true,
+          when(answers) {
+            return { ask: !answers.fruit, display: true };
+          },
+        },
+      ]);
+      promise.ui.process.subscribe(processSpy);
+
+      const answers = await promise;
+
+      expect(answers).toEqual({ fruit: true });
+      expect(processSpy).toHaveBeenCalledTimes(1);
+      expect(processSpy).toHaveBeenCalledWith({ name: 'fruit', answer: true });
+      const { prefix } = makeTheme();
+      const idlePrefix = typeof prefix === 'string' ? prefix : prefix['idle'];
+      expect(await screen.getFullOutput()).toBe('? Is it sweet? Yes');
+      expect(await screen.getFullOutput({ raw: true })).toContain(
+        styleText(
+          'dim',
+          `${idlePrefix} ${styleText('bold', 'Is it sweet?')} ${styleText('cyan', 'Yes')}`,
+        ),
+      );
+    });
+
+    it('should support static `{ ask: false, display: true }` object on `when`', async () => {
+      const localPromptModule = createTestPromptModule();
+
+      const answers = await localPromptModule([
+        {
+          type: 'input',
+          name: 'skipped',
+          message: 'Project name?',
+          default: 'my-app',
+          when: { ask: false, display: true },
+        },
+      ]);
+
+      expect(answers).toEqual({});
+      expect(await screen.getFullOutput()).toBe('? Project name? my-app');
+    });
+
+    it('should not display skipped question when `when` returns `{ ask: false, display: false }` or `{ ask: false }`', async () => {
+      const localPromptModule = createTestPromptModule();
+
+      const answers = await localPromptModule([
+        {
+          type: 'input',
+          name: 'q1',
+          message: 'Hidden 1?',
+          default: 'a',
+          when: () => ({ ask: false, display: false }),
+        },
+        {
+          type: 'input',
+          name: 'q2',
+          message: 'Hidden 2?',
+          default: 'b',
+          when: { ask: false },
+        },
+      ]);
+
+      expect(answers).toEqual({});
+      expect(await screen.getFullOutput()).toBe('');
+    });
+
+    it('should run prompt normally when `when` returns `{ ask: true, display: true }` or `{ ask: true }`', async () => {
+      const localPromptModule = createTestPromptModule();
+
+      const answers = await localPromptModule([
+        {
+          type: 'stub',
+          name: 'q1',
+          message: 'First?',
+          answer: 'one',
+          when: () => ({ ask: true, display: true }),
+        },
+        {
+          type: 'stub',
+          name: 'q2',
+          message: 'Second?',
+          answer: 'two',
+          when: { ask: true, display: false },
+        },
+      ]);
+
+      expect(answers).toEqual({ q1: 'one', q2: 'two' });
+      expect(await screen.getFullOutput()).toBe('');
+    });
+
+    it('should support async `when` (Promise and legacy this.async()) returning `{ ask: false, display: true }`', async () => {
+      const localPromptModule = createTestPromptModule();
+
+      const answers = await localPromptModule([
+        {
+          type: 'confirm',
+          name: 'q1',
+          message: 'Async promise?',
+          default: false,
+          async when() {
+            return Promise.resolve({ ask: false, display: true });
+          },
+        },
+        {
+          type: 'input',
+          name: 'q2',
+          message: 'Async callback?',
+          default: 'cb-val',
+          when() {
+            const done = this.async();
+            setTimeout(() => {
+              done(null, { ask: false, display: true });
+            }, 0);
+          },
+        },
+      ]);
+
+      expect(answers).toEqual({});
+      expect(await screen.getFullOutput()).toBe(
+        '? Async promise? No\n? Async callback? cb-val',
+      );
+    });
+
+    it('should resolve dynamic `message` and `default` functions for displayed skipped questions', async () => {
+      const localPromptModule = createTestPromptModule();
+
+      const answers = await localPromptModule([
+        {
+          type: 'stub',
+          name: 'pkg',
+          message: 'Package?',
+          answer: 'demo',
+        },
+        {
+          type: 'input',
+          name: 'dir',
+          message: (ans) => `Directory for ${String(ans.pkg)}?`,
+          default: (ans) => Promise.resolve(`./${String(ans.pkg)}`),
+          when: { ask: false, display: true },
+        },
+      ]);
+
+      expect(answers).toEqual({ pkg: 'demo' });
+      expect(await screen.getFullOutput()).toBe('? Directory for demo? ./demo');
+    });
+
+    it('should display the answer set inside `when` when returning `{ ask: false, display: true }`', async () => {
+      const localPromptModule = createTestPromptModule();
+
+      const answers = await localPromptModule([
+        {
+          type: 'confirm',
+          name: 'sweet',
+          message: 'Is it sweet?',
+          default: true,
+          when(ans) {
+            ans.sweet = false;
+            return { ask: false, display: true };
+          },
+        },
+      ]);
+
+      expect(answers).toEqual({ sweet: false });
+      expect(await screen.getFullOutput()).toBe('? Is it sweet? No');
+    });
+
+    it('should respect custom `theme` options when displaying skipped questions', async () => {
+      const localPromptModule = createTestPromptModule();
+
+      await localPromptModule([
+        {
+          type: 'confirm',
+          name: 'sweet',
+          message: 'Est-ce sucré?',
+          default: true,
+          theme: {
+            prefix: { skipped: '-' },
+            keywords: { yes: 'Oui', no: 'Non' },
+            style: {
+              message: (text: string, status: string) => `${text} [${status}]`,
+              answer: (text: string) => `(${text})`,
+            },
+          },
+          when: { ask: false, display: true },
+        },
+      ]);
+
+      expect(await screen.getFullOutput()).toBe('- Est-ce sucré? [skipped] (Oui)');
+    });
+
+    it('should not invoke a `choices` function on a displayed skipped question', async () => {
+      const localPromptModule = createTestPromptModule();
+      const choicesFn = vi.fn(() => ['a', 'b']);
+
+      await localPromptModule([
+        {
+          type: 'select',
+          name: 'choice',
+          message: 'Pick one?',
+          choices: choicesFn,
+          when: { ask: false, display: true },
+        },
+      ]);
+
+      expect(choicesFn).not.toHaveBeenCalled();
+      expect(await screen.getFullOutput()).toBe('? Pick one?');
+    });
+
+    it('should format static choices, masked password, and unset type on displayed skipped questions', async () => {
+      const localPromptModule = createTestPromptModule();
+
+      await localPromptModule([
+        {
+          name: 'plain',
+          message: 'Plain?',
+          default: 'ok',
+          when: { ask: false, display: true },
+        },
+        {
+          type: 'select',
+          name: 'fruit',
+          message: 'Fruit?',
+          choices: [{ name: 'Red Apple', value: 'apple', short: 'Apple' }],
+          default: 'apple',
+          when: { ask: false, display: true },
+        },
+        {
+          type: 'password',
+          name: 'secret',
+          message: 'Secret?',
+          default: 'abcd',
+          mask: '*',
+          when: { ask: false, display: true },
+        },
+      ]);
+
+      expect(await screen.getFullOutput()).toBe(
+        '? Plain? ok\n? Fruit? Apple\n? Secret? ****',
+      );
+    });
+
+    it('should render skipped questions inline between interactive prompts', async () => {
+      const skippedChunks: string[] = [];
+      const output = new stream.Writable({
+        write(chunk: Buffer, _encoding, callback) {
+          skippedChunks.push(chunk.toString());
+          callback();
+        },
+      });
+      const localPromptModule = createTestPromptModule({ output });
+
+      const promise = localPromptModule([
+        {
+          type: 'confirm',
+          name: 'fruit',
+          message: 'Is it a fruit?',
+          default: true,
+        },
+        {
+          type: 'confirm',
+          name: 'sweet',
+          message: 'Is it sweet?',
+          default: true,
+          when(answers) {
+            return { ask: !answers.fruit, display: true };
+          },
+        },
+        {
+          type: 'confirm',
+          name: 'example',
+          message: 'Is it a good example?',
+          default: true,
+        },
+      ]);
+
+      await screen.next();
+      expect(screen.getScreen()).toContain('Is it a fruit?');
+      screen.keypress('enter');
+
+      await screen.next();
+      expect(screen.getScreen()).toContain('Is it a good example?');
+      expect(stripVTControlCharacters(skippedChunks.join(''))).toBe(
+        '? Is it sweet? Yes\n',
+      );
+      screen.keypress('enter');
+
+      const answers = await promise;
+      expect(answers).toEqual({ fruit: true, example: true });
     });
   });
 
