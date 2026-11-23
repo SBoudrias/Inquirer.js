@@ -156,7 +156,16 @@ export default createPrompt(
     const parseVimMotion = useVimNavigation(keybindings, { allowCount: false });
 
     useKeypress((key, rl) => {
-      const vimMotion = parseVimMotion(key);
+      // A choice key always wins over the gg/G motions: when a choice is
+      // picked with `g` or `G`, the keypress is typed input and must reach
+      // the line instead of starting a jump.
+      const typedChar =
+        key.name === 'g' && !key.ctrl ? (key.shift ? 'G' : 'g') : undefined;
+      const collidesWithChoiceKey =
+        typedChar !== undefined &&
+        choices.some((choice) => isSelectableChoice(choice) && choice.key === typedChar);
+
+      const vimMotion = collidesWithChoiceKey ? null : parseVimMotion(key);
       if (vimMotion) {
         if (vimMotion.type === 'pending') {
           if (rl.line.endsWith('g')) {

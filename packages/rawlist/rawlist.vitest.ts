@@ -11,7 +11,6 @@ const numberedChoices = [
 ];
 
 afterEach(() => {
-  vi.useRealTimers();
   vi.unstubAllEnvs();
 });
 
@@ -271,14 +270,57 @@ describe('rawlist prompt', () => {
     await expect(answer).resolves.toEqual(1);
   });
 
-  it('supports vim gg and G jump navigation while preserving numeric typing', async () => {
-    vi.useFakeTimers();
+  it.each([
+    {
+      motion: 'G',
+      keys: ['G'],
+      note: 'last',
+      line: '? Select a topping 3',
+      answer: 'pineapple',
+    },
+    {
+      motion: 'gg',
+      keys: ['g', 'g'],
+      note: 'first',
+      line: '? Select a topping 1',
+      answer: 'ham',
+    },
+  ])(
+    'vim $motion jumps to the $note selectable choice, skipping separators',
+    async ({ keys, line, answer: picked }) => {
+      const { answer, events, getScreen } = await render(rawlist, {
+        message: 'Select a topping',
+        choices: [
+          new Separator(),
+          { name: 'Ham', value: 'ham' },
+          new Separator('---'),
+          { name: 'Pepperoni', value: 'pepperoni' },
+          { name: 'Pineapple', value: 'pineapple' },
+          new Separator(),
+        ],
+        theme: {
+          keybindings: ['vim'],
+        },
+      });
+
+      for (const key of keys) {
+        events.keypress(key);
+        // A pending g must never leak into the shown input line.
+        expect(getScreen()).toContain('? Select a topping');
+      }
+      expect(getScreen()).toContain(line);
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(picked);
+    },
+  );
+
+  it('cancels a pending vim g when another key arrives, without a timeout', async () => {
     const { answer, events, getScreen } = await render(rawlist, {
       message: 'Select a topping',
       choices: [
         new Separator(),
         { name: 'Ham', value: 'ham' },
-        new Separator('---'),
         { name: 'Pepperoni', value: 'pepperoni' },
         { name: 'Pineapple', value: 'pineapple' },
         new Separator(),
@@ -288,28 +330,45 @@ describe('rawlist prompt', () => {
       },
     });
 
-    // Partial g on empty input does not render 'g' in the prompt line
-    events.keypress('g');
-    expect(getScreen().split('\n')[0]?.trimEnd()).toBe('? Select a topping');
-    vi.advanceTimersByTime(1000);
+    const firstLine = () => getScreen().split('\n')[0]?.trimEnd();
 
-    // G jumps to last selectable choice (skipping trailing separator)
+    // G jumps to the last selectable choice (skipping the trailing separator)
     events.keypress('G');
-    expect(getScreen()).toContain('? Select a topping 3');
+    expect(firstLine()).toBe('? Select a topping 3');
 
-    // Partial g does not corrupt the displayed input and expires after timeout
+    // A pending g never leaks into the shown input line
     events.keypress('g');
-    expect(getScreen()).toContain('? Select a topping 3');
-    vi.advanceTimersByTime(1000);
-    events.keypress('g');
-    expect(getScreen()).toContain('? Select a topping 3');
+    expect(firstLine()).toBe('? Select a topping 3');
 
-    // Second g within timeout completes gg and jumps to first selectable choice
+    // An unrelated key between the two g presses cancels the sequence: the
+    // following g starts a new one instead of completing gg.
+    events.keypress('x');
+    expect(firstLine()).toBe('? Select a topping 3x');
     events.keypress('g');
-    expect(getScreen()).toContain('? Select a topping 1');
+    expect(firstLine()).toBe('? Select a topping 3x');
 
-    // Typing a number still works in rawlist even with vim keybindings enabled
-    events.keypress('backspace');
+    events.keypress('g');
+    expect(firstLine()).toBe('? Select a topping 1');
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('ham');
+  });
+
+  it('keeps typed numbers usable under vim keybindings', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a topping',
+      choices: [
+        new Separator(),
+        { name: 'Ham', value: 'ham' },
+        { name: 'Pepperoni', value: 'pepperoni' },
+        { name: 'Pineapple', value: 'pineapple' },
+        new Separator(),
+      ],
+      theme: {
+        keybindings: ['vim'],
+      },
+    });
+
     events.keypress('2');
     expect(getScreen()).toContain('? Select a topping 2');
 

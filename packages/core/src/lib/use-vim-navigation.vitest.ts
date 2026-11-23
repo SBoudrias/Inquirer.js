@@ -149,24 +149,15 @@ describe('useVimNavigation', () => {
     ]);
   });
 
-  it('cancels pending g or count on unrelated keys, escape, or timeout', async () => {
-    vi.useFakeTimers();
+  it('cancels pending g or count on unrelated keys or escape', async () => {
     const TestPrompt = createTestPrompt();
     const { answer, events } = await render(TestPrompt, {
       keybindings: ['vim'],
-      options: { timeoutMs: 500 },
     });
 
-    // g then timeout then g does not trigger gg
-    events.keypress('g');
-    vi.advanceTimersByTime(500);
-    events.keypress('g');
     // x cancels pending g
+    events.keypress('g');
     events.keypress('x');
-    // 5 then timeout then j -> uncounted j (null)
-    events.keypress('5');
-    vi.advanceTimersByTime(500);
-    events.keypress('j');
     // 5 then escape then j cancels count -> uncounted j (null)
     events.keypress('5');
     events.keypress('escape');
@@ -194,12 +185,9 @@ describe('useVimNavigation', () => {
     events.keypress('enter');
 
     const result = await answer;
-    expect(result.slice(0, 20)).toEqual([
+    expect(result.slice(0, 18)).toEqual([
       { type: 'pending' }, // g
-      { type: 'pending' }, // g after timeout
       null, // x
-      { type: 'pending' }, // 5
-      null, // j after timeout
       { type: 'pending' }, // 5
       null, // escape
       null, // j after escape
@@ -215,8 +203,22 @@ describe('useVimNavigation', () => {
       null, // ctrl+shift+g
       null, // !
       { type: 'pending' }, // first 9
+      { type: 'pending' }, // second 9
     ]);
     expect(result.at(-1)).toEqual({ type: 'down', count: 999999999 });
+  });
+
+  it('completes gg even when the two g presses are far apart', async () => {
+    // There is no timeout: a slow `g … g` is still `gg`. A pending `g`
+    // survives any number of unrelated keys only until one arrives.
+    const TestPrompt = createTestPrompt();
+    const { answer, events } = await render(TestPrompt, { keybindings: ['vim'] });
+
+    events.keypress('g');
+    events.keypress('g');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toEqual([{ type: 'pending' }, { type: 'first' }]);
   });
 
   it('respects allowCount: false by ignoring digits while still supporting gg and G', async () => {

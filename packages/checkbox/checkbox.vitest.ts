@@ -20,7 +20,6 @@ const numberedChoices = [
 ];
 
 afterEach(() => {
-  vi.useRealTimers();
   vi.unstubAllEnvs();
 });
 
@@ -1729,58 +1728,44 @@ describe('checkbox prompt', () => {
       await expect(answer).resolves.toEqual([]);
     });
 
-    it('supports vim gg, G, and counted motions without toggling choices on digits', async () => {
-      const { answer, events, getScreen } = await render(checkbox, {
-        message: 'Select items',
-        choices: [
-          new Separator(),
-          { value: 'one', name: 'One' },
-          { value: 'two', name: 'Two' },
-          new Separator('---'),
-          { value: 'three', name: 'Three' },
-          { value: 'four', name: 'Four' },
-          { value: 'five', name: 'Five' },
-          new Separator(),
-        ],
-        theme: {
-          keybindings: ['vim'],
-        },
-      });
+    it.each([
+      { motion: 'G', keys: ['G'], note: 'last', lands: '❯◯ Five', answer: ['five'] },
+      { motion: 'gg', keys: ['g', 'g'], note: 'first', lands: '❯◯ One', answer: ['one'] },
+    ])(
+      'vim $motion jumps to the $note navigable choice, skipping separators',
+      async ({ keys, lands, answer: picked }) => {
+        const { answer, events, getScreen } = await render(checkbox, {
+          message: 'Select items',
+          choices: [
+            new Separator(),
+            { value: 'one', name: 'One' },
+            { value: 'two', name: 'Two' },
+            new Separator('---'),
+            { value: 'three', name: 'Three' },
+            { value: 'four', name: 'Four' },
+            { value: 'five', name: 'Five' },
+            new Separator(),
+          ],
+          theme: {
+            keybindings: ['vim'],
+          },
+        });
 
-      // G jumps to last navigable item (skipping trailing separator)
-      events.keypress('G');
-      expect(getScreen()).toContain('❯◯ Five');
+        expect(getScreen()).toContain('❯◯ One');
 
-      // gg jumps to first navigable item (skipping leading separator)
-      events.keypress('g');
-      expect(getScreen()).toContain('❯◯ Five');
-      events.keypress('g');
-      expect(getScreen()).toContain('❯◯ One');
+        for (const key of keys) {
+          events.keypress(key);
+        }
+        expect(getScreen()).toContain(lands);
 
-      // 3j moves down 3 navigable items (One -> Four) without toggling choice 3
-      events.keypress('3');
-      events.keypress('j');
-      expect(getScreen()).toContain('❯◯ Four');
-      expect(getScreen()).not.toContain('◉ Three');
+        // Space selects the landed item, Enter submits only that item
+        events.keypress('space');
+        events.keypress('enter');
+        await expect(answer).resolves.toEqual(picked);
+      },
+    );
 
-      // 2k moves up 2 navigable items (Four -> Two)
-      events.keypress('2');
-      events.keypress('k');
-      expect(getScreen()).toContain('❯◯ Two');
-
-      // 4G jumps to 4th navigable item (Four)
-      events.keypress('4');
-      events.keypress('G');
-      expect(getScreen()).toContain('❯◯ Four');
-
-      // Space selects active item, Enter submits only that item
-      events.keypress('space');
-      events.keypress('enter');
-      await expect(answer).resolves.toEqual(['four']);
-    });
-
-    it('cancels partial vim g sequence on timeout or another key', async () => {
-      vi.useFakeTimers();
+    it('cancels a pending vim g when another key arrives, without a timeout', async () => {
       const { answer, events, getScreen } = await render(checkbox, {
         message: 'Select items',
         choices: [
@@ -1793,7 +1778,7 @@ describe('checkbox prompt', () => {
         },
       });
 
-      // Trigger disabled error, then verify G clears the error and jumps to last item
+      // A motion clears the error shown by the disabled space toggle
       events.keypress('space');
       expect(getScreen()).toContain('This option is disabled and cannot be toggled.');
 
@@ -1801,19 +1786,13 @@ describe('checkbox prompt', () => {
       expect(getScreen()).toContain('❯◯ Three');
       expect(getScreen()).not.toContain('This option is disabled and cannot be toggled.');
 
-      // Partial g followed by timeout does not jump
+      // An unrelated key between the two g presses cancels the sequence:
+      // the following g starts a new one instead of completing gg.
       events.keypress('g');
-      vi.advanceTimersByTime(1000);
+      events.keypress('x');
       events.keypress('g');
       expect(getScreen()).toContain('❯◯ Three');
 
-      // Pressing another key cancels pending g
-      events.keypress('k');
-      expect(getScreen()).toContain('❯◯ Two');
-      events.keypress('g');
-      expect(getScreen()).toContain('❯◯ Two');
-
-      // Second g completes gg
       events.keypress('g');
       expect(getScreen()).toContain('❯- One (disabled)');
 

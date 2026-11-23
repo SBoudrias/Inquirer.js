@@ -177,7 +177,7 @@ Set `INQUIRER_KEYBINDINGS=vim`, `INQUIRER_KEYBINDINGS=emacs`, or `INQUIRER_KEYBI
 
 You can override the environment setting per prompt with `theme.keybindings`.
 
-## Theming
+Vim mode adds jump motions: `gg` moves to the first choice and `G` to the last. A choice picked with the key `g` or `G` takes precedence over these motions.
 
 You can theme a prompt by passing a `theme` object option. The theme object only need to includes the keys you wish to modify, we'll fallback on the defaults for the rest.
 

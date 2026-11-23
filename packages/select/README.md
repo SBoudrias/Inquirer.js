@@ -196,6 +196,8 @@ Set `INQUIRER_KEYBINDINGS=vim`, `INQUIRER_KEYBINDINGS=emacs`, or `INQUIRER_KEYBI
 
 When Vim keybindings are enabled, the prompt disables type-to-search so navigation keys are not interpreted as search input. You can override the environment setting per prompt with `theme.keybindings`.
 
+Vim mode adds jump motions: `gg` moves to the first choice and `G` to the last.
+
 ## Theming
 
 You can theme a prompt by passing a `theme` object option. The theme object only need to includes the keys you wish to modify, we'll fallback on the defaults for the rest.

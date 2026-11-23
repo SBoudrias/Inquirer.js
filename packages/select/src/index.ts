@@ -170,7 +170,8 @@ export default createPrompt(
     }
 
     const [errorMsg, setError] = useState<string>();
-    const parseVimMotion = useVimNavigation(keybindings);
+    // Digits jump straight to an item, so they are not collected as counts.
+    const parseVimMotion = useVimNavigation(keybindings, { allowCount: false });
 
     useKeypress((key, rl) => {
       clearTimeout(searchTimeoutRef.current);
@@ -257,10 +258,13 @@ export default createPrompt(
 
     const message = theme.style.message(config.message, status);
 
-    const helpLine = theme.style.keysHelpTip([
+    const keys: [string, string][] = [
       ['↑↓', 'navigate'],
       ['⏎', 'select'],
-    ]);
+    ];
+    if (keybindings.includes('vim')) keys.push(['gg/G', 'first/last']);
+
+    const helpLine = theme.style.keysHelpTip(keys);
 
     let separatorCount = 0;
     const page = usePagination({
