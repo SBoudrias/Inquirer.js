@@ -250,6 +250,50 @@ describe('rawlist prompt', () => {
     await expect(answer).resolves.toEqual('ham');
   });
 
+  it('picks a choice with a custom lowercase g key under vim keybindings', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a color',
+      choices: [
+        { key: 'r', name: 'Red', value: 'red' },
+        { key: 'g', name: 'Green', value: 'green' },
+        { key: 'b', name: 'Blue', value: 'blue' },
+      ],
+      theme: {
+        keybindings: ['vim'],
+      },
+    });
+
+    // g is a choice key here, not a pending gg motion: it must reach the
+    // line and pick Green instead of being swallowed.
+    events.keypress('g');
+    expect(getScreen()).toContain('? Select a color g');
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('green');
+  });
+
+  it('picks a choice with a custom uppercase G key under vim keybindings', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a color',
+      choices: [
+        { key: 'r', name: 'Red', value: 'red' },
+        { key: 'G', name: 'Gold', value: 'gold' },
+        { key: 'b', name: 'Blue', value: 'blue' },
+      ],
+      theme: {
+        keybindings: ['vim'],
+      },
+    });
+
+    // G is a choice key here, not the jump-to-last motion: typing it must
+    // pick Gold, not move the cursor to the last choice.
+    events.keypress('G');
+    expect(getScreen()).toContain('? Select a color G');
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('gold');
+  });
+
   it('uses keybindings from INQUIRER_KEYBINDINGS by default', async () => {
     vi.stubEnv('INQUIRER_KEYBINDINGS', 'vim,emacs');
     const { answer, events, getScreen } = await render(rawlist, {

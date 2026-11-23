@@ -1622,6 +1622,35 @@ describe('checkbox prompt', () => {
   });
 
   describe('keybindings', () => {
+    it('keeps number keys toggling the nth choice with vim keybindings', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select a topping',
+        choices: [
+          { name: 'Ham', value: 'ham' },
+          { name: 'Pineapple', value: 'pineapple', disabled: true },
+          { name: 'Pepperoni', value: 'pepperoni' },
+        ],
+        theme: {
+          keybindings: ['vim'],
+        },
+      });
+
+      // A digit targets the nth choice directly: landing on the disabled
+      // Pineapple shows the same error the space key shows.
+      events.keypress('2');
+      expect(getScreen()).toContain('> This option is disabled and cannot be toggled.');
+
+      // A digit landing on a selectable choice toggles it and clears the error.
+      events.keypress('3');
+      expect(getScreen()).toContain('❯◉ Pepperoni');
+      expect(getScreen()).not.toContain(
+        '> This option is disabled and cannot be toggled.',
+      );
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['pepperoni']);
+    });
+
     it('supports vim keybindings when vim is in the keybindings array', async () => {
       const { answer, events, getScreen } = await render(checkbox, {
         message: 'Select items',
