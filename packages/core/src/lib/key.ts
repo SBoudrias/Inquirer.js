@@ -2,6 +2,8 @@ export type KeypressEvent = {
   name: string;
   ctrl: boolean;
   shift: boolean;
+  meta?: boolean;
+  sequence?: string;
 };
 
 export type Keybinding = 'emacs' | 'vim';
