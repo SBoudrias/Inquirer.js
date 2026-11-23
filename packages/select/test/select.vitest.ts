@@ -1198,6 +1198,23 @@ describe('select prompt', () => {
   });
 
   describe('keybindings', () => {
+    it('keeps number keys jumping to the nth choice with vim keybindings', async () => {
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: numberedChoices,
+        theme: {
+          keybindings: ['vim'],
+        },
+      });
+
+      // A digit is a direct jump to the nth choice, not a vim motion count.
+      events.keypress('4');
+      expect(getScreen()).toContain('❯ 4');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(4);
+    });
+
     it('supports vim bindings when vim is in the keybindings array', async () => {
       const { answer, events, getScreen } = await render(select, {
         message: 'Select a number',
