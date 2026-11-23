@@ -247,7 +247,12 @@ export function createPrompt<Value, Config>(
       //
       // @see https://github.com/SBoudrias/Inquirer.js/issues/1303
       if ('readableFlowing' in input && isTTY) {
-        const immediate = nativeSetImmediate(startCycle);
+        const immediate = nativeSetImmediate(() => {
+          // Buffered keys still update readline's line while the prompt handlers
+          // are absent. Discard that text before rendering or applying defaults.
+          rl.clearLine(0);
+          startCycle();
+        });
         cleanups.add(() => nativeClearImmediate(immediate));
       } else {
         startCycle();
