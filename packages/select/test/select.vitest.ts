@@ -1475,6 +1475,145 @@ describe('select prompt', () => {
       vi.runAllTimers();
       await expect(answer).resolves.toEqual('ZH');
     });
+
+    it('supports vim gg and G jump navigation skipping separators', async () => {
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          new Separator(),
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+          new Separator('---'),
+          { value: 3, name: 'Three' },
+          { value: 4, name: 'Four' },
+          new Separator(),
+        ],
+        theme: {
+          keybindings: ['vim'],
+        },
+      });
+
+      expect(getScreen()).toContain('❯ One');
+
+      // G jumps to last navigable item (skipping trailing separator)
+      events.keypress('G');
+      expect(getScreen()).toContain('❯ Four');
+
+      // gg jumps back to first navigable item (skipping leading separator)
+      events.keypress('g');
+      expect(getScreen()).toContain('❯ Four');
+      events.keypress('g');
+      expect(getScreen()).toContain('❯ One');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(1);
+    });
+
+    it('supports vim counted motions ([count]j, [count]k, [count]G, [count]gg)', async () => {
+      const choices = Array.from({ length: 60 }, (_, idx) => ({
+        value: idx + 1,
+        name: `Item ${idx + 1}`,
+      }));
+
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select an item',
+        choices,
+        theme: {
+          keybindings: ['vim'],
+        },
+      });
+
+      // 50j moves down 50 items from Item 1 -> Item 51
+      events.keypress('5');
+      events.keypress('0');
+      events.keypress('j');
+      expect(getScreen()).toContain('❯ Item 51');
+
+      // 20k moves up 20 items from Item 51 -> Item 31
+      events.keypress('2');
+      events.keypress('0');
+      events.keypress('k');
+      expect(getScreen()).toContain('❯ Item 31');
+
+      // 100j clamps to the last item rather than wrapping
+      events.keypress('1');
+      events.keypress('0');
+      events.keypress('0');
+      events.keypress('j');
+      expect(getScreen()).toContain('❯ Item 60');
+
+      // 5gg jumps to the 5th item
+      events.keypress('5');
+      events.keypress('g');
+      events.keypress('g');
+      expect(getScreen()).toContain('❯ Item 5');
+
+      // 12G jumps to the 12th item
+      events.keypress('1');
+      events.keypress('2');
+      events.keypress('G');
+      expect(getScreen()).toContain('❯ Item 12');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(12);
+    });
+
+    it('cancels partial vim g sequence on other keys or timeout', async () => {
+      vi.useFakeTimers();
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+          { value: 3, name: 'Three' },
+          { value: 4, name: 'Four' },
+        ],
+        theme: {
+          keybindings: ['vim'],
+        },
+      });
+
+      events.keypress('G');
+      expect(getScreen()).toContain('❯ Four');
+
+      // Partial g followed by unrelated key cancels gg
+      events.keypress('g');
+      events.keypress('x');
+      events.keypress('g');
+      expect(getScreen()).toContain('❯ Four');
+
+      // Timeout expires pending g
+      vi.advanceTimersByTime(1000);
+      events.keypress('g');
+      expect(getScreen()).toContain('❯ Four');
+
+      // Second g within timeout completes gg
+      events.keypress('g');
+      expect(getScreen()).toContain('❯ One');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(1);
+    });
+
+    it('does not trigger vim gg or G when vim keybindings are not enabled', async () => {
+      vi.useFakeTimers();
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a fruit',
+        choices: [
+          { value: 'apple', name: 'Apple' },
+          { value: 'grape', name: 'Grape' },
+          { value: 'mango', name: 'Mango' },
+        ],
+      });
+
+      // Without vim keybindings, G acts as normal type-to-search (matches Grape, not Mango)
+      events.keypress('G');
+      expect(getScreen()).toContain('❯ Grape');
+
+      events.keypress('enter');
+      vi.runAllTimers();
+      await expect(answer).resolves.toEqual('grape');
+    });
   });
 
   describe('type inference', () => {

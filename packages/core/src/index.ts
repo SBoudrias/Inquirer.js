@@ -17,6 +17,12 @@ export { useEffect } from './lib/use-effect.ts';
 export { useMemo } from './lib/use-memo.ts';
 export { useRef } from './lib/use-ref.ts';
 export { useKeypress } from './lib/use-keypress.ts';
+export {
+  useVimNavigation,
+  resolveVimMotion,
+  type VimMotion,
+  type VimNavigationOptions,
+} from './lib/use-vim-navigation.ts';
 export { makeTheme } from './lib/make-theme.ts';
 export type { Theme, Status } from './lib/theme.ts';
 export { usePagination } from './lib/pagination/use-pagination.ts';

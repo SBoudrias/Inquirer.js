@@ -20,6 +20,7 @@ const numberedChoices = [
 ];
 
 afterEach(() => {
+  vi.useRealTimers();
   vi.unstubAllEnvs();
 });
 
@@ -1726,6 +1727,123 @@ describe('checkbox prompt', () => {
 
       events.keypress('enter');
       await expect(answer).resolves.toEqual([]);
+    });
+
+    it('supports vim gg, G, and counted motions without toggling choices on digits', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select items',
+        choices: [
+          new Separator(),
+          { value: 'one', name: 'One' },
+          { value: 'two', name: 'Two' },
+          new Separator('---'),
+          { value: 'three', name: 'Three' },
+          { value: 'four', name: 'Four' },
+          { value: 'five', name: 'Five' },
+          new Separator(),
+        ],
+        theme: {
+          keybindings: ['vim'],
+        },
+      });
+
+      // G jumps to last navigable item (skipping trailing separator)
+      events.keypress('G');
+      expect(getScreen()).toContain('❯◯ Five');
+
+      // gg jumps to first navigable item (skipping leading separator)
+      events.keypress('g');
+      expect(getScreen()).toContain('❯◯ Five');
+      events.keypress('g');
+      expect(getScreen()).toContain('❯◯ One');
+
+      // 3j moves down 3 navigable items (One -> Four) without toggling choice 3
+      events.keypress('3');
+      events.keypress('j');
+      expect(getScreen()).toContain('❯◯ Four');
+      expect(getScreen()).not.toContain('◉ Three');
+
+      // 2k moves up 2 navigable items (Four -> Two)
+      events.keypress('2');
+      events.keypress('k');
+      expect(getScreen()).toContain('❯◯ Two');
+
+      // 4G jumps to 4th navigable item (Four)
+      events.keypress('4');
+      events.keypress('G');
+      expect(getScreen()).toContain('❯◯ Four');
+
+      // Space selects active item, Enter submits only that item
+      events.keypress('space');
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['four']);
+    });
+
+    it('cancels partial vim g sequence on timeout or another key', async () => {
+      vi.useFakeTimers();
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select items',
+        choices: [
+          { value: 'one', name: 'One', disabled: true },
+          { value: 'two', name: 'Two' },
+          { value: 'three', name: 'Three' },
+        ],
+        theme: {
+          keybindings: ['vim'],
+        },
+      });
+
+      // Trigger disabled error, then verify G clears the error and jumps to last item
+      events.keypress('space');
+      expect(getScreen()).toContain('This option is disabled and cannot be toggled.');
+
+      events.keypress('G');
+      expect(getScreen()).toContain('❯◯ Three');
+      expect(getScreen()).not.toContain('This option is disabled and cannot be toggled.');
+
+      // Partial g followed by timeout does not jump
+      events.keypress('g');
+      vi.advanceTimersByTime(1000);
+      events.keypress('g');
+      expect(getScreen()).toContain('❯◯ Three');
+
+      // Pressing another key cancels pending g
+      events.keypress('k');
+      expect(getScreen()).toContain('❯◯ Two');
+      events.keypress('g');
+      expect(getScreen()).toContain('❯◯ Two');
+
+      // Second g completes gg
+      events.keypress('g');
+      expect(getScreen()).toContain('❯- One (disabled)');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual([]);
+    });
+
+    it('keeps default non-vim behavior untouched when vim is not enabled', async () => {
+      const { answer, events, getScreen } = await render(checkbox, {
+        message: 'Select items',
+        choices: [
+          { value: 'one', name: 'One' },
+          { value: 'two', name: 'Two' },
+          { value: 'three', name: 'Three' },
+        ],
+      });
+
+      events.keypress('G');
+      expect(getScreen()).toContain('❯◯ One');
+
+      // Digits still immediately toggle items when vim is disabled
+      events.keypress('2');
+      expect(getScreen()).toContain('❯◉ Two');
+
+      events.keypress('g');
+      events.keypress('g');
+      expect(getScreen()).toContain('❯◉ Two');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(['two']);
     });
   });
 });

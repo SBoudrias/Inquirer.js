@@ -2,6 +2,8 @@ import {
   createPrompt,
   useState,
   useKeypress,
+  useVimNavigation,
+  resolveVimMotion,
   usePrefix,
   usePagination,
   useMemo,
@@ -190,9 +192,21 @@ export default createPrompt(
 
     const [active, setActive] = useState(bounds.first);
     const [errorMsg, setError] = useState<string>();
+    const parseVimMotion = useVimNavigation(keybindings);
 
     useKeypress(async (key) => {
       if (status !== 'idle') return;
+
+      const vimMotion = parseVimMotion(key);
+      if (vimMotion) {
+        if (vimMotion.type !== 'pending') {
+          if (errorMsg) {
+            setError(undefined);
+          }
+          setActive(resolveVimMotion(items, active, vimMotion, isNavigable));
+        }
+        return;
+      }
 
       if (isEnterKey(key)) {
         setStatus('loading');

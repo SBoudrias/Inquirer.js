@@ -11,6 +11,7 @@ const numberedChoices = [
 ];
 
 afterEach(() => {
+  vi.useRealTimers();
   vi.unstubAllEnvs();
 });
 
@@ -268,6 +269,69 @@ describe('rawlist prompt', () => {
 
     events.keypress('enter');
     await expect(answer).resolves.toEqual(1);
+  });
+
+  it('supports vim gg and G jump navigation while preserving numeric typing', async () => {
+    vi.useFakeTimers();
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a topping',
+      choices: [
+        new Separator(),
+        { name: 'Ham', value: 'ham' },
+        new Separator('---'),
+        { name: 'Pepperoni', value: 'pepperoni' },
+        { name: 'Pineapple', value: 'pineapple' },
+        new Separator(),
+      ],
+      theme: {
+        keybindings: ['vim'],
+      },
+    });
+
+    // Partial g on empty input does not render 'g' in the prompt line
+    events.keypress('g');
+    expect(getScreen().split('\n')[0]?.trimEnd()).toBe('? Select a topping');
+    vi.advanceTimersByTime(1000);
+
+    // G jumps to last selectable choice (skipping trailing separator)
+    events.keypress('G');
+    expect(getScreen()).toContain('? Select a topping 3');
+
+    // Partial g does not corrupt the displayed input and expires after timeout
+    events.keypress('g');
+    expect(getScreen()).toContain('? Select a topping 3');
+    vi.advanceTimersByTime(1000);
+    events.keypress('g');
+    expect(getScreen()).toContain('? Select a topping 3');
+
+    // Second g within timeout completes gg and jumps to first selectable choice
+    events.keypress('g');
+    expect(getScreen()).toContain('? Select a topping 1');
+
+    // Typing a number still works in rawlist even with vim keybindings enabled
+    events.keypress('backspace');
+    events.keypress('2');
+    expect(getScreen()).toContain('? Select a topping 2');
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('pepperoni');
+  });
+
+  it('does not intercept g or G when vim keybindings are not enabled', async () => {
+    const { answer, events, getScreen } = await render(rawlist, {
+      message: 'Select a color',
+      choices: [
+        { key: 'r', name: 'Red', value: 'red' },
+        { key: 'g', name: 'Green', value: 'green' },
+        { key: 'G', name: 'Gold', value: 'gold' },
+      ],
+    });
+
+    events.keypress('G');
+    expect(getScreen()).toContain('? Select a color G');
+
+    events.keypress('enter');
+    await expect(answer).resolves.toEqual('gold');
   });
 
   it('errors when no selected options', async () => {
