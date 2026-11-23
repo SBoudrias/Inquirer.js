@@ -90,6 +90,17 @@ describe('screen', () => {
     await expect(answer).resolves.toBe('ab \tc');
   });
 
+  it('inserts multi-character type() calls at the cursor position', async () => {
+    const answer = input({ message: 'Question?' });
+
+    screen.type(' world');
+    screen.keypress('home');
+    screen.type('hello');
+    screen.keypress('enter');
+
+    await expect(answer).resolves.toBe('hello world');
+  });
+
   it.each(['dumb', 'xterm-256color'])(
     'supports line editing with TERM=%s',
     async (term) => {

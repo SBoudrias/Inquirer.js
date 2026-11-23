@@ -163,9 +163,13 @@ export class Screen {
   }
 
   type(text: string): void {
-    // Writing the bytes is enough: readline's input decoder fires one
-    // keypress per character and its line editor inserts them.
-    this.#input.write(text);
+    // Write one code point at a time so readline processes each character
+    // as an individual keystroke rather than a pasted chunk. On Node 20,
+    // readline appends to the end of the line instead of inserting at the
+    // cursor while draining multi-character chunks.
+    for (const char of text) {
+      this.#input.write(char);
+    }
   }
 
   clear(): void {
