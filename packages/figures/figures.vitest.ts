@@ -1,4 +1,13 @@
-import { vi, it, expect, afterAll } from 'vitest';
+import { vi, it, expect, afterAll, afterEach } from 'vitest';
+
+afterEach(() => {
+  // Drop every module evaluated while the terminal env was stubbed. Without
+  // this, the last stubbed evaluation of @inquirer/figures (the fallback
+  // symbol set on a non-unicode TERM) stays cached in the module registry
+  // after the env is restored, and leaks into later test files that share
+  // the worker when running with isolate: false.
+  vi.resetModules();
+});
 
 afterAll(() => {
   vi.unstubAllEnvs();

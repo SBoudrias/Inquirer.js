@@ -21,10 +21,13 @@ export async function applyTypeScriptRules(
   pkg: PackageJson,
   {
     dir,
+    cwd = process.cwd(),
     tsconfig = { extends: '@repo/tsconfig' },
     typescriptVersion,
   }: {
     dir: string;
+    // Workspace root `dir` (a POSIX-style package path) is relative to.
+    cwd?: string;
     tsconfig: TsConfigJson | undefined;
     typescriptVersion: string | undefined;
   },
@@ -54,7 +57,7 @@ export async function applyTypeScriptRules(
       ? pkg.exports
       : {};
   exports['./package.json'] = './package.json';
-  if (await fileExists(path.join(dir, 'src/index.ts'))) {
+  if (await fileExists(path.resolve(cwd, dir, 'src/index.ts'))) {
     exports['.'] = './src/index.ts';
   }
   pkg.exports = exports;

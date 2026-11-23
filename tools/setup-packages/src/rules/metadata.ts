@@ -13,11 +13,14 @@ export async function applyMetadataRules(
   {
     rootPkg,
     dir,
+    cwd = process.cwd(),
   }: {
     rootPkg: Pick<PackageJson, 'author' | 'license' | 'repository' | 'keywords'> & {
       engines: { node: string };
     };
     dir: string;
+    // Workspace root `dir` (a POSIX-style package path) is relative to.
+    cwd?: string;
   },
 ) {
   pkg.devDependencies ??= {};
@@ -50,7 +53,7 @@ export async function applyMetadataRules(
   pkg.publishConfig = { access: 'public' };
 
   const repoUrl = githubUrl(rootPkg.repository);
-  if (repoUrl && (await fileExists(path.join(dir, 'README.md')))) {
+  if (repoUrl && (await fileExists(path.resolve(cwd, dir, 'README.md')))) {
     // GitHub serves `blob/HEAD` from the default branch, whatever its name.
     pkg.homepage = `${repoUrl}/blob/HEAD/${dir}/README.md`;
   }
