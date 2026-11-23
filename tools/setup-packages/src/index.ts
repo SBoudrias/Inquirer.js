@@ -18,18 +18,27 @@ import { validateRootPackage } from './rules/root.ts';
  * missing or outdated file is returned, so callers can fail (e.g. in CI)
  * without a git diff.
  */
-export async function setupPackages({ check }: { check: boolean }): Promise<string[]> {
+export async function setupPackages({
+  check,
+  cwd = process.cwd(),
+}: {
+  check: boolean;
+  cwd?: string;
+}): Promise<string[]> {
   const drift: string[] = [];
 
   // Write (or in check mode, validate) a JSON file against the current one on
   // disk. Paths are POSIX-style (globby's), so messages read the same on
   // Windows.
   async function writeJSON(filepath: string, content: unknown) {
-    const text = (await fileExists(filepath)) ? await readFile(filepath) : undefined;
+    // globby returns paths relative to `cwd`; resolve them back before touching
+    // the filesystem so an explicit `cwd` option works from any directory.
+    const absolute = path.resolve(cwd, filepath);
+    const text = (await fileExists(absolute)) ? await readFile(absolute) : undefined;
 
     if (!check) {
       const rendered = renderJSON(text, content);
-      if (rendered !== text) await fs.writeFile(filepath, rendered);
+      if (rendered !== text) await fs.writeFile(absolute, rendered);
       return;
     }
 
@@ -48,19 +57,24 @@ export async function setupPackages({ check }: { check: boolean }): Promise<stri
   }
 
   const rootPkg = validateRootPackage(
-    await readJSONFile<PackageJson>(path.join(process.cwd(), 'package.json')),
+    await readJSONFile<PackageJson>(path.join(cwd, 'package.json')),
   );
   // Globs are POSIX-style (a backslash is an escape), and `path.join` would
-  // yield backslashes on Windows.
-  const paths = await globby([
-    ...rootPkg.workspaces.map((workspace) => path.posix.join(workspace, 'package.json')),
-    '!**/node_modules',
-  ]);
+  // yield backslashes on Windows. Returned paths are relative to `cwd`.
+  const paths = await globby(
+    [
+      ...rootPkg.workspaces.map((workspace) =>
+        path.posix.join(workspace, 'package.json'),
+      ),
+      '!**/node_modules',
+    ],
+    { cwd },
+  );
 
   const packages = await Promise.all(
     paths.map(async (pkgPath): Promise<[string, PackageJson]> => [
       pkgPath,
-      await readJSONFile<PackageJson>(pkgPath),
+      await readJSONFile<PackageJson>(path.resolve(cwd, pkgPath)),
     ]),
   );
   // Every TS package is pinned to the first TypeScript version the workspace
@@ -77,11 +91,12 @@ export async function setupPackages({ check }: { check: boolean }): Promise<stri
     const dir = path.posix.dirname(pkgPath);
     const tsconfigPath = path.posix.join(dir, 'tsconfig.json');
 
-    await applyMetadataRules(pkg, { rootPkg, dir });
+    await applyMetadataRules(pkg, { rootPkg, dir, cwd });
     const tsconfig = await applyTypeScriptRules(pkg, {
       dir,
-      tsconfig: (await fileExists(tsconfigPath))
-        ? await readJSONFile<TsConfigJson>(tsconfigPath)
+      cwd,
+      tsconfig: (await fileExists(path.resolve(cwd, tsconfigPath)))
+        ? await readJSONFile<TsConfigJson>(path.resolve(cwd, tsconfigPath))
         : undefined,
       typescriptVersion,
     });

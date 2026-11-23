@@ -3,13 +3,13 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+// Repo root, captured before any test mocks process.cwd().
+const repoRoot = process.cwd();
 const tempDirs: string[] = [];
-const originalCwd = process.cwd();
 const originalArgv = process.argv;
 const originalExitCode = process.exitCode;
 
 afterEach(async () => {
-  process.chdir(originalCwd);
   process.argv = originalArgv;
   process.exitCode = originalExitCode;
   vi.restoreAllMocks();
@@ -65,10 +65,12 @@ describe('package CLI', () => {
     });
     await writeJson(packagePath, originalPackageJson);
     const stderr = captureStderr();
-    process.chdir(cwd);
+    // The CLI reads the workspace from process.cwd(); point it at the temp
+    // workspace (process.chdir() is unavailable in worker threads).
+    vi.spyOn(process, 'cwd').mockReturnValue(cwd);
     process.argv = [
       process.execPath,
-      path.join(originalCwd, 'tools/package/src/bin.ts'),
+      path.join(repoRoot, 'tools/package/src/bin.ts'),
       'lint',
       '--check',
     ];

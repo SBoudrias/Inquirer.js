@@ -3,8 +3,16 @@ import type { Prompt } from '@inquirer/type';
 import { Screen } from './screen.ts';
 import { withEditableTerminal } from './with-editable-terminal.ts';
 
-// Global screen instance - exported for tests
-const screenInstance: Screen = new Screen();
+// Global screen instance - exported for tests. Anchored on globalThis so
+// every evaluation of this module shares one Screen: `vi.resetModules()` (in
+// a test file that re-imports prompts under a stubbed environment) wipes the
+// module registry, and without the anchor the re-evaluation would create a
+// second Screen — prompts would render through the mock factories' instance
+// while tests read another, leaving every assertion on stale output.
+const globalStore = globalThis as typeof globalThis & {
+  inquirerTestingScreen?: Screen;
+};
+const screenInstance: Screen = (globalStore.inquirerTestingScreen ??= new Screen());
 export { screenInstance as screen };
 
 // Reset before each test
