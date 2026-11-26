@@ -31,7 +31,7 @@ jobs:
       - run: corepack enable
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: latest
+          node-version: 24
           cache: 'yarn'
       - run: yarn install --immutable
       # Pulls the subjects to lint out of the GitHub event payload the
