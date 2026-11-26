@@ -89,12 +89,6 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 2
-      - name: Cache turbo build setup
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-turbo-
       - run: corepack enable
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -110,12 +104,19 @@ jobs:
             export YARN_ENABLE_HARDENED_MODE=false
           fi
           yarn install --immutable
-      - run: yarn oxlint .
-      - run: yarn oxfmt --check .
-      - run: yarn eslint .
-      - run: yarn package lint --check
-      - name: Validate package setup
-        run: yarn setup-packages --check
+      - name: Run linters in parallel
+        run: |
+          PATH="$PWD/node_modules/.bin:$PATH"
+          oxlint . & p1=$!
+          oxfmt --check . & p2=$!
+          eslint . & p3=$!
+          package lint --check & p4=$!
+          setup-packages --check & p5=$!
+          rc=0
+          for p in $p1 $p2 $p3 $p4 $p5; do
+            wait "$p" || rc=1
+          done
+          exit "$rc"
 
   Unit:
     name: Unit Tests
