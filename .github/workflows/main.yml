@@ -62,10 +62,13 @@ jobs:
       - name: Typescript
         run: yarn tsc
       - name: Pack isolated deno test project
+        env:
+          # Freshly isolated workspaces have no lockfile, so hardened lockfile
+          # verification adds resolution overhead for nothing.
+          YARN_ENABLE_HARDENED_MODE: false
         run: |
-          DIR=$(yarn isolate-monorepo-package @inquirer/deno-integration-tests)
+          DIR=$(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/deno-integration-tests)
           cd "$DIR"
-          yarn set version stable
           yarn install
           cd -
           tar -czf "${RUNNER_TEMP}/deno-integration-tests.tar.gz" \
@@ -248,9 +251,10 @@ jobs:
           yarn install --immutable
       - run: yarn turbo tsc
       - name: Test isolated build of @inquirer/demo
+        env:
+          YARN_ENABLE_HARDENED_MODE: false
         run: |
-          cd $(yarn isolate-monorepo-package @inquirer/demo)
-          yarn set version stable
+          cd $(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/demo)
           yarn install
           yarn tsc
           cd -
@@ -288,8 +292,8 @@ jobs:
       - run: yarn turbo tsc
       - name: Test isolated build of @inquirer/demo (with npm)
         run: |
-          cd $(yarn isolate-monorepo-package @inquirer/demo)
-          npm install
+          cd $(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/demo)
+          npm install --no-audit --no-fund --prefer-offline
           npm run tsc
           cd -
 
@@ -325,9 +329,10 @@ jobs:
           yarn install --immutable
       - run: yarn turbo tsc
       - name: Run esm integration tests
+        env:
+          YARN_ENABLE_HARDENED_MODE: false
         run: |
-          cd $(yarn isolate-monorepo-package @inquirer/esm-integration-tests)
-          yarn set version stable
+          cd $(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/esm-integration-tests)
           yarn install
           yarn test
           cd -
@@ -364,9 +369,10 @@ jobs:
           yarn install --immutable
       - run: yarn turbo tsc
       - name: Run cjs integration tests
+        env:
+          YARN_ENABLE_HARDENED_MODE: false
         run: |
-          cd $(yarn isolate-monorepo-package @inquirer/cjs-integration-tests)
-          yarn set version stable
+          cd $(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/cjs-integration-tests)
           yarn install
           yarn test
           cd -

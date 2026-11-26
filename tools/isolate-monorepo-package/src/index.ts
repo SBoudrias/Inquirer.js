@@ -261,26 +261,46 @@ export function collectWorkspaceDependencies(
 }
 
 /**
- * Pack a single workspace package into a tarball
+ * Pack all workspace dependencies and return a map of package names to tarball paths
  */
-async function packWorkspace(
-  workspace: WorkspaceInfo,
+export async function packAllDependencies(
+  dependencies: Set<string>,
+  workspaceMap: Map<string, WorkspaceInfo>,
   rootDir: string,
   artifactsDir: string,
-): Promise<string> {
-  // Create a safe filename for the tarball
-  const safeFileName = workspace.name.replace('@', '').replace('/', '-') + '.tgz';
-  const tarballPath = path.join(artifactsDir, safeFileName);
+  verbose: boolean = false,
+): Promise<Map<string, string>> {
+  const workspacesToPack: WorkspaceInfo[] = [];
+  for (const dep of dependencies) {
+    const workspace = workspaceMap.get(dep);
+    if (workspace) {
+      workspacesToPack.push(workspace);
+    }
+  }
 
-  return new Promise((resolve, reject) => {
-    const child = spawn(
-      'yarn',
-      ['workspace', workspace.name, 'pack', '--out', tarballPath],
-      {
-        cwd: rootDir,
-        stdio: 'pipe',
-      },
+  if (workspacesToPack.length === 0) {
+    return new Map();
+  }
+
+  if (verbose) {
+    console.error(
+      `[isolate-monorepo-package] Packing ${workspacesToPack.length} workspace dependencies...`,
     );
+  }
+
+  // Pack all workspace dependencies in one parallel `yarn workspaces foreach`
+  // invocation instead of spawning a separate `yarn` process per dependency.
+  const args = ['workspaces', 'foreach', '--all', '--parallel'];
+  for (const workspace of workspacesToPack) {
+    args.push('--include', workspace.name);
+  }
+  args.push('pack', '--out', path.join(artifactsDir, '%s.tgz'));
+
+  await new Promise<void>((resolve, reject) => {
+    const child = spawn('yarn', args, {
+      cwd: rootDir,
+      stdio: 'pipe',
+    });
 
     let stderr = '';
     child.stderr.on('data', (data: Buffer) => {
@@ -293,68 +313,29 @@ async function packWorkspace(
       if (code !== 0) {
         const errorMessage = stderr || 'Unknown error';
         reject(
-          new IsolatedBuildError(`Failed to pack ${workspace.name}: ${errorMessage}`),
+          new IsolatedBuildError(
+            `Failed to pack workspace dependencies: ${errorMessage}`,
+          ),
         );
       } else {
-        resolve(tarballPath);
+        resolve();
       }
     });
   });
-}
 
-/**
- * Pack all workspace dependencies and return a map of package names to tarball paths
- */
-export async function packAllDependencies(
-  dependencies: Set<string>,
-  workspaceMap: Map<string, WorkspaceInfo>,
-  rootDir: string,
-  artifactsDir: string,
-  verbose: boolean = false,
-): Promise<Map<string, string>> {
-  if (verbose) {
-    console.error(
-      `[isolate-monorepo-package] Packing ${dependencies.size} workspace dependencies...`,
-    );
-  }
-
-  // Pack all dependencies in parallel
-  const packPromises: Promise<{ name: string; path: string } | null>[] = [];
-
-  for (const dep of dependencies) {
-    const workspace = workspaceMap.get(dep);
-    if (!workspace) {
-      // Skip non-workspace dependencies
-      continue;
-    }
-
-    if (verbose) {
-      console.error(`[isolate-monorepo-package]   Packing ${dep}...`);
-    }
-
-    packPromises.push(
-      packWorkspace(workspace, rootDir, artifactsDir).then(
-        (tarballPath) => {
-          if (verbose) {
-            console.error(`[isolate-monorepo-package]   Packed ${dep} to ${tarballPath}`);
-          }
-          return { name: dep, path: tarballPath };
-        },
-        (error: unknown) => {
-          // Let the error propagate
-          throw error;
-        },
-      ),
-    );
-  }
-
-  const results = await Promise.all(packPromises);
   const packMap = new Map<string, string>();
-
-  for (const result of results) {
-    if (result) {
-      packMap.set(result.name, result.path);
+  for (const workspace of workspacesToPack) {
+    // Yarn's `%s` slug replaces `/` with `-` while keeping any leading `@`.
+    const tarballPath = path.join(
+      artifactsDir,
+      `${workspace.name.replace('/', '-')}.tgz`,
+    );
+    if (verbose) {
+      console.error(
+        `[isolate-monorepo-package]   Packed ${workspace.name} to ${tarballPath}`,
+      );
     }
+    packMap.set(workspace.name, tarballPath);
   }
 
   return packMap;
@@ -383,12 +364,16 @@ export async function setupIsolatedEnvironment(
     console.error(`[isolate-monorepo-package]   Created temp directory: ${tempDir}`);
   }
 
-  // Copy the package to temp directory
+  // Copy the package to temp directory (skip build/install caches so the
+  // isolated workspace starts clean).
   const packageDestDir = path.join(tempDir, path.basename(workspace.location));
-  // Use async cp for better performance
   await fsPromises.cp(workspace.location, packageDestDir, {
     recursive: true,
     errorOnExist: false,
+    filter: (src) => {
+      const base = path.basename(src);
+      return base !== 'node_modules' && base !== '.turbo';
+    },
   });
   if (verbose) {
     console.error(
@@ -407,7 +392,16 @@ export async function setupIsolatedEnvironment(
 
   // Modify package.json to use local tarballs
   const packageJsonPath = path.join(packageDestDir, 'package.json');
-  const pkg = await readJSON<PackageJson>(packageJsonPath);
+  const [pkg, rootPkg] = await Promise.all([
+    readJSON<PackageJson>(packageJsonPath),
+    readJSON<PackageJson>(path.join(rootDir, 'package.json')),
+  ]);
+
+  // Inherit the monorepo's pinned packageManager so Corepack resolves the
+  // already-cached Yarn release directly instead of falling back to Yarn 1.x.
+  if (!pkg.packageManager && rootPkg.packageManager) {
+    pkg.packageManager = rootPkg.packageManager;
+  }
 
   // Update direct dependencies to use file: protocol
   for (const deps of [pkg.dependencies, pkg.devDependencies]) {
