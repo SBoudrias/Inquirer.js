@@ -14,7 +14,7 @@
     "tsc": "tsc && chmod +x ./dist/bin.js"
   },
   "dependencies": {
-    "type-fest": "^5.5.0"
+    "type-fest": "^6.0.2"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",

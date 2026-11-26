@@ -93,7 +93,7 @@
     "setup-packages": "workspace:*",
     "tsrs": "^0.25.0-ts7.1.0-beta",
     "turbo": "^2.9.4",
-    "type-fest": "^5.5.0",
+    "type-fest": "^6.0.2",
     "typescript": "^7.0.2",
     "vite": "^8.3.0",
     "vitest": "^5.0.0"
