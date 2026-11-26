@@ -29,6 +29,8 @@ jobs:
   # `dist/` only, so packing without a prior build yields empty tarballs.
   Compile:
     runs-on: ubuntu-latest
+    outputs:
+      deno-versions: ${{ steps.deno-matrix.outputs.versions }}
     env:
       # The isolated deno workspace has no lockfile, so immutable installs
       # would fail inside it. The repo-level install still passes --immutable.
@@ -62,6 +64,7 @@ jobs:
       - name: Typescript
         run: yarn tsc
       - name: Pack isolated deno test project
+        id: deno-matrix
         env:
           # Freshly isolated workspaces have no lockfile, so hardened lockfile
           # verification adds resolution overhead for nothing.
@@ -70,9 +73,19 @@ jobs:
           DIR=$(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/deno-integration-tests)
           cd "$DIR"
           yarn install
+          # Deno runs tests directly without Yarn, so exclude .yarn/ from the artifact.
+          rm -rf .yarn
           cd -
           tar -czf "${RUNNER_TEMP}/deno-integration-tests.tar.gz" \
             -C "$(dirname "$DIR")" "$(basename "$DIR")"
+
+          # Run the full Deno version matrix on main pushes and Deno/workflow-touching
+          # PRs; run latest only on routine PRs to cut 3 redundant cells.
+          if [ "$GITHUB_EVENT_NAME" != "pull_request" ] || ! git diff --quiet HEAD^1 -- integration/deno/ .github/workflows/main.yml; then
+            echo 'versions=["v2.7.x","v2.8.x","v2.9.x","latest"]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'versions=["latest"]' >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: deno-integration-tests
@@ -396,13 +409,13 @@ jobs:
       fail-fast: false
       matrix:
         # Deno >= 2.7 is required: earlier versions throw EOPNOTSUPP when
-        # node:readline enables raw mode on non-TTY stdin.
-        deno-version: ['v2.7.x', 'v2.8.x', 'v2.9.x', 'latest']
+        # node:readline enables raw mode on non-TTY stdin. Routine PRs test
+        # `latest` only; pushes to main and Deno-touching PRs test all four.
+        deno-version: ${{ fromJson(needs.Compile.outputs.deno-versions) }}
     steps:
       - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
         with:
           deno-version: ${{ matrix.deno-version }}
-      - run: corepack enable
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: deno-integration-tests
@@ -411,4 +424,4 @@ jobs:
         run: |
           tar -xzf "${RUNNER_TEMP}/deno-integration-tests.tar.gz" -C "${RUNNER_TEMP}"
           cd "${RUNNER_TEMP}/deno"
-          yarn test:deno
+          deno test --allow-env --allow-run=deno integration.test.mjs
