@@ -3,6 +3,8 @@
  * CLI entry point for the isolate-monorepo-package tool
  */
 
+import { realpathSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
 import { createIsolatedEnvironment } from './index.ts';
 
 type CliOptions = {
@@ -53,8 +55,11 @@ async function main(options: CliOptions): Promise<void> {
   console.log(isolatedDir);
 }
 
-// Run the CLI tool
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Run the CLI tool (resolve symlinks so invoking via node_modules/.bin works)
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href
+) {
   await main(parseArguments());
 }
 
