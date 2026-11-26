@@ -15,17 +15,30 @@ export async function interpretTerminalOutput(
   cols: number = 10_000,
   rows: number = 4000,
 ): Promise<string> {
+  // Size the viewport to the output's line count (bounded by `rows`, with any
+  // remainder kept as scrollback) instead of always pre-allocating 4000 rows:
+  // xterm initializes every viewport row upfront, which dominates test runtime
+  // when rendering short prompt sessions.
+  let newlines = 0;
+  for (let i = 0; i < rawOutput.length; i++) {
+    if (rawOutput.charCodeAt(i) === 10) newlines++;
+  }
+  const viewportRows = Math.min(rows, Math.max(24, newlines + 16));
+  const scrollback = Math.max(0, rows - viewportRows);
+
   const term = new xterm.Terminal({
     cols,
-    rows,
+    rows: viewportRows,
+    scrollback,
     allowProposedApi: true,
     convertEol: true,
   });
   await new Promise<void>((resolve) => term.write(rawOutput, resolve));
 
+  const buffer = term.buffer.active;
   const lines: string[] = [];
-  for (let i = 0; i < term.rows; i++) {
-    lines.push(term.buffer.active.getLine(i)?.translateToString(true) ?? '');
+  for (let i = 0; i < buffer.length; i++) {
+    lines.push(buffer.getLine(i)?.translateToString(true) ?? '');
   }
   term.dispose();
 
