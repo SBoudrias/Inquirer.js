@@ -15,6 +15,145 @@
     "test": {
       "dependsOn": ["^tsc", "@inquirer/testing#tsc"],
       "outputs": []
+    },
+    "//#lint:oxlint": {
+      "inputs": [
+        ".oxlintrc.json",
+        "tsconfig.json",
+        "*.{js,mjs,cjs,ts,mts,cts}",
+        "packages/**/*.{js,mjs,cjs,ts,mts,cts,json}",
+        "integration/**/*.{js,mjs,cjs,ts,mts,cts,json}",
+        "tools/**/*.{js,mjs,cjs,ts,mts,cts,json}",
+        "!**/dist/**",
+        "!**/node_modules/**",
+        "!**/.turbo/**"
+      ],
+      "outputs": []
+    },
+    "//#lint:oxfmt": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "packages/**",
+        "integration/**",
+        "tools/**",
+        "!**/dist/**",
+        "!**/node_modules/**",
+        "!**/.turbo/**"
+      ],
+      "outputs": []
+    },
+    "//#lint:eslint": {
+      "inputs": [
+        "eslint.config.js",
+        ".oxlintrc.json",
+        "*.{js,mjs,cjs,ts,mts,cts}",
+        "packages/**/*.{js,mjs,cjs,ts,mts,cts,json}",
+        "integration/**/*.{js,mjs,cjs,ts,mts,cts,json}",
+        "tools/**/*.{js,mjs,cjs,ts,mts,cts,json}",
+        "!**/dist/**",
+        "!**/node_modules/**",
+        "!**/.turbo/**"
+      ],
+      "outputs": []
+    },
+    "//#lint:package": {
+      "inputs": [
+        "package.json",
+        "packages/*/package.json",
+        "integration/*/package.json",
+        "tools/*/package.json",
+        "tools/package/**",
+        "!tools/package/dist/**",
+        "!tools/package/node_modules/**",
+        "!tools/package/.turbo/**"
+      ],
+      "outputs": []
+    },
+    "//#lint:setup": {
+      "inputs": [
+        "package.json",
+        "packages/*/package.json",
+        "packages/*/tsconfig.json",
+        "packages/*/README.md",
+        "packages/*/src/index.ts",
+        "integration/*/package.json",
+        "integration/*/tsconfig.json",
+        "integration/*/README.md",
+        "integration/*/src/index.ts",
+        "tools/*/package.json",
+        "tools/*/tsconfig.json",
+        "tools/*/README.md",
+        "tools/*/src/index.ts",
+        "tools/setup-packages/**",
+        "!tools/setup-packages/dist/**",
+        "!tools/setup-packages/node_modules/**",
+        "!tools/setup-packages/.turbo/**"
+      ],
+      "outputs": []
+    },
+    "//#e2e:demo-yarn": {
+      "dependsOn": ["@inquirer/demo#tsc", "isolate-monorepo-package#tsc"],
+      "inputs": [
+        "package.json",
+        ".yarnrc.yml",
+        "packages/demo/**",
+        "tools/tsconfig/**",
+        "tools/isolate-monorepo-package/**",
+        "!**/*.vitest.ts",
+        "!**/*.jest.ts",
+        "!**/dist/**",
+        "!**/node_modules/**",
+        "!**/.turbo/**"
+      ],
+      "outputs": []
+    },
+    "//#e2e:demo-npm": {
+      "dependsOn": ["@inquirer/demo#tsc", "isolate-monorepo-package#tsc"],
+      "inputs": [
+        "package.json",
+        ".yarnrc.yml",
+        "packages/demo/**",
+        "tools/tsconfig/**",
+        "tools/isolate-monorepo-package/**",
+        "!**/*.vitest.ts",
+        "!**/*.jest.ts",
+        "!**/dist/**",
+        "!**/node_modules/**",
+        "!**/.turbo/**"
+      ],
+      "outputs": []
+    },
+    "//#e2e:esm": {
+      "dependsOn": [
+        "inquirer#tsc",
+        "@inquirer/testing#tsc",
+        "isolate-monorepo-package#tsc"
+      ],
+      "inputs": [
+        "package.json",
+        ".yarnrc.yml",
+        "integration/esm/**",
+        "tools/tsconfig/**",
+        "tools/isolate-monorepo-package/**",
+        "!**/dist/**",
+        "!**/node_modules/**",
+        "!**/.turbo/**"
+      ],
+      "outputs": []
+    },
+    "//#e2e:cjs": {
+      "dependsOn": ["inquirer#tsc", "isolate-monorepo-package#tsc"],
+      "inputs": [
+        "package.json",
+        ".yarnrc.yml",
+        "integration/cjs/**",
+        "tools/tsconfig/**",
+        "tools/isolate-monorepo-package/**",
+        "!**/dist/**",
+        "!**/node_modules/**",
+        "!**/.turbo/**"
+      ],
+      "outputs": []
     }
   }
 }

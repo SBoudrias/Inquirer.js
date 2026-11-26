@@ -99,18 +99,10 @@ jobs:
           persist-credentials: false
           fetch-depth: 2
       - uses: $/.github/actions/setup-node
-      - name: Run linters in parallel
-        run: |
-          oxlint . & p1=$!
-          oxfmt --check . & p2=$!
-          eslint . & p3=$!
-          package lint --check & p4=$!
-          setup-packages --check & p5=$!
-          rc=0
-          for p in $p1 $p2 $p3 $p4 $p5; do
-            wait "$p" || rc=1
-          done
-          exit "$rc"
+        with:
+          enable-yarn: 'true'
+      - name: Lint
+        run: yarn lint
 
   Unit:
     name: Unit Tests
@@ -200,16 +192,11 @@ jobs:
           files: coverage/vitest/coverage-final.json,coverage/jest/coverage-final.json
 
   # Required check (main ruleset: 'End to End build tests'). The four isolated
-  # suites each create their own temp directory via isolate-monorepo-package and
-  # don't share mutable state, so running them concurrently inside one job shares
-  # the repo checkout/install/build setup once instead of paying 4x setup plus a
-  # downstream join job. Each suite's output is buffered and printed in its own
-  # collapsible log group.
+  # suites run in parallel via Turbo (`yarn e2e`), sharing one checkout/setup
+  # and caching results against the built workspace graph.
   e2e:
     name: End to End build tests
     runs-on: ubuntu-latest
-    env:
-      YARN_ENABLE_IMMUTABLE_INSTALLS: false
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -230,63 +217,8 @@ jobs:
       - uses: $/.github/actions/setup-node
         with:
           enable-yarn: 'true'
-      - name: Build packages
-        run: turbo tsc
-      - name: Run isolated e2e suites in parallel
-        env:
-          YARN_ENABLE_HARDENED_MODE: false
-          YARN_ENABLE_CACHE_CLEAN: false
-        run: |
-          log_dir=$(mktemp -d)
-          root_dir="$PWD"
-
-          run_yarn_suite() {
-            local name="$1" pkg="$2" script="$3"
-            (
-              set -euo pipefail
-              dir=$(isolate-monorepo-package "$pkg")
-              if [ -d "$root_dir/.yarn/cache" ]; then
-                mkdir -p "$dir/.yarn"
-                cp -al "$root_dir/.yarn/cache" "$dir/.yarn/cache"
-              fi
-              cd "$dir"
-              yarn install
-              yarn "$script"
-            ) >"$log_dir/$name.log" 2>&1
-          }
-
-          run_npm_suite() {
-            local name="$1" pkg="$2"
-            (
-              set -euo pipefail
-              dir=$(isolate-monorepo-package "$pkg")
-              cd "$dir"
-              npm install --no-audit --no-fund --prefer-offline
-              npm run tsc
-            ) >"$log_dir/$name.log" 2>&1
-          }
-
-          run_yarn_suite demo-yarn @inquirer/demo tsc & p1=$!
-          run_npm_suite demo-npm @inquirer/demo & p2=$!
-          run_yarn_suite esm @inquirer/esm-integration-tests test & p3=$!
-          run_yarn_suite cjs @inquirer/cjs-integration-tests test & p4=$!
-
-          rc=0
-          names=(demo-yarn demo-npm esm cjs)
-          pids=($p1 $p2 $p3 $p4)
-          for i in "${!pids[@]}"; do
-            name="${names[$i]}"
-            suite_rc=0
-            wait "${pids[$i]}" || suite_rc=$?
-            echo "::group::e2e: $name (exit $suite_rc)"
-            cat "$log_dir/$name.log"
-            echo "::endgroup::"
-            if [ "$suite_rc" -ne 0 ]; then
-              rc=1
-            fi
-          done
-          rm -rf "$log_dir"
-          exit "$rc"
+      - name: Run isolated e2e suites
+        run: yarn e2e
 
   deno:
     name: Deno Tests (${{ matrix.deno-version }})
