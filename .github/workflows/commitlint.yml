@@ -28,12 +28,18 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 2
       - run: corepack enable
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: 'yarn'
-      - run: yarn install --immutable
+      - name: Install dependencies
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
+            export YARN_ENABLE_HARDENED_MODE=false
+          fi
+          yarn install --immutable
       # Pulls the subjects to lint out of the GitHub event payload the
       # runner exposes at $GITHUB_EVENT_PATH: the PR title on pull_request
       # runs (the repo squash-merges, so titles become the subjects on

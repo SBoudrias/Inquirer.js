@@ -37,6 +37,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 2
       - name: Cache turbo build setup
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -48,7 +49,16 @@ jobs:
         with:
           node-version: 24
           cache: 'yarn'
-      - run: yarn install --immutable
+      # Yarn enables hardened mode on public PRs, re-verifying every package
+      # resolution against the registry (+3-7s per job). When yarn.lock and
+      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
+      # trusted and --immutable still rejects any package.json drift.
+      - name: Install dependencies
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
+            export YARN_ENABLE_HARDENED_MODE=false
+          fi
+          yarn install --immutable
       - name: Typescript
         run: yarn tsc
       - name: Pack isolated deno test project
@@ -78,6 +88,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 2
       - name: Cache turbo build setup
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -89,7 +100,16 @@ jobs:
         with:
           node-version: 24
           cache: 'yarn'
-      - run: yarn install --immutable
+      # Yarn enables hardened mode on public PRs, re-verifying every package
+      # resolution against the registry (+3-7s per job). When yarn.lock and
+      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
+      # trusted and --immutable still rejects any package.json drift.
+      - name: Install dependencies
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
+            export YARN_ENABLE_HARDENED_MODE=false
+          fi
+          yarn install --immutable
       - run: yarn oxlint .
       - run: yarn oxfmt --check .
       - run: yarn eslint .
@@ -134,7 +154,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
-      - run: yarn install --immutable
+      - name: Install dependencies
+        shell: bash
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
+            export YARN_ENABLE_HARDENED_MODE=false
+          fi
+          yarn install --immutable
       # Coverage runs on one matrix cell only; every other cell runs the
       # suites bare. The per-OS coverage parity check measured identical
       # coverage on linux and windows (54 files, 1850/1934 vitest and
@@ -187,6 +213,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 2
       - name: Cache turbo build setup
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -198,7 +225,16 @@ jobs:
         with:
           node-version: 24
           cache: 'yarn'
-      - run: yarn install --immutable
+      # Yarn enables hardened mode on public PRs, re-verifying every package
+      # resolution against the registry (+3-7s per job). When yarn.lock and
+      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
+      # trusted and --immutable still rejects any package.json drift.
+      - name: Install dependencies
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
+            export YARN_ENABLE_HARDENED_MODE=false
+          fi
+          yarn install --immutable
       - run: yarn turbo tsc
       - name: Test isolated build of @inquirer/demo
         run: |
@@ -216,6 +252,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 2
       - name: Cache turbo build setup
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -227,7 +264,16 @@ jobs:
         with:
           node-version: 24
           cache: 'yarn'
-      - run: yarn install --immutable
+      # Yarn enables hardened mode on public PRs, re-verifying every package
+      # resolution against the registry (+3-7s per job). When yarn.lock and
+      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
+      # trusted and --immutable still rejects any package.json drift.
+      - name: Install dependencies
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
+            export YARN_ENABLE_HARDENED_MODE=false
+          fi
+          yarn install --immutable
       - run: yarn turbo tsc
       - name: Test isolated build of @inquirer/demo (with npm)
         run: |
@@ -244,6 +290,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 2
       - name: Cache turbo build setup
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -255,7 +302,16 @@ jobs:
         with:
           node-version: 24
           cache: 'yarn'
-      - run: yarn install --immutable
+      # Yarn enables hardened mode on public PRs, re-verifying every package
+      # resolution against the registry (+3-7s per job). When yarn.lock and
+      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
+      # trusted and --immutable still rejects any package.json drift.
+      - name: Install dependencies
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
+            export YARN_ENABLE_HARDENED_MODE=false
+          fi
+          yarn install --immutable
       - run: yarn turbo tsc
       - name: Run esm integration tests
         run: |
@@ -273,6 +329,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 2
       - name: Cache turbo build setup
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -284,7 +341,16 @@ jobs:
         with:
           node-version: 24
           cache: 'yarn'
-      - run: yarn install --immutable
+      # Yarn enables hardened mode on public PRs, re-verifying every package
+      # resolution against the registry (+3-7s per job). When yarn.lock and
+      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
+      # trusted and --immutable still rejects any package.json drift.
+      - name: Install dependencies
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
+            export YARN_ENABLE_HARDENED_MODE=false
+          fi
+          yarn install --immutable
       - run: yarn turbo tsc
       - name: Run cjs integration tests
         run: |
