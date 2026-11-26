@@ -186,20 +186,21 @@ jobs:
             export YARN_ENABLE_HARDENED_MODE=false
           fi
           yarn install --immutable
-      # Coverage runs on one matrix cell only; every other cell runs bare.
-      # The per-OS coverage parity check measured identical coverage on linux
-      # and windows, so a single ubuntu cell alone sees everything. On PR runs,
-      # non-coverage cells run only suites affected by the PR's changes via
-      # `vitest --changed HEAD^1` (thanks to fetch-depth: 2 above; config and
-      # package.json changes still trigger the full suite via forceRerunTriggers).
-      # Vitest and Jest (--runInBand for its two small CJS adapter suites) run
-      # in parallel via direct node invocation to skip Yarn's CLI startup
-      # overhead and overlap Jest behind Vitest; their coverage output
-      # directories are disjoint.
+      # Coverage runs on one matrix cell only (ubuntu node 24, which is
+      # pre-cached in the runner toolcache so coverage overlaps with node 26's
+      # download); every other cell runs bare. The per-OS coverage parity check
+      # measured identical coverage on linux and windows, so a single ubuntu cell
+      # alone sees everything. On PR runs, non-coverage cells run only suites
+      # affected by the PR's changes via `vitest --changed HEAD^1` (thanks to
+      # fetch-depth: 2 above; config and package.json changes still trigger the
+      # full suite via forceRerunTriggers). Vitest and Jest (--runInBand for its
+      # two small CJS adapter suites) run in parallel via direct node invocation
+      # to skip Yarn's CLI startup overhead and overlap Jest behind Vitest; their
+      # coverage output directories are disjoint.
       - name: Run unit tests (vitest + jest)
         shell: bash
         env:
-          COVERAGE: ${{ matrix.os == 'ubuntu-latest' && matrix.node-version == 26 }}
+          COVERAGE: ${{ matrix.os == 'ubuntu-latest' && matrix.node-version == 24 }}
         run: |
           vitest_args=(--run)
           jest_args=(--runInBand)
@@ -224,7 +225,7 @@ jobs:
 
           exit $((vitest_rc || jest_rc))
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
-        if: matrix.os == 'ubuntu-latest' && matrix.node-version == 26
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == 24
         with:
           # Each tool writes its own subdirectory (vitest: coverage/vitest,
           # jest: coverage/jest) and emits istanbul JSON; coverage ownership
