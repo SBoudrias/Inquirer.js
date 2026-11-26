@@ -46,7 +46,7 @@ jobs:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable
+      - run: corepack enable yarn
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
@@ -69,8 +69,11 @@ jobs:
           # Freshly isolated workspaces have no lockfile, so hardened lockfile
           # verification adds resolution overhead for nothing.
           YARN_ENABLE_HARDENED_MODE: false
+          YARN_ENABLE_CACHE_CLEAN: false
         run: |
           DIR=$(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/deno-integration-tests)
+          mkdir -p "$DIR/.yarn"
+          cp -al "$PWD/.yarn/cache" "$DIR/.yarn/cache"
           cd "$DIR"
           yarn install
           # Deno runs tests directly without Yarn, so exclude .yarn/ from the artifact.
@@ -105,7 +108,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 2
-      - run: corepack enable
+      - run: corepack enable yarn
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
@@ -250,13 +253,13 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 2
-      - name: Cache turbo build setup
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - name: Restore turbo build cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable
+      - run: corepack enable yarn
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
@@ -275,8 +278,12 @@ jobs:
       - name: Test isolated build of @inquirer/demo
         env:
           YARN_ENABLE_HARDENED_MODE: false
+          YARN_ENABLE_CACHE_CLEAN: false
         run: |
-          cd $(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/demo)
+          DIR=$(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/demo)
+          mkdir -p "$DIR/.yarn"
+          cp -al "$PWD/.yarn/cache" "$DIR/.yarn/cache"
+          cd "$DIR"
           yarn install
           yarn tsc
           cd -
@@ -290,13 +297,13 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 2
-      - name: Cache turbo build setup
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - name: Restore turbo build cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable
+      - run: corepack enable yarn
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
@@ -328,13 +335,13 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 2
-      - name: Cache turbo build setup
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - name: Restore turbo build cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable
+      - run: corepack enable yarn
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
@@ -353,8 +360,12 @@ jobs:
       - name: Run esm integration tests
         env:
           YARN_ENABLE_HARDENED_MODE: false
+          YARN_ENABLE_CACHE_CLEAN: false
         run: |
-          cd $(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/esm-integration-tests)
+          DIR=$(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/esm-integration-tests)
+          mkdir -p "$DIR/.yarn"
+          cp -al "$PWD/.yarn/cache" "$DIR/.yarn/cache"
+          cd "$DIR"
           yarn install
           yarn test
           cd -
@@ -368,13 +379,13 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 2
-      - name: Cache turbo build setup
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - name: Restore turbo build cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable
+      - run: corepack enable yarn
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
@@ -393,8 +404,12 @@ jobs:
       - name: Run cjs integration tests
         env:
           YARN_ENABLE_HARDENED_MODE: false
+          YARN_ENABLE_CACHE_CLEAN: false
         run: |
-          cd $(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/cjs-integration-tests)
+          DIR=$(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/cjs-integration-tests)
+          mkdir -p "$DIR/.yarn"
+          cp -al "$PWD/.yarn/cache" "$DIR/.yarn/cache"
+          cd "$DIR"
           yarn install
           yarn test
           cd -
