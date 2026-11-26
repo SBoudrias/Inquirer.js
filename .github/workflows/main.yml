@@ -162,33 +162,43 @@ jobs:
             export YARN_ENABLE_HARDENED_MODE=false
           fi
           yarn install --immutable
-      # Coverage runs on one matrix cell only; every other cell runs the
-      # suites bare. The per-OS coverage parity check measured identical
-      # coverage on linux and windows (54 files, 1850/1934 vitest and
-      # 193/217 jest statements on each OS), so a single ubuntu cell alone
-      # sees everything. Bare vitest is 10-16s on windows instead of 28s.
-      - run: yarn vitest --run --coverage
-        if: matrix.os == 'ubuntu-latest' && matrix.node-version == 26
-      # PR runs: only the suites affected by the PR's changes. vitest's
-      # --changed diffs against HEAD^1 — on pull_request, HEAD is the PR
-      # merge ref and its first parent is the base branch head (present
-      # thanks to fetch-depth: 2 above), so the diff is exactly the PR's
-      # changes — then keeps the suites importing them through the real
-      # module graph, cross-package imports included. A diff with no test
-      # impact (docs, .github) runs zero suites and exits 0; changes to a
-      # package.json or a vitest/vite/tsconfig config rerun the full suite
-      # (forceRerunTriggers in vitest.config.ts); a deleted file is caught
-      # by the Compile job's type-check. push runs keep the full matrix.
-      - run: yarn vitest --run --changed HEAD^1
-        if: github.event_name == 'pull_request' && !(matrix.os == 'ubuntu-latest' && matrix.node-version == 26)
-      - run: yarn vitest --run
-        if: github.event_name != 'pull_request' && !(matrix.os == 'ubuntu-latest' && matrix.node-version == 26)
-      # Jest runs the two CJS adapter suites (~2s bare); they stay full in
-      # all cells — a second selector for them wouldn't pay for itself.
-      - run: yarn jest --coverage
-        if: matrix.os == 'ubuntu-latest' && matrix.node-version == 26
-      - run: yarn jest
-        if: ${{ !(matrix.os == 'ubuntu-latest' && matrix.node-version == 26) }}
+      # Coverage runs on one matrix cell only; every other cell runs bare.
+      # The per-OS coverage parity check measured identical coverage on linux
+      # and windows, so a single ubuntu cell alone sees everything. On PR runs,
+      # non-coverage cells run only suites affected by the PR's changes via
+      # `vitest --changed HEAD^1` (thanks to fetch-depth: 2 above; config and
+      # package.json changes still trigger the full suite via forceRerunTriggers).
+      # Vitest and Jest (--runInBand for its two small CJS adapter suites) run
+      # in parallel via direct node invocation to skip Yarn's CLI startup
+      # overhead and overlap Jest behind Vitest; their coverage output
+      # directories are disjoint.
+      - name: Run unit tests (vitest + jest)
+        shell: bash
+        env:
+          COVERAGE: ${{ matrix.os == 'ubuntu-latest' && matrix.node-version == 26 }}
+        run: |
+          vitest_args=(--run)
+          jest_args=(--runInBand)
+          if [ "$COVERAGE" = "true" ]; then
+            vitest_args+=(--coverage)
+            jest_args+=(--coverage)
+          elif [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            vitest_args+=(--changed HEAD^1)
+          fi
+
+          jest_log=$(mktemp)
+          node ./node_modules/jest/bin/jest.js "${jest_args[@]}" >"$jest_log" 2>&1 &
+          jest_pid=$!
+
+          vitest_rc=0
+          node ./node_modules/vitest/vitest.mjs "${vitest_args[@]}" || vitest_rc=$?
+
+          jest_rc=0
+          wait "$jest_pid" || jest_rc=$?
+          cat "$jest_log"
+          rm -f "$jest_log"
+
+          exit $((vitest_rc || jest_rc))
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: matrix.os == 'ubuntu-latest' && matrix.node-version == 26
         with:
