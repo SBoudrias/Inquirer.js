@@ -237,193 +237,104 @@ jobs:
           # subdirectory at start, so run order doesn't matter.
           files: coverage/vitest/coverage-final.json,coverage/jest/coverage-final.json
 
-  # The four e2e suites each run in their own isolated install (spawned by
-  # `yarn isolate-monorepo-package`) and don't read each other's output, so
-  # they run as four parallel jobs to overlap their fixed setup instead of
-  # queuing behind each other. Each builds first: dist/ is packed into the
-  # tarballs that the isolated suite below consumes. The full-repo
-  # type-check (`yarn tsc` also runs `tsc -p tsconfig.json`) lives in the
-  # Compile job only, so the validation is not duplicated here.
-  e2e-demo-yarn:
-    runs-on: ubuntu-latest
-    env:
-      YARN_ENABLE_IMMUTABLE_INSTALLS: false
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 2
-      - name: Restore turbo build cache
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable yarn
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 24
-          cache: 'yarn'
-      # Yarn enables hardened mode on public PRs, re-verifying every package
-      # resolution against the registry (+3-7s per job). When yarn.lock and
-      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
-      # trusted and --immutable still rejects any package.json drift.
-      - name: Install dependencies
-        run: |
-          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
-            export YARN_ENABLE_HARDENED_MODE=false
-          fi
-          yarn install --immutable
-      - run: yarn turbo tsc
-      - name: Test isolated build of @inquirer/demo
-        env:
-          YARN_ENABLE_HARDENED_MODE: false
-          YARN_ENABLE_CACHE_CLEAN: false
-        run: |
-          DIR=$(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/demo)
-          mkdir -p "$DIR/.yarn"
-          cp -al "$PWD/.yarn/cache" "$DIR/.yarn/cache"
-          cd "$DIR"
-          yarn install
-          yarn tsc
-          cd -
-
-  e2e-demo-npm:
-    runs-on: ubuntu-latest
-    env:
-      YARN_ENABLE_IMMUTABLE_INSTALLS: false
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 2
-      - name: Restore turbo build cache
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable yarn
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 24
-          cache: 'yarn'
-      # Yarn enables hardened mode on public PRs, re-verifying every package
-      # resolution against the registry (+3-7s per job). When yarn.lock and
-      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
-      # trusted and --immutable still rejects any package.json drift.
-      - name: Install dependencies
-        run: |
-          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
-            export YARN_ENABLE_HARDENED_MODE=false
-          fi
-          yarn install --immutable
-      - run: yarn turbo tsc
-      - name: Test isolated build of @inquirer/demo (with npm)
-        run: |
-          cd $(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/demo)
-          npm install --no-audit --no-fund --prefer-offline
-          npm run tsc
-          cd -
-
-  e2e-esm-integration:
-    runs-on: ubuntu-latest
-    env:
-      YARN_ENABLE_IMMUTABLE_INSTALLS: false
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 2
-      - name: Restore turbo build cache
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable yarn
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 24
-          cache: 'yarn'
-      # Yarn enables hardened mode on public PRs, re-verifying every package
-      # resolution against the registry (+3-7s per job). When yarn.lock and
-      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
-      # trusted and --immutable still rejects any package.json drift.
-      - name: Install dependencies
-        run: |
-          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
-            export YARN_ENABLE_HARDENED_MODE=false
-          fi
-          yarn install --immutable
-      - run: yarn turbo tsc
-      - name: Run esm integration tests
-        env:
-          YARN_ENABLE_HARDENED_MODE: false
-          YARN_ENABLE_CACHE_CLEAN: false
-        run: |
-          DIR=$(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/esm-integration-tests)
-          mkdir -p "$DIR/.yarn"
-          cp -al "$PWD/.yarn/cache" "$DIR/.yarn/cache"
-          cd "$DIR"
-          yarn install
-          yarn test
-          cd -
-
-  e2e-cjs-integration:
-    runs-on: ubuntu-latest
-    env:
-      YARN_ENABLE_IMMUTABLE_INSTALLS: false
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 2
-      - name: Restore turbo build cache
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable yarn
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 24
-          cache: 'yarn'
-      # Yarn enables hardened mode on public PRs, re-verifying every package
-      # resolution against the registry (+3-7s per job). When yarn.lock and
-      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
-      # trusted and --immutable still rejects any package.json drift.
-      - name: Install dependencies
-        run: |
-          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
-            export YARN_ENABLE_HARDENED_MODE=false
-          fi
-          yarn install --immutable
-      - run: yarn turbo tsc
-      - name: Run cjs integration tests
-        env:
-          YARN_ENABLE_HARDENED_MODE: false
-          YARN_ENABLE_CACHE_CLEAN: false
-        run: |
-          DIR=$(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/cjs-integration-tests)
-          mkdir -p "$DIR/.yarn"
-          cp -al "$PWD/.yarn/cache" "$DIR/.yarn/cache"
-          cd "$DIR"
-          yarn install
-          yarn test
-          cd -
-
-  # Required check (main ruleset): keeps the 'End to End build tests' name
-  # reporting while the suites themselves run in the four e2e jobs above.
-  # It needs no runner work of its own: it joins the suite results.
+  # Required check (main ruleset: 'End to End build tests'). The four isolated
+  # suites each create their own temp directory via isolate-monorepo-package and
+  # don't share mutable state, so running them concurrently inside one job shares
+  # the repo checkout/install/build setup once instead of paying 4x setup plus a
+  # downstream join job. Each suite's output is buffered and printed in its own
+  # collapsible log group.
   e2e:
     name: End to End build tests
     runs-on: ubuntu-latest
-    needs: [e2e-demo-yarn, e2e-demo-npm, e2e-esm-integration, e2e-cjs-integration]
+    env:
+      YARN_ENABLE_IMMUTABLE_INSTALLS: false
     steps:
-      - name: All e2e suites passed
-        run: echo "The e2e suites passed; this job reports their result as the required 'End to End build tests' check."
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Restore turbo build cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-turbo-
+      - name: Cache npm download cache for demo e2e
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-e2e-npm-${{ hashFiles('packages/demo/package.json', 'yarn.lock') }}
+          restore-keys: ${{ runner.os }}-e2e-npm-
+      - run: corepack enable yarn
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: 'yarn'
+      # Yarn enables hardened mode on public PRs, re-verifying every package
+      # resolution against the registry (+3-7s per job). When yarn.lock and
+      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
+      # trusted and --immutable still rejects any package.json drift.
+      - name: Install dependencies
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
+            export YARN_ENABLE_HARDENED_MODE=false
+          fi
+          yarn install --immutable
+      - name: Build packages
+        run: ./node_modules/.bin/turbo tsc
+      - name: Run isolated e2e suites in parallel
+        env:
+          YARN_ENABLE_HARDENED_MODE: false
+          YARN_ENABLE_CACHE_CLEAN: false
+        run: |
+          log_dir=$(mktemp -d)
+          root_dir="$PWD"
+
+          run_yarn_suite() {
+            local name="$1" pkg="$2" script="$3"
+            (
+              set -euo pipefail
+              dir=$(node ./tools/isolate-monorepo-package/src/bin.ts "$pkg")
+              mkdir -p "$dir/.yarn"
+              cp -al "$root_dir/.yarn/cache" "$dir/.yarn/cache"
+              cd "$dir"
+              yarn install
+              yarn "$script"
+            ) >"$log_dir/$name.log" 2>&1
+          }
+
+          run_npm_suite() {
+            local name="$1" pkg="$2"
+            (
+              set -euo pipefail
+              dir=$(node ./tools/isolate-monorepo-package/src/bin.ts "$pkg")
+              cd "$dir"
+              npm install --no-audit --no-fund --prefer-offline
+              npm run tsc
+            ) >"$log_dir/$name.log" 2>&1
+          }
+
+          run_yarn_suite demo-yarn @inquirer/demo tsc & p1=$!
+          run_npm_suite demo-npm @inquirer/demo & p2=$!
+          run_yarn_suite esm @inquirer/esm-integration-tests test & p3=$!
+          run_yarn_suite cjs @inquirer/cjs-integration-tests test & p4=$!
+
+          rc=0
+          names=(demo-yarn demo-npm esm cjs)
+          pids=($p1 $p2 $p3 $p4)
+          for i in "${!pids[@]}"; do
+            name="${names[$i]}"
+            suite_rc=0
+            wait "${pids[$i]}" || suite_rc=$?
+            echo "::group::e2e: $name (exit $suite_rc)"
+            cat "$log_dir/$name.log"
+            echo "::endgroup::"
+            if [ "$suite_rc" -ne 0 ]; then
+              rc=1
+            fi
+          done
+          rm -rf "$log_dir"
+          exit "$rc"
 
   deno:
     name: Deno Tests (${{ matrix.deno-version }})
