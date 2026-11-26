@@ -151,22 +151,30 @@ jobs:
             node-version: 26
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: runner.os != 'Windows'
         with:
           persist-credentials: false
           # Two commits deep so that, on pull_request runs, the PR merge ref
           # brings its first parent (the base branch head) along: vitest's
           # --changed below diffs against it.
           fetch-depth: 2
-      # The windows runner image's C:\npm\prefix yarn shims resolve to yarn
-      # 1.x, so corepack must overwrite them in place. The old workaround
-      # reinstalled corepack with npm (~10s per windows job); overwriting
-      # the shims directly costs 3-4s. The image's corepack validates the
-      # pinned yarn's signature fine (#2062 no longer reproduces), so
-      # integrity checking stays on.
-      - run: corepack enable --install-directory "C:\npm\prefix"
-        if: runner.os == 'Windows'
-      - run: corepack enable
+      - run: corepack enable yarn
         if: runner.os != 'Windows'
+      # On Windows, actions/checkout runs 6+ `git submodule foreach` spawns (in
+      # setup, teardown, and post-cleanup) totaling ~9-13s for a 1s fetch, and
+      # overwriting the stale yarn 1.x shims in C:\npm\prefix takes another 3-4s.
+      # Overlap the shim overwrite with a direct depth-2 git fetch of GITHUB_SHA
+      # (no auth persisted, no post-cleanup step).
+      - name: Checkout and enable corepack (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          corepack enable --install-directory 'C:\npm\prefix' yarn &
+          corepack_pid=$!
+          git init -q
+          git -c protocol.version=2 fetch -q --no-tags --depth=2 "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git" "$GITHUB_SHA"
+          git checkout -q --force FETCH_HEAD
+          wait "$corepack_pid"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ matrix.node-version }}
