@@ -1,13 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@inquirer/testing';
-import { withResolver } from '@inquirer/type';
 import { cursorTo } from '@inquirer/ansi';
 import { stripVTControlCharacters } from 'node:util';
 import password from './src/index.ts';
 
 describe('password prompt', () => {
   it('discards keys typed during validation before restoring a rejected answer', async () => {
-    const { promise, resolve } = withResolver<string>();
+    const { promise, resolve } = Promise.withResolvers<string>();
     const { answer, events, nextRender } = await render(password, {
       message: 'Value',
       validate: (value) => value !== '12' || promise,

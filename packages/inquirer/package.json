@@ -77,7 +77,7 @@
     "@inquirer/core": "^12.1.1",
     "@inquirer/prompts": "^8.8.1",
     "@inquirer/type": "^4.3.1",
-    "mute-stream": "^3.0.0",
+    "mute-stream": "^4.0.0",
     "run-async": "^4.0.6"
   },
   "devDependencies": {
@@ -95,6 +95,6 @@
     }
   },
   "engines": {
-    "node": ">=23.5.0 || ^22.13.0 || ^20.17.0"
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
   }
 }

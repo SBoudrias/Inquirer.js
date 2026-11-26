@@ -7,7 +7,7 @@
     "types": ["node", "jest"],
     // tinybench (vitest dependency) types reference DOM lib types like
     // `DOMHighResTimeStamp`, and the shared config keeps skipLibCheck off.
-    "lib": ["es2023", "dom"]
+    "lib": ["es2024", "dom"]
   },
   "include": ["src"],
   "exclude": ["src/**/*.vitest.ts", "src/**/*.jest.ts"]

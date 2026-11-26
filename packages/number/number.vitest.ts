@@ -1,11 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@inquirer/testing';
-import { withResolver } from '@inquirer/type';
 import number from './src/index.ts';
 
 describe('number prompt', () => {
   it('discards keys typed during validation before restoring a rejected answer', async () => {
-    const { promise, resolve } = withResolver<string>();
+    const { promise, resolve } = Promise.withResolvers<string>();
     const { answer, events, nextRender } = await render(number, {
       message: 'Value',
       validate: (value?: number) => value !== 12 || promise,

@@ -1,7 +1,7 @@
 {
   "extends": "@sindresorhus/tsconfig",
   "compilerOptions": {
-    "lib": ["es2023"],
+    "lib": ["es2024"],
     "skipLibCheck": false,
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,

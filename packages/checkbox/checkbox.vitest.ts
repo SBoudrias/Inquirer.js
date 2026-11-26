@@ -1,6 +1,5 @@
 import { afterEach, describe, it, expect, expectTypeOf, vi } from 'vitest';
 import { render } from '@inquirer/testing';
-import { withResolver } from '@inquirer/type';
 import { ValidationError } from '@inquirer/core';
 import checkbox, { Separator } from './src/index.ts';
 
@@ -805,7 +804,8 @@ describe('checkbox prompt', () => {
 
   it('ignores keypresses while validation is pending', async () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'setInterval'] });
-    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const { promise: validation, resolve: resolveValidation } =
+      Promise.withResolvers<boolean>();
     const validate = vi.fn(() => validation);
     const { answer, events, getScreen, nextRender } = await render(checkbox, {
       message: 'Select packages',
@@ -851,7 +851,8 @@ describe('checkbox prompt', () => {
   });
 
   it('keeps the submitted answer when keys are pressed while validation is pending', async () => {
-    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const { promise: validation, resolve: resolveValidation } =
+      Promise.withResolvers<boolean>();
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Pick modules',
       choices: ['parser', 'writer'],
@@ -869,7 +870,8 @@ describe('checkbox prompt', () => {
   });
 
   it('allows selecting a choice after a pending validation rejects an empty selection', async () => {
-    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const { promise: validation, resolve: resolveValidation } =
+      Promise.withResolvers<boolean>();
     const validate = vi.fn().mockReturnValueOnce(validation).mockReturnValueOnce(true);
     const { answer, events, getScreen, nextRender } = await render(checkbox, {
       message: 'Pick modules',
@@ -899,7 +901,8 @@ describe('checkbox prompt', () => {
   });
 
   it('includes disabled checked choices while validation is pending', async () => {
-    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const { promise: validation, resolve: resolveValidation } =
+      Promise.withResolvers<boolean>();
     const validate = vi.fn(() => validation);
     const { answer, events, getScreen } = await render(checkbox, {
       message: 'Pick modules',
@@ -924,7 +927,8 @@ describe('checkbox prompt', () => {
 
   it('can abort while validation is pending', async () => {
     const controller = new AbortController();
-    const { promise: validation, resolve: resolveValidation } = withResolver<boolean>();
+    const { promise: validation, resolve: resolveValidation } =
+      Promise.withResolvers<boolean>();
     const { answer, events } = await render(
       checkbox,
       { message: 'Pick modules', choices: ['parser'], validate: () => validation },
@@ -940,7 +944,7 @@ describe('checkbox prompt', () => {
   });
 
   it('allows changing the selection after a pending validation fails', async () => {
-    const { promise: validation, resolve: resolveValidation } = withResolver<
+    const { promise: validation, resolve: resolveValidation } = Promise.withResolvers<
       boolean | string
     >();
     const validate = vi.fn().mockReturnValueOnce(validation).mockReturnValueOnce(true);
