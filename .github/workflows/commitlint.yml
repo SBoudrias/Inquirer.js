@@ -57,5 +57,5 @@ jobs:
                    | .message | split("\n")[0]
                  else empty end' "$GITHUB_EVENT_PATH" |
             while IFS= read -r subject; do
-              printf '%s\n' "$subject" | node ./node_modules/@commitlint/cli/cli.js
+              printf '%s\n' "$subject" | commitlint
             done

@@ -59,7 +59,7 @@ jobs:
           YARN_ENABLE_HARDENED_MODE: false
           YARN_ENABLE_CACHE_CLEAN: false
         run: |
-          DIR=$(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/deno-integration-tests)
+          DIR=$(isolate-monorepo-package @inquirer/deno-integration-tests)
           if [ -d "$PWD/.yarn/cache" ]; then
             mkdir -p "$DIR/.yarn"
             cp -al "$PWD/.yarn/cache" "$DIR/.yarn/cache"
@@ -101,7 +101,6 @@ jobs:
       - uses: $/.github/actions/setup-node
       - name: Run linters in parallel
         run: |
-          PATH="$PWD/node_modules/.bin:$PATH"
           oxlint . & p1=$!
           oxfmt --check . & p2=$!
           eslint . & p3=$!
@@ -159,9 +158,10 @@ jobs:
       # affected by the PR's changes via `vitest --changed HEAD^1` (thanks to
       # fetch-depth: 2 above; config and package.json changes still trigger the
       # full suite via forceRerunTriggers). Vitest and Jest (--runInBand for its
-      # two small CJS adapter suites) run in parallel via direct node invocation
-      # to skip Yarn's CLI startup overhead and overlap Jest behind Vitest; their
-      # coverage output directories are disjoint.
+      # two small CJS adapter suites) run directly in parallel (via
+      # node_modules/.bin on PATH) to skip Yarn's CLI startup overhead and
+      # overlap Jest behind Vitest; their coverage output directories are
+      # disjoint.
       - name: Run unit tests (vitest + jest)
         shell: bash
         env:
@@ -177,11 +177,11 @@ jobs:
           fi
 
           jest_log=$(mktemp)
-          node ./node_modules/jest/bin/jest.js "${jest_args[@]}" >"$jest_log" 2>&1 &
+          jest "${jest_args[@]}" >"$jest_log" 2>&1 &
           jest_pid=$!
 
           vitest_rc=0
-          node ./node_modules/vitest/vitest.mjs "${vitest_args[@]}" || vitest_rc=$?
+          vitest "${vitest_args[@]}" || vitest_rc=$?
 
           jest_rc=0
           wait "$jest_pid" || jest_rc=$?
@@ -231,7 +231,7 @@ jobs:
         with:
           enable-yarn: 'true'
       - name: Build packages
-        run: ./node_modules/.bin/turbo tsc
+        run: turbo tsc
       - name: Run isolated e2e suites in parallel
         env:
           YARN_ENABLE_HARDENED_MODE: false
@@ -244,7 +244,7 @@ jobs:
             local name="$1" pkg="$2" script="$3"
             (
               set -euo pipefail
-              dir=$(node ./tools/isolate-monorepo-package/src/bin.ts "$pkg")
+              dir=$(isolate-monorepo-package "$pkg")
               if [ -d "$root_dir/.yarn/cache" ]; then
                 mkdir -p "$dir/.yarn"
                 cp -al "$root_dir/.yarn/cache" "$dir/.yarn/cache"
@@ -259,7 +259,7 @@ jobs:
             local name="$1" pkg="$2"
             (
               set -euo pipefail
-              dir=$(node ./tools/isolate-monorepo-package/src/bin.ts "$pkg")
+              dir=$(isolate-monorepo-package "$pkg")
               cd "$dir"
               npm install --no-audit --no-fund --prefer-offline
               npm run tsc

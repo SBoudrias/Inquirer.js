@@ -95,3 +95,9 @@ runs:
       with:
         path: .yarn/cache
         key: ${{ steps.cache-yarn.outputs.cache-primary-key }}
+
+    # Expose workspace binaries (vitest, jest, oxlint, commitlint, turbo,
+    # isolate-monorepo-package, ...) on PATH for all subsequent steps.
+    - name: Add node_modules/.bin to PATH
+      shell: bash
+      run: node -e "require('node:fs').appendFileSync(process.env.GITHUB_PATH, require('node:path').resolve('node_modules/.bin') + '\n')"
