@@ -1,0 +1,97 @@
+name: 'Setup Node.js and dependencies'
+description: >-
+  Install Node.js and restore cached node_modules (falling back to a cached
+  Yarn install on cache miss).
+
+inputs:
+  node-version:
+    description: 'Node.js version to install'
+    required: false
+    default: '24'
+  enable-yarn:
+    description: 'Ensure Corepack yarn shim is enabled even on a node_modules cache hit'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Restore node_modules cache
+      id: cache-node-modules
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: |
+          node_modules
+          packages/*/node_modules
+          integration/*/node_modules
+          tools/*/node_modules
+          .yarn/install-state.gz
+        # Key hashes yarn.lock, .yarnrc.yml, and every workspace manifest so any
+        # dependency or workspace edit misses and runs `yarn install --immutable`.
+        # With enableScripts: false and N-API prebuilds on native deps, the
+        # linked tree is Node-version agnostic and shared across matrix cells.
+        # No restore-keys: reconciling a stale node_modules is slower than a
+        # clean install from the Yarn download cache.
+        key: node-modules-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('yarn.lock', '.yarnrc.yml', 'package.json', 'packages/*/package.json', 'integration/*/package.json', 'tools/*/package.json') }}
+
+    # Enable Corepack before actions/setup-node so the runner's system Corepack
+    # shim is wired even when setup-node installs Node >= 25 (no bundled Corepack).
+    - name: Enable Corepack yarn shim (Unix)
+      if: runner.os != 'Windows' && (inputs.enable-yarn == 'true' || steps.cache-node-modules.outputs.cache-hit != 'true')
+      shell: bash
+      run: corepack enable yarn
+
+    - name: Enable Corepack yarn shim (Windows)
+      if: runner.os == 'Windows' && (inputs.enable-yarn == 'true' || steps.cache-node-modules.outputs.cache-hit != 'true')
+      shell: bash
+      run: corepack enable --install-directory 'C:\npm\prefix' yarn
+
+    - name: Setup Node.js
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version: ${{ inputs.node-version }}
+        package-manager-cache: false
+
+    - name: Restore Yarn download cache
+      id: cache-yarn
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: .yarn/cache
+        key: yarn-cache-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          yarn-cache-${{ runner.os }}-${{ runner.arch }}-
+
+    # Yarn enables hardened mode on public PRs, re-verifying every package
+    # resolution against the registry (+3-7s). When yarn.lock and .yarnrc.yml
+    # are unchanged from the base commit, the lockfile is already trusted and
+    # --immutable still rejects any package.json drift.
+    - name: Install dependencies
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml 2>/dev/null; then
+          export YARN_ENABLE_HARDENED_MODE=false
+        fi
+        yarn install --immutable
+
+    # Save immediately after install (before test/build steps write into
+    # node_modules/.vite or caches) so cache-hit jobs skip post-job saves.
+    - name: Save node_modules cache
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: |
+          node_modules
+          packages/*/node_modules
+          integration/*/node_modules
+          tools/*/node_modules
+          .yarn/install-state.gz
+        key: ${{ steps.cache-node-modules.outputs.cache-primary-key }}
+
+    - name: Save Yarn download cache
+      if: steps.cache-node-modules.outputs.cache-hit != 'true' && steps.cache-yarn.outputs.cache-hit != 'true'
+      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: .yarn/cache
+        key: ${{ steps.cache-yarn.outputs.cache-primary-key }}

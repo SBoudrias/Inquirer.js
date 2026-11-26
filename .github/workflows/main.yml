@@ -46,21 +46,9 @@ jobs:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: ${{ runner.os }}-turbo-
-      - run: corepack enable yarn
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - uses: $/.github/actions/setup-node
         with:
-          node-version: 24
-          cache: 'yarn'
-      # Yarn enables hardened mode on public PRs, re-verifying every package
-      # resolution against the registry (+3-7s per job). When yarn.lock and
-      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
-      # trusted and --immutable still rejects any package.json drift.
-      - name: Install dependencies
-        run: |
-          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
-            export YARN_ENABLE_HARDENED_MODE=false
-          fi
-          yarn install --immutable
+          enable-yarn: 'true'
       - name: Typescript
         run: yarn tsc
       - name: Pack isolated deno test project
@@ -72,8 +60,10 @@ jobs:
           YARN_ENABLE_CACHE_CLEAN: false
         run: |
           DIR=$(node ./tools/isolate-monorepo-package/src/bin.ts @inquirer/deno-integration-tests)
-          mkdir -p "$DIR/.yarn"
-          cp -al "$PWD/.yarn/cache" "$DIR/.yarn/cache"
+          if [ -d "$PWD/.yarn/cache" ]; then
+            mkdir -p "$DIR/.yarn"
+            cp -al "$PWD/.yarn/cache" "$DIR/.yarn/cache"
+          fi
           cd "$DIR"
           yarn install
           # Deno runs tests directly without Yarn, so exclude .yarn/ from the artifact.
@@ -108,21 +98,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 2
-      - run: corepack enable yarn
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 24
-          cache: 'yarn'
-      # Yarn enables hardened mode on public PRs, re-verifying every package
-      # resolution against the registry (+3-7s per job). When yarn.lock and
-      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
-      # trusted and --immutable still rejects any package.json drift.
-      - name: Install dependencies
-        run: |
-          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
-            export YARN_ENABLE_HARDENED_MODE=false
-          fi
-          yarn install --immutable
+      - uses: $/.github/actions/setup-node
       - name: Run linters in parallel
         run: |
           PATH="$PWD/node_modules/.bin:$PATH"
@@ -161,34 +137,20 @@ jobs:
           # brings its first parent (the base branch head) along: vitest's
           # --changed below diffs against it.
           fetch-depth: 2
-      - run: corepack enable yarn
-        if: runner.os != 'Windows'
       # On Windows, actions/checkout runs 6+ `git submodule foreach` spawns (in
-      # setup, teardown, and post-cleanup) totaling ~9-13s for a 1s fetch, and
-      # overwriting the stale yarn 1.x shims in C:\npm\prefix takes another 3-4s.
-      # Overlap the shim overwrite with a direct depth-2 git fetch of GITHUB_SHA
-      # (no auth persisted, no post-cleanup step).
-      - name: Checkout and enable corepack (Windows)
+      # setup, teardown, and post-cleanup) totaling ~9-13s for a 1s fetch. Use
+      # a direct depth-2 git fetch of GITHUB_SHA instead (no auth persisted, no
+      # post-cleanup step).
+      - name: Checkout (Windows)
         if: runner.os == 'Windows'
         shell: bash
         run: |
-          corepack enable --install-directory 'C:\npm\prefix' yarn &
-          corepack_pid=$!
           git init -q
           git -c protocol.version=2 fetch -q --no-tags --depth=2 "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git" "$GITHUB_SHA"
           git checkout -q --force FETCH_HEAD
-          wait "$corepack_pid"
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - uses: $/.github/actions/setup-node
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
-      - name: Install dependencies
-        shell: bash
-        run: |
-          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
-            export YARN_ENABLE_HARDENED_MODE=false
-          fi
-          yarn install --immutable
       # Coverage runs on one matrix cell only (ubuntu node 24, which is
       # pre-cached in the runner toolcache so coverage overlaps with node 26's
       # download); every other cell runs bare. The per-OS coverage parity check
@@ -265,21 +227,9 @@ jobs:
           path: ~/.npm
           key: ${{ runner.os }}-e2e-npm-${{ hashFiles('packages/demo/package.json', 'yarn.lock') }}
           restore-keys: ${{ runner.os }}-e2e-npm-
-      - run: corepack enable yarn
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - uses: $/.github/actions/setup-node
         with:
-          node-version: 24
-          cache: 'yarn'
-      # Yarn enables hardened mode on public PRs, re-verifying every package
-      # resolution against the registry (+3-7s per job). When yarn.lock and
-      # .yarnrc.yml are unchanged from the base commit, the lockfile is already
-      # trusted and --immutable still rejects any package.json drift.
-      - name: Install dependencies
-        run: |
-          if [ "$GITHUB_EVENT_NAME" = "pull_request" ] && git diff --quiet HEAD^1 -- yarn.lock .yarnrc.yml; then
-            export YARN_ENABLE_HARDENED_MODE=false
-          fi
-          yarn install --immutable
+          enable-yarn: 'true'
       - name: Build packages
         run: ./node_modules/.bin/turbo tsc
       - name: Run isolated e2e suites in parallel
@@ -295,8 +245,10 @@ jobs:
             (
               set -euo pipefail
               dir=$(node ./tools/isolate-monorepo-package/src/bin.ts "$pkg")
-              mkdir -p "$dir/.yarn"
-              cp -al "$root_dir/.yarn/cache" "$dir/.yarn/cache"
+              if [ -d "$root_dir/.yarn/cache" ]; then
+                mkdir -p "$dir/.yarn"
+                cp -al "$root_dir/.yarn/cache" "$dir/.yarn/cache"
+              fi
               cd "$dir"
               yarn install
               yarn "$script"
