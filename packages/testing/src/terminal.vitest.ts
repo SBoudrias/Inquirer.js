@@ -27,4 +27,16 @@ describe('interpretTerminalOutput()', () => {
     const output = await interpretTerminalOutput('? Name\r? Name John\r✔ Name John');
     expect(output).toBe('✔ Name John');
   });
+
+  it('preserves multi-line output and cursor-up rewrites beyond 24 rows', async () => {
+    const lines = Array.from({ length: 40 }, (_, i) => `line ${i + 1}`);
+    const output = await interpretTerminalOutput(
+      `${lines.join('\n')}\x1b[2A\r\x1b[2Kreplaced`,
+    );
+    const result = output.split('\n');
+    expect(result).toHaveLength(40);
+    expect(result[0]).toBe('line 1');
+    expect(result[37]).toBe('replaced');
+    expect(result[39]).toBe('line 40');
+  });
 });
