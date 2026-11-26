@@ -29,7 +29,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 2
-      - uses: $/.github/actions/setup-node
+      - uses: SBoudrias/fast-setup-node@0bdcad6b060aae1074ef7e3a1fd371e1b302648a # v1
       # Pulls the subjects to lint out of the GitHub event payload the
       # runner exposes at $GITHUB_EVENT_PATH: the PR title on pull_request
       # runs (the repo squash-merges, so titles become the subjects on
