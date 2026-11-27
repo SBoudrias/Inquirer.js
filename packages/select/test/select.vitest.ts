@@ -1241,7 +1241,7 @@ describe('select prompt', () => {
           3. Three
           4. Four
 
-        ↑↓ navigate • ⏎ select"
+        ↑↓ navigate • ⏎ select • gg/G first/last"
       `);
 
       // Vim bindings
@@ -1319,7 +1319,7 @@ describe('select prompt', () => {
           3. Three
           4. Four
 
-        ↑↓ navigate • ⏎ select"
+        ↑↓ navigate • ⏎ select • gg/G first/last"
       `);
 
       // Vim bindings
@@ -1407,7 +1407,7 @@ describe('select prompt', () => {
           China
           United States
 
-        ↑↓ navigate • ⏎ select"
+        ↑↓ navigate • ⏎ select • gg/G first/last"
       `);
 
       // No-op since search is disabled when vim bindings are enabled
@@ -1419,7 +1419,7 @@ describe('select prompt', () => {
           China
           United States
 
-        ↑↓ navigate • ⏎ select"
+        ↑↓ navigate • ⏎ select • gg/G first/last"
       `);
 
       events.keypress('enter');
@@ -1491,6 +1491,91 @@ describe('select prompt', () => {
       events.keypress('enter');
       vi.runAllTimers();
       await expect(answer).resolves.toEqual('ZH');
+    });
+
+    it.each([
+      { motion: 'G', keys: ['G'], note: 'last', lands: '❯ Four', answer: 4 },
+      { motion: 'gg', keys: ['g', 'g'], note: 'first', lands: '❯ One', answer: 1 },
+    ])(
+      'vim $motion jumps to the $note navigable choice, skipping separators',
+      async ({ keys, lands, answer: picked }) => {
+        const { answer, events, getScreen } = await render(select, {
+          message: 'Select a number',
+          choices: [
+            new Separator(),
+            { value: 1, name: 'One' },
+            { value: 2, name: 'Two' },
+            new Separator('---'),
+            { value: 3, name: 'Three' },
+            { value: 4, name: 'Four' },
+            new Separator(),
+          ],
+          theme: {
+            keybindings: ['vim'],
+          },
+        });
+
+        expect(getScreen()).toContain('❯ One');
+
+        for (const key of keys) {
+          events.keypress(key);
+        }
+        expect(getScreen()).toContain(lands);
+
+        events.keypress('enter');
+        await expect(answer).resolves.toEqual(picked);
+      },
+    );
+
+    it('cancels a pending vim g when another key arrives, without a timeout', async () => {
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a number',
+        choices: [
+          { value: 1, name: 'One' },
+          { value: 2, name: 'Two' },
+          { value: 3, name: 'Three' },
+          { value: 4, name: 'Four' },
+        ],
+        theme: {
+          keybindings: ['vim'],
+        },
+      });
+
+      events.keypress('G');
+      expect(getScreen()).toContain('❯ Four');
+
+      // An unrelated key between the two g presses cancels the sequence:
+      // the following g starts a new one instead of completing gg.
+      events.keypress('g');
+      events.keypress('x');
+      events.keypress('g');
+      expect(getScreen()).toContain('❯ Four');
+
+      events.keypress('g');
+      expect(getScreen()).toContain('❯ One');
+
+      events.keypress('enter');
+      await expect(answer).resolves.toEqual(1);
+    });
+
+    it('does not trigger vim gg or G when vim keybindings are not enabled', async () => {
+      vi.useFakeTimers();
+      const { answer, events, getScreen } = await render(select, {
+        message: 'Select a fruit',
+        choices: [
+          { value: 'apple', name: 'Apple' },
+          { value: 'grape', name: 'Grape' },
+          { value: 'mango', name: 'Mango' },
+        ],
+      });
+
+      // Without vim keybindings, G acts as normal type-to-search (matches Grape, not Mango)
+      events.keypress('G');
+      expect(getScreen()).toContain('❯ Grape');
+
+      events.keypress('enter');
+      vi.runAllTimers();
+      await expect(answer).resolves.toEqual('grape');
     });
   });
 

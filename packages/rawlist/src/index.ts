@@ -3,6 +3,8 @@ import {
   useMemo,
   useState,
   useKeypress,
+  useVimNavigation,
+  resolveVimMotion,
   usePrefix,
   isDownKey,
   isEnterKey,
@@ -151,7 +153,42 @@ export default createPrompt(
       return { first, last };
     }, [choices]);
 
+    const parseVimMotion = useVimNavigation(keybindings, { allowCount: false });
+
     useKeypress((key, rl) => {
+      // A choice key always wins over the gg/G motions: when a choice is
+      // picked with `g` or `G`, the keypress is typed input and must reach
+      // the line instead of starting a jump.
+      const typedChar =
+        key.name === 'g' && !key.ctrl ? (key.shift ? 'G' : 'g') : undefined;
+      const collidesWithChoiceKey =
+        typedChar !== undefined &&
+        choices.some((choice) => isSelectableChoice(choice) && choice.key === typedChar);
+
+      const vimMotion = collidesWithChoiceKey ? null : parseVimMotion(key);
+      if (vimMotion) {
+        if (vimMotion.type === 'pending') {
+          if (rl.line.endsWith('g')) {
+            const previousLine = rl.line.slice(0, -1);
+            rl.clearLine(0);
+            if (previousLine) {
+              rl.write(previousLine);
+            }
+          }
+          return;
+        }
+
+        rl.clearLine(0);
+        const [, active] = getSelectedChoice(value, choices);
+        const nextChoice =
+          choices[resolveVimMotion(choices, active ?? -1, vimMotion, isSelectableChoice)];
+        if (isSelectableChoice(nextChoice)) {
+          setValue(nextChoice.key);
+          setError(undefined);
+          rl.write(nextChoice.key);
+        }
+        return;
+      }
       if (isEnterKey(key)) {
         const [selectedChoice] = getSelectedChoice(value, choices);
 

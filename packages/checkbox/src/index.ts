@@ -2,6 +2,8 @@ import {
   createPrompt,
   useState,
   useKeypress,
+  useVimNavigation,
+  resolveVimMotion,
   usePrefix,
   usePagination,
   useMemo,
@@ -190,9 +192,22 @@ export default createPrompt(
 
     const [active, setActive] = useState(bounds.first);
     const [errorMsg, setError] = useState<string>();
+    // Digits toggle items by number, so they are not collected as counts.
+    const parseVimMotion = useVimNavigation(keybindings, { allowCount: false });
 
     useKeypress(async (key) => {
       if (status !== 'idle') return;
+
+      const vimMotion = parseVimMotion(key);
+      if (vimMotion) {
+        if (vimMotion.type !== 'pending') {
+          if (errorMsg) {
+            setError(undefined);
+          }
+          setActive(resolveVimMotion(items, active, vimMotion, isNavigable));
+        }
+        return;
+      }
 
       if (isEnterKey(key)) {
         setStatus('loading');
@@ -319,6 +334,7 @@ export default createPrompt(
       ['↑↓', 'navigate'],
       ['space', 'select'],
     ];
+    if (keybindings.includes('vim')) keys.push(['gg/G', 'first/last']);
     if (shortcuts.all) keys.push([shortcuts.all, 'all']);
     if (shortcuts.invert) keys.push([shortcuts.invert, 'invert']);
     keys.push(['⏎', 'submit']);

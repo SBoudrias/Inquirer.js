@@ -192,6 +192,8 @@ Set `INQUIRER_KEYBINDINGS=vim`, `INQUIRER_KEYBINDINGS=emacs`, or `INQUIRER_KEYBI
 
 You can override the environment setting per prompt with `theme.keybindings`.
 
+Vim mode adds jump motions: `gg` moves to the first choice and `G` to the last.
+
 ## Shortcuts
 
 You can customize the shortcut keys for `all` and `invert` or disable them by setting them to `null`.
