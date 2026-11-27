@@ -77,6 +77,7 @@ export type {
   DistinctQuestion,
   Answers,
   PromptSession,
+  WhenResult,
 } from './types.ts';
 
 const builtInPrompts: PromptCollection = {

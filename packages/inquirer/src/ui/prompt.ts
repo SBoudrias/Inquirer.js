@@ -19,6 +19,7 @@ import {
   observableToAsyncIterable,
 } from '../utils/observable.ts';
 import type { InteropObservable } from '../utils/observable.ts';
+import { renderSkippedQuestion } from './render-skipped.ts';
 
 export const _ = {
   set: (obj: Record<string, unknown>, path: string = '', value: unknown): void => {
@@ -160,7 +161,7 @@ function setupReadlineOptions(opt: StreamOptions) {
 
   // Add mute capabilities to the output
   const ms = new MuteStream();
-  ms.pipe(opt.output || process.stdout);
+  ms.pipe(opt.output || process.stdout, { end: false });
   const output = ms;
 
   return {
@@ -186,6 +187,12 @@ function isQuestionMap<A extends Answers>(
       !Array.isArray(maybeQuestion) &&
       maybeQuestion != null,
   );
+}
+
+function isWhenConfig(
+  value: unknown,
+): value is { readonly ask: unknown; readonly display?: unknown } {
+  return typeof value === 'object' && value !== null && 'ask' in value;
 }
 
 function isPromptConstructor(
@@ -224,10 +231,13 @@ export default class PromptsRunner<A extends Answers> {
 
     try {
       for await (const question of this.getQuestions(questions)) {
-        if (await this.shouldRun(question)) {
+        const { ask, display } = await this.evaluateWhen(question);
+        if (ask) {
           const answer = await this.fetchAnswer(question);
           _.set(this.answers, answer.name, answer.answer);
           processController.next(answer);
+        } else if (display) {
+          await this.displaySkipped(question);
         }
       }
 
@@ -430,20 +440,64 @@ export default class PromptsRunner<A extends Answers> {
     this.abortController.abort();
   };
 
-  private shouldRun = async (question: Question<A>): Promise<boolean> => {
+  private displaySkipped = async (question: Question<A>): Promise<void> => {
+    const [message, defaultValue] = await Promise.all([
+      fetchAsyncQuestionProperty(question, 'message', this.answers),
+      fetchAsyncQuestionProperty(question, 'default', this.answers),
+    ]);
+
+    const existingAnswer = _.get(this.answers, question.name);
+    const value = existingAnswer !== undefined ? existingAnswer : defaultValue;
+
+    const mask =
+      'mask' in question &&
+      (typeof question['mask'] === 'boolean' || typeof question['mask'] === 'string')
+        ? question['mask']
+        : undefined;
+
+    const line = renderSkippedQuestion({
+      type: question.type ?? 'input',
+      message,
+      value,
+      choices: Array.isArray(question.choices) ? question.choices : undefined,
+      mask,
+      transformer: question.transformer,
+      theme: question.theme,
+    });
+
+    const output = this.opt.output ?? process.stdout;
+    output.write(`${line}\n`);
+  };
+
+  private evaluateWhen = async (
+    question: Question<A>,
+  ): Promise<{ ask: boolean; display: boolean }> => {
     if (
       question.askAnswered !== true &&
       _.get(this.answers, question.name) !== undefined
     ) {
-      return false;
+      return { ask: false, display: false };
     }
 
     const { when } = question;
     if (typeof when === 'function') {
-      const shouldRun = await runAsync(when)(this.answers);
-      return Boolean(shouldRun);
+      const result: unknown = await runAsync(when)(this.answers);
+      if (isWhenConfig(result)) {
+        return {
+          ask: Boolean(result.ask),
+          display: Boolean(result.display),
+        };
+      }
+      return { ask: Boolean(result), display: false };
     }
 
-    return when !== false;
+    if (isWhenConfig(when)) {
+      return {
+        ask: when.ask,
+        display: Boolean(when.display),
+      };
+    }
+
+    return { ask: when !== false, display: false };
   };
 }
