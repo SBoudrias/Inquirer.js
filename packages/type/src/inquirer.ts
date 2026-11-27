@@ -14,7 +14,11 @@ export type InquirerReadline = {
   getCursorPos: () => { rows: number; cols: number };
   setPrompt: (prompt: string) => void;
   line: string;
-  write: (data: string) => void;
+  readonly cursor: number;
+  write: (
+    data: string | null | undefined,
+    key?: { name?: string; ctrl?: boolean; meta?: boolean; shift?: boolean },
+  ) => void;
   on: (event: string, listener: (...args: unknown[]) => void) => void;
   removeListener: (event: string, listener: (...args: unknown[]) => void) => void;
   pause: () => void;

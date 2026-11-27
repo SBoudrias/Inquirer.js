@@ -66,4 +66,15 @@ describe('render()', () => {
     events.keypress('enter');
     await expect(answer).resolves.toBe('ab \tc');
   });
+
+  it('inserts multi-character type() calls at the cursor position', async () => {
+    const { answer, events } = await render(input, { message: 'Question?' });
+
+    events.type(' world');
+    events.keypress('home');
+    events.type('hello');
+    events.keypress('enter');
+
+    await expect(answer).resolves.toBe('hello world');
+  });
 });
