@@ -46,7 +46,7 @@ jobs:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: ${{ runner.os }}-turbo-
-      - uses: SBoudrias/fast-setup-node@0bdcad6b060aae1074ef7e3a1fd371e1b302648a # v1
+      - uses: SBoudrias/fast-setup-node@e546b4622df47716d706e23557a2d00f0f3b48b6 # v1
         with:
           enable-yarn: 'true'
       - name: Typescript
@@ -98,7 +98,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 2
-      - uses: SBoudrias/fast-setup-node@0bdcad6b060aae1074ef7e3a1fd371e1b302648a # v1
+      - uses: SBoudrias/fast-setup-node@e546b4622df47716d706e23557a2d00f0f3b48b6 # v1
         with:
           enable-yarn: 'true'
       - name: Lint
@@ -139,7 +139,7 @@ jobs:
           git init -q
           git -c protocol.version=2 fetch -q --no-tags --depth=2 "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git" "$GITHUB_SHA"
           git checkout -q --force FETCH_HEAD
-      - uses: SBoudrias/fast-setup-node@0bdcad6b060aae1074ef7e3a1fd371e1b302648a # v1
+      - uses: SBoudrias/fast-setup-node@e546b4622df47716d706e23557a2d00f0f3b48b6 # v1
         with:
           node-version: ${{ matrix.node-version }}
       # Coverage runs on one matrix cell only (ubuntu node 24, which is
@@ -214,7 +214,7 @@ jobs:
           path: ~/.npm
           key: ${{ runner.os }}-e2e-npm-${{ hashFiles('packages/demo/package.json', 'yarn.lock') }}
           restore-keys: ${{ runner.os }}-e2e-npm-
-      - uses: SBoudrias/fast-setup-node@0bdcad6b060aae1074ef7e3a1fd371e1b302648a # v1
+      - uses: SBoudrias/fast-setup-node@e546b4622df47716d706e23557a2d00f0f3b48b6 # v1
         with:
           enable-yarn: 'true'
       - name: Run isolated e2e suites
